@@ -1,27 +1,27 @@
 import { isDefined } from '../../../core/utils/type';
 
-function splitRectsByPages(rects, topLeft, rightSplitBoundary) {
+function splitRectsByPages(rects, topLeft, maxBottomRight) {
     if(!isDefined(rects) || rects.length === 0) { // Empty Table
         return [[]];
     }
 
-    const rectsByPage = splitRectsHorizontalByPages(rects, rightSplitBoundary, topLeft);
+    const rectsByPage = splitRectsHorizontalByPages(rects, topLeft, maxBottomRight);
     // TODO: splitRectsVerticalByPages
 
     return rectsByPage;
 }
 
-function splitRectsHorizontalByPages(rects, rightSplitBoundary, topLeft) {
+function splitRectsHorizontalByPages(rects, topLeft, maxBottomRight) {
     const pages = [];
     const rectsToSplit = [...rects];
 
     while(rectsToSplit.length > 0) {
         let currentPageMaxRectRight = 0;
         const currentPageRects = rectsToSplit.filter(rect => {
-            const currentCellRight = Math.round((rect.x + rect.w) * 1000) / 1000;
-            if(currentCellRight <= rightSplitBoundary) {
-                if(currentPageMaxRectRight <= currentCellRight) {
-                    currentPageMaxRectRight = currentCellRight;
+            const currentRectRight = Math.round((rect.x + rect.w) * 1000) / 1000;
+            if(currentRectRight <= maxBottomRight.x) {
+                if(currentPageMaxRectRight <= currentRectRight) {
+                    currentPageMaxRectRight = currentRectRight;
                 }
                 return true;
             } else {

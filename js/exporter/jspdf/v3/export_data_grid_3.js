@@ -23,7 +23,7 @@ function _getFullOptions(options) {
     if(!isDefined(fullOptions.indent)) {
         fullOptions.indent = 10;
     }
-
+    fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
     return fullOptions;
 }
 
@@ -99,8 +99,10 @@ function exportDataGrid(doc, dataGrid, options) {
             const docStyles = getDocumentStyles(doc);
 
             const rects = pdfCellsInfo.map(cellInfo => Object.assign({}, cellInfo._rect, { sourceCellInfo: cellInfo }));
-            const rightSplitBoundary = doc.internal.pageSize.getWidth() - normalizeBoundaryValue(options?.margin).right;
-            const rectsByPages = splitRectsByPages(rects, options.topLeft, rightSplitBoundary);
+            const maxBottomRight = {
+                x: doc.internal.pageSize.getWidth() - options.margin.right
+            };
+            const rectsByPages = splitRectsByPages(rects, options.topLeft, maxBottomRight);
             const pdfCellsInfoByPages = rectsByPages.map(rects => {
                 return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
             });
