@@ -19,14 +19,41 @@ test('Correct display border to last column', async (t) => {
 }).before(async () => createWidget('dxTreeList', {
   dataSource: [
     {
-      id: 1, parentId: 0, name: 'Name 1', lastName: 'Last 1', age: 19,
-    },
-    {
-      id: 2, parentId: 0, name: 'Name 2', lastName: 'Last 2', age: 23,
+      ID: 1,
+      Country: 'Brazil',
+      Area: 8515767,
+      Population_Urban: 0.85,
+      Population_Total: 205809000,
+      GDP_Agriculture: 0.054,
+      GDP_Industry: 0.274,
+      GDP_Services: 0.672,
+      GDP_Total: 2353025,
     },
   ],
+  keyExpr: 'ID',
   columns: [
-    { dataField: 'id' }, { columns: ['name', 'lastName'] }, { dataField: 'age' },
+    'Country',
+    {
+      columns: [{
+        dataField: 'GDP_Total',
+      }, {
+        columns: [{
+          dataField: 'GDP_Agriculture',
+        }, {
+          dataField: 'GDP_Industry',
+        }, {
+          dataField: 'GDP_Services',
+        }],
+      }],
+    }, {
+      columns: [{
+        dataField: 'Population_Total',
+      }, {
+        dataField: 'Population_Urban',
+      }],
+    }, {
+      dataField: 'Area',
+    },
   ],
   width: 600,
   height: 300,

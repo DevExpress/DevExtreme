@@ -664,10 +664,14 @@ $grid-masterdetail-padding: 16px;
                 padding-bottom: 12px;
                 vertical-align: bottom;
                 border-right: 1px solid $material-grid-base-border-color;
+                border-left: 1px solid $material-grid-base-border-color;
+
+                &:first-child {
+                  border-left: none;
+                }
 
                 &:last-child {
                   border-right: none;
-                  border-left: 1px solid $material-grid-base-border-color;
                 }
               }
             }
