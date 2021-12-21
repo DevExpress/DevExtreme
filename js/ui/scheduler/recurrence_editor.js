@@ -431,7 +431,7 @@ class RecurrenceEditor extends Editor {
     _renderEditors($container) {
         this._recurrenceForm = this._createComponent($container, Form, {
             items: this._editors,
-            showValidationSummary: true,
+            showValidationSummary: false,
             scrollingEnabled: true,
             showColonAfterLabel: false,
             labelLocation: 'top',

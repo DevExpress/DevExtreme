@@ -18,12 +18,11 @@ import {
   subscribeToDXScrollStopEvent,
 } from '../../../utils/subscribe_to_event';
 import { Widget } from '../../common/widget';
-import { ScrollViewLoadPanel } from '../internal/load_panel';
 
 import { combineClasses } from '../../../utils/combine_classes';
 import { getScrollLeftMax } from '../utils/get_scroll_left_max';
 import { getBoundaryProps } from '../utils/get_boundary_props';
-import { getScrollSign, normalizeOffsetLeft } from '../utils/normalize_offset_left';
+import { normalizeOffsetLeft } from '../utils/normalize_offset_left';
 import {
   getElementOverflowX,
   getElementOverflowY,
@@ -80,10 +79,11 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
-      needScrollViewLoadPanel, needRenderScrollbars,
+      needRenderScrollbars,
       pullingDownText, pulledDownText, refreshingText, reachBottomText, refreshStrategy,
       pullDownEnabled, reachBottomEnabled, showScrollbar,
       useSimulatedScrollbar,
+      loadPanelTemplate: LoadPanelTemplate,
     },
     restAttributes,
   } = viewModel;
@@ -141,12 +141,12 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           </div>
         </div>
       </div>
-      { needScrollViewLoadPanel && (
-        <ScrollViewLoadPanel
-          targetElement={scrollableRef}
-          refreshingText={refreshingText}
-          visible={isLoadPanelVisible}
-        />
+      { LoadPanelTemplate && (
+      <LoadPanelTemplate
+        targetElement={scrollableRef}
+        refreshingText={refreshingText}
+        visible={isLoadPanelVisible}
+      />
       )}
       { needRenderScrollbars && showScrollbar !== 'never' && useSimulatedScrollbar && direction.isHorizontal && (
         <Scrollbar
@@ -460,7 +460,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       containerEl.scrollTop += location.top;
     }
     if (this.direction.isHorizontal) {
-      containerEl.scrollLeft += getScrollSign(!!this.props.rtlEnabled) * location.left;
+      containerEl.scrollLeft += location.left;
     }
   }
 

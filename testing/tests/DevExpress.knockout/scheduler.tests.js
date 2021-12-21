@@ -2,9 +2,11 @@ const $ = require('jquery');
 const ko = require('knockout');
 
 require('integration/knockout');
-require('ui/scheduler');
+const Scheduler = require('ui/scheduler');
 
 require('generic_light.css!');
+
+const isRenovatedScheduler = !!Scheduler.IS_RENOVATED_WIDGET;
 
 QUnit.test('Appointment should have right date format', function(assert) {
     const $element = $('<div data-bind=\'dxScheduler: {dataSource: schedulerDataSource, currentDate: new Date(2016, 6, 10)}\'></div>').appendTo('#qunit-fixture');
@@ -27,7 +29,7 @@ QUnit.test('Appointment should have right date format', function(assert) {
     assert.deepEqual(endDate, new Date(2016, 6, 10, 3));
 });
 
-QUnit.test('Appointment template should be render once(T947938)', function(assert) {
+QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment template should be render once(T947938)', function(assert) {
     const markupText = `<div class='dx-viewport demo-container'>
         <div id='scheduler-demo'>
             <div data-bind='dxScheduler: schedulerOptions'></div>
@@ -56,7 +58,7 @@ QUnit.test('Appointment template should be render once(T947938)', function(asser
     assert.equal($('.dx-scheduler-appointment-content-details').length, 1, 'details should be render once');
 });
 
-QUnit.test('Appointment DnD with disabled property (T1046067)', function(assert) {
+QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment DnD with disabled property (T1046067)', function(assert) {
     const markupText = `<div class='dx-viewport demo-container'>
         <div id='scheduler-demo'>
             <div data-bind='dxScheduler: schedulerOptions'></div>

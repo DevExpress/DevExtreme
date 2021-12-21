@@ -12,9 +12,9 @@ export {
 
 export function convertRulesToOptions<T>(rules: DefaultOptionsRule<T>[]): T;
 
-export function normalizeOptions(options: string | object, value): { [name: string]: string };
+export function normalizeOptions(options: string | object, value: any): { [name: string]: string };
 
-export function deviceMatch(device: Device, filter): boolean;
+export function deviceMatch(device: Device, filter: any): boolean;
 
 export function getFieldName(fullName: string): string;
 

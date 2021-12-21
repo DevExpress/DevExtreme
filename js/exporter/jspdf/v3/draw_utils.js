@@ -11,7 +11,9 @@ function round(value) {
 function drawCellsContent(doc, customDrawCell, cellsArray, docStyles) {
     cellsArray.forEach(cell => {
         const { _rect, pdfRowInfo, gridCell, ...pdfCell } = cell;
-        const eventArg = { doc, rect: _rect, pdfCell, gridCell, cancel: false };
+        const { x, y, w, h } = _rect;
+        const rect = { x, y, w, h };
+        const eventArg = { doc, rect, pdfCell, gridCell, cancel: false };
         customDrawCell?.(eventArg);
         if(!eventArg.cancel) {
             drawCellBackground(doc, cell);

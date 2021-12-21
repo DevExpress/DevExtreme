@@ -10,7 +10,8 @@ export const viewFunction = (viewModel: HeaderRow): JSX.Element => (
         key={index}
         aria-selected="false"
         role="columnheader" // eslint-disable-line jsx-a11y/no-noninteractive-element-to-interactive-role
-        aria-colindex={index + 1}
+        // TODO uncomment after https://trello.com/c/kVXfSWI7
+        // aria-colindex={index + 1}
         id={`dx-col-${index + 1}`}
         aria-label={`Column ${dataField}`}
         className="dx-datagrid-action dx-cell-focus-disabled"
