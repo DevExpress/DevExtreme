@@ -128,6 +128,10 @@ export const VirtualScrollController = Class.inherit((function() {
             return this.component.option.apply(this.component, arguments);
         },
 
+        getController: function() {
+            return this.component.getController.apply(this.component, arguments);
+        },
+
         isVirtual: function() {
             return this._isVirtual;
         },
@@ -354,6 +358,8 @@ export const VirtualScrollController = Class.inherit((function() {
         getViewportParams: function() {
             const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
             const totalItemsCount = this._dataOptions.totalItemsCount();
+            const insertedRowsCount = this.getController('editing').getInsertRowCount();
+            const totalRowsCount = totalItemsCount + insertedRowsCount;
             const topIndex = this._viewportItemIndex;
             const bottomIndex = this._viewportSize + topIndex;
             const maxGap = this.option('scrolling.prerenderedRowChunkSize') || 1;
@@ -365,7 +371,7 @@ export const VirtualScrollController = Class.inherit((function() {
             let take = Math.ceil((bottomIndex + bottomMinGap - skip) / maxGap) * maxGap;
 
             if(virtualMode) {
-                const remainedItems = Math.max(0, totalItemsCount - skip);
+                const remainedItems = Math.max(0, totalRowsCount - skip);
                 take = Math.min(take, remainedItems);
             }
 
