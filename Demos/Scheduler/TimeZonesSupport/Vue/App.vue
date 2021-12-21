@@ -22,7 +22,7 @@
       :on-option-changed="onOptionChanged"
     >
       <DxEditing
-        :allow-editing-time-zones="true"
+        :allow-time-zone-editing="true"
       />
     </DxScheduler>
   </div>
