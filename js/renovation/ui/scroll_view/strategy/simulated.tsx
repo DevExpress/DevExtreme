@@ -358,10 +358,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   scrollOffset(): ScrollOffset {
     const { scrollTop, scrollLeft } = this.savedScrollOffset;
 
+    // WA for React
     return {
-      top: this.vScrollOffsetMax === 0 ? 0 : scrollTop,
-      left: this.hScrollOffsetMax === 0 ? 0 : scrollLeft,
+      top: scrollTop,
+      left: scrollLeft,
     };
+
+    // return {
+    //   top: this.vScrollOffsetMax === 0 ? 0 : scrollTop,
+    //   left: this.hScrollOffsetMax === 0 ? 0 : scrollLeft,
+    // };
   }
 
   @Method()
