@@ -49,7 +49,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 
 export type ScrollbarPropsType = ScrollbarProps
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb' | 'scrollLocationChange'>;
+& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb'>; //  | 'scrollLocationChange'
 
 @Component({
   defaultOptionRules: null,
@@ -129,22 +129,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Method()
   setActiveState(): void {
     this.active = true;
-  }
-
-  @Method()
-  moveTo(location: number): void {
-    const scrollDelta = Math.abs(this.prevScrollLocation - location);
-    this.prevScrollLocation = location;
-
-    this.props.scrollLocationChange?.({
-      fullScrollProp: this.fullScrollProp,
-      location: -location,
-      needFireScroll: scrollDelta > 0,
-    });
-  }
-
-  get fullScrollProp(): 'scrollLeft' | 'scrollTop' {
-    return this.isHorizontal ? 'scrollLeft' : 'scrollTop';
   }
 
   get dimension(): 'width' | 'height' {
