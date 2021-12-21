@@ -4950,6 +4950,32 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-error-row').length, 1, 'error row is rendered');
     });
+
+    QUnit.test('Inserted row should not hide existing rows (T1052464)', function(assert) {
+        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
+        // arrange
+        createDataGrid({
+            dataSource: [ { value: 'value 1' }, { value: 'value 2' }],
+            editing: {
+                allowAdding: true,
+            },
+            scrolling: {
+                mode: 'virtual',
+            },
+        });
+        this.clock.tick();
+
+        // act
+        $('.dx-datagrid-addrow-button').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        const dataRows = $('.dx-data-row');
+        assert.strictEqual(dataRows.length, 3);
+        assert.strictEqual($('.dx-data-row:eq(0) .dx-link-save').length, 1, 'first row is new');
+        assert.strictEqual($('.dx-data-row:eq(1)').text(), 'value 1', 'second row is "value 1"');
+        assert.strictEqual($('.dx-data-row:eq(2)').text(), 'value 2', 'third row is "value 2"');
+    });
 });
 
 
