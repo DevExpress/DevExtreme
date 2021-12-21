@@ -667,6 +667,7 @@ $grid-masterdetail-padding: 16px;
 
                 &:last-child {
                   border-right: none;
+                  border-left: 1px solid $material-grid-base-border-color;
                 }
               }
             }
