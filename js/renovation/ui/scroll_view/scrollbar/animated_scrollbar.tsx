@@ -429,12 +429,14 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     const scrollDelta = Math.abs(this.prevScrollLocation - value);
     this.prevScrollLocation = value;
 
+    this.props.scrollLocationChange?.({
+      fullScrollProp: this.fullScrollProp,
+      location: -value,
+      needFireScroll: scrollDelta > 0,
+    });
+
     if (scrollDelta > 0) {
-      this.props.scrollLocationChange?.({
-        fullScrollProp: this.fullScrollProp,
-        location: -value,
-        needFireScroll: scrollDelta > 0,
-      });
+      this.props.onScroll?.();
     }
   }
 

@@ -96,7 +96,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     topPocketRef, bottomPocketRef, bottomPocketHeight,
     hovered, pulledDown, scrollLocationChange,
     containerHasSizes, contentWidth, containerClientWidth, contentHeight, containerClientHeight,
-    scrollableRef, contentStyles, containerStyles, onBounce,
+    scrollableRef, contentStyles, containerStyles, onBounce, onScroll,
     onReachBottom, onPullDown, onEnd, direction, topPocketState,
     isLoadPanelVisible, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom, active,
@@ -180,6 +180,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
+              onScroll={onScroll}
               onEnd={onEnd}
               containerHasSizes={containerHasSizes}
 
@@ -205,6 +206,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
+              onScroll={onScroll}
               onEnd={onEnd}
               containerHasSizes={containerHasSizes}
 
@@ -736,7 +738,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       return;
     }
 
-    const { fullScrollProp, location, needFireScroll } = eventData;
+    const { fullScrollProp, location } = eventData;
 
     this.containerRef.current![fullScrollProp] = location;
 
@@ -746,12 +748,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       this.vScrollLocation = -location;
     }
 
-    const scrollDelta = Math.abs(this.savedScrollOffset[fullScrollProp] - location);
+    // const scrollDelta = Math.abs(this.savedScrollOffset[fullScrollProp] - location);
     this.savedScrollOffset[fullScrollProp] = location;
-
-    if (needFireScroll && scrollDelta >= 1) {
-      this.onScroll();
-    }
+    // console.log(needFireScroll, scrollDelta >= 1);
+    // if (needFireScroll && scrollDelta >= 1) {
+    //   this.onScroll();
+    // }
   }
 
   get hScrollOffsetMax(): number {
