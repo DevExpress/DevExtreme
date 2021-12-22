@@ -5227,7 +5227,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'no bottom loading');
     });
 
-    QUnit.test('Infinite scrolling should works correctly if row heights are different (T1013838)', function(assert) {
+    QUnit.test('Infinite scrolling should work correctly if row heights are different (T1013838)', function(assert) {
         // arrange, act
         const data = [];
 
@@ -5264,7 +5264,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         dataGrid.getScrollable().scrollTo(10000);
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 5, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows().length, 4, 'visible rows');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'not bottom loading');
     });
@@ -5960,5 +5960,41 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // assert
         assert.strictEqual(getScrollBarHeight(), previousScrollbarHeight, 'scrollbar height is not changed on scroll top');
         assert.strictEqual(dataGrid.getScrollable().scrollTop(), 0, 'scroll position is changed on scroll top');
+    });
+
+    QUnit.test('CustomStore.load should be called once when the first request returned less items than required (T1049853)', function(assert) {
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 5; i++) {
+            data.push({ id: i + 1 });
+        }
+        const store = new ArrayStore({
+            key: 'id',
+            data
+        });
+        const loadSpy = sinon.spy(function(loadOptions) {
+            return store.load(loadOptions);
+        });
+        createDataGrid({
+            dataSource: {
+                key: 'id',
+                load: loadSpy
+            },
+            remoteOperations: true,
+            scrolling: {
+                mode: 'infinite',
+                useNative: false
+            },
+            paging: {
+                pageSize: 10
+            }
+        });
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(loadSpy.callCount, 1, 'call count');
+        assert.equal(loadSpy.getCall(0).args[0].skip, 0, 'skip');
+        assert.equal(loadSpy.getCall(0).args[0].take, 10, 'take');
     });
 });
