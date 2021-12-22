@@ -560,7 +560,7 @@ class FileManager extends Widget {
                 if(!this._lockCurrentPathProcessing) {
                     this._providerUpdateDeferred = new Deferred();
                 }
-                const pathKeys = this._lockCurrentPathProcessing ? undefined : this.option('currentPathKeys'); // TODO: change to pathKeys
+                const pathKeys = this._lockCurrentPathProcessing ? undefined : this.option('currentPathKeys');
                 this._controller.updateProvider(args.value, pathKeys)
                     .then(() => this._providerUpdateDeferred.resolve())
                     .then(() => this.repaint());
