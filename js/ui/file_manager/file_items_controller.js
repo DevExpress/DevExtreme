@@ -85,19 +85,17 @@ export default class FileItemsController {
         this._resetState();
     }
 
-    updateProvider(fileProvider, currentPath) {
-        if(!isDefined(currentPath)) {
-            // console.log('updateProvider without path change');
+    updateProvider(fileProvider, currentPathKeys) {
+        if(!isDefined(currentPathKeys)) {
             return this._updateProviderOnly(fileProvider);
         }
-        // console.log('updateProvider without path change');
-        const pathParts = getPathParts(currentPath);
-        return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts).then(newDirectory => {
+
+        return this._getDirectoryByPathParts(this._rootDirectoryInfo, currentPathKeys, true).then(newDirectory => {
             if(newDirectory !== this._rootDirectoryInfo) {
                 this._resetCurrentDirectory();
             }
             this._setProvider(fileProvider);
-            return this.refresh().then(() => this.setCurrentPath(currentPath));
+            return this.refresh().then(() => this.setCurrentPathByKeys(currentPathKeys));
         });
     }
 
@@ -176,7 +174,6 @@ export default class FileItemsController {
             directoryInfo = this._getActualDirectoryInfo(directoryInfo);
         }
 
-        // this._raiseInitialized(); // bad approach, but rather efficient
         if(this._currentDirectoryInfo && this._currentDirectoryInfo === directoryInfo) {
             this._raisePathPotentiallyChanged();
             return;
@@ -687,7 +684,7 @@ export default class FileItemsController {
             .then(dirInfos => {
                 const subDirInfo = find(dirInfos, d => d.fileItem[fieldName] === pathParts[0]);
                 if(!subDirInfo) {
-                    return new Deferred().reject().promise(); // need to reset path in this case
+                    return new Deferred().reject().promise();
                 }
                 const restPathParts = [...pathParts].splice(1);
                 return this._getDirectoryByPathParts(subDirInfo, restPathParts, useKeys);
