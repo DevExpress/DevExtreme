@@ -54,7 +54,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @deprecated
+     * @deprecated dxOverlayOptions.wrapperAttr.class
      * @default false
      * @public
      */
