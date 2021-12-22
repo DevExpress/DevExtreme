@@ -7,6 +7,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
+import { extend } from 'core/utils/extend';
 
 import 'generic_light.css!';
 
@@ -14,6 +15,7 @@ const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
+const BUTTON = 'dx-button';
 const BUTTON_GROUP_WRAPPER = 'dx-buttongroup-wrapper';
 const BUTTON_TEXT = 'dx-button-text';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
@@ -2416,5 +2418,68 @@ QUnit.module('custom content template', {}, () => {
 
         const $listItems = getList(dropDownButton).itemElements();
         assert.strictEqual($listItems.eq(0).text(), '1: A', 'itemTemlate has changed item text');
+    });
+});
+
+
+QUnit.module('Accessibility', {
+    beforeEach: function() {
+        this.elementSelector = '#dropDownButton';
+        this.$element = $(this.elementSelector);
+
+        this.createInstance = (options) => {
+            return new DropDownButton(this.elementSelector, extend({
+                items: ['item 1'],
+                text: 'Text'
+            }, options));
+        };
+
+        this.getButtons = () => {
+            return $(this.elementSelector).find(`.${BUTTON}`);
+        };
+    }
+}, () => {
+    QUnit.test('check aria-expanded attr for dropdown', function(assert) {
+        this.createInstance();
+
+        const buttonElements = this.getButtons();
+
+        assert.ok(buttonElements.eq(0).attr('aria-expanded'));
+        assert.ok(this.$element.attr('aria-expanded'));
+    });
+
+
+    QUnit.test('check aria-expanded attr for visible dropdown', function(assert) {
+        this.createInstance({ opened: true });
+
+        const buttonElements = this.getButtons();
+
+        assert.strictEqual(buttonElements.eq(0).attr('aria-expanded'), 'true');
+        assert.strictEqual(this.$element.attr('aria-expanded'), 'true');
+    });
+
+    QUnit.test('check aria-expanded attr for visible dropdown if splitButton is true', function(assert) {
+        const instance = this.createInstance({ splitButton: true });
+
+        instance.open();
+
+        const buttonElements = this.getButtons();
+
+        assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), 'true');
+        assert.strictEqual($(buttonElements[1]).attr('aria-expanded'), 'true');
+        assert.strictEqual(this.$element.attr('aria-expanded'), 'true');
+    });
+
+    QUnit.test('check aria-expanded attr if splitButton is true after dropdown was closed', function(assert) {
+        const instance = this.createInstance({ splitButton: true });
+
+        const buttonElements = this.getButtons();
+
+        instance.open();
+        instance.close();
+
+        assert.strictEqual($(buttonElements[0]).attr('aria-expanded'), 'false');
+        assert.strictEqual($(buttonElements[1]).attr('aria-expanded'), 'false');
+        assert.strictEqual(this.$element.attr('aria-expanded'), 'false');
     });
 });

@@ -1,9 +1,10 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { normalizeRowsInfo } from './normalizeOptions';
+import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
+import { splitRectsByPages } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
 
 // TODO: check names with techwritters
@@ -22,7 +23,7 @@ function _getFullOptions(options) {
     if(!isDefined(fullOptions.indent)) {
         fullOptions.indent = 10;
     }
-
+    fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
     return fullOptions;
 }
 
@@ -96,15 +97,32 @@ function exportDataGrid(doc, dataGrid, options) {
             );
 
             const docStyles = getDocumentStyles(doc);
-            drawCellsContent(doc, options.customDrawCell, pdfCellsInfo, docStyles);
-            drawCellsLines(doc, pdfCellsInfo, docStyles);
 
-            const isDrawTableBorderSpecified = options.drawTableBorder === true;
-            const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
-            if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
-                const tableRect = calculateTableSize(doc, rowsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
-                drawGridLines(doc, tableRect, docStyles);
-            }
+            const rects = pdfCellsInfo.map(cellInfo => Object.assign({}, cellInfo._rect, { sourceCellInfo: cellInfo }));
+            const maxBottomRight = {
+                x: doc.internal.pageSize.getWidth() - options.margin.right
+            };
+            const rectsByPages = splitRectsByPages(rects, options.topLeft, maxBottomRight);
+            const pdfCellsInfoByPages = rectsByPages.map(rects => {
+                return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
+            });
+
+            pdfCellsInfoByPages.forEach((pdfCellsInfo, index) => {
+                if(index > 0) {
+                    doc.addPage();
+                }
+
+                drawCellsContent(doc, options.customDrawCell, pdfCellsInfo, docStyles);
+                drawCellsLines(doc, pdfCellsInfo, docStyles);
+
+                const isDrawTableBorderSpecified = options.drawTableBorder === true;
+                const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
+                if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
+                    const tableRect = calculateTableSize(doc, pdfCellsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
+                    drawGridLines(doc, tableRect, docStyles);
+                }
+            });
+
             setDocumentStyles(doc, docStyles);
 
             resolve();

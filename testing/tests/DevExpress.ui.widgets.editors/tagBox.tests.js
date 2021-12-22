@@ -20,6 +20,8 @@ import TagBox from 'ui/tag_box';
 import { normalizeKeyName } from 'events/utils/index';
 import { getWidth, getHeight } from 'core/utils/size';
 
+import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
+
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -7334,17 +7336,18 @@ QUnit.module('valueChanged should receive correct event parameter', {
 
 QUnit.module('label integration', () => {
     QUnit.test('tagBox should pass containerWidth equal to tag container width', function(assert) {
-        const constructorMock = sinon.stub();
-        TagBox.mockTextEditorLabel(constructorMock);
+        this.TextEditorLabelMock = (args) => { this.labelArgs = args; return new TextEditorLabel(args); };
+        TagBox.mockTextEditorLabel(this.TextEditorLabelMock);
 
         try {
             const $tagBox = $('#tagBox').dxTagBox({
                 label: 'some'
             });
 
+            const borderWidth = 2;
             const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
             const tagContainerWidth = getWidth($tagContainer);
-            assert.strictEqual(constructorMock.getCall(0).args[0].containerWidth, tagContainerWidth);
+            assert.strictEqual(this.labelArgs.containerWidth + borderWidth, tagContainerWidth);
         } finally {
             TagBox.restoreTextEditorLabel();
         }
