@@ -342,27 +342,29 @@ const Form = Widget.inherit({
             for(let i = 0; i < items.length; i++) {
                 let item = items[i];
                 const path = concatPaths(currentPath, createItemPathByIndex(i, isTabs));
-                const guid = this._itemsRunTimeInfo.add({ item, itemIndex: i, path });
+                const itemRunTimeInfo = { item, itemIndex: i, path };
+                const guid = this._itemsRunTimeInfo.add(itemRunTimeInfo);
 
                 if(isString(item)) {
                     item = { dataField: item };
                 }
 
                 if(isObject(item)) {
-                    const itemCopy = extend({}, item);
-                    itemCopy.guid = guid;
-                    this._tryPrepareGroupItem(itemCopy);
-                    this._tryPrepareTabbedItem(itemCopy, path);
-                    this._tryPrepareItemTemplate(itemCopy);
+                    const preparedItem = { ...item };
+                    itemRunTimeInfo.preparedItem = preparedItem;
+                    preparedItem.guid = guid;
+                    this._tryPrepareGroupItem(preparedItem);
+                    this._tryPrepareTabbedItem(preparedItem, path);
+                    this._tryPrepareItemTemplate(preparedItem);
 
                     if(parentIsTabbedItem) {
-                        itemCopy.cssItemClass = FIELD_ITEM_TAB_CLASS;
+                        preparedItem.cssItemClass = FIELD_ITEM_TAB_CLASS;
                     }
 
-                    if(itemCopy.items) {
-                        itemCopy.items = this._prepareItems(itemCopy.items, parentIsTabbedItem, path);
+                    if(preparedItem.items) {
+                        preparedItem.items = this._prepareItems(preparedItem.items, parentIsTabbedItem, path);
                     }
-                    result.push(itemCopy);
+                    result.push(preparedItem);
                 } else {
                     result.push(item);
                 }
@@ -376,11 +378,14 @@ const Form = Widget.inherit({
         if(item.itemType === 'group') {
             item.alignItemLabels = ensureDefined(item.alignItemLabels, true);
 
-            if(item.template) {
-                item.groupContentTemplate = this._getTemplate(item.template);
-            }
+            item._prepareGroupItemTemplate = (itemTemplate) => {
+                if(item.template) {
+                    item.groupContentTemplate = this._getTemplate(itemTemplate);
+                }
 
-            item.template = this._itemGroupTemplate.bind(this, item);
+                item.template = this._itemGroupTemplate.bind(this, item);
+            };
+            item._prepareGroupItemTemplate(item.template);
         }
     },
 
@@ -521,14 +526,18 @@ const Form = Widget.inherit({
             .appendTo($group);
 
         if(item.groupContentTemplate) {
-            const data = {
-                formData: this.option('formData'),
-                component: this
+            item._renderGroupContentTemplate = () => {
+                $groupContent.empty();
+                const data = {
+                    formData: this.option('formData'),
+                    component: this
+                };
+                item.groupContentTemplate.render({
+                    model: data,
+                    container: getPublicElement($groupContent)
+                });
             };
-            item.groupContentTemplate.render({
-                model: data,
-                container: getPublicElement($groupContent)
-            });
+            item._renderGroupContentTemplate();
         } else {
             layoutManager = this._renderLayoutManager($groupContent, this._createLayoutManagerOptions(this._tryGetItemsForTemplate(item), {
                 colCount: item.colCount,
@@ -813,10 +822,6 @@ const Form = Widget.inherit({
     _tryChangeLayoutManagerItemOption(fullName, value) {
         const nameParts = fullName.split('.');
         const optionName = getOptionNameFromFullName(fullName);
-
-        if(optionName === 'template') {
-            return false; // force rerender to call _tryPrepareGroupItem and rerender template
-        }
 
         if(optionName === 'items' && nameParts.length > 1) {
             const itemPath = this._getItemPath(nameParts);
