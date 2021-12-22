@@ -6,7 +6,6 @@ import {
   Ref,
   Effect,
   Method,
-  Mutable,
 } from '@devextreme-generator/declarations';
 
 import { combineClasses } from '../../../utils/combine_classes';
@@ -61,15 +60,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
 
-  @Mutable() prevScrollLocation = 0;
-
-  @Mutable() prevMaxOffset = 0;
+  @Ref() thumbRef!: RefObject<HTMLDivElement>;
 
   @InternalState() hovered = false;
 
   @InternalState() active = false;
-
-  @Ref() thumbRef!: RefObject<HTMLDivElement>;
 
   @Effect({ run: 'once' })
   pointerDownEffect(): EffectReturn {

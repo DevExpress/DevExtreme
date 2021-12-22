@@ -124,6 +124,54 @@ describe('AnimatedScrollbar', () => {
   });
 });
 
+describe('Methods', () => {
+  each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
+    it('moveTo(), should not raise any errors when scrollLocationChange events not defined', () => {
+      const viewModel = new AnimatedScrollbar({
+        showScrollbar: 'always',
+        direction,
+        scrollLocationChange: undefined,
+      });
+
+      viewModel.prevScrollLocation = -99;
+
+      expect(() => { viewModel.moveTo(-100); }).not.toThrow();
+    });
+
+    test.each([
+      { prevScrollLocation: -499, scrollLocation: -500.25, expected: { needFireScroll: true } },
+      { prevScrollLocation: -399, scrollLocation: -400, expected: { needFireScroll: true } },
+      { prevScrollLocation: -100, scrollLocation: -100.25, expected: { needFireScroll: true } },
+      { prevScrollLocation: -55, scrollLocation: -55.75, expected: { needFireScroll: true } },
+      { prevScrollLocation: 0, scrollLocation: 0.25, expected: { needFireScroll: true } },
+      { prevScrollLocation: 100, scrollLocation: 100.25, expected: { needFireScroll: true } },
+      { prevScrollLocation: 500.24, scrollLocation: 500.25, expected: { needFireScroll: true } },
+      { prevScrollLocation: 480, scrollLocation: 480, expected: { needFireScroll: false } },
+    ])('moveTo(location), pass correct arguments to scrollLocationChange event: %o', ({ prevScrollLocation, scrollLocation, expected }) => {
+      const scrollLocationChange = jest.fn();
+
+      const viewModel = new AnimatedScrollbar({
+        direction,
+        scrollLocationChange,
+        scrollLocation,
+      });
+
+      viewModel.prevScrollLocation = prevScrollLocation;
+
+      viewModel.moveTo(scrollLocation);
+
+      expect(scrollLocationChange).toHaveBeenCalledTimes(1);
+      expect(scrollLocationChange).toHaveBeenCalledWith(
+        {
+          fullScrollProp: viewModel.fullScrollProp,
+          location: -scrollLocation,
+          needFireScroll: expected.needFireScroll,
+        },
+      );
+    });
+  });
+});
+
 describe('Handlers', () => {
   each([true, false]).describe('isDxWheelEvent: %o', (isDxWheelEvent) => {
     each([true, false]).describe('crossThumbScrolling: %o', (crossThumbScrolling) => {

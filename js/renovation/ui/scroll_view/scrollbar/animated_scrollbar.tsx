@@ -67,7 +67,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-& Pick<ScrollableSimulatedProps, 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'
+& Pick<ScrollableSimulatedProps, 'reachBottomEnabled' | 'forceGeneratePockets'
 | 'inertiaEnabled' | 'showScrollbar' | 'rtlEnabled' | 'scrollByThumb' | 'bounceEnabled' | 'scrollLocationChange'>;
 
 @Component({
@@ -338,9 +338,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
         newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
       }
 
-      // if (this.prevScrollLocation !== newScrollLocation) {
       this.moveTo(newScrollLocation);
-      // }
     }
   }
 
@@ -488,7 +486,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   get pendingRelease(): boolean {
     return this.props.forceGeneratePockets
-      && ((this.props.pulledDown && this.props.pullDownEnabled) || this.isReachBottom)
+      && (this.props.pulledDown || this.isReachBottom)
       && !this.wasRelease;
   }
 
