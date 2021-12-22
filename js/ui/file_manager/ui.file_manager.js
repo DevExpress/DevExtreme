@@ -60,8 +60,7 @@ class FileManager extends Widget {
             onInitialized: this._onControllerInitialized.bind(this),
             onDataLoading: this._onDataLoading.bind(this),
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this),
-            onPathPotentiallyChanged: this._checkPathActuality.bind(this),
-            editingEvents: this._actions.editing
+            onPathPotentiallyChanged: this._checkPathActuality.bind(this)
         });
     }
 
