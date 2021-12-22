@@ -731,65 +731,61 @@ describe('Effects', () => {
               each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
                 each([true, false]).describe('thumbScrolling: %o', (thumbScrolling) => {
                   each([true, false]).describe('crossThumbScrolling: %o', (crossThumbScrolling) => {
-                    each([true, false]).describe('pendingAnimator: %o', (pendingAnimator) => {
-                      it('startAnimator()', () => {
-                        (inRange as Mock).mockReturnValue(inRangeValue);
-                        const viewModel = new AnimatedScrollbar({
-                          direction: 'vertical',
-                          inertiaEnabled,
-                          bounceEnabled,
-                          onBounce: eventHandler,
-                          scrollLocation: -1500,
-                          maxOffset: -700,
-                          minOffset: 0,
-                        });
-
-                        viewModel.thumbScrolling = thumbScrolling;
-                        viewModel.crossThumbScrolling = crossThumbScrolling;
-                        viewModel.pendingBounceAnimator = pendingAnimator;
-                        viewModel.pendingInertiaAnimator = pendingAnimator;
-                        Object.defineProperties(viewModel, {
-                          isReadyToStart: { get() { return isReadyToStart; } },
-                        });
-                        viewModel.canceled = true;
-                        viewModel.velocity = -10;
-
-                        viewModel.startAnimator();
-
-                        let expectedCanceled = true;
-                        let expectedVelocity = -10;
-                        let expectedPendingInertiaAnimator = pendingAnimator;
-                        let needRiseBounce = false;
-                        let expectedPendingBounceAnimator = pendingAnimator;
-
-                        if (isReadyToStart) {
-                          expectedCanceled = false;
-
-                          if (inRangeValue && inertiaEnabled && !pendingAnimator) {
-                            if (thumbScrolling || (!thumbScrolling && crossThumbScrolling)) {
-                              expectedVelocity = 0;
-                            }
-                            expectedPendingInertiaAnimator = true;
-                          }
-
-                          if (!inRangeValue && bounceEnabled && !pendingAnimator) {
-                            expectedVelocity = 800 / BOUNCE_ACCELERATION_SUM;
-                            expectedPendingBounceAnimator = true;
-                            needRiseBounce = true;
-                          }
-                        }
-
-                        expect(viewModel.canceled).toEqual(expectedCanceled);
-                        expect(viewModel.velocity).toEqual(expectedVelocity);
-                        expect(viewModel.pendingInertiaAnimator)
-                          .toEqual(expectedPendingInertiaAnimator);
-                        expect(viewModel.pendingBounceAnimator)
-                          .toEqual(expectedPendingBounceAnimator);
-
-                        if (eventHandler) {
-                          expect(eventHandler).toHaveBeenCalledTimes(needRiseBounce ? 1 : 0);
-                        }
+                    it('startAnimator()', () => {
+                      (inRange as Mock).mockReturnValue(inRangeValue);
+                      const viewModel = new AnimatedScrollbar({
+                        direction: 'vertical',
+                        inertiaEnabled,
+                        bounceEnabled,
+                        onBounce: eventHandler,
+                        scrollLocation: -1500,
+                        maxOffset: -700,
+                        minOffset: 0,
                       });
+
+                      viewModel.thumbScrolling = thumbScrolling;
+                      viewModel.crossThumbScrolling = crossThumbScrolling;
+                      Object.defineProperties(viewModel, {
+                        isReadyToStart: { get() { return isReadyToStart; } },
+                      });
+                      viewModel.canceled = true;
+                      viewModel.velocity = -10;
+
+                      viewModel.startAnimator();
+
+                      let expectedCanceled = true;
+                      let expectedVelocity = -10;
+                      let expectedPendingInertiaAnimator = false;
+                      let needRiseBounce = false;
+                      let expectedPendingBounceAnimator = false;
+
+                      if (isReadyToStart) {
+                        expectedCanceled = false;
+
+                        if (inRangeValue && inertiaEnabled) {
+                          if (thumbScrolling || (!thumbScrolling && crossThumbScrolling)) {
+                            expectedVelocity = 0;
+                          }
+                          expectedPendingInertiaAnimator = true;
+                        }
+
+                        if (!inRangeValue && bounceEnabled) {
+                          expectedVelocity = 800 / BOUNCE_ACCELERATION_SUM;
+                          expectedPendingBounceAnimator = true;
+                          needRiseBounce = true;
+                        }
+                      }
+
+                      expect(viewModel.canceled).toEqual(expectedCanceled);
+                      expect(viewModel.velocity).toEqual(expectedVelocity);
+                      expect(viewModel.pendingInertiaAnimator)
+                        .toEqual(expectedPendingInertiaAnimator);
+                      expect(viewModel.pendingBounceAnimator)
+                        .toEqual(expectedPendingBounceAnimator);
+
+                      if (eventHandler) {
+                        expect(eventHandler).toHaveBeenCalledTimes(needRiseBounce ? 1 : 0);
+                      }
                     });
                   });
                 });
@@ -969,13 +965,13 @@ describe('Animator', () => {
 
     each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
       each([true, false]).describe('pulledDown: %o', (pulledDown) => {
-        each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+        each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
           each([true, false]).describe('isReachBottom: %o', (isReachBottom) => {
             each([true, false]).describe('wasRelease: %o', (wasRelease) => {
               it('pendingRelease()', () => {
                 const viewModel = new AnimatedScrollbar({
                   direction: DIRECTION_VERTICAL,
-                  forceGeneratePockets,
+                  reachBottomEnabled,
                   pullDownEnabled,
                   pulledDown,
                 });
@@ -987,9 +983,8 @@ describe('Animator', () => {
                 });
 
                 expect(viewModel.pendingRelease).toEqual(
-                  forceGeneratePockets
-                  && ((pulledDown && pullDownEnabled) || isReachBottom)
-                  && !wasRelease,
+                  ((pulledDown && pullDownEnabled)
+                    || (isReachBottom && reachBottomEnabled)) && !wasRelease,
                 );
               });
             });

@@ -281,11 +281,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     if (this.isReadyToStart) {
       this.canceled = false;
 
-      if (
-        !this.inRange
-        && this.props.bounceEnabled
-        && !this.pendingBounceAnimator
-      ) {
+      if (!this.inRange && this.props.bounceEnabled) {
         const distanceToBound = clampIntoRange(
           this.props.scrollLocation, this.props.minOffset, this.maxOffset,
         ) - this.props.scrollLocation;
@@ -295,11 +291,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
         this.pendingBounceAnimator = true;
       }
 
-      if (this.inRange
-        && this.props.inertiaEnabled
-        && !this.finished
-        && !this.pendingInertiaAnimator
-      ) {
+      if (this.inRange && this.props.inertiaEnabled) {
         if (this.thumbScrolling || (!this.thumbScrolling && this.crossThumbScrolling)) {
           this.velocity = 0;
         }
@@ -434,9 +426,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   get pendingRelease(): boolean {
-    return this.props.forceGeneratePockets
-      && ((this.props.pulledDown && this.props.pullDownEnabled) || this.isReachBottom)
-      && !this.wasRelease;
+    return ((this.props.pulledDown && this.props.pullDownEnabled)
+      || (this.isReachBottom && this.props.reachBottomEnabled)) && !this.wasRelease;
   }
 
   get inProgress(): boolean {
