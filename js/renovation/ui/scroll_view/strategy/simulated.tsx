@@ -292,6 +292,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @InternalState() hScrollLocation = 0;
 
+  @InternalState() pendingScrollEvent = false;
+
   @Mutable() validateWheelTimer?: unknown;
 
   @Mutable() locked = false;
@@ -358,16 +360,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   scrollOffset(): ScrollOffset {
     const { scrollTop, scrollLeft } = this.savedScrollOffset;
 
-    // WA for React
     return {
-      top: scrollTop,
-      left: scrollLeft,
+      top: this.vScrollOffsetMax === 0 ? 0 : scrollTop,
+      left: this.hScrollOffsetMax === 0 ? 0 : scrollLeft,
     };
-
-    // return {
-    //   top: this.vScrollOffsetMax === 0 ? 0 : scrollTop,
-    //   left: this.hScrollOffsetMax === 0 ? 0 : scrollLeft,
-    // };
   }
 
   @Method()
@@ -605,6 +601,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.updateElementDimensions();
   }
 
+  @Effect() triggerScrollEvent(): void {
+    if (this.pendingScrollEvent) {
+      this.pendingScrollEvent = false;
+      eventsEngine.triggerHandler(this.containerRef.current, { type: 'scroll' });
+    }
+  }
+
   @Method()
   scrollByLocation(location: ScrollOffset): void {
     this.updateHandler();
@@ -777,7 +780,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   onScroll(): void {
-    eventsEngine.triggerHandler(this.containerRef.current, { type: 'scroll' });
+    this.pendingScrollEvent = true;
   }
 
   handleInit(event: DxMouseEvent): void {
