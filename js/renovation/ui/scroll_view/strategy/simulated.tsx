@@ -637,13 +637,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const { scrollLeft, scrollTop } = this.containerRef.current!; // this.scrollOffset();
     this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: -clampIntoRange(-scrollTop, 0, this.vScrollOffsetMax), needFireScroll: false });
 
-    if (!this.props.rtlEnabled) { // TODO: support native rtl mode
-      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: -clampIntoRange(-scrollLeft, 0, this.hScrollOffsetMax), needFireScroll: false });
-    }
+    // if (!this.props.rtlEnabled) { // TODO: support native rtl mode
+    this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: -clampIntoRange(-scrollLeft, 0, this.hScrollOffsetMax), needFireScroll: false });
+    // }
   }
 
   startLoading(): void {
-    if (this.loadingIndicatorEnabled && isElementVisible(this.scrollableRef.current)) {
+    if (this.loadingIndicatorEnabled && isElementVisible(this.containerRef.current)) {
       this.isLoadPanelVisible = true;
     }
     this.lock();
@@ -743,7 +743,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   scrollLocationChange(eventData: ScrollLocationChangeArgs): void {
-    if (!isElementVisible(this.scrollableRef.current)) {
+    if (!isElementVisible(this.containerRef.current)) {
       return;
     }
 

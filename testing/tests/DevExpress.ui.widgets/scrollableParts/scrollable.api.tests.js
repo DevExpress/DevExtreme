@@ -833,6 +833,9 @@ QUnit.test('scrollTo should not reset unused position', function(assert) {
                 direction,
             }).dxScrollable('instance');
 
+            // for IOS with min-height: 101% style
+            $(scrollable.content()).css({ minHeight: '100%' });
+
             scrollable.scrollTo(scrollToValue);
 
             const expectedTopOffsetValue = direction !== DIRECTION_HORIZONTAL ? 40 : 0;
