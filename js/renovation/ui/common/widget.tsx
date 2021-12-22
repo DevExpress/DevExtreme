@@ -116,9 +116,6 @@ export class WidgetProps extends BaseWidgetProps {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: {
-    register: true,
-  },
   view: viewFunction,
 })
 
