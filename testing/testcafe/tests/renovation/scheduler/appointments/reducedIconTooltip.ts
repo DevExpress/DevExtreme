@@ -8,10 +8,10 @@ const test = multiPlatformTest({
   platforms: [/* 'jquery', */'react'], // TODO unskip after fix children in tooltip
 });
 
-fixture.disablePageReloads('Renovated scheduler - Reduced icon tooltip');
+fixture('Renovated scheduler - Reduced icon tooltip');
 
 ['timelineDay', 'week'].forEach((currentView) => {
-  test(`it should show reduced icon tooltip if ${currentView} view`, async (t) => {
+  test(`it should show reduced icon tooltip in '${currentView}' view`, async (t) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
     const appointment0 = scheduler.getAppointment('appt-0');
     const appointment1 = scheduler.getAppointment('appt-1');
