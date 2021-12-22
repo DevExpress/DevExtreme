@@ -4,17 +4,31 @@ import {
 } from '@devextreme-generator/declarations';
 import React from 'react';
 import { DataGridLight, DataGridLightProps } from '../../../../js/renovation/ui/grids/data_grid_light/data_grid_light';
+import { Pager, PagerProps } from '../../../../js/renovation/ui/grids/data_grid_light/widgets/pager';
+import { Paging, PagingProps } from '../../../../js/renovation/ui/grids/data_grid_light/widgets/paging';
 
 export const viewFunction = ({
-  options,
+  options, pager, paging, setPageIndex, setPageSize,
 }: App): JSX.Element => (
   <DataGridLight
     id="container"
     dataSource={options.dataSource}
     columns={options.columns}
-    paging={options.paging}
-    pager={options.pager}
-  />
+  >
+    <Paging
+      enabled={paging.enabled}
+      pageIndex={paging.pageIndex}
+      pageIndexChange={setPageIndex}
+      pageSize={paging.pageSize}
+      pageSizeChange={setPageSize}
+    />
+    <Pager
+      visible={pager.visible}
+      allowedPageSizes={pager.allowedPageSizes}
+      showPageSizeSelector={pager.showPageSizeSelector}
+      displayMode={pager.displayMode}
+    />
+  </DataGridLight>
 );
 @ComponentBindings()
 class AppProps { }
@@ -34,27 +48,56 @@ export class App extends JSXComponent<AppProps>() {
       { id: 4, text: 'text 4' },
       { id: 5, text: 'text 5' },
     ],
-    paging: {
-      pageSize: 2,
-      pageIndex: 0,
-      enabled: true,
-    },
-    pager: {
-      visible: true,
-      allowedPageSizes: [2, 4, 'all'],
-      showPageSizeSelector: true,
-      displayMode: 'full',
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any,
   };
+
+  @InternalState()
+  paging: Partial<PagingProps> = {
+    pageSize: 2,
+    pageIndex: 0,
+    enabled: true,
+  };
+
+  @InternalState()
+  pager: Partial<PagerProps> = {
+    visible: true,
+    allowedPageSizes: [2, 4, 'all'],
+    showPageSizeSelector: true,
+    displayMode: 'full',
+  };
+
+  setPageIndex(pageIndex: number): void {
+    this.paging = {
+      ...this.paging,
+      pageIndex,
+    };
+  }
+
+  setPageSize(pageSize: number | 'all'): void {
+    this.paging = {
+      ...this.paging,
+      pageSize,
+    };
+  }
 
   @Effect({ run: 'once' })
   optionsUpdated(): void {
     (window as unknown as { onOptionsUpdated: (unknown) => void })
       .onOptionsUpdated = (newOptions) => {
+        const { paging, pager, ...rest } = newOptions;
+
         this.options = {
           ...this.options,
-          ...newOptions,
+          ...rest,
+        };
+
+        this.pager = {
+          ...this.pager,
+          ...pager,
+        };
+
+        this.paging = {
+          ...this.paging,
+          ...paging,
         };
       };
   }

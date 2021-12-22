@@ -38,10 +38,13 @@ const createScheduler = async (
   ['day', 'week', 'workWeek', 'month'].forEach((view) => {
     test(`Base views layout test in material theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t, { screenshotComparerOptions }) => {
       const scheduler = new Scheduler('#container');
-      const { takeScreenshot } = createScreenshotsComparer(t);
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
         .expect(await takeScreenshot(`material-groups(view=${view}-orientation=${groupOrientation}).png`, scheduler.workSpace, screenshotComparerOptions)).ok();
+
+      await t.expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
     }).before(async (_, { platform }) => createScheduler(platform, view, groupOrientation));
   });
 });
@@ -50,10 +53,13 @@ const createScheduler = async (
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
     test(`Timeline views layout test in material theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t, { screenshotComparerOptions }) => {
       const scheduler = new Scheduler('#container');
-      const { takeScreenshot } = createScreenshotsComparer(t);
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
         .expect(await takeScreenshot(`material-groups(view=${view}-orientation=${groupOrientation}).png`, scheduler.workSpace, screenshotComparerOptions)).ok();
+
+      await t.expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
     }).before(async (_, { platform }) => createScheduler(platform, view, groupOrientation));
   });
 });

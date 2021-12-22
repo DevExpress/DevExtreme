@@ -5,6 +5,8 @@ import { getValidStartDate } from './week';
 
 const SATURDAY_INDEX = 6;
 const SUNDAY_INDEX = 0;
+const MONDAY_INDEX = 1;
+const DAYS_IN_WEEK = 7;
 
 export const isDataOnWeekend = (date: Date): boolean => {
   const day = date.getDay();
@@ -28,7 +30,12 @@ export const calculateStartViewDate: CalculateStartViewDate = (
   );
 
   const firstViewDate = dateUtils.getFirstWeekDate(viewStart, firstDayOfWeek);
-  const normalizedDate = dateUtils.normalizeDateByWeek(firstViewDate, viewStart);
+  if (isDataOnWeekend(firstViewDate)) {
+    const currentDay = firstViewDate.getDay();
+    const distance = (MONDAY_INDEX + DAYS_IN_WEEK - currentDay) % 7;
 
-  return setOptionHour(normalizedDate, startDayHour);
+    firstViewDate.setDate(firstViewDate.getDate() + distance);
+  }
+
+  return setOptionHour(firstViewDate, startDayHour);
 };
