@@ -82,6 +82,8 @@ describe('AppointmentContent', () => {
 
     it('should render reduced icon', () => {
       const appointmentContent = render({
+        onReducedIconMouseEnter: 'some value 1',
+        onReducedIconMouseLeave: 'some value 2',
         props: {
           isReduced: true,
         },
@@ -91,6 +93,13 @@ describe('AppointmentContent', () => {
 
       expect(reducedIcon)
         .toHaveLength(1);
+
+      expect(reducedIcon.props())
+        .toEqual({
+          className: 'dx-scheduler-appointment-reduced-icon',
+          onMouseEnter: 'some value 1',
+          onMouseLeave: 'some value 2',
+        });
     });
 
     it('it should has correct render with template', () => {
@@ -119,6 +128,46 @@ describe('AppointmentContent', () => {
 
       expect(appointmentTemplate.props())
         .toEqual(templateProps);
+    });
+  });
+
+  describe('Behavior', () => {
+    describe('onReducedIconMouseEnter', () => {
+      it('should invoke showReducedIconTooltip', () => {
+        const showReducedIconTooltip = jest.fn();
+        const content = new AppointmentContent({
+          data: {
+            appointmentData: {
+              endDate: 'some value 0',
+            },
+          },
+          showReducedIconTooltip,
+        } as any);
+
+        content.refReducedIcon = { current: 'some ref' } as any;
+
+        content.onReducedIconMouseEnter();
+
+        expect(showReducedIconTooltip)
+          .toBeCalledWith({
+            target: 'some ref',
+            endDate: 'some value 0',
+          });
+      });
+    });
+
+    describe('onReducedIconMouseLeave', () => {
+      it('should invoke hideReducedIconTooltip', () => {
+        const hideReducedIconTooltip = jest.fn();
+        const content = new AppointmentContent({
+          hideReducedIconTooltip,
+        } as any);
+
+        content.onReducedIconMouseLeave();
+
+        expect(hideReducedIconTooltip)
+          .toBeCalledTimes(1);
+      });
     });
   });
 

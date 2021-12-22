@@ -1,5 +1,11 @@
 import {
-  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template, Event,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  JSXTemplate,
+  OneWay,
+  Template,
+  Event,
 } from '@devextreme-generator/declarations';
 import {
   AppointmentTemplateProps,
@@ -7,6 +13,7 @@ import {
   OverflowIndicatorTemplateProps,
   OverflowIndicatorViewModel,
   AppointmentClickData,
+  ReducedIconHoverData,
 } from './types';
 import { Appointment } from './appointment';
 import { OverflowIndicator } from './overflow_indicator/layout';
@@ -18,6 +25,8 @@ export const viewFunction = ({
     appointments,
     overflowIndicators,
     appointmentTemplate,
+    showReducedIconTooltip,
+    hideReducedIconTooltip,
     onAppointmentClick,
     overflowIndicatorTemplate,
   },
@@ -31,6 +40,8 @@ export const viewFunction = ({
           index={index}
           key={item.key}
           onItemClick={onAppointmentClick}
+          showReducedIconTooltip={showReducedIconTooltip}
+          hideReducedIconTooltip={hideReducedIconTooltip}
         />
       ))
     }
@@ -54,6 +65,10 @@ export class AppointmentLayoutProps {
 
   @OneWay() overflowIndicators: OverflowIndicatorViewModel[] = [];
 
+  @OneWay() showReducedIconTooltip!: (data: ReducedIconHoverData) => void;
+
+  @OneWay() hideReducedIconTooltip!: () => void;
+
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
   @Template() overflowIndicatorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
@@ -66,7 +81,7 @@ export class AppointmentLayoutProps {
   view: viewFunction,
   jQuery: { register: true },
 })
-export class AppointmentLayout extends JSXComponent(AppointmentLayoutProps) {
+export class AppointmentLayout extends JSXComponent<AppointmentLayoutProps, 'showReducedIconTooltip' | 'hideReducedIconTooltip'>() {
   get classes(): string {
     const { isAllDay } = this.props;
 

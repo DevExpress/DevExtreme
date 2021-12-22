@@ -6,13 +6,18 @@ import {
   OneWay,
   Template,
   Fragment,
+  RefObject,
+  ForwardRef,
 } from '@devextreme-generator/declarations';
 import { AppointmentDetails } from './details/layout';
 import { AppointmentTitle } from './title/layout';
-import { AppointmentTemplateProps } from '../types';
+import { AppointmentTemplateProps, ReducedIconHoverData } from '../types';
 import type { AppointmentTemplateData } from '../../../../../ui/scheduler';
 
 export const viewFunction = ({
+  refReducedIcon,
+  onReducedIconMouseEnter,
+  onReducedIconMouseLeave,
   props: {
     text,
     index,
@@ -40,7 +45,12 @@ export const viewFunction = ({
               }
               {
                 isReduced && (
-                  <div className="dx-scheduler-appointment-reduced-icon" />
+                  <div
+                    ref={refReducedIcon}
+                    className="dx-scheduler-appointment-reduced-icon"
+                    onMouseEnter={onReducedIconMouseEnter}
+                    onMouseLeave={onReducedIconMouseLeave}
+                  />
                 )
               }
             </Fragment>
@@ -62,7 +72,11 @@ export class AppointmentContentProps {
 
   @OneWay() index = 0;
 
-  @OneWay() data?: AppointmentTemplateData;
+  @OneWay() data!: AppointmentTemplateData;
+
+  @OneWay() showReducedIconTooltip!: (data: ReducedIconHoverData) => void;
+
+  @OneWay() hideReducedIconTooltip!: () => void;
 
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 }
@@ -71,5 +85,17 @@ export class AppointmentContentProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class AppointmentContent extends JSXComponent<AppointmentContentProps>() {
+export class AppointmentContent extends JSXComponent<AppointmentContentProps, 'data' | 'showReducedIconTooltip' | 'hideReducedIconTooltip'>() {
+  @ForwardRef() refReducedIcon!: RefObject<HTMLDivElement>;
+
+  onReducedIconMouseEnter(): void {
+    this.props.showReducedIconTooltip({
+      target: this.refReducedIcon.current as HTMLDivElement,
+      endDate: this.props.data.appointmentData.endDate,
+    });
+  }
+
+  onReducedIconMouseLeave(): void {
+    this.props.hideReducedIconTooltip();
+  }
 }

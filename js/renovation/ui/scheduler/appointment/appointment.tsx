@@ -14,6 +14,7 @@ import {
   AppointmentTemplateProps,
   AppointmentViewModel,
   AppointmentClickData,
+  ReducedIconHoverData,
 } from './types';
 import { getAppointmentStyles } from './utils';
 import { AppointmentContent } from './content/layout';
@@ -37,6 +38,8 @@ export const viewFunction = ({
       },
     },
     index,
+    showReducedIconTooltip,
+    hideReducedIconTooltip,
     appointmentTemplate,
   },
 }: Appointment): JSX.Element => (
@@ -55,6 +58,8 @@ export const viewFunction = ({
       isRecurrent={isRecurrent}
       index={index}
       data={data}
+      showReducedIconTooltip={showReducedIconTooltip}
+      hideReducedIconTooltip={hideReducedIconTooltip}
       appointmentTemplate={appointmentTemplate}
     />
   </Widget>
@@ -66,6 +71,10 @@ export class AppointmentProps {
 
   @OneWay() index = 0;
 
+  @OneWay() showReducedIconTooltip!: (data: ReducedIconHoverData) => void;
+
+  @OneWay() hideReducedIconTooltip!: () => void;
+
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
   @Event() onItemClick!: (e: AppointmentClickData) => void;
@@ -75,7 +84,7 @@ export class AppointmentProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'onItemClick'>() {
+export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'onItemClick' | 'showReducedIconTooltip' | 'hideReducedIconTooltip'>() {
   @ForwardRef() ref!: RefObject<HTMLDivElement>;
 
   get text(): string { return this.props.viewModel.appointment.text; }
