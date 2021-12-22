@@ -1336,8 +1336,11 @@ export const virtualScrollingModule = {
                         const currentTake = this._loadViewportParams?.take ?? 0;
                         const rowsScrollController = this._rowsScrollController;
                         const newTake = rowsScrollController?.getViewportParams().take;
+                        const loadPageCount = this._dataSource?.loadPageCount() ?? 0;
+                        const requiredItemCount = loadPageCount * this.pageSize();
+                        const allLoadedInAppendMode = isAppendMode(this) && this.totalItemsCount() < requiredItemCount;
 
-                        (viewportIsNotFilled || currentTake < newTake) && itemCount && this.loadViewport({
+                        (viewportIsNotFilled || currentTake < newTake) && !allLoadedInAppendMode && itemCount && this.loadViewport({
                             checkLoading: true
                         });
                     },
