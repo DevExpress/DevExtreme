@@ -571,9 +571,6 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
         this.fileManager.option({
             onCurrentDirectoryChanged: dirChangedSpy,
-            // onOptionChanged: ({ value, previousValue, name, fullName })=> {
-            //     if(name === 'currentPathKeys' && value.length === 0) debugger;
-            // },
             onOptionChanged: optionChangedSpy,
             currentPathKeys: pathKeys
         });
