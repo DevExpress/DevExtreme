@@ -571,6 +571,9 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
         this.fileManager.option({
             onCurrentDirectoryChanged: dirChangedSpy,
+            // onOptionChanged: ({ value, previousValue, name, fullName })=> {
+            //     if(name === 'currentPathKeys' && value.length === 0) debugger;
+            // },
             onOptionChanged: optionChangedSpy,
             currentPathKeys: pathKeys
         });
@@ -986,7 +989,10 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     test('currentPath option value can be changed along with the fileSystemProvider option (T1045617)', function(assert) {
         let targetPath = 'Folder 1/Folder 1.1';
 
-        this.fileManager.option('currentPath', targetPath);
+        this.fileManager.option({
+            currentPath: targetPath,
+            itemView: { mode: 'details' }
+        });
         this.clock.tick(400);
 
         let currentPath = this.fileManager.option('currentPath');
@@ -1011,7 +1017,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
                     hasSubDirectories: true,
                     items: [
                         {
-                            title: 'Directory11',
+                            name: 'Directory11',
                             isDirectory: true,
                             hasSubDirectories: false,
                             items: []
@@ -1032,7 +1038,37 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(currentPathKeys[1], targetPath, 'Current path keys [1] is correct');
         assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/' + targetPath, 'Breadcrumbs has correct path');
         assert.strictEqual(this.fileManager.getCurrentDirectory().key, targetPath, 'Current directory is the target one');
-        assert.strictEqual(this.wrapper.getFolderNodes().length, 6, 'NavPane folder nodes count is correct');
-        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'NavPane current folder text is correct');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 3, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Directory11', 'NavPane current folder text is correct');
+    });
+
+    test('currentPath option value resets when corresponding path does not exist (T1045617)', function(assert) {
+        this.fileManager.option('currentPath', 'Folder x');
+        this.clock.tick(400);
+
+        const currentPath = this.fileManager.option('currentPath');
+        const currentPathKeys = this.fileManager.option('currentPathKeys');
+
+        assert.strictEqual(currentPath, '', 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 0, 'Current path keys has correct size');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, '', 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 4, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'NavPane current folder text is correct');
+    });
+
+    test('currentPathKeys option value resets when corresponding path does not exist (T1045617)', function(assert) {
+        this.fileManager.option('currentPathKeys', ['Folder x']);
+        this.clock.tick(400);
+
+        const currentPath = this.fileManager.option('currentPath');
+        const currentPathKeys = this.fileManager.option('currentPathKeys');
+
+        assert.strictEqual(currentPath, '', 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 0, 'Current path keys has correct size');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, '', 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 4, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'NavPane current folder text is correct');
     });
 });

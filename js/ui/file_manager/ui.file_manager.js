@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { isFunction } from '../../core/utils/type';
-import { when } from '../../core/utils/deferred';
+import { isDefined, isEmptyObject, isFunction, type } from '../../core/utils/type';
+import { Deferred, when } from '../../core/utils/deferred';
 import { ensureDefined, equalByValue } from '../../core/utils/common';
 
 import messageLocalization from '../../localization/message';
@@ -22,6 +22,7 @@ import FileManagerNotificationControl from './ui.file_manager.notification';
 import FileManagerEditingControl from './ui.file_manager.editing';
 import FileManagerBreadcrumbs from './ui.file_manager.breadcrumbs';
 import FileManagerAdaptivityControl from './ui.file_manager.adaptivity';
+import { normalizeOptions } from '../../core/options/utils';
 
 const FILE_MANAGER_CLASS = 'dx-filemanager';
 const FILE_MANAGER_WRAPPER_CLASS = FILE_MANAGER_CLASS + '-wrapper';
@@ -45,8 +46,10 @@ class FileManager extends Widget {
 
     _init() {
         super._init();
-
         this._initActions();
+
+        this._providerUpdateDeferred = new Deferred().resolve();
+        this._lockCurrentPathProcessing = false;
 
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
@@ -59,6 +62,7 @@ class FileManager extends Widget {
             onInitialized: this._onControllerInitialized.bind(this),
             onDataLoading: this._onDataLoading.bind(this),
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this),
+            onPathPotentiallyChanged: this._checkPathActuality.bind(this),
             editingEvents: this._actions.editing
         });
     }
@@ -503,15 +507,123 @@ class FileManager extends Widget {
         });
     }
 
+    _optionChanging(optionName, currentValue, nextValue) {
+        // // console.log(`changing=${optionName}`);
+        super._optionChanging(...arguments);
+    }
+
+    _notifyOptionChanged(optionName, value, previousValue) {
+        // // console.log(`notify_changed=${optionName}`);
+        super._notifyOptionChanged(...arguments);
+    }
+
+    _tryRemoveOptionStorage(optionName) {
+        if(!this._optionsSetAlong) {
+            return false;
+        }
+        const isOptionPresent = isDefined(this._optionsSetAlong[optionName]);
+        delete this._optionsSetAlong[optionName];
+        return isOptionPresent;
+    }
+
+    option(options, value) {
+        // if(options !== undefined) {
+        //     this.log(options, value);
+        // }
+        const optionsToCheck = normalizeOptions(options, value);
+        const isGetter = arguments.length < 2 && type(options) !== 'object';
+        const isOptionDefined = function(name) {
+            return isDefined(optionsToCheck[name]);
+        };
+
+        // !isGetter && window.canLog && // console.log('some options have changed: ', arguments[0]);
+        // if(!isGetter && (isOptionDefined('currentPath') || isOptionDefined('currentPathKeys')) && isOptionDefined('fileSystemProvider')) {
+        //     this._optionsSetAlong = optionsToCheck;
+        // }
+        if(!isGetter && (isOptionDefined('currentPath') || isOptionDefined('currentPathKeys')) && isOptionDefined('fileSystemProvider')) {
+            // console.log('detected provider setter');
+            this._providerUpdateDeferred = new Deferred();
+            this._lockCurrentPathProcessing = true;
+        }
+        // if(this._initialized) {
+        //     this._lockUpdate();
+        //     // this.log('lockUpdate');
+        // }
+        const result = super.option(...arguments);
+        // if(this._initialized) {
+        //     this._unlockUpdate();
+        //     // this.log('unlockUpdate');
+        // }
+        return result;
+    }
+
+    // _postponeDataSourceLoading(promise) {
+    //     this.postponedOperations.add('_reloadDataSource', this._reloadDataSource.bind(this), promise);
+    // }
+
+    // _postponedChangePath() {
+    //     log('_postponedChangePath');
+    //     this.postponedOperations.add('_fmPath', () => {
+    //         log('pathChangied');
+    //         return this._controller.setCurrentPath(this.option('currentPath')).then(() => this._lockCurrentPathProcessing = false);
+    //     });
+    // }
+
+    // _postponedChangePathByKeys() {
+    //     log('_postponedChangePathByKeys');
+    //     this.postponedOperations.add('_fmPathKeys', () => {
+    //         log('pathKeyChanged');
+    //         return this._controller.setCurrentPathByKeys(this.option('currentPathKeys')).then(() => this._lockCurrentPathProcessing = false);
+    //     });
+    // }
+
+    // _postponedUpdateProvider() {
+    //     log('_postponedUpdateProvider');
+    //     this.postponedOperations.add('_fmProvider', () => {
+    //         log('providerChanged');
+    //         // return this._controller.updateProvider(this.option('fileSystemProvider'), this.option('currentPath'))
+    //         return this._controller._updateProviderOnly(this.option('fileSystemProvider'), this.option('currentPath'))
+    //             .then(() => {
+    //                 log('pathKeyChangedAfterProviderChanged');
+    //                 return this._controller.setCurrentPathByKeys(this.option('currentPathKeys'))
+    //                     .then(() => {
+    //                         log('repaintAfterProviderChanged');
+    //                         return this.repaint();
+    //                     });
+    //             });
+    //     });
+    // }
+
     _optionChanged(args) {
         const name = args.name;
+        // // console.log(`changed=${name}`);
 
         switch(name) {
             case 'currentPath':
-                this._controller.setCurrentPath(args.value);
+                // this._tryRemoveOptionStorage(name);
+                // console.log(`change scheduled(${name})=${args.value}`);
+                // this._lockCurrentPathProcessing = true;
+
+                this._providerUpdateDeferred.then(() => {
+                    // console.log(`changed(${name})=${args.value}`);
+                    this._lockCurrentPathProcessing = false;
+                    return this._controller.setCurrentPath(args.value);// .then(() => this._lockCurrentPathProcessing = false);
+                });
+                // this._controller.setCurrentPath(args.value);
+                // this._postponedChangePath();
                 break;
             case 'currentPathKeys':
-                this._controller.setCurrentPathByKeys(args.value);
+                // this._tryRemoveOptionStorage(name);
+                // console.log(`change scheduled(${name})=${args.value}`);
+                // this._lockCurrentPathProcessing = true;
+
+                this._providerUpdateDeferred.then(() => {
+                    // console.log(`changed(${name})=${args.value}`);
+                    this._lockCurrentPathProcessing = false;
+                    this._controller.setCurrentPathByKeys(args.value);// .then(() => this._lockCurrentPathProcessing = false);
+                });
+                // this._controller.setCurrentPathByKeys(args.value);
+                // this._postponedChangePathByKeys();
                 break;
             case 'selectedItemKeys':
                 if(!this._lockSelectionProcessing && this._itemView) {
@@ -525,31 +637,63 @@ class FileManager extends Widget {
                 break;
             case 'rootFolderName':
                 this._controller.setRootText(args.value);
-                this.repaint();
+                this._invalidate();
                 break;
-            case 'fileSystemProvider':
-                this._controller.updateProvider(args.value, this.option('currentPath'))
-                    .then(() => this.repaint());
+            case 'fileSystemProvider': {
+                // console.log(`changed=${name}`);
+                // // console.log(args);
+                // // console.log(this.option('currentPath'));
+                // if(isDefined(this._optionsSetAlong?.['currentPath']) && this._optionsSetAlong['currentPath'] !== this.option('currentPath')) {
+                //     this._options.silent('currentPath', '');
+                // }
+                // if(isDefined(this._optionsSetAlong?.['currentPath']) && this._optionsSetAlong['currentPath'] !== this.option('currentPath')) {
+                //     this._options.silent('currentPath', '');
+                // }
+
+                // const pathAlreadySet = isDefined(this._optionsSetAlong) && (this._optionsSetAlong['currentPath'] || this._optionsSetAlong['currentPathKeys']);
+                // this._controller.updateProvider(args.value, pathAlreadySet ? this.option('currentPath') : undefined)
+
+                // log('providerChanging');
+                if(!this._lockCurrentPathProcessing) {
+                    this._providerUpdateDeferred = new Deferred();
+                }
+                const path = this._lockCurrentPathProcessing ? undefined : this.option('currentPath'); // TODO: change to pathKeys
+                this._controller.updateProvider(args.value, path)
+                    .then(() => {
+                        // console.log('resolvingDeferredToProcessPath');
+                        return this._providerUpdateDeferred.resolve();
+                    })
+                    .then(() => {
+                        // console.log('repaintAfterProviderChanged');
+                        return this.repaint();
+                    });
+                // this._controller.updateProvider(args.value, '')
+                //     .then(() => {
+                //         log('repaintAfterProviderChanged');
+                //         this.repaint();
+                //     });
+                // this._postponedUpdateProvider();
                 break;
+            }
             case 'allowedFileExtensions':
                 this._controller.setAllowedFileExtensions(args.value);
-                this.repaint();
+                this._invalidate();
                 break;
             case 'upload':
                 this._controller.setUploadOptions(this.option('upload'));
-                this.repaint();
+                this._invalidate();
                 break;
             case 'permissions':
             case 'selectionMode':
             case 'customizeThumbnail':
             case 'customizeDetailColumns':
-                this.repaint();
+                this._invalidate();
                 break;
             case 'itemView':
                 if(args.fullName === 'itemView.mode') {
                     this._switchView(args.value);
                 } else {
-                    this.repaint();
+                    this._invalidate();
                 }
                 break;
             case 'toolbar':
@@ -658,12 +802,13 @@ class FileManager extends Widget {
         return this._controller.getCurrentDirectory();
     }
 
-    _onControllerInitialized({ controller }) {
+    _onControllerInitialized({ controller }) { // TODO
         this._controller = this._controller || controller;
-        const currentDirectory = controller.getCurrentDirectory();
-        if(!currentDirectory.fileItem.isRoot()) {
-            this._syncToCurrentDirectory();
-        }
+        // const currentDirectory = controller.getCurrentDirectory();
+        this._syncToCurrentDirectory();
+        // if(!currentDirectory.fileItem.isRoot()) {
+        //     this._syncToCurrentDirectory();
+        // }
     }
 
     _onDataLoading({ operation }) {
@@ -685,24 +830,35 @@ class FileManager extends Widget {
 
     _syncToCurrentDirectory() {
         const currentDirectory = this._getCurrentDirectory();
-        const currentPath = this._controller.getCurrentPath();
-        const currentPathKeys = currentDirectory.fileItem.pathKeys;
 
         if(this._filesTreeView) {
             this._filesTreeView.updateCurrentDirectory();
         }
-
         if(this._breadcrumbs) {
             this._breadcrumbs.setCurrentDirectory(currentDirectory);
         }
 
-        const options = { currentPath };
+        this._checkPathActuality();
+    }
 
+    _checkPathActuality() {
+        if(this._lockCurrentPathProcessing) {
+            return;
+        }
+        const currentPath = this._controller.getCurrentPath();
+        const currentPathKeys = this._controller.getCurrentPathKeys();
+        const options = {};
+
+        if(this.option('currentPath') !== currentPath) {
+            options.currentPath = currentPath;
+        }
         if(!equalByValue(this.option('currentPathKeys'), currentPathKeys)) {
             options.currentPathKeys = currentPathKeys;
         }
 
-        this.option(options);
+        if(!isEmptyObject(options)) {
+            this.option(options);
+        }
     }
 
     getDirectories(parentDirectoryInfo, skipNavigationOnError) {
