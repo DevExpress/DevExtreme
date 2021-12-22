@@ -149,7 +149,7 @@ const baseTrackerPrototype = {
             this._hoveredPoint.clearHover();
             this._hoveredPoint = null;
             if(this._tooltip.isEnabled()) {
-                this._hideTooltip(this._hoveredPoint, null, isPointerOut);
+                this._hideTooltip(this._hoveredPoint, false, isPointerOut);
             }
         }
     },
@@ -233,7 +233,7 @@ const baseTrackerPrototype = {
     },
 
     _hidePointTooltip: function(event, point) {
-        event.data.tracker._hideTooltip(point, null, true);
+        event.data.tracker._hideTooltip(point, false, true);
     },
 
     _enableOutHandler: function() {
@@ -270,7 +270,7 @@ const baseTrackerPrototype = {
 
     _pointerOut: function(force) {
         this.clearHover(true);
-        (force || this._tooltip.isEnabled()) && this._hideTooltip(this.pointAtShownTooltip, null, true);
+        (force || this._tooltip.isEnabled()) && this._hideTooltip(this.pointAtShownTooltip, false, true);
     },
 
     _triggerLegendClick: function(eventArgs, elementClick) {
