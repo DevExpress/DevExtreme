@@ -36,6 +36,11 @@
         ".github"
     ],
     "constraints": {
-        "npm": "^7.0.0"
+        "npm": "^8.3.0"
+    },
+    "force": {
+        "constraints": {
+            "node": "^16.13.1"
+        }
     }
 }
