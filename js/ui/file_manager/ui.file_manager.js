@@ -602,7 +602,7 @@ class FileManager extends Widget {
             case 'currentPath':
                 // this._tryRemoveOptionStorage(name);
                 // console.log(`change scheduled(${name})=${args.value}`);
-                // this._lockCurrentPathProcessing = true;
+                this._lockCurrentPathProcessing = true;
 
                 this._providerUpdateDeferred.then(() => {
                     // console.log(`changed(${name})=${args.value}`);
@@ -615,7 +615,7 @@ class FileManager extends Widget {
             case 'currentPathKeys':
                 // this._tryRemoveOptionStorage(name);
                 // console.log(`change scheduled(${name})=${args.value}`);
-                // this._lockCurrentPathProcessing = true;
+                this._lockCurrentPathProcessing = true;
 
                 this._providerUpdateDeferred.then(() => {
                     // console.log(`changed(${name})=${args.value}`);
