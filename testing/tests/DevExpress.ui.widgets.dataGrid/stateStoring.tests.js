@@ -456,7 +456,7 @@ QUnit.module('State Storing with real controllers', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options, ignoreClockTick) {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'editing', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling', 'focus', 'keyboardNavigation'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'editing', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling', 'focus', 'keyboardNavigation', 'filterSync'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: options
@@ -1611,6 +1611,7 @@ QUnit.module('State Storing with real controllers', {
             'filterPanel': {},
             'filterValue': null,
             'searchText': '',
+            'selectedRowKeys': [],
             'pageIndex': 0,
             'pageSize': 20
         };
@@ -1714,6 +1715,56 @@ QUnit.module('State Storing with real controllers', {
         assert.strictEqual(customSave.getCall(0).args[0].searchText, '1', 'customSave is called with the searchPanel.text initial value');
         assert.strictEqual(this.option('searchPanel.text'), '1', 'searchPanel.text equals its initial value');
         assert.equal(this.dataController.items().length, 1);
+    });
+
+    [null, {}].forEach(emptyState => {
+        QUnit.test(`searchPanel.text should be cleared after calling state(${emptyState})`, function(assert) {
+            // arrange
+            this.setupDataGridModules({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                searchPanel: {
+                    visible: true,
+                    text: 'Some text'
+                },
+            });
+
+            // act
+            this.state(emptyState);
+
+            // assert
+            assert.equal(this.option('searchPanel.text'), '');
+        });
+
+        QUnit.test(`focusedRowKey should be cleared after calling state(${emptyState})`, function(assert) {
+            // arrange
+            this.setupDataGridModules({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                keyExpr: 'id',
+                focusedRowEnabled: true,
+                focusedRowKey: 1
+            });
+
+            // act
+            this.state(emptyState);
+
+            // assert
+            assert.strictEqual(this.option('focusedRowKey'), null);
+        });
+
+        QUnit.test(`selectedRowKeys should be cleared after calling state(${emptyState})`, function(assert) {
+            // arrange
+            this.setupDataGridModules({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                keyExpr: 'id',
+                selectedRowKeys: [1, 2],
+            });
+
+            // act
+            this.state(emptyState);
+
+            // assert
+            assert.deepEqual(this.option('selectedRowKeys'), []);
+        });
     });
 });
 

@@ -38,7 +38,7 @@ export class AppointmentViewModelGenerator {
 
         if(isRenovatedAppointments) {
             // TODO this structure should be by default after remove old render
-            return this.makeRenovatedViewModels(viewModel, options.supportAllDayRow);
+            return this.makeRenovatedViewModels(viewModel, options.supportAllDayRow, options.isVerticalGroupOrientation);
         }
 
         return {
@@ -76,11 +76,12 @@ export class AppointmentViewModelGenerator {
             return item;
         });
     }
-    makeRenovatedViewModels(viewModel, supportAllDayRow) {
+    makeRenovatedViewModels(viewModel, supportAllDayRow, isVerticalGrouping) {
         const strategy = this.getRenderingStrategy();
         const regularViewModels = [];
         const allDayViewModels = [];
         const compactOptions = [];
+        const isAllDayPanel = supportAllDayRow && !isVerticalGrouping;
 
         viewModel.forEach(({ itemData, settings }) => {
             settings.forEach((options) => {
@@ -90,7 +91,7 @@ export class AppointmentViewModelGenerator {
                         compactViewModel: options.virtual,
                         appointmentViewModel: item
                     });
-                } else if(options.allDay && supportAllDayRow) {
+                } else if(options.allDay && isAllDayPanel) {
                     allDayViewModels.push(item);
                 } else {
                     regularViewModels.push(item);

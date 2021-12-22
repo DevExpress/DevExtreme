@@ -1,5 +1,5 @@
 import ViewDataProvider from '../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
-import { SchedulerProps } from '../../props';
+import { SchedulerProps, ViewProps } from '../../props';
 import { ViewType } from '../../types';
 import { prepareGenerationOptions } from '../../workspaces/base/work_space';
 import { getViewRenderConfigByType } from '../../workspaces/base/work_space_config';
@@ -13,6 +13,7 @@ import {
 import { createTimeZoneCalculator } from '../../common';
 import { AppointmentsConfigType } from '../types';
 import { TimeZoneCalculator } from '../../timeZoneCalculator/utils';
+import { getCurrentViewConfig } from '../views';
 
 const prepareInstances = (
   viewType: ViewType,
@@ -26,13 +27,23 @@ const prepareInstances = (
   viewDataProvider: ViewDataProviderType;
   DOMMetaData: CellsMetaData;
 } => {
-  const schedulerProps = new SchedulerProps();
+  const schedulerProps: any = new SchedulerProps();
   schedulerProps.currentDate = currentDate;
-  const workspaceProps = new WorkSpaceProps();
+  let workspaceProps = new WorkSpaceProps();
   workspaceProps.type = viewType;
   workspaceProps.intervalCount = intervalCount;
   workspaceProps.currentDate = currentDate;
   workspaceProps.startDate = currentDate;
+
+  workspaceProps = {
+    ...workspaceProps,
+    ...getCurrentViewConfig(
+      workspaceProps as unknown as Partial<ViewProps>,
+      schedulerProps,
+      currentDate,
+    ),
+    showAllDayPanel: supportAllDayRow,
+  };
 
   // TODO: convert ViewdataProvider to TS
   const viewDataProvider = (new ViewDataProvider('week') as unknown) as ViewDataProviderType;
@@ -121,7 +132,7 @@ describe('Appointments model', () => {
               isVirtualScrolling: false,
               intervalCount: 7,
               hoursInterval: 0.5,
-              showAllDayPanel: false,
+              showAllDayPanel: supportAllDayRow,
               groups: [],
               appointmentCountPerCell: 2, // TODO default
               appointmentOffset: 26, // TODO default

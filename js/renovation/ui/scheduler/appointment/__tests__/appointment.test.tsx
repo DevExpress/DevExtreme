@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Widget } from '../../../common/widget';
 import { viewFunction as ViewFunction, Appointment, AppointmentProps } from '../appointment';
-import { AppointmentContent } from '../content';
+import { AppointmentContent } from '../content/layout';
 import { AppointmentViewModel, ReduceType } from '../types';
 
 describe('Appointment', () => {
@@ -56,7 +56,19 @@ describe('Appointment', () => {
       const appointment = render({
         styles: 'some-styles',
         classes: 'some-classes',
-        text: 'some-text',
+        text: 'some Text',
+        isReduced: true,
+        data: { data: 'someData' },
+        dateText: 'some dateText',
+        props: {
+          viewModel: {
+            info: {
+              isRecurrent: true,
+            },
+          },
+          index: 123,
+          appointmentTemplate: 'some template',
+        },
       });
 
       expect(appointment.is(Widget))
@@ -69,70 +81,22 @@ describe('Appointment', () => {
         .toEqual('some-styles');
 
       expect(appointment.prop('hint'))
-        .toEqual('some-text');
-    });
+        .toEqual('some Text');
 
-    it('it should has correct render with template', () => {
-      const templateProps = {
-        data: { test: 'Test Data' },
-        index: 1234,
-      };
-      const template = '<div class="some-template">Some Template</div>';
-      const appointment = render({
-        styles: 'some-styles',
-        classes: 'some-classes',
-        ...templateProps,
-        props: {
-          appointmentTemplate: template,
-        },
-      });
+      const content = appointment.childAt(0);
 
-      expect(appointment.is(Widget))
-        .toBe(true);
+      expect(content.type())
+        .toBe(AppointmentContent);
 
-      expect(appointment.prop('classes'))
-        .toBe('some-classes');
-
-      expect(appointment.prop('style'))
-        .toEqual('some-styles');
-
-      const appointmentTemplate = appointment.children();
-
-      expect(appointmentTemplate.type())
-        .toBe(template);
-
-      expect(appointmentTemplate)
-        .toHaveLength(1);
-
-      expect(appointmentTemplate.props())
-        .toEqual(templateProps);
-    });
-
-    it('content should have correct props', () => {
-      const appointment = render({
-        text: 'some-text',
-        dateText: 'some-dateText',
-        isReduced: true,
-        props: {
-          viewModel: {
-            info: {
-              isRecurrent: true,
-            },
-          },
-        },
-      });
-
-      const appointmentContent = appointment.childAt(0);
-
-      expect(appointmentContent.is(AppointmentContent))
-        .toBe(true);
-
-      expect(appointmentContent.props())
+      expect(content.props())
         .toEqual({
-          text: 'some-text',
-          dateText: 'some-dateText',
-          isRecurrent: true,
+          text: 'some Text',
           isReduced: true,
+          dateText: 'some dateText',
+          isRecurrent: true,
+          index: 123,
+          data: { data: 'someData' },
+          appointmentTemplate: 'some template',
         });
     });
   });
@@ -166,6 +130,15 @@ describe('Appointment', () => {
   });
 
   describe('Logic', () => {
+    describe('AppointmentProps', () => {
+      it('should be correctly initialize default props', () => {
+        expect(new AppointmentProps())
+          .toEqual({
+            index: 0,
+          });
+      });
+    });
+
     describe('Getters', () => {
       describe('styles', () => {
         it('should return correct styles', () => {
@@ -309,25 +282,6 @@ describe('Appointment', () => {
                 text: 'Some text',
               },
             });
-        });
-      });
-
-      describe('index', () => {
-        it('shoud return correct default value', () => {
-          const appointment = new Appointment(new AppointmentProps());
-
-          expect(appointment.index)
-            .toEqual(0);
-        });
-
-        it('shoud return correct value', () => {
-          const appointment = new Appointment({
-            viewModel: defaultViewModel,
-            index: 1234,
-          } as any);
-
-          expect(appointment.index)
-            .toEqual(1234);
         });
       });
 

@@ -98,6 +98,8 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() type: ViewType = 'week';
 
+  @OneWay() maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 
   @Slot() appointments?: JSX.Element;
@@ -113,7 +115,6 @@ WorkSpaceProps,
 | 'endDayHour'
 | 'cellDuration'
 | 'groupByDate'
-| 'groups'
 | 'scrolling'
 | 'currentDate'
 | 'intervalCount'
@@ -129,11 +130,9 @@ WorkSpaceProps,
 | 'tabIndex'
 | 'accessKey'
 | 'focusStateEnabled'
-| 'indicatorTime'
 | 'allowMultipleCellSelection'
 | 'allDayPanelExpanded'
 | 'hoursInterval'
-| 'selectedCellData'
 | 'type'
 | 'dataCellTemplate'
 | 'dateCellTemplate'
@@ -141,6 +140,7 @@ WorkSpaceProps,
 | 'resourceCellTemplate'
 | 'appointmentTemplate'
 | 'appointmentCollectorTemplate'
+| 'maxAppointmentsPerCell'
 >;
 
 export interface ViewRenderConfig {
@@ -158,6 +158,8 @@ export interface ViewRenderConfig {
   scrollingDirection: ScrollableDirection;
   isCreateCrossScrolling: boolean;
   defaultGroupOrientation: GroupOrientation;
+
+  isMonthDateHeader: boolean;
 
   // This is a WA for this bug: https://github.com/DevExpress/devextreme-renovation/issues/814
   isUseMonthDateTable: boolean;

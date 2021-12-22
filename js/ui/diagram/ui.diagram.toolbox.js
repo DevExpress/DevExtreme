@@ -227,16 +227,17 @@ class DiagramToolbox extends DiagramFloatingPanel {
                             filteringToolboxes: this._toolboxes.length - 1
                         });
                     }
-                    this._createTooltips($toolboxElement.find('[data-toggle="' + DIAGRAM_TOOLTIP_DATATOGGLE + '"]'));
+                    this._createTooltips($toolboxElement);
                 }
             };
             result.push(groupObj);
         }
         return result;
     }
-    _createTooltips(targets) {
+    _createTooltips($toolboxElement) {
         if(this._isTouchMode()) return;
 
+        const targets = $toolboxElement.find('[data-toggle="' + DIAGRAM_TOOLTIP_DATATOGGLE + '"]');
         const $container = this.$element();
         targets.each((index, element) => {
             const $target = $(element);
@@ -319,13 +320,16 @@ class DiagramToolbox extends DiagramFloatingPanel {
             text: this._filterText,
             filteringToolboxes: this._toolboxes.map(($element, index) => index)
         });
-        this._toolboxes.forEach($element => {
-            const $tooltipContainer = $($element);
-            this._createTooltips($tooltipContainer.find('[data-toggle="' + DIAGRAM_TOOLTIP_DATATOGGLE + '"]'));
-        });
+        this.updateTooltips();
 
         this.updateMaxHeight();
         this._scrollView.update();
+    }
+    updateTooltips() {
+        this._toolboxes.forEach($element => {
+            const $tooltipContainer = $($element);
+            this._createTooltips($tooltipContainer);
+        });
     }
 
     _createOnShapeCategoryRenderedAction() {

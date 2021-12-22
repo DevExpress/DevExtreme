@@ -20,6 +20,7 @@ import {
 } from './common/types';
 
 import { ScrollViewProps } from './common/scrollview_props';
+import { ScrollViewLoadPanel } from './internal/load_panel';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
@@ -64,7 +65,6 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       reachBottomText={reachBottomText}
       forceGeneratePockets
       needScrollViewContentWrapper
-      needScrollViewLoadPanel
       // Native
       useSimulatedScrollbar={useSimulatedScrollbar}
       // Simulated
@@ -75,6 +75,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       onStart={onStart}
       onEnd={onEnd}
       onBounce={onBounce}
+      loadPanelTemplate={ScrollViewLoadPanel}
 
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
@@ -200,9 +201,4 @@ export class ScrollView extends JSXComponent<ScrollViewProps>() {
     }
     return this.props.reachBottomEnabled;
   }
-
-  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
-  // get scrollable(): any {
-  //   return this.scrollableRef.current!;
-  // }
 }

@@ -10,6 +10,7 @@ import {
 import { CellBase as Cell, CellBaseProps } from '../cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import { DataCellTemplateProps } from '../../types';
+import { DATE_TABLE_CELL_CLASS } from '../../const';
 
 const ADD_APPOINTMENT_LABEL = 'Add appointment';
 
@@ -72,7 +73,7 @@ export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
     return combineClasses({
       'dx-scheduler-cell-sizes-horizontal': true,
       'dx-scheduler-cell-sizes-vertical': !allDay,
-      'dx-scheduler-date-table-cell': !allDay,
+      [DATE_TABLE_CELL_CLASS]: !allDay,
       'dx-state-focused': isSelected,
       'dx-scheduler-focused-cell': isFocused,
       [className]: true,

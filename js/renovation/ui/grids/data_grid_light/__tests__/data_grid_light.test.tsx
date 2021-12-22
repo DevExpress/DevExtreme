@@ -1,8 +1,11 @@
 import React from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { DataGridLight, viewFunction as DataGridView, DataGridLightProps } from '../data_grid_light';
+import {
+  DataGridLight, viewFunction as DataGridView, DataGridLightProps, PagingProps,
+} from '../data_grid_light';
 import { Widget } from '../../../common/widget';
+import { columns, generateData } from './test_data';
 
 describe('DataGridLight', () => {
   describe('View', () => {
@@ -15,7 +18,7 @@ describe('DataGridLight', () => {
       } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...props as any} /> as any);
 
-      expect(tree.find(Widget).props()).toMatchObject({
+      expect(tree.find(Widget).first().props()).toMatchObject({
         aria: { role: 'presentation' },
         classes: '',
         'rest-attributes': 'true',
@@ -26,7 +29,10 @@ describe('DataGridLight', () => {
       const props = new DataGridLightProps();
       props.dataSource = [{ id: 1 }, { id: 2 }];
       props.columns = ['id'];
-      const viewProps = { props } as Partial<DataGridLight>;
+      const viewProps = {
+        props,
+        visibleItems: props.dataSource,
+      } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
       expect(tree.find('tr')).toHaveLength(3);
@@ -40,7 +46,10 @@ describe('DataGridLight', () => {
       const props = new DataGridLightProps();
       props.dataSource = [{ id: 1, name: 'name 1' }];
       props.columns = ['id', 'name'];
-      const viewProps = { props } as Partial<DataGridLight>;
+      const viewProps = {
+        props,
+        visibleItems: props.dataSource,
+      } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
       expect(tree.find('tr')).toHaveLength(2);
@@ -57,6 +66,116 @@ describe('DataGridLight', () => {
       describe('aria', () => {
         it('should have role "presentation"', () => {
           expect(new DataGridLight({}).aria).toEqual({ role: 'presentation' });
+        });
+      });
+
+      // todo: move when paging will be in different module
+      describe('paging', () => {
+        describe('visibleItems', () => {
+          const dataSource = generateData(20);
+          const paging = new PagingProps();
+
+          it('should be calculated on first page', () => {
+            paging.pageIndex = 0;
+            paging.pageSize = 5;
+
+            const dataGrid = new DataGridLight({
+              dataSource,
+              columns,
+              paging,
+            });
+            dataGrid.updatePagingProps();
+            expect(dataGrid.visibleItems).toEqual(dataSource.slice(0, 5));
+          });
+
+          it('should be calculated on second page', () => {
+            paging.pageIndex = 1;
+            paging.pageSize = 5;
+
+            const dataGrid = new DataGridLight({
+              dataSource,
+              columns,
+              paging,
+            });
+            dataGrid.updatePagingProps();
+            expect(dataGrid.visibleItems).toEqual(dataSource.slice(5, 10));
+          });
+
+          it('should be calculated when pageSize is "all"', () => {
+            paging.pageSize = 'all';
+
+            const dataGrid = new DataGridLight({
+              dataSource,
+              columns,
+              paging,
+            });
+            dataGrid.updatePagingProps();
+            expect(dataGrid.visibleItems).toEqual(dataSource);
+          });
+        });
+
+        describe('pageCount', () => {
+          const dataSource = generateData(22);
+
+          it('should be calculated when pageSize is a number', () => {
+            const dataGrid = new DataGridLight({
+              dataSource,
+            });
+
+            dataGrid.pagingPageSize = 10;
+            expect(dataGrid.pagingPageCount).toEqual(3);
+          });
+
+          it('should be calculated when pageSize is "all"', () => {
+            const dataGrid = new DataGridLight({
+              dataSource,
+            });
+
+            dataGrid.pagingPageSize = 'all';
+            expect(dataGrid.pagingPageCount).toEqual(1);
+          });
+        });
+      });
+    });
+
+    describe('Callbacks', () => {
+      it('onPageIndexChange', () => {
+        const grid = new DataGridLight({});
+
+        grid.onPageIndexChange(100);
+        expect(grid.pagingPageIndex).toEqual(100);
+      });
+
+      it('onPageSizeChange', () => {
+        const grid = new DataGridLight({});
+
+        grid.onPageSizeChange(100);
+        expect(grid.pagingPageSize).toEqual(100);
+      });
+    });
+
+    describe('Effects', () => {
+      describe('updatePagingProps', () => {
+        it('should update two way props', () => {
+          const paging = new PagingProps();
+          paging.pageSize = 10;
+          paging.pageIndex = 20;
+          const dataGrid = new DataGridLight({
+            paging,
+          });
+          dataGrid.updatePagingProps();
+          expect(dataGrid.pagingPageSize).toEqual(10);
+          expect(dataGrid.pagingPageIndex).toEqual(20);
+        });
+
+        it('should set pageSize to "all" if prop is zero', () => {
+          const paging = new PagingProps();
+          paging.pageSize = 0;
+          const dataGrid = new DataGridLight({
+            paging,
+          });
+          dataGrid.updatePagingProps();
+          expect(dataGrid.pagingPageSize).toEqual('all');
         });
       });
     });

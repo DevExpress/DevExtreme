@@ -15,11 +15,10 @@ fixture.disablePageReloads`Editing`
 const getGridConfig = (config): Record<string, unknown> => {
   const defaultConfig = {
     errorRowEnabled: true,
-    dataSource: {
-      asyncLoadEnabled: false,
-      store: [{ name: 'Alex', age: 15, lastName: 'John' }],
-      paginate: true,
-    },
+    dataSource: [{
+      id: 1, name: 'Alex', age: 15, lastName: 'John',
+    }],
+    keyExpr: 'id',
     legacyRendering: false,
   };
 

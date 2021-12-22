@@ -1,4 +1,5 @@
 import { isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
 
 export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
 
@@ -11,8 +12,15 @@ export const concatPaths = (path1, path2) => {
 
 export const getTextWithoutSpaces = text => text ? text.replace(/\s/g, '') : undefined;
 
-export const isExpectedItem = (item, fieldName) => item && (item.dataField === fieldName || item.name === fieldName ||
-    getTextWithoutSpaces(item.title) === fieldName || (item.itemType === 'group' && getTextWithoutSpaces(item.caption) === fieldName));
+export const isEqualToDataFieldOrNameOrTitleOrCaption = (item, fieldName) => {
+    if(item) {
+        return item.dataField === fieldName
+            || item.name === fieldName
+            || getTextWithoutSpaces(item.title) === fieldName
+            || (item.itemType === 'group' && getTextWithoutSpaces(item.caption) === fieldName);
+    }
+    return false;
+};
 
 export const getFullOptionName = (path, optionName) => `${path}.${optionName}`;
 
@@ -53,21 +61,43 @@ export const getItemPath = (items, item, isTabs) => {
     }
 };
 
-export function getRootLevelOfExpectedComplexOption(fullOptionName) {
-    const expectedRootNames = ['formData', 'items'];
-    const splitFullName = fullOptionName.split('.');
-    let result;
+export function convertToLayoutManagerOptions({ form, $formElement, formOptions, items, validationGroup, extendedLayoutManagerOptions,
+    onFieldDataChanged, onContentReady, onDisposing
+}) {
+    const baseOptions = {
+        form: form,
+        items,
+        $formElement,
+        validationGroup,
+        onFieldDataChanged,
+        onContentReady,
+        onDisposing,
+        validationBoundary: formOptions.scrollingEnabled ? $formElement : undefined,
+        scrollingEnabled: formOptions.scrollingEnabled,
+        showRequiredMark: formOptions.showRequiredMark,
+        showOptionalMark: formOptions.showOptionalMark,
+        requiredMark: formOptions.requiredMark,
+        optionalMark: formOptions.optionalMark,
+        requiredMessage: formOptions.requiredMessage,
+        screenByWidth: formOptions.screenByWidth,
+        layoutData: formOptions.formData,
+        labelLocation: formOptions.labelLocation,
+        customizeItem: formOptions.customizeItem,
+        minColWidth: formOptions.minColWidth,
+        showColonAfterLabel: formOptions.showColonAfterLabel,
+        onEditorEnterKey: formOptions.onEditorEnterKey,
+        labelMode: formOptions.labelMode,
+    };
 
-    if(splitFullName.length > 1) {
-        let i;
-        const rootOptionName = splitFullName[0];
-
-        for(i = 0; i < expectedRootNames.length; i++) {
-            if(rootOptionName.search(expectedRootNames[i]) !== -1) {
-                result = expectedRootNames[i];
-            }
-        }
-    }
-
+    // cannot use '=' because 'extend' makes special assingment
+    const result = extend(baseOptions, {
+        isRoot: extendedLayoutManagerOptions.isRoot,
+        colCount: extendedLayoutManagerOptions.colCount,
+        alignItemLabels: extendedLayoutManagerOptions.alignItemLabels,
+        cssItemClass: extendedLayoutManagerOptions.cssItemClass,
+        colCountByScreen: extendedLayoutManagerOptions.colCountByScreen,
+        onLayoutChanged: extendedLayoutManagerOptions.onLayoutChanged,
+        width: extendedLayoutManagerOptions.width
+    });
     return result;
 }

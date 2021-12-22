@@ -541,6 +541,7 @@ class Scheduler extends Widget {
                     this._appointments.option('items', []);
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
+                    this._createAppointmentPopupForm();
                 });
                 break;
             case 'startDayHour':
@@ -1216,8 +1217,7 @@ class Scheduler extends Widget {
             ? MobileTooltipStrategy
             : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
 
-        this._appointmentForm = this.createAppointmentForm();
-        this._appointmentPopup = this.createAppointmentPopup(this._appointmentForm);
+        this._createAppointmentPopupForm();
 
         if(this._isDataSourceLoaded() || this._isDataSourceLoading()) {
             this._initMarkupCore(this.option('loadedResources'));
@@ -1231,6 +1231,16 @@ class Scheduler extends Widget {
                 this._reloadDataSource();
             });
         }
+    }
+
+    _createAppointmentPopupForm() {
+        if(this._appointmentForm) {
+            this._appointmentForm.form?.dispose();
+        }
+        this._appointmentForm = this.createAppointmentForm();
+
+        this._appointmentPopup?.dispose();
+        this._appointmentPopup = this.createAppointmentPopup(this._appointmentForm);
     }
 
     _renderMainContainer() {

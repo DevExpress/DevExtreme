@@ -695,6 +695,87 @@ QUnit.test('form.option("onFieldDataChanged", "newHandler") -> check new handler
     });
 });
 
+QUnit.test('Change options -> check _itemsOptionChangedHandler/_formDataOptionChangedHandler calls', function(assert) {
+    const form = $('#form').dxForm({
+        items: [ { name: 'id' } ]
+    }).dxForm('instance');
+
+    let actualLog = '';
+    const _itemsOptionChangedHandler = form._itemsOptionChangedHandler;
+    form._itemsOptionChangedHandler = function() { actualLog += 'items; '; return _itemsOptionChangedHandler.apply(form, arguments); };
+    const _formDataOptionChangedHandler = form._formDataOptionChangedHandler;
+    form._formDataOptionChangedHandler = function() { actualLog += 'formData; '; return _formDataOptionChangedHandler.apply(form, arguments); };
+    const _defaultOptionChangedHandler = form._defaultOptionChangedHandler;
+    form._defaultOptionChangedHandler = function() { actualLog += 'default; '; return _defaultOptionChangedHandler.apply(form, arguments); };
+
+    function testConfig(optionName, expectedLog) {
+        actualLog = '';
+        form.option(optionName, {});
+        assert.strictEqual(actualLog, expectedLog, `option("${optionName}")`);
+    }
+
+    testConfig('.', 'default; ');
+    testConfig('.hint', 'default; ');
+    testConfig('.items', 'default; ');
+    testConfig('.formData', 'default; ');
+
+    testConfig('a', 'default; ');
+    testConfig('hint.b', 'default; ');
+    testConfig('colCountByScreen.b.', 'default; ');
+    testConfig('colCountByScreen.lg.c', 'default; ');
+
+    testConfig('formData', 'default; ');
+    testConfig('formData.', 'formData; ');
+    testConfig(' formData . ', 'formData; ');
+    testConfig('formData.a', 'formData; ');
+    testConfig('formData.a.', 'formData; ');
+    testConfig('formData.a.b', 'formData; ');
+    testConfig('formData.items', 'formData; ');
+    testConfig('formData.items[0]', 'formData; ');
+    testConfig('formData.formData', 'formData; ');
+
+    testConfig('items', 'default; ');
+    testConfig('items.', 'items; default; ');
+    testConfig(' items . ', 'items; default; ');
+    testConfig('items.a', 'items; default; ');
+    testConfig(' items . a ', 'items; default; ');
+    testConfig('items.a.b', 'items; default; ');
+    testConfig('items.formData', 'items; default; ');
+    testConfig('items.formData.b', 'items; default; ');
+    testConfig('items.items', 'items; default; ');
+
+    testConfig('items[0]', 'default; ');
+    testConfig('items[0].a', 'items; default; ');
+    testConfig('items[0].visible', 'items; default; ');
+    testConfig('items[0].items', 'items; default; ');
+    testConfig('items[0].formData', 'items; default; ');
+    testConfig('items[0].items[0]', 'items; default; ');
+
+    testConfig('items[0].tabs', 'items; default; ');
+    testConfig('items[0].tabs.a', 'items; default; ');
+    testConfig('items[0].tabs.visible', 'items; default; ');
+    testConfig('items[0].tabs[0]', 'items; default; ');
+    testConfig('items[0].tabs[0].visible', 'items; default; ');
+    testConfig('items[0].tabs[0].items', 'items; default; ');
+    testConfig('items[0].tabs[0].formData', 'items; default; ');
+    testConfig('items[0].tabs[0].items[0]', 'items; default; ');
+
+    testConfig('hint.items', 'default; ');
+    testConfig('hint.items.', 'default; ');
+    testConfig('hint.items.a', 'default; ');
+    testConfig('hint.items[0]', 'default; ');
+    testConfig('hint.items[0].visible', 'default; ');
+
+    testConfig('hint.formData', 'default; ');
+    testConfig('hint.formData.a', 'default; ');
+
+    testConfig('formData_items', 'default; ');
+    testConfig('formData_items.', 'items; default; ');
+    testConfig('xxx_formData_xxx', 'default; ');
+    testConfig('xxx_formData_xxx.', 'formData; ');
+    testConfig('xxx_items_xxx', 'default; ');
+    testConfig('xxx_items_xxx.', 'items; default; ');
+});
 
 QUnit.module('Tabs', {
     beforeEach: function() {
@@ -1089,6 +1170,51 @@ QUnit.test('Update editorOptions of an editor inside the tab', function(assert) 
     assert.equal(form.getEditor('firstName').option('disabled'), false, '\'disabled\' option was successfully changed');
 });
 
+QUnit.test('Update layout inside a tab (T1040296)', function(assert) {
+    const testContainer = $('#form');
+
+    const form = testContainer.dxForm({
+        deferRendering: false,
+        items: [
+            {
+                itemType: 'tabbed',
+                tabPanelOptions: { 'deferRendering': false },
+                tabs: [
+                    {
+                        title: 'General',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [
+                                    { dataField: 'id', visible: false },
+                                    { itemType: 'group', items: [{ dataField: 'minWidth' }] }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm('instance');
+
+    form.option('items[0].tabs[0].items[0].items[0].visible', true);
+    form.option('items[0].tabs', [
+        {
+            title: 'General',
+            items: [
+                {
+                    itemType: 'group',
+                    items: [
+                        { dataField: 'id', visible: true }, { itemType: 'group', items: [{ dataField: 'minWidth' }] }
+                    ]
+                }
+            ]
+        },
+        { title: 'Window' }
+    ]);
+
+    assert.deepEqual([...document.querySelectorAll('.dx-tab-text')].map(e => e.textContent), ['General', 'Window'], 'dx-tab-text elements');
+});
 
 QUnit.module('Align labels', {
     beforeEach: function() {

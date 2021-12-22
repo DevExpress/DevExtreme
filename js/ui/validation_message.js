@@ -29,6 +29,7 @@ const ValidationMessage = Overlay.inherit({
             contentTemplate: this._renderInnerHtml,
             maxWidth: '100%',
 
+            target: undefined,
             mode: 'auto',
             validationErrors: undefined,
             positionRequest: undefined,
@@ -48,8 +49,15 @@ const ValidationMessage = Overlay.inherit({
         this.callBase();
 
         this._ensureMessageNotEmpty();
+        this._updatePositionByTarget();
         this._toggleModeClass();
         this._updateContentId();
+    },
+
+    _updatePositionByTarget: function() {
+        const { target } = this.option();
+
+        this.option('position.of', target);
     },
 
     _ensureMessageNotEmpty: function() {
@@ -139,6 +147,7 @@ const ValidationMessage = Overlay.inherit({
         const { name, value } = args;
         switch(name) {
             case 'target':
+                this._updatePositionByTarget();
                 this.updateMaxWidth();
                 this.callBase(args);
                 break;

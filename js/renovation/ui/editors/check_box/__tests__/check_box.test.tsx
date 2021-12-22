@@ -3,13 +3,11 @@ import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import { RefObject } from '@devextreme-generator/declarations';
 import devices from '../../../../../core/devices';
-import { convertRulesToOptions } from '../../../../../core/options/utils';
-import { current } from '../../../../../ui/themes';
 import {
   clear as clearEventHandlers,
 } from '../../../../test_utils/events_mock';
 import {
-  CheckBox, CheckBoxProps, defaultOptionRules, viewFunction,
+  CheckBox, CheckBoxProps, viewFunction,
 } from '../check_box';
 import { Editor } from '../../internal/editor';
 import { CheckBoxIcon } from '../check_box_icon';
@@ -294,32 +292,28 @@ describe('CheckBox', () => {
       });
     });
 
-    describe('Default options', () => {
-      const getDefaultOptions = (): CheckBoxProps => Object.assign(new CheckBoxProps(),
-        convertRulesToOptions(defaultOptionRules));
-
-      beforeEach(() => {
-        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
-        (devices.isSimulator as Mock).mockImplementation(() => false);
-        (current as Mock).mockImplementation(() => 'generic');
-      });
-
+    describe('focusStateEnabled', () => {
       afterEach(() => jest.resetAllMocks());
 
-      describe('focusStateEnabled', () => {
-        it('should be false if device is not desktop', () => {
-          (devices.real as Mock).mockImplementation(() => ({ deviceType: 'android' }));
-          expect(getDefaultOptions().focusStateEnabled).toBe(false);
-        });
+      it('should be true on desktop', () => {
+        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
+        (devices.isSimulator as Mock).mockImplementation(() => false);
 
-        it('should be true on desktop and not simulator', () => {
-          expect(getDefaultOptions().focusStateEnabled).toBe(true);
-        });
+        expect(new CheckBoxProps()).toMatchObject({ focusStateEnabled: true });
+      });
 
-        it('should be false on simulator', () => {
-          (devices.isSimulator as Mock).mockImplementation(() => true);
-          expect(getDefaultOptions().focusStateEnabled).toBe(false);
-        });
+      it('should be false is simulator', () => {
+        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
+        (devices.isSimulator as Mock).mockImplementation(() => true);
+
+        expect(new CheckBoxProps()).toMatchObject({ focusStateEnabled: false });
+      });
+
+      it('should be false on not desktop', () => {
+        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'modile' }));
+        (devices.isSimulator as Mock).mockImplementation(() => true);
+
+        expect(new CheckBoxProps()).toMatchObject({ focusStateEnabled: false });
       });
     });
   });
