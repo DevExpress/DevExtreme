@@ -5256,7 +5256,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         dataGrid.getScrollable().scrollTo(10000);
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 4, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows().length, 5, 'visible rows');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'not bottom loading');
     });

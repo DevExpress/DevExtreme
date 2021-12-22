@@ -1280,9 +1280,14 @@ export const virtualScrollingModule = {
                         const virtualPaging = isVirtualPaging(this);
                         const dataSourceAdapter = this._dataSource;
                         const changedParams = this._getChangedLoadParams();
+                        const currentLoadPageCount = dataSourceAdapter?.loadPageCount() ?? 0;
+                        const requiredItemCount = this.pageSize() * currentLoadPageCount;
+                        const currentPageIndex = dataSourceAdapter?.pageIndex() ?? 0;
+                        const pageIndexNotChanged = changedParams?.pageIndex === currentPageIndex;
+                        const allLoadedInAppendMode = isAppendMode(this) && this.totalItemsCount() < requiredItemCount;
                         let result = false;
 
-                        if(!dataSourceAdapter || (virtualPaging && checkLoading && changedParams && changedParams.pageIndex > dataSourceAdapter.pageIndex())) {
+                        if(!dataSourceAdapter || (virtualPaging && checkLoading && (changedParams?.pageIndex > currentPageIndex || pageIndexNotChanged && allLoadedInAppendMode))) {
                             return result;
                         }
 
@@ -1336,11 +1341,8 @@ export const virtualScrollingModule = {
                         const currentTake = this._loadViewportParams?.take ?? 0;
                         const rowsScrollController = this._rowsScrollController;
                         const newTake = rowsScrollController?.getViewportParams().take;
-                        const loadPageCount = this._dataSource?.loadPageCount() ?? 0;
-                        const requiredItemCount = loadPageCount * this.pageSize();
-                        const allLoadedInAppendMode = isAppendMode(this) && this.totalItemsCount() < requiredItemCount;
 
-                        (viewportIsNotFilled || currentTake < newTake) && !allLoadedInAppendMode && itemCount && this.loadViewport({
+                        (viewportIsNotFilled || currentTake < newTake) && itemCount && this.loadViewport({
                             checkLoading: true
                         });
                     },
