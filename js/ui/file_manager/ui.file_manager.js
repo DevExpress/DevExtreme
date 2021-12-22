@@ -815,7 +815,10 @@ class FileManager extends Widget {
         let options = null;
 
         if(operation === 'navigation') {
-            options = { focusedItemKey: this._itemKeyToFocus };
+            options = {
+                focusedItemKey: this._itemKeyToFocus,
+                selectedItemKeys: this.option('selectedItemKeys')
+            };
             this._itemKeyToFocus = undefined;
         }
 
