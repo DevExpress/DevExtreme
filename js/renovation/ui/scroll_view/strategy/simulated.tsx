@@ -216,7 +216,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               pulledDown={pulledDown}
               onPullDown={onPullDown}
               onReachBottom={onReachBottom}
-              pullDownEnabled={pullDownEnabled}
               reachBottomEnabled={reachBottomEnabled}
 
               onLock={lock}

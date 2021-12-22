@@ -410,6 +410,18 @@ describe('Simulated > Behavior', () => {
       });
     });
 
+    each([true, false]).describe('pendingScrollEvent: %o', (pendingScrollEvent) => {
+      it('triggerScrollEvent()', () => {
+        const helper = new ScrollableTestHelper({});
+        helper.viewModel.pendingScrollEvent = pendingScrollEvent;
+
+        helper.viewModel.triggerScrollEvent();
+
+        expect(helper.viewModel.pendingScrollEvent).toEqual(false);
+        // TODO: check call trigger handler here
+      });
+    });
+
     it('should subscribe to dxpointerdown event', () => {
       const helper = new ScrollableTestHelper({ direction: 'vertical' });
 
@@ -1461,7 +1473,7 @@ describe('Simulated > Behavior', () => {
         helper.viewModel.handleScroll();
 
         expect(helper.viewModel.vScrollLocation).toEqual(!scrolling ? -50 : 0);
-        expect(helper.viewModel.hScrollLocation).toEqual(!scrolling && !rtlEnabled ? -30 : 0);
+        expect(helper.viewModel.hScrollLocation).toEqual(!scrolling ? -30 : 0);
       });
     });
   });

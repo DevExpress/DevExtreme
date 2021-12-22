@@ -51,7 +51,6 @@ describe('AnimatedScrollbar', () => {
     { name: 'isScrollbar', calledWith: ['arg1'] },
     { name: 'isThumb', calledWith: ['arg1'] },
     { name: 'setActiveState', calledWith: [] },
-    { name: 'moveTo', calledWith: ['arg1'] },
   ]).describe('Method: %o', (methodInfo) => {
     it(`${methodInfo.name}() method should call according scrollbar method`, () => {
       const viewModel = new AnimatedScrollbar({});
@@ -130,6 +129,7 @@ describe('Methods', () => {
       const viewModel = new AnimatedScrollbar({
         showScrollbar: 'always',
         direction,
+        onScroll: undefined,
         scrollLocationChange: undefined,
       });
 
@@ -149,11 +149,13 @@ describe('Methods', () => {
       { prevScrollLocation: 480, scrollLocation: 480, expected: { needFireScroll: false } },
     ])('moveTo(location), pass correct arguments to scrollLocationChange event: %o', ({ prevScrollLocation, scrollLocation, expected }) => {
       const scrollLocationChange = jest.fn();
+      const onScrollHandler = jest.fn();
 
       const viewModel = new AnimatedScrollbar({
         direction,
         scrollLocationChange,
         scrollLocation,
+        onScroll: onScrollHandler,
       });
 
       viewModel.prevScrollLocation = prevScrollLocation;
@@ -168,6 +170,8 @@ describe('Methods', () => {
           needFireScroll: expected.needFireScroll,
         },
       );
+
+      expect(onScrollHandler).toBeCalledTimes(expected.needFireScroll ? 1 : 0);
     });
   });
 });
@@ -1094,31 +1098,28 @@ describe('Animator', () => {
       });
     });
 
-    each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
-      each([true, false]).describe('pulledDown: %o', (pulledDown) => {
-        each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
-          each([true, false]).describe('isReachBottom: %o', (isReachBottom) => {
-            each([true, false]).describe('wasRelease: %o', (wasRelease) => {
-              it('pendingRelease()', () => {
-                const viewModel = new AnimatedScrollbar({
-                  direction: DIRECTION_VERTICAL,
-                  forceGeneratePockets,
-                  pullDownEnabled,
-                  pulledDown,
-                });
-
-                viewModel.wasRelease = wasRelease;
-
-                Object.defineProperties(viewModel, {
-                  isReachBottom: { get() { return isReachBottom; } },
-                });
-
-                expect(viewModel.pendingRelease).toEqual(
-                  forceGeneratePockets
-                  && ((pulledDown && pullDownEnabled) || isReachBottom)
-                  && !wasRelease,
-                );
+    each([true, false]).describe('pulledDown: %o', (pulledDown) => {
+      each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+        each([true, false]).describe('isReachBottom: %o', (isReachBottom) => {
+          each([true, false]).describe('wasRelease: %o', (wasRelease) => {
+            it('pendingRelease()', () => {
+              const viewModel = new AnimatedScrollbar({
+                direction: DIRECTION_VERTICAL,
+                forceGeneratePockets,
+                pulledDown,
               });
+
+              viewModel.wasRelease = wasRelease;
+
+              Object.defineProperties(viewModel, {
+                isReachBottom: { get() { return isReachBottom; } },
+              });
+
+              expect(viewModel.pendingRelease).toEqual(
+                forceGeneratePockets
+                  && (pulledDown || isReachBottom)
+                  && !wasRelease,
+              );
             });
           });
         });

@@ -267,8 +267,6 @@ class ScrollableTestHelper {
             containerSize: 100,
             minOffset: 0,
             maxOffset: -100,
-            scrollLocationChange:
-              scrollbar.props.scrollLocationChange.bind(this.viewModel),
             ...restProps,
           },
         },
