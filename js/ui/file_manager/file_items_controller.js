@@ -95,7 +95,7 @@ export default class FileItemsController {
                 this._resetCurrentDirectory();
             }
             this._setProvider(fileProvider);
-            return this.refresh().then(() => this.setCurrentPathByKeys(currentPathKeys));
+            return this.setCurrentPathByKeys(currentPathKeys);
         });
     }
 
@@ -712,6 +712,7 @@ export default class FileItemsController {
     _resetState() {
         this._selectedDirectory = null;
         this._rootDirectoryInfo.items = [ ];
+        this._rootDirectoryInfo.itemsLoaded = false;
         this._loadedItems = { };
     }
 
