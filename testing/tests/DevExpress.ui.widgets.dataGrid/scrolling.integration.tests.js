@@ -1310,4 +1310,111 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[0].key, 1, 'first visible row key on the first page after srolling up to top');
         assert.equal(visibleRows[10].key, 11, 'last visible row key on the first page after srolling up to top');
     });
+
+    QUnit.test('New mode. Rows should be rendered properly when the page size is changed, rowRenderingMode is virtual and max height (T1054920)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        $('#dataGrid').css('max-height', 600);
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            showBorders: true,
+            remoteOperations: true,
+            scrolling: {
+                rowRenderingMode: 'virtual',
+                useNative: false
+            },
+            paging: {
+                pageSize: 10,
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [10, 'all'],
+                showPageSizeSelector: true
+            },
+        });
+
+        this.clock.tick(300);
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 10, 'visible row count on the first page');
+
+        // act (pageSize all)
+        $(dataGrid.element()).find('.dx-pager .dx-page-sizes .dx-page-size:eq(1)').trigger('dxclick');
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+        let $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
+
+        // assert
+        assert.ok(visibleRows.length > 0, 'visible row count when all rows are enabled');
+        assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered outside viewport');
+
+        // act (scroll down)
+        dataGrid.getScrollable().scrollTo({ top: 2000 });
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+        $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
+
+        // assert
+        assert.equal(visibleRows.length, 18, 'visible row count after scroll');
+        assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered outside viewport');
+
+        // act (pageSize 10)
+        $(dataGrid.element()).find('.dx-pager .dx-page-sizes .dx-page-size:eq(0)').trigger('dxclick');
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+        $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
+
+        // assert
+        assert.equal(visibleRows.length, 10, 'visible row count after switch to 10 page size');
+        assert.equal(dataGrid.pageIndex(), 0, 'page index');
+        assert.equal($virtualRowElement.length, 0, 'no virtual rows');
+
+        // act (pageIndex 4)
+        $(dataGrid.element()).find('.dx-pager .dx-page-indexes .dx-page:eq(4)').trigger('dxclick');
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(dataGrid.pageIndex(), 4, 'page index');
+        assert.equal(visibleRows.length, 10, 'visible row count after switch to 4 page');
+        assert.equal(visibleRows[0].key, 41, 'top visible row');
+        assert.equal(visibleRows[9].key, 50, 'bottom visible row');
+
+        // act (pageSize all)
+        $(dataGrid.element()).find('.dx-pager .dx-page-sizes .dx-page-size:eq(1)').trigger('dxclick');
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+        $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
+
+        // assert
+        assert.ok(visibleRows.length > 0, 'visible row count when all rows are enabled');
+        assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered outside viewport');
+
+        // act (pageSize 10)
+        $(dataGrid.element()).find('.dx-pager .dx-page-sizes .dx-page-size:eq(0)').trigger('dxclick');
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+        $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
+
+
+        // assert
+        assert.equal(dataGrid.pageIndex(), 4, 'page index');
+        assert.equal(visibleRows.length, 10, 'visible row count after switch to 4 page');
+        assert.equal(visibleRows[0].key, 41, 'top visible row');
+        assert.equal(visibleRows[9].key, 50, 'bottom visible row');
+        assert.equal($virtualRowElement.length, 0, 'no virtual rows');
+
+        $('#dataGrid').css('max-height', '');
+    });
 });
