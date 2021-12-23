@@ -3,10 +3,12 @@ const { test } = QUnit;
 import 'ui/file_manager';
 import FileSystemError from 'file_management/error.js';
 import CustomFileSystemProvider from 'file_management/custom_provider';
+import ObjectFileSystemProvider from 'file_management/object_provider.js';
 import FileItemsController from 'ui/file_manager/file_items_controller';
 import FileManagerBreadcrumbs from 'ui/file_manager/ui.file_manager.breadcrumbs';
 import fx from 'animation/fx';
 import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, FileManagerProgressPanelWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
 import { implementationsMap } from 'core/utils/size';
 
 const moduleConfig = {
@@ -1091,6 +1093,228 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(this.fileManager.getCurrentDirectory().key, targetPath, 'Current directory is the target one');
         assert.strictEqual(this.wrapper.getFolderNodes().length, 3, 'NavPane folder nodes count is correct');
         assert.strictEqual(this.wrapper.getFocusedItemText(), 'Directory11', 'NavPane current folder text is correct');
+    });
+
+    test('currentPath option value stays the same when changed along with the fileSystemProvider option (T1045617)', function(assert) {
+        const targetPath = 'Folder 1/Folder 1.1';
+
+        this.fileManager.option({
+            currentPath: targetPath,
+            itemView: { mode: 'details' }
+        });
+        this.clock.tick(400);
+
+        let currentPath = this.fileManager.option('currentPath');
+        let currentPathKeys = this.fileManager.option('currentPathKeys');
+
+        assert.strictEqual(currentPath, targetPath, 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 2, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], targetPath.split('/')[0], 'Current path keys [0] is correct');
+        assert.strictEqual(currentPathKeys[1], targetPath, 'Current path keys [1] is correct');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/' + targetPath, 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, targetPath, 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 6, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'NavPane current folder text is correct');
+
+        this.fileManager.option({
+            fileSystemProvider: [
+                {
+                    name: 'Folder 1',
+                    isDirectory: true,
+                    hasSubDirectories: true,
+                    items: [
+                        {
+                            name: 'Folder 1.1',
+                            isDirectory: true,
+                            hasSubDirectories: false,
+                            items: []
+                        }
+                    ]
+                }
+            ],
+            currentPath: targetPath
+        });
+        this.clock.tick(400);
+
+        currentPath = this.fileManager.option('currentPath');
+        currentPathKeys = this.fileManager.option('currentPathKeys');
+
+        assert.strictEqual(currentPath, targetPath, 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 2, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], targetPath.split('/')[0], 'Current path keys [0] is correct');
+        assert.strictEqual(currentPathKeys[1], targetPath, 'Current path keys [1] is correct');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/' + targetPath, 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, targetPath, 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 3, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'NavPane current folder text is correct');
+    });
+
+    test('currentPath option value stays the same when fileSystemProvider option value set along with the currentPath option (T1045617)', function(assert) {
+        const targetPath = 'Folder 1/Folder 1.1';
+
+        this.fileManager.option({
+            currentPath: targetPath,
+            itemView: { mode: 'details' }
+        });
+        this.clock.tick(400);
+
+        let currentPath = this.fileManager.option('currentPath');
+        let currentPathKeys = this.fileManager.option('currentPathKeys');
+
+        assert.strictEqual(currentPath, targetPath, 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 2, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], targetPath.split('/')[0], 'Current path keys [0] is correct');
+        assert.strictEqual(currentPathKeys[1], targetPath, 'Current path keys [1] is correct');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/' + targetPath, 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, targetPath, 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 6, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'NavPane current folder text is correct');
+
+        this.fileManager.option({
+            currentPath: targetPath,
+            fileSystemProvider: [
+                {
+                    name: 'Folder 1',
+                    isDirectory: true,
+                    hasSubDirectories: true,
+                    items: [
+                        {
+                            name: 'Folder 1.1',
+                            isDirectory: true,
+                            hasSubDirectories: false,
+                            items: []
+                        }
+                    ]
+                }
+            ]
+        });
+        this.clock.tick(400);
+
+        currentPath = this.fileManager.option('currentPath');
+        currentPathKeys = this.fileManager.option('currentPathKeys');
+
+        assert.strictEqual(currentPath, targetPath, 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 2, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], targetPath.split('/')[0], 'Current path keys [0] is correct');
+        assert.strictEqual(currentPathKeys[1], targetPath, 'Current path keys [1] is correct');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/' + targetPath, 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, targetPath, 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 3, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'NavPane current folder text is correct');
+    });
+
+    test('currentPath option value stays the same when changed along with the fileSystemProvider option with delay (T1045617)', function(assert) {
+        const operationDelay = 1000;
+        const targetPath = 'Folder 1/Folder 1.1';
+
+        this.fileManager.option('currentPath', targetPath);
+        this.clock.tick(400);
+
+        let currentPath = this.fileManager.option('currentPath');
+        let currentPathKeys = this.fileManager.option('currentPathKeys');
+
+        assert.strictEqual(currentPath, targetPath, 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 2, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], targetPath.split('/')[0], 'Current path keys [0] is correct');
+        assert.strictEqual(currentPathKeys[1], targetPath, 'Current path keys [1] is correct');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/' + targetPath, 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, targetPath, 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 6, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'NavPane current folder text is correct');
+
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'r',
+                realProviderInstance: new ObjectFileSystemProvider({ data: [
+                    {
+                        name: 'Folder 1',
+                        isDirectory: true,
+                        hasSubDirectories: true,
+                        items: [
+                            {
+                                name: 'Folder 1.1',
+                                isDirectory: true,
+                                hasSubDirectories: false,
+                                items: []
+                            }
+                        ]
+                    }
+                ]
+                })
+            }),
+            currentPath: targetPath
+        });
+        this.clock.tick(operationDelay * 2 + 1);
+
+        currentPath = this.fileManager.option('currentPath');
+        currentPathKeys = this.fileManager.option('currentPathKeys');
+
+        assert.strictEqual(currentPath, targetPath, 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 2, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], targetPath.split('/')[0], 'Current path keys [0] is correct');
+        assert.strictEqual(currentPathKeys[1], targetPath, 'Current path keys [1] is correct');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/' + targetPath, 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, targetPath, 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 3, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'NavPane current folder text is correct');
+    });
+
+    test('currentPath option value stays the same when fileSystemProvider option value set along with the currentPath option with delay (T1045617)', function(assert) {
+        const operationDelay = 1000;
+        const targetPath = 'Folder 1/Folder 1.1';
+
+        this.fileManager.option('currentPath', targetPath);
+        this.clock.tick(400);
+
+        let currentPath = this.fileManager.option('currentPath');
+        let currentPathKeys = this.fileManager.option('currentPathKeys');
+
+        assert.strictEqual(currentPath, targetPath, 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 2, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], targetPath.split('/')[0], 'Current path keys [0] is correct');
+        assert.strictEqual(currentPathKeys[1], targetPath, 'Current path keys [1] is correct');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/' + targetPath, 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, targetPath, 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 6, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'NavPane current folder text is correct');
+
+        this.fileManager.option({
+            currentPath: targetPath,
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'r',
+                realProviderInstance: new ObjectFileSystemProvider({ data: [
+                    {
+                        name: 'Folder 1',
+                        isDirectory: true,
+                        hasSubDirectories: true,
+                        items: [
+                            {
+                                name: 'Folder 1.1',
+                                isDirectory: true,
+                                hasSubDirectories: false,
+                                items: []
+                            }
+                        ]
+                    }
+                ]
+                })
+            }),
+        });
+        this.clock.tick(operationDelay * 2 + 1);
+
+        currentPath = this.fileManager.option('currentPath');
+        currentPathKeys = this.fileManager.option('currentPathKeys');
+
+        assert.strictEqual(currentPath, targetPath, 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 2, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], targetPath.split('/')[0], 'Current path keys [0] is correct');
+        assert.strictEqual(currentPathKeys[1], targetPath, 'Current path keys [1] is correct');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/' + targetPath, 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, targetPath, 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 3, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'NavPane current folder text is correct');
     });
 
     test('currentPath option value resets when corresponding path does not exist (T1045617)', function(assert) {
