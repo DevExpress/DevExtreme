@@ -2322,8 +2322,8 @@ QUnit.module('Header Filter with real columnsController', {
     },
     afterEach: function() {
         this.clock.restore();
-        this.headerFilterController.hideHeaderFilterMenu();
-        this.dispose();
+        this.headerFilterController?.hideHeaderFilterMenu();
+        this?.dispose();
     }
 }, () => {
 
