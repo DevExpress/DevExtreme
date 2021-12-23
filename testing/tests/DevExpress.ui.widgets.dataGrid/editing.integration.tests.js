@@ -3207,6 +3207,32 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         assert.equal(idCallCount, 200, 'key call count after paging');
     });
+
+    QUnit.test('Popup should render editor if columns[].renderAsync option is true)', function(assert) {
+        createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'test11', field2: 'test12' },
+            ],
+            columns: [{
+                dataField: 'field1',
+                renderAsync: true,
+                width: 100,
+            }],
+            editing: {
+                mode: 'popup',
+                allowUpdating: true,
+            },
+        });
+        this.clock.tick();
+
+        // act
+        $('.dx-link-edit').trigger('click');
+        this.clock.tick();
+
+        // assert
+        const $textBox = $('.dx-textbox');
+        assert.equal($textBox.length, 1);
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
