@@ -7,7 +7,7 @@ import {
   Template,
   Fragment,
   RefObject,
-  ForwardRef,
+  Ref,
 } from '@devextreme-generator/declarations';
 import { AppointmentDetails } from './details/layout';
 import { AppointmentTitle } from './title/layout';
@@ -86,7 +86,7 @@ export class AppointmentContentProps {
   view: viewFunction,
 })
 export class AppointmentContent extends JSXComponent<AppointmentContentProps, 'data' | 'showReducedIconTooltip' | 'hideReducedIconTooltip'>() {
-  @ForwardRef() refReducedIcon!: RefObject<HTMLDivElement>;
+  @Ref() refReducedIcon!: RefObject<HTMLDivElement>;
 
   onReducedIconMouseEnter(): void {
     this.props.showReducedIconTooltip({
