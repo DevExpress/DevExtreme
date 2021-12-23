@@ -323,22 +323,26 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   @Effect()
   syncScrollLocation(): void {
     if (this.props.containerHasSizes) { // && !this.inProgress
-      let newScrollLocation = this.props.scrollLocation;
-
-      const maxOffsetChanged = Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
-      this.prevMaxOffset = this.props.maxOffset;
-
-      if (maxOffsetChanged
-        && this.isHorizontal
-        && this.props.rtlEnabled) {
-        if (this.props.maxOffset === 0) {
-          this.rightScrollLocation = 0;
-        }
-
-        newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
-      }
+      const newScrollLocation = this.props.scrollLocation;
 
       this.moveTo(newScrollLocation);
+    }
+  }
+
+  @Effect()
+  updateScrollLocationInRTL(): void {
+    // const maxOffsetChanged = Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
+    // this.prevMaxOffset = this.props.maxOffset;
+
+    if (// maxOffsetChanged
+    // &&
+      this.isHorizontal
+        && this.props.rtlEnabled) {
+      if (this.props.maxOffset === 0) {
+        this.rightScrollLocation = 0;
+      }
+
+      this.moveTo(this.props.maxOffset - this.rightScrollLocation);
     }
   }
 
@@ -527,6 +531,10 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     }
 
     return this.props.maxOffset;
+  }
+
+  get maxOffsetChanged(): boolean {
+    return Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
   }
 
   get isHorizontal(): boolean {
