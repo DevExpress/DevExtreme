@@ -84,7 +84,6 @@ import { BottomPocket } from '../internal/pocket/bottom';
 
 import { getDevicePixelRatio } from '../utils/get_device_pixel_ratio';
 import { isElementVisible } from '../utils/is_element_visible';
-import { clampIntoRange } from '../utils/clamp_into_range';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { subscribeToResize } from '../utils/subscribe_to_resize';
 import domAdapter from '../../../../core/dom_adapter';
@@ -618,8 +617,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const { scrollLeft, scrollTop } = this.containerRef.current!;
     const { top, left } = location;
 
-    this.hScrollbarRef.current?.scrollTo(scrollLeft + left);
-    this.vScrollbarRef.current?.scrollTo(scrollTop + top);
+    this.hScrollbarRef.current?.scrollTo(scrollLeft + left, true);
+    this.vScrollbarRef.current?.scrollTo(scrollTop + top, true);
 
     this.scrolling = false;
   }
@@ -634,11 +633,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   syncScrollbarsWithContent(): void {
     const { scrollLeft, scrollTop } = this.containerRef.current!; // this.scrollOffset();
-    this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: -clampIntoRange(-scrollTop, 0, this.vScrollOffsetMax), needFireScroll: false });
 
-    // if (!this.props.rtlEnabled) { // TODO: support native rtl mode
-    this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: -clampIntoRange(-scrollLeft, 0, this.hScrollOffsetMax), needFireScroll: false });
-    // }
+    this.vScrollbarRef.current?.scrollTo(scrollTop, false);
+    if (!this.props.rtlEnabled) { // TODO: support native rtl mode // require for Qunit test
+      this.hScrollbarRef.current?.scrollTo(scrollLeft, false);
+    }
   }
 
   startLoading(): void {
@@ -1082,8 +1081,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
       const { scrollTop, scrollLeft } = this.savedScrollOffset;
       // restore scrollLocation on second and next opening of popup with data_view rollers
-      this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: scrollTop, needFireScroll: false });
-      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: scrollLeft, needFireScroll: false });
+      this.vScrollbarRef.current?.scrollTo(scrollTop, false);
+      this.hScrollbarRef.current?.scrollTo(scrollLeft, false);
     }
 
     this.props.onVisibilityChange?.(visible);

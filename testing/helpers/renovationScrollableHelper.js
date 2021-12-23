@@ -31,12 +31,12 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
             handleScroll.apply(this, arguments);
         };
 
-        const syncScrollLocation = scrollable.syncScrollLocation;
+        // const syncScrollLocation = scrollable.syncScrollLocation;
 
-        scrollable.syncScrollLocation = function() {
-            reRender();
-            syncScrollLocation.apply(this, arguments);
-        };
+        // scrollable.syncScrollLocation = function() {
+        //     reRender();
+        //     syncScrollLocation.apply(this, arguments);
+        // };
 
         // let vScrollbar;
         // let hScrollbar;

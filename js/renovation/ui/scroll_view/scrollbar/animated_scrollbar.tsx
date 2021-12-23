@@ -206,7 +206,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  scrollTo(value: number): void {
+  scrollTo(value: number, needRiseEnd: boolean): void {
     this.loading = false;
     this.refreshing = false;
 
@@ -215,7 +215,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     // I wanna use this statement ->
     // this.newScrollLocation = -clampIntoRange(value, -this.maxOffset, 0);
 
-    this.needRiseEnd = true;
+    this.needRiseEnd = needRiseEnd;
   }
 
   @Method()
@@ -321,30 +321,24 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Effect()
-  syncScrollLocation(): void {
-    if (this.props.containerHasSizes) { // && !this.inProgress
-      const newScrollLocation = this.props.scrollLocation;
-
-      this.moveTo(newScrollLocation);
-    }
-  }
-
-  @Effect()
   updateScrollLocationInRTL(): void {
-    // const maxOffsetChanged = Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
-    // this.prevMaxOffset = this.props.maxOffset;
-
-    if (// maxOffsetChanged
-    // &&
-      this.isHorizontal
-        && this.props.rtlEnabled) {
-      if (this.props.maxOffset === 0) {
+    if (this.isHorizontal && this.props.rtlEnabled) {
+      if (this.props.maxOffset === 0 && this.props.scrollLocation) {
         this.rightScrollLocation = 0;
       }
 
       this.moveTo(this.props.maxOffset - this.rightScrollLocation);
     }
   }
+
+  // @Effect()
+  // syncScrollLocation(): void {
+  //   if (this.props.containerHasSizes) { // && !this.inProgress
+  //     const newScrollLocation = this.props.scrollLocation;
+
+  //     this.moveTo(newScrollLocation);
+  //   }
+  // }
 
   @Effect()
   performAnimation(): void {
