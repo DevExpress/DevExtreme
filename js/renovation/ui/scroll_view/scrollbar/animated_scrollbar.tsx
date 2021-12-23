@@ -39,8 +39,8 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
     props: {
       direction,
       contentSize, containerSize,
-      showScrollbar, scrollByThumb, bounceEnabled, // scrollLocationChange,
-      visible, // scrollLocation,
+      showScrollbar, scrollByThumb, bounceEnabled,
+      visible,
       minOffset, maxOffset,
       containerHasSizes,
     },
@@ -56,7 +56,6 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       minOffset={minOffset}
       maxOffset={maxOffset}
       scrollLocation={newScrollLocation}
-      // scrollLocationChange={scrollLocationChange}
       scrollByThumb={scrollByThumb}
       bounceEnabled={bounceEnabled}
       showScrollbar={showScrollbar}
@@ -322,7 +321,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @Effect()
   updateScrollLocationInRTL(): void {
-    if (this.isHorizontal && this.props.rtlEnabled) {
+    if (this.props.containerHasSizes && this.isHorizontal && this.props.rtlEnabled) {
       if (this.props.maxOffset === 0 && this.props.scrollLocation) {
         this.rightScrollLocation = 0;
       }
@@ -330,15 +329,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       this.moveTo(this.props.maxOffset - this.rightScrollLocation);
     }
   }
-
-  // @Effect()
-  // syncScrollLocation(): void {
-  //   if (this.props.containerHasSizes) { // && !this.inProgress
-  //     const newScrollLocation = this.props.scrollLocation;
-
-  //     this.moveTo(newScrollLocation);
-  //   }
-  // }
 
   @Effect()
   performAnimation(): void {
