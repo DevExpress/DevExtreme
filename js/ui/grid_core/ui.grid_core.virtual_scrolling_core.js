@@ -336,7 +336,7 @@ export const VirtualScrollController = Class.inherit((function() {
         // new mode
         getViewportParams: function() {
             const totalItemsCount = this._dataOptions.totalItemsCount();
-            const insertedRowsCount = this.component.getController('editing')?.getInsertRowCount() ?? 0;
+            const insertedRowsCount = this.component.getController?.('editing')?.getInsertRowCount() ?? 0;
             const totalRowsCount = totalItemsCount + insertedRowsCount;
             const topIndex = this._viewportItemIndex;
             const bottomIndex = this._viewportSize + topIndex;
