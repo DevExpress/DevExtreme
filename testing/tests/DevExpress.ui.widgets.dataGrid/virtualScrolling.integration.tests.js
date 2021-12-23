@@ -3275,7 +3275,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getTopVisibleRowData().id, 24, 'top visible item index');
         assert.strictEqual(scrollTop, scrollable.scrollTop(), 'scrollTop is not changed');
         assert.strictEqual($fixedContent.scrollTop(), scrollTop, 'fixed content has the correct scroll top');
-        assert.strictEqual(dataGrid.getVisibleRows().length, 17, 'item count');
     });
 
     QUnit.test('DataGrid should display rows from a particular page when dataSource is set initially (rowRenderingMode = \'virtual\') (T971067)', function(assert) {
