@@ -168,44 +168,47 @@ fixture('Renovated scheduler - Cross-scrolling');
       ))
       .ok();
   }).before(
-    async (_, { platform }) => createWidget(platform, 'dxScheduler', {
-      timeZone: 'America/Los_Angeles',
-      dataSource: data,
-      views: [{
-        type: 'day',
-      }, {
-        type: 'week',
-        intervalCount: 4,
-      }, {
-        type: 'workWeek',
-        intervalCount: 4,
-      }, {
-        type: 'month',
-      }],
-      currentView,
-      currentDate: new Date(2021, 3, 21),
-      startDayHour: 9,
-      endDayHour: 16,
-      groups: ['priorityId'],
-      resources: [
-        {
-          fieldExpr: 'priorityId',
-          allowMultiple: false,
-          dataSource: [{
-            text: 'Low Priority',
-            id: 1,
-            color: '#1e90ff',
-          }, {
-            text: 'High Priority',
-            id: 2,
-            color: '#ff9747',
-          }],
-          label: 'Priority',
-        },
-      ],
-      showCurrentTimeIndicator: false,
-      crossScrollingEnabled: true,
-      height: 800,
-    }),
+    async (t, { platform }) => {
+      await t.resizeWindow(1200, 800);
+      await createWidget(platform, 'dxScheduler', {
+        timeZone: 'America/Los_Angeles',
+        dataSource: data,
+        views: [{
+          type: 'day',
+        }, {
+          type: 'week',
+          intervalCount: 4,
+        }, {
+          type: 'workWeek',
+          intervalCount: 4,
+        }, {
+          type: 'month',
+        }],
+        currentView,
+        currentDate: new Date(2021, 3, 21),
+        startDayHour: 9,
+        endDayHour: 16,
+        groups: ['priorityId'],
+        resources: [
+          {
+            fieldExpr: 'priorityId',
+            allowMultiple: false,
+            dataSource: [{
+              text: 'Low Priority',
+              id: 1,
+              color: '#1e90ff',
+            }, {
+              text: 'High Priority',
+              id: 2,
+              color: '#ff9747',
+            }],
+            label: 'Priority',
+          },
+        ],
+        showCurrentTimeIndicator: false,
+        crossScrollingEnabled: true,
+        height: 800,
+      });
+    },
   );
 });
