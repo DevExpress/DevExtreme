@@ -23,6 +23,7 @@ import FileManagerEditingControl from './ui.file_manager.editing';
 import FileManagerBreadcrumbs from './ui.file_manager.breadcrumbs';
 import FileManagerAdaptivityControl from './ui.file_manager.adaptivity';
 import { normalizeOptions } from '../../core/options/utils';
+import { equals } from '../../core/utils/comparator';
 
 const FILE_MANAGER_CLASS = 'dx-filemanager';
 const FILE_MANAGER_WRAPPER_CLASS = FILE_MANAGER_CLASS + '-wrapper';
@@ -511,13 +512,21 @@ class FileManager extends Widget {
     option(options, value) {
         const optionsToCheck = normalizeOptions(options, value);
         const isGetter = arguments.length < 2 && type(options) !== 'object';
-        const isOptionDefined = function(name) {
-            return isDefined(optionsToCheck[name]);
+        const isOptionDefined = name => isDefined(optionsToCheck[name]);
+        const isOptionValueDiffers = name => {
+            if(!isOptionDefined(name)) {
+                return false;
+            }
+            const previousValue = this.option(name);
+            const value = optionsToCheck[name];
+            return !equals(previousValue, value);
         };
 
-        if(!isGetter && (isOptionDefined('currentPath') || isOptionDefined('currentPathKeys')) && isOptionDefined('fileSystemProvider')) {
+        if(!isGetter && isOptionDefined('fileSystemProvider')) {
             this._providerUpdateDeferred = new Deferred();
-            this._lockCurrentPathProcessing = true;
+            if(isOptionValueDiffers('currentPath') || isOptionValueDiffers('currentPathKeys')) {
+                this._lockCurrentPathProcessing = true;
+            }
         }
 
         return super.option(...arguments);
