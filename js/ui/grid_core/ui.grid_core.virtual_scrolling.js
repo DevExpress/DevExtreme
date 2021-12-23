@@ -1441,6 +1441,13 @@ export const virtualScrollingModule = {
                         }
                         return this.callBase.apply(this, arguments);
                     },
+                    pageSize: function(value) {
+                        const virtualPaging = isVirtualPaging(this);
+                        if(isDefined(value) && this.option(LEGACY_SCROLLING_MODE) === false && !virtualPaging) {
+                            this._rowsScrollController?.reset();
+                        }
+                        return this.callBase.apply(this, arguments);
+                    },
                     _fireChanged: function(e) {
                         this.callBase.apply(this, arguments);
 
