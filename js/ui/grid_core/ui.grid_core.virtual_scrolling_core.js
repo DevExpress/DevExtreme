@@ -143,10 +143,6 @@ export const VirtualScrollController = Class.inherit((function() {
             return this.component.option.apply(this.component, arguments);
         },
 
-        getController: function() {
-            return this.component.getController.apply(this.component, arguments);
-        },
-
         isVirtual: function() {
             return this._isVirtual;
         },
@@ -339,8 +335,11 @@ export const VirtualScrollController = Class.inherit((function() {
 
         // new mode
         getViewportParams: function() {
+            const insertedRowsCount = (this.option('editing.changes') ?? [])
+                .filter(change => change.type === 'insert')
+                .length;
+
             const totalItemsCount = this._dataOptions.totalItemsCount();
-            const insertedRowsCount = this.getController('editing').getInsertRowCount();
             const totalRowsCount = totalItemsCount + insertedRowsCount;
             const topIndex = this._viewportItemIndex;
             const bottomIndex = this._viewportSize + topIndex;

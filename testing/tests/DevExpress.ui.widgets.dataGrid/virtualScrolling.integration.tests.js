@@ -3637,7 +3637,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     });
 
     QUnit.test('Inserted row should not hide existing rows (T1052464)', function(assert) {
-        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
         // arrange
         createDataGrid({
             dataSource: [ { value: 'value 1' }, { value: 'value 2' }],
