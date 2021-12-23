@@ -1238,13 +1238,13 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         scrollable.scrollTo({ top: 1000000 });
 
         realSetTimeout(function() {
-            const scrollPosition = scrollable.scrollTop();
+            const scrollPosition = $(scrollable.container()).get(0).scrollTop;
 
             // act
             dataGrid.clearGrouping();
             realSetTimeout(function() {
                 // assert
-                assert.equal(scrollable.scrollTop(), scrollPosition, 'top visible position is not changed');
+                assert.equal($(scrollable.container()).get(0).scrollTop, scrollPosition, 'top visible position is not changed');
                 assert.ok(getHeight($(dataGrid.element()).find('.dx-virtual-row').first()) <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
                 assert.ok($(dataGrid.element()).find('.dx-virtual-row').last().position().top >= dataGrid.getScrollable().scrollTop(), 'second virtual row is not in viewport');
                 done();

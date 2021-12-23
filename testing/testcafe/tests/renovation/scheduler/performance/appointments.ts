@@ -38,7 +38,7 @@ test('Virtual scrolling', async (t, { platform }) => {
 
   const renderCounts = {
     jquery: 6,
-    react: 13,
+    react: 15,
   };
 
   await ClientFunction(() => {
