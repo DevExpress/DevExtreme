@@ -26,6 +26,7 @@ import fx from 'animation/fx';
 import messageLocalization from 'localization/message';
 import dateSerialization from 'core/utils/date_serialization';
 import { ListSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
+import browser from 'core/utils/browser';
 
 QUnit.module('Header Filter dataController', {
     beforeEach: function() {
@@ -3992,6 +3993,10 @@ QUnit.module('Header Filter with real columnsController', {
     [null, 'yyyy-MM-ddTHH:mm:ssZ', 'yyyy-MM-ddTHH:mm:ss\'Z\'', 'yyyy-MM-dd HH:mm:ss'].forEach(dateSerializationFormat => {
         [false, true].forEach(remoteOperations => {
             QUnit.test(`Load data for column with dataType is 'datetime' if remoteOperations is enabled and dates are formatted in UTC (dateSerializationFormat=${dateSerializationFormat}, remoteOperations=${remoteOperations}) (T1029128, T1051815)`, function(assert) {
+                if(dateSerializationFormat === 'yyyy-MM-dd HH:mm:ss' && !remoteOperations && browser.msie && parseInt(browser.version) <= 11) {
+                    assert.ok(true, 'Date.parse in IE11 does not support yyyy-MM-dd HH:mm:ss format');
+                    return;
+                }
                 // arrange
                 let items;
                 const getTreeText = function(items) {
