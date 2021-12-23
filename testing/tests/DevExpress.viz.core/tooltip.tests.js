@@ -1638,14 +1638,16 @@ QUnit.test('forceEvents. rise tooltipHidden event', function(assert) {
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._wrapper.detach = sinon.spy();
     // act
-    this.tooltip.hide();
+    this.tooltip.hide('pointer-out-value');
 
     // assert
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
     assert.equal(this.tooltip._wrapper.get(0).style.left, '-9999px', 'wrapper is moved to invisible area');
     assert.equal(this.tooltip._wrapper.detach.callCount, 1, 'wrapper detached');
     assert.equal(this.eventTrigger.callCount, 1);
-    assert.deepEqual(this.eventTrigger.firstCall.args, ['tooltipHidden', eventObject]);
+    assert.deepEqual(this.eventTrigger.firstCall.args[0], 'tooltipHidden');
+    assert.strictEqual(this.eventTrigger.firstCall.args[1]['some-event-object'], 'some-event-value');
+    assert.strictEqual(this.eventTrigger.firstCall.args[1].isPointerOut, 'pointer-out-value');
 });
 
 function getCloudPoints() {
