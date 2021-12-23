@@ -548,12 +548,14 @@ const DropDownButton = Widget.inherit({
             this._setListOption('selectionMode', 'single');
             const selectedItemKey = this.option('selectedItemKey');
             this._setListOption('selectedItemKeys', isDefined(selectedItemKey) ? [selectedItemKey] : []);
+            this._selectedItemKeyChanged(this.option('selectedItemKey'));
         } else {
             this._setListOption('selectionMode', 'none');
             this.option({
                 'selectedItemKey': undefined,
                 'selectedItem': undefined
             });
+            this._actionButtonOptionChanged({ text: this.option('text') });
         }
     },
 
