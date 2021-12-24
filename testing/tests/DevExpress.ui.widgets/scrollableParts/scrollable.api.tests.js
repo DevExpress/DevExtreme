@@ -26,6 +26,7 @@ import {
 import {
     DIRECTION_HORIZONTAL,
     DIRECTION_VERTICAL,
+    DIRECTION_BOTH,
     SCROLLABLE_WRAPPER_CLASS
 } from 'renovation/ui/scroll_view/common/consts.js';
 
@@ -809,6 +810,65 @@ QUnit.test('scrollTo should not reset unused position', function(assert) {
     assert.equal(scrollable.scrollTop(), 40, 'top position set');
 });
 
+[true, false].forEach((useNative) => {
+    [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BOTH].forEach((direction) => {
+        let scrollToValue = 40;
+
+        if(direction === DIRECTION_HORIZONTAL) {
+            scrollToValue = { left: 40 };
+        }
+
+        if(direction === DIRECTION_VERTICAL) {
+            scrollToValue = { top: 40 };
+        }
+
+        QUnit.test(`scrollTo(${JSON.stringify(scrollToValue)}), update scrollOffset value after resize, useNative: ${useNative}, dir: ${direction}`, function(assert) {
+            const contentSize = 1000;
+            const containerSize = 100;
+            const $scrollable = $('#scrollable').width(containerSize).height(containerSize);
+            $scrollable.wrapInner('<div>').children().width(contentSize).height(contentSize);
+
+            const scrollable = $scrollable.dxScrollable({
+                useNative,
+                direction,
+            }).dxScrollable('instance');
+
+            // for IOS with min-height: 101% style
+            $(scrollable.content()).css({ minHeight: '100%' });
+
+            scrollable.scrollTo(scrollToValue);
+
+            const expectedTopOffsetValue = direction !== DIRECTION_HORIZONTAL ? 40 : 0;
+            const expectedLeftOffsetValue = direction !== DIRECTION_VERTICAL ? 40 : 0;
+            assert.deepEqual(scrollable.scrollOffset(), {
+                top: expectedTopOffsetValue,
+                left: expectedLeftOffsetValue,
+            }, 'scrollOffset()');
+            assert.strictEqual(scrollable.scrollTop(), expectedTopOffsetValue, 'scrollTop()');
+            assert.strictEqual(scrollable.scrollLeft(), expectedLeftOffsetValue, 'scrollLeft()');
+
+            $('#scrollable').width(500).height(500);
+            resizeCallbacks.fire();
+
+            assert.deepEqual(scrollable.scrollOffset(), {
+                top: expectedTopOffsetValue,
+                left: expectedLeftOffsetValue,
+            }, 'scrollOffset()');
+            assert.strictEqual(scrollable.scrollTop(), expectedTopOffsetValue, 'scrollTop()');
+            assert.strictEqual(scrollable.scrollLeft(), expectedLeftOffsetValue, 'scrollLeft()');
+
+            $('#scrollable').width(1000).height(1000);
+            resizeCallbacks.fire();
+
+            assert.deepEqual(scrollable.scrollOffset(), {
+                top: 0,
+                left: 0,
+            }, 'scrollOffset()');
+            assert.strictEqual(scrollable.scrollTop(), 0, 'scrollTop()');
+            assert.strictEqual(scrollable.scrollLeft(), 0, 'scrollLeft()');
+        });
+    });
+});
 
 class ScrollableTestHelper {
     constructor(options) {
