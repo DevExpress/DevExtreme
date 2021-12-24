@@ -149,6 +149,72 @@ QUnit.test('Select all by one page should skip non-selectable items', function(a
     assert.deepEqual(selection.getSelectedItems(), [this.data[1], this.data[2]], 'selected items');
 });
 
+QUnit.module('Selection with all pages mode: ',
+    {
+        beforeEach: function() {
+            const items = [
+                { id: 1 },
+                { id: 2, disabled: true },
+            ];
+            const dataSource = createDataSource(items, { key: 'id' }, { paginate: true, pageSize: 1 });
+
+            this.selection = new Selection({
+                key: function() {
+                    const store = dataSource.store();
+                    return store && store.key();
+                },
+                keyOf: function(item) {
+                    const store = dataSource.store();
+                    return store && store.keyOf(item);
+                },
+                dataFields: function() {
+                    return dataSource.select();
+                },
+                plainItems: function() {
+                    return dataSource.items();
+                },
+                load: function(options) {
+                    return dataSource && dataSource.store().load(options);
+                }
+            });
+            this.dataSource = dataSource;
+        }
+    }, function() {
+        QUnit.test('Select all should not select disabled items when not ignoreDisabledItems', function(assert) {
+            this.dataSource.load();
+            this.selection.selectAll();
+
+            assert.deepEqual(this.selection.getSelectedItemKeys(), [1], 'selected item keys are correct');
+        });
+
+        QUnit.test('Select all should select disabled items when ignoreDisabledItems', function(assert) {
+            this.selection.options.ignoreDisabledItems = true;
+            this.dataSource.load();
+            this.selection.selectAll();
+
+            assert.deepEqual(this.selection.getSelectedItemKeys(), [1, 2], 'selected item keys are correct');
+        });
+
+        QUnit.test('Deselect all should not unselect disabled items when not ignoreDisabledItems', function(assert) {
+            this.dataSource.load();
+            this.selection.options.ignoreDisabledItems = true;
+            this.selection.selectAll();
+            this.selection.options.ignoreDisabledItems = false;
+            this.selection.deselectAll();
+
+            assert.deepEqual(this.selection.getSelectedItemKeys(), [2], 'selected item keys are correct');
+        });
+
+        QUnit.test('Deselect all should unselect disabled items when ignoreDisabledItems', function(assert) {
+            this.selection.options.ignoreDisabledItems = true;
+            this.dataSource.load();
+            this.selection.selectAll();
+            this.selection.deselectAll();
+
+            assert.deepEqual(this.selection.getSelectedItemKeys(), [], 'selected item keys are correct');
+        });
+    });
+
 QUnit.test('Select all for all pages when item is disabled', function(assert) {
     this.data[5].disabled = true;
     const dataSource = createDataSource(this.data, { key: 'id' }, { paginate: true, pageSize: 3 });
