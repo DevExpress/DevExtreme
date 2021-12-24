@@ -82,8 +82,6 @@ describe('AppointmentContent', () => {
 
     it('should render reduced icon', () => {
       const appointmentContent = render({
-        onReducedIconMouseEnter: 'some value 1',
-        onReducedIconMouseLeave: 'some value 2',
         props: {
           isReduced: true,
         },
@@ -97,8 +95,6 @@ describe('AppointmentContent', () => {
       expect(reducedIcon.props())
         .toEqual({
           className: 'dx-scheduler-appointment-reduced-icon',
-          onMouseEnter: 'some value 1',
-          onMouseLeave: 'some value 2',
         });
     });
 
@@ -132,6 +128,65 @@ describe('AppointmentContent', () => {
   });
 
   describe('Behavior', () => {
+    describe('bindHoverEffect', () => {
+      it('should correctly handle events from the reduced icon element', () => {
+        const addEventListener = jest.fn();
+        const removeEventListener = jest.fn();
+
+        const content = new AppointmentContent({
+          ...new AppointmentContentProps(),
+        });
+
+        content.refReducedIcon = {
+          current: {
+            addEventListener,
+            removeEventListener,
+          },
+        } as any;
+
+        content.onReducedIconMouseEnter = jest.fn();
+        content.onReducedIconMouseLeave = jest.fn();
+
+        const freeResources = content.bindHoverEffect();
+
+        expect(addEventListener)
+          .toHaveBeenCalledTimes(2);
+
+        expect(addEventListener)
+          .toBeCalledWith('mouseenter', content.onReducedIconMouseEnter);
+
+        expect(addEventListener)
+          .lastCalledWith('mouseleave', content.onReducedIconMouseLeave);
+
+        freeResources();
+
+        expect(removeEventListener)
+          .toHaveBeenCalledTimes(2);
+
+        expect(removeEventListener)
+          .toBeCalledWith('mouseenter', content.onReducedIconMouseEnter);
+
+        expect(removeEventListener)
+          .lastCalledWith('mouseleave', content.onReducedIconMouseLeave);
+      });
+
+      it('should do nothing if reduced icon ref is not defined', () => {
+        const content = new AppointmentContent({
+          ...new AppointmentContentProps(),
+        });
+
+        content.refReducedIcon = {
+          undefined,
+        } as any;
+
+        expect(() => {
+          const freeResources = content.bindHoverEffect();
+          expect(freeResources)
+            .not.toThrow();
+        }).not.toThrow();
+      });
+    });
+
     describe('onReducedIconMouseEnter', () => {
       it('should invoke showReducedIconTooltip', () => {
         const showReducedIconTooltip = jest.fn();
