@@ -778,6 +778,15 @@ export const virtualScrollingModule = {
                         baseResult.done(this.initVirtualRows.bind(this));
                         return baseResult;
                     },
+                    _loadDataSource: function() {
+                        if(this._rowsScrollController) {
+                            const { loadPageCount } = this.getLoadPageParams() ?? {};
+
+                            loadPageCount >= 1 && this._dataSource?.loadPageCount(loadPageCount);
+                        }
+
+                        return this.callBase.apply(this, arguments);
+                    },
                     getRowPageSize: function() {
                         const rowPageSize = this.option('scrolling.rowPageSize');
                         const pageSize = this.pageSize();
@@ -825,19 +834,22 @@ export const virtualScrollingModule = {
                         const pageIndex = !isVirtualMode(this) && this.pageIndex() >= this.pageCount() ? this.pageCount() - 1 : this.pageIndex();
                         this._rowPageIndex = Math.ceil(pageIndex * this.pageSize() / this.getRowPageSize());
                         this._visibleItems = this.option(LEGACY_SCROLLING_MODE) === false ? null : [];
-                        this._rowsScrollController = new VirtualScrollController(this.component, this._getRowsScrollDataOptions(), true);
                         this._viewportChanging = false;
                         this._needUpdateViewportAfterLoading = false;
 
-                        this._rowsScrollController.positionChanged.add(() => {
-                            if(this.option(LEGACY_SCROLLING_MODE) === false) {
-                                this._viewportChanging = true;
-                                this.loadViewport();
-                                this._viewportChanging = false;
-                                return;
-                            }
-                            this._dataSource?.setViewportItemIndex(this._rowsScrollController.getViewportItemIndex());
-                        });
+                        if(!this._rowsScrollController) {
+                            this._rowsScrollController = new VirtualScrollController(this.component, this._getRowsScrollDataOptions(), true);
+
+                            this._rowsScrollController.positionChanged.add(() => {
+                                if(this.option(LEGACY_SCROLLING_MODE) === false) {
+                                    this._viewportChanging = true;
+                                    this.loadViewport();
+                                    this._viewportChanging = false;
+                                    return;
+                                }
+                                this._dataSource?.setViewportItemIndex(this._rowsScrollController.getViewportItemIndex());
+                            });
+                        }
 
                         if(this.option(LEGACY_SCROLLING_MODE) === false) {
                             this._updateLoadViewportParams();

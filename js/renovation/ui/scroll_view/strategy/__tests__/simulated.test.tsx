@@ -454,6 +454,18 @@ describe('Simulated > Behavior', () => {
       });
     });
 
+    each([true, false]).describe('pendingScrollEvent: %o', (pendingScrollEvent) => {
+      it('triggerScrollEvent()', () => {
+        const helper = new ScrollableTestHelper({});
+        helper.viewModel.pendingScrollEvent = pendingScrollEvent;
+
+        helper.viewModel.triggerScrollEvent();
+
+        expect(helper.viewModel.pendingScrollEvent).toEqual(false);
+        // TODO: check call trigger handler here
+      });
+    });
+
     it('should subscribe to dxpointerdown event', () => {
       const helper = new ScrollableTestHelper({ direction: 'vertical' });
 
@@ -727,6 +739,7 @@ describe('Simulated > Behavior', () => {
         const scrollLeft = 30;
 
         const helper = new ScrollableTestHelper({ direction });
+        helper.initScrollbarSettings();
         helper.initContainerPosition({ top: scrollTop, left: scrollLeft });
 
         helper.viewModel.effectResetInactiveState();
@@ -1375,40 +1388,38 @@ describe('Simulated > Behavior', () => {
 
         each([{ scrollTop: 0, scrollLeft: 0 }, { scrollTop: 20, scrollLeft: 30 }]).describe('initialSavedScrollOffset: %o', (initialSavedScrollOffset) => {
           test.each([true, false])('onVisibilityChangeHandler(%o)', (visible) => {
-            const viewModel = new Scrollable({
+            const helper = new ScrollableTestHelper({
               direction,
               onVisibilityChange: actionHandler,
             });
+            helper.initScrollbarSettings();
+            helper.initContainerPosition({ top: 10, left: 20 });
 
-            viewModel.savedScrollOffset = initialSavedScrollOffset;
-            viewModel.updateHandler = jest.fn();
-            viewModel.scrollLocationChange = jest.fn();
+            helper.viewModel.savedScrollOffset = initialSavedScrollOffset;
+            helper.viewModel.updateHandler = jest.fn();
 
-            viewModel.scrollableRef = {
-              current: { offsetWidth: 100, offsetHeight: 100 },
-            } as RefObject;
-            viewModel.containerRef = {
-              current: {
-                scrollTop: 10,
-                scrollLeft: 20,
-              },
-            } as RefObject<HTMLDivElement>;
-
-            viewModel.onVisibilityChangeHandler(visible);
+            helper.viewModel.onVisibilityChangeHandler(visible);
 
             if (actionHandler) {
               expect(actionHandler).toHaveBeenCalledTimes(1);
               expect(actionHandler).toHaveBeenLastCalledWith(visible);
             }
 
-            const expectedContainerScrollTop = 10;
-            const expectedContainerScrollLeft = 20;
-            const containerEl = viewModel.containerRef.current!;
+            let expectedContainerScrollTop = 10;
+            let expectedContainerScrollLeft = 20;
+            const containerEl = helper.viewModel.containerRef.current!;
             if (visible) {
-              expect(viewModel.updateHandler).toBeCalledTimes(1);
-              expect(viewModel.savedScrollOffset).toEqual(initialSavedScrollOffset);
+              expect(helper.viewModel.updateHandler).toBeCalledTimes(1);
+              expect(helper.viewModel.savedScrollOffset).toEqual(initialSavedScrollOffset);
+
+              expectedContainerScrollTop = direction !== DIRECTION_HORIZONTAL
+                ? initialSavedScrollOffset.scrollTop
+                : 10;
+              expectedContainerScrollLeft = direction !== DIRECTION_VERTICAL
+                ? initialSavedScrollOffset.scrollLeft
+                : 20;
             } else {
-              expect(viewModel.updateHandler).toBeCalledTimes(0);
+              expect(helper.viewModel.updateHandler).toBeCalledTimes(0);
             }
 
             expect(containerEl.scrollTop).toEqual(expectedContainerScrollTop);
@@ -1492,7 +1503,8 @@ describe('Simulated > Behavior', () => {
 
     each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
       test.each([true, false])('handleScroll(), syncScrollbarsWithContent, should synchronize scrollbars with content offset after trigger scroll, scrolling: %o', (scrolling) => {
-        const helper = new ScrollableTestHelper({ rtlEnabled });
+        const helper = new ScrollableTestHelper({ direction: 'both', rtlEnabled } as any);
+        helper.initScrollbarSettings();
 
         helper.viewModel.containerRef.current!.scrollTop = 50;
         helper.viewModel.containerRef.current!.scrollLeft = 30;

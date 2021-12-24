@@ -1199,6 +1199,7 @@ export const columnsControllerModule = {
                     }
                 },
                 reset: function() {
+                    this._dataSource = null;
                     this._dataSourceApplied = false;
                     this._dataSourceColumnsCount = undefined;
                     this.reinit();

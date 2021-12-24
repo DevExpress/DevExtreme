@@ -48,19 +48,8 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
             };
         }
 
-        let vScrollbar;
-        let hScrollbar;
-
-        if(this.option('useNative')) {
-            vScrollbar = scrollable.vScrollbarRef.current;
-            hScrollbar = scrollable.hScrollbarRef.current;
-        } else {
-            const animatedVScrollbar = scrollable.vScrollbarRef.current;
-            const animatedHScrollbar = scrollable.hScrollbarRef.current;
-
-            vScrollbar = animatedVScrollbar?.scrollbarRef?.current;
-            hScrollbar = animatedHScrollbar?.scrollbarRef?.current;
-        }
+        const vScrollbar = scrollable.vScrollbarRef.current;
+        const hScrollbar = scrollable.hScrollbarRef.current;
 
         if(vScrollbar) {
             const moveTo = vScrollbar.moveTo;

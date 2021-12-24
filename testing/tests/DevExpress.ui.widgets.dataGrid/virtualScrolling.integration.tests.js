@@ -1190,7 +1190,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     const realSetTimeout = window.setTimeout;
 
     // T644981
-    QUnit[isRenovatedScrollable ? 'skip' : 'test']('ungrouping after grouping and scrolling should work correctly with large amount of data if row rendering mode is virtual', function(assert) {
+    QUnit.test('ungrouping after grouping and scrolling should work correctly with large amount of data if row rendering mode is virtual', function(assert) {
         this.clock.restore();
         const done = assert.async();
         // arrange, act
@@ -1238,13 +1238,13 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         scrollable.scrollTo({ top: 1000000 });
 
         realSetTimeout(function() {
-            const scrollPosition = scrollable.scrollTop();
+            const scrollPosition = $(scrollable.container()).get(0).scrollTop;
 
             // act
             dataGrid.clearGrouping();
             realSetTimeout(function() {
                 // assert
-                assert.equal(scrollable.scrollTop(), scrollPosition, 'top visible position is not changed');
+                assert.equal($(scrollable.container()).get(0).scrollTop, scrollPosition, 'top visible position is not changed');
                 assert.ok(getHeight($(dataGrid.element()).find('.dx-virtual-row').first()) <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
                 assert.ok($(dataGrid.element()).find('.dx-virtual-row').last().position().top >= dataGrid.getScrollable().scrollTop(), 'second virtual row is not in viewport');
                 done();
@@ -3228,12 +3228,56 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         dataGrid.option('dataSource', dataSource2);
         this.clock.tick(300);
         const $gridElement = $(dataGrid.element());
-        const $virtualRows = $gridElement.find('.dx-datagrid-rowsview .dx-row.dx-virtual-row');
-        const $renderedRows = $gridElement.find('.dx-datagrid-rowsview .dx-row.dx-data-row');
+        const $rows = $gridElement.find('.dx-datagrid-rowsview .dx-row');
+        const $virtualRows = $rows.filter('.dx-virtual-row');
+        const $dataRows = $rows.filter('.dx-data-row');
 
         // assert
-        assert.equal($renderedRows.length, 18, 'rendered data rows');
-        assert.equal($virtualRows.length, 0, 'no virtual rows');
+        assert.equal($dataRows.length, 15, 'rendered data rows');
+        assert.equal($virtualRows.length, 1, 'has virtual row');
+        assert.ok($rows.last().hasClass('dx-virtual-row'), 'virtual row is last');
+    });
+
+    // T1048528
+    QUnit.test('The scroll top should be the same for the fixed and main tables after data source changing when there are fixed columns', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            height: 600,
+            dataSource: generateDataSource(40),
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            columns: [{ dataField: 'name', fixed: true }, 'id']
+        });
+
+        this.clock.tick();
+
+        const scrollable = dataGrid.getScrollable();
+
+        // act
+        scrollable.scrollTo(10000);
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick(500);
+
+        const scrollTop = scrollable.scrollTop();
+
+        // assert
+        assert.strictEqual(dataGrid.pageIndex(), 1, 'pageIndex');
+        assert.strictEqual(dataGrid.getTopVisibleRowData().id, 24, 'top visible item index');
+
+        // act
+        dataGrid.option('dataSource', generateDataSource(40));
+        this.clock.tick(500);
+
+
+        // assert
+        const $fixedContent = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-content.dx-datagrid-content-fixed');
+        assert.strictEqual(dataGrid.pageIndex(), 1, 'pageIndex');
+        assert.strictEqual(dataGrid.getTopVisibleRowData().id, 24, 'top visible item index');
+        assert.strictEqual(scrollTop, scrollable.scrollTop(), 'scrollTop is not changed');
+        assert.strictEqual($fixedContent.scrollTop(), scrollTop, 'fixed content has the correct scroll top');
     });
 
     QUnit.test('DataGrid should display rows from a particular page when dataSource is set initially (rowRenderingMode = \'virtual\') (T971067)', function(assert) {
@@ -5222,8 +5266,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         $(dataGrid.getScrollable().content()).trigger('scroll');
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 15, 'visible rows');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 36, 'top visible row');
+        assert.equal(dataGrid.getVisibleRows().length, isRenovatedScrollable ? 14 : 15, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, isRenovatedScrollable ? 37 : 36, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'no bottom loading');
     });
 

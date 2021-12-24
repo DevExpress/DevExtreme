@@ -2,10 +2,10 @@ import React from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  DataGridLight, viewFunction as DataGridView, DataGridLightProps, PagingProps,
+  DataGridLight, viewFunction as DataGridView, DataGridLightProps,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
-import { columns, generateData } from './test_data';
+import { generateData } from './test_data';
 
 describe('DataGridLight', () => {
   describe('View', () => {
@@ -61,122 +61,48 @@ describe('DataGridLight', () => {
     });
   });
 
-  describe('Logic', () => {
-    describe('Getters', () => {
-      describe('aria', () => {
-        it('should have role "presentation"', () => {
-          expect(new DataGridLight({}).aria).toEqual({ role: 'presentation' });
-        });
+  describe('Getters', () => {
+    describe('aria', () => {
+      it('should have role "presentation"', () => {
+        expect(new DataGridLight({}).aria).toEqual({ role: 'presentation' });
       });
+    });
+  });
 
-      // todo: move when paging will be in different module
-      describe('paging', () => {
-        describe('visibleItems', () => {
-          const dataSource = generateData(20);
-          const paging = new PagingProps();
+  describe('Effects', () => {
+    describe('updateVisibleItems', () => {
+      const watchMock = jest.fn();
+      const grid = new DataGridLight({});
+      grid.plugins = {
+        watch: watchMock,
+      } as any;
 
-          it('should be calculated on first page', () => {
-            paging.pageIndex = 0;
-            paging.pageSize = 5;
+      it('should update visibleItems', () => {
+        grid.updateVisibleItems();
 
-            const dataGrid = new DataGridLight({
-              dataSource,
-              columns,
-              paging,
-            });
-            dataGrid.updatePagingProps();
-            expect(dataGrid.visibleItems).toEqual(dataSource.slice(0, 5));
-          });
+        const data = generateData(10);
 
-          it('should be calculated on second page', () => {
-            paging.pageIndex = 1;
-            paging.pageSize = 5;
+        const callback = watchMock.mock.calls[0][1];
+        callback(data);
 
-            const dataGrid = new DataGridLight({
-              dataSource,
-              columns,
-              paging,
-            });
-            dataGrid.updatePagingProps();
-            expect(dataGrid.visibleItems).toEqual(dataSource.slice(5, 10));
-          });
-
-          it('should be calculated when pageSize is "all"', () => {
-            paging.pageSize = 'all';
-
-            const dataGrid = new DataGridLight({
-              dataSource,
-              columns,
-              paging,
-            });
-            dataGrid.updatePagingProps();
-            expect(dataGrid.visibleItems).toEqual(dataSource);
-          });
-        });
-
-        describe('pageCount', () => {
-          const dataSource = generateData(22);
-
-          it('should be calculated when pageSize is a number', () => {
-            const dataGrid = new DataGridLight({
-              dataSource,
-            });
-
-            dataGrid.pagingPageSize = 10;
-            expect(dataGrid.pagingPageCount).toEqual(3);
-          });
-
-          it('should be calculated when pageSize is "all"', () => {
-            const dataGrid = new DataGridLight({
-              dataSource,
-            });
-
-            dataGrid.pagingPageSize = 'all';
-            expect(dataGrid.pagingPageCount).toEqual(1);
-          });
-        });
+        expect(grid.visibleItems).toBe(data);
       });
     });
 
-    describe('Callbacks', () => {
-      it('onPageIndexChange', () => {
-        const grid = new DataGridLight({});
-
-        grid.onPageIndexChange(100);
-        expect(grid.pagingPageIndex).toEqual(100);
+    describe('setDataSourceToVisibleItems', () => {
+      const extendMock = jest.fn();
+      const dataSource = generateData(10);
+      const grid = new DataGridLight({
+        dataSource,
       });
+      grid.plugins = {
+        extend: extendMock,
+      } as any;
 
-      it('onPageSizeChange', () => {
-        const grid = new DataGridLight({});
+      it('should return dataSource', () => {
+        grid.setDataSourceToVisibleItems();
 
-        grid.onPageSizeChange(100);
-        expect(grid.pagingPageSize).toEqual(100);
-      });
-    });
-
-    describe('Effects', () => {
-      describe('updatePagingProps', () => {
-        it('should update two way props', () => {
-          const paging = new PagingProps();
-          paging.pageSize = 10;
-          paging.pageIndex = 20;
-          const dataGrid = new DataGridLight({
-            paging,
-          });
-          dataGrid.updatePagingProps();
-          expect(dataGrid.pagingPageSize).toEqual(10);
-          expect(dataGrid.pagingPageIndex).toEqual(20);
-        });
-
-        it('should set pageSize to "all" if prop is zero', () => {
-          const paging = new PagingProps();
-          paging.pageSize = 0;
-          const dataGrid = new DataGridLight({
-            paging,
-          });
-          dataGrid.updatePagingProps();
-          expect(dataGrid.pagingPageSize).toEqual('all');
-        });
+        expect(extendMock.mock.calls[0][2]()).toBe(dataSource);
       });
     });
   });
