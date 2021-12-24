@@ -1459,7 +1459,7 @@ describe('Simulated > Behavior', () => {
 
     each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
       test.each([true, false])('handleScroll(), syncScrollbarsWithContent, should synchronize scrollbars with content offset after trigger scroll, scrolling: %o', (scrolling) => {
-        const helper = new ScrollableTestHelper({ direction: 'both', rtlEnabled });
+        const helper = new ScrollableTestHelper({ direction: 'both', rtlEnabled } as any);
         helper.initScrollbarSettings();
 
         helper.viewModel.containerRef.current!.scrollTop = 50;

@@ -2,11 +2,10 @@ import {
   ComponentBindings,
   OneWay,
 } from '@devextreme-generator/declarations';
-import { ScrollableDirection } from './types';
 
 @ComponentBindings()
 export class ScrollbarProps {
-  @OneWay() direction: Omit<ScrollableDirection, 'both'> = 'vertical';
+  @OneWay() direction: 'vertical' | 'horizontal' = 'vertical';
 
   @OneWay() containerSize = 0;
 
