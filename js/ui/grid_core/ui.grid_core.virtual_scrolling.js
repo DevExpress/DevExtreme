@@ -1281,10 +1281,10 @@ export const virtualScrollingModule = {
                         const dataSourceAdapter = this._dataSource;
                         const changedParams = this._getChangedLoadParams();
                         const currentLoadPageCount = dataSourceAdapter?.loadPageCount() ?? 0;
-                        const requiredItemCount = this.pageSize() * currentLoadPageCount;
+                        const lastRequiredItemCount = this.pageSize() * currentLoadPageCount;
                         const currentPageIndex = dataSourceAdapter?.pageIndex() ?? 0;
                         const pageIndexNotChanged = changedParams?.pageIndex === currentPageIndex;
-                        const allLoadedInAppendMode = isAppendMode(this) && this.totalItemsCount() < requiredItemCount;
+                        const allLoadedInAppendMode = isAppendMode(this) && this.totalItemsCount() < lastRequiredItemCount;
                         let result = false;
 
                         if(!dataSourceAdapter || (virtualPaging && checkLoading && (changedParams?.pageIndex > currentPageIndex || pageIndexNotChanged && allLoadedInAppendMode))) {
