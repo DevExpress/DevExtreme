@@ -64,10 +64,6 @@ createTestCafe('localhost', 1437, 1438)
             runner.cache = args.cache;
         }
 
-        if(args.dashboard) {
-            runner.reporter('dashboard');
-        }
-
         return runner.run({
             quarantineMode: args.quarantineMode
         });
@@ -96,7 +92,6 @@ function getArgs() {
             quarantineMode: false,
             indices: '',
             platform: '',
-            dashboard: false,
         }
     });
 }
