@@ -643,12 +643,13 @@ export default class FileItemsController {
 
     _setCurrentDirectoryByPathPartsInternal(pathParts, useKeys) {
         return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts, useKeys)
-            .then(directoryInfo => {
+            .done(directoryInfo => {
                 for(let info = directoryInfo.parentDirectory; info; info = info.parentDirectory) {
                     info.expanded = true;
                 }
                 this.setCurrentDirectory(directoryInfo);
-            }, () => {
+            })
+            .fail(() => {
                 this._raisePathPotentiallyChanged();
             });
     }
@@ -844,7 +845,7 @@ export default class FileItemsController {
 
     _tryCallAction(actionName) {
         const args = Array.prototype.slice.call(arguments, 1);
-        if(this._options[actionName]) {
+        if(this._options[actionName] && this._isInitialized) {
             this._options[actionName](...args);
         }
     }
