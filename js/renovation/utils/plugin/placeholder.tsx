@@ -5,14 +5,14 @@ import {
 
 import { PlaceholderItem } from './placeholder_item';
 import {
-  PluginsContext, Plugins,
+  PluginsContext, Plugins, PluginEntity,
 } from './context';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
-  componentTypes, props: { column, children },
+  componentTypes, componentDeps, props: { column, children },
 }: Placeholder): JSX.Element => (
-  <PlaceholderItem componentTypes={componentTypes} column={column}>
+  <PlaceholderItem componentTypes={componentTypes} componentDeps={componentDeps} column={column}>
     { children }
   </PlaceholderItem>
 );
@@ -32,10 +32,17 @@ export class Placeholder extends JSXComponent<PlaceholderProps, 'type'>(Placehol
 
   @InternalState() componentTypes: any /* [] */ = [];
 
+  @InternalState() componentDeps: any = [];
+
   @Effect()
   updateComponentTypes(): () => void {
-    return this.plugins.watch(this.props.type, (items: { order: number; component: unknown }[]) => {
+    return this.plugins.watch(this.props.type, (items: {
+      order: number;
+      component: unknown;
+      deps: PluginEntity<unknown, unknown>[];
+    }[]) => {
       this.componentTypes = items.map((item) => item.component).reverse();
+      this.componentDeps = items.map((item) => item.deps).reverse();
     });
   }
 }
