@@ -167,7 +167,6 @@ describe('Methods', () => {
         {
           fullScrollProp: viewModel.fullScrollProp,
           location: -scrollLocation,
-          needFireScroll: expected.needFireScroll,
         },
       );
 
@@ -668,55 +667,43 @@ describe('Effects', () => {
       });
     });
 
-    each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
-      each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
-        each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
-          each([0, -300]).describe('maxOffset: %o', (prevMaxOffset) => {
-            each([0, -300]).describe('maxOffset: %o', (maxOffset) => {
-              it('syncScrollLocation() should call moveTo(location)', () => {
-                const viewModel = new AnimatedScrollbar({
-                  showScrollbar: 'always',
-                  direction,
-                  scrollLocation,
-                  containerHasSizes,
-                  maxOffset,
-                  rtlEnabled,
-                });
+    each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
+      each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
+        each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
+          each([0, -300]).describe('maxOffset: %o', (maxOffset) => {
+            it('updateScrollLocationInRTL() should call moveTo(location)', () => {
+              const viewModel = new AnimatedScrollbar({
+                showScrollbar: 'always',
+                direction,
+                scrollLocation,
+                containerHasSizes,
+                maxOffset,
+                rtlEnabled,
+              });
 
-                // viewModel.config = ConfigContext;
+              // viewModel.config = ConfigContext;
 
-                [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
-                  viewModel.moveTo = jest.fn();
+              [0, -50, -100, -250, -400].forEach((initialRightScrollLocation) => {
+                viewModel.moveTo = jest.fn();
 
-                  viewModel.rightScrollLocation = rightScrollLocation;
-                  // viewModel.prevScrollLocation = -100;
-                  viewModel.prevMaxOffset = prevMaxOffset;
+                viewModel.rightScrollLocation = initialRightScrollLocation;
 
-                  viewModel.syncScrollLocation();
+                viewModel.updateScrollLocationInRTL();
 
-                  let expectedRightScrollLocation = rightScrollLocation;
-                  if (containerHasSizes) {
-                    let expectedLocation = scrollLocation;
-
-                    if (Math.abs(maxOffset - prevMaxOffset) > 0 && direction === 'horizontal' && rtlEnabled) { // && ConfigContext?.rtlEnabled
-                      if (maxOffset === 0) {
-                        expectedRightScrollLocation = 0;
-                      }
-
-                      expectedLocation = maxOffset - expectedRightScrollLocation;
-                    }
-
-                    // if (expectedLocation === -100 /* prev location */) {
-                    //   expect(viewModel.moveTo).not.toBeCalled();
-                    // } else {
-                    expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
-                    expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
-                    // }
-                  } else {
-                    expect(viewModel.moveTo).not.toBeCalled();
+                let expectedRightScrollLocation = initialRightScrollLocation;
+                if (containerHasSizes && direction === 'horizontal' && rtlEnabled) { // && ConfigContext?.rtlEnabled
+                  if (maxOffset === 0 && scrollLocation) {
+                    expectedRightScrollLocation = 0;
                   }
-                  expect(viewModel.rightScrollLocation).toEqual(expectedRightScrollLocation);
-                });
+
+                  const newScrollLocation = maxOffset - expectedRightScrollLocation;
+
+                  expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+                  expect(viewModel.moveTo).toHaveBeenCalledWith(newScrollLocation);
+                } else {
+                  expect(viewModel.moveTo).not.toBeCalled();
+                }
+                expect(viewModel.rightScrollLocation).toEqual(expectedRightScrollLocation);
               });
             });
           });

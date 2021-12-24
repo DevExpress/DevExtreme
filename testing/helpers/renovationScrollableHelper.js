@@ -31,26 +31,8 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
             handleScroll.apply(this, arguments);
         };
 
-        // const syncScrollLocation = scrollable.syncScrollLocation;
-
-        // scrollable.syncScrollLocation = function() {
-        //     reRender();
-        //     syncScrollLocation.apply(this, arguments);
-        // };
-
-        // let vScrollbar;
-        // let hScrollbar;
-
-        // if(this.option('useNative')) {
         const vScrollbar = scrollable.vScrollbarRef.current;
         const hScrollbar = scrollable.hScrollbarRef.current;
-        // } else {
-        //     const animatedVScrollbar = scrollable.vScrollbarRef.current;
-        //     const animatedHScrollbar = scrollable.hScrollbarRef.current;
-
-        //     vScrollbar = animatedVScrollbar?.scrollbarRef?.current;
-        //     hScrollbar = animatedHScrollbar?.scrollbarRef?.current;
-        // }
 
         if(vScrollbar) {
             const moveTo = vScrollbar.moveTo;

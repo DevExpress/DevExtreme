@@ -102,8 +102,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @Mutable() prevScrollLocation = 0;
 
-  @Mutable() prevMaxOffset = 0;
-
   @Mutable() thumbScrolling = false;
 
   @Mutable() crossThumbScrolling = false;
@@ -418,7 +416,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.props.scrollLocationChange?.({
       fullScrollProp: this.fullScrollProp,
       location: -value,
-      needFireScroll: scrollDelta > 0,
     });
 
     if (scrollDelta > 0) {
@@ -515,10 +512,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     }
 
     return this.props.maxOffset;
-  }
-
-  get maxOffsetChanged(): boolean {
-    return Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
   }
 
   get isHorizontal(): boolean {

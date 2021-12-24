@@ -541,7 +541,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.scrollLocationChange({
       fullScrollProp: inactiveScrollProp,
       location: 0,
-      needFireScroll: false,
     });
   }
 
@@ -755,12 +754,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       this.vScrollLocation = -location;
     }
 
-    // const scrollDelta = Math.abs(this.savedScrollOffset[fullScrollProp] - location);
     this.savedScrollOffset[fullScrollProp] = location;
-    // console.log(needFireScroll, scrollDelta >= 1);
-    // if (needFireScroll && scrollDelta >= 1) {
-    //   this.onScroll();
-    // }
   }
 
   get hScrollOffsetMax(): number {
