@@ -14,6 +14,7 @@ import { AppointmentDetails } from './details/layout';
 import { AppointmentTitle } from './title/layout';
 import { AppointmentTemplateProps, ReducedIconHoverData } from '../types';
 import type { AppointmentTemplateData } from '../../../../../ui/scheduler';
+import { EffectReturn } from '../../../../utils/effect_return';
 
 export const viewFunction = ({
   refReducedIcon,
@@ -85,16 +86,14 @@ export class AppointmentContentProps {
 export class AppointmentContent extends JSXComponent<AppointmentContentProps, 'data' | 'showReducedIconTooltip' | 'hideReducedIconTooltip'>() {
   @Ref() refReducedIcon!: RefObject<HTMLDivElement>;
 
-  @Effect({ run: 'once' })
-  bindHoverEffect(): () => void {
-    const { current: reducedIconElement } = this.refReducedIcon;
-
-    reducedIconElement?.addEventListener('mouseenter', this.onReducedIconMouseEnter);
-    reducedIconElement?.addEventListener('mouseleave', this.onReducedIconMouseLeave);
+  @Effect()
+  bindHoverEffect(): EffectReturn {
+    this.refReducedIcon.current?.addEventListener('mouseenter', this.onReducedIconMouseEnter);
+    this.refReducedIcon.current?.addEventListener('mouseleave', this.onReducedIconMouseLeave);
 
     return (): void => {
-      reducedIconElement?.removeEventListener('mouseenter', this.onReducedIconMouseEnter);
-      reducedIconElement?.removeEventListener('mouseleave', this.onReducedIconMouseLeave);
+      this.refReducedIcon.current?.removeEventListener('mouseenter', this.onReducedIconMouseEnter);
+      this.refReducedIcon.current?.removeEventListener('mouseleave', this.onReducedIconMouseLeave);
     };
   }
 
