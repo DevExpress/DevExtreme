@@ -1190,7 +1190,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     const realSetTimeout = window.setTimeout;
 
     // T644981
-    QUnit[isRenovatedScrollable ? 'skip' : 'test']('ungrouping after grouping and scrolling should work correctly with large amount of data if row rendering mode is virtual', function(assert) {
+    QUnit.test('ungrouping after grouping and scrolling should work correctly with large amount of data if row rendering mode is virtual', function(assert) {
         this.clock.restore();
         const done = assert.async();
         // arrange, act
@@ -1238,13 +1238,13 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         scrollable.scrollTo({ top: 1000000 });
 
         realSetTimeout(function() {
-            const scrollPosition = scrollable.scrollTop();
+            const scrollPosition = $(scrollable.container()).get(0).scrollTop;
 
             // act
             dataGrid.clearGrouping();
             realSetTimeout(function() {
                 // assert
-                assert.equal(scrollable.scrollTop(), scrollPosition, 'top visible position is not changed');
+                assert.equal($(scrollable.container()).get(0).scrollTop, scrollPosition, 'top visible position is not changed');
                 assert.ok(getHeight($(dataGrid.element()).find('.dx-virtual-row').first()) <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
                 assert.ok($(dataGrid.element()).find('.dx-virtual-row').last().position().top >= dataGrid.getScrollable().scrollTop(), 'second virtual row is not in viewport');
                 done();
@@ -5266,8 +5266,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         $(dataGrid.getScrollable().content()).trigger('scroll');
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 15, 'visible rows');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 36, 'top visible row');
+        assert.equal(dataGrid.getVisibleRows().length, isRenovatedScrollable ? 14 : 15, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, isRenovatedScrollable ? 37 : 36, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'no bottom loading');
     });
 

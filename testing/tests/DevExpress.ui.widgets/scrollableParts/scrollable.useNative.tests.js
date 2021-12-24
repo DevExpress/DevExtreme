@@ -81,18 +81,20 @@ QUnit.test('simulated scroll does not work when using native', function(assert) 
 QUnit.test('scroll action fired for simulated scroller during native scroll', function(assert) {
     assert.expect(1);
 
+    this.clock.restore();
     const done = assert.async();
 
     const $scrollable = $('#scrollable').dxScrollable({
         inertiaEnabled: false,
         useNative: false,
-        onScroll: function(args) {
-            assert.equal(args.scrollOffset.top, 10, 'scroll action fired with right offset');
-            done();
-        },
     });
 
     $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS).scrollTop(10);
+
+    setTimeout(() => {
+        assert.equal($scrollable.dxScrollable('instance').scrollOffset().top, 10, 'scroll action fired with right offset');
+        done();
+    });
 });
 
 QUnit.test('scroll action fired when scrollable scrolling', function(assert) {
