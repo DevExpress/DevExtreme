@@ -208,9 +208,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.refreshing = false;
 
     this.moveTo(-clampIntoRange(value, -this.maxOffset, 0));
-    // uses for jest tests only
-    // I wanna use this statement ->
-    // this.newScrollLocation = -clampIntoRange(value, -this.maxOffset, 0);
 
     this.needRiseEnd = needRiseEnd;
   }
@@ -371,7 +368,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     return this.needRiseEnd
       && !this.inProgress
       && !(this.pendingRefreshing || this.pendingLoading);
-    // && this.props.maxOffset < 0; // TODO: try without it
   }
 
   get distanceToNearestBoundary(): number {
@@ -395,7 +391,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       this.velocity *= this.acceleration;
 
       this.moveTo(this.props.scrollLocation + prevVelocity);
-      // this.newScrollLocation = this.props.scrollLocation + prevVelocity;
     });
   }
 
@@ -404,11 +399,9 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   moveTo(value: number): void {
-    // this.prevScrollLocation = value;
     this.rightScrollLocation = this.props.maxOffset - value;
 
     this.newScrollLocation = value;
-    // this.scrollbarRef.current!.moveTo(value);
 
     const scrollDelta = Math.abs(this.prevScrollLocation - value);
     this.prevScrollLocation = value;

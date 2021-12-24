@@ -631,7 +631,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   syncScrollbarsWithContent(): void {
-    const { scrollLeft, scrollTop } = this.containerRef.current!; // this.scrollOffset();
+    const { scrollLeft, scrollTop } = this.containerRef.current!;
 
     this.vScrollbarRef.current?.scrollTo(scrollTop, false);
     if (!this.props.rtlEnabled) { // TODO: support native rtl mode // require for Qunit test
