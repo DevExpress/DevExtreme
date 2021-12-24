@@ -8,6 +8,7 @@ import {
   Fragment,
   RefObject,
   Ref,
+  Effect,
 } from '@devextreme-generator/declarations';
 import { AppointmentDetails } from './details/layout';
 import { AppointmentTitle } from './title/layout';
@@ -16,8 +17,6 @@ import type { AppointmentTemplateData } from '../../../../../ui/scheduler';
 
 export const viewFunction = ({
   refReducedIcon,
-  onReducedIconMouseEnter,
-  onReducedIconMouseLeave,
   props: {
     text,
     index,
@@ -48,8 +47,6 @@ export const viewFunction = ({
                   <div
                     ref={refReducedIcon}
                     className="dx-scheduler-appointment-reduced-icon"
-                    onMouseEnter={onReducedIconMouseEnter}
-                    onMouseLeave={onReducedIconMouseLeave}
                   />
                 )
               }
@@ -87,6 +84,19 @@ export class AppointmentContentProps {
 })
 export class AppointmentContent extends JSXComponent<AppointmentContentProps, 'data' | 'showReducedIconTooltip' | 'hideReducedIconTooltip'>() {
   @Ref() refReducedIcon!: RefObject<HTMLDivElement>;
+
+  @Effect({ run: 'once' })
+  bindHoverEffect(): () => void {
+    const { current: reducedIconElement } = this.refReducedIcon;
+
+    reducedIconElement?.addEventListener('mouseenter', this.onReducedIconMouseEnter);
+    reducedIconElement?.addEventListener('mouseleave', this.onReducedIconMouseLeave);
+
+    return (): void => {
+      reducedIconElement?.removeEventListener('mouseenter', this.onReducedIconMouseEnter);
+      reducedIconElement?.removeEventListener('mouseleave', this.onReducedIconMouseLeave);
+    };
+  }
 
   onReducedIconMouseEnter(): void {
     this.props.showReducedIconTooltip({
