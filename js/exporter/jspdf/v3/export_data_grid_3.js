@@ -102,7 +102,7 @@ function exportDataGrid(doc, dataGrid, options) {
             const maxBottomRight = {
                 x: doc.internal.pageSize.getWidth() - options.margin.right
             };
-            const rectsByPages = splitRectsByPages(rects, options.topLeft, maxBottomRight);
+            const rectsByPages = splitRectsByPages(rects, options.margin, options.topLeft, maxBottomRight);
             const pdfCellsInfoByPages = rectsByPages.map(rects => {
                 return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
             });

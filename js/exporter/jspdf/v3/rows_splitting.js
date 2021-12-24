@@ -1,18 +1,18 @@
 import { isDefined } from '../../../core/utils/type';
 import { round } from './draw_utils';
 
-function splitRectsByPages(rects, topLeft, maxBottomRight) {
+function splitRectsByPages(rects, margin, topLeft, maxBottomRight) {
     if(!isDefined(rects) || rects.length === 0) { // Empty Table
         return [[]];
     }
 
-    const rectsByPage = splitRectsHorizontalByPages(rects, topLeft, maxBottomRight);
+    const rectsByPage = splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight);
     // TODO: splitRectsVerticalByPages
 
     return rectsByPage;
 }
 
-function splitRectsHorizontalByPages(rects, topLeft, maxBottomRight) {
+function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight) {
     const pages = [];
     const rectsToSplit = [...rects];
 
@@ -74,7 +74,7 @@ function splitRectsHorizontalByPages(rects, topLeft, maxBottomRight) {
         });
 
         rectsToSplit.forEach(rect => {
-            rect.x = (currentPageMaxRectRight !== undefined) ? (rect.x - currentPageMaxRectRight + topLeft.x) : rect.x;
+            rect.x = (currentPageMaxRectRight !== undefined) ? (rect.x - currentPageMaxRectRight + margin.left + topLeft.x) : rect.x;
         });
 
         if(currentPageRects.length > 0) {

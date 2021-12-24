@@ -1,17 +1,19 @@
 import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { normalizeBoundaryValue } from 'exporter/jspdf/v3/normalizeOptions';
 
 const JSPdfSplittingTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
 
-        function initMargin(doc, availablePageWidth) {
+        function initMargin(doc, availablePageWidth, customMargin) {
             // Calculate margins for the allowed page width.
             const docPageWidth = doc.internal.pageSize.getWidth();
             const unusableWidth = docPageWidth - availablePageWidth;
+            const margin = normalizeBoundaryValue(customMargin);
             return {
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: unusableWidth,
+                top: margin.top,
+                bottom: margin.bottom,
+                left: margin.left,
+                right: unusableWidth - margin.left,
             };
         }
 
@@ -465,6 +467,51 @@ const JSPdfSplittingTests = {
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 1 rows, topLeft.x = 10, margin.left = 15, columnWidth = 200, availablePageWidth = 300', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 300, { left: 15 });
+
+                const dataGrid = createDataGrid({
+                    width: 600,
+                    columns: [
+                        { dataField: 'f1' },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v2_1', f3: 'v3_1' }]
+                });
+
+                const expectedLog = [
+                    'text,F1,25,24.2,{baseline:middle}',
+                    'text,v1_1,25,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,25,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,33.4,200,18.4',
+                    'addPage,',
+                    'text,F2,25,24.2,{baseline:middle}',
+                    'text,v2_1,25,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,25,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,33.4,200,18.4',
+                    'addPage,',
+                    'text,F3,25,24.2,{baseline:middle}',
+                    'text,v3_1,25,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,25,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,33.4,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1358,6 +1405,119 @@ const JSPdfSplittingTests = {
                     'rect,10,33.4,400,18.4',
                     'setLineWidth,1',
                     'rect,10,15,400,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[band1_1-[f1, f2, f3], band1_2-[f4, f5, f6]]], topLeft.x = 10, margin.left = 15, columnWidth = 200, availablePageWidth = 500', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500, { left: 15 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                {
+                                    caption: 'Band1_1',
+                                    columns: [ 'f1', 'f2', 'f3' ]
+                                },
+                                {
+                                    caption: 'Band1_2',
+                                    columns: [ 'f4', 'f5', 'f6' ]
+                                },
+                            ]
+                        }
+                    ],
+                    dataSource: [{ f1: 'f1_1_1', f2: 'f2_1_1', f3: 'f3_1_1', f4: 'f4_1_2', f5: 'f5_1_2', f6: 'f6_1_2' }],
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text === 'Band1') {
+                        pdfCell.backgroundColor = '#CCFFCC';
+                    } else if(pdfCell.text === 'Band1_1') {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    } else if(pdfCell.text === 'Band1_2') {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F1,25,61,{baseline:middle}',
+                    'text,F2,225,61,{baseline:middle}',
+                    'text,f1_1_1,25,79.4,{baseline:middle}',
+                    'text,f2_1_1,225,79.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,15,400,18.4,F',
+                    'text,Band1,25,24.2,{baseline:middle}',
+                    'setFillColor,#CCCCFF',
+                    'rect,25,33.4,400,18.4,F',
+                    'text,Band1_1,25,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,25,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,15,400,18.4',
+                    'setLineWidth,1',
+                    'rect,25,33.4,400,18.4',
+                    'addPage,',
+                    'text,F3,25,61,{baseline:middle}',
+                    'text,F4,225,61,{baseline:middle}',
+                    'text,f3_1_1,25,79.4,{baseline:middle}',
+                    'text,f4_1_2,225,79.4,{baseline:middle}',
+                    'setFillColor,#CCCCFF',
+                    'rect,25,33.4,200,18.4,F',
+                    'setFillColor,#CCCCFF',
+                    'rect,225,33.4,200,18.4,F',
+                    'text,Band1_2,225,42.6,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,15,400,18.4,F',
+                    'setLineWidth,1',
+                    'rect,25,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,15,400,18.4',
+                    'addPage,',
+                    'text,F5,25,61,{baseline:middle}',
+                    'text,F6,225,61,{baseline:middle}',
+                    'text,f5_1_2,25,79.4,{baseline:middle}',
+                    'text,f6_1_2,225,79.4,{baseline:middle}',
+                    'setFillColor,#CCCCFF',
+                    'rect,25,33.4,400,18.4,F',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,15,400,18.4,F',
+                    'setLineWidth,1',
+                    'rect,25,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,33.4,400,18.4',
+                    'setLineWidth,1',
+                    'rect,25,15,400,18.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
