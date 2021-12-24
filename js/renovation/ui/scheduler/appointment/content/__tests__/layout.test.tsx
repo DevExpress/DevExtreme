@@ -147,7 +147,7 @@ describe('AppointmentContent', () => {
         content.onReducedIconMouseEnter = jest.fn();
         content.onReducedIconMouseLeave = jest.fn();
 
-        const freeResources = content.bindHoverEffect();
+        const freeResources = content.bindHoverEffect() as any;
 
         expect(addEventListener)
           .toHaveBeenCalledTimes(2);
