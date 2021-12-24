@@ -44,10 +44,7 @@ export default SelectionStrategy.inherit({
             const item = items[i];
             const key = keyOf(item);
             if(isDeselect) {
-                if(item?.disabled) {
-                    continue;
-                }
-                keyIndex = this.removeSelectedItem(key, keyIndicesToRemoveMap);
+                keyIndex = this.removeSelectedItem(key, keyIndicesToRemoveMap, item?.disabled);
                 if(keyIndicesToRemoveMap && keyIndex >= 0) {
                     keyIndicesToRemoveMap[keyIndex] = true;
                 }
@@ -332,7 +329,11 @@ export default SelectionStrategy.inherit({
         }
     },
 
-    removeSelectedItem: function(key, keyIndicesToRemoveMap) {
+    removeSelectedItem: function(key, keyIndicesToRemoveMap, isDisabled) {
+        if(!this.options.ignoreDisabledItems && isDisabled) {
+            return;
+        }
+
         const keyHash = this._getKeyHash(key);
         const isBatchDeselect = !!keyIndicesToRemoveMap;
         const keyIndex = this._indexOfSelectedItemKey(keyHash, keyIndicesToRemoveMap);
