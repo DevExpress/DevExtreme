@@ -594,7 +594,16 @@ const Form = Widget.inherit({
         const $element = $('<div>');
         $element.appendTo($parent);
         const instance = this._createComponent($element, 'dxLayoutManager', layoutManagerOptions);
-        instance.on('autoColCountChanged', () => this._refresh());
+        instance.on(
+            'autoColCountChanged',
+            () => {
+                this._clearAutoColCountChangedTimeout();
+                this.autoColCountChangedTimeoutId = setTimeout(
+                    () => (!this._disposed) && this._refresh(),
+                    0
+                );
+            }
+        );
         this._cachedLayoutManagers.push(instance);
         return instance;
     },
@@ -1142,7 +1151,15 @@ const Form = Widget.inherit({
 
     _visibilityChanged: function() {},
 
+    _clearAutoColCountChangedTimeout: function() {
+        if(this.autoColCountChangedTimeoutId) {
+            clearTimeout(this.autoColCountChangedTimeoutId);
+            this.autoColCountChangedTimeoutId = undefined;
+        }
+    },
+
     _dispose: function() {
+        this._clearAutoColCountChangedTimeout();
         ValidationEngine.removeGroup(this._getValidationGroup());
         this.callBase();
     },
