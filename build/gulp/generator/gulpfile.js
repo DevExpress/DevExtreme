@@ -199,7 +199,6 @@ function addGenerationTask(
             ...SRC,
             ...frameworkIgnorePaths,
             '!js/renovation/component_wrapper/**/*.*',
-            '!testing/typescript',
         ], { base: 'js' })
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
