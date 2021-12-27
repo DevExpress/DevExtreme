@@ -11,6 +11,7 @@ const CLASS = {
   stateFocused: 'dx-state-focused',
   allDay: 'dx-scheduler-all-day-appointment',
   reduced: {
+    icon: 'dx-scheduler-appointment-reduced-icon',
     appointment: 'dx-scheduler-appointment-reduced',
     head: 'dx-scheduler-appointment-head',
     body: 'dx-scheduler-appointment-body',
@@ -39,6 +40,8 @@ export default class Appointment {
 
   isReducedTail: Promise<boolean>;
 
+  reducedIcon: Selector;
+
   constructor(scheduler: Selector, index = 0, title?: string) {
     const element = scheduler.find(`.${CLASS.appointment}`);
     this.element = (title ? element.withAttribute('title', title) : element).nth(index);
@@ -63,6 +66,8 @@ export default class Appointment {
 
     this.isFocused = this.element.hasClass(CLASS.stateFocused);
     this.isAllDay = this.element.hasClass(CLASS.allDay);
+
+    this.reducedIcon = this.element.find(`.${CLASS.reduced.icon}`);
 
     this.isReduced = this.element.hasClass(CLASS.reduced.appointment);
     this.isReducedHead = this.element.hasClass(CLASS.reduced.head);

@@ -6,6 +6,7 @@ import AppointmentDialog from './appointment/dialog';
 import Appointment from './appointment';
 import Toolbar from './toolbar';
 import Collectors from './collectors';
+import ReducedIconTooltip from './appointment/tooltip/reducedIconTooltip';
 
 export const CLASS = {
   appointment: 'dx-scheduler-appointment',
@@ -66,6 +67,8 @@ export default class Scheduler extends Widget {
 
   readonly collectors: Collectors;
 
+  readonly reducedIconTooltip: ReducedIconTooltip;
+
   constructor(id: string) {
     super(id);
 
@@ -95,6 +98,7 @@ export default class Scheduler extends Widget {
 
     this.appointmentPopup = new AppointmentPopup(this.element);
     this.appointmentTooltip = new AppointmentTooltip(this.element);
+    this.reducedIconTooltip = new ReducedIconTooltip();
   }
 
   static getDialog(): AppointmentDialog {
