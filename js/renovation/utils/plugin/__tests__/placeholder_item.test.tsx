@@ -129,6 +129,7 @@ describe('PlaceholderItem', () => {
 
       const placeholderItem = new PlaceholderItem(props);
       placeholderItem.plugins = new Plugins();
+      placeholderItem.updateArgs();
       placeholderItem.plugins.set(SomeValue, 1);
 
       expect(placeholderItem.args).toEqual([1]);
@@ -136,7 +137,7 @@ describe('PlaceholderItem', () => {
   });
 
   describe('Effects', () => {
-    it('updateArgs should increment updateCount to force render', () => {
+    it('updateArgs should update args to force render', () => {
       const SomeComponent: any = () => {};
       const SomeValue1 = createValue();
       const SomeValue2 = createValue();
@@ -155,10 +156,10 @@ describe('PlaceholderItem', () => {
       placeholderItem.plugins.set(SomeValue1, 1);
       placeholderItem.plugins.set(SomeValue2, 2);
 
-      expect(placeholderItem.updateCounter).toEqual(2);
+      expect(placeholderItem.args).toEqual([1, 2]);
     });
 
-    it('updateArgs should not increment updateCount after dispose', () => {
+    it('updateArgs should not update args after dispose', () => {
       const SomeComponent: any = () => {};
       const SomeValue1 = createValue();
 
@@ -171,13 +172,15 @@ describe('PlaceholderItem', () => {
       const placeholderItem = new PlaceholderItem(props);
       placeholderItem.plugins = new Plugins();
 
+      placeholderItem.plugins.set(SomeValue1, 0);
+
       const dispose = placeholderItem.updateArgs();
 
       dispose();
 
       placeholderItem.plugins.set(SomeValue1, 1);
 
-      expect(placeholderItem.updateCounter).toEqual(0);
+      expect(placeholderItem.args).toEqual([0]);
     });
   });
 });

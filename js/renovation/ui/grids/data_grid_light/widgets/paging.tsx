@@ -72,12 +72,13 @@ export class Paging extends JSXComponent(PagingProps) {
   }
 
   calculateVisibleItems(dataSource: RowData[]): RowData[] {
-    if (!this.props.enabled || this.props.pageSize === 0 || this.props.pageSize === 'all') {
+    if (!this.props.enabled || this.pageSize === 'all') {
       return dataSource;
     }
 
-    const start = (this.props.pageIndex as number) * (this.props.pageSize as number);
-    const end = start + (this.props.pageSize as number);
+    const pageSize = this.pageSize as number;
+    const start = (this.props.pageIndex as number) * pageSize;
+    const end = start + pageSize;
 
     return dataSource.slice(start, end);
   }

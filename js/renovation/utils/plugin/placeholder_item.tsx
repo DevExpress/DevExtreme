@@ -55,17 +55,23 @@ export class PlaceholderItem extends JSXComponent(PlaceholderItemProps) {
   plugins!: Plugins;
 
   @InternalState()
-  updateCounter = 0;
+  args: unknown[] = [];
 
   @Effect()
   updateArgs(): () => void {
     const disposers = this.componentDeps.map((entity) => this.plugins.watch(entity, () => {
-      this.updateCounter += 1;
+      this.args = this.getArgs();
     }));
 
     return (): void => {
       disposers.forEach((disposer) => disposer());
     };
+  }
+
+  getArgs(): unknown[] {
+    return this.componentDeps.map(
+      (entity) => this.plugins.getValue(entity),
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -79,11 +85,5 @@ export class PlaceholderItem extends JSXComponent(PlaceholderItemProps) {
 
   get componentDeps(): PluginEntity<unknown, unknown>[] {
     return this.props.componentDeps[this.props.index] ?? [];
-  }
-
-  get args(): unknown { // TODO unknown[]
-    return this.componentDeps.map(
-      (entity) => this.plugins.getValue(entity),
-    );
   }
 }
