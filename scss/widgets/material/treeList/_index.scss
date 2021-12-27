@@ -137,7 +137,6 @@ $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $mat
 
   .dx-checkbox {
     left: $treelist-checkbox-offset-left;
-    top: math.div($material-grid-base-header-height - $material-grid-base-checkbox-size, 2);
   }
 }
 

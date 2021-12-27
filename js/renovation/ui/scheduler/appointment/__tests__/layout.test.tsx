@@ -1,5 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { AppointmentLayout, viewFunction } from '../layout';
+import { AppointmentLayout, AppointmentLayoutProps, viewFunction } from '../layout';
 
 describe('AppointmentLayout', () => {
   describe('Render', () => {
@@ -70,6 +70,8 @@ describe('AppointmentLayout', () => {
             viewModel0,
             viewModel1,
           ],
+          showReducedIconTooltip: 'some value 1',
+          hideReducedIconTooltip: 'some value 2',
           appointmentTemplate,
         },
       });
@@ -80,6 +82,10 @@ describe('AppointmentLayout', () => {
       let appointment = layout.childAt(0);
       expect(appointment.key())
         .toEqual('1-2-10-20');
+      expect(appointment.prop('showReducedIconTooltip'))
+        .toBe('some value 1');
+      expect(appointment.prop('hideReducedIconTooltip'))
+        .toBe('some value 2');
       expect(appointment.prop('viewModel'))
         .toBe(viewModel0);
 
@@ -125,7 +131,7 @@ describe('AppointmentLayout', () => {
     describe('Getters', () => {
       describe('classes', () => {
         it('should return correct classes by default', () => {
-          const layout = new AppointmentLayout({});
+          const layout = new AppointmentLayout(new AppointmentLayoutProps());
 
           expect(layout.classes)
             .toBe('dx-scheduler-scrollable-appointments');
@@ -133,8 +139,9 @@ describe('AppointmentLayout', () => {
 
         it('should return correct classes for the allDay appointments', () => {
           const layout = new AppointmentLayout({
+            ...new AppointmentLayoutProps(),
             isAllDay: true,
-          });
+          } as any);
 
           expect(layout.classes)
             .toBe('dx-scheduler-all-day-appointments');

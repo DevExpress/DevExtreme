@@ -24,8 +24,9 @@ import { Scrollbar, ScrollbarPropsType } from '../../scrollbar/scrollbar';
 import { ScrollableSimulatedProps } from '../../common/simulated_strategy_props';
 import { AnimatedScrollbar } from '../../scrollbar/animated_scrollbar';
 
-jest.mock('../../../load_indicator', () => ({ LoadIndicator: React.forwardRef(() => null) }));
-jest.mock('../../internal/load_panel', () => ({ ScrollViewLoadPanel: React.forwardRef(() => null) }));
+// jest.mock('../../../load_indicator', () => ({ LoadIndicator: React.forwardRef(() => null) }));
+// jest.mock('../../internal/load_panel',
+// () => ({ ScrollViewLoadPanel: React.forwardRef(() => null) }));
 
 const TOP_POCKET_HEIGHT = 80;
 const BOTTOM_POCKET_HEIGHT = 55;
@@ -166,10 +167,6 @@ class ScrollableTestHelper {
       el.style[prop] = `${size[prop]}px`;
     });
 
-    ['outerWidth', 'outerHeight'].forEach((prop) => {
-      el.style[prop] = `${size[`outer${titleize(prop)}`]}px`;
-    });
-
     if (overflow) {
       ['overflowX', 'overflowY'].forEach((prop) => {
         el.style[prop] = overflow;
@@ -267,8 +264,6 @@ class ScrollableTestHelper {
             containerSize: 100,
             minOffset: 0,
             maxOffset: -100,
-            scrollLocationChange:
-              scrollbar.props.scrollLocationChange.bind(this.viewModel),
             ...restProps,
           },
         },

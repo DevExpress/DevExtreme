@@ -6,7 +6,7 @@ const getSkippedHoursInRange = (
   viewDataProvider: ViewDataProviderType,
 ): number => {
   const startTime = startDate.getTime();
-  const endTime = endDate.getTime();
+  const endTime = endDate.getTime() - 1;
   const hoursInDay = 24;
   const allDayIntervalDuration = hoursInDay * 1000 * 3600;
 

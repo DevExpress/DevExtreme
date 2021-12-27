@@ -62,6 +62,7 @@ export const dataControllerModule = {
                 init: function() {
                     const that = this;
                     that._items = [];
+                    that._cachedProcessedItems = null;
                     that._columnsController = that.getController('columns');
 
                     that._currentOperationTypes = null;
@@ -427,6 +428,7 @@ export const dataControllerModule = {
                     that.callBase();
                     dataSource = that._dataSource;
                     that._useSortingGroupingFromColumns = true;
+                    that._cachedProcessedItems = null;
                     if(dataSource) {
                         that._setPagingOptions(dataSource);
                         that.setDataSource(dataSource);

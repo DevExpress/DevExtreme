@@ -97,6 +97,9 @@
                         pointers: [{ pointerId: 1 }]
                     });
                 }
+
+                // eslint-disable-next-line spellcheck/spell-checker
+                inferno.rerender();
                 return this;
             },
 

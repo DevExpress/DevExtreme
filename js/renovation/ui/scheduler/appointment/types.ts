@@ -78,3 +78,8 @@ export interface AppointmentClickData {
   target: HTMLElement;
   index: number;
 }
+
+export interface ReducedIconHoverData {
+  target: HTMLDivElement;
+  endDate?: Date | string;
+}
