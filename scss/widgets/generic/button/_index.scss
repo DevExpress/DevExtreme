@@ -10,11 +10,13 @@
 // adduse
 
 
-.dx-button-content {
+.dx-button:not(.dx-button-has-text) .dx-button-content,
+.dx-button-has-icon.dx-button-has-text .dx-button-content {
   line-height: 0;
 }
 
 .dx-button-text {
+  vertical-align: baseline;
   line-height: normal;
 }
 
@@ -26,7 +28,7 @@
   @include dx-button-onlyicon-sizing();
 }
 
-.dx-button-has-icon {
+.dx-button-has-icon:not(.dx-button-has-text) {
   @include dx-button-onlyicon-sizing();
 }
 

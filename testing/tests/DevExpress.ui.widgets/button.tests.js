@@ -372,6 +372,21 @@ QUnit.module('Button', function() {
 
             assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
         });
+
+        QUnit.test('button height should be equal if content is text either icon (T1015242)', function(assert) {
+            const $button = $('#widget').dxButton({ text: 'text' });
+            const button = $button.dxButton('instance');
+            const heightOfButtonWithText = $button.height();
+
+            button.option('icon', 'square');
+            const heightOfButtonWithTextAndIcon = $button.height();
+
+            button.option('icon', '');
+            const heightOfButtonWithIcon = $button.height();
+
+            assert.roughEqual(heightOfButtonWithText, heightOfButtonWithTextAndIcon, 1.01, 'height is equal');
+            assert.roughEqual(heightOfButtonWithText, heightOfButtonWithIcon, 1.01, 'height is equal');
+        });
     });
 
     QUnit.module('keyboard navigation', {}, function() {
