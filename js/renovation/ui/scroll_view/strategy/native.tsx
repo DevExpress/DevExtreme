@@ -409,7 +409,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       return false;
     }
 
-    this.updateHandler();
+    // this.updateHandler();
 
     return this.moveIsAllowed(event);
   }

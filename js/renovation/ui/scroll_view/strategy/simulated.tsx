@@ -499,7 +499,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       return false;
     }
 
-    this.updateHandler();
+    // this.updateHandler();
 
     return this.moveIsAllowed(event);
   }
@@ -585,6 +585,34 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   @Effect({ run: 'once' })
+  subscribeToResizeContent(): EffectReturn {
+    if (this.props.needScrollViewContentWrapper) {
+      const unsubscribeHeightResize = subscribeToResize(
+        this.content(),
+        (element: HTMLDivElement) => { this.setContentHeight(element); },
+      );
+
+      const unsubscribeWidthResize = subscribeToResize(
+        this.contentRef.current,
+        (element: HTMLDivElement) => { this.setContentWidth(element); },
+      );
+
+      return (): void => {
+        unsubscribeHeightResize?.();
+        unsubscribeWidthResize?.();
+      };
+    }
+
+    return subscribeToResize(
+      this.contentRef.current,
+      (element: HTMLDivElement) => {
+        this.setContentHeight(element);
+        this.setContentWidth(element);
+      },
+    );
+  }
+
+  @Effect({ run: 'once' })
   subscribeToResizeContentHeight(): EffectReturn {
     return subscribeToResize(
       this.content(),
@@ -615,7 +643,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @Method()
   scrollByLocation(location: ScrollOffset): void {
-    this.updateHandler();
+    // this.updateHandler();
 
     this.scrolling = true;
     this.prepareDirections(true);
@@ -738,7 +766,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     this.loadingIndicatorEnabled = true;
     this.finishLoading();
-    this.updateHandler();
+    // this.updateHandler();
   }
 
   onReachBottom(): void {
@@ -1079,7 +1107,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   // onVisibilityChangeHandler uses for date_view_roller purposes only
   onVisibilityChangeHandler(visible: boolean): void {
     if (visible) {
-      this.updateHandler();
+      // this.updateHandler();
 
       const { scrollTop, scrollLeft } = this.savedScrollOffset;
       // restore scrollLocation on second and next opening of popup with data_view rollers
