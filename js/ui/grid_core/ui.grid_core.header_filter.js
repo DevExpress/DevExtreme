@@ -195,7 +195,8 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
         getDataSource: function(column) {
             const that = this;
             const dataSource = that._dataController.dataSource();
-            const group = gridCoreUtils.getHeaderFilterGroupParameters(column, dataSource?.remoteOperations().grouping);
+            const remoteGrouping = dataSource?.remoteOperations().grouping;
+            const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
             const headerFilterDataSource = column.headerFilter?.dataSource;
             const headerFilterOptions = that.option('headerFilter');
             let isLookup = false;
@@ -236,7 +237,7 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                         options.dataField = column.dataField || column.name;
 
                         dataSource.load(options).done(function(data) {
-                            const convertUTCDates = isUTCFormat(column.serializationFormat) && cutoffLevel > 3;
+                            const convertUTCDates = remoteGrouping && isUTCFormat(column.serializationFormat) && cutoffLevel > 3;
                             if(convertUTCDates) {
                                 data = convertDataFromUTCToLocal(data, column);
                             }

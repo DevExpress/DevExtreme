@@ -813,7 +813,7 @@ QUnit.module('Sync on initialization', {
         assert.deepEqual(this.columnsController.columnOption('field', 'filterValues'), ['1']);
     });
 
-    // T695018
+    // T695018 -> T1049956
     QUnit.test('sync column.filterValue if column has dataField && name', function(assert) {
         // act
         this.setupDataGrid({
@@ -829,7 +829,38 @@ QUnit.module('Sync on initialization', {
         });
 
         // assert
-        assert.deepEqual(this.option('filterValue'), ['field', '=', '1' ], 'filterValue');
+        assert.deepEqual(this.option('filterValue'), ['field1', '=', '1' ], 'filterValue');
+    });
+
+    // T1049956
+    QUnit.test('sync column.filterValue when there are columns with the same dataField and and different names', function(assert) {
+        // act
+        this.setupDataGrid({
+            filterValue: null,
+            filterSyncEnabled: true,
+            columns: [{
+                dataField: 'field',
+                name: 'field1',
+                dataType: 'string'
+            }, {
+                dataField: 'field',
+                name: 'field2',
+                dataType: 'string',
+                selectedFilterOperation: '=',
+                filterValue: '1'
+            }]
+        });
+
+        // assert
+        assert.deepEqual(this.option('filterValue'), ['field2', '=', '1' ], 'filterValue');
+
+        // act
+        this.option('filterValue', null);
+
+        // assert
+        assert.deepEqual(this.option('filterValue'), null, 'filterValue');
+        assert.strictEqual(this.columnsController.columnOption(0, 'filterValue'), undefined, 'filterValue of the first column');
+        assert.strictEqual(this.columnsController.columnOption(1, 'filterValue'), undefined, 'filterValue of the second column');
     });
 
     QUnit.test('Error E1049', function(assert) {

@@ -30,7 +30,9 @@ RUN npm set package-lock false
 RUN curl -L https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-bionic-prod bionic main" > /etc/apt/sources.list.d/dotnetdev.list
 RUN apt-get update
-RUN DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y dotnet-sdk-2.1
+RUN DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y \
+        dotnet-sdk-2.1 \
+        dotnet-sdk-3.1
 RUN rm /usr/share/dotnet/sdk/*/nuGetPackagesArchive.lzma
 
 # Slim

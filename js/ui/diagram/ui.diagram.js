@@ -1570,7 +1570,10 @@ class Diagram extends Widget {
     }
     updateToolbox() {
         this._diagramInstance && this._diagramInstance.refreshToolbox();
-        this._toolbox && this._toolbox.updateMaxHeight();
+        if(this._toolbox) {
+            this._toolbox.updateTooltips();
+            this._toolbox.updateMaxHeight();
+        }
     }
 
     _getDefaultOptions() {

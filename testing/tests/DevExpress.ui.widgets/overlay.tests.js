@@ -115,7 +115,6 @@ const OVERLAY_MODAL_CLASS = 'dx-overlay-modal';
 const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
 
 const HOVER_STATE_CLASS = 'dx-state-hover';
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const RESIZABLE_HANDLE_TOP_CLASS = 'dx-resizable-handle-top';
 const RESIZABLE_HANDLE_CORNER_BR_CLASS = 'dx-resizable-handle-corner-bottom-right';
@@ -360,23 +359,7 @@ testModule('option', moduleConfig, () => {
         assert.ok(overlay.option('visible'), 'overlay is visible after rtlEnabled option change');
     });
 
-    test('disabled', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            disabled: true
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $content = overlay.$content();
-
-        assert.ok($content.hasClass(DISABLED_STATE_CLASS), 'disabled state present in content element');
-
-        overlay.option('disabled', false);
-        assert.ok(!$content.hasClass(DISABLED_STATE_CLASS), 'disabled state not present in content element');
-
-        overlay.option('disabled', undefined);
-        assert.ok(!$content.hasClass(DISABLED_STATE_CLASS), 'disabled state not present in content element');
-    });
-
-    test('there is no errors when overlay has a subscription on \'onHiding\' event where the widget is desposed', function(assert) {
+    test('there is no errors when overlay has a subscription on \'onHiding\' even when the widget is disposed', function(assert) {
         const instance = $('#overlay').dxOverlay({
             visible: true,
             onHiding: function(e) {

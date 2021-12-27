@@ -489,6 +489,29 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(rows[0].values, [true, 'Test']);
     });
 
+    QUnit.test('Editing should work for class field that contains circular link (T1053794)', function(assert) {
+        // arrange
+        function Foo() {
+            this.text = 'Hello';
+            this.circular = this;
+        }
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            columns: ['id', 'foo.text'],
+            dataSource: [{ id: 1, foo: new Foo() }],
+            editing: { allowUpdating: true, mode: 'batch' }
+        }).dxDataGrid('instance');
+
+        // act
+        dataGrid.cellValue(0, 1, 'test');
+
+        // assert
+        const rows = dataGrid.getVisibleRows();
+        assert.equal(rows.length, 1);
+        assert.equal(rows[0].data.foo.text, 'test');
+        assert.deepEqual(rows[0].values, [1, 'test']);
+    });
+
     // T613804
     QUnit.test('calculateCellValue for edited cell fires twice and at the second time contains full data row as an argument', function(assert) {
         // arrange
@@ -1997,6 +2020,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
         grid.addRow();
         this.clock.tick();
 
+        $(document).trigger('dxpointerdown');
+        $(document).trigger('dxclick');
+
         let $secondCell = $(grid.getCellElement(0, 1));
         $secondCell.trigger(pointerEvents.down).trigger('dxclick');
         this.clock.tick(1000);
@@ -2008,6 +2034,41 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         assert.equal($(grid.element()).find('.dx-datagrid-revert-tooltip .dx-overlay-content').length, 1, 'one revert button is visible');
         assert.equal($(grid.element()).find('.dx-invalid-message .dx-overlay-content').length, 1, 'one error message is visible');
+    });
+
+    QUnit.testInActiveWindow('Cell mode - New row should not be saved after click in another added row cell if startEditAction is dblclick (T1041291)', function(assert) {
+        // arrange
+        const items = [{ id: 1, a: 'a', b: 'b' }];
+        const gridConfig = {
+            dataSource: items,
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowAdding: true,
+                allowUpdating: true,
+                startEditAction: 'dblClick',
+            },
+            columns: [
+                {
+                    dataField: 'a'
+                }, {
+                    dataField: 'b'
+                }
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+
+        grid.addRow();
+        this.clock.tick();
+
+        const $secondCell = $(grid.getCellElement(0, 1));
+        $secondCell.trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick(1000);
+
+        // assert
+        assert.equal(items.length, 1, 'new item is not saved');
     });
 
     QUnit.testInActiveWindow('Cell mode - Cell validation message should be shown when a user clicks outside the cell (T869854)', function(assert) {
@@ -3055,6 +3116,32 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
 
         assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
+    });
+
+    QUnit.test('Popup should render editor if columns[].renderAsync option is true)', function(assert) {
+        createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'test11', field2: 'test12' },
+            ],
+            columns: [{
+                dataField: 'field1',
+                renderAsync: true,
+                width: 100,
+            }],
+            editing: {
+                mode: 'popup',
+                allowUpdating: true,
+            },
+        });
+        this.clock.tick();
+
+        // act
+        $('.dx-link-edit').trigger('click');
+        this.clock.tick();
+
+        // assert
+        const $textBox = $('.dx-textbox');
+        assert.equal($textBox.length, 1);
     });
 });
 
