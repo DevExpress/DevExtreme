@@ -3547,13 +3547,10 @@ QUnit.module('Adaptivity', {
     beforeEach: function() {
         const that = this;
         that.clock = sinon.useFakeTimers();
-
-        responsiveBoxScreenMock.setup.call(this, 1200);
     },
 
     afterEach: function() {
         this.clock.restore();
-        responsiveBoxScreenMock.teardown.call(this);
     }
 });
 
