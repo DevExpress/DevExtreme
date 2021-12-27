@@ -475,7 +475,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   onRelease(): void {
     this.loadingIndicatorEnabled = true;
     this.finishLoading();
-    this.updateHandler();
+    // this.updateHandler();
   }
 
   onUpdated(): void {
