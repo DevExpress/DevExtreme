@@ -60,6 +60,13 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
+    - name: Run npm install TS testing
+      run: |
+        cd testing/typescript
+        npm install --no-audit --no-fund
+        cd ../../
+
+
     - name: Build
       run: npm run build
 
