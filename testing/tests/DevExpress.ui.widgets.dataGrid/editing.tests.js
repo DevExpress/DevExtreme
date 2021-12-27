@@ -16498,7 +16498,7 @@ QUnit.module('Editing with scrolling', {
 
         // assert
         const items = that.dataController.items();
-        assert.equal(items.length, 6, 'count items');
+        assert.equal(items.length, 7, 'count items');
         assert.ok(items[0].isNewRow, 'inserted item');
     });
 
@@ -20342,7 +20342,7 @@ QUnit.module('Editing - new row position', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 6 : 11, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 11, 'row count');
                 assert.ok(rows[0].isNewRow, 'new row');
 
                 const $insertRow = $testElement.find('tbody > .dx-data-row').first();
@@ -20545,7 +20545,7 @@ QUnit.module('Editing - new row position', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, isVirtualScrolling ? 9 : 11, 'row count');
+                assert.strictEqual(rows.length, isVirtualScrolling ? 8 : 11, 'row count');
                 assert.ok(rows[isVirtualScrolling ? 0 : 1].isNewRow, 'new row');
             });
 
