@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { isDefined, isEmptyObject, isFunction, type } from '../../core/utils/type';
-import { Deferred, when } from '../../core/utils/deferred';
+import { isFunction } from '../../core/utils/type';
+import { when } from '../../core/utils/deferred';
 import { ensureDefined, equalByValue } from '../../core/utils/common';
 
 import messageLocalization from '../../localization/message';
@@ -22,8 +22,6 @@ import FileManagerNotificationControl from './ui.file_manager.notification';
 import FileManagerEditingControl from './ui.file_manager.editing';
 import FileManagerBreadcrumbs from './ui.file_manager.breadcrumbs';
 import FileManagerAdaptivityControl from './ui.file_manager.adaptivity';
-import { normalizeOptions } from '../../core/options/utils';
-import { equals } from '../../core/utils/comparator';
 
 const FILE_MANAGER_CLASS = 'dx-filemanager';
 const FILE_MANAGER_WRAPPER_CLASS = FILE_MANAGER_CLASS + '-wrapper';
@@ -47,8 +45,6 @@ class FileManager extends Widget {
 
     _init() {
         super._init();
-        this._providerUpdateDeferred = new Deferred().resolve();
-        this._lockCurrentPathProcessing = false;
 
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
@@ -60,8 +56,7 @@ class FileManager extends Widget {
             uploadChunkSize: this.option('upload').chunkSize,
             onInitialized: this._onControllerInitialized.bind(this),
             onDataLoading: this._onDataLoading.bind(this),
-            onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this),
-            onPathPotentiallyChanged: this._checkPathActuality.bind(this)
+            onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
     }
 
@@ -494,48 +489,15 @@ class FileManager extends Widget {
         });
     }
 
-    option(options, value) {
-        const optionsToCheck = normalizeOptions(options, value);
-        const isGetter = arguments.length < 2 && type(options) !== 'object';
-        const isOptionDefined = name => isDefined(optionsToCheck[name]);
-        const isOptionValueDiffers = name => {
-            if(!isOptionDefined(name)) {
-                return false;
-            }
-            const previousValue = this.option(name);
-            const value = optionsToCheck[name];
-            return !equals(previousValue, value);
-        };
-
-        if(!isGetter && isOptionDefined('fileSystemProvider')) {
-            this._providerUpdateDeferred = new Deferred();
-            if(isOptionValueDiffers('currentPath') || isOptionValueDiffers('currentPathKeys')) {
-                this._lockCurrentPathProcessing = true;
-            }
-        }
-
-        return super.option(...arguments);
-    }
-
     _optionChanged(args) {
         const name = args.name;
 
         switch(name) {
             case 'currentPath':
-                this._lockCurrentPathProcessing = true;
-
-                this._providerUpdateDeferred.then(() => {
-                    this._lockCurrentPathProcessing = false;
-                    return this._controller.setCurrentPath(args.value);
-                });
+                this._controller.setCurrentPath(args.value);
                 break;
             case 'currentPathKeys':
-                this._lockCurrentPathProcessing = true;
-
-                this._providerUpdateDeferred.then(() => {
-                    this._lockCurrentPathProcessing = false;
-                    this._controller.setCurrentPathByKeys(args.value);
-                });
+                this._controller.setCurrentPathByKeys(args.value);
                 break;
             case 'selectedItemKeys':
                 if(!this._lockSelectionProcessing && this._itemView) {
@@ -549,37 +511,31 @@ class FileManager extends Widget {
                 break;
             case 'rootFolderName':
                 this._controller.setRootText(args.value);
-                this._invalidate();
+                this.repaint();
                 break;
-            case 'fileSystemProvider': {
-                if(!this._lockCurrentPathProcessing) {
-                    this._providerUpdateDeferred = new Deferred();
-                }
-                const pathKeys = this._lockCurrentPathProcessing ? undefined : this.option('currentPathKeys');
-                this._controller.updateProvider(args.value, pathKeys)
-                    .always(() => this._providerUpdateDeferred.resolve())
-                    .always(() => this.repaint());
+            case 'fileSystemProvider':
+                this._controller.updateProvider(args.value, this.option('currentPath'))
+                    .then(() => this.repaint());
                 break;
-            }
             case 'allowedFileExtensions':
                 this._controller.setAllowedFileExtensions(args.value);
-                this._invalidate();
+                this.repaint();
                 break;
             case 'upload':
                 this._controller.setUploadOptions(this.option('upload'));
-                this._invalidate();
+                this.repaint();
                 break;
             case 'permissions':
             case 'selectionMode':
             case 'customizeThumbnail':
             case 'customizeDetailColumns':
-                this._invalidate();
+                this.repaint();
                 break;
             case 'itemView':
                 if(args.fullName === 'itemView.mode') {
                     this._switchView(args.value);
                 } else {
-                    this._invalidate();
+                    this.repaint();
                 }
                 break;
             case 'toolbar':
@@ -659,17 +615,17 @@ class FileManager extends Widget {
 
     _onControllerInitialized({ controller }) {
         this._controller = this._controller || controller;
-        this._syncToCurrentDirectory();
+        const currentDirectory = controller.getCurrentDirectory();
+        if(!currentDirectory.fileItem.isRoot()) {
+            this._syncToCurrentDirectory();
+        }
     }
 
     _onDataLoading({ operation }) {
         let options = null;
 
         if(operation === 'navigation') {
-            options = {
-                focusedItemKey: this._itemKeyToFocus,
-                selectedItemKeys: this.option('selectedItemKeys')
-            };
+            options = { focusedItemKey: this._itemKeyToFocus };
             this._itemKeyToFocus = undefined;
         }
 
@@ -684,35 +640,24 @@ class FileManager extends Widget {
 
     _syncToCurrentDirectory() {
         const currentDirectory = this._getCurrentDirectory();
+        const currentPath = this._controller.getCurrentPath();
+        const currentPathKeys = currentDirectory.fileItem.pathKeys;
 
         if(this._filesTreeView) {
             this._filesTreeView.updateCurrentDirectory();
         }
+
         if(this._breadcrumbs) {
             this._breadcrumbs.setCurrentDirectory(currentDirectory);
         }
 
-        this._checkPathActuality();
-    }
+        const options = { currentPath };
 
-    _checkPathActuality() {
-        if(this._lockCurrentPathProcessing) {
-            return;
-        }
-        const currentPath = this._controller.getCurrentPath();
-        const currentPathKeys = this._controller.getCurrentPathKeys();
-        const options = {};
-
-        if(this.option('currentPath') !== currentPath) {
-            options.currentPath = currentPath;
-        }
         if(!equalByValue(this.option('currentPathKeys'), currentPathKeys)) {
             options.currentPathKeys = currentPathKeys;
         }
 
-        if(!isEmptyObject(options)) {
-            this.option(options);
-        }
+        this.option(options);
     }
 
     getDirectories(parentDirectoryInfo, skipNavigationOnError) {

@@ -36,23 +36,6 @@ export default class FileItemsController {
         this._initialize();
     }
 
-    _initialize() {
-        const result = this._options.currentPathKeys && this._options.currentPathKeys.length
-            ? this.setCurrentPathByKeys(this._options.currentPathKeys)
-            : this.setCurrentPath(this._options.currentPath);
-
-        const completeInitialization = () => {
-            this._isInitialized = true;
-            this._raiseInitialized();
-        };
-
-        if(result) {
-            when(result).always(completeInitialization);
-        } else {
-            completeInitialization();
-        }
-    }
-
     _setSecurityController() {
         this._securityController = new FileSecurityController({
             allowedFileExtensions: this._options.allowedFileExtensions,
@@ -85,24 +68,10 @@ export default class FileItemsController {
         this._resetState();
     }
 
-    updateProvider(fileProvider, currentPathKeys) {
-        if(!isDefined(currentPathKeys)) {
-            return this._updateProviderOnly(fileProvider);
-        }
-
-        return this._getDirectoryByPathParts(this._rootDirectoryInfo, currentPathKeys, true).then(newDirectory => {
-            if(newDirectory !== this._rootDirectoryInfo) {
-                this._resetCurrentDirectory();
-            }
-            this._setProvider(fileProvider);
-            return this.setCurrentPathByKeys(currentPathKeys);
-        });
-    }
-
-    _updateProviderOnly(fileProvider) {
+    updateProvider(fileProvider, currentPath) {
         this._resetCurrentDirectory();
         this._setProvider(fileProvider);
-        return this.refresh();
+        return this.refresh().then(() => this.setCurrentPath(currentPath));
     }
 
     _createFileProvider(fileProvider) {
@@ -140,7 +109,7 @@ export default class FileItemsController {
 
     setCurrentPathByKeys(pathKeys) {
         if(equalByValue(this.getCurrentDirectory().fileItem.pathKeys, pathKeys, 0, true)) {
-            return new Deferred().resolve().promise();
+            return;
         }
 
         return this._setCurrentDirectoryByPathParts(pathKeys, true);
@@ -157,10 +126,6 @@ export default class FileItemsController {
         return currentPath;
     }
 
-    getCurrentPathKeys() {
-        return this.getCurrentDirectory().fileItem.pathKeys;
-    }
-
     getCurrentDirectory() {
         return this._currentDirectoryInfo;
     }
@@ -175,7 +140,6 @@ export default class FileItemsController {
         }
 
         if(this._currentDirectoryInfo && this._currentDirectoryInfo === directoryInfo) {
-            this._raisePathPotentiallyChanged();
             return;
         }
 
@@ -497,20 +461,34 @@ export default class FileItemsController {
             () => null);
     }
 
+    _initialize() {
+        const result = this._options.currentPathKeys && this._options.currentPathKeys.length
+            ? this.setCurrentPathByKeys(this._options.currentPathKeys)
+            : this.setCurrentPath(this._options.currentPath);
+
+        const completeInitialization = () => {
+            this._isInitialized = true;
+            this._raiseInitialized();
+        };
+
+        if(result) {
+            when(result).always(completeInitialization);
+        } else {
+            completeInitialization();
+        }
+    }
+
     _setCurrentDirectoryByPathParts(pathParts, useKeys) {
         return this._executeDataLoad(() => this._setCurrentDirectoryByPathPartsInternal(pathParts, useKeys), 'navigation');
     }
 
     _setCurrentDirectoryByPathPartsInternal(pathParts, useKeys) {
         return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts, useKeys)
-            .done(directoryInfo => {
+            .then(directoryInfo => {
                 for(let info = directoryInfo.parentDirectory; info; info = info.parentDirectory) {
                     info.expanded = true;
                 }
                 this.setCurrentDirectory(directoryInfo);
-            })
-            .fail(() => {
-                this._raisePathPotentiallyChanged();
             });
     }
 
@@ -664,56 +642,64 @@ export default class FileItemsController {
     }
 
     _raiseInitialized() {
-        this._tryCallAction('onInitialized', { controller: this });
+        const e = { controller: this };
+        if(this._options.onInitialized) {
+            this._options.onInitialized(e);
+        }
     }
 
     _raiseDataLoading(operation) {
-        this._tryCallAction('onDataLoading', { operation });
+        if(this._options.onDataLoading) {
+            this._options.onDataLoading({ operation });
+        }
     }
 
     _raiseSelectedDirectoryChanged(directoryInfo) {
-        this._tryCallAction('onSelectedDirectoryChanged', { selectedDirectoryInfo: directoryInfo });
+        const e = { selectedDirectoryInfo: directoryInfo };
+        if(this._options.onSelectedDirectoryChanged) {
+            this._options.onSelectedDirectoryChanged(e);
+        }
     }
 
     _raiseEditActionStarting(actionInfo) {
-        this._tryCallAction('onEditActionStarting', actionInfo);
+        if(this._options.onEditActionStarting) {
+            this._options.onEditActionStarting(actionInfo);
+        }
     }
 
     _raiseEditActionResultAcquired(actionInfo) {
-        this._tryCallAction('onEditActionResultAcquired', actionInfo);
+        if(this._options.onEditActionResultAcquired) {
+            this._options.onEditActionResultAcquired(actionInfo);
+        }
     }
 
     _raiseEditActionError(actionInfo, errorInfo) {
-        this._tryCallAction('onEditActionError', actionInfo, errorInfo);
+        if(this._options.onEditActionError) {
+            this._options.onEditActionError(actionInfo, errorInfo);
+        }
     }
 
     _raiseEditActionItemError(actionInfo, errorInfo) {
-        this._tryCallAction('onEditActionItemError', actionInfo, errorInfo);
+        if(this._options.onEditActionItemError) {
+            this._options.onEditActionItemError(actionInfo, errorInfo);
+        }
     }
 
     _raiseCompleteEditActionItem(actionInfo, info) {
-        this._tryCallAction('onCompleteEditActionItem', actionInfo, info);
+        if(this._options.onCompleteEditActionItem) {
+            this._options.onCompleteEditActionItem(actionInfo, info);
+        }
     }
 
     _raiseCompleteEditAction(actionInfo) {
-        this._tryCallAction('onCompleteEditAction', actionInfo);
-    }
-
-    _raisePathPotentiallyChanged() {
-        this._tryCallAction('onPathPotentiallyChanged');
-    }
-
-    _tryCallAction(actionName) {
-        const args = Array.prototype.slice.call(arguments, 1);
-        if(this._options[actionName] && this._isInitialized) {
-            this._options[actionName](...args);
+        if(this._options.onCompleteEditAction) {
+            this._options.onCompleteEditAction(actionInfo);
         }
     }
 
     _resetState() {
         this._selectedDirectory = null;
         this._rootDirectoryInfo.items = [ ];
-        this._rootDirectoryInfo.itemsLoaded = false;
         this._loadedItems = { };
     }
 
