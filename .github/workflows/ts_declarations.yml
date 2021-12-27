@@ -96,7 +96,7 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
-    - name: Validate declarations
+    - name: Run TS tests
       run: npm run test-typescript
 
   notify:
