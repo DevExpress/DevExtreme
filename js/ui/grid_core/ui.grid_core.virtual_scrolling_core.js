@@ -335,9 +335,6 @@ export const VirtualScrollController = Class.inherit((function() {
 
         // new mode
         getViewportParams: function() {
-            const totalItemsCount = this._dataOptions.totalItemsCount();
-            const insertedRowsCount = this.component.getController?.('editing')?.getInsertRowCount() ?? 0;
-            const totalRowsCount = totalItemsCount + insertedRowsCount;
             const topIndex = this._viewportItemIndex;
             const bottomIndex = this._viewportSize + topIndex;
             const maxGap = this.pageSize();
@@ -347,7 +344,7 @@ export const VirtualScrollController = Class.inherit((function() {
             let take = Math.ceil((bottomIndex + minGap) / maxGap) * maxGap - skip;
 
             if(virtualMode) {
-                const remainedItems = totalRowsCount - skip;
+                const remainedItems = this._dataOptions.totalItemsCount() - skip;
                 take = Math.min(take, remainedItems);
             }
 
