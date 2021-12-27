@@ -490,7 +490,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceWeek('instance').option('allDayExpanded'), false, 'Work space has a right allDay visibility');
     });
 
-    test('Work space \'allDayExpanded\' option value should be correct after changing view', function(assert) {
+    test('Work space "allDayExpanded" option value should be correct after changing view', function(assert) {
         const scheduler = createWrapper({
             showAllDayPanel: true,
             currentDate: new Date(2015, 1, 9),

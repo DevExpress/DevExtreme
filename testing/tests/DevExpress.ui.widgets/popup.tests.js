@@ -106,6 +106,7 @@ const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 const POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-bottom-right';
 const POPUP_TOP_LEFT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-top-left';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
@@ -427,6 +428,44 @@ QUnit.module('basic', () => {
         assert.ok(toolbarButtons.eq(0).hasClass('dx-button-mode-text'), 'shortcut has dx-button-mode-text class');
         assert.ok(toolbarButtons.eq(1).hasClass('dx-button-mode-text'), 'button has dx-button-mode-text class');
         devices.current(devices.real());
+    });
+
+    QUnit.test('disabled=true should add "dx-state-disabled" class to popup content (T1046427)', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            disabled: true
+        }).dxPopup('instance');
+
+        assert.ok(popup.$content().hasClass(DISABLED_STATE_CLASS));
+
+        popup.option('disabled', false);
+        assert.notOk(popup.$content().hasClass(DISABLED_STATE_CLASS), 'class is removed after runtime change to false');
+    });
+
+    QUnit.test('disabled=true should pass disabled to toolbars', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            disabled: true,
+            toolbarItems: [{
+                location: 'before',
+                name: 'topButton',
+                visible: true,
+                widget: 'dxButton'
+            }, {
+                location: 'after',
+                toolbar: 'bottom',
+                name: 'bottomButton',
+                visible: true,
+                widget: 'dxButton'
+            }]
+        }).dxPopup('instance');
+
+        assert.ok(popup.topToolbar().hasClass(DISABLED_STATE_CLASS), 'top toolbar has disabled class');
+        assert.ok(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'bottom toolbar has disabled class');
+
+        popup.option('disabled', false);
+        assert.notOk(popup.topToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from top toolbar');
+        assert.notOk(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from bottom toolbar');
     });
 });
 
