@@ -49,6 +49,7 @@ export interface CustomStoreOptions<
      */
     load: ((options: LoadOptions<TItem>) =>
       | DxPromise<
+        | Object
         | Array<TItem>
         | Array<GroupItem>
         | {
@@ -57,6 +58,7 @@ export interface CustomStoreOptions<
             summary?: Array<any>;
             groupCount?: number;
           }>
+      | JQueryXHR
       | Array<GroupItem>
       | Array<TItem>);
     /**

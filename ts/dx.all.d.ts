@@ -1658,6 +1658,7 @@ declare module DevExpress.data {
      */
     load: (options: LoadOptions<TItem>) =>
       | DevExpress.core.utils.DxPromise<
+          | Object
           | Array<TItem>
           | Array<DevExpress.data.CustomStore.GroupItem>
           | {
@@ -1667,6 +1668,7 @@ declare module DevExpress.data {
               groupCount?: number;
             }
         >
+      | JQueryXHR
       | Array<DevExpress.data.CustomStore.GroupItem>
       | Array<TItem>;
     /**
