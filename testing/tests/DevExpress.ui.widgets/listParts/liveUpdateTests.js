@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
+import { RESIZE_WAIT_TIMEOUT } from '../scrollableParts/scrollable.constants.js';
 
 
 import 'ui/list';
@@ -287,6 +288,8 @@ QUnit.module('live update', {
     });
 
     QUnit.test('load new page by scrolling after updating an item (T937825)', function(assert) {
+        const done = assert.async();
+
         const list = this.createList({
             pageLoadMode: 'scrollBottom',
             height: 40,
@@ -315,9 +318,13 @@ QUnit.module('live update', {
                 key: 1
             }
         ]);
-        list.scrollTo(100);
 
-        assert.strictEqual(list.itemElements().length, 4, '2nd page is loaded');
+        setTimeout(() => {
+            list.scrollTo(100);
+            assert.strictEqual(list.itemElements().length, 4, '2nd page is loaded');
+
+            done();
+        }, RESIZE_WAIT_TIMEOUT);
     });
 
     QUnit.test('push & repaintChangesOnly', function(assert) {

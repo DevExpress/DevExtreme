@@ -1243,12 +1243,13 @@ QUnit.module('api', moduleConfig, () => {
 
         this.clock.tick();
 
-        assert.equal(onUpdatedHandler.callCount, 1, 'update fired');
+        assert.equal(onUpdatedHandler.callCount, isRenovatedScrollView ? 0 : 1, 'update fired');
     });
 
     QUnit.test('release calls update', function(assert) {
-        const done = assert.async();
         assert.expect(1);
+        this.clock.restore();
+        const done = assert.async();
 
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,
@@ -1283,12 +1284,12 @@ QUnit.module('api', moduleConfig, () => {
             .down()
             .move(0, $topPocket.height() + 1)
             .up();
-
-        this.clock.tick();
     });
 
     QUnit.test('release calls update for scrollbar', function(assert) {
         assert.expect(1);
+        this.clock.restore();
+        const done = assert.async();
 
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,
@@ -1297,12 +1298,15 @@ QUnit.module('api', moduleConfig, () => {
             inertiaEnabled: false,
             onEnd: function() {
                 assert.equal($scroll.outerHeight(), Math.pow($container.height(), 2) / $content.height());
+
+                done();
             },
             reachBottomEnabled: true,
             onReachBottom: function() {
                 $container.height(100);
                 $('.content2').height(400);
-                setTimeout($.proxy(this.release, this));
+
+                setTimeout($.proxy(this.release, this), RESIZE_WAIT_TIMEOUT);
             }
         });
 
@@ -1316,8 +1320,6 @@ QUnit.module('api', moduleConfig, () => {
             .down()
             .move(0, $container.height() - $content.height() - $topPocket.height() - 10)
             .up();
-
-        this.clock.tick();
     });
 
     QUnit.test('release calls moveToBound location immediately when state is released', function(assert) {
@@ -1850,8 +1852,7 @@ QUnit.module('native pullDown strategy', {
         try {
             $scrollView.dxScrollView('release');
             clock.tick(400);
-            assert.equal(onUpdatedHandler.callCount, 1, 'update fired');
-
+            assert.equal(onUpdatedHandler.callCount, isRenovatedScrollView ? 0 : 1, 'update fired');
         } finally {
             clock.restore();
         }
@@ -2178,7 +2179,7 @@ QUnit.module('native swipeDown strategy', {
         try {
             $scrollView.dxScrollView('instance').release();
             clock.tick(800);
-            assert.equal(onUpdatedHandler.callCount, 1, 'update fired');
+            assert.equal(onUpdatedHandler.callCount, isRenovatedScrollView ? 0 : 1, 'update fired');
         } finally {
             clock.restore();
         }
