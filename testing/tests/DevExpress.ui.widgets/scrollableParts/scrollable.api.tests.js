@@ -20,7 +20,8 @@ import {
     SCROLLBAR_VERTICAL_CLASS,
     SCROLLABLE_SCROLLBARS_HIDDEN,
     SCROLLABLE_DISABLED_CLASS,
-    calculateInertiaDistance
+    calculateInertiaDistance,
+    RESIZE_WAIT_TIMEOUT
 } from './scrollable.constants.js';
 
 import {
@@ -263,6 +264,9 @@ QUnit.test('scrollBy to location', function(assert) {
 });
 
 QUnit.test('scrollBy to location with dynamic content', function(assert) {
+    this.clock.restore();
+    const done = assert.async();
+
     const distance = 10;
     let wasFirstMove = false;
 
@@ -272,6 +276,7 @@ QUnit.test('scrollBy to location with dynamic content', function(assert) {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
                 assert.equal(location.top, -distance * 2, 'scroll to correctly vertical position');
+                done();
             }
             wasFirstMove = true;
         }
@@ -280,14 +285,19 @@ QUnit.test('scrollBy to location with dynamic content', function(assert) {
     const scrollable = $scrollable.dxScrollable('instance');
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
-
     $content.append($('<div>').height(100));
-    scrollable.scrollBy(distance);
-    scrollable.scrollBy(distance);
+    setTimeout(() => {
+        scrollable.scrollBy(distance);
+        scrollable.scrollBy(distance);
+    }, RESIZE_WAIT_TIMEOUT);
+
 });
 
 // T389058
 QUnit.test('scrollBy to location with dynamic content if auto update is prevented', function(assert) {
+    this.clock.restore();
+    const done = assert.async();
+
     const distance = 10;
     let wasFirstMove = false;
 
@@ -298,6 +308,7 @@ QUnit.test('scrollBy to location with dynamic content if auto update is prevente
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
                 assert.equal(location.top, isRenovatedScrollable ? -20 : 0, 'vertical location set correctly');
+                done();
             }
             wasFirstMove = true;
         }
@@ -307,8 +318,11 @@ QUnit.test('scrollBy to location with dynamic content if auto update is prevente
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
     $content.append($('<div>').height(100));
-    scrollable.scrollBy(distance);
-    scrollable.scrollBy(distance);
+    setTimeout(() => {
+        scrollable.scrollBy(distance);
+        scrollable.scrollBy(distance);
+    }, RESIZE_WAIT_TIMEOUT);
+
 });
 
 QUnit.test('scrollTo to location', function(assert) {
