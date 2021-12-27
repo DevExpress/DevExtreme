@@ -517,10 +517,6 @@ class FileManager extends Widget {
         return super.option(...arguments);
     }
 
-    _repaintInternal() {
-        this._providerUpdateDeferred.always(() => this.repaint());
-    }
-
     _optionChanged(args) {
         const name = args.name;
 
@@ -553,7 +549,7 @@ class FileManager extends Widget {
                 break;
             case 'rootFolderName':
                 this._controller.setRootText(args.value);
-                this._repaintInternal();
+                this._invalidate();
                 break;
             case 'fileSystemProvider': {
                 if(!this._lockCurrentPathProcessing) {
@@ -561,29 +557,29 @@ class FileManager extends Widget {
                 }
                 const pathKeys = this._lockCurrentPathProcessing ? undefined : this.option('currentPathKeys');
                 this._controller.updateProvider(args.value, pathKeys)
-                    .then(() => this._providerUpdateDeferred.resolve());
-                this._repaintInternal();
+                    .always(() => this._providerUpdateDeferred.resolve())
+                    .always(() => this.repaint());
                 break;
             }
             case 'allowedFileExtensions':
                 this._controller.setAllowedFileExtensions(args.value);
-                this._repaintInternal();
+                this._invalidate();
                 break;
             case 'upload':
                 this._controller.setUploadOptions(this.option('upload'));
-                this._repaintInternal();
+                this._invalidate();
                 break;
             case 'permissions':
             case 'selectionMode':
             case 'customizeThumbnail':
             case 'customizeDetailColumns':
-                this._repaintInternal();
+                this._invalidate();
                 break;
             case 'itemView':
                 if(args.fullName === 'itemView.mode') {
                     this._switchView(args.value);
                 } else {
-                    this._repaintInternal();
+                    this._invalidate();
                 }
                 break;
             case 'toolbar':
