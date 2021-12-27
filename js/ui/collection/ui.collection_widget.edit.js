@@ -216,7 +216,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             totalCount: function() {
                 const items = that.option('items');
                 const dataSource = that._dataSource;
-                return dataSource && dataSource.totalCount() >= 0 ? dataSource.totalCount() : items.length;
+                return dataSource && dataSource.totalCount() >= 0
+                    ? dataSource.totalCount()
+                    : that._getItemsCount(items);
             },
             key: that.key.bind(that),
             keyOf: that.keyOf.bind(that),
@@ -247,6 +249,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             },
             plainItems: itemsGetter.bind(that._editStrategy)
         });
+    },
+
+    _getItemsCount: function(items) {
+        return items.reduce((itemsCount, item) => {
+            return itemsCount += item.items
+                ? this._getItemsCount(item.items)
+                : 1;
+        }, 0);
     },
 
     _initEditStrategy: function() {

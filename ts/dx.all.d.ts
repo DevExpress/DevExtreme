@@ -18287,7 +18287,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxProgressBarOptions.value]
      */
-    value?: number | boolean;
+    value?: number | false;
   }
   /**
    * [descr:dxRadioGroup]
@@ -23347,6 +23347,8 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewItem.selected]
      */
     selected?: boolean;
+
+    [key: string]: any;
   }
   /**
    * [descr:dxTreeViewNode]

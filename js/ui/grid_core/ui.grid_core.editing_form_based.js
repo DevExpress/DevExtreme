@@ -200,6 +200,7 @@ export const editingFormBasedModule = {
                         this._$popupContent = $(scrollable.content());
 
                         formTemplate(this._$popupContent, templateOptions, { renderFormOnly: true });
+                        this._rowsView.renderDelayedTemplates();
                     };
                 },
 

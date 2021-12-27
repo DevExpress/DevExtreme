@@ -10,70 +10,70 @@ import {
   Event,
   ForwardRef,
 } from '@devextreme-generator/declarations';
-import type { AppointmentTemplateData } from '../../../../ui/scheduler';
 import {
   AppointmentTemplateProps,
   AppointmentViewModel,
   AppointmentClickData,
+  ReducedIconHoverData,
 } from './types';
 import { getAppointmentStyles } from './utils';
-import { AppointmentContent } from './content';
+import { AppointmentContent } from './content/layout';
 import { Widget } from '../../common/widget';
 import { combineClasses } from '../../../utils/combine_classes';
+import type { AppointmentTemplateData } from '../../../../ui/scheduler';
 
 export const viewFunction = ({
   text,
-  dateText,
   styles,
-  data,
-  index,
   ref,
   onItemClick,
   classes,
   isReduced,
+  data,
+  dateText,
   props: {
     viewModel: {
       info: {
         isRecurrent,
       },
     },
+    index,
+    showReducedIconTooltip,
+    hideReducedIconTooltip,
     appointmentTemplate,
   },
-}: Appointment): JSX.Element => {
-  const AppointmentTemplate = appointmentTemplate;
-  return (
-    <Widget
-      onClick={onItemClick}
-      rootElementRef={ref}
-      style={styles}
-      classes={classes}
-      hint={text}
-      {...{ role: 'button' }}
-    >
-      {
-        !!AppointmentTemplate && (
-          <AppointmentTemplate data={data} index={index} />
-        )
-      }
-      {
-        !AppointmentTemplate && (
-          <AppointmentContent
-            text={text}
-            dateText={dateText}
-            isRecurrent={isRecurrent}
-            isReduced={isReduced}
-          />
-        )
-      }
-    </Widget>
-  );
-};
+}: Appointment): JSX.Element => (
+  <Widget
+    onClick={onItemClick}
+    rootElementRef={ref}
+    style={styles}
+    classes={classes}
+    hint={text}
+    {...{ role: 'button' }}
+  >
+    <AppointmentContent
+      text={text}
+      isReduced={isReduced}
+      dateText={dateText}
+      isRecurrent={isRecurrent}
+      index={index}
+      data={data}
+      showReducedIconTooltip={showReducedIconTooltip}
+      hideReducedIconTooltip={hideReducedIconTooltip}
+      appointmentTemplate={appointmentTemplate}
+    />
+  </Widget>
+);
 
 @ComponentBindings()
 export class AppointmentProps {
   @OneWay() viewModel!: AppointmentViewModel;
 
   @OneWay() index = 0;
+
+  @OneWay() showReducedIconTooltip!: (data: ReducedIconHoverData) => void;
+
+  @OneWay() hideReducedIconTooltip!: () => void;
 
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
@@ -84,36 +84,13 @@ export class AppointmentProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'onItemClick'>() {
+export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'onItemClick' | 'showReducedIconTooltip' | 'hideReducedIconTooltip'>() {
   @ForwardRef() ref!: RefObject<HTMLDivElement>;
 
   get text(): string { return this.props.viewModel.appointment.text; }
 
-  get dateText(): string { return this.props.viewModel.info.dateText; }
-
   get styles(): CSSAttributes {
     return getAppointmentStyles(this.props.viewModel);
-  }
-
-  get data(): AppointmentTemplateData {
-    return {
-      appointmentData: this.props.viewModel.info.appointment,
-      targetedAppointmentData: this.props.viewModel.appointment,
-    };
-  }
-
-  get index(): number {
-    return this.props.index;
-  }
-
-  onItemClick(): void {
-    const e = {
-      data: [this.props.viewModel],
-      target: this.ref.current as HTMLDivElement,
-      index: this.props.index,
-    };
-
-    this.props.onItemClick(e);
   }
 
   get isReduced(): boolean {
@@ -141,5 +118,24 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'o
       'dx-scheduler-appointment-body': appointmentReduced === 'body',
       'dx-scheduler-appointment-tail': appointmentReduced === 'tail',
     });
+  }
+
+  get dateText(): string { return this.props.viewModel.info.dateText; }
+
+  get data(): AppointmentTemplateData {
+    return {
+      appointmentData: this.props.viewModel.info.appointment,
+      targetedAppointmentData: this.props.viewModel.appointment,
+    };
+  }
+
+  onItemClick(): void {
+    const e = {
+      data: [this.props.viewModel],
+      target: this.ref.current as HTMLDivElement,
+      index: this.props.index,
+    };
+
+    this.props.onItemClick(e);
   }
 }

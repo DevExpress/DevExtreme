@@ -292,7 +292,10 @@ const Form = Widget.inherit({
     },
 
     _clean: function() {
+        this._clearValidationSummary();
+
         this.callBase();
+
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
         this._lastMarkupScreenFactor = undefined;
@@ -313,19 +316,21 @@ const Form = Widget.inherit({
         return this.option('scrollingEnabled') ? $(this._scrollable.content()) : this.$element();
     },
 
-    _renderValidationSummary: function() {
-        const $validationSummary = this.$element().find('.' + FORM_VALIDATION_SUMMARY);
+    _clearValidationSummary: function() {
+        this._$validationSummary?.remove();
+        this._$validationSummary = undefined;
+        this._validationSummary = undefined;
+    },
 
-        if($validationSummary.length > 0) {
-            $validationSummary.remove();
-        }
+    _renderValidationSummary: function() {
+        this._clearValidationSummary();
 
         if(this.option('showValidationSummary')) {
-            const $validationSummary = $('<div>')
+            this._$validationSummary = $('<div>')
                 .addClass(FORM_VALIDATION_SUMMARY)
                 .appendTo(this._getContent());
 
-            this._validationSummary = $validationSummary.dxValidationSummary({
+            this._validationSummary = this._$validationSummary.dxValidationSummary({
                 validationGroup: this._getValidationGroup()
             }).dxValidationSummary('instance');
         }
@@ -337,27 +342,29 @@ const Form = Widget.inherit({
             for(let i = 0; i < items.length; i++) {
                 let item = items[i];
                 const path = concatPaths(currentPath, createItemPathByIndex(i, isTabs));
-                const guid = this._itemsRunTimeInfo.add({ item, itemIndex: i, path });
+                const itemRunTimeInfo = { item, itemIndex: i, path };
+                const guid = this._itemsRunTimeInfo.add(itemRunTimeInfo);
 
                 if(isString(item)) {
                     item = { dataField: item };
                 }
 
                 if(isObject(item)) {
-                    const itemCopy = extend({}, item);
-                    itemCopy.guid = guid;
-                    this._tryPrepareGroupItem(itemCopy);
-                    this._tryPrepareTabbedItem(itemCopy, path);
-                    this._tryPrepareItemTemplate(itemCopy);
+                    const preparedItem = { ...item };
+                    itemRunTimeInfo.preparedItem = preparedItem;
+                    preparedItem.guid = guid;
+                    this._tryPrepareGroupItem(preparedItem);
+                    this._tryPrepareTabbedItem(preparedItem, path);
+                    this._tryPrepareItemTemplate(preparedItem);
 
                     if(parentIsTabbedItem) {
-                        itemCopy.cssItemClass = FIELD_ITEM_TAB_CLASS;
+                        preparedItem.cssItemClass = FIELD_ITEM_TAB_CLASS;
                     }
 
-                    if(itemCopy.items) {
-                        itemCopy.items = this._prepareItems(itemCopy.items, parentIsTabbedItem, path);
+                    if(preparedItem.items) {
+                        preparedItem.items = this._prepareItems(preparedItem.items, parentIsTabbedItem, path);
                     }
-                    result.push(itemCopy);
+                    result.push(preparedItem);
                 } else {
                     result.push(item);
                 }
@@ -371,11 +378,14 @@ const Form = Widget.inherit({
         if(item.itemType === 'group') {
             item.alignItemLabels = ensureDefined(item.alignItemLabels, true);
 
-            if(item.template) {
-                item.groupContentTemplate = this._getTemplate(item.template);
-            }
+            item._prepareGroupItemTemplate = (itemTemplate) => {
+                if(item.template) {
+                    item.groupContentTemplate = this._getTemplate(itemTemplate);
+                }
 
-            item.template = this._itemGroupTemplate.bind(this, item);
+                item.template = this._itemGroupTemplate.bind(this, item);
+            };
+            item._prepareGroupItemTemplate(item.template);
         }
     },
 
@@ -408,6 +418,8 @@ const Form = Widget.inherit({
         let items = that.option('items');
         const $content = that._getContent();
 
+        // TODO: Introduce this.preparedItems and use it for partial rerender???
+        // Compare new preparedItems with old preparedItems to detect what should be rerendered?
         items = that._prepareItems(items);
 
         //#DEBUG
@@ -514,14 +526,18 @@ const Form = Widget.inherit({
             .appendTo($group);
 
         if(item.groupContentTemplate) {
-            const data = {
-                formData: this.option('formData'),
-                component: this
+            item._renderGroupContentTemplate = () => {
+                $groupContent.empty();
+                const data = {
+                    formData: this.option('formData'),
+                    component: this
+                };
+                item.groupContentTemplate.render({
+                    model: data,
+                    container: getPublicElement($groupContent)
+                });
             };
-            item.groupContentTemplate.render({
-                model: data,
-                container: getPublicElement($groupContent)
-            });
+            item._renderGroupContentTemplate();
         } else {
             layoutManager = this._renderLayoutManager($groupContent, this._createLayoutManagerOptions(this._tryGetItemsForTemplate(item), {
                 colCount: item.colCount,
@@ -748,7 +764,7 @@ const Form = Widget.inherit({
     _tryCreateItemOptionAction: function(optionName, item, value, previousValue, itemPath) {
         if(optionName === 'tabs') {
             this._itemsRunTimeInfo.removeItemsByPathStartWith(`${itemPath}.tabs`);
-            value = this._prepareItems(value, true, itemPath, true);
+            value = this._prepareItems(value, true, itemPath, true); // preprocess user value as in _tryPrepareTabbedItem
         }
         return tryCreateItemOptionAction(optionName, {
             item,
