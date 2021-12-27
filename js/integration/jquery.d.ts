@@ -87,6 +87,10 @@ declare module '../core/element' {
     interface InternalElementWrapper<T extends Element> extends JQuery<T> { }
 }
 
+declare module '../core/utils/ajax' {
+    interface JQueryXHR extends XMLHttpRequest, JQueryPromise<any> { }
+}
+
 declare module '../core/utils/deferred' {
     interface PromiseType<T> extends JQueryPromise<T> { }
 }
