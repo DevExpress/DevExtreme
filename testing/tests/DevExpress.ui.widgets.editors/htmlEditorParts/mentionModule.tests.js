@@ -433,6 +433,9 @@ QUnit.module('Mentions module', moduleConfig, () => {
             return;
         }
 
+        this.clock.restore();
+        const done = assert.async();
+
         const items = [];
         for(let i = 0; i < 60; i++) {
             items.push(i);
@@ -451,23 +454,28 @@ QUnit.module('Mentions module', moduleConfig, () => {
             },
         }];
 
+        const resizeWaitTimeout = 50;
         const mention = new Mentions(this.quillMock, this.options);
+        setTimeout(() => {
+            mention._popup.option('container', this.$element);
+            mention.savePosition(0);
+            mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
+            setTimeout(() => {
+                let $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
+                assert.strictEqual($items.length, 50);
 
-        mention._popup.option('container', this.$element);
-        mention.savePosition(0);
-        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
+                this.$element.trigger($.Event('keydown', { key: 'ArrowUp', which: KEY_CODES.ARROW_UP }));
 
-        this.clock.tick();
 
-        let $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
-        assert.strictEqual($items.length, 50);
+                $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
+                const isLastItemOnPageFocused = $items.eq(49).hasClass(FOCUSED_STATE_CLASS);
 
-        this.$element.trigger($.Event('keydown', { key: 'ArrowUp', which: KEY_CODES.ARROW_UP }));
-        $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
-        const isLastItemOnPageFocused = $items.eq(49).hasClass(FOCUSED_STATE_CLASS);
+                assert.ok(isLastItemOnPageFocused);
+                assert.strictEqual($items.length, 60, 'next page has loaded');
 
-        assert.ok(isLastItemOnPageFocused);
-        assert.strictEqual($items.length, 60, 'next page has loaded');
+                done();
+            }, resizeWaitTimeout);
+        }, resizeWaitTimeout);
     });
 
     test('trigger \'arrow up\' should focus previous list item', function(assert) {

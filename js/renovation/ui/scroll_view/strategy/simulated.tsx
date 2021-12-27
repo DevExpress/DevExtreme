@@ -612,22 +612,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     );
   }
 
-  @Effect({ run: 'once' })
-  subscribeToResizeContentHeight(): EffectReturn {
-    return subscribeToResize(
-      this.content(),
-      (element: HTMLDivElement) => { this.setContentHeight(element); },
-    );
-  }
-
-  @Effect({ run: 'once' })
-  subscribeToResizeContentWidth(): EffectReturn {
-    return subscribeToResize(
-      this.contentRef.current,
-      (element: HTMLDivElement) => { this.setContentWidth(element); },
-    );
-  }
-
   // if delete this effect we need to wait changing size inside resizeObservable
   // it needs for support qunit tests
   @Effect({ run: 'once' }) updateDimensions(): void {
