@@ -633,12 +633,13 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         _handleScroll: function(e) {
-            const that = this;
+            const legacyScrollingMode = this.option(LEGACY_SCROLLING_MODE) === true;
+            const zeroTopPosition = e.scrollOffset.top === 0;
 
-            if(that._hasHeight && that._rowHeight) {
-                that._dataController.setViewportPosition(e.scrollOffset.top);
+            if((this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
+                this._dataController.setViewportPosition(e.scrollOffset.top);
             }
-            that.callBase.apply(that, arguments);
+            this.callBase.apply(this, arguments);
         },
 
         _needUpdateRowHeight: function(itemsCount) {
@@ -1441,13 +1442,6 @@ export const virtualScrollingModule = {
                         }
                         return this.callBase.apply(this, arguments);
                     },
-                    pageSize: function(value) {
-                        const virtualPaging = isVirtualPaging(this);
-                        if(isDefined(value) && this.option(LEGACY_SCROLLING_MODE) === false && !virtualPaging) {
-                            this._rowsScrollController?.reset();
-                        }
-                        return this.callBase.apply(this, arguments);
-                    },
                     _fireChanged: function(e) {
                         this.callBase.apply(this, arguments);
 
@@ -1468,7 +1462,15 @@ export const virtualScrollingModule = {
                         return result;
                     },
                     isEmpty: function() {
-                        return this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this) ? !this._itemCount : this.callBase(this, arguments);
+                        let result;
+
+                        if(this.option(LEGACY_SCROLLING_MODE) === false) {
+                            result = isVirtualPaging(this) ? !this._itemCount : !this.items(true).length;
+                        } else {
+                            result = this.callBase(this, arguments);
+                        }
+
+                        return result;
                     },
                     isLastPageLoaded: function() {
                         let result = false;
