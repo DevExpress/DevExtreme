@@ -1,4 +1,4 @@
-import $ from 'JQuery';
+import $ from 'jquery';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from '../../../js/data/custom_store';
 
