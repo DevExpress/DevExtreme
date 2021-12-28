@@ -71,8 +71,6 @@ export class App extends JSXComponent<AppProps>() {
   }
 
   get componentOptions(): Partial<ScrollableProps> {
-    console.log(this.options);
-
     return this.options;
   }
 }
