@@ -14,10 +14,10 @@ describe('ConfigProvider', () => {
 
   it('should return correct correct context data', () => {
     const component = new AppointmentsDataProvider({
-      appointmentsData: 'data',
+      appointmentsContextValue: 'data',
     } as any);
 
-    expect(component.appointmentsData)
-      .toEqual({ data: 'data' });
+    expect(component.appointmentsContextValue)
+      .toBe('data');
   });
 });

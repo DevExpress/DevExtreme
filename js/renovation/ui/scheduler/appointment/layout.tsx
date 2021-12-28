@@ -16,14 +16,12 @@ export const viewFunction = ({
   appointments,
   overflowIndicators,
 
-  appointmentsConfig: {
-    data: {
-      appointmentTemplate,
-      showReducedIconTooltip,
-      hideReducedIconTooltip,
-      onAppointmentClick,
-      overflowIndicatorTemplate,
-    },
+  appointmentsContextValue: {
+    appointmentTemplate,
+    showReducedIconTooltip,
+    hideReducedIconTooltip,
+    onAppointmentClick,
+    overflowIndicatorTemplate,
   },
 }: AppointmentLayout): JSX.Element => (
   <div className={classes}>
@@ -64,7 +62,7 @@ export class AppointmentLayoutProps {
 })
 export class AppointmentLayout extends JSXComponent(AppointmentLayoutProps) {
   @Consumer(AppointmentsContext)
-  appointmentsConfig!: AppointmentsContextValue;
+  appointmentsContextValue!: AppointmentsContextValue;
 
   get classes(): string {
     const { isAllDay } = this.props;
@@ -77,17 +75,17 @@ export class AppointmentLayout extends JSXComponent(AppointmentLayoutProps) {
 
   get appointments(): AppointmentViewModel[] {
     if (this.props.isAllDay) {
-      return this.appointmentsConfig.data.viewModel.allDay;
+      return this.appointmentsContextValue.viewModel.allDay;
     }
 
-    return this.appointmentsConfig.data.viewModel.regular;
+    return this.appointmentsContextValue.viewModel.regular;
   }
 
   get overflowIndicators(): OverflowIndicatorViewModel[] {
     if (this.props.isAllDay) {
-      return this.appointmentsConfig.data.viewModel.allDayCompact;
+      return this.appointmentsContextValue.viewModel.allDayCompact;
     }
 
-    return this.appointmentsConfig.data.viewModel.regularCompact;
+    return this.appointmentsContextValue.viewModel.regularCompact;
   }
 }

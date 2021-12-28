@@ -47,7 +47,7 @@ import { getFilterStrategy } from './utils/filtering/local';
 import combineRemoteFilter from './utils/filtering/remote';
 import { ReducedIconTooltip } from './appointment/reduced_icon_tooltip/layout';
 import { AppointmentsDataProvider } from './appointments_data_provider';
-import { AppointmentsData } from './appointments_data_context';
+import { AppointmentsContextValue } from './appointments_data_context';
 
 export const viewFunction = ({
   restAttributes,
@@ -65,7 +65,7 @@ export const viewFunction = ({
   reducedIconTarget,
   changeTooltipVisible,
   workSpaceKey,
-  appointmentsData,
+  appointmentsContextValue,
 
   props: {
     accessKey,
@@ -156,7 +156,7 @@ export const viewFunction = ({
           />
         )}
         <AppointmentsDataProvider
-          appointmentsData={appointmentsData}
+          appointmentsContextValue={appointmentsContextValue}
         >
           <WorkSpace
             firstDayOfWeek={firstDayOfWeek}
@@ -505,7 +505,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
   }
 
-  get appointmentsData(): AppointmentsData {
+  get appointmentsContextValue(): AppointmentsContextValue {
     return {
       viewModel: this.appointmentsViewModel,
       appointmentTemplate: this.currentViewConfig.appointmentTemplate,

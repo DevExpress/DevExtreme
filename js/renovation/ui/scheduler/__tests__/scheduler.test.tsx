@@ -172,7 +172,7 @@ describe('Scheduler', () => {
 
     it('should render AppointmentsDataProvider', () => {
       const tree = renderComponent({
-        appointmentsData: 'appointmentsData',
+        appointmentsContextValue: 'appointmentsContextValue',
       });
 
       const appointmentsDataProvider = tree.find(AppointmentsDataProvider);
@@ -181,7 +181,7 @@ describe('Scheduler', () => {
         .toBe(true);
       expect(appointmentsDataProvider.props())
         .toEqual({
-          appointmentsData: 'appointmentsData',
+          appointmentsContextValue: 'appointmentsContextValue',
           children: expect.anything(),
         });
     });
@@ -1456,7 +1456,7 @@ describe('Scheduler', () => {
       });
     });
 
-    describe('appointmentsData', () => {
+    describe('appointmentsContextValue', () => {
       it('should return correct data', () => {
         const appointmentTemplate = jest.fn();
         const appointmentCollectorTemplate = jest.fn();
@@ -1467,7 +1467,7 @@ describe('Scheduler', () => {
           appointmentCollectorTemplate,
         });
 
-        expect(scheduler.appointmentsData)
+        expect(scheduler.appointmentsContextValue)
           .toEqual({
             viewModel: {
               regular: [],
@@ -1483,7 +1483,7 @@ describe('Scheduler', () => {
           });
 
         const data = { startDate: new Date(2021, 11, 27) };
-        scheduler.appointmentsData.onAppointmentClick({
+        scheduler.appointmentsContextValue.onAppointmentClick({
           data,
           target: 'target',
         } as any);
@@ -1496,7 +1496,7 @@ describe('Scheduler', () => {
           .toBe(true);
 
         const endDate = new Date(2021, 11, 27);
-        scheduler.appointmentsData.showReducedIconTooltip({
+        scheduler.appointmentsContextValue.showReducedIconTooltip({
           target: 'target',
           endDate,
         } as any);
@@ -1508,7 +1508,7 @@ describe('Scheduler', () => {
         expect(scheduler.reducedIconTooltipVisible)
           .toBe(true);
 
-        scheduler.appointmentsData.hideReducedIconTooltip();
+        scheduler.appointmentsContextValue.hideReducedIconTooltip();
 
         expect(scheduler.reducedIconTooltipVisible)
           .toBe(false);

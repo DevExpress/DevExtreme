@@ -6,9 +6,7 @@ describe('AppointmentLayout', () => {
     const render = (viewModel): ShallowWrapper => shallow(viewFunction({
       appointments: [],
       overflowIndicators: [],
-      appointmentsConfig: {
-        data: {},
-      },
+      appointmentsContextValue: {},
       ...viewModel,
       props: {
         ...viewModel.props,
@@ -72,12 +70,10 @@ describe('AppointmentLayout', () => {
           viewModel0,
           viewModel1,
         ],
-        appointmentsConfig: {
-          data: {
-            showReducedIconTooltip: 'some value 1',
-            hideReducedIconTooltip: 'some value 2',
-            appointmentTemplate,
-          },
+        appointmentsContextValue: {
+          showReducedIconTooltip: 'some value 1',
+          hideReducedIconTooltip: 'some value 2',
+          appointmentTemplate,
         },
       });
 
@@ -114,10 +110,8 @@ describe('AppointmentLayout', () => {
       const overflowIndicatorTemplate = '<div class="test-template">Some template</div>';
       const layout = render({
         overflowIndicators: [viewModel],
-        appointmentsConfig: {
-          data: {
-            overflowIndicatorTemplate,
-          },
+        appointmentsContextValue: {
+          overflowIndicatorTemplate,
         },
       });
 
@@ -160,11 +154,9 @@ describe('AppointmentLayout', () => {
           const layout = new AppointmentLayout(new AppointmentLayoutProps());
 
           const appointments = [];
-          layout.appointmentsConfig = {
-            data: {
-              viewModel: {
-                regular: appointments,
-              },
+          layout.appointmentsContextValue = {
+            viewModel: {
+              regular: appointments,
             },
           } as any;
 
@@ -178,11 +170,9 @@ describe('AppointmentLayout', () => {
           });
 
           const appointments = [];
-          layout.appointmentsConfig = {
-            data: {
-              viewModel: {
-                allDay: appointments,
-              },
+          layout.appointmentsContextValue = {
+            viewModel: {
+              allDay: appointments,
             },
           } as any;
 
@@ -196,11 +186,9 @@ describe('AppointmentLayout', () => {
           const layout = new AppointmentLayout(new AppointmentLayoutProps());
 
           const appointments = [];
-          layout.appointmentsConfig = {
-            data: {
-              viewModel: {
-                regularCompact: appointments,
-              },
+          layout.appointmentsContextValue = {
+            viewModel: {
+              regularCompact: appointments,
             },
           } as any;
 
@@ -214,11 +202,9 @@ describe('AppointmentLayout', () => {
           });
 
           const appointments = [];
-          layout.appointmentsConfig = {
-            data: {
-              viewModel: {
-                allDayCompact: appointments,
-              },
+          layout.appointmentsContextValue = {
+            viewModel: {
+              allDayCompact: appointments,
             },
           } as any;
 

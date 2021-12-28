@@ -7,7 +7,7 @@ import {
   ReducedIconHoverData,
 } from './appointment/types';
 
-export interface AppointmentsData {
+export interface AppointmentsContextValue {
   viewModel: AppointmentsViewModelType;
   appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
   overflowIndicatorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
@@ -16,7 +16,4 @@ export interface AppointmentsData {
   hideReducedIconTooltip: () => void;
 }
 
-export interface AppointmentsContextValue {
-  data: AppointmentsData;
-}
 export const AppointmentsContext = createContext<AppointmentsContextValue | undefined>(undefined);
