@@ -19,8 +19,8 @@ export const views = [
   'week',
   'month',
   'timelineDay',
-  'timelineWeek',
   'timelineMonth',
+  'timelineWeek',
 ];
 export const verticalViews = views
   .map((viewType) => ({

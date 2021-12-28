@@ -37,6 +37,7 @@ import {
   AppointmentsViewModelType,
   AppointmentViewModel,
   AppointmentClickData,
+  ReducedIconHoverData,
 } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
@@ -45,6 +46,7 @@ import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
 import { getPreparedDataItems, resolveDataItems } from './utils/data';
 import { getFilterStrategy } from './utils/filtering/local';
 import combineRemoteFilter from './utils/filtering/remote';
+import { ReducedIconTooltip } from './appointment/reduced_icon_tooltip/layout';
 
 export const viewFunction = ({
   restAttributes,
@@ -58,8 +60,13 @@ export const viewFunction = ({
   tooltipData,
   tooltipTarget,
   tooltipVisible,
+  reducedIconTooltipVisible,
+  reducedIconEndDate,
+  reducedIconTarget,
   changeTooltipVisible,
   showTooltip,
+  showReducedIconTooltip,
+  hideReducedIconTooltip,
   workSpaceKey,
 
   props: {
@@ -190,6 +197,8 @@ export const viewFunction = ({
               overflowIndicators={appointmentsViewModel.allDayCompact}
               appointmentTemplate={appointmentTemplate}
               overflowIndicatorTemplate={appointmentCollectorTemplate}
+              showReducedIconTooltip={showReducedIconTooltip}
+              hideReducedIconTooltip={hideReducedIconTooltip}
               onAppointmentClick={showTooltip}
             />
           )}
@@ -200,6 +209,8 @@ export const viewFunction = ({
               overflowIndicators={appointmentsViewModel.regularCompact}
               appointmentTemplate={appointmentTemplate}
               overflowIndicatorTemplate={appointmentCollectorTemplate}
+              showReducedIconTooltip={showReducedIconTooltip}
+              hideReducedIconTooltip={hideReducedIconTooltip}
               onAppointmentClick={showTooltip}
             />
           )}
@@ -211,6 +222,11 @@ export const viewFunction = ({
           onVisibleChange={changeTooltipVisible}
           target={tooltipTarget}
           dataList={tooltipData}
+        />
+        <ReducedIconTooltip
+          visible={reducedIconTooltipVisible}
+          endDate={reducedIconEndDate}
+          target={reducedIconTarget}
         />
       </div>
     </Widget>
@@ -238,6 +254,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState() tooltipData: AppointmentViewModel[] = [];
 
   @InternalState() lastViewDateByEndDayHour?: Date;
+
+  @InternalState() reducedIconTooltipVisible = false;
+
+  @InternalState() reducedIconEndDate?: Date | string;
+
+  @InternalState() reducedIconTarget!: HTMLDivElement;
 
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
@@ -647,5 +669,15 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   changeTooltipVisible(value: boolean): void {
     this.tooltipVisible = value;
+  }
+
+  showReducedIconTooltip(data: ReducedIconHoverData): void {
+    this.reducedIconTarget = data.target;
+    this.reducedIconEndDate = data.endDate;
+    this.reducedIconTooltipVisible = true;
+  }
+
+  hideReducedIconTooltip(): void {
+    this.reducedIconTooltipVisible = false;
   }
 }

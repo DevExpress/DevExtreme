@@ -257,6 +257,9 @@ describe('Scheduler', () => {
             ...defaultCurrentViewConfig,
             ...templates,
           },
+          showTooltip: 'some value 0',
+          showReducedIconTooltip: 'some value 1',
+          hideReducedIconTooltip: 'some value 2',
         });
 
         const workspace = scheduler.find(WorkSpace);
@@ -268,9 +271,11 @@ describe('Scheduler', () => {
 
         expect(appointments.props)
           .toEqual({
-            isAllDay: false,
             appointments: appointmentsViewModel.regular,
             overflowIndicators: appointmentsViewModel.regularCompact,
+            onAppointmentClick: 'some value 0',
+            showReducedIconTooltip: 'some value 1',
+            hideReducedIconTooltip: 'some value 2',
             appointmentTemplate: templates.appointmentTemplate,
             overflowIndicatorTemplate: templates.appointmentCollectorTemplate,
           });
@@ -281,6 +286,9 @@ describe('Scheduler', () => {
         expect(allDayAppointments.props)
           .toEqual({
             isAllDay: true,
+            onAppointmentClick: 'some value 0',
+            showReducedIconTooltip: 'some value 1',
+            hideReducedIconTooltip: 'some value 2',
             appointments: appointmentsViewModel.allDay,
             overflowIndicators: appointmentsViewModel.allDayCompact,
             appointmentTemplate: templates.appointmentTemplate,
@@ -759,9 +767,12 @@ describe('Scheduler', () => {
 
           scheduler.showTooltip({ data, target } as any);
 
-          expect(scheduler.tooltipVisible).toBe(true);
-          expect(scheduler.tooltipTarget).toBe(target);
-          expect(scheduler.tooltipData).toBe(data);
+          expect(scheduler.tooltipVisible)
+            .toBe(true);
+          expect(scheduler.tooltipTarget)
+            .toBe(target);
+          expect(scheduler.tooltipData)
+            .toBe(data);
         });
       });
 
@@ -775,7 +786,41 @@ describe('Scheduler', () => {
 
           scheduler.hideTooltip();
 
-          expect(scheduler.tooltipVisible).toBe(false);
+          expect(scheduler.tooltipVisible)
+            .toBe(false);
+        });
+      });
+
+      describe('showReducedIconTooltip', () => {
+        it('should correctly change component state', () => {
+          const data = 'data';
+          const target = 'target';
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+          });
+
+          scheduler.showReducedIconTooltip({ data, target } as any);
+
+          expect(scheduler.reducedIconTooltipVisible)
+            .toBe(true);
+          expect(scheduler.reducedIconTarget)
+            .toBe(target);
+        });
+      });
+
+      describe('hideReducedIconTooltip', () => {
+        it('should change visible to false', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+          });
+
+          scheduler.reducedIconTooltipVisible = true;
+
+          scheduler.hideReducedIconTooltip();
+
+          expect(scheduler.reducedIconTooltipVisible)
+            .toBe(false);
         });
       });
     });

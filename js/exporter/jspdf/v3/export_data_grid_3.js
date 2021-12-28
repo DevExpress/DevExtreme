@@ -1,6 +1,6 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { normalizeRowsInfo } from './normalizeOptions';
+import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
@@ -23,7 +23,7 @@ function _getFullOptions(options) {
     if(!isDefined(fullOptions.indent)) {
         fullOptions.indent = 10;
     }
-
+    fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
     return fullOptions;
 }
 
@@ -99,7 +99,10 @@ function exportDataGrid(doc, dataGrid, options) {
             const docStyles = getDocumentStyles(doc);
 
             const rects = pdfCellsInfo.map(cellInfo => Object.assign({}, cellInfo._rect, { sourceCellInfo: cellInfo }));
-            const rectsByPages = splitRectsByPages(rects, options.topLeft, options.pageWidth); // ??? options.pageWidth -> doc.internal.pageSize.getWidth()
+            const maxBottomRight = {
+                x: doc.internal.pageSize.getWidth() - options.margin.right
+            };
+            const rectsByPages = splitRectsByPages(rects, options.topLeft, maxBottomRight);
             const pdfCellsInfoByPages = rectsByPages.map(rects => {
                 return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
             });
