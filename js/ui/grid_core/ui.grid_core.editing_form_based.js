@@ -267,6 +267,8 @@ export const editingFormBasedModule = {
                     const editorType = getEditorType(item);
                     const rowData = detailCellOptions?.row.data;
                     const form = formTemplateOptions.component;
+                    const { label, labelMark, labelMode } = formTemplateOptions.editorOptions || {};
+
                     const cellOptions = extend({}, detailCellOptions, {
                         data: rowData,
                         cellElement: null,
@@ -275,7 +277,9 @@ export const editingFormBasedModule = {
                         id: form.getItemID(item.name || item.dataField),
                         column: extend({}, column, {
                             editorType: editorType,
-                            editorOptions: extend({}, formTemplateOptions.editorOptions, column.editorOptions, item.editorOptions)
+                            editorOptions: extend({
+                                label, labelMark, labelMode
+                            }, column.editorOptions, item.editorOptions)
                         }),
                         columnIndex: column.index,
                         setValue: !isReadOnly && column.allowEditing && function(value) {
