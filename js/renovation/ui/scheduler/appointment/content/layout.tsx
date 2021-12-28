@@ -102,7 +102,6 @@ export class AppointmentContent extends JSXComponent<AppointmentContentProps, 'd
   }
 
   onReducedIconMouseEnter(): void {
-    // console.log('hello');
     this.props.showReducedIconTooltip({
       target: this.refReducedIcon.current as HTMLDivElement,
       endDate: this.props.data.appointmentData.endDate,
