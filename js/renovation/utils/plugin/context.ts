@@ -32,6 +32,9 @@ export class PluginGetter<T> extends PluginEntity<T, GetterStoreValue<T>> {
 
   // eslint-disable-next-line class-methods-use-this
   getValue(value: GetterStoreValue<T>): T {
+    if (!value) {
+      return this.defaultValue;
+    }
     return value.reduce((base, item) => item.func(base), this.defaultValue);
   }
 }

@@ -28,10 +28,10 @@ describe('DataGridLight', () => {
     it('render with dataSource and 1 column', () => {
       const props = new DataGridLightProps();
       props.dataSource = [{ id: 1 }, { id: 2 }];
-      props.columns = ['id'];
       const viewProps = {
         props,
         visibleItems: props.dataSource,
+        visibleColumns: [{ dataField: 'id' }],
       } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
@@ -45,10 +45,13 @@ describe('DataGridLight', () => {
     it('render with dataSource and 2 columns', () => {
       const props = new DataGridLightProps();
       props.dataSource = [{ id: 1, name: 'name 1' }];
-      props.columns = ['id', 'name'];
       const viewProps = {
         props,
         visibleItems: props.dataSource,
+        visibleColumns: [
+          { dataField: 'id' },
+          { dataField: 'name' },
+        ],
       } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
@@ -65,6 +68,19 @@ describe('DataGridLight', () => {
     describe('aria', () => {
       it('should have role "presentation"', () => {
         expect(new DataGridLight({}).aria).toEqual({ role: 'presentation' });
+      });
+    });
+
+    describe('columns', () => {
+      it('should handle user input', () => {
+        const grid = new DataGridLight({
+          columns: ['id', 'name'],
+        });
+
+        expect(grid.columns).toEqual([
+          { dataField: 'id' },
+          { dataField: 'name' },
+        ]);
       });
     });
   });
@@ -103,6 +119,42 @@ describe('DataGridLight', () => {
         grid.setDataSourceToVisibleItems();
 
         expect(extendMock.mock.calls[0][2]()).toBe(dataSource);
+      });
+    });
+
+    describe('updateVisibleColumns', () => {
+      const watchMock = jest.fn();
+      const grid = new DataGridLight({});
+      grid.plugins = {
+        watch: watchMock,
+      } as any;
+
+      it('should update visibleColumns', () => {
+        grid.updateVisibleColumns();
+
+        const columns = [{ dataField: 'id' }];
+
+        const callback = watchMock.mock.calls[0][1];
+        callback(columns);
+
+        expect(grid.visibleColumns).toBe(columns);
+      });
+    });
+
+    describe('setInitialColumnsToVisibleColumns', () => {
+      const extendMock = jest.fn();
+      const columns = ['id'];
+      const grid = new DataGridLight({
+        columns,
+      });
+      grid.plugins = {
+        extend: extendMock,
+      } as any;
+
+      it('should return columns', () => {
+        grid.setInitialColumnsToVisibleColumns();
+
+        expect(extendMock.mock.calls[0][2]()).toEqual([{ dataField: 'id' }]);
       });
     });
   });
