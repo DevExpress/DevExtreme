@@ -709,6 +709,54 @@ QUnit.module('list integration', {}, () => {
         assert.strictEqual(list.option('selectionMode'), 'none', 'selectionMode is none for useSelectMode: false');
     });
 
+    QUnit.test('text property value should be rendered as the button text after useSelectMode changed to false', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            items: [{ id: 1, name: 'Item 1' }],
+            deferRendering: false,
+            useSelectMode: true,
+            keyExpr: 'id',
+            displayExpr: 'name',
+            selectedItemKey: 1,
+            text: 'initial text'
+        });
+        const $element = dropDownButton.$element();
+
+        let $text = $element.find(`.${BUTTON_TEXT}`);
+        assert.strictEqual($text.text(), 'Item 1', 'selected item text is rendered as the button text');
+
+        dropDownButton.option({
+            text: 'new text',
+            useSelectMode: false
+        });
+
+        $text = $element.find(`.${BUTTON_TEXT}`);
+        assert.strictEqual($text.text(), 'new text', 'text property value is rendered as the button text');
+    });
+
+    QUnit.test('selected item text should be rendered as the button text after useSelectMode changed to true (T1049361)', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            items: [{ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }],
+            deferRendering: false,
+            useSelectMode: false,
+            keyExpr: 'id',
+            displayExpr: 'name',
+            selectedItemKey: 1,
+            text: 'initial text'
+        });
+        const $element = dropDownButton.$element();
+
+        let $text = $element.find(`.${BUTTON_TEXT}`);
+        assert.strictEqual($text.text(), 'initial text', 'text property value is rendered as the button text');
+
+        dropDownButton.option({
+            selectedItemKey: 2,
+            useSelectMode: true
+        });
+
+        $text = $element.find(`.${BUTTON_TEXT}`);
+        assert.strictEqual($text.text(), 'Item 2', 'selected item text is rendered as the button text');
+    });
+
     QUnit.test('groupTemplate should be transfered to list', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', {
             items: [{ key: 1, name: 'Item 1', icon: 'box' }],
