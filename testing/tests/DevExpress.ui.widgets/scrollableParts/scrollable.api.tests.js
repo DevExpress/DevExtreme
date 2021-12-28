@@ -100,6 +100,7 @@ QUnit.test('update', function(assert) {
     const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
 
     $scrollableChild.height(-1 * distance + 1);
+    onUpdatedHandler.reset();
     $scrollable.dxScrollable('instance').update();
 
     assert.strictEqual(onUpdatedHandler.callCount, 1, 'onUpdatedHandler.callCount');

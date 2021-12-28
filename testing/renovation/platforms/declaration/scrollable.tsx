@@ -14,25 +14,25 @@ const getContent = () => {
   return content;
 };
 
-export const viewFunction = ({ componentInstance, options }: App): JSX.Element => (
+export const viewFunction = ({ componentInstance, componentOptions }: App): JSX.Element => (
   <Fragment>
-    {options && (
+    {componentOptions && (
     <Scrollable
       ref={componentInstance}
       id="container"
-      width={options.width}
-      height={options.height}
-      useNative={options.useNative}
-      rtlEnabled={options.rtlEnabled}
-      direction={options.direction}
-      showScrollbar={options.showScrollbar}
+      width={componentOptions.width}
+      height={componentOptions.height}
+      useNative={componentOptions.useNative}
+      rtlEnabled={componentOptions.rtlEnabled}
+      direction={componentOptions.direction}
+      showScrollbar={componentOptions.showScrollbar}
     >
       <div className="text-content" style={{ minHeight: 500, minWidth: 500 }}>
         {getContent()}
       </div>
     </Scrollable>
     )}
-    {!options && (
+    {!componentOptions && (
     <div>Something went wrong...</div>
     )}
   </Fragment>
@@ -68,5 +68,11 @@ export class App extends JSXComponent<AppProps>() {
     // eslint-disable-next-line no-restricted-globals
     (window as unknown as { componentInstance: unknown })
       .componentInstance = this.componentInstance.current ?? this.componentInstance;
+  }
+
+  get componentOptions(): Partial<ScrollableProps> {
+    console.log(this.options);
+
+    return this.options;
   }
 }
