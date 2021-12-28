@@ -732,7 +732,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(infos.length, 0, 'No notifications');
 
         provider.forbidAll = true;
-        this.wrapper.getToolbarButton('Refresh').trigger('dxclick');
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
         this.clock.tick(700);
 
         infos = this.progressPanelWrapper.getInfos();
@@ -827,7 +827,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(infos.length, 0, 'No notifications');
 
         changeableFolder.name = 'Folder1';
-        this.wrapper.getToolbarButton('Refresh').trigger('dxclick');
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
         this.clock.tick(400);
 
         infos = this.progressPanelWrapper.getInfos();

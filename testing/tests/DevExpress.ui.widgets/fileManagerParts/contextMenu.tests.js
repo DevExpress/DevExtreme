@@ -934,8 +934,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         let $subMenuItems = this.wrapper.getContextMenuSubMenuItems();
         assert.equal($subMenuItems.length, 0, 'there is no items available');
 
-        const $commandButton = this.wrapper.getToolbarButton('Refresh');
-        $commandButton.trigger('dxclick');
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
         this.clock.tick(400);
 
         this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
