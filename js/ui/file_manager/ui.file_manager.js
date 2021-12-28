@@ -12,7 +12,7 @@ import notify from '../notify';
 
 import { findItemsByKeys, extendAttributes } from './ui.file_manager.common';
 import FileItemsController from './file_items_controller';
-import { FileManagerCommandManager } from './ui.file_manager.command_manager';
+import { defaultPermissions, FileManagerCommandManager } from './ui.file_manager.command_manager';
 import FileManagerContextMenu from './ui.file_manager.context_menu';
 import FileManagerFilesTreeView from './ui.file_manager.files_tree_view';
 import FileManagerDetailsItemList from './ui.file_manager.item_list.details';
@@ -492,15 +492,7 @@ class FileManager extends Widget {
                 chunkSize: 200000
             },
 
-            permissions: {
-                create: false,
-                copy: false,
-                move: false,
-                delete: false,
-                rename: false,
-                upload: false,
-                download: false
-            },
+            permissions: defaultPermissions,
 
             notifications: {
                 showPanel: true,
@@ -585,6 +577,8 @@ class FileManager extends Widget {
                 this._invalidate();
                 break;
             case 'permissions':
+                this._commandManager.updatePermissions(this.option('permissions'));
+                break;
             case 'selectionMode':
             case 'customizeThumbnail':
             case 'customizeDetailColumns':

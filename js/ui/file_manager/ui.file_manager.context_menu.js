@@ -35,6 +35,11 @@ const DEFAULT_ITEM_ALLOWED_PROPERTIES = [
 
 class FileManagerContextMenu extends Widget {
 
+    _init() {
+        super._init();
+        this._commandManager.registerPermissionsChangedCallback(() => this.repaint());
+    }
+
     _initMarkup() {
         this._initActions();
 
