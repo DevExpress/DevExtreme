@@ -1,5 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
-import { round } from './draw_utils';
+import { roundScaledValue } from './draw_utils';
 
 function splitRectsByPages(rects, margin, topLeft, maxBottomRight, onSplitRectHorizontally) {
     if(!isDefined(rects) || rects.length === 0) { // Empty Table
@@ -19,7 +19,7 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
     while(rectsToSplit.length > 0) {
         let currentPageMaxRectRight = 0;
         const currentPageRects = rectsToSplit.filter(rect => {
-            const currentRectRight = round(rect.x + rect.w);
+            const currentRectRight = roundScaledValue(rect.x + rect.w);
             if(currentRectRight <= maxBottomRight.x) {
                 if(currentPageMaxRectRight <= currentRectRight) {
                     currentPageMaxRectRight = currentRectRight;
@@ -32,8 +32,8 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
 
         const currentPageCanBeSplitRects = rectsToSplit.filter(rect => {
             // Check cells that have 'rect.x' less than 'currentPageMaxRectRight'
-            const currentRectLeft = round(rect.x);
-            const currentRectRight = round(rect.x + rect.w);
+            const currentRectLeft = roundScaledValue(rect.x);
+            const currentRectRight = roundScaledValue(rect.x + rect.w);
             if(currentRectLeft < currentPageMaxRectRight && currentPageMaxRectRight < currentRectRight) {
                 return true;
             }

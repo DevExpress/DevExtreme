@@ -4,7 +4,7 @@ import { calculateTextHeight, getTextLines } from './pdf_utils_v3';
 
 const defaultBorderLineWidth = 1;
 
-function round(value) {
+function roundScaledValue(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
 
@@ -23,14 +23,14 @@ function drawCellsContent(doc, customDrawCell, cellsArray, docStyles) {
 }
 
 function drawLine(doc, startX, startY, endX, endY) {
-    doc.line(round(startX), round(startY), round(endX), round(endY));
+    doc.line(roundScaledValue(startX), roundScaledValue(startY), roundScaledValue(endX), roundScaledValue(endY));
 }
 
 function drawRect(doc, x, y, width, height, style) {
     if(isDefined(style)) {
-        doc.rect(round(x), round(y), round(width), round(height), style);
+        doc.rect(roundScaledValue(x), roundScaledValue(y), roundScaledValue(width), roundScaledValue(height), style);
     } else {
-        doc.rect(round(x), round(y), round(width), round(height));
+        doc.rect(roundScaledValue(x), roundScaledValue(y), roundScaledValue(width), roundScaledValue(height));
     }
 }
 
@@ -60,7 +60,7 @@ function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWra
     const x = rect.x
         + (rect.w * horizontalAlignMap[hAlign]);
 
-    doc.text(textArray.join('\n'), round(x), round(y), { baseline: vAlign, align: hAlign });
+    doc.text(textArray.join('\n'), roundScaledValue(x), roundScaledValue(y), { baseline: vAlign, align: hAlign });
 }
 
 function drawCellBackground(doc, cell) {
@@ -220,4 +220,4 @@ function setDocumentStyles(doc, styles) {
     }
 }
 
-export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, round };
+export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, roundScaledValue };
