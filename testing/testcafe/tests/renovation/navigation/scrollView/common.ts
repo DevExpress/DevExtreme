@@ -19,8 +19,8 @@ const defaultProps: Partial<ScrollableProps> = {
 
 const config: Partial<ScrollableProps>[] = [];
 
-[true, false].forEach((useNative) => {
-  [false].forEach((rtlEnabled) => {
+[false, true].forEach((useNative) => {
+  [false, true].forEach((rtlEnabled) => {
     // TODO: support true value
     // it works incorrectly in angular and react
     ([

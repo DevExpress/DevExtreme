@@ -753,7 +753,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.finishLoading();
     // this.updateHandler();
 
-    // the resizeObserver handler calls soo late
+    // the resizeObserver handler calls too late
     // in case when List visibility was changed
     this.updateElementDimensions();
   }
