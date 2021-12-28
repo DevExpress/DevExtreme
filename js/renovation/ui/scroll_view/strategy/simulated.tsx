@@ -597,6 +597,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
         (element: HTMLDivElement) => { this.setContentWidth(element); },
       );
 
+      /* istanbul ignore next */
       return (): void => {
         unsubscribeHeightResize?.();
         unsubscribeWidthResize?.();

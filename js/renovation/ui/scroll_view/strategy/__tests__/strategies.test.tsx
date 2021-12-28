@@ -538,7 +538,7 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
         viewModel.updateHandler = jest.fn();
 
         expect(viewModel.validate(event)).toEqual(false);
-        expect(viewModel.updateHandler).toHaveBeenCalledTimes(1);
+        expect(viewModel.updateHandler).toHaveBeenCalledTimes(0);
       });
 
       it('validate(event), locked: true, disabled: false', () => {
