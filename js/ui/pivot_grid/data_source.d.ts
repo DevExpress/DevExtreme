@@ -2,9 +2,10 @@ import {
     DxPromise,
 } from '../../core/utils/deferred';
 
-import Store, {
-    Options as StoreOptions,
-} from '../../data/abstract_store';
+import {
+    Store,
+    StoreOptions,
+} from '../../data/index';
 
 import DataSource from '../../data/data_source';
 
@@ -196,7 +197,7 @@ export interface PivotGridDataSourceOptions {
      * @docid
      * @public
      */
-    store?: Store | StoreOptions | XmlaStore | XmlaStoreOptions | Array<{
+    store?: Store | StoreOptions | XmlaStore | (XmlaStoreOptions & { type: 'xmla' }) | Array<{
       /**
        * @docid
        * @type Enums.PivotGridStoreType

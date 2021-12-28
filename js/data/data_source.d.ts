@@ -1,12 +1,15 @@
 import {
- FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor, LoadOptions, SearchOperation,
+ FilterDescriptor,
+ GroupDescriptor,
+ LoadOptions,
+ SearchOperation,
+ SelectDescriptor,
+ SortDescriptor,
+ Store,
+ StoreOptions,
 } from './index';
 import { DxPromise } from '../core/utils/deferred';
-import Store from './abstract_store';
 import { Options as CustomStoreOptions } from './custom_store';
-import { Options as ArrayStoreOptions } from './array_store';
-import { Options as LocalStoreOptions } from './local_store';
-import { Options as ODataStoreOptions } from './odata/store';
 
 /** @public */
 export type Options<
@@ -147,12 +150,7 @@ export interface DataSourceOptions<
      * @public
      * @type Store|StoreOptions|Array<any>
      */
-    store?: Array<TStoreItem> |
-        Store<TStoreItem, TKey> |
-        ArrayStoreOptions<TStoreItem, TKey> & { type: 'array' } |
-        LocalStoreOptions<TStoreItem, TKey> & { type: 'local' } |
-        ODataStoreOptions<TStoreItem, TKey> & { type: 'odata' } |
-        CustomStoreOptions<TStoreItem, TKey>;
+    store?: Array<TStoreItem> | Store<TStoreItem, TKey> | StoreOptions<TStoreItem, TKey>;
 }
 /**
  * @docid
