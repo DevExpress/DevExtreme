@@ -408,18 +408,14 @@ QUnit.test('selectAll/unselectAll for \'allPages\' selectAllMode', function(asse
     assert.equal(loading.callCount, 2, 'no load during unselect all');
 });
 
-QUnit.test('unselectAll method should not unselect disabled items', function(assert) {
+QUnit.test('unselectAll method should not unselect disabled items  (T1050340)', function(assert) {
     const items = [{ text: '1', disabled: true }, { text: '2' }];
     const instance = $('#list').dxList({
         dataSource: items,
-        selectedItemKeys: '1',
+        selectedItemKeys: ['1', '2'],
         selectionMode: 'all',
         keyExpr: 'text',
     }).dxList('instance');
-
-    instance.selectAll();
-
-    assert.deepEqual(instance.option('selectedItems'), items, 'all item are selected');
 
     instance.unselectAll();
 
