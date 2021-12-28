@@ -86,7 +86,7 @@ export class AppointmentContentProps {
 export class AppointmentContent extends JSXComponent<AppointmentContentProps, 'data' | 'showReducedIconTooltip' | 'hideReducedIconTooltip'>() {
   @Ref() refReducedIcon!: RefObject<HTMLDivElement>;
 
-  @Effect({ run: 'once' })
+  @Effect()
   bindHoverEffect(): EffectReturn {
     const onMouseEnter = (): void => this.onReducedIconMouseEnter();
     const onMouseLeave = (): void => this.onReducedIconMouseLeave();
