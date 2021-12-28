@@ -16,6 +16,7 @@ import { MonthDateTableLayout } from '../month/date_table/layout';
 import { DateTableLayoutBase } from './date_table/layout';
 import { TimelineHeaderPanelLayout } from '../timeline/header_panel/layout';
 import { HeaderPanelLayout } from './header_panel/layout';
+import { AppointmentLayout } from '../../appointment/layout';
 
 export const viewFunction = ({
   dateTableScrollableRef,
@@ -51,9 +52,6 @@ export const viewFunction = ({
     timePanelRef,
     groupPanelRef,
     widgetElementRef,
-
-    appointments,
-    allDayAppointments,
   },
 }: OrdinaryLayout): JSX.Element => {
   const DateTable = isUseMonthDateTable ? MonthDateTableLayout : DateTableLayoutBase;
@@ -91,7 +89,6 @@ export const viewFunction = ({
               viewData={viewData}
               dataCellTemplate={dataCellTemplate}
               tableRef={allDayPanelRef}
-              allDayAppointments={allDayAppointments}
             />
           )}
         </div>
@@ -132,7 +129,7 @@ export const viewFunction = ({
               groupOrientation={groupOrientation}
               dataCellTemplate={dataCellTemplate}
             />
-            {appointments}
+            <AppointmentLayout />
           </div>
         </div>
       </Scrollable>

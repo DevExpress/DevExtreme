@@ -4,10 +4,11 @@ import { AppointmentLayout, AppointmentLayoutProps, viewFunction } from '../layo
 describe('AppointmentLayout', () => {
   describe('Render', () => {
     const render = (viewModel): ShallowWrapper => shallow(viewFunction({
+      appointments: [],
+      overflowIndicators: [],
+      appointmentsContextValue: {},
       ...viewModel,
       props: {
-        appointments: [],
-        overflowIndicators: [],
         ...viewModel.props,
       },
     }));
@@ -65,11 +66,11 @@ describe('AppointmentLayout', () => {
         },
       };
       const layout = render({
-        props: {
-          appointments: [
-            viewModel0,
-            viewModel1,
-          ],
+        appointments: [
+          viewModel0,
+          viewModel1,
+        ],
+        appointmentsContextValue: {
           showReducedIconTooltip: 'some value 1',
           hideReducedIconTooltip: 'some value 2',
           appointmentTemplate,
@@ -108,8 +109,8 @@ describe('AppointmentLayout', () => {
       };
       const overflowIndicatorTemplate = '<div class="test-template">Some template</div>';
       const layout = render({
-        props: {
-          overflowIndicators: [viewModel],
+        overflowIndicators: [viewModel],
+        appointmentsContextValue: {
           overflowIndicatorTemplate,
         },
       });
@@ -145,6 +146,70 @@ describe('AppointmentLayout', () => {
 
           expect(layout.classes)
             .toBe('dx-scheduler-all-day-appointments');
+        });
+      });
+
+      describe('appointments', () => {
+        it('should return regular appointments by default', () => {
+          const layout = new AppointmentLayout(new AppointmentLayoutProps());
+
+          const appointments = [];
+          layout.appointmentsContextValue = {
+            viewModel: {
+              regular: appointments,
+            },
+          } as any;
+
+          expect(layout.appointments)
+            .toBe(appointments);
+        });
+
+        it('should return allDay appointments if isAllDay is true', () => {
+          const layout = new AppointmentLayout({
+            isAllDay: true,
+          });
+
+          const appointments = [];
+          layout.appointmentsContextValue = {
+            viewModel: {
+              allDay: appointments,
+            },
+          } as any;
+
+          expect(layout.appointments)
+            .toBe(appointments);
+        });
+      });
+
+      describe('overflowIndicators', () => {
+        it('should return regular indicators by default', () => {
+          const layout = new AppointmentLayout(new AppointmentLayoutProps());
+
+          const appointments = [];
+          layout.appointmentsContextValue = {
+            viewModel: {
+              regularCompact: appointments,
+            },
+          } as any;
+
+          expect(layout.overflowIndicators)
+            .toBe(appointments);
+        });
+
+        it('should return allDay appointments if isAllDay is true', () => {
+          const layout = new AppointmentLayout({
+            isAllDay: true,
+          });
+
+          const appointments = [];
+          layout.appointmentsContextValue = {
+            viewModel: {
+              allDayCompact: appointments,
+            },
+          } as any;
+
+          expect(layout.overflowIndicators)
+            .toBe(appointments);
         });
       });
     });
