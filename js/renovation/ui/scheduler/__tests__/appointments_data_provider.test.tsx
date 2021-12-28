@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { AppointmentsDataProvider, viewFunction as View } from '../appointments_data_provider';
 
 describe('ConfigProvider', () => {
-  it('render', () => {
+  it('should render children', () => {
     const tree = shallow(View({
       props: { children: <div className="child" /> },
     } as any));
@@ -12,7 +12,7 @@ describe('ConfigProvider', () => {
       .toBe(true);
   });
 
-  it('setup config provider value', () => {
+  it('should return correct correct context data', () => {
     const component = new AppointmentsDataProvider({
       appointmentsData: 'data',
     } as any);
