@@ -69,6 +69,8 @@ const RowDraggingExtender = {
                 dropFeedbackMode: 'indicate'
             }, rowDragging, {
                 onDragStart: (e) => {
+                    this.getController('keyboardNavigation')?._resetFocusedCell();
+
                     const row = e.component.getVisibleRows()[e.fromIndex];
                     e.itemData = row && row.data;
 
