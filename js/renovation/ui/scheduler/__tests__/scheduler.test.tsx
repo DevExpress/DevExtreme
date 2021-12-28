@@ -79,10 +79,13 @@ describe('Scheduler', () => {
       allDayPanelExpanded: false,
       type: 'week',
     };
+    const startViewDate = new Date(2021, 8, 5);
+
     const renderComponent = (viewModel) => shallow(
       <ViewFunction
         currentViewConfig={defaultCurrentViewConfig}
         appointmentsViewModel={defaultAppointmentViewModel}
+        startViewDate={startViewDate}
         {...viewModel}
         props={{
           ...new SchedulerProps(),
@@ -162,6 +165,7 @@ describe('Scheduler', () => {
         .toEqual({
           ...defaultCurrentViewConfig,
           ...templates,
+          startViewDate,
           onViewRendered: expect.any(Function),
           schedulerHeight: 500,
           schedulerWidth: 600,
@@ -207,10 +211,12 @@ describe('Scheduler', () => {
       };
       const setCurrentDate = () => {};
       const setCurrentView = () => {};
-      const startViewDate = new Date(2021, 1, 1);
 
       const tree = renderComponent({
-        props, setCurrentView, setCurrentDate, startViewDate,
+        props,
+        setCurrentView,
+        setCurrentDate,
+        startViewDate: new Date(2021, 1, 1),
       });
       const schedulerToolbar = tree.find(SchedulerToolbar);
 

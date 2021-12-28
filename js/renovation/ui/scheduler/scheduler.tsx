@@ -169,6 +169,7 @@ export const viewFunction = ({
             intervalCount={intervalCount}
             groupOrientation={groupOrientation}
             startDate={startDate}
+            startViewDate={startViewDate}
             showAllDayPanel={showAllDayPanel}
             showCurrentTimeIndicator={showCurrentTimeIndicator}
             indicatorUpdateInterval={indicatorUpdateInterval}

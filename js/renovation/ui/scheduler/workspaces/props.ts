@@ -68,6 +68,8 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() startDate?: Date;
 
+  @OneWay() startViewDate!: Date;
+
   @OneWay() hoursInterval = 0.5;
 
   @OneWay() showAllDayPanel = false;
