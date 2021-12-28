@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { isObject, isString } from '../../../../core/utils/type';
 import { CurrentViewConfigProps, ViewProps } from '../props';
 import { ViewType } from '../types';
@@ -79,9 +80,23 @@ export const getCurrentViewConfig = (
     scrolling: schedulerScrolling,
     ...restSchedulerProps,
     ...currentViewProps,
+
     schedulerHeight: schedulerProps.height,
     schedulerWidth: schedulerProps.width,
     crossScrollingEnabled,
+
+    // Default value for templates in Angular is null
+    appointmentTemplate: currentViewProps.appointmentTemplate
+      || restSchedulerProps.appointmentTemplate,
+    dataCellTemplate: currentViewProps.dataCellTemplate || restSchedulerProps.dataCellTemplate,
+    dateCellTemplate: currentViewProps.dateCellTemplate || restSchedulerProps.dateCellTemplate,
+    timeCellTemplate: currentViewProps.timeCellTemplate || restSchedulerProps.timeCellTemplate,
+    resourceCellTemplate: currentViewProps.resourceCellTemplate
+      || restSchedulerProps.resourceCellTemplate,
+    appointmentCollectorTemplate: currentViewProps.appointmentCollectorTemplate
+      || restSchedulerProps.appointmentCollectorTemplate,
+    appointmentTooltipTemplate: currentViewProps.appointmentTooltipTemplate
+      || restSchedulerProps.appointmentTooltipTemplate,
   };
 
   return {

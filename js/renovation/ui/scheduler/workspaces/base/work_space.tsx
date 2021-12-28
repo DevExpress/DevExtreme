@@ -894,7 +894,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     if (this.virtualScrolling.isAttachWindowScrollEvent()) {
       return subscribeToScrollEvent(
         domAdapter.getDocument(),
-        this.onWindowScroll,
+        () => this.onWindowScroll(),
       );
     }
 
@@ -905,11 +905,11 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   pointerEventsEffect(): EffectReturn {
     const disposePointerDown = subscribeToDXPointerDownEvent(
       this.widgetElementRef.current,
-      this.onPointerDown,
+      (e) => this.onPointerDown(e),
     );
     const disposePointerMove = subscribeToDXPointerMoveEvent(
       this.widgetElementRef.current,
-      this.onPointerMove,
+      (e) => this.onPointerMove(e),
     );
 
     return (): void => {
@@ -993,8 +993,13 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   }
 
   @Effect({ run: 'once' })
-  disposeEffect(): void {
-    eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
+  pointerUpEffect(): EffectReturn {
+    const onPointerUp = (e): void => this.onPointerUp(e);
+    eventsEngine.on(domAdapter.getDocument(), pointerEvents.up, onPointerUp);
+
+    return (): void => {
+      eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, onPointerUp);
+    };
   }
 
   createDateTableElementsMeta(totalCellCount: number): DOMRect[][] {
@@ -1080,9 +1085,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       const cellData = this.viewDataProvider.getCellData(
         cellIndices.rowIndex, cellIndices.columnIndex, isAllDay,
       );
-
-      eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
-      eventsEngine.on(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
 
       this.cellsSelectionState = {
         focusedCell: {

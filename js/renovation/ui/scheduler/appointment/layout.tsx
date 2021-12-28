@@ -2,28 +2,21 @@ import {
   Component,
   ComponentBindings,
   JSXComponent,
-  JSXTemplate,
   OneWay,
-  Template,
-  Event,
+  Consumer,
 } from '@devextreme-generator/declarations';
-import {
-  AppointmentTemplateProps,
-  AppointmentViewModel,
-  OverflowIndicatorTemplateProps,
-  OverflowIndicatorViewModel,
-  AppointmentClickData,
-  ReducedIconHoverData,
-} from './types';
+import { AppointmentViewModel, OverflowIndicatorViewModel } from './types';
 import { Appointment } from './appointment';
 import { OverflowIndicator } from './overflow_indicator/layout';
 import { combineClasses } from '../../../utils/combine_classes';
+import { AppointmentsContext, AppointmentsContextValue } from '../appointments_context';
 
 export const viewFunction = ({
   classes,
-  props: {
-    appointments,
-    overflowIndicators,
+  appointments,
+  overflowIndicators,
+
+  appointmentsContextValue: {
     appointmentTemplate,
     showReducedIconTooltip,
     hideReducedIconTooltip,
@@ -60,20 +53,6 @@ export const viewFunction = ({
 @ComponentBindings()
 export class AppointmentLayoutProps {
   @OneWay() isAllDay = false;
-
-  @OneWay() appointments: AppointmentViewModel[] = [];
-
-  @OneWay() overflowIndicators: OverflowIndicatorViewModel[] = [];
-
-  @OneWay() showReducedIconTooltip!: (data: ReducedIconHoverData) => void;
-
-  @OneWay() hideReducedIconTooltip!: () => void;
-
-  @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
-
-  @Template() overflowIndicatorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
-
-  @Event() onAppointmentClick?: (e: AppointmentClickData) => void;
 }
 
 @Component({
@@ -81,7 +60,10 @@ export class AppointmentLayoutProps {
   view: viewFunction,
   jQuery: { register: true },
 })
-export class AppointmentLayout extends JSXComponent<AppointmentLayoutProps, 'showReducedIconTooltip' | 'hideReducedIconTooltip'>() {
+export class AppointmentLayout extends JSXComponent(AppointmentLayoutProps) {
+  @Consumer(AppointmentsContext)
+  appointmentsContextValue!: AppointmentsContextValue;
+
   get classes(): string {
     const { isAllDay } = this.props;
 
@@ -89,5 +71,21 @@ export class AppointmentLayout extends JSXComponent<AppointmentLayoutProps, 'sho
       'dx-scheduler-scrollable-appointments': !isAllDay,
       'dx-scheduler-all-day-appointments': isAllDay,
     });
+  }
+
+  get appointments(): AppointmentViewModel[] {
+    if (this.props.isAllDay) {
+      return this.appointmentsContextValue.viewModel.allDay;
+    }
+
+    return this.appointmentsContextValue.viewModel.regular;
+  }
+
+  get overflowIndicators(): OverflowIndicatorViewModel[] {
+    if (this.props.isAllDay) {
+      return this.appointmentsContextValue.viewModel.allDayCompact;
+    }
+
+    return this.appointmentsContextValue.viewModel.regularCompact;
   }
 }
