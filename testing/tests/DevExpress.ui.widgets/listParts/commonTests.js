@@ -649,7 +649,6 @@ QUnit.module('collapsible groups', moduleSetup, () => {
                     }, RESIZE_WAIT_TIMEOUT);
                 }, RESIZE_WAIT_TIMEOUT);
             }, RESIZE_WAIT_TIMEOUT);
-
         }, RESIZE_WAIT_TIMEOUT);
     });
 

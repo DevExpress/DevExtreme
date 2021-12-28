@@ -78,6 +78,7 @@ QUnit.test('update', function(assert) {
     const done = assert.async();
     const moveDistance = -10;
     const moveDuration = 10;
+    const onUpdatedHandler = sinon.spy();
     const inertiaDistance = calculateInertiaDistance(moveDistance, moveDuration);
     const distance = moveDistance + inertiaDistance;
     const $scrollable = $('#scrollable');
@@ -87,6 +88,7 @@ QUnit.test('update', function(assert) {
 
     $scrollable.dxScrollable({
         useNative: false,
+        onUpdated: onUpdatedHandler,
         onEnd: function() {
             const location = getScrollOffset($scrollable);
 
@@ -99,6 +101,8 @@ QUnit.test('update', function(assert) {
 
     $scrollableChild.height(-1 * distance + 1);
     $scrollable.dxScrollable('instance').update();
+
+    assert.strictEqual(onUpdatedHandler.callCount, 1, 'onUpdatedHandler.callCount');
 
     mouse
         .down()

@@ -380,7 +380,7 @@ describe('Scrollable', () => {
 
             viewModel.scrollTo(scrollToValue);
 
-            expect(viewModel.updateHandler).toBeCalledTimes(0);
+            expect(viewModel.updateHandler).toBeCalledTimes(useNative ? 0 : 1);
             expect(viewModel.scrollBy).toBeCalledTimes(1);
             expect(viewModel.scrollBy).toBeCalledWith(expectedScrollByArg);
           });

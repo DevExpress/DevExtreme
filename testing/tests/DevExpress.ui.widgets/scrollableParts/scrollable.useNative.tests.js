@@ -230,11 +230,13 @@ QUnit.test('simulatedScrollbar visibility', function(assert) {
 QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is true', function(assert) {
     const containerHeight = 50;
     const contentHeight = 100;
+    const onUpdatedHandler = sinon.spy();
     const scrollHeight = (containerHeight / contentHeight) * containerHeight;
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
-        useSimulatedScrollbar: true
+        useSimulatedScrollbar: true,
+        onUpdated: onUpdatedHandler
     });
 
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
@@ -246,6 +248,7 @@ QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is tru
 
     $scrollable.dxScrollable('instance').update();
 
+    assert.strictEqual(onUpdatedHandler.callCount, 1, 'onUpdatedHandler.callCount');
     assert.equal($scroll.outerHeight(), scrollHeight, 'scrollbar height calculated correctly');
 });
 
