@@ -46,8 +46,8 @@ import { getPreparedDataItems, resolveDataItems } from './utils/data';
 import { getFilterStrategy } from './utils/filtering/local';
 import combineRemoteFilter from './utils/filtering/remote';
 import { ReducedIconTooltip } from './appointment/reduced_icon_tooltip/layout';
-import { AppointmentsDataProvider } from './appointments_data_provider';
-import { AppointmentsContextValue } from './appointments_data_context';
+import { AppointmentsContextProvider } from './appointments_context_provider';
+import { AppointmentsContextValue } from './appointments_context';
 
 export const viewFunction = ({
   restAttributes,
@@ -155,7 +155,7 @@ export const viewFunction = ({
             viewType={type}
           />
         )}
-        <AppointmentsDataProvider
+        <AppointmentsContextProvider
           appointmentsContextValue={appointmentsContextValue}
         >
           <WorkSpace
@@ -191,7 +191,7 @@ export const viewFunction = ({
 
             key={workSpaceKey}
           />
-        </AppointmentsDataProvider>
+        </AppointmentsContextProvider>
         <AppointmentTooltip
           visible={tooltipVisible}
           onVisibleChange={changeTooltipVisible}

@@ -6,14 +6,14 @@ import {
   Provider,
   Component,
 } from '@devextreme-generator/declarations';
-import { AppointmentsContextValue, AppointmentsContext } from './appointments_data_context';
+import { AppointmentsContextValue, AppointmentsContext } from './appointments_context';
 
 export const viewFunction = (
-  viewModel: AppointmentsDataProvider,
+  viewModel: AppointmentsContextProvider,
 ): JSX.Element => viewModel.props.children;
 
 @ComponentBindings()
-export class AppointmentsDataProviderProps {
+export class AppointmentsContextProviderProps {
   @OneWay() appointmentsContextValue!: AppointmentsContextValue;
 
   @Slot() children!: JSX.Element;
@@ -23,7 +23,7 @@ export class AppointmentsDataProviderProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class AppointmentsDataProvider extends JSXComponent<AppointmentsDataProviderProps, 'appointmentsContextValue' | 'children'>() {
+export class AppointmentsContextProvider extends JSXComponent<AppointmentsContextProviderProps, 'appointmentsContextValue' | 'children'>() {
   @Provider(AppointmentsContext)
   get appointmentsContextValue(): AppointmentsContextValue {
     return this.props.appointmentsContextValue;

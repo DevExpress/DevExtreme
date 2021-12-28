@@ -15,7 +15,7 @@ import { getFilterStrategy } from '../utils/filtering/local';
 import combineRemoteFilter from '../utils/filtering/remote';
 import { getAppointmentsConfig, getAppointmentsModel } from '../model/appointments';
 import { getAppointmentsViewModel } from '../view_model/appointments/appointments';
-import { AppointmentsDataProvider } from '../appointments_data_provider';
+import { AppointmentsContextProvider } from '../appointments_context_provider';
 
 jest.mock('../model/appointments', () => ({
   ...jest.requireActual('../model/appointments'),
@@ -170,16 +170,16 @@ describe('Scheduler', () => {
         .toBe('workSpaceKey');
     });
 
-    it('should render AppointmentsDataProvider', () => {
+    it('should render AppointmentsContextProvider', () => {
       const tree = renderComponent({
         appointmentsContextValue: 'appointmentsContextValue',
       });
 
-      const appointmentsDataProvider = tree.find(AppointmentsDataProvider);
+      const appointmentsContextProvider = tree.find(AppointmentsContextProvider);
 
-      expect(appointmentsDataProvider.exists())
+      expect(appointmentsContextProvider.exists())
         .toBe(true);
-      expect(appointmentsDataProvider.props())
+      expect(appointmentsContextProvider.props())
         .toEqual({
           appointmentsContextValue: 'appointmentsContextValue',
           children: expect.anything(),

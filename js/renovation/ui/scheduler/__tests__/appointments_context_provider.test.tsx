@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { AppointmentsDataProvider, viewFunction as View } from '../appointments_data_provider';
+import { AppointmentsContextProvider, viewFunction as View } from '../appointments_context_provider';
 
-describe('ConfigProvider', () => {
+describe('AppointmentsContextProvider', () => {
   it('should render children', () => {
     const tree = shallow(View({
       props: { children: <div className="child" /> },
@@ -13,7 +13,7 @@ describe('ConfigProvider', () => {
   });
 
   it('should return correct correct context data', () => {
-    const component = new AppointmentsDataProvider({
+    const component = new AppointmentsContextProvider({
       appointmentsContextValue: 'data',
     } as any);
 
