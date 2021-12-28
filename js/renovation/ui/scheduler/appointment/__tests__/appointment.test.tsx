@@ -67,6 +67,8 @@ describe('Appointment', () => {
             },
           },
           index: 123,
+          showReducedIconTooltip: 'test value 1',
+          hideReducedIconTooltip: 'test value 2',
           appointmentTemplate: 'some template',
         },
       });
@@ -96,6 +98,8 @@ describe('Appointment', () => {
           isRecurrent: true,
           index: 123,
           data: { data: 'someData' },
+          showReducedIconTooltip: 'test value 1',
+          hideReducedIconTooltip: 'test value 2',
           appointmentTemplate: 'some template',
         });
     });
@@ -110,7 +114,7 @@ describe('Appointment', () => {
             viewModel: defaultViewModel,
             index: 2021,
             onItemClick: mockCallback,
-          });
+          } as any);
           appointment.ref = {
             current: 'element',
           } as any;

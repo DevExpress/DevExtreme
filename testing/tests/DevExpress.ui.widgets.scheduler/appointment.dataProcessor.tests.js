@@ -2,6 +2,7 @@ import { compileGetter, compileSetter } from 'core/utils/data';
 import config from 'core/config';
 import { DataSource } from 'data/data_source/data_source';
 import { AppointmentDataProvider } from 'ui/scheduler/appointments/dataProvider/appointmentDataProvider';
+import { getPreparedDataItems } from 'renovation/ui/scheduler/utils/data';
 
 const {
     module,
@@ -24,13 +25,24 @@ const defaultDataAccessors = {
 };
 
 const createAppointmentDataProvider = (options) => {
-    return new AppointmentDataProvider({
-        timeZoneCalculator: ({
-            createDate: date => date
+    return {
+        appointmentDataProvider: new AppointmentDataProvider({
+            timeZoneCalculator: ({
+                createDate: date => date
+            }),
+            getIsVirtualScrolling: () => false,
+            ...options
         }),
-        getIsVirtualScrolling: () => false,
-        ...options
-    });
+        prepareDataItems: () => {
+            const appointmentDuration = options.appointmentDuration || 30;
+            return getPreparedDataItems(
+                options.dataSource.items(),
+                options.dataAccessors,
+                appointmentDuration,
+                { createDate: date => date }
+            );
+        }
+    };
 };
 
 module('Server side filtering', () => {
@@ -51,7 +63,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: data,
         });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             dataSource,
             isVirtualScrolling: false,
             dataAccessors: defaultDataAccessors,
@@ -81,7 +93,7 @@ module('Server side filtering', () => {
             store: data,
             filter: ['text', '=', 'Appointment 2']
         });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -131,7 +143,7 @@ module('Server side filtering', () => {
             store: appointments
         });
 
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -198,7 +210,7 @@ module('Server side filtering', () => {
             filter: [dateFilter, ['text', '=', 'Appointment 2']]
         });
 
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -236,7 +248,7 @@ module('Server side filtering', () => {
                     }
                 ]
             });
-            const appointmentDataProvider = createAppointmentDataProvider({
+            const { appointmentDataProvider } = createAppointmentDataProvider({
                 key: 0,
                 dataSource,
                 isVirtualScrolling: false,
@@ -286,7 +298,7 @@ module('Server side filtering', () => {
                     }
                 ]
             });
-            const appointmentDataProvider = createAppointmentDataProvider({
+            const { appointmentDataProvider } = createAppointmentDataProvider({
                 key: 0,
                 dataSource,
                 isVirtualScrolling: false,
@@ -334,7 +346,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: data,
         });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -356,7 +368,7 @@ module('Server side filtering', () => {
             }]
         });
 
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -394,7 +406,7 @@ module('Server side filtering', () => {
             store: tasks
         });
 
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -434,7 +446,7 @@ module('Server side filtering', () => {
             store: tasks
         });
 
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -481,7 +493,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: recurrentAppts
         });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -530,7 +542,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -578,7 +590,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -619,7 +631,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -660,7 +672,10 @@ module('Server side filtering', () => {
             store: appointments
         });
 
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const {
+            appointmentDataProvider,
+            prepareDataItems
+        } = createAppointmentDataProvider({
             dataSource,
             dataAccessors: {
                 getter: {
@@ -695,12 +710,13 @@ module('Server side filtering', () => {
 
         dataSource.filter('priorityId', '=', 1);
 
+
         const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 1, 0),
             max: new Date(2015, 0, 3)
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6), priorityId: 1 }], 'Appointments are OK');
     });
@@ -717,7 +733,7 @@ module('Server side filtering', () => {
             filter: ['priorityId', '=', 1]
         });
 
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -758,7 +774,7 @@ module('Server side filtering', () => {
 module('Client side after filtering', () => {
     test('Loaded appointments should be filtered by start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -795,14 +811,14 @@ module('Client side after filtering', () => {
             max: new Date(2015, 0, 1),
             startDayHour: 3,
             endDayHour: 7
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() }], 'Appointments are OK');
     });
 
     test('Loaded appointments on the borders should be filtered by start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -838,14 +854,14 @@ module('Client side after filtering', () => {
             max: new Date(2015, 0, 1),
             startDayHour: 3,
             endDayHour: 7
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() }], 'Appointments are OK. Appointment \'a\' was filtered');
     });
 
     test('Loaded appointments should be filtered by decimal start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -882,14 +898,14 @@ module('Client side after filtering', () => {
             max: new Date(2015, 0, 1),
             startDayHour: 3.5,
             endDayHour: 7.5
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() }], 'Appointments are OK');
     });
 
     test('Loaded appointments should be filtered by recurrence rule', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -928,7 +944,7 @@ module('Client side after filtering', () => {
             endDayHour: 7,
             min: new Date(2014, 11, 31).toString(),
             max: new Date(2015, 0, 1, 23, 59).toString()
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
@@ -938,7 +954,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by recurrence rule correctly, if appointment startDate.getHours < starDayHour', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -974,7 +990,7 @@ module('Client side after filtering', () => {
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
             max: new Date(2015, 0, 11, 7, 0).toString()
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [
             { text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' },
@@ -984,7 +1000,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by recurrence rule correctly for day interval', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1020,7 +1036,7 @@ module('Client side after filtering', () => {
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
             max: new Date(2015, 0, 5, 7, 0).toString()
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [
             { text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' },
@@ -1030,7 +1046,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = null', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1066,7 +1082,7 @@ module('Client side after filtering', () => {
             endDayHour: 7,
             min: new Date(2015, 0, 1),
             max: new Date(2015, 11, 27)
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
@@ -1077,7 +1093,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = ""', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1113,7 +1129,7 @@ module('Client side after filtering', () => {
             endDayHour: 7,
             min: new Date(2015, 0, 1),
             max: new Date(2015, 11, 27)
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
@@ -1124,7 +1140,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by resources', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1174,7 +1190,7 @@ module('Client side after filtering', () => {
                     items: [{ 'id': 1, 'text': 'a' }, { 'id': 2, 'text': 'b' }]
                 }
             ]
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4 },
@@ -1184,7 +1200,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by allDay field', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1219,14 +1235,14 @@ module('Client side after filtering', () => {
             allDay: false,
             min: new Date(2015, 0, 1, 3),
             max: new Date(2015, 0, 1, 8)
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false }], 'Appointments are OK');
     });
 
     test('Loaded recurrent allDay appointments should not be filtered by start/endDayHour', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1261,7 +1277,7 @@ module('Client side after filtering', () => {
             endDayHour: 10,
             min: new Date(2015, 0, 1, 3),
             max: new Date(2015, 0, 1, 9, 59)
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [{ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' }], 'Appointments are OK');
     });
@@ -1274,7 +1290,7 @@ module('Client side after filtering', () => {
     ].forEach(({ visible, expectedVisibility }) => {
         test(`Appointment should be correctly filtered by visible state if visible=${visible}`, function(assert) {
             const dataSource = new DataSource({ store: [] });
-            const appointmentDataProvider = createAppointmentDataProvider({
+            const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
                 dataSource,
                 isVirtualScrolling: false,
                 dataAccessors: {
@@ -1315,7 +1331,7 @@ module('Client side after filtering', () => {
                 endDayHour: 10,
                 min: new Date(2015, 0, 1, 3),
                 max: new Date(2015, 0, 1, 9, 59)
-            });
+            }, prepareDataItems());
 
             assert.equal(!!appts.length, expectedVisibility, 'Filtered correctly');
         });
@@ -1323,7 +1339,7 @@ module('Client side after filtering', () => {
 
     test('Appointment should be filtered if startDate, endDate are at the edge of the trimmed end view date', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1341,14 +1357,14 @@ module('Client side after filtering', () => {
             endDayHour: 24,
             min: new Date(2020, 6, 15),
             max: new Date(2020, 6, 15, 23, 59)
-        });
+        }, prepareDataItems());
 
         assert.ok(!appts.length, 'Filtered');
     });
 
     test('The part of long appointment should be filtered by start/endDayHour, with endDate < startDayHour(T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1383,14 +1399,14 @@ module('Client side after filtering', () => {
             endDayHour: 10,
             min: new Date(2015, 1, 23, 1, 0),
             max: new Date(2015, 2, 1, 9, 59)
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [], 'Appointments are OK');
     });
 
     test('The part of long appointment should be filtered by start/endDayHour, with startDate < startDayHour(T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1426,14 +1442,14 @@ module('Client side after filtering', () => {
             min: new Date(2015, 2, 2, 1, 0),
             max: new Date(2015, 2, 8, 9, 59),
             supportMultiDayAppointments: true
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [], 'Appointments are OK');
     });
 
     test('Appointment between days should be filtered by start/endDayHour (T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1468,14 +1484,14 @@ module('Client side after filtering', () => {
             endDayHour: 10,
             min: new Date(2015, 2, 1, 1, 0),
             max: new Date(2015, 2, 8, 9, 59)
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts, [], 'Appointments are OK');
     });
 
     test('Wrong endDate of appointment should be replaced before filtering', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1515,7 +1531,7 @@ module('Client side after filtering', () => {
             endDayHour: 24,
             min: new Date(2015, 2, 1),
             max: new Date(2015, 2, 8)
-        });
+        }, prepareDataItems());
 
         assert.deepEqual(appts[0].EndDate, new Date(2015, 2, 1, 12, 0), 'EndDate of appointment should be replaced by correct value');
     });
@@ -1549,7 +1565,7 @@ module('API', () => {
     ].forEach(({ item, expected }) => {
         test(`hasAllDayAppointments() should return correct result if all day is ${expected}`, function(assert) {
             const dataSource = new DataSource({ store: [] });
-            const appointmentDataProvider = createAppointmentDataProvider({
+            const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
                 key: 0,
                 dataSource,
                 isVirtualScrolling: false,
@@ -1574,7 +1590,7 @@ module('API', () => {
 
             appointmentDataProvider.add(item);
 
-            const result = appointmentDataProvider.hasAllDayAppointments([item]);
+            const result = appointmentDataProvider.hasAllDayAppointments([item], prepareDataItems());
 
             assert.equal(result, expected, 'Result is corrects');
         });
@@ -1595,7 +1611,7 @@ module('Virtual Scrolling', () => {
             store: appointments
         });
 
-        const appointmentDataProvider = createAppointmentDataProvider({
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
@@ -1641,7 +1657,7 @@ module('Virtual Scrolling', () => {
                 min: new Date(2021, 8, 6, 9),
                 max: new Date(2021, 8, 6, 18),
                 allDay: false
-            });
+            }, prepareDataItems());
 
             assert.deepEqual(result, appointments, 'Items feltered correcly');
         });

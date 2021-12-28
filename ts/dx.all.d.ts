@@ -1117,6 +1117,27 @@ declare module DevExpress {
    */
   export function hideTopOverlay(): boolean;
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface PdfExportGanttFont {
+    /**
+     * [descr:PdfExportGanttFont.fontObject]
+     */
+    fontObject: object;
+    /**
+     * [descr:PdfExportGanttFont.name]
+     */
+    name: string;
+    /**
+     * [descr:PdfExportGanttFont.style]
+     */
+    style?: string;
+    /**
+     * [descr:PdfExportGanttFont.weight]
+     */
+    weight?: string | number;
+  }
+  /**
    * [descr:PositionConfig]
    */
   export interface PositionConfig {
@@ -4188,6 +4209,10 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportGanttProps.dateRange]
      */
     dateRange?: 'all' | 'visible' | object;
+    /**
+     * [descr:PdfExportGanttProps.font]
+     */
+    font?: PdfExportGanttFont;
   }
 }
 declare module DevExpress.ui {
@@ -18287,7 +18312,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxProgressBarOptions.value]
      */
-    value?: number | boolean;
+    value?: number | false;
   }
   /**
    * [descr:dxRadioGroup]

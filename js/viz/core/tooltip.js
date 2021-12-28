@@ -293,12 +293,12 @@ Tooltip.prototype = {
         return false;
     },
 
-    hide: function() {
+    hide: function(isPointerOut) {
         const that = this;
         hideElement(that._wrapper);
         // trigger event
         if(that._eventData) {
-            that._eventTrigger('tooltipHidden', that._eventData);
+            that._eventTrigger('tooltipHidden', that._options.forceEvents ? extend({ isPointerOut }, that._eventData) : that._eventData);
             that._clear();
             that._eventData = null;
         }

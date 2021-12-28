@@ -162,18 +162,50 @@ export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>
    * @public
    */
   margins?: object;
-   /**
+  /**
    * @docid
    * @type Enums.GanttPdfExportMode
    * @public
    */
   exportMode?: 'all' | 'treeList' | 'chart';
-   /**
+  /**
    * @docid
    * @type Enums.GanttPdfExportDateRange|object
    * @public
    */
   dateRange?: 'all' | 'visible' | object;
+  /**
+  * @docid
+  * @public
+  */
+  font?: PdfExportGanttFont;
+}
+
+export interface PdfExportGanttFont {
+  /**
+  * @docid
+  * @default undefined
+  * @public
+  */
+  fontObject: object;
+  /**
+  * @docid
+  * @default undefined
+  * @public
+  */
+  name: string;
+  /**
+  * @docid
+  * @default undefined
+  * @public
+  */
+  style?: string;
+  /**
+  * @docid
+  * @default undefined
+  * @public
+  */
+  weight?: string | number;
 }
 
 /**

@@ -25,7 +25,6 @@ import { getDateTableWidth } from '../utils';
 
 import { getWindow, setWindow } from '../../../../../../core/utils/window';
 import * as subscribeUtils from '../../../../../utils/subscribe_to_event';
-import domAdapter from '../../../../../../core/dom_adapter';
 import { DATE_TABLE_CELL_CLASS, DATE_TABLE_ROW_CLASS } from '../../const';
 
 jest.mock('../../../../../utils/combine_classes', () => ({
@@ -37,7 +36,6 @@ jest.mock('../utils', () => ({
 }));
 const isVerticalGroupingApplied = jest.spyOn(Utils, 'isVerticalGroupingApplied');
 const isHorizontalGroupingApplied = jest.spyOn(Utils, 'isHorizontalGroupingApplied');
-const subscribeToScrollEvent = jest.spyOn(subscribeUtils, 'subscribeToScrollEvent');
 const subscribeToDXPointerDownEvent = jest.spyOn(subscribeUtils, 'subscribeToDXPointerDownEvent');
 const subscribeToDXPointerMoveEvent = jest.spyOn(subscribeUtils, 'subscribeToDXPointerMoveEvent');
 
@@ -1313,11 +1311,11 @@ describe('WorkSpace', () => {
 
           expect(workSpace.onWindowScrollEffect())
             .toStrictEqual(expect.any(Function));
-          expect(subscribeToScrollEvent)
-            .toBeCalledWith(
-              domAdapter.getDocument(),
-              onWindowScroll,
-            );
+
+          emit(EVENT.scroll);
+
+          expect(onWindowScroll)
+            .toBeCalled();
         });
 
         it('shoud not subscribe to window onScroll if height is defined and virtual scrolling is used', () => {
@@ -1983,12 +1981,14 @@ describe('WorkSpace', () => {
           workSpace.onPointerUp = jest.fn();
           workSpace.onPointerDown(eventMock);
 
+          const disposePointerUp = workSpace.pointerUpEffect();
+
           emit(EVENT.pointerUp);
 
           expect(workSpace.onPointerUp)
             .toBeCalledTimes(1);
 
-          workSpace.disposeEffect();
+          disposePointerUp!();
 
           emit(EVENT.pointerUp);
           expect(workSpace.onPointerUp)

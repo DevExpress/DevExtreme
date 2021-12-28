@@ -16,6 +16,8 @@ export class AnimatedScrollbarProps extends ScrollbarProps {
 
   @Event() onBounce?: EventCallback;
 
+  @Event() onScroll?: EventCallback;
+
   @Event() onLock?: EventCallback;
 
   @Event() onUnlock?: EventCallback;

@@ -1,6 +1,7 @@
 import {
   Component, ComponentBindings, ForwardRef, JSXComponent, RefObject, Slot,
 } from '@devextreme-generator/declarations';
+import { AppointmentLayout } from '../../../../appointment/layout';
 import { LayoutProps } from '../../layout_props';
 import { AllDayTable } from './table';
 
@@ -9,14 +10,13 @@ export const viewFunction = ({
     tableRef,
     viewData,
     dataCellTemplate,
-    allDayAppointments,
     width,
   },
 }: AllDayPanelLayout): JSX.Element => (
   <div
     className="dx-scheduler-all-day-panel"
   >
-    {allDayAppointments}
+    <AppointmentLayout isAllDay />
     <AllDayTable
       tableRef={tableRef}
       viewData={viewData}
