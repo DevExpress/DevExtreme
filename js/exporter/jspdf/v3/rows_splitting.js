@@ -1,18 +1,18 @@
 import { isDefined } from '../../../core/utils/type';
 import { round } from './draw_utils';
 
-function splitRectsByPages(rects, margin, topLeft, maxBottomRight) {
+function splitRectsByPages(rects, margin, topLeft, maxBottomRight, onSplitRectHorizontally) {
     if(!isDefined(rects) || rects.length === 0) { // Empty Table
         return [[]];
     }
 
-    const rectsByPage = splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight);
+    const rectsByPage = splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSplitRectHorizontally);
     // TODO: splitRectsVerticalByPages
 
     return rectsByPage;
 }
 
-function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight) {
+function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSplitRectHorizontally) {
     const pages = [];
     const rectsToSplit = [...rects];
 
@@ -41,24 +41,20 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight) {
 
         currentPageCanBeSplitRects.forEach(rect => {
             // Split merged rects that can be split and put to neccessary array
-            const leftRect = Object.assign({}, {
+            const splitResult = onSplitRectHorizontally(rect, {
                 x: rect.x,
                 y: rect.y,
                 w: currentPageMaxRectRight - rect.x,
                 h: rect.h
-            }, { sourceCellInfo: rect.sourceCellInfo });
-
-            currentPageRects.push(leftRect);
-
-            const rightRect = Object.assign({}, {
+            }, {
                 x: currentPageMaxRectRight,
                 y: rect.y,
                 w: rect.w - (currentPageMaxRectRight - rect.x),
                 h: rect.h
-            }, { sourceCellInfo: Object.assign({}, rect.sourceCellInfo) });
-            rightRect.sourceCellInfo.text = '';
+            });
 
-            rectsToSplit.push(rightRect);
+            currentPageRects.push(splitResult.left);
+            rectsToSplit.push(splitResult.right);
 
             const index = rectsToSplit.indexOf(rect);
             if(index !== -1) {
