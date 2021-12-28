@@ -137,7 +137,7 @@ export default Class.inherit({
     _getFullSelectAllState: function() {
         const items = this.options.plainItems();
         const dataFilter = this.options.filter();
-        let selectedItems = this.options.selectedItems.filter(item => !item?.disabled);
+        let selectedItems = this.options.ignoreDisabledItems ? this.options.selectedItems : this.options.selectedItems.filter(item => !item?.disabled);
 
         if(dataFilter) {
             selectedItems = dataQuery(selectedItems).filter(dataFilter).toArray();
