@@ -88,6 +88,7 @@ export class AppointmentContent extends JSXComponent<AppointmentContentProps, 'd
 
   @Effect()
   bindHoverEffect(): EffectReturn {
+    // TODO: https://trello.com/c/vMlPwrVE/2990-angular-support-native-event-generation
     this.refReducedIcon.current?.addEventListener('mouseenter', this.onReducedIconMouseEnter);
     this.refReducedIcon.current?.addEventListener('mouseleave', this.onReducedIconMouseLeave);
 
