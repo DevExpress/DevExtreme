@@ -86,19 +86,23 @@ export class AppointmentContentProps {
 export class AppointmentContent extends JSXComponent<AppointmentContentProps, 'data' | 'showReducedIconTooltip' | 'hideReducedIconTooltip'>() {
   @Ref() refReducedIcon!: RefObject<HTMLDivElement>;
 
-  @Effect()
+  @Effect({ run: 'once' })
   bindHoverEffect(): EffectReturn {
+    const onMouseEnter = (): void => this.onReducedIconMouseEnter();
+    const onMouseLeave = (): void => this.onReducedIconMouseLeave();
+
     // TODO: https://trello.com/c/vMlPwrVE/2990-angular-support-native-event-generation
-    this.refReducedIcon.current?.addEventListener('mouseenter', this.onReducedIconMouseEnter);
-    this.refReducedIcon.current?.addEventListener('mouseleave', this.onReducedIconMouseLeave);
+    this.refReducedIcon.current?.addEventListener('mouseenter', onMouseEnter);
+    this.refReducedIcon.current?.addEventListener('mouseleave', onMouseLeave);
 
     return (): void => {
-      this.refReducedIcon.current?.removeEventListener('mouseenter', this.onReducedIconMouseEnter);
-      this.refReducedIcon.current?.removeEventListener('mouseleave', this.onReducedIconMouseLeave);
+      this.refReducedIcon.current?.removeEventListener('mouseenter', onMouseEnter);
+      this.refReducedIcon.current?.removeEventListener('mouseleave', onMouseLeave);
     };
   }
 
   onReducedIconMouseEnter(): void {
+    // console.log('hello');
     this.props.showReducedIconTooltip({
       target: this.refReducedIcon.current as HTMLDivElement,
       endDate: this.props.data.appointmentData.endDate,
