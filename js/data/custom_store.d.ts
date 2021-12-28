@@ -1,7 +1,7 @@
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 import Store, { Options as StoreOptions } from './abstract_store';
 import { DxPromise } from '../core/utils/deferred';
-import { JQueryXHR } from '../core/utils/ajax';
+import JQueryXHR from '../core/utils/ajax';
 
 /** @public */
 export type Options<
