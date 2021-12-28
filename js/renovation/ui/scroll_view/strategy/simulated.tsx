@@ -752,6 +752,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.loadingIndicatorEnabled = true;
     this.finishLoading();
     // this.updateHandler();
+
+    // the resizeObserver handler calls soo late
+    // in case when List visibility was changed
+    this.updateElementDimensions();
   }
 
   onReachBottom(): void {
