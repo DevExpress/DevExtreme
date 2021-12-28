@@ -1323,7 +1323,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             }
             return items;
         };
-        $('#dataGrid').css('max-height', 600);
+        $('#dataGrid').css('max-height', '600px');
         const dataGrid = createDataGrid({
             dataSource: getData(),
             keyExpr: 'id',
@@ -1378,41 +1378,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(visibleRows.length, 10, 'visible row count after switch to 10 page size');
         assert.equal(dataGrid.pageIndex(), 0, 'page index');
-        assert.equal($virtualRowElement.length, 0, 'no virtual rows');
-
-        // act (pageIndex 4)
-        $(dataGrid.element()).find('.dx-pager .dx-page-indexes .dx-page:eq(4)').trigger('dxclick');
-        this.clock.tick(300);
-        visibleRows = dataGrid.getVisibleRows();
-
-        // assert
-        assert.equal(dataGrid.pageIndex(), 4, 'page index');
-        assert.equal(visibleRows.length, 10, 'visible row count after switch to 4 page');
-        assert.equal(visibleRows[0].key, 41, 'top visible row');
-        assert.equal(visibleRows[9].key, 50, 'bottom visible row');
-
-        // act (pageSize all)
-        $(dataGrid.element()).find('.dx-pager .dx-page-sizes .dx-page-size:eq(1)').trigger('dxclick');
-        this.clock.tick(300);
-        visibleRows = dataGrid.getVisibleRows();
-        $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
-
-        // assert
-        assert.ok(visibleRows.length > 0, 'visible row count when all rows are enabled');
-        assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered outside viewport');
-
-        // act (pageSize 10)
-        $(dataGrid.element()).find('.dx-pager .dx-page-sizes .dx-page-size:eq(0)').trigger('dxclick');
-        this.clock.tick(300);
-        visibleRows = dataGrid.getVisibleRows();
-        $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
-
-
-        // assert
-        assert.equal(dataGrid.pageIndex(), 4, 'page index');
-        assert.equal(visibleRows.length, 10, 'visible row count after switch to 4 page');
-        assert.equal(visibleRows[0].key, 41, 'top visible row');
-        assert.equal(visibleRows[9].key, 50, 'bottom visible row');
         assert.equal($virtualRowElement.length, 0, 'no virtual rows');
 
         $('#dataGrid').css('max-height', '');
