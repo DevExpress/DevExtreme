@@ -39,16 +39,11 @@ if(Quill) {
 
     const USER_ACTION = 'user';
 
-    const FORMAT_HOTKEYS = [{
-        key: 'b',
-        formatName: 'bold'
-    }, {
-        key: 'i',
-        formatName: 'italic'
-    }, {
-        key: 'u',
-        formatName: 'underline'
-    }];
+    const FORMAT_HOTKEYS = {
+        66: 'bold',
+        73: 'italic',
+        85: 'underline'
+    };
 
     const localize = (name) => {
         return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
@@ -195,22 +190,42 @@ if(Quill) {
         }
 
         _detectKeyboardFormatChanging() {
-            const namespace = addNamespace('keydown', this.editorInstance.NAME);
+            // eventsEngine.off(this.editorInstance._getQuillContainer(), namespace);
+            // eventsEngine.on(this.editorInstance._getQuillContainer(), namespace, ({ originalEvent }) => {
+            //     const pressedKey = originalEvent && normalizeKeyName(originalEvent);
 
-            eventsEngine.off(this.editorInstance._getQuillContainer(), namespace);
-            eventsEngine.on(this.editorInstance._getQuillContainer(), namespace, ({ originalEvent }) => {
-                const pressedKey = originalEvent && normalizeKeyName(originalEvent);
+            //     if(pressedKey) {
+            //         // console.log(originalEvent);
+            //         // each(FORMAT_HOTKEYS, (index, { key, formatName }) => {
+            //         //     if(pressedKey.toLowerCase() === key && isCommandKeyPressed(originalEvent)) {
+            //         //         this._updateButtonState(formatName);
 
-                if(pressedKey) {
-                    each(FORMAT_HOTKEYS, (index, { key, formatName }) => {
-                        if(pressedKey.toLowerCase() === key && isCommandKeyPressed(originalEvent)) {
-                            this._updateButtonState(formatName);
+            //         //         return false;
+            //         //     }
+            //         // });
+            //     }
+            // });
 
-                            return false;
-                        }
-                    });
-                }
-            });
+            this.quill.keyboard.addBinding({
+                which: 66,
+                shortKey: true,
+            }, this._handleFormatHotKey.bind(this));
+
+            this.quill.keyboard.addBinding({
+                which: 73,
+                shortKey: true,
+            }, this._handleFormatHotKey.bind(this));
+
+            this.quill.keyboard.addBinding({
+                which: 85,
+                shortKey: true,
+            }, this._handleFormatHotKey.bind(this));
+        }
+
+        _handleFormatHotKey(range, context, { which }) {
+            const formatName = FORMAT_HOTKEYS[which];
+
+            this._updateButtonState(formatName);
         }
 
         _updateButtonState(formatName) {
