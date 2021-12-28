@@ -54,7 +54,12 @@ export const Consts = {
     TOOLBAR_ITEM_CLASS: 'dx-toolbar-item',
     TOOLBAR_ITEM_WITH_HIDDEN_TEXT_CLASS: 'dx-toolbar-text-auto-hide',
     TOOLBAR_REFRESH_ITEM_ICON_CLASS: 'dx-filemanager-i',
-    TOOLBAR_REFRESH_ITEM_ICON_DEAFULT_CLASS: 'dx-filemanager-i-refresh',
+    TOOLBAR_REFRESH_ICON_MAP: {
+        default: 'dx-filemanager-i dx-filemanager-i-refresh',
+        progress: 'dx-filemanager-i dx-filemanager-i-progress',
+        success: 'dx-filemanager-i dx-filemanager-i-done',
+        error: 'dx-filemanager-i dx-filemanager-i-danger'
+    },
     DETAILS_VIEW_CLASS: 'dx-filemanager-details',
     DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
     FOLDER_CHOOSER_DIALOG_CLASS: 'dx-filemanager-dialog-folder-chooser-popup',
@@ -236,6 +241,16 @@ export class FileManagerWrapper {
 
     getToolbarRefreshButton(isFileSelectionToolbar) {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}[title='Refresh']`).eq(isFileSelectionToolbar ? 1 : 0);
+    }
+
+    getToolbarRefreshButtonState(isFileSelectionToolbar) {
+        const refreshIcon = this.getToolbarRefreshButton(isFileSelectionToolbar).find(`.${Consts.TOOLBAR_REFRESH_ITEM_ICON_CLASS}`);
+        return {
+            isDefault: refreshIcon.hasClass(Consts.TOOLBAR_REFRESH_ICON_MAP.default),
+            isProgress: refreshIcon.hasClass(Consts.TOOLBAR_REFRESH_ICON_MAP.progress),
+            isSuccess: refreshIcon.hasClass(Consts.TOOLBAR_REFRESH_ICON_MAP.success),
+            isError: refreshIcon.hasClass(Consts.TOOLBAR_REFRESH_ICON_MAP.error)
+        };
     }
 
     getToolbarSeparators() {
