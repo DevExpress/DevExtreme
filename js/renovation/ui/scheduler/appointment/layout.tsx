@@ -9,7 +9,7 @@ import { AppointmentViewModel, OverflowIndicatorViewModel } from './types';
 import { Appointment } from './appointment';
 import { OverflowIndicator } from './overflow_indicator/layout';
 import { combineClasses } from '../../../utils/combine_classes';
-import { AppointmentsContext, AppointmentsContextValue } from '../appointments_data_context';
+import { AppointmentsContext, AppointmentsContextValue } from '../appointments_context';
 
 export const viewFunction = ({
   classes,
