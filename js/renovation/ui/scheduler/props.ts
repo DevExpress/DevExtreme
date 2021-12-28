@@ -452,6 +452,7 @@ SchedulerProps,
 | 'dateCellTemplate'
 | 'appointmentTemplate'
 | 'appointmentCollectorTemplate'
+| 'appointmentTooltipTemplate'
 | 'maxAppointmentsPerCell'
 | 'showAllDayPanel'
 | 'showCurrentTimeIndicator'

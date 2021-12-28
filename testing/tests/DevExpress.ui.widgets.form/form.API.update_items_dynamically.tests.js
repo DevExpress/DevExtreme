@@ -1458,6 +1458,81 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkItemElement('.test-item2', false);
         testWrapper.checkRequired('.test-item1', true, 'required of dataField 1');
     });
+
+    test('{ items: [{ caption:group1, [{ caption:group1_1 }] } -> itemOption(group1.group1_1, template)', function() {
+        const myClass = 'myClass';
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [ {
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: 1
+                }]
+            }]
+        }).dxForm('instance');
+
+
+        form.itemOption('group1.group1_1', 'template', `<div class="${myClass}"></div>`);
+
+        QUnit.assert.strictEqual(
+            JSON.stringify(form.option('items')),
+            JSON.stringify([{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [{
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: `<div class="${myClass}"></div>`
+                }]
+            }])
+        );
+        QUnit.assert.strictEqual(JSON.stringify($('.dx-form-group-caption').toArray().map(item => $(item).text())), JSON.stringify(['group 1', 'group 1_1']));
+        QUnit.assert.strictEqual($(`.${myClass}`).length, 1, '$(`.${myClass}`).length');
+    });
+
+    test('{ items: [{ caption:group1, [{ caption:group1_1 }] } -> itemOption(group1.group1_1, template, null)', function() {
+        const myClass = 'myClass';
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [ {
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: `<div class="${myClass}"></div>`
+                }]
+            }]
+        }).dxForm('instance');
+
+
+        form.itemOption('group1.group1_1', 'template', null);
+
+        QUnit.assert.strictEqual(
+            JSON.stringify(form.option('items')),
+            JSON.stringify([{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [{
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: null
+                }]
+            }])
+        );
+        QUnit.assert.strictEqual(JSON.stringify($('.dx-form-group-caption').toArray().map(item => $(item).text())), JSON.stringify(['group 1', 'group 1_1']));
+        QUnit.assert.strictEqual($(`.${myClass}`).length, 0, '$(`.${myClass}`).length');
+    });
+
+    test('{ items: [{ caption:group1, [{ caption:group1_1 }] } -> itemOption(group1.group1_1, template, undefined)', function() {
+        const myClass = 'myClass';
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [ {
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: `<div class="${myClass}"></div>`
+                }]
+            }]
+        }).dxForm('instance');
+
+
+        form.itemOption('group1.group1_1', 'template', undefined);
+
+        QUnit.assert.strictEqual(
+            JSON.stringify(form.option('items')),
+            JSON.stringify([{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [{
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: undefined
+                }]
+            }])
+        );
+        QUnit.assert.strictEqual(JSON.stringify($('.dx-form-group-caption').toArray().map(item => $(item).text())), JSON.stringify(['group 1', 'group 1_1']));
+        QUnit.assert.strictEqual($(`.${myClass}`).length, 0, '$(`.${myClass}`).length');
+    });
 });
 
 module('Tabbed item. Use the itemOption method', function() {

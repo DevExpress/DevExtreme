@@ -314,6 +314,8 @@ describe('Workspace base utils', () => {
         className: '.dx-scheduler-date-table-row',
       };
 
+      cell.closest = () => cell.parentNode;
+
       cell.parentNode.parentNode = {
         children: [{
           className: '.dx-scheduler-date-table-row',
@@ -344,6 +346,8 @@ describe('Workspace base utils', () => {
         className: '.dx-scheduler-date-table-row',
       };
 
+      cell.closest = () => cell.parentNode;
+
       cell.parentNode.parentNode = {
         children: [{
           className: '.dx-scheduler-virtual-row',
@@ -352,6 +356,38 @@ describe('Workspace base utils', () => {
         }, {
           className: '.dx-scheduler-date-table-row',
         }, cell.parentNode],
+      };
+
+      expect(getCellIndices(cell))
+        .toEqual({
+          rowIndex: 2,
+          columnIndex: 3,
+        });
+    });
+
+    it('should work correctly when parent and closest are not equal', () => {
+      const cell: any = { className: '.dx-scheduler-date-table-cell' };
+      cell.parentNode = {
+        children: [{
+          className: '.dx-scheduler-date-table-cell',
+        }, {
+          className: '.dx-scheduler-date-table-cell',
+        }, {
+          className: '.dx-scheduler-all-day-table-cell',
+        }, cell],
+        parentNode: {
+          className: '.dx-scheduler-date-table-row',
+        },
+      };
+
+      cell.closest = () => cell.parentNode.parentNode;
+
+      cell.parentNode.parentNode.parentNode = {
+        children: [{
+          className: '.dx-scheduler-date-table-row',
+        }, {
+          className: '.dx-scheduler-date-table-row',
+        }, cell.parentNode.parentNode],
       };
 
       expect(getCellIndices(cell))

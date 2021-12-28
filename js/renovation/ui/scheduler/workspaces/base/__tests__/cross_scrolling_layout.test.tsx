@@ -1,4 +1,4 @@
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import React from 'react';
 import { Scrollable } from '../../../../scroll_view/scrollable';
 import { Widget } from '../../../../common/widget';
@@ -16,6 +16,7 @@ import { TimelineHeaderPanelLayout } from '../../timeline/header_panel/layout';
 import { DateTableLayoutBase, DateTableLayoutProps } from '../date_table/layout';
 import { MonthDateTableLayout } from '../../month/date_table/layout';
 import { TimePanelTableLayout } from '../time_panel/layout';
+import { AppointmentLayout } from '../../../appointment/layout';
 
 describe('OrdinaryLayout', () => {
   const viewData = {
@@ -109,16 +110,19 @@ describe('OrdinaryLayout', () => {
         ...viewModel.props,
       },
     }) as any);
-    const mountComponent = (viewModel) => mount(LayoutView({
-      ...viewModel,
-      props: {
-        ...commonProps,
-        ...viewModel.props,
-      },
-    }) as any);
+    const renderWithJSX = (viewModel) => shallow(
+      <LayoutView
+        {...viewModel}
+        props={{
+          ...commonProps,
+          className: 'custom-classes',
+          widgetElementRef: 'widgetElementRef',
+        } as any}
+      />,
+    );
 
     it('should render widget as root component', () => {
-      const layout = mountComponent({
+      const layout = renderWithJSX({
         props: {
           className: 'custom-classes',
           widgetElementRef: 'widgetElementRef',
@@ -478,13 +482,9 @@ describe('OrdinaryLayout', () => {
     });
 
     it('should render appointments', () => {
-      const layout = render({
-        props: {
-          appointments: <div className="appointments" />,
-        },
-      });
+      const layout = render({});
 
-      expect(layout.find('.appointments').exists())
+      expect(layout.find(AppointmentLayout).exists())
         .toBe(true);
     });
 

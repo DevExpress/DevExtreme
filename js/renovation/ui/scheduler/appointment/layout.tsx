@@ -1,23 +1,25 @@
 import {
-  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template, Event,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
+  Consumer,
 } from '@devextreme-generator/declarations';
-import {
-  AppointmentTemplateProps,
-  AppointmentViewModel,
-  OverflowIndicatorTemplateProps,
-  OverflowIndicatorViewModel,
-  AppointmentClickData,
-} from './types';
+import { AppointmentViewModel, OverflowIndicatorViewModel } from './types';
 import { Appointment } from './appointment';
 import { OverflowIndicator } from './overflow_indicator/layout';
 import { combineClasses } from '../../../utils/combine_classes';
+import { AppointmentsContext, AppointmentsContextValue } from '../appointments_context';
 
 export const viewFunction = ({
   classes,
-  props: {
-    appointments,
-    overflowIndicators,
+  appointments,
+  overflowIndicators,
+
+  appointmentsContextValue: {
     appointmentTemplate,
+    showReducedIconTooltip,
+    hideReducedIconTooltip,
     onAppointmentClick,
     overflowIndicatorTemplate,
   },
@@ -31,6 +33,8 @@ export const viewFunction = ({
           index={index}
           key={item.key}
           onItemClick={onAppointmentClick}
+          showReducedIconTooltip={showReducedIconTooltip}
+          hideReducedIconTooltip={hideReducedIconTooltip}
         />
       ))
     }
@@ -49,16 +53,6 @@ export const viewFunction = ({
 @ComponentBindings()
 export class AppointmentLayoutProps {
   @OneWay() isAllDay = false;
-
-  @OneWay() appointments: AppointmentViewModel[] = [];
-
-  @OneWay() overflowIndicators: OverflowIndicatorViewModel[] = [];
-
-  @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
-
-  @Template() overflowIndicatorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
-
-  @Event() onAppointmentClick?: (e: AppointmentClickData) => void;
 }
 
 @Component({
@@ -67,6 +61,9 @@ export class AppointmentLayoutProps {
   jQuery: { register: true },
 })
 export class AppointmentLayout extends JSXComponent(AppointmentLayoutProps) {
+  @Consumer(AppointmentsContext)
+  appointmentsContextValue!: AppointmentsContextValue;
+
   get classes(): string {
     const { isAllDay } = this.props;
 
@@ -74,5 +71,21 @@ export class AppointmentLayout extends JSXComponent(AppointmentLayoutProps) {
       'dx-scheduler-scrollable-appointments': !isAllDay,
       'dx-scheduler-all-day-appointments': isAllDay,
     });
+  }
+
+  get appointments(): AppointmentViewModel[] {
+    if (this.props.isAllDay) {
+      return this.appointmentsContextValue.viewModel.allDay;
+    }
+
+    return this.appointmentsContextValue.viewModel.regular;
+  }
+
+  get overflowIndicators(): OverflowIndicatorViewModel[] {
+    if (this.props.isAllDay) {
+      return this.appointmentsContextValue.viewModel.allDayCompact;
+    }
+
+    return this.appointmentsContextValue.viewModel.regularCompact;
   }
 }

@@ -1292,9 +1292,14 @@ export const virtualScrollingModule = {
                         const virtualPaging = isVirtualPaging(this);
                         const dataSourceAdapter = this._dataSource;
                         const changedParams = this._getChangedLoadParams();
+                        const currentLoadPageCount = dataSourceAdapter?.loadPageCount() ?? 0;
+                        const lastRequiredItemCount = this.pageSize() * currentLoadPageCount;
+                        const currentPageIndex = dataSourceAdapter?.pageIndex() ?? 0;
+                        const pageIndexNotChanged = changedParams?.pageIndex === currentPageIndex;
+                        const allLoadedInAppendMode = isAppendMode(this) && this.totalItemsCount() < lastRequiredItemCount;
                         let result = false;
 
-                        if(!dataSourceAdapter || (virtualPaging && checkLoading && changedParams && changedParams.pageIndex > dataSourceAdapter.pageIndex())) {
+                        if(!dataSourceAdapter || (virtualPaging && checkLoading && (changedParams?.pageIndex > currentPageIndex || pageIndexNotChanged && allLoadedInAppendMode))) {
                             return result;
                         }
 
