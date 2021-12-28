@@ -1312,7 +1312,7 @@ describe('WorkSpace', () => {
           expect(workSpace.onWindowScrollEffect())
             .toStrictEqual(expect.any(Function));
 
-          emit('scroll');
+          emit(EVENT.scroll);
 
           expect(onWindowScroll)
             .toBeCalled();
