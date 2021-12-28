@@ -11,7 +11,7 @@ import {
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
 // eslint-disable-next-line import/named
 import { Appointment } from '../../../ui/scheduler';
-import { ViewProps, SchedulerProps } from './props';
+import { ViewProps, SchedulerPropsType } from './props';
 
 import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
@@ -213,7 +213,7 @@ export const viewFunction = ({
   view: viewFunction,
   jQuery: { register: true },
 })
-export class Scheduler extends JSXComponent(SchedulerProps) {
+export class Scheduler extends JSXComponent<SchedulerPropsType>() {
   @InternalState() workSpaceViewModel?: ViewMetaData;
 
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();

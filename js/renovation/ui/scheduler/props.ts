@@ -11,7 +11,6 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { SchedulerToolbarItem } from './header/props';
-import type { template } from '../../../core/templates/template';
 import DataSource from '../../../data/data_source';
 import type { DataSourceOptions } from '../../../data/data_source';
 
@@ -34,11 +33,9 @@ import type {
   AppointmentUpdatedEvent,
   AppointmentUpdatingEvent,
   CellContextMenuEvent,
-  AppointmentTooltipTemplateData,
   CellClickEvent,
 } from '../../../ui/scheduler';
 
-import type { UserDefinedElement, DxElement } from '../../../core/element'; // eslint-disable-line import/named
 import messageLocalization from '../../../localization/message';
 import { ViewType } from './types';
 import { BaseWidgetProps } from '../common/base_props';
@@ -384,32 +381,6 @@ export class SchedulerProps extends BaseWidgetProps {
 
   textExpr = 'text';
 
-  // TODO: https://github.com/DevExpress/devextreme-renovation/issues/751
-  /* Templates */
-
-  @Template()
-  dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
-
-  @Template()
-  dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
-
-  @Template()
-  timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
-
-  @Template()
-  resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
-
-  @Template()
-  appointmentCollectorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
-
-  @Template()
-  appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
-
-  @Template()
-  appointmentTooltipTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-
   @OneWay()
   toolbar: SchedulerToolbarItem[] = [
     {
@@ -438,8 +409,19 @@ SchedulerProps,
 | 'dateSerializationFormat'
 >;
 
+export type SchedulerPropsType = SchedulerProps & Pick<
+ViewProps,
+'dataCellTemplate'
+| 'dateCellTemplate'
+| 'timeCellTemplate'
+| 'resourceCellTemplate'
+| 'appointmentTooltipTemplate'
+| 'appointmentCollectorTemplate'
+| 'appointmentTemplate'
+>;
+
 export type CurrentViewConfigProps = Pick<
-SchedulerProps,
+SchedulerPropsType,
 'firstDayOfWeek'
 | 'startDayHour'
 | 'endDayHour'
@@ -462,15 +444,3 @@ SchedulerProps,
 | 'height'
 | 'width'
 >;
-
-// TODO: https://github.com/DevExpress/devextreme-renovation/issues/751
-// export type SchedulerPropsType = SchedulerProps & Pick<
-// ViewProps,
-// 'dataCellTemplate'
-// | 'dateCellTemplate'
-// | 'timeCellTemplate'
-// | 'resourceCellTemplate'
-// | 'appointmentTooltipTemplate'
-// | 'appointmentCollectorTemplate'
-// | 'appointmentTemplate'
-// >;
