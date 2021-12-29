@@ -1,72 +1,54 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import each from 'jest-each';
 import {
   Pager, viewFunction as GridPagerView, PagerProps,
 } from '../pager';
 import { PagerContent } from '../../../../pager/content';
-import { Plugins } from '../../../../../utils/plugin/context';
 import { PlaceholderExtender } from '../../../../../utils/plugin/placeholder_extender';
+import { PageSize, SetPageIndex, SetPageSize } from '../paging';
 
 describe('Pager', () => {
-  describe('View', () => {
-    it('default render', () => {
-      const props = new PagerProps();
+  each`
+         pageSize    | pageSizeExpected
+         ${'all'}    | ${0}
+         ${40}       | ${40}
+    `
+    .describe('View', ({
+      pageSize, pageSizeExpected,
+    }) => {
+      const name = JSON.stringify({
+        pageSize, pageSizeExpected,
+      });
 
-      const viewProps: Partial<Pager> = {
-        props,
-        pageCount: 10,
-        totalCount: 20,
-        pageIndex: 30,
-        pageSize: 40,
-      };
+      it(name, () => {
+        const props = new PagerProps();
+        const viewProps: Partial<Pager> = {
+          props,
+        };
+        const pageCount = 10;
+        const totalCount = 20;
+        const pageIndex = 30;
 
-      const placeholderTree = mount(<GridPagerView {...viewProps as any} /> as any);
-      const { template: PagerTemplate } = placeholderTree.find(PlaceholderExtender).props();
+        const placeholderTree = mount(<GridPagerView {...viewProps as any} /> as any);
+        const { template } = placeholderTree.find(PlaceholderExtender).props();
+        const PagerTemplate = template([pageIndex, pageSize, totalCount, pageCount]);
 
-      const tree = mount(<PagerTemplate />);
-      expect(tree.find(PagerContent).props()).toMatchObject({
-        displayMode: 'adaptive',
-        infoText: 'Page {0} of {1} ({2} items)',
-        pageCount: 10,
-        totalCount: 20,
-        pageIndex: 30,
-        pageSize: 40,
-        showInfo: false,
-        showNavigationButtons: false,
-        showPageSizes: false,
-        visible: true,
+        const tree = mount(PagerTemplate);
+        expect(tree.find(PagerContent).props()).toMatchObject({
+          displayMode: 'adaptive',
+          infoText: 'Page {0} of {1} ({2} items)',
+          pageCount: 10,
+          totalCount: 20,
+          pageIndex: 30,
+          pageSize: pageSizeExpected,
+          showInfo: false,
+          showNavigationButtons: false,
+          showPageSizes: false,
+          visible: true,
+        });
       });
     });
-
-    it('should pass zero to pager component when pageSize is "all"', () => {
-      const props = new PagerProps();
-
-      const viewProps = {
-        props,
-        pageCount: 10,
-        totalCount: 20,
-        pageIndex: 30,
-        pageSize: 'all',
-      } as Partial<Pager>;
-
-      const placeholderTree = mount(<GridPagerView {...viewProps as any} /> as any);
-      const { template: PagerTemplate } = placeholderTree.find(PlaceholderExtender).props();
-
-      const tree = mount(<PagerTemplate />);
-      expect(tree.find(PagerContent).props()).toMatchObject({
-        displayMode: 'adaptive',
-        infoText: 'Page {0} of {1} ({2} items)',
-        pageCount: 10,
-        totalCount: 20,
-        pageIndex: 30,
-        pageSize: 0,
-        showInfo: false,
-        showNavigationButtons: false,
-        showPageSizes: false,
-        visible: true,
-      });
-    });
-  });
 
   describe('Getters', () => {
     describe('allowedPageSizes', () => {
@@ -81,7 +63,7 @@ describe('Pager', () => {
           allowedPageSizes: 'auto',
         });
 
-        grid.pageSize = 20;
+        grid.plugins.set(PageSize, 20);
 
         expect(grid.allowedPageSizes).toEqual([10, 20, 40]);
       });
@@ -91,7 +73,7 @@ describe('Pager', () => {
           allowedPageSizes: 'auto',
         });
 
-        grid.pageSize = 'all';
+        grid.plugins.set(PageSize, 'all');
 
         expect(grid.allowedPageSizes).toEqual([]);
       });
@@ -102,19 +84,16 @@ describe('Pager', () => {
     describe('onPageIndexChange', () => {
       it('should update pageIndex', () => {
         const pager = new Pager({});
-        pager.plugins = {
-          getValue: () => ({ setPageIndex: (n) => { pager.pageIndex = n; } }),
-        } as any;
+        const setPageIndex = jest.fn();
+        pager.plugins.set(SetPageIndex, setPageIndex);
 
         pager.onPageIndexChange(10);
-        expect(pager.pageIndex).toEqual(10);
+
+        expect(setPageIndex).toHaveBeenCalledWith(10);
       });
 
       it('should work when paging plugin is empty', () => {
         const pager = new Pager({});
-        pager.plugins = {
-          getValue: () => null,
-        } as any;
 
         expect(() => pager.onPageIndexChange(10)).not.toThrow();
       });
@@ -123,54 +102,28 @@ describe('Pager', () => {
     describe('onPageSizeChange', () => {
       it('should update pager.pageSize', () => {
         const pager = new Pager({});
-        pager.plugins = {
-          getValue: () => ({ setPageSize: (n) => { pager.pageSize = n; } }),
-        } as any;
+        const setPageSize = jest.fn();
+        pager.plugins.set(SetPageSize, setPageSize);
 
         pager.onPageSizeChange(10);
-        expect(pager.pageSize).toEqual(10);
+
+        expect(setPageSize).toHaveBeenCalledWith(10);
       });
 
       it('should set pager.pageSize to "all" when called with zero', () => {
         const pager = new Pager({});
-        pager.plugins = {
-          getValue: () => ({ setPageSize: (n) => { pager.pageSize = n; } }),
-        } as any;
+        const setPageSize = jest.fn();
+        pager.plugins.set(SetPageSize, setPageSize);
 
         pager.onPageSizeChange(0);
-        expect(pager.pageSize).toEqual('all');
+
+        expect(setPageSize).toHaveBeenCalledWith('all');
       });
 
       it('should work when paging plugin is empty', () => {
         const pager = new Pager({});
-        pager.plugins = {
-          getValue: () => null,
-        } as any;
 
         expect(() => pager.onPageSizeChange(10)).not.toThrow();
-      });
-    });
-  });
-
-  describe('Effects', () => {
-    describe('subscribeToPagingPluginUpdates', () => {
-      it('should update paging props', () => {
-        const watchMock = jest.fn();
-        const pager = new Pager({});
-
-        pager.plugins = {
-          watch: watchMock,
-        } as unknown as Plugins;
-
-        pager.subscribeToPagingPluginUpdates();
-
-        watchMock.mock.calls[0][1]({
-          pageSize: 5,
-          pageIndex: 10,
-        });
-
-        expect(pager.pageSize).toEqual(5);
-        expect(pager.pageIndex).toEqual(10);
       });
     });
   });

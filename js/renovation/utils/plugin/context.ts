@@ -36,8 +36,44 @@ export class PluginGetter<T> extends PluginEntity<T, GetterStoreValue<T>> {
   }
 }
 
+export type SelectorFunc<R> = (...args) => R;
+
+export class PluginSelector<R> extends PluginEntity<R, R> {
+  readonly deps: PluginEntity<unknown, unknown>[];
+
+  readonly func: SelectorFunc<R>;
+
+  constructor(deps: PluginEntity<unknown, unknown>[], func: SelectorFunc<R>) {
+    super();
+    this.deps = deps;
+    this.func = func;
+  }
+}
+
 export function createValue<T>(): PluginEntity<T, T> {
   return new PluginEntity<T, T>();
+}
+
+// export function createSelector<A, R>(
+//   deps: [PluginEntity<A, A>],
+//   func: (a: A) => R
+// ): PluginSelector<R>;
+
+// export function createSelector<A, B, R>(
+//   deps: [PluginEntity<A, A>, PluginEntity<B, B>],
+//   func: (a: A, b: B) => R
+// ): PluginSelector<R>;
+
+// export function createSelector<A, B, C, R>(
+//   deps: [PluginEntity<A, A>, PluginEntity<B, B>, PluginEntity<C, C>],
+//   func: (a: A, b: B, c: C) => R
+// ): PluginSelector<R>;
+
+export function createSelector<R>(
+  deps: PluginEntity<unknown, unknown>[],
+  func: SelectorFunc<R>,
+): PluginSelector<R> {
+  return new PluginSelector<R>(deps, func);
 }
 
 export function createGetter<T>(defaultValue: T): PluginGetter<T> {
@@ -54,12 +90,18 @@ export function createPlaceholder(): PluginEntity<PlaceholderStoreValue, Placeho
   return new PluginEntity<PlaceholderStoreValue, PlaceholderStoreValue>(); // TODO PluginPlaceholder
 }
 
+type Subscription = (callbackValue: unknown) => void;
+
 export class Plugins {
   private readonly items: Record<number, unknown> = {};
 
-  private readonly subscriptions: Record<number, ((callbackValue: unknown) => void)[]> = {};
+  private readonly subscriptions: Record<number, Subscription[]> = {};
 
-  set<T, S>(entity: PluginEntity<T, S>, value: S): void {
+  private readonly subscribedSelectors: Record<number, boolean> = {};
+
+  set<T, S>(entity: PluginEntity<T, S>, value: S, force = false): void {
+    if (entity.id in this.items && this.items[entity.id] === value && !force) return;
+
     this.items[entity.id] = value;
     const subscriptions = this.subscriptions[entity.id];
     if (subscriptions) {
@@ -77,13 +119,13 @@ export class Plugins {
     const item = { order, func };
     value.splice(insertIndex, 0, item);
 
-    this.set(entity, value);
+    this.set(entity, value, true);
 
     return (): void => {
       const index = value.indexOf(item);
       if (index >= 0) {
         value.splice(index, 1);
-        this.set(entity, value);
+        this.set(entity, value, true);
       }
     };
   }
@@ -92,41 +134,88 @@ export class Plugins {
     entity: PluginEntity<PlaceholderStoreValue, PlaceholderStoreValue>, /* TODO PluginPlaceholder */
     order: number,
     component: unknown,
+    deps: PluginEntity<unknown, unknown>[] = [],
   ): () => void {
     const value = (this.items[entity.id] || []) as PlaceholderStoreValue;
     const insertIndex = value.filter((item) => item.order < order).length;
-    const item = { order, component };
+    const item = { order, component, deps };
     value.splice(insertIndex, 0, item);
-    this.set(entity, value);
+    this.set(entity, value, true);
     return (): void => {
       const index = value.indexOf(item);
       if (index >= 0) {
         value.splice(index, 1);
-        this.set(entity, value);
+        this.set(entity, value, true);
       }
     };
   }
 
   getValue<T, S>(entity: PluginEntity<T, S>): T {
+    this.update(entity);
     const value = this.items[entity.id] as S;
     return entity.getValue(value);
   }
 
-  watch<T, S>(entity: PluginEntity<T, S>, callback: (value: T) => void): () => void {
-    const value = this.items[entity.id] as S;
+  hasValue<T, S>(entity: PluginEntity<T, S>): boolean {
+    return entity.id in this.items;
+  }
+
+  updateSelectorValue<R>(entity: PluginSelector<R>): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    const childValues = entity.deps.map((childEntity) => this.getValue(childEntity));
+    const newValue = entity.func.apply(null, childValues);
+    this.set(entity, newValue);
+  }
+
+  subscribeToSelectorDeps<R>(entity: PluginSelector<R>): void {
+    if (!this.subscribedSelectors[entity.id]) {
+      this.subscribedSelectors[entity.id] = true;
+      entity.deps.forEach((childEntity) => {
+        const childSubscriptions = this.getSubscriptions(childEntity);
+        childSubscriptions.push(() => {
+          this.update(entity);
+        });
+      });
+    }
+  }
+
+  update<T, S>(entity: PluginEntity<T, S>): void {
+    if (entity instanceof PluginSelector) {
+      entity.deps.forEach((child) => {
+        this.update(child);
+      });
+
+      this.subscribeToSelectorDeps(entity);
+
+      if (entity.deps.every((childEntity) => this.hasValue(childEntity))) {
+        this.updateSelectorValue(entity);
+      }
+    }
+  }
+
+  getSubscriptions<T, S>(entity: PluginEntity<T, S>): Subscription[] {
     const subscriptions = this.subscriptions[entity.id] || [];
 
     this.subscriptions[entity.id] = subscriptions;
 
-    if (value !== undefined) {
+    return subscriptions;
+  }
+
+  watch<T, S>(entity: PluginEntity<T, S>, callback: (value: T) => void): () => void {
+    this.update(entity);
+
+    if (this.hasValue(entity)) {
+      const value = this.items[entity.id] as S;
       const callbackValue = entity.getValue(value);
       callback(callbackValue);
     }
 
-    subscriptions.push(callback as (callback: unknown) => void);
+    const subscriptions = this.getSubscriptions(entity);
+
+    subscriptions.push(callback as Subscription);
 
     return (): void => {
-      const index = subscriptions.indexOf(callback as (callback: unknown) => void);
+      const index = subscriptions.indexOf(callback as Subscription);
       if (index >= 0) {
         subscriptions.splice(index, 1);
       }
