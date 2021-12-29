@@ -4,11 +4,15 @@ import {
   OneWay, Effect, InternalState, Provider, Slot,
 } from '@devextreme-generator/declarations';
 
-import { createGetter, Plugins, PluginsContext } from '../../../utils/plugin/context';
+import {
+  createGetter, createValue, Plugins, PluginsContext,
+} from '../../../utils/plugin/context';
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
-import type { Column, ColumnUserConfig, RowData } from './types';
+import type {
+  Column, ColumnUserConfig, KeyExpr, RowData,
+} from './types';
 
 import { TableContent } from './views/table_content';
 import { TableHeader } from './views/table_header';
@@ -16,6 +20,8 @@ import { Footer } from './views/footer';
 
 export const VisibleItems = createGetter<RowData[]>([]);
 export const VisibleColumns = createGetter<Column[]>([]);
+export const DataSource = createValue<RowData[]>();
+export const KeyExprPlugin = createValue<KeyExpr>();
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -46,6 +52,9 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
 export class DataGridLightProps extends BaseWidgetProps {
   @OneWay()
   dataSource: RowData[] = [];
+
+  @OneWay()
+  keyExpr?: KeyExpr;
 
   @OneWay()
   columns: ColumnUserConfig[] = [];
@@ -104,6 +113,16 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     return this.plugins.extend(
       VisibleColumns, -1, () => this.columns,
     );
+  }
+
+  @Effect()
+  updateKeyExpr(): void {
+    this.plugins.set(KeyExprPlugin, this.props.keyExpr);
+  }
+
+  @Effect()
+  updateDataSource(): void {
+    this.plugins.set(DataSource, this.props.dataSource);
   }
 
   get columns(): Column[] {

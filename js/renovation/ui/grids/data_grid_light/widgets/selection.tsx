@@ -2,15 +2,19 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings,
-  TwoWay, Fragment, Consumer, Effect, OneWay, Method,
+  TwoWay, Fragment, Consumer, Effect, OneWay, Method, InternalState,
 } from '@devextreme-generator/declarations';
 import { Plugins, PluginsContext, createValue } from '../../../../utils/plugin/context';
 
 import { SelectionCheckbox } from './select_checkbox';
 import { SelectAllCheckbox } from './select_all_checkbox';
 
-import { VisibleColumns, VisibleItems } from '../data_grid_light';
-import { Column, RowData } from '../types';
+import {
+  KeyExprPlugin, VisibleColumns, VisibleItems, DataSource,
+} from '../data_grid_light';
+import {
+  Column, KeyExpr, RowData, Key,
+} from '../types';
 import { DataRowClassesGetter, DataRowPropertiesGetter } from './data_row';
 import { RowClick } from '../views/table_content';
 
@@ -26,13 +30,16 @@ export const viewFunction = (): JSX.Element => <Fragment />;
 @ComponentBindings()
 export class SelectionProps {
   @TwoWay()
-  selectedRowKeys: number[] = [];
+  selectedRowKeys: Key[] = [];
 
   @OneWay()
   mode: 'multiple' | 'single' | 'none' = 'single';
 
   @OneWay()
   allowSelectAll = true;
+
+  @OneWay()
+  selectAllMode: 'allPages' | 'page' = 'allPages';
 }
 
 @Component({
@@ -43,29 +50,46 @@ export class Selection extends JSXComponent(SelectionProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
 
+  @InternalState()
+  keyExpr: KeyExpr = '';
+
   @Effect()
-  addVisibleColumnsHandler(): () => void {
-    return this.plugins.extend(VisibleColumns, 1, (columns) => {
-      const selectColumn: Column = { cellTemplate: SelectionCheckbox };
-
-      if (this.props.mode === 'multiple' && this.props.allowSelectAll) {
-        selectColumn.headerTemplate = SelectAllCheckbox;
-      }
-
-      return [
-        selectColumn,
-        ...columns,
-      ];
+  watchKeyExpr(): () => void {
+    return this.plugins.watch(KeyExprPlugin, (keyExpr) => {
+      this.keyExpr = keyExpr;
     });
   }
 
   @Effect()
-  addPluginValues(): void {
+  addVisibleColumnsHandler(): (() => void) | undefined {
+    if (this.props.mode !== 'none') {
+      return this.plugins.extend(VisibleColumns, 1, (columns) => {
+        const selectColumn: Column = { cellTemplate: SelectionCheckbox };
+
+        if (this.props.mode === 'multiple' && this.props.allowSelectAll) {
+          selectColumn.headerTemplate = SelectAllCheckbox;
+        }
+
+        return [
+          selectColumn,
+          ...columns,
+        ];
+      });
+    }
+    return undefined;
+  }
+
+  @Effect()
+  addPluginMethods(): void {
     this.plugins.set(SetSelected, this.setSelected);
     this.plugins.set(IsSelected, this.isSelected);
     this.plugins.set(ClearSelection, this.clearSelection);
     this.plugins.set(SelectAll, this.selectAll);
-    this.plugins.set(SelectedCount, this.selectedCount());
+  }
+
+  @Effect()
+  addPluginValues(): void {
+    this.plugins.set(SelectedCount, this.props.selectedRowKeys.length);
     this.plugins.set(SelectableCount, this.selectableCount());
   }
 
@@ -110,8 +134,12 @@ export class Selection extends JSXComponent(SelectionProps) {
 
   @Method()
   selectAll(): void {
-    const items = this.plugins.getValue(VisibleItems) ?? [];
-    this.props.selectedRowKeys = items.map((item) => item.id as number);
+    const items = (
+      this.props.selectAllMode === 'allPages'
+        ? this.plugins.getValue(DataSource)
+        : this.plugins.getValue(VisibleItems)
+    ) ?? [];
+    this.props.selectedRowKeys = items.map((item) => item[this.keyExpr]);
   }
 
   @Method()
@@ -120,7 +148,7 @@ export class Selection extends JSXComponent(SelectionProps) {
   }
 
   isSelected(data: RowData): boolean {
-    return this.props.selectedRowKeys.includes(data.id as number);
+    return this.props.selectedRowKeys.includes(data[this.keyExpr]);
   }
 
   setSelected(data: RowData, value: boolean): void {
@@ -138,12 +166,13 @@ export class Selection extends JSXComponent(SelectionProps) {
     }
   }
 
-  selectedCount(): number {
-    return this.props.selectedRowKeys.length;
-  }
-
   selectableCount(): number {
-    return this.plugins.getValue(VisibleItems)?.length ?? 0;
+    const items = (
+      this.props.selectAllMode === 'allPages'
+        ? this.plugins.getValue(DataSource)
+        : this.plugins.getValue(VisibleItems)
+    ) ?? [];
+    return items.length;
   }
 
   invertSelected(data: RowData): void {

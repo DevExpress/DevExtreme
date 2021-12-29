@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  DataGridLight, viewFunction as DataGridView, DataGridLightProps,
+  DataGridLight, viewFunction as DataGridView, DataGridLightProps, KeyExprPlugin, DataSource,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
 import { generateData } from './test_data';
@@ -86,6 +86,29 @@ describe('DataGridLight', () => {
   });
 
   describe('Effects', () => {
+    describe('updateKeyExpr', () => {
+      it('should update keyExpr', () => {
+        const grid = new DataGridLight({
+          keyExpr: 'some key',
+        });
+
+        grid.updateKeyExpr();
+        expect(grid.plugins.getValue(KeyExprPlugin)).toEqual('some key');
+      });
+    });
+
+    describe('updateDataSource', () => {
+      it('should update updateDataSource', () => {
+        const dataSource = [{ id: 1 }, { id: 2 }, { id: 3 }];
+        const grid = new DataGridLight({
+          dataSource,
+        });
+
+        grid.updateDataSource();
+        expect(grid.plugins.getValue(DataSource)).toBe(dataSource);
+      });
+    });
+
     describe('updateVisibleItems', () => {
       const watchMock = jest.fn();
       const grid = new DataGridLight({});

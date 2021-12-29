@@ -14,3 +14,5 @@ export interface Column {
 }
 
 export type ColumnUserConfig = string;
+export type KeyExpr = string;
+export type Key = unknown;

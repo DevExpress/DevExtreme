@@ -1,6 +1,6 @@
 import {
   Component, JSXComponent, ComponentBindings, OneWay,
-  Event, RefObject, Effect, InternalState, JSXTemplate, Consumer,
+  Effect, InternalState, Consumer,
 } from '@devextreme-generator/declarations';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
@@ -37,9 +37,7 @@ export class SelectionCheckbox extends JSXComponent<SelectionCheckboxProps, 'dat
   updateIsSelected(): () => void {
     return this.plugins.watch(IsSelected, (isSelected) => {
       const newSelected = isSelected(this.props.data);
-      if (newSelected !== this.isSelected) {
-        this.isSelected = newSelected;
-      }
+      this.isSelected = newSelected;
     });
   }
 

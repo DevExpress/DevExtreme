@@ -1,5 +1,5 @@
 import {
-  Component, JSXComponent, ComponentBindings, OneWay, Event, RefObject, Effect, InternalState, Consumer,
+  Component, JSXComponent, ComponentBindings, OneWay, Effect, InternalState, Consumer,
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../utils/combine_classes';
 import { createGetter, PluginsContext, Plugins } from '../../../../utils/plugin/context';
@@ -12,7 +12,6 @@ export const DataRowClassesGetter = createGetter<DataRowClassesGetterType>(() =>
 
 export const viewFunction = (viewModel: DataRow): JSX.Element => (
   <tr
-    onClick={(): void => viewModel.props.onClick?.(viewModel.props.data)}
     className={viewModel.cssClasses}
     role="row"
     aria-selected="false"
@@ -51,9 +50,6 @@ export class DataRowProps {
 
   @OneWay()
   columns: Column[] = [];
-
-  @Event()
-  onClick?: (data: RowData) => void;
 }
 
 @Component({
@@ -80,15 +76,16 @@ export class DataRow extends JSXComponent(DataRowProps) {
   additionalClasses: Record<string, boolean> = {};
 
   @Effect()
-  watchDataRowProperties(): () => void {
-    const disposes = [
-      this.plugins.watch(DataRowPropertiesGetter, (getter) => {
-        this.additionalParams = getter(this.props.data);
-      }),
-      this.plugins.watch(DataRowClassesGetter, (getter) => {
-        this.additionalClasses = getter(this.props.data);
-      }),
-    ];
-    return (): void => { disposes.forEach((dispose) => dispose()); };
+  watchAdditionalParams(): () => void {
+    return this.plugins.watch(DataRowPropertiesGetter, (getter) => {
+      this.additionalParams = getter(this.props.data);
+    });
+  }
+
+  @Effect()
+  watchAdditionalClasses(): () => void {
+    return this.plugins.watch(DataRowClassesGetter, (getter) => {
+      this.additionalClasses = getter(this.props.data);
+    });
   }
 }
