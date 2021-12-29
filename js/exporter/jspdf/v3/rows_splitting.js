@@ -1,18 +1,18 @@
 import { isDefined } from '../../../core/utils/type';
 import { roundToThreeDecimals } from './draw_utils';
 
-function allocateRectsByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally) {
+function splitRectsByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally) {
     if(!isDefined(rects) || rects.length === 0) { // Empty Table
         return [[]];
     }
 
-    const rectsByPage = allocateRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally);
+    const rectsByPage = splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally);
     // TODO: splitRectsVerticalByPages
 
     return rectsByPage;
 }
 
-function allocateRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally) {
+function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally) {
     const pages = [];
     const rectsToSplit = [...rects];
 
@@ -83,4 +83,4 @@ function allocateRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, 
     return pages;
 }
 
-export { allocateRectsByPages };
+export { splitRectsByPages };
