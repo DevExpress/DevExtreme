@@ -1036,6 +1036,30 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
 
         assert.strictEqual(abortUploadSpy.callCount, 0, '\'abortUpload\' callback was not rised');
     });
+    test('onUploadError raised after no connection established during upload (T1047868)', function(assert) {
+        const xhrMock = { status: 0 };
+
+        const uploadErrorSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            chunkSize: 20000,
+            onUploadError: uploadErrorSpy
+        });
+        this.clock.tick(200);
+
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+        fileUploader._uploadStrategy._sendChunkCore = () => {
+            const deferred = new Deferred();
+            setTimeout(() => deferred.reject(xhrMock), 200);
+            return deferred.promise();
+        };
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+        this.clock.tick(400);
+
+        assert.ok(uploadErrorSpy.calledOnce, 'onUploadError raised');
+        assert.strictEqual(uploadErrorSpy.args[0][0].error.status, 0, 'xhr passed as an argument');
+    });
 });
 
 QUnit.module('validation rendering', moduleConfig, function() {
