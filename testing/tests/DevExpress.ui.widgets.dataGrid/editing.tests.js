@@ -15,6 +15,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
 import 'ui/color_box';
+import 'ui/tag_box';
 import 'ui/data_grid';
 import 'ui/drop_down_box';
 import 'ui/drop_down_button';
@@ -17514,6 +17515,7 @@ QUnit.module('Edit Form', {
                     dataField: 'name'
                 }, {
                     dataField: 'phone',
+                    isRequired: true,
                     editorOptions: {
                         labelMode: 'hidden'
                     }
@@ -17534,8 +17536,10 @@ QUnit.module('Edit Form', {
         assert.equal($textEditors.length, 3, 'text editor count');
         assert.equal($textEditors.eq(0).dxTextBox('instance').option('labelMode'), 'floating', 'item 0 labelMode');
         assert.equal($textEditors.eq(0).dxTextBox('instance').option('label'), 'Name', 'item 0 label');
+        assert.equal($textEditors.eq(0).dxTextBox('instance').option('labelMark'), '\u00A0*', 'item 0 label mark');
         assert.equal($textEditors.eq(1).dxTextBox('instance').option('labelMode'), 'hidden', 'item 1 labelMode');
         assert.equal($textEditors.eq(1).dxTextBox('instance').option('label'), 'Phone', 'item 1 label');
+        assert.equal($textEditors.eq(1).dxTextBox('instance').option('labelMark'), '\u00A0*', 'item 1 label mark');
     });
 
     ['static', 'floating'].forEach(labelMode => {
@@ -17577,6 +17581,40 @@ QUnit.module('Edit Form', {
             assert.strictEqual(formLayoutItems[0].label.visible, true, 'item 0 label.visible is assigned');
             assert.strictEqual(formLayoutItems[1].label.visible, undefined, 'item 1 label.visible is not assigned');
         });
+    });
+
+    QUnit.test('value should be correct if editorType is dxTagBox for lookup column (T1054830)', function(assert) {
+        this.array[0].tags = [1, 2];
+        this.columns.push({ dataField: 'tags', lookup: { valueExpr: 'this' } });
+
+        this.setupModules(this);
+
+        const that = this;
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        $.extend(that.options.editing, {
+            mode: 'form',
+            allowUpdating: true,
+            form: {
+                labelMode: 'floating',
+                items: [{
+                    dataField: 'tags',
+                    editorType: 'dxTagBox'
+                }]
+            }
+        });
+
+        rowsView.render(testElement);
+
+        // act
+        that.editRow(0);
+
+        // assert
+        const $textEditors = testElement.find('.dx-form .dx-texteditor');
+
+        assert.equal($textEditors.length, 1, 'text editor count');
+        assert.deepEqual($textEditors.eq(0).dxTagBox('instance').option('value'), [1, 2], 'item 0 value');
     });
 
     QUnit.testInActiveWindow('Focus editor after click on a label', function(assert) {
