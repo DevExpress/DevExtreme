@@ -1909,16 +1909,7 @@ declare module DevExpress.data {
       store?:
         | Array<TStoreItem>
         | Store<TStoreItem, any>
-        | (DevExpress.data.ArrayStore.Options<TStoreItem, any> & {
-            type: 'array';
-          })
-        | (DevExpress.data.LocalStore.Options<TStoreItem, any> & {
-            type: 'local';
-          })
-        | (DevExpress.data.ODataStore.Options<TStoreItem, any> & {
-            type: 'odata';
-          })
-        | DevExpress.data.CustomStore.Options<TStoreItem, any>;
+        | StoreOptions<TStoreItem, any>;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -2023,16 +2014,7 @@ declare module DevExpress.data {
     store?:
       | Array<TStoreItem>
       | Store<TStoreItem, TKey>
-      | (DevExpress.data.ArrayStore.Options<TStoreItem, TKey> & {
-          type: 'array';
-        })
-      | (DevExpress.data.LocalStore.Options<TStoreItem, TKey> & {
-          type: 'local';
-        })
-      | (DevExpress.data.ODataStore.Options<TStoreItem, TKey> & {
-          type: 'odata';
-        })
-      | DevExpress.data.CustomStore.Options<TStoreItem, TKey>;
+      | StoreOptions<TStoreItem, TKey>;
   }
   /**
    * [descr:EdmLiteral]
@@ -2776,9 +2758,9 @@ declare module DevExpress.data {
      */
     store?:
       | Store
-      | DevExpress.data.Store.Options
+      | StoreOptions
       | XmlaStore
-      | XmlaStoreOptions
+      | (XmlaStoreOptions & { type: 'xmla' })
       | Array<{
           /**
            * [descr:PivotGridDataSourceOptions.store.type]
@@ -2927,65 +2909,112 @@ declare module DevExpress.data {
    * [descr:SortDescriptor]
    */
   export type SortDescriptor<T> = GroupDescriptor<T>;
+  export type Store<TItem = any, TKey = any> =
+    | CustomStore<TItem, TKey>
+    | ArrayStore<TItem, TKey>
+    | LocalStore<TItem, TKey>
+    | ODataStore<TItem, TKey>;
   /**
-   * [descr:Store]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   * @docid
+   * @hidden
+   * @namespace DevExpress.data
    */
   export class Store<TItem = any, TKey = any> {
     constructor(options?: DevExpress.data.Store.Options<TItem, TKey>);
     /**
-     * [descr:Store.byKey(key)]
+     * @docid
+     * @publicName byKey(key)
+     * @param1 key:object|string|number
+     * @param2 extraOptions:LoadOptions
+     * @return Promise<any>
+     * @public
      */
     byKey(
       key: TKey,
       extraOptions?: LoadOptions<TItem>
     ): DevExpress.core.utils.DxPromise<TItem>;
     /**
-     * [descr:Store.insert(values)]
+     * @docid
+     * @publicName insert(values)
+     * @param1 values:object
+     * @return Promise<any>
+     * @public
      */
     insert(values: TItem): DevExpress.core.utils.DxPromise<TItem>;
     /**
-     * [descr:Store.key()]
+     * @docid
+     * @publicName key()
+     * @public
      */
     key(): string | Array<string>;
     /**
-     * [descr:Store.keyOf(obj)]
+     * @docid
+     * @publicName keyOf(obj)
+     * @param1 obj:object
+     * @return any|string|number
+     * @public
      */
     keyOf(obj: TItem): TKey;
     /**
-     * [descr:Store.load()]
+     * @docid
+     * @publicName load()
+     * @return Promise<any>
+     * @public
      */
     load(): DevExpress.core.utils.DxPromise<Array<TItem>>;
     /**
-     * [descr:Store.load(options)]
+     * @docid
+     * @publicName load(options)
+     * @param1 options:LoadOptions
+     * @return Promise<any>
+     * @public
      */
     load(
       options: LoadOptions<TItem>
     ): DevExpress.core.utils.DxPromise<Array<TItem>>;
     /**
-     * [descr:Store.off(eventName)]
+     * @docid
+     * @publicName off(eventName)
+     * @param1 eventName:string
+     * @return this
+     * @public
      */
     off(eventName: DevExpress.data.Store.EventName): this;
     /**
-     * [descr:Store.off(eventName, eventHandler)]
+     * @docid
+     * @publicName off(eventName, eventHandler)
+     * @param1 eventName:string
+     * @return this
+     * @public
      */
     off(
       eventName: DevExpress.data.Store.EventName,
       eventHandler: Function
     ): this;
     /**
-     * [descr:Store.on(eventName, eventHandler)]
+     * @docid
+     * @publicName on(eventName, eventHandler)
+     * @param1 eventName:string
+     * @return this
+     * @public
      */
     on(
       eventName: DevExpress.data.Store.EventName,
       eventHandler: Function
     ): this;
     /**
-     * [descr:Store.on(events)]
+     * @docid
+     * @publicName on(events)
+     * @param1 events:object
+     * @return this
+     * @public
      */
     on(events: { [key in DevExpress.data.Store.EventName]?: Function }): this;
     /**
-     * [descr:Store.push(changes)]
+     * @docid
+     * @publicName push(changes)
+     * @param1 changes:Array<any>
+     * @public
      */
     push(
       changes: Array<{
@@ -2996,18 +3025,32 @@ declare module DevExpress.data {
       }>
     ): void;
     /**
-     * [descr:Store.remove(key)]
+     * @docid
+     * @publicName remove(key)
+     * @param1 key:object|string|number
+     * @return Promise<void>
+     * @public
      */
     remove(key: TKey): DevExpress.core.utils.DxPromise<void>;
     /**
-     * [descr:Store.totalCount(options)]
+     * @docid
+     * @publicName totalCount(options)
+     * @param1_field1 filter:object
+     * @param1_field2 group:object
+     * @return Promise<number>
+     * @public
      */
     totalCount(obj: {
       filter?: FilterDescriptor | Array<FilterDescriptor>;
       group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     }): DevExpress.core.utils.DxPromise<number>;
     /**
-     * [descr:Store.update(key, values)]
+     * @docid
+     * @publicName update(key, values)
+     * @param1 key:object|string|number
+     * @param2 values:object
+     * @return Promise<any>
+     * @public
      */
     update(
       key: TKey,
@@ -3093,6 +3136,12 @@ declare module DevExpress.data {
      */
     onUpdating?: (key: TKey, values: TItem) => void;
   }
+  /** @public */
+  export type StoreOptions<TItem = any, TKey = any> =
+    | DevExpress.data.CustomStore.Options<TItem, TKey>
+    | (DevExpress.data.ArrayStore.Options<TItem, TKey> & { type: 'array' })
+    | (DevExpress.data.LocalStore.Options<TItem, TKey> & { type: 'local' })
+    | (DevExpress.data.ODataStore.Options<TItem, TKey> & { type: 'odata' });
   /**
    * [descr:SummaryDescriptor]
    */
