@@ -39,7 +39,6 @@ import {
   AppointmentClickData,
   ReducedIconHoverData,
 } from './appointment/types';
-import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
@@ -47,6 +46,8 @@ import { getPreparedDataItems, resolveDataItems } from './utils/data';
 import { getFilterStrategy } from './utils/filtering/local';
 import combineRemoteFilter from './utils/filtering/remote';
 import { ReducedIconTooltip } from './appointment/reduced_icon_tooltip/layout';
+import { AppointmentsContextProvider } from './appointments_context_provider';
+import { AppointmentsContextValue } from './appointments_context';
 
 export const viewFunction = ({
   restAttributes,
@@ -56,7 +57,6 @@ export const viewFunction = ({
   setCurrentDate,
   setCurrentView,
   startViewDate,
-  appointmentsViewModel,
   tooltipData,
   tooltipTarget,
   tooltipVisible,
@@ -64,10 +64,8 @@ export const viewFunction = ({
   reducedIconEndDate,
   reducedIconTarget,
   changeTooltipVisible,
-  showTooltip,
-  showReducedIconTooltip,
-  hideReducedIconTooltip,
   workSpaceKey,
+  appointmentsContextValue,
 
   props: {
     accessKey,
@@ -117,8 +115,6 @@ export const viewFunction = ({
     dateCellTemplate,
     timeCellTemplate,
     resourceCellTemplate,
-    appointmentTemplate,
-    appointmentCollectorTemplate,
   } = currentViewConfig;
 
   return (
@@ -159,64 +155,43 @@ export const viewFunction = ({
             viewType={type}
           />
         )}
-        <WorkSpace
-          firstDayOfWeek={firstDayOfWeek}
-          startDayHour={startDayHour}
-          endDayHour={endDayHour}
-          cellDuration={cellDuration}
-          groupByDate={groupByDate}
-          scrolling={scrolling}
-          currentDate={currentDate}
-          intervalCount={intervalCount}
-          groupOrientation={groupOrientation}
-          startDate={startDate}
-          showAllDayPanel={showAllDayPanel}
-          showCurrentTimeIndicator={showCurrentTimeIndicator}
-          indicatorUpdateInterval={indicatorUpdateInterval}
-          shadeUntilCurrentTime={shadeUntilCurrentTime}
-          crossScrollingEnabled={crossScrollingEnabled}
-          hoursInterval={hoursInterval}
-          groups={loadedResources}
-          type={type}
-          schedulerHeight={height}
-          schedulerWidth={width}
+        <AppointmentsContextProvider
+          appointmentsContextValue={appointmentsContextValue}
+        >
+          <WorkSpace
+            firstDayOfWeek={firstDayOfWeek}
+            startDayHour={startDayHour}
+            endDayHour={endDayHour}
+            cellDuration={cellDuration}
+            groupByDate={groupByDate}
+            scrolling={scrolling}
+            currentDate={currentDate}
+            intervalCount={intervalCount}
+            groupOrientation={groupOrientation}
+            startDate={startDate}
+            showAllDayPanel={showAllDayPanel}
+            showCurrentTimeIndicator={showCurrentTimeIndicator}
+            indicatorUpdateInterval={indicatorUpdateInterval}
+            shadeUntilCurrentTime={shadeUntilCurrentTime}
+            crossScrollingEnabled={crossScrollingEnabled}
+            hoursInterval={hoursInterval}
+            groups={loadedResources}
+            type={type}
+            schedulerHeight={height}
+            schedulerWidth={width}
 
-          allowMultipleCellSelection={allowMultipleCellSelection}
-          allDayPanelExpanded={allDayPanelExpanded}
-          onViewRendered={onViewRendered}
+            allowMultipleCellSelection={allowMultipleCellSelection}
+            allDayPanelExpanded={allDayPanelExpanded}
+            onViewRendered={onViewRendered}
 
-          dataCellTemplate={dataCellTemplate}
-          timeCellTemplate={timeCellTemplate}
-          dateCellTemplate={dateCellTemplate}
-          resourceCellTemplate={resourceCellTemplate}
+            dataCellTemplate={dataCellTemplate}
+            timeCellTemplate={timeCellTemplate}
+            dateCellTemplate={dateCellTemplate}
+            resourceCellTemplate={resourceCellTemplate}
 
-          allDayAppointments={(
-            <AppointmentLayout
-              isAllDay
-              appointments={appointmentsViewModel.allDay}
-              overflowIndicators={appointmentsViewModel.allDayCompact}
-              appointmentTemplate={appointmentTemplate}
-              overflowIndicatorTemplate={appointmentCollectorTemplate}
-              showReducedIconTooltip={showReducedIconTooltip}
-              hideReducedIconTooltip={hideReducedIconTooltip}
-              onAppointmentClick={showTooltip}
-            />
-          )}
-
-          appointments={(
-            <AppointmentLayout
-              appointments={appointmentsViewModel.regular}
-              overflowIndicators={appointmentsViewModel.regularCompact}
-              appointmentTemplate={appointmentTemplate}
-              overflowIndicatorTemplate={appointmentCollectorTemplate}
-              showReducedIconTooltip={showReducedIconTooltip}
-              hideReducedIconTooltip={hideReducedIconTooltip}
-              onAppointmentClick={showTooltip}
-            />
-          )}
-
-          key={workSpaceKey}
-        />
+            key={workSpaceKey}
+          />
+        </AppointmentsContextProvider>
         <AppointmentTooltip
           visible={tooltipVisible}
           onVisibleChange={changeTooltipVisible}
@@ -272,9 +247,9 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     const {
       firstDayOfWeek, startDayHour, endDayHour, cellDuration, groupByDate, scrolling,
       dataCellTemplate, timeCellTemplate, resourceCellTemplate, dateCellTemplate,
-      appointmentTemplate, appointmentCollectorTemplate, maxAppointmentsPerCell, currentDate,
-      showAllDayPanel, showCurrentTimeIndicator, indicatorUpdateInterval, shadeUntilCurrentTime,
-      crossScrollingEnabled, height, width,
+      appointmentTemplate, appointmentCollectorTemplate, appointmentTooltipTemplate,
+      maxAppointmentsPerCell, currentDate, showAllDayPanel, showCurrentTimeIndicator,
+      indicatorUpdateInterval, shadeUntilCurrentTime, crossScrollingEnabled, height, width,
     } = this.props;
 
     return getCurrentViewConfig(
@@ -292,6 +267,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         dateCellTemplate,
         appointmentTemplate,
         appointmentCollectorTemplate,
+        appointmentTooltipTemplate,
         maxAppointmentsPerCell,
         showAllDayPanel,
         showCurrentTimeIndicator,
@@ -527,6 +503,17 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     const groupCount = getGroupCount(this.loadedResources ?? []);
 
     return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
+  }
+
+  get appointmentsContextValue(): AppointmentsContextValue {
+    return {
+      viewModel: this.appointmentsViewModel,
+      appointmentTemplate: this.currentViewConfig.appointmentTemplate,
+      overflowIndicatorTemplate: this.currentViewConfig.appointmentCollectorTemplate,
+      onAppointmentClick: (data) => this.showTooltip(data),
+      showReducedIconTooltip: (data) => this.showReducedIconTooltip(data),
+      hideReducedIconTooltip: () => this.hideReducedIconTooltip(),
+    };
   }
 
   @Method()
