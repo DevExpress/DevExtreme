@@ -460,10 +460,7 @@ export type DataSourceLike<TItem, TKey = any> =
     sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
     store?: Array<TStoreItem> |
         Store<TStoreItem, any> |
-        ArrayStoreOptions<TStoreItem, any> & { type: 'array' } |
-        LocalStoreOptions<TStoreItem, any> & { type: 'local' } |
-        ODataStoreOptions<TStoreItem, any> & { type: 'odata' } |
-        CustomStoreOptions<TStoreItem, any>;
+        StoreOptions<TStoreItem, any>;
 }
 
 type EventName = 'changed' | 'loadError' | 'loadingChanged';
