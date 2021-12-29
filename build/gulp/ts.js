@@ -4,6 +4,7 @@ const gulp = require('gulp');
 const file = require('gulp-file');
 const footer = require('gulp-footer');
 const concat = require('gulp-concat');
+const exec = require('child_process').exec;
 const path = require('path');
 const replace = require('gulp-replace');
 const ts = require('gulp-typescript');
@@ -157,26 +158,34 @@ gulp.task('ts-check-public-modules', gulp.series('ts-copy-modules', function() {
         .pipe(compileTS({ allowSyntheticDefaultImports: true }));
 }));
 
-gulp.task('test-ts', function () {
-  const testTSPath = './testing/typescript';
-  return gulp
-    .src([
-      `${testTSPath}/**/*.ts`,
-      `!${testTSPath}/node_modules`,
-      `!${testTSPath}/node_modules/**`,
-    ])
-    .pipe(compileTS({
-      "esModuleInterop": true,
-      "noEmit": true,
-      "skipLibCheck": true,
-      "typeRoots": [],
-      "target": "es2015",
-      "baseUrl": `${testTSPath}`,
-      "paths": {
-        "*": ['node_modules/*']
-      },
-    }));
-});
+gulp.task('test-ts', gulp.series(
+  (callback) => {
+    exec(`cd testing/typescript && npm i --no-audit --no-fund`, (e, out, err) => {
+      console.log(out, err);
+      callback(e);
+    });
+  },
+  () => { 
+    const testTSPath = './testing/typescript';
+    return gulp
+      .src([
+        `${testTSPath}/**/*.ts`,
+        `!${testTSPath}/node_modules`,
+        `!${testTSPath}/node_modules/**`,
+      ])
+      .pipe(compileTS({
+        "esModuleInterop": true,
+        "noEmit": true,
+        "skipLibCheck": true,
+        "typeRoots": [],
+        "target": "es2015",
+        "baseUrl": `${testTSPath}`,
+        "paths": {
+          "*": ['node_modules/*']
+        },
+      }));
+  }
+));
 
 gulp.task('validate-ts', gulp.series(
     'ts-check-modules',
