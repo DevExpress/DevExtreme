@@ -4247,7 +4247,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.dataController.setViewportPosition(600);
 
         // assert
-        assert.strictEqual(this.dataController.items().length, 10, 'item count');
+        assert.strictEqual(this.dataController.items().length, 11, 'item count');
         assert.strictEqual(this.dataController.items()[0].isNewRow, true, 'item 0 is new');
     });
 // =================================
