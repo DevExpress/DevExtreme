@@ -4148,9 +4148,9 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.dataController.setViewportPosition(0);
 
         // assert
-        assert.strictEqual(this.dataController.items().length, 11, 'item count');
+        assert.strictEqual(this.dataController.items().length, 12, 'item count');
         assert.strictEqual(this.dataController.items()[0].isNewRow, true, 'item 0 is new');
-        assert.strictEqual(this.dataController.items()[6].isNewRow, true, 'item 6 is new');
+        assert.strictEqual(this.dataController.items()[7].isNewRow, true, 'item 7 is new');
     });
 
     QUnit.test('addRow > scroll to little near > add row', function(assert) {
@@ -4163,7 +4163,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.addRow();
 
         // assert
-        assert.strictEqual(this.dataController.items().length, 16, 'item count');
+        assert.strictEqual(this.dataController.items().length, 17, 'item count');
         assert.strictEqual(this.dataController.items()[0].isNewRow, true, 'item 0 is new');
         assert.strictEqual(this.dataController.items()[2].isNewRow, true, 'item 2 is new');
     });
@@ -4189,9 +4189,9 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
 
         // assert
         assert.strictEqual(this.dataController.items().length, 11, 'item count');
-        assert.strictEqual(this.dataController.items()[0].key, 15, 'item 15 from first page');
-        assert.strictEqual(this.dataController.items()[4].key, 19, 'item 19 from first page');
-        assert.strictEqual(this.dataController.items()[5].key, 20, 'item 20 from second page');
+        assert.strictEqual(this.dataController.items()[0].key, 16, 'item 16 from first page');
+        assert.strictEqual(this.dataController.items()[4].key, 20, 'item 20 from first page');
+        assert.strictEqual(this.dataController.items()[5].key, 21, 'item 21 from second page');
     });
 
     QUnit.test('scroll to second page > add row > scroll back > scroll to second page', function(assert) {
@@ -4247,7 +4247,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.dataController.setViewportPosition(600);
 
         // assert
-        assert.strictEqual(this.dataController.items().length, 10, 'item count');
+        assert.strictEqual(this.dataController.items().length, 11, 'item count');
         assert.strictEqual(this.dataController.items()[0].isNewRow, true, 'item 0 is new');
     });
 // =================================
