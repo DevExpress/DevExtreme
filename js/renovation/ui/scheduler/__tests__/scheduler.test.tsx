@@ -237,7 +237,7 @@ describe('Scheduler', () => {
           customizationFunction: props.customizeDateNavigatorText,
           onCurrentViewUpdate: setCurrentView,
           onCurrentDateUpdate: setCurrentDate,
-          startViewDate,
+          startViewDate: new Date(2021, 1, 1),
           viewType: 'week',
         });
     });
