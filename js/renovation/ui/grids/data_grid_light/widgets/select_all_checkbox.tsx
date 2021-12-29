@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-extraneous-class */
 import {
   Component, JSXComponent, ComponentBindings,
   Effect, InternalState, Consumer,
@@ -7,7 +8,7 @@ import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 import { CheckBox } from '../../../editors/check_box/check_box';
 import {
   ClearSelection, SelectableCount, SelectAll, SelectedCount,
-} from './selection';
+} from './selection_plugins';
 
 export const viewFunction = (viewModel: SelectAllCheckbox): JSX.Element => (
   <CheckBox
@@ -18,8 +19,7 @@ export const viewFunction = (viewModel: SelectAllCheckbox): JSX.Element => (
 );
 
 @ComponentBindings()
-export class SelectAllCheckboxProps {
-}
+export class SelectAllCheckboxProps {}
 
 @Component({
   defaultOptionRules: null,
@@ -62,9 +62,9 @@ export class SelectAllCheckbox extends JSXComponent(SelectAllCheckboxProps) {
 
   onValueChange(value: boolean): void {
     if (value) {
-      this.plugins.getValue(SelectAll)?.();
+      this.plugins.callAction(SelectAll);
     } else {
-      this.plugins.getValue(ClearSelection)?.();
+      this.plugins.callAction(ClearSelection);
     }
   }
 }

@@ -4,7 +4,7 @@ import { createContext } from '@devextreme-generator/declarations';
 
 let nextEntityId = 1;
 
-export class PluginEntity<T, S> {
+export class PluginEntity<T, S=T> {
   id: number;
 
   constructor() {
@@ -53,7 +53,7 @@ export class PluginSelector<R> extends PluginEntity<R, R> {
   }
 }
 
-export function createValue<T>(): PluginEntity<T, T> {
+export function createValue<T>(): PluginEntity<T> {
   return new PluginEntity<T, T>();
 }
 
@@ -153,7 +153,7 @@ export class Plugins {
     };
   }
 
-  getValue<T, S>(entity: PluginEntity<T, S>): T {
+  getValue<T, S>(entity: PluginEntity<T, S>): T | undefined {
     this.update(entity);
     const value = this.items[entity.id] as S;
     return entity.getValue(value);
@@ -223,6 +223,13 @@ export class Plugins {
         subscriptions.splice(index, 1);
       }
     };
+  }
+
+  callAction<
+    Args extends unknown[], R,
+  >(entity: PluginEntity<(...args: Args) => R>, ...args: Args): R | undefined {
+    const value = this.getValue(entity);
+    return value?.(...args);
   }
 }
 

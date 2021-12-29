@@ -93,6 +93,7 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     this.plugins.set(TotalCount, this.props.dataSource.length);
   }
 
+  @Effect()
   updateVisibleItems(): () => void {
     return this.plugins.watch(VisibleItems, (items) => {
       this.visibleItems = items;

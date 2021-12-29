@@ -1,6 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import {
+  ClearSelection, IsSelected, SelectableCount, SelectAll, SelectedCount, SetSelected,
+} from '../selection_plugins';
+import {
   Selection, SelectionProps, viewFunction as SelectionView,
 } from '../selection';
 import {
@@ -9,7 +12,7 @@ import {
 import { DataRowClassesGetter, DataRowPropertiesGetter } from '../data_row';
 import { RowClick } from '../../views/table_content';
 
-describe('Paging', () => {
+describe('Selection', () => {
   describe('View', () => {
     it('should be empty', () => {
       const tree = mount(<SelectionView />);
@@ -74,7 +77,7 @@ describe('Paging', () => {
         selection.keyExpr = 'id';
         selection.extendDataRowAttributes();
 
-        const attrGetter = selection.plugins.getValue(DataRowPropertiesGetter);
+        const attrGetter = selection.plugins.getValue(DataRowPropertiesGetter)!;
         expect(attrGetter({ id: 1 })).toEqual({
           'aria-selected': true,
         });
@@ -90,7 +93,7 @@ describe('Paging', () => {
         selection.keyExpr = 'id';
         selection.extendDataRowClasses();
 
-        const classesGetter = selection.plugins.getValue(DataRowClassesGetter);
+        const classesGetter = selection.plugins.getValue(DataRowClassesGetter)!;
         expect(classesGetter({ id: 1 })).toEqual({
           'dx-selection': true,
         });
@@ -104,13 +107,35 @@ describe('Paging', () => {
         selection.keyExpr = 'id';
 
         selection.setRowClickEvent();
-        const invert = selection.plugins.getValue(RowClick);
+        const invert = selection.plugins.getValue(RowClick)!;
 
         expect(selection.props.selectedRowKeys).toEqual([]);
         invert({ id: 1 });
         expect(selection.props.selectedRowKeys).toEqual([1]);
         invert({ id: 1 });
         expect(selection.props.selectedRowKeys).toEqual([]);
+      });
+    });
+
+    describe('addPluginMethods', () => {
+      it('should set methods', () => {
+        const selection = new Selection({});
+        selection.addPluginMethods();
+
+        expect(selection.plugins.getValue(SetSelected)).toBe(selection.setSelected);
+        expect(selection.plugins.getValue(IsSelected)).toBe(selection.isSelected);
+        expect(selection.plugins.getValue(ClearSelection)).toBe(selection.clearSelection);
+        expect(selection.plugins.getValue(SelectAll)).toBe(selection.selectAll);
+      });
+    });
+
+    describe('addPluginValues', () => {
+      it('should set methods', () => {
+        const selection = new Selection(new SelectionProps());
+        selection.addPluginValues();
+
+        expect(selection.plugins.getValue(SelectedCount)).toBe(0);
+        expect(selection.plugins.getValue(SelectableCount)).toBe(0);
       });
     });
   });

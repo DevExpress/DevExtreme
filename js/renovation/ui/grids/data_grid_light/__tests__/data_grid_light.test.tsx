@@ -2,7 +2,8 @@ import React from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  DataGridLight, viewFunction as DataGridView, DataGridLightProps, TotalCount, KeyExprPlugin, DataSource,
+  DataGridLight, viewFunction as DataGridView, DataGridLightProps,
+  TotalCount, KeyExprPlugin, DataSource,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
 import { generateData } from './test_data';

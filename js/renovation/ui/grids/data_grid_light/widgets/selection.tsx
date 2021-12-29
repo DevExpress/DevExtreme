@@ -4,7 +4,7 @@ import {
   Component, JSXComponent, ComponentBindings,
   TwoWay, Fragment, Consumer, Effect, OneWay, Method, InternalState,
 } from '@devextreme-generator/declarations';
-import { Plugins, PluginsContext, createValue } from '../../../../utils/plugin/context';
+import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
 import { SelectionCheckbox } from './select_checkbox';
 import { SelectAllCheckbox } from './select_all_checkbox';
@@ -17,13 +17,9 @@ import {
 } from '../types';
 import { DataRowClassesGetter, DataRowPropertiesGetter } from './data_row';
 import { RowClick } from '../views/table_content';
-
-export const SetSelected = createValue<(data: RowData, value: boolean) => void>();
-export const IsSelected = createValue<(data: RowData) => boolean>();
-export const SelectAll = createValue<() => void>();
-export const ClearSelection = createValue<() => void>();
-export const SelectedCount = createValue<number>();
-export const SelectableCount = createValue<number>();
+import {
+  ClearSelection, IsSelected, SelectableCount, SelectAll, SelectedCount, SetSelected,
+} from './selection_plugins';
 
 export const viewFunction = (): JSX.Element => <Fragment />;
 
@@ -134,11 +130,7 @@ export class Selection extends JSXComponent(SelectionProps) {
 
   @Method()
   selectAll(): void {
-    const items = (
-      this.props.selectAllMode === 'allPages'
-        ? this.plugins.getValue(DataSource)
-        : this.plugins.getValue(VisibleItems)
-    ) ?? [];
+    const items = this.getAllItems();
     this.props.selectedRowKeys = items.map((item) => item[this.keyExpr]);
   }
 
@@ -167,16 +159,20 @@ export class Selection extends JSXComponent(SelectionProps) {
   }
 
   selectableCount(): number {
-    const items = (
-      this.props.selectAllMode === 'allPages'
-        ? this.plugins.getValue(DataSource)
-        : this.plugins.getValue(VisibleItems)
-    ) ?? [];
+    const items = this.getAllItems();
     return items.length;
   }
 
   invertSelected(data: RowData): void {
     const isSelected = this.isSelected(data);
     this.setSelected(data, !isSelected);
+  }
+
+  getAllItems(): RowData[] {
+    return (
+      this.props.selectAllMode === 'allPages'
+        ? this.plugins.getValue(DataSource)
+        : this.plugins.getValue(VisibleItems)
+    ) ?? [];
   }
 }
