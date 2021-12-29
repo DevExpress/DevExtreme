@@ -5009,6 +5009,86 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getTotalSummaryValue('id'), 0, 'summary is updated');
     });
 
+    QUnit.test('Cascade lookup dataSource should be updated on editing if repaintChangesOnly and recalculateWhileEditing are true (T1055325)', function(assert) {
+        // arrange
+        const employees = [{
+            ID: 1, StateID: 1, CityID: 1,
+        }];
+
+        const states = [{
+            ID: 1, Name: 'Alabama',
+        }, {
+            ID: 2, Name: 'Alaska',
+        }];
+
+        const cities = [{
+            ID: 1, Name: 'Tuscaloosa', StateID: 1,
+        }, {
+            ID: 5, Name: 'Anchorage', StateID: 2,
+        }];
+
+        const dataGrid = createDataGrid({
+            keyExpr: 'ID',
+            dataSource: employees,
+            repaintChangesOnly: true,
+            editing: {
+                allowUpdating: true,
+                mode: 'row'
+            },
+            summary: {
+                recalculateWhileEditing: true,
+                totalItems: [{
+                    column: 'ID',
+                    summaryType: 'count'
+                }]
+            },
+            columns: ['ID',
+                {
+                    dataField: 'StateID',
+                    caption: 'State',
+                    setCellValue(rowData, value) {
+                        rowData.StateID = value;
+                        rowData.CityID = null;
+                    },
+                    lookup: {
+                        dataSource: states,
+                        valueExpr: 'ID',
+                        displayExpr: 'Name',
+                    },
+                },
+                {
+                    dataField: 'CityID',
+                    caption: 'City',
+                    lookup: {
+                        dataSource(options) {
+                            return {
+                                store: cities,
+                                filter: options.data ? ['StateID', '=', options.data.StateID] : null,
+                            };
+                        },
+                        valueExpr: 'ID',
+                        displayExpr: 'Name',
+                    },
+                },
+            ],
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        $(dataGrid.getCellElement(0, 'StateID')).find('.dx-selectbox').dxSelectBox('instance').option('value', 2);
+        this.clock.tick();
+
+        $(dataGrid.getCellElement(0, 'StateID')).find('.dx-selectbox').dxSelectBox('instance').option('value', 1);
+        this.clock.tick();
+
+        // assert
+        const selectBox = $(dataGrid.getCellElement(0, 'CityID')).find('.dx-selectbox').dxSelectBox('instance');
+        assert.strictEqual(selectBox.option().value, null, 'lookup value is updated');
+        assert.deepEqual(selectBox.option().dataSource.filter, ['StateID', '=', 1], 'lookup dataSource filter is correct');
+    });
 
     QUnit.testInActiveWindow('Validation message should be positioned relative cell in material theme', function(assert) {
         // arrange

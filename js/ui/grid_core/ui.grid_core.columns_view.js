@@ -675,15 +675,19 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         source = source || options;
 
-        source.watch = source.watch || function(getter, updateFunc) {
+        source.watch = source.watch || function(getter, updateValueFunc, updateRowFunc) {
             let oldValue = getter(source.data);
 
             const watcher = function(row) {
+                if(row && updateRowFunc) {
+                    updateRowFunc(row);
+                }
+
                 const newValue = getter(source.data);
 
                 if(JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
                     if(row) {
-                        updateFunc(newValue, row);
+                        updateValueFunc(newValue);
                     }
                     oldValue = newValue;
                 }
