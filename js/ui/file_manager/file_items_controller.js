@@ -704,7 +704,7 @@ export default class FileItemsController {
 
     _tryCallAction(actionName) {
         const args = Array.prototype.slice.call(arguments, 1);
-        if(this._options[actionName]) {
+        if(this._options[actionName] && this._isInitialized) {
             this._options[actionName](...args);
         }
     }

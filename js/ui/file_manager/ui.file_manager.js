@@ -557,7 +557,7 @@ class FileManager extends Widget {
                 }
                 const pathKeys = this._lockCurrentPathProcessing ? undefined : this.option('currentPathKeys');
                 this._controller.updateProvider(args.value, pathKeys)
-                    .then(() => this._providerUpdateDeferred.resolve())
+                    .always(() => this._providerUpdateDeferred.resolve())
                     .always(() => this.repaint());
                 break;
             }
