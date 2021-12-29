@@ -1,25 +1,25 @@
 import { isDefined } from '../../../core/utils/type';
-import { roundScaledValue } from './draw_utils';
+import { roundToThreeDecimals } from './draw_utils';
 
-function splitRectsByPages(rects, margin, topLeft, maxBottomRight, onSplitRectHorizontally) {
+function allocateRectsByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally) {
     if(!isDefined(rects) || rects.length === 0) { // Empty Table
         return [[]];
     }
 
-    const rectsByPage = splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSplitRectHorizontally);
+    const rectsByPage = allocateRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally);
     // TODO: splitRectsVerticalByPages
 
     return rectsByPage;
 }
 
-function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSplitRectHorizontally) {
+function allocateRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally) {
     const pages = [];
     const rectsToSplit = [...rects];
 
     while(rectsToSplit.length > 0) {
         let currentPageMaxRectRight = 0;
         const currentPageRects = rectsToSplit.filter(rect => {
-            const currentRectRight = roundScaledValue(rect.x + rect.w);
+            const currentRectRight = roundToThreeDecimals(rect.x + rect.w);
             if(currentRectRight <= maxBottomRight.x) {
                 if(currentPageMaxRectRight <= currentRectRight) {
                     currentPageMaxRectRight = currentRectRight;
@@ -30,18 +30,17 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
             }
         });
 
-        const currentPageCanBeSplitRects = rectsToSplit.filter(rect => {
+        const rectsToSeparate = rectsToSplit.filter(rect => {
             // Check cells that have 'rect.x' less than 'currentPageMaxRectRight'
-            const currentRectLeft = roundScaledValue(rect.x);
-            const currentRectRight = roundScaledValue(rect.x + rect.w);
+            const currentRectLeft = roundToThreeDecimals(rect.x);
+            const currentRectRight = roundToThreeDecimals(rect.x + rect.w);
             if(currentRectLeft < currentPageMaxRectRight && currentPageMaxRectRight < currentRectRight) {
                 return true;
             }
         });
 
-        currentPageCanBeSplitRects.forEach(rect => {
-            // Split merged rects that can be split and put to neccessary array
-            const splitResult = onSplitRectHorizontally(rect, {
+        rectsToSeparate.forEach(rect => {
+            const separatedRects = onSeparateRectHorizontally(rect, {
                 x: rect.x,
                 y: rect.y,
                 w: currentPageMaxRectRight - rect.x,
@@ -53,8 +52,8 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
                 h: rect.h
             });
 
-            currentPageRects.push(splitResult.left);
-            rectsToSplit.push(splitResult.right);
+            currentPageRects.push(separatedRects.left);
+            rectsToSplit.push(separatedRects.right);
 
             const index = rectsToSplit.indexOf(rect);
             if(index !== -1) {
@@ -84,4 +83,4 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
     return pages;
 }
 
-export { splitRectsByPages };
+export { allocateRectsByPages };

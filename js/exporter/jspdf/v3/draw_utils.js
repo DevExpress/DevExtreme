@@ -4,7 +4,7 @@ import { calculateTextHeight, getTextLines } from './pdf_utils_v3';
 
 const defaultBorderLineWidth = 1;
 
-function roundScaledValue(value) {
+function roundToThreeDecimals(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
 
@@ -23,14 +23,14 @@ function drawCellsContent(doc, customDrawCell, cellsArray, docStyles) {
 }
 
 function drawLine(doc, startX, startY, endX, endY) {
-    doc.line(roundScaledValue(startX), roundScaledValue(startY), roundScaledValue(endX), roundScaledValue(endY));
+    doc.line(roundToThreeDecimals(startX), roundToThreeDecimals(startY), roundToThreeDecimals(endX), roundToThreeDecimals(endY));
 }
 
 function drawRect(doc, x, y, width, height, style) {
     if(isDefined(style)) {
-        doc.rect(roundScaledValue(x), roundScaledValue(y), roundScaledValue(width), roundScaledValue(height), style);
+        doc.rect(roundToThreeDecimals(x), roundToThreeDecimals(y), roundToThreeDecimals(width), roundToThreeDecimals(height), style);
     } else {
-        doc.rect(roundScaledValue(x), roundScaledValue(y), roundScaledValue(width), roundScaledValue(height));
+        doc.rect(roundToThreeDecimals(x), roundToThreeDecimals(y), roundToThreeDecimals(width), roundToThreeDecimals(height));
     }
 }
 
@@ -60,7 +60,7 @@ function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWra
     const x = rect.x
         + (rect.w * horizontalAlignMap[hAlign]);
 
-    doc.text(textArray.join('\n'), roundScaledValue(x), roundScaledValue(y), { baseline: vAlign, align: hAlign });
+    doc.text(textArray.join('\n'), roundToThreeDecimals(x), roundToThreeDecimals(y), { baseline: vAlign, align: hAlign });
 }
 
 function drawCellBackground(doc, cell) {
@@ -220,4 +220,4 @@ function setDocumentStyles(doc, styles) {
     }
 }
 
-export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, roundScaledValue };
+export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, roundToThreeDecimals };
