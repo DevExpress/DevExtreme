@@ -1,13 +1,12 @@
 import {
-  Component, JSXComponent, ComponentBindings, OneWay,
-  Event, RefObject, Effect, InternalState, JSXTemplate, Consumer,
+  Component, JSXComponent, ComponentBindings,
+  Effect, InternalState, Consumer,
 } from '@devextreme-generator/declarations';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
 import { CheckBox } from '../../../editors/check_box/check_box';
-import { RowData } from '../types';
 import {
-  ClearSelection, IsSelected, SelectableCount, SelectAll, SelectedCount, SetSelected,
+  ClearSelection, SelectableCount, SelectAll, SelectedCount,
 } from './selection';
 
 export const viewFunction = (viewModel: SelectAllCheckbox): JSX.Element => (

@@ -1,13 +1,13 @@
 import {
   Component, JSXComponent, ComponentBindings, OneWay, Fragment,
-  JSXTemplate, Consumer, InternalState, Effect, Ref, RefObject,
+  Consumer, Effect, Ref, RefObject,
 } from '@devextreme-generator/declarations';
 
 import { Table } from '../widgets/table';
-import { DataRow, DataRowProps } from '../widgets/data_row';
+import { DataRow } from '../widgets/data_row';
 import { Column, RowData } from '../types';
 import {
-  createGetter, createPlaceholder, createValue, Plugins, PluginsContext,
+  createPlaceholder, createValue, Plugins, PluginsContext,
 } from '../../../../utils/plugin/context';
 import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
