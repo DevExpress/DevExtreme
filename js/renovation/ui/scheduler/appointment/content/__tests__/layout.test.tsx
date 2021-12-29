@@ -132,9 +132,14 @@ describe('AppointmentContent', () => {
       it('should correctly handle events from the reduced icon element', () => {
         const addEventListener = jest.fn();
         const removeEventListener = jest.fn();
+        const showReducedIconTooltip = jest.fn();
+        const hideReducedIconTooltip = jest.fn();
 
         const content = new AppointmentContent({
           ...new AppointmentContentProps(),
+          showReducedIconTooltip,
+          hideReducedIconTooltip,
+          data: { appointmentData: {} },
         });
 
         content.refReducedIcon = {
@@ -144,19 +149,22 @@ describe('AppointmentContent', () => {
           },
         } as any;
 
-        content.onReducedIconMouseEnter = jest.fn();
-        content.onReducedIconMouseLeave = jest.fn();
-
         const freeResources = content.bindHoverEffect() as any;
 
         expect(addEventListener)
           .toHaveBeenCalledTimes(2);
 
         expect(addEventListener)
-          .toBeCalledWith('mouseenter', content.onReducedIconMouseEnter);
-
+          .toBeCalledWith('mouseenter', expect.any(Function));
         expect(addEventListener)
-          .lastCalledWith('mouseleave', content.onReducedIconMouseLeave);
+          .lastCalledWith('mouseleave', expect.any(Function));
+
+        addEventListener.mock.calls[0][1]();
+        expect(showReducedIconTooltip)
+          .toBeCalled();
+        addEventListener.mock.calls[1][1]();
+        expect(hideReducedIconTooltip)
+          .toBeCalled();
 
         freeResources();
 
@@ -164,10 +172,16 @@ describe('AppointmentContent', () => {
           .toHaveBeenCalledTimes(2);
 
         expect(removeEventListener)
-          .toBeCalledWith('mouseenter', content.onReducedIconMouseEnter);
-
+          .toBeCalledWith('mouseenter', expect.any(Function));
         expect(removeEventListener)
-          .lastCalledWith('mouseleave', content.onReducedIconMouseLeave);
+          .lastCalledWith('mouseleave', expect.any(Function));
+
+        removeEventListener.mock.calls[0][1]();
+        expect(showReducedIconTooltip)
+          .toBeCalledTimes(2);
+        removeEventListener.mock.calls[1][1]();
+        expect(hideReducedIconTooltip)
+          .toBeCalledTimes(2);
       });
 
       it('should do nothing if reduced icon ref is not defined', () => {
