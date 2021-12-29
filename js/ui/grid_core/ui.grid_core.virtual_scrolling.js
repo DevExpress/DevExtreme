@@ -1052,7 +1052,7 @@ export const virtualScrollingModule = {
                             let prevCountable;
                             let prevRowType;
                             let isPrevRowNew;
-                            let wasExistingRow = false;
+                            let wasCountableItem = false;
 
                             newItems.forEach(item => {
                                 const rowType = item.rowType;
@@ -1061,9 +1061,9 @@ export const virtualScrollingModule = {
                                 if(!item.isNewRow && isDefined(prevCountable)) {
                                     const isNextGroupItem = rowType === 'group' && (prevCountable || itemCountable || (prevRowType !== 'group' && currentIndex > 0));
                                     const isNextDataItem = rowType === 'data' && itemCountable && (prevCountable || prevRowType !== 'group');
-                                    const isPrevNewRowFirst = isPrevRowNew && !wasExistingRow;
+                                    const isPrevNewRowFirst = isPrevRowNew && !wasCountableItem;
                                     if((isNextGroupItem || isNextDataItem)) {
-                                        wasExistingRow = true;
+                                        wasCountableItem = true;
                                         if(!isPrevNewRowFirst) {
                                             currentIndex++;
                                         }
