@@ -633,12 +633,13 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         _handleScroll: function(e) {
-            const that = this;
+            const legacyScrollingMode = this.option(LEGACY_SCROLLING_MODE) === true;
+            const zeroTopPosition = e.scrollOffset.top === 0;
 
-            if(that._hasHeight && that._rowHeight) {
-                that._dataController.setViewportPosition(e.scrollOffset.top);
+            if((this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
+                this._dataController.setViewportPosition(e.scrollOffset.top);
             }
-            that.callBase.apply(that, arguments);
+            this.callBase.apply(this, arguments);
         },
 
         _needUpdateRowHeight: function(itemsCount) {
@@ -1468,7 +1469,7 @@ export const virtualScrollingModule = {
                         return result;
                     },
                     isEmpty: function() {
-                        return this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this) ? !this._itemCount : this.callBase(this, arguments);
+                        return this.option(LEGACY_SCROLLING_MODE) === false ? !this.items(true).length : this.callBase(this, arguments);
                     },
                     isLastPageLoaded: function() {
                         let result = false;
@@ -1483,6 +1484,11 @@ export const virtualScrollingModule = {
                         }
 
                         return result;
+                    },
+                    reset: function() {
+                        this._itemCount = 0;
+                        this._allItems = null;
+                        this.callBase.apply(this, arguments);
                     }
                 };
 

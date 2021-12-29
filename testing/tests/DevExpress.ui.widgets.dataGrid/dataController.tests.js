@@ -5413,6 +5413,37 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // assert
         assert.equal(timeout, 100);
     });
+
+    QUnit.test('Options are reset when dataSource is changed to null (T1054920)', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                legacyMode: false,
+                rowPageSize: 5,
+                timeout: 100,
+                renderingThreshold: 100,
+                minTimeout: 50,
+                renderAsync: true
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        // assert
+        assert.equal(this.dataController._itemCount, 1, 'itemCount');
+        assert.equal(this.dataController._allItems[0].data.id, 1, 'first item id');
+
+        // act
+        this.option('dataSource', null);
+
+        // assert
+        assert.equal(this.dataController._itemCount, 0, 'itemCount is reset');
+        assert.strictEqual(this.dataController._allItems, null, 'all items are reset');
+    });
 });
 
 QUnit.module('Virtual scrolling preload', {
