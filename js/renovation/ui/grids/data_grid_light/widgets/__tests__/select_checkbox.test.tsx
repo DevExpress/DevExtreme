@@ -4,7 +4,7 @@ import {
   SelectionCheckbox, viewFunction as SelectionCheckboxView,
 } from '../select_checkbox';
 import { CheckBox } from '../../../../editors/check_box/check_box';
-import { IsSelected, SetSelected } from '../selection';
+import { IsSelected, SetSelected } from '../selection_plugins';
 
 describe('SelectionCheckbox', () => {
   describe('View', () => {

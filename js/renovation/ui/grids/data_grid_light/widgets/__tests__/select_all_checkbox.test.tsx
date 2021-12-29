@@ -6,7 +6,7 @@ import {
 import { CheckBox } from '../../../../editors/check_box/check_box';
 import {
   ClearSelection, SelectableCount, SelectAll, SelectedCount,
-} from '../selection';
+} from '../selection_plugins';
 
 describe('SelectionCheckbox', () => {
   describe('View', () => {
