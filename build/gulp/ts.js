@@ -157,6 +157,27 @@ gulp.task('ts-check-public-modules', gulp.series('ts-copy-modules', function() {
         .pipe(compileTS({ allowSyntheticDefaultImports: true }));
 }));
 
+gulp.task('test-ts', function () {
+  const testTSPath = './testing/typescript';
+  return gulp
+    .src([
+      `${testTSPath}/**/*.ts`,
+      `!${testTSPath}/node_modules`,
+      `!${testTSPath}/node_modules/**`,
+    ])
+    .pipe(compileTS({
+      "esModuleInterop": true,
+      "noEmit": true,
+      "skipLibCheck": true,
+      "typeRoots": [],
+      "target": "es2015",
+      "baseUrl": `${testTSPath}`,
+      "paths": {
+        "*": ['node_modules/*']
+      },
+    }));
+});
+
 gulp.task('validate-ts', gulp.series(
     'ts-check-modules',
     'ts-copy-bundle',
