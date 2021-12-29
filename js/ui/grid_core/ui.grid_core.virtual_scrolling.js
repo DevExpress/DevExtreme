@@ -1462,15 +1462,7 @@ export const virtualScrollingModule = {
                         return result;
                     },
                     isEmpty: function() {
-                        let result;
-
-                        if(this.option(LEGACY_SCROLLING_MODE) === false) {
-                            result = isVirtualPaging(this) ? !this._itemCount : !this.items(true).length;
-                        } else {
-                            result = this.callBase(this, arguments);
-                        }
-
-                        return result;
+                        return this.option(LEGACY_SCROLLING_MODE) === false ? !this.items(true).length : this.callBase(this, arguments);
                     },
                     isLastPageLoaded: function() {
                         let result = false;
@@ -1485,6 +1477,11 @@ export const virtualScrollingModule = {
                         }
 
                         return result;
+                    },
+                    reset: function() {
+                        this._itemCount = 0;
+                        this._allItems = null;
+                        this.callBase.apply(this, arguments);
                     }
                 };
 

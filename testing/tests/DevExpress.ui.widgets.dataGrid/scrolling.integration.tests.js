@@ -1371,6 +1371,13 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // act (pageSize 10)
         $(dataGrid.element()).find('.dx-pager .dx-page-sizes .dx-page-size:eq(0)').trigger('dxclick');
+        this.clock.tick();
+        const $noDataElement = $(dataGrid.element()).find('.dx-datagrid-nodata');
+
+        // assert
+        assert.ok(!$noDataElement.is(':visible'), 'No data element is hidden');
+
+        // act
         this.clock.tick(300);
         visibleRows = dataGrid.getVisibleRows();
         $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
