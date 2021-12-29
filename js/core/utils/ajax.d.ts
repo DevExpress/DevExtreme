@@ -5,7 +5,7 @@ import { DependencyInjector } from './dependency_injector';
 export interface JQueryXHR { }
 
 interface Ajax extends DependencyInjector {
-  sendRequest(any): DxPromise<any>;
+  sendRequest(any): DxPromise<any> | JQueryXHR;
 }
 
 declare const ajax: Ajax;
