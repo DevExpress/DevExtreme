@@ -95,7 +95,7 @@ export class Pager extends JSXComponent(PagerProps) {
   }
 
   get allowedPageSizes(): (number | 'all')[] {
-    const pageSize = this.plugins.getValue(PageSize);
+    const pageSize = this.plugins.getValue(PageSize) ?? 'all';
 
     if (this.props.allowedPageSizes === 'auto') {
       if (pageSize === 'all') {
