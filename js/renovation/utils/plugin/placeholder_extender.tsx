@@ -4,7 +4,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
-  PluginsContext, Plugins,
+  PluginsContext, Plugins, PluginEntity,
 } from './context';
 
 @ComponentBindings()
@@ -13,19 +13,26 @@ export class PlaceholderExtenderProps {
 
   @OneWay() order!: number;
 
-  @Template() template: any;
+  @Template() template!: (props) => JSX.Element;
+
+  @OneWay() deps: PluginEntity<unknown, unknown>[] = [];
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = (): JSX.Element => <Fragment />;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PlaceholderExtender extends JSXComponent<PlaceholderExtenderProps, 'type' | 'order'>(PlaceholderExtenderProps) {
+export class PlaceholderExtender extends JSXComponent<PlaceholderExtenderProps, 'type' | 'order' | 'template'>(PlaceholderExtenderProps) {
   @Consumer(PluginsContext)
   plugins!: Plugins;
 
   @Effect()
   extendPlaceholder(): () => void {
-    return this.plugins.extendPlaceholder(this.props.type, this.props.order, this.props.template);
+    return this.plugins.extendPlaceholder(
+      this.props.type,
+      this.props.order,
+      this.props.template,
+      this.props.deps,
+    );
   }
 }

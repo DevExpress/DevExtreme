@@ -2,14 +2,42 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings, OneWay,
-  TwoWay, Fragment, Consumer, Effect, InternalState,
+  TwoWay, Fragment,
 } from '@devextreme-generator/declarations';
-import { Plugins, PluginsContext, createValue } from '../../../../utils/plugin/context';
+import {
+  createValue, createSelector,
+} from '../../../../utils/plugin/context';
 
-import { VisibleItems } from '../data_grid_light';
+import { ValueSetter } from '../../../../utils/plugin/value_setter';
+import { GetterExtender } from '../../../../utils/plugin/getter_extender';
+
+import { VisibleItems, TotalCount } from '../data_grid_light';
 import { RowData } from '../types';
 
-export const viewFunction = (): JSX.Element => <Fragment />;
+export const PageIndex = createValue<number>();
+export const SetPageIndex = createValue<(pageIndex: number) => void>();
+export const PageSize = createValue<number | 'all'>();
+export const SetPageSize = createValue<(pageSize: number | 'all') => void>();
+
+export const PageCount = createSelector(
+  [TotalCount, PageSize],
+  (totalCount, pageSize) => {
+    if (pageSize === 'all') {
+      return 1;
+    }
+    return Math.ceil(totalCount / pageSize);
+  },
+);
+
+export const viewFunction = (viewModel: Paging): JSX.Element => (
+  <Fragment>
+    <ValueSetter type={PageIndex} value={viewModel.props.pageIndex} />
+    <ValueSetter type={PageSize} value={viewModel.pageSize} />
+    <ValueSetter type={SetPageIndex} value={viewModel.setPageIndex} />
+    <ValueSetter type={SetPageSize} value={viewModel.setPageSize} />
+    <GetterExtender type={VisibleItems} order={1} func={viewModel.calculateVisibleItems} />
+  </Fragment>
+);
 
 @ComponentBindings()
 export class PagingProps {
@@ -23,54 +51,16 @@ export class PagingProps {
   enabled = true;
 }
 
-export interface PagingPluginData {
-  pageCount: number;
-
-  totalCount: number;
-
-  pageIndex: number;
-
-  setPageIndex: (pageIndex: number) => void;
-
-  pageSize: number | 'all';
-
-  setPageSize: (pageSize: number | 'all') => void;
-}
-
-export const PagingPlugin = createValue<PagingPluginData>();
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
 export class Paging extends JSXComponent(PagingProps) {
-  @Consumer(PluginsContext)
-  plugins = new Plugins();
-
-  @InternalState()
-  dataSource: RowData[] = [];
-
-  @Effect()
-  addPagingHandler(): () => void {
-    return this.plugins.extend(VisibleItems, 1, (items): RowData[] => {
-      this.dataSource = items;
-      return this.calculateVisibleItems(items);
-    });
-  }
-
-  @Effect()
-  updatePagingProps(): void {
-    this.plugins.set(PagingPlugin, {
-      pageIndex: this.props.pageIndex,
-      setPageIndex: this.setPageIndex,
-
-      pageSize: this.pageSize,
-      setPageSize: this.setPageSize,
-
-      totalCount: this.totalCount,
-
-      pageCount: this.pageCount,
-    });
+  get pageSize(): number | 'all' {
+    if (this.props.pageSize === 0) {
+      return 'all';
+    }
+    return this.props.pageSize;
   }
 
   setPageIndex(pageIndex: number): void {
@@ -86,29 +76,10 @@ export class Paging extends JSXComponent(PagingProps) {
       return dataSource;
     }
 
-    const start = (this.props.pageIndex as number) * (this.pageSize as number);
-    const end = start + (this.pageSize as number);
+    const pageSize = this.pageSize as number;
+    const start = (this.props.pageIndex as number) * pageSize;
+    const end = start + pageSize;
 
     return dataSource.slice(start, end);
-  }
-
-  get totalCount(): number {
-    return this.dataSource.length;
-  }
-
-  get pageCount(): number {
-    if (this.pageSize === 'all') {
-      return 1;
-    }
-
-    return Math.ceil(this.totalCount / (this.pageSize as number));
-  }
-
-  get pageSize(): number | 'all' {
-    if (this.props.pageSize === 0) {
-      return 'all';
-    }
-
-    return this.props.pageSize;
   }
 }

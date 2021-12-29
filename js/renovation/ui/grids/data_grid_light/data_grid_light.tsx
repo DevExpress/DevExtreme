@@ -5,7 +5,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
-  createGetter, createValue, Plugins, PluginsContext,
+  createValue, createGetter, Plugins, PluginsContext,
 } from '../../../utils/plugin/context';
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
@@ -22,6 +22,7 @@ export const VisibleItems = createGetter<RowData[]>([]);
 export const VisibleColumns = createGetter<Column[]>([]);
 export const DataSource = createValue<RowData[]>();
 export const KeyExprPlugin = createValue<KeyExpr>();
+export const TotalCount = createValue<number>();
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -88,6 +89,10 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   visibleColumns: Column[] = [];
 
   @Effect()
+  updateTotalCount(): void {
+    this.plugins.set(TotalCount, this.props.dataSource.length);
+  }
+
   updateVisibleItems(): () => void {
     return this.plugins.watch(VisibleItems, (items) => {
       this.visibleItems = items;
