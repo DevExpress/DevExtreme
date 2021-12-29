@@ -434,7 +434,7 @@ export type DataSourceLike<TItem, TKey = any> =
     DataSourceOptionsStub<any, any, TItem> |
     DataSource<TItem, TKey>;
 
-    interface DataSourceOptionsStub<
+interface DataSourceOptionsStub<
     TStoreItem = any,
     TMappedItem = TStoreItem,
     TItem = TMappedItem,
@@ -458,9 +458,7 @@ export type DataSourceLike<TItem, TKey = any> =
     searchValue?: any;
     select?: SelectDescriptor<TItem>;
     sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
-    store?: Array<TStoreItem> |
-        Store<TStoreItem, any> |
-        StoreOptions<TStoreItem, any>;
+    store?: Array<TStoreItem> | Store<TStoreItem, any> | StoreOptions<TStoreItem, any>;
 }
 
 type EventName = 'changed' | 'loadError' | 'loadingChanged';
