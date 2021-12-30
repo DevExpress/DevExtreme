@@ -65,6 +65,7 @@ const LIST_CLASS = 'dx-list';
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
+const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 
 const CALENDAR_HOURS_NUMBERBOX_SELECTOR = '.dx-numberbox-spin-down';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
@@ -4816,6 +4817,17 @@ QUnit.module('pickerType', {}, () => {
 
             assert.ok(areClassesCorrect(pickerType), 'classes for ' + pickerType + ' are correct');
         }
+    });
+
+    [
+        { pickerType: 'calendar', type: 'datetime' },
+        { pickerType: 'rollers', type: 'datetime' },
+        { pickerType: 'list', type: 'time' }
+    ].forEach(({ type, pickerType }) => {
+        QUnit.test(`Overlay wrapper should have 'dx-dropdowneditor-overlay' class in DateBox with ${pickerType} pickerType`, function(assert) {
+            $('#dateBox').dxDateBox({ type, pickerType, opened: true });
+            assert.ok($(`.${DATEBOX_WRAPPER_CLASS}`).hasClass(DROPDOWNEDITOR_OVERLAY_CLASS));
+        });
     });
 
     QUnit.test('Calendar pickerType and time type should use time list (T248089)', function(assert) {
