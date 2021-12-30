@@ -492,7 +492,7 @@ class FileManager extends Widget {
                 chunkSize: 200000
             },
 
-            permissions: defaultPermissions,
+            permissions: extend({}, defaultPermissions),
 
             notifications: {
                 showPanel: true,

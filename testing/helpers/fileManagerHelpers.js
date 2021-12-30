@@ -558,9 +558,17 @@ export class FileManagerWrapper {
             elementOffset.left = !isDefined(elementOffset.left) ? offsetValue : elementOffset.left;
         }
         $element.trigger($.Event(eventType, {
-            clientX: $element.offset().left + elementOffset.left,
-            clientY: $element.offset().top + elementOffset.top
+            clientX: $element.offset().left + elementOffset.left - this.getDocumentScrollLeft(),
+            clientY: $element.offset().top + elementOffset.top - this.getDocumentScrollTop()
         }));
+    }
+
+    getDocumentScrollTop() {
+        return document.documentElement.scrollTop || document.body.scrollTop;
+    }
+
+    getDocumentScrollLeft() {
+        return document.documentElement.scrollLeft || document.body.scrollLeft;
     }
 
 }
