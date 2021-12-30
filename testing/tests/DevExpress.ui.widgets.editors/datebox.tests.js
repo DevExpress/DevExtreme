@@ -4787,7 +4787,14 @@ QUnit.module('aria accessibility', {}, () => {
     });
 });
 
-QUnit.module('pickerType', {}, () => {
+QUnit.module('pickerType', {
+    beforeEach: function() {
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+}, () => {
     QUnit.test('T319039 - classes on DateBox should be correct after the \'pickerType\' option changed', function(assert) {
         const pickerTypes = ['rollers', 'calendar', 'native', 'list'];
         const $dateBox = $('#dateBox').dxDateBox();
@@ -4827,7 +4834,6 @@ QUnit.module('pickerType', {}, () => {
         QUnit.test(`Overlay wrapper should have 'dx-dropdowneditor-overlay' class in DateBox with ${pickerType} pickerType`, function(assert) {
             $('#dateBox').dxDateBox({ type, pickerType, opened: true });
             assert.ok($(`.${DATEBOX_WRAPPER_CLASS}`).hasClass(DROPDOWNEDITOR_OVERLAY_CLASS));
-            this.clock.restore();
         });
     });
 
