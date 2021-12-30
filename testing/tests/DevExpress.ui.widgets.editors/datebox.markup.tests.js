@@ -19,6 +19,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const DATEBOX_CLASS = 'dx-datebox';
 const DATEBOX_LIST_CLASS = 'dx-datebox-list';
 const DX_AUTO_WIDTH_CLASS = 'dx-auto-width';
+const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -55,6 +56,17 @@ QUnit.module('Datebox markup', moduleConfig, () => {
         this.createInstance();
         assert.ok(this.instance instanceof DateBox);
         assert.ok(this.$element.hasClass(DATEBOX_CLASS));
+    });
+
+    [
+        { pickerType: 'calendar', type: 'datetime' },
+        { pickerType: 'rollers', type: 'datetime' },
+        { pickerType: 'list', type: 'time' }
+    ].forEach(({ type, pickerType }) => {
+        QUnit.test(`Overlay wrapper should have 'dx-dropdowneditor-overlay' class in DateBox with ${pickerType} pickerType`, function(assert) {
+            this.createInstance({ type, pickerType, opened: true });
+            assert.ok($('.dx-overlay-wrapper').hasClass(DROPDOWNEDITOR_OVERLAY_CLASS));
+        });
     });
 
     QUnit.test('rendered markup when pickerType=\'list\'', function(assert) {
