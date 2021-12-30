@@ -194,7 +194,7 @@ export const editingFormBasedModule = {
                         rowIndex
                     };
 
-                    this._rowsView._addWatchMethod(templateOptions);
+                    this._rowsView._addWatchMethod(templateOptions, row);
 
                     return (container) => {
                         const formTemplate = this.getEditFormTemplate();

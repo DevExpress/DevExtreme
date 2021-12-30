@@ -21110,11 +21110,17 @@ QUnit.module('Editing - public arguments of the events/templates', {
         [true, false].forEach((repaintChangesOnly) => {
             QUnit.test(`Check the watch argument of the editCellTemplate in ${editMode} mode when repaintChangesOnly = ${repaintChangesOnly}`, function(assert) {
                 // arrange
-                const editCellTemplateSpy = sinon.spy();
+                const watchSpy = sinon.spy();
+                const editCellTemplateSpy = sinon.spy((container, cellInfo) => {
+                    cellInfo.watch && cellInfo.watch((data) => {
+                        return data;
+                    }, watchSpy);
+                });
 
                 this.options.editing.mode = editMode;
                 this.options.repaintChangesOnly = repaintChangesOnly;
                 this.columns[0] = { dataField: 'name', editCellTemplate: editCellTemplateSpy };
+                this.columns[1] = { dataField: 'age', setCellValue: (newData, value) => { newData.age = value; } };
                 this.setupModules();
                 this.renderRowsView();
 
@@ -21132,6 +21138,15 @@ QUnit.module('Editing - public arguments of the events/templates', {
 
                 if(repaintChangesOnly) {
                     assert.strictEqual(typeof args.watch, 'function', 'watch arg');
+
+                    if(editMode !== 'batch' && editMode !== 'cell') {
+                        // act
+                        $(this.getCellElement(0, 1)).find('.dx-numberbox').dxNumberBox('instance').option('value', 123);
+                        this.clock.tick();
+
+                        // assert
+                        assert.strictEqual(watchSpy.callCount, 1, 'watch update is called');
+                    }
                 } else {
                     assert.strictEqual(args.watch, undefined, 'watch arg');
                 }
