@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { Selector, ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import FilterBuilder from '../../model/filterBuilder';
 
@@ -18,4 +18,18 @@ test('Field menu should be opened on field click if window scroll exists (T85270
 
   await t.expect(lastField.text).eql('Test 50');
   await t.expect(FilterBuilder.getPopupTreeView().visible).ok();
+});
+
+fixture`Filter Builder with DateBox and pickerType "rollers"`
+  .page(url(__dirname, './pages/T1051831.html'));
+
+test('DateBox should not close on click (T1051831)', async (t) => {
+  await t
+    .click(Selector('.dx-filterbuilder-item-value-text'))
+    .click(Selector('.dx-datebox'))
+    .click(Selector('.dx-popup-done'));
+
+  const overlay = Selector('.dx-overlay-content');
+
+  await t.expect(overlay.exists).ok();
 });
