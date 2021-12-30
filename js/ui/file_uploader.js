@@ -1573,6 +1573,18 @@ class FileUploadStrategyBase {
         return callback && isFunction(callback);
     }
 
+    _handleProgress(file, e) {
+        if(file._isError) {
+            return;
+        }
+
+        file._isProgressStarted = true;
+        this._handleProgressCore(file, e);
+    }
+
+    _handleProgressCore(file, e) {
+    }
+
     _handleFileError(file, error) {
         file._isError = true;
         file.onError.fire(error);
@@ -1594,6 +1606,10 @@ class FileUploadStrategyBase {
         file.onAbort.add(this._onAbortHandler.bind(this, file));
         file.onProgress.add(this._onProgressHandler.bind(this, file));
         file.isInitialized = true;
+    }
+
+    _shouldHandleError(file, e) {
+        return (this._isStatusError(e.status) || !file._isProgressStarted) && !file.isAborted;
     }
 
     _isStatusError(status) {
@@ -1726,7 +1742,7 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
                     setTimeout(() => this._sendChunk(file, chunksData));
                 })
                 .fail(error => {
-                    if(this._shouldHandleError(error)) {
+                    if(this._shouldHandleError(file, error)) {
                         this._handleFileError(file, error);
                     }
                 });
@@ -1734,9 +1750,6 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     }
 
     _sendChunkCore(file, chunksData, chunk) {
-    }
-
-    _shouldHandleError(error) {
     }
 
     _tryRaiseStartLoad(file) {
@@ -1775,6 +1788,7 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
             headers: this.fileUploader.option('uploadHeaders'),
             beforeSend: xhr => this._beforeSend(xhr, file),
             upload: {
+                'onprogress': e => this._handleProgress(file, e),
                 'onloadstart': () => this._tryRaiseStartLoad(file),
                 'onabort': () => file.onAbort.fire()
             },
@@ -1789,10 +1803,6 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
                 size: chunksData.fileSize
             })
         });
-    }
-
-    _shouldHandleError(e) {
-        return this._isStatusError(e.status);
     }
 
     _createFormData(options) {
@@ -1827,7 +1837,7 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
         }
     }
 
-    _shouldHandleError(e) {
+    _shouldHandleError(file, error) {
         return true;
     }
 }
@@ -1852,15 +1862,7 @@ class WholeFileUploadStrategyBase extends FileUploadStrategyBase {
     _uploadFile(file) {
     }
 
-    _shouldHandleError(file, e) {
-    }
-
-    _handleProgress(file, e) {
-        if(file._isError) {
-            return;
-        }
-
-        file._isProgressStarted = true;
+    _handleProgressCore(file, e) {
         file.onProgress.fire(e);
     }
 
@@ -1886,10 +1888,6 @@ class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
             },
             data: this._createFormData(this.fileUploader.option('name'), file.value)
         });
-    }
-
-    _shouldHandleError(file, e) {
-        return (this._isStatusError(e.status) || !file._isProgressStarted) && !file.isAborted;
     }
 
     _createFormData(fieldName, fieldValue) {
