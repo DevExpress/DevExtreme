@@ -14,6 +14,20 @@ export type GroupItem<
     TItem = any,
 > = { key: any | string | number; items: Array<TItem> | Array<GroupItem> | null; count?: number; summary?: Array<any> };
 
+/** @public */
+export type ResolvedData<
+    TItem = any,
+> =
+  | Object
+  | Array<TItem>
+  | Array<GroupItem>
+  | {
+      data: Array<TItem> | Array<GroupItem>;
+      totalCount?: number;
+      summary?: Array<any>;
+      groupCount?: number;
+    };
+
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
@@ -49,16 +63,8 @@ export interface CustomStoreOptions<
      * @public
      */
     load: ((options: LoadOptions<TItem>) =>
-      | DxPromise<
-        | Object
-        | Array<TItem>
-        | Array<GroupItem>
-        | {
-            data: Array<TItem> | Array<GroupItem>;
-            totalCount?: number;
-            summary?: Array<any>;
-            groupCount?: number;
-          }>
+      | DxPromise<ResolvedData>
+      | PromiseLike<ResolvedData>
       | JQueryXHR
       | Array<GroupItem>
       | Array<TItem>);
