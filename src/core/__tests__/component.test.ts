@@ -1593,6 +1593,36 @@ describe("component rendering", () => {
                 expect(WidgetClass.mock.calls[0][1].integrationOptions.templates).toBeUndefined();
             });
 
+            it("doesn't pass template to integrationOptions if nested item has comment", () => {
+                const NestedItem = createConfigurationComponent({
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+                (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+                (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+                const SubNested = buildTestConfigCtor();
+                (SubNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
+
+                const vm = defineComponent({
+                    template: `<test-component>
+                                <nested-item>
+                                    <!-- <div>test</div> -->
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                expect(WidgetClass.mock.calls[0][1].integrationOptions.templates).toBeUndefined();
+            });
+
             it("doesn't pass integrationOptions to widget if nested item has sub nested item", () => {
                 const NestedItem = createConfigurationComponent({
                     props: {
