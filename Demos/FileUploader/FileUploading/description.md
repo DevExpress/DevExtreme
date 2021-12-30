@@ -4,4 +4,4 @@ In&nbsp;this demo, the FileUploader component is&nbsp;configured for asynchronou
 To&nbsp;select files, click the _Select file_ button or&nbsp;drop the files directly on&nbsp;the component. If&nbsp;the upload mode is _&laquo;useButtons&raquo;_, you must click the _Upload_ button or&nbsp;a&nbsp;corresponding button for each file to&nbsp;initiate upload. 
 
 
-**NOTE:** This demo does not actually upload files. To&nbsp;upload files, assign the URL of&nbsp;a&nbsp;page providing server scenarios for saving uploaded files to&nbsp;the **uploadUrl** configuration property of&nbsp;the component.
+[note]This demo does not actually upload files. To upload files, assign the URL of a page providing server scenarios for saving uploaded files to the **uploadUrl** configuration property of the component.

@@ -5,4 +5,4 @@ The component's default security settings provide read-only access to files and 
 
 Use the component's [itemView](/Documentation/ApiReference/UI_Components/dxFileManager/Configuration/itemView/) property or the view switcher on the toolbar to display file system items as a detailed list or customizable thumbnails.
 
-*This demo contains commented out code lines that enable file modification operations. You can uncomment them and configure if necessary.*
+This demo contains commented out code lines that enable file modification operations. You can uncomment them and configure if necessary.

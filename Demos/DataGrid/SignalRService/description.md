@@ -6,4 +6,4 @@ For server-side configuration, refer to the [ASP.NET MVC version of this demo](/
 
 For more information about integration with push services, refer to the following help topic: [Integration with Push Services](/Documentation/Guide/Data_Binding/Data_Layer/#Data_Modification/Integration_with_Push_Services).
  
-NOTE: Data used in this demo is for demonstration purposes only.
+[note]Data used in this demo is for demonstration purposes only.

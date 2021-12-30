@@ -2,4 +2,4 @@ The FileUploader component allows an&nbsp;end user to&nbsp;upload files to&nbsp;
 
 To see an example of server-side implementation, refer to the **HTML Form Upload** article for [ASP.NET](/Documentation/Guide/UI_Components/FileUploader/Upload_Files/Server-Side_Implementation_in_ASP.NET/#HTML_Form_Upload) or [PHP](/Documentation/Guide/UI_Components/FileUploader/Upload_Files/Server-Side_Implementation_in_PHP/#HTML_Form_Upload).
 
-**NOTE:** This demo does not actually upload the selected file. To&nbsp;upload a&nbsp;file, submit the form. The form element should contain the **action** attribute, which holds the URL of&nbsp;the page providing server scenarios for saving uploaded files.
+[note]This demo does not actually upload the selected file. To upload a file, submit the form. The form element should contain the **action** attribute, which holds the URL of the page providing server scenarios for saving uploaded files.

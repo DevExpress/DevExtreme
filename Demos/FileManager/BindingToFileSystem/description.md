@@ -5,4 +5,4 @@ Configure the built-in server-side helper methods to process the FileManager com
 2. Use the [FileSystemProvider](https://docs.devexpress.com/AspNetCore/DevExtreme.AspNet.Mvc.FileManagement.FileSystemConfiguration.FileSystemProvider) property to specify a file system provider. For a physical file system, configure a file system provider of the [PhysicalFileSystemProvider](https://docs.devexpress.com/AspNetCore/DevExtreme.AspNet.Mvc.FileManagement.PhysicalFileSystemProvider) type.
 3. Use the [FileSystemCommandProcessor](https://docs.devexpress.com/AspNetCore/DevExtreme.AspNet.Mvc.FileManagement.FileSystemCommandProcessor) class to process commands and request parameters that the component passes to the file system.
 
-*This demo contains commented out code lines that enable file modification operations. You can uncomment them and configure if necessary.*
+This demo contains commented out code lines that enable file modification operations. You can uncomment them and configure if necessary.
