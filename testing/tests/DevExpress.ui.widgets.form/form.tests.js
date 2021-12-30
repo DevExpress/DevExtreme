@@ -3543,7 +3543,16 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
     });
 });
 
-QUnit.module('Adaptivity');
+QUnit.module('Adaptivity', {
+    beforeEach: function() {
+        const that = this;
+        that.clock = sinon.useFakeTimers();
+    },
+
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
 
 QUnit.test('One column screen should be customizable with screenByWidth option on init', function(assert) {
     const $form = $('#form');
@@ -3917,6 +3926,7 @@ QUnit.test('Form refreshes only one time on dimension changed with group layout'
 
     $form.width(100);
     resizeCallbacks.fire();
+    this.clock.tick();
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout one time');
 });
 
@@ -3942,6 +3952,7 @@ QUnit.test('Form redraw layout when colCount is \'auto\' and an calculated colCo
 
     $form.width(100);
     resizeCallbacks.fire();
+    this.clock.tick();
 
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout');
 });
