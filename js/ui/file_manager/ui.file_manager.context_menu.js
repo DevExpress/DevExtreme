@@ -35,6 +35,11 @@ const DEFAULT_ITEM_ALLOWED_PROPERTIES = [
 
 class FileManagerContextMenu extends Widget {
 
+    _init() {
+        super._init();
+        this._commandManager.registerPermissionsChangedCallback(() => this._tryUpdateVisibleContextMenu());
+    }
+
     _initMarkup() {
         this._initActions();
 
@@ -192,7 +197,7 @@ class FileManagerContextMenu extends Widget {
 
     _onContextMenuShowing(e) {
         if(this._isVisible) {
-            this._onContextMenuHidden();
+            this._onContextMenuHidden(true);
         }
         e = extend(e, this._menuShowingContext, { options: this.option(), cancel: false });
         this._actions.onContextMenuShowing(e);
@@ -202,13 +207,22 @@ class FileManagerContextMenu extends Widget {
         }
     }
 
+    _tryUpdateVisibleContextMenu() {
+        if(this._isVisible) {
+            const items = this.createContextMenuItems(this._targetFileItems);
+            this._contextMenu.option('dataSource', items);
+        }
+    }
+
     _onContextMenuShown() {
         this._isVisible = true;
     }
 
-    _onContextMenuHidden() {
+    _onContextMenuHidden(preserveContext) {
         this._isVisible = false;
-        this._menuShowingContext = {};
+        if(!preserveContext) {
+            this._menuShowingContext = {};
+        }
         this._contextMenu.option('visible', false);
         this._raiseContextMenuHidden();
     }
@@ -233,10 +247,7 @@ class FileManagerContextMenu extends Widget {
                 this.repaint();
                 break;
             case 'items':
-                if(this._isVisible) {
-                    const items = this.createContextMenuItems(this._targetFileItems);
-                    this._contextMenu.option('dataSource', items);
-                }
+                this._tryUpdateVisibleContextMenu();
                 break;
             case 'onItemClick':
             case 'onContextMenuShowing':

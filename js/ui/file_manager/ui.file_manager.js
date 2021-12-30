@@ -12,7 +12,7 @@ import notify from '../notify';
 
 import { findItemsByKeys, extendAttributes } from './ui.file_manager.common';
 import FileItemsController from './file_items_controller';
-import { FileManagerCommandManager } from './ui.file_manager.command_manager';
+import { defaultPermissions, FileManagerCommandManager } from './ui.file_manager.command_manager';
 import FileManagerContextMenu from './ui.file_manager.context_menu';
 import FileManagerFilesTreeView from './ui.file_manager.files_tree_view';
 import FileManagerDetailsItemList from './ui.file_manager.item_list.details';
@@ -158,9 +158,13 @@ class FileManager extends Widget {
 
         this._createBreadcrumbs(this._$itemsPanel);
         this._createItemView(this._$itemsPanel);
-        if(this._commandManager.isCommandAvailable('upload')) {
-            this._editing.setUploaderDropZone(this._$itemsPanel);
-        }
+        this._commandManager.registerPermissionsChangedCallback(() => this._updateUploadDropZone());
+        this._updateUploadDropZone();
+    }
+
+    _updateUploadDropZone() {
+        const dropZone = this._commandManager.isCommandAvailable('upload') ? this._$itemsPanel : $();
+        this._editing.setUploaderDropZone(dropZone);
     }
 
     _createFilesTreeView(container) {
@@ -492,15 +496,7 @@ class FileManager extends Widget {
                 chunkSize: 200000
             },
 
-            permissions: {
-                create: false,
-                copy: false,
-                move: false,
-                delete: false,
-                rename: false,
-                upload: false,
-                download: false
-            },
+            permissions: extend({}, defaultPermissions),
 
             notifications: {
                 showPanel: true,
@@ -585,6 +581,8 @@ class FileManager extends Widget {
                 this._invalidate();
                 break;
             case 'permissions':
+                this._commandManager.updatePermissions(this.option('permissions'));
+                break;
             case 'selectionMode':
             case 'customizeThumbnail':
             case 'customizeDetailColumns':
