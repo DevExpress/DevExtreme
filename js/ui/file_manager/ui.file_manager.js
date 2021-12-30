@@ -158,9 +158,13 @@ class FileManager extends Widget {
 
         this._createBreadcrumbs(this._$itemsPanel);
         this._createItemView(this._$itemsPanel);
-        if(this._commandManager.isCommandAvailable('upload')) {
-            this._editing.setUploaderDropZone(this._$itemsPanel);
-        }
+        this._commandManager.registerPermissionsChangedCallback(() => this._updateUploadDropZone());
+        this._updateUploadDropZone();
+    }
+
+    _updateUploadDropZone() {
+        const dropZone = this._commandManager.isCommandAvailable('upload') ? this._$itemsPanel : $();
+        this._editing.setUploaderDropZone(dropZone);
     }
 
     _createFilesTreeView(container) {
