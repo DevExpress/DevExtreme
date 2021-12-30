@@ -62,10 +62,9 @@ jobs:
 
     - name: Run npm install TS testing
       run: |
-        cd testing/typescript
+        pushd testing/typescript
         npm install --no-audit --no-fund
-        cd ../../
-
+        popd ../../
 
     - name: Build
       run: npm run build
