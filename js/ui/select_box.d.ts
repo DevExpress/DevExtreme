@@ -130,7 +130,6 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
-     * @type_function_param1_field4 text:string
      * @type_function_param1_field5 customItem:string|object|Promise<any>
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement

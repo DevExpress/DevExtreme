@@ -344,8 +344,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 itemData:any
      * @type_function_param1_field4 itemElement:DxElement
-     * @type_function_param1_field5 fromIndex:number
-     * @type_function_param1_field6 toIndex:number
      * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 fromData:any
@@ -361,8 +359,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 fromIndex:number
-     * @type_function_param1_field7 toIndex:number
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      * @type_function_param1_field10 fromData:any
@@ -378,8 +374,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 fromIndex:number
-     * @type_function_param1_field7 toIndex:number
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      * @type_function_param1_field10 fromData:any
@@ -395,8 +389,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 fromIndex:number
-     * @type_function_param1_field7 toIndex:number
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      * @type_function_param1_field10 fromData:any
@@ -412,8 +404,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 fromIndex:number
-     * @type_function_param1_field7 fromData:any
      */
     onDragStart?: ((e: Cancelable & DragStartEventInfo<T, TRowData, TKey>) => void);
     /**
@@ -438,8 +428,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 itemData:any
      * @type_function_param1_field4 itemElement:DxElement
-     * @type_function_param1_field5 fromIndex:number
-     * @type_function_param1_field6 toIndex:number
      * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 fromData:any
@@ -679,7 +667,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 formOptions:object
      * @action
      * @public
@@ -691,8 +678,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 error:Error
      * @action
      * @public
      */
@@ -702,7 +687,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 changes:Array<DataChange>
      * @default null
      * @action
@@ -727,7 +711,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 promise:Promise<void>
      * @default null
@@ -740,9 +723,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 handled:boolean
      * @default null
      * @action
      * @public
@@ -753,7 +734,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 key:any
      * @default null
      * @action
@@ -778,7 +758,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 key:any
      * @default null
      * @action
@@ -803,10 +782,8 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
-     * @type_function_param1_field6 error:Error
      * @default null
      * @action
      * @public
@@ -817,7 +794,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 cancel:boolean|Promise<void>
      * @default null
@@ -830,10 +806,8 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
-     * @type_function_param1_field6 error:Error
      * @default null
      * @action
      * @public
@@ -844,7 +818,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 cancel:boolean|Promise<void>
@@ -858,10 +831,8 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
-     * @type_function_param1_field6 error:Error
      * @default null
      * @action
      * @public
@@ -872,7 +843,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 oldData:object
      * @type_function_param1_field5 newData:object
      * @type_function_param1_field6 key:any
@@ -887,13 +857,10 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @type_function_param1_field5 isValid:boolean
      * @type_function_param1_field6 key:any
      * @type_function_param1_field7 newData:object
      * @type_function_param1_field8 oldData:object
-     * @type_function_param1_field9 errorText:string
      * @type_function_param1_field10 promise:Promise<void>
      * @default null
      * @action
@@ -905,7 +872,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 changes:Array<DataChange>
      * @default null
      * @action
@@ -917,10 +883,8 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 changes:Array<DataChange>
      * @type_function_param1_field5 promise:Promise<void>
-     * @type_function_param1_field6 cancel:boolean
      * @default null
      * @action
      * @public
@@ -931,7 +895,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 currentSelectedRowKeys:Array<any>
      * @type_function_param1_field5 currentDeselectedRowKeys:Array<any>
      * @type_function_param1_field6 selectedRowKeys:Array<any>
@@ -947,7 +910,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 toolbarOptions:dxToolbarOptions
      * @default null
      * @action

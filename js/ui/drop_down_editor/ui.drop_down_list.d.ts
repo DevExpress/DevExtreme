@@ -77,7 +77,6 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -89,7 +88,6 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @type_function_param1_field4 selectedItem:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -103,7 +101,6 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @type_function_param1_field6 event:event
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
