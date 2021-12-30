@@ -18017,7 +18017,6 @@ QUnit.module('Edit Form', {
 
     QUnit.test('Edit form when group form items are specified and simple form items have editor type', function(assert) {
         // arrange
-
         this.options.editing.form = {
             items: [{ itemType: 'group', items: [{ dataField: 'name', editorType: 'dxAutocomplete' }] }]
         };
@@ -18083,9 +18082,9 @@ QUnit.module('Edit Form', {
 
     QUnit.test('Edit form when formItem is specified with editorType in the column and the editorName is overridden on the onEditorPreparing event', function(assert) {
         // arrange
-
         this.options.onEditorPreparing = (e) => {
             if(e.dataField === 'name') {
+                assert.strictEqual(e.editorName, 'dxColorBox', 'editorName arg');
                 e.editorName = 'dxAutocomplete';
             }
         };
