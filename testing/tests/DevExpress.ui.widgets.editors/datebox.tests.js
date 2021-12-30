@@ -4827,6 +4827,7 @@ QUnit.module('pickerType', {}, () => {
         QUnit.test(`Overlay wrapper should have 'dx-dropdowneditor-overlay' class in DateBox with ${pickerType} pickerType`, function(assert) {
             $('#dateBox').dxDateBox({ type, pickerType, opened: true });
             assert.ok($(`.${DATEBOX_WRAPPER_CLASS}`).hasClass(DROPDOWNEDITOR_OVERLAY_CLASS));
+            this.clock.restore();
         });
     });
 
