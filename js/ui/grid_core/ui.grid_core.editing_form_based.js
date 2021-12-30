@@ -190,8 +190,11 @@ export const editingFormBasedModule = {
                     const templateOptions = {
                         row: row,
                         rowType: row.rowType,
-                        key: row.key
+                        key: row.key,
+                        rowIndex
                     };
+
+                    this._rowsView._addWatchMethod(templateOptions);
 
                     return (container) => {
                         const formTemplate = this.getEditFormTemplate();
