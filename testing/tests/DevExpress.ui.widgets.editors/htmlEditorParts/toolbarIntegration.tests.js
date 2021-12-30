@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import fx from 'animation/fx';
+import Quill from 'devextreme-quill';
 
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
@@ -695,6 +696,65 @@ export default function() {
                 .change();
 
             $okDialogButton.trigger('dxclick');
+        });
+
+        test('format buttons can change state on shortkey combinations (T1027453)', function(assert) {
+            // const done = assert.async();
+            const $container = $('#htmlEditor').html('<p>test</p>');
+
+            // debugger;
+
+            // const quill = window.DevExpress.Quill;
+
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['bold', 'italic', 'underline'] },
+                height: 100,
+                width: 300,
+                value: '<p>test</p>'
+                // customizeModules: (config) => {
+                //     config.keyboard.bindings;
+                // },
+                // onContentReady: () => {
+                //     const $toolbarButtons = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+                //     assert.ok($toolbarButtons.eq(0).hasClass(STATE_DISABLED_CLASS), 'Undo button is disabled');
+                //     assert.ok($toolbarButtons.eq(1).hasClass(STATE_DISABLED_CLASS), 'Redo button is disabled');
+
+                //     done();
+                // }
+            }).dxHtmlEditor('instance');
+
+            const quill = instance.getQuillInstance();
+
+            quill.keyboard.bindings[66];
+
+            const quillRootElement = $('.ql-editor.dx-htmleditor-content').get(0);
+
+            instance.setSelection(4, 0);
+
+            // const nativeAddEventListener = quillRootElement.addEventListener;
+
+            // quillRootElement.addEventListener = function(type, handler) {
+            //     const modifiedHandler = event => {
+            //         if(event.key === 'n') {
+            //             event = fakeEvent;
+            //         }
+
+            //         handler(event);
+            //     };
+
+            //     nativeAddEventListener.call(this, type, modifiedHandler);
+            // };
+
+            const keydownEvent = new KeyboardEvent('keydown', {
+                key: 'b',
+                ctrlKey: true
+            });
+
+            quillRootElement.dispatchEvent(keydownEvent);
+
+            const $activeFormats = $(this.$container).find('.dx-format-active');
+
+            assert.strictEqual($activeFormats.length, 1);
         });
 
         test('history buttons are inactive after processing transcluded content', function(assert) {
