@@ -129,10 +129,17 @@ class FileManagerToolbar extends Widget {
     _init() {
         super._init();
         this._generalToolbarVisible = true;
+        this._refreshItemState = {
+            message: '',
+            status: 'default'
+        };
+        this._commandManager.registerPermissionsChangedCallback(() => {
+            this.repaint();
+            this._restoreRefreshItemState();
+        });
     }
 
     _initMarkup() {
-        this._commandManager = this.option('commandManager');
         this._createItemClickedAction();
 
         this._$viewSwitcherPopup = $('<div>').addClass(FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS);
@@ -580,12 +587,17 @@ class FileManagerToolbar extends Widget {
         }
     }
 
+    _restoreRefreshItemState() {
+        this.updateRefreshItem(this._refreshItemState.message, this._refreshItemState.status);
+    }
+
     updateRefreshItem(message, status) {
         let generalToolbarOptions = null;
         let text = messageLocalization.format('dxFileManager-commandRefresh');
         let showText = 'inMenu';
 
         this._isRefreshVisibleInFileToolbar = false;
+        this._refreshItemState = { message, status };
 
         if(status === 'default') {
             generalToolbarOptions = {
@@ -652,6 +664,10 @@ class FileManagerToolbar extends Widget {
         const toolbar = this._getVisibleToolbar();
         this._ensureAvailableCommandsVisible(toolbar);
         this._checkCompactMode(toolbar);
+    }
+
+    get _commandManager() {
+        return this.option('commandManager');
     }
 
 }

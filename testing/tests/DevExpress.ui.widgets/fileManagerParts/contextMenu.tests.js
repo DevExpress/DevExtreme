@@ -934,8 +934,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         let $subMenuItems = this.wrapper.getContextMenuSubMenuItems();
         assert.equal($subMenuItems.length, 0, 'there is no items available');
 
-        const $commandButton = this.wrapper.getToolbarButton('Refresh');
-        $commandButton.trigger('dxclick');
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
         this.clock.tick(400);
 
         this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
@@ -1044,6 +1043,27 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         this.clock.tick(400);
 
         assert.ok(this.wrapper.getContextMenuItems().eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), 'item disabled');
+    });
+
+    test('default context menu items can be updated for visible menu after action button click', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+
+        this.fileManager.option('contextMenu.items', [ { name: 'copy' }, 'move', 'refresh' ]);
+
+        this.wrapper.getRowInDetailsView(1).trigger('dxhoverstart');
+        this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
+        this.clock.tick(400);
+
+
+        this.fileManager.option('contextMenu.items[0].disabled', true);
+        this.clock.tick(400);
+
+        const items = this.wrapper.getContextMenuItems(true);
+        assert.strictEqual(items.length, 3, 'all items are shown');
+        assert.ok(items.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), 'item disabled');
     });
 
     test('default items visibility - all items are visible (T922557)', function(assert) {
@@ -1297,6 +1317,60 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         assert.strictEqual(clickSpy.callCount, 1, 'custom command is called');
         assert.strictEqual($items.length, 2, 'context menu is still visible');
         assert.ok($items.eq(0).hasClass(Consts.MENU_ITEM_SELECTED_CLASS), 'context menu item is selected');
+    });
+
+    test('Hidden context menu can be updated with change of the permissions option (T1051605)', function(assert) {
+        this.wrapper.getRowActionButtonInDetailsView(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        let $items = this.wrapper.getContextMenuItems(true);
+        assert.equal($items.length, 5, 'all of items are visible');
+
+        assert.strictEqual($items.eq(0).text(), 'Rename', 'first item is correct');
+        assert.strictEqual($items.eq(1).text(), 'Move to', 'second item is correct');
+        assert.strictEqual($items.eq(2).text(), 'Copy to', 'third item is correct');
+        assert.strictEqual($items.eq(3).text(), 'Delete', 'fourth item is correct');
+        assert.strictEqual($items.eq(4).text(), 'Refresh', 'fifth item is correct');
+
+        this.wrapper.getContextMenuItem('Refresh').trigger('dxclick');
+        this.wrapper.getInstance().option('permissions', { rename: false });
+        this.clock.tick(400);
+
+        this.wrapper.getRowActionButtonInDetailsView(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        $items = this.wrapper.getContextMenuItems(true);
+        assert.equal($items.length, 4, 'fewer items are visible now');
+
+        assert.strictEqual($items.eq(0).text(), 'Move to', 'first item is correct');
+        assert.strictEqual($items.eq(1).text(), 'Copy to', 'second item is correct');
+        assert.strictEqual($items.eq(2).text(), 'Delete', 'third item is correct');
+        assert.strictEqual($items.eq(3).text(), 'Refresh', 'fourth item is correct');
+    });
+
+    test('Visible context menu can be updated with change of the permissions option (T1051605)', function(assert) {
+        this.wrapper.getRowActionButtonInDetailsView(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        let $items = this.wrapper.getContextMenuItems(true);
+        assert.equal($items.length, 5, 'all of items are visible');
+
+        assert.strictEqual($items.eq(0).text(), 'Rename', 'first item is correct');
+        assert.strictEqual($items.eq(1).text(), 'Move to', 'second item is correct');
+        assert.strictEqual($items.eq(2).text(), 'Copy to', 'third item is correct');
+        assert.strictEqual($items.eq(3).text(), 'Delete', 'fourth item is correct');
+        assert.strictEqual($items.eq(4).text(), 'Refresh', 'fifth item is correct');
+
+        this.wrapper.getInstance().option('permissions', { rename: false });
+        this.clock.tick(400);
+
+        $items = this.wrapper.getContextMenuItems(true);
+        assert.equal($items.length, 4, 'fewer items are visible now');
+
+        assert.strictEqual($items.eq(0).text(), 'Move to', 'first item is correct');
+        assert.strictEqual($items.eq(1).text(), 'Copy to', 'second item is correct');
+        assert.strictEqual($items.eq(2).text(), 'Delete', 'third item is correct');
+        assert.strictEqual($items.eq(3).text(), 'Refresh', 'fourth item is correct');
     });
 
 });
