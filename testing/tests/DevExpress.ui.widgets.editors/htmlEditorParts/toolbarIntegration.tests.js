@@ -2,7 +2,6 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import fx from 'animation/fx';
-import Quill from 'devextreme-quill';
 
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
@@ -11,6 +10,7 @@ const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
 const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
+const TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS = 'dx-format-active';
 const DROPDOWNMENU_CLASS = 'dx-dropdownmenu-button';
 const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
 const BUTTON_CONTENT_CLASS = 'dx-button-content';
@@ -24,6 +24,8 @@ const BUTTON_CLASS = 'dx-button';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+
+const ROOT_ELEMENT_SELECTOR = '.ql-editor.dx-htmleditor-content';
 
 const WHITE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4////fwAJ+wP93BEhJAAAAABJRU5ErkJggg==';
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgYmL6DwABFgEGpP/tHAAAAABJRU5ErkJggg==';
@@ -698,63 +700,87 @@ export default function() {
             $okDialogButton.trigger('dxclick');
         });
 
-        test('format buttons can change state on shortkey combinations (T1027453)', function(assert) {
-            // const done = assert.async();
-            const $container = $('#htmlEditor').html('<p>test</p>');
+        [
+            { format: 'bold', which: 66 },
+            { format: 'italic', which: 73 },
+            { format: 'underline', which: 85 }
+        ].forEach((data) => {
+            test(`format buttons can set active state for ${data.format} button on shortkey combinations (T1027453)`, function(assert) {
+                const $container = $('#htmlEditor').html('<p>test</p>');
 
-            // debugger;
+                const instance = $container.dxHtmlEditor({
+                    toolbar: { items: ['bold', 'italic', 'underline'] },
+                    height: 100,
+                    width: 300,
+                    value: '<p>test</p>',
+                }).dxHtmlEditor('instance');
 
-            // const quill = window.DevExpress.Quill;
+                const quillRootElement = $(ROOT_ELEMENT_SELECTOR).get(0);
+                const quill = instance.getQuillInstance();
+                const oldFormatBinding = quill.keyboard.bindings[data.which];
+                const newFormatBinding = {
+                    key: 'b',
+                    ctrlKey: true,
+                    handler: oldFormatBinding[1].handler.bind(quill.keyboard, null, null, { which: data.which })
+                };
 
-            const instance = $container.dxHtmlEditor({
-                toolbar: { items: ['bold', 'italic', 'underline'] },
-                height: 100,
-                width: 300,
-                value: '<p>test</p>'
-                // customizeModules: (config) => {
-                //     config.keyboard.bindings;
-                // },
-                // onContentReady: () => {
-                //     const $toolbarButtons = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
-                //     assert.ok($toolbarButtons.eq(0).hasClass(STATE_DISABLED_CLASS), 'Undo button is disabled');
-                //     assert.ok($toolbarButtons.eq(1).hasClass(STATE_DISABLED_CLASS), 'Redo button is disabled');
+                quill.keyboard.addBinding(newFormatBinding);
 
-                //     done();
-                // }
-            }).dxHtmlEditor('instance');
+                instance.setSelection(4, 0);
+                instance.formatText(3, 1, { bold: true, italic: true, underline: true });
 
-            const quill = instance.getQuillInstance();
+                $container.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`).removeClass(TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS);
 
-            quill.keyboard.bindings[66];
+                const keydownEvent = new KeyboardEvent('keydown', {
+                    key: 'b',
+                    ctrlKey: true
+                });
 
-            const quillRootElement = $('.ql-editor.dx-htmleditor-content').get(0);
+                quillRootElement.dispatchEvent(keydownEvent);
 
-            instance.setSelection(4, 0);
+                const $activeFormats = $container.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
 
-            // const nativeAddEventListener = quillRootElement.addEventListener;
-
-            // quillRootElement.addEventListener = function(type, handler) {
-            //     const modifiedHandler = event => {
-            //         if(event.key === 'n') {
-            //             event = fakeEvent;
-            //         }
-
-            //         handler(event);
-            //     };
-
-            //     nativeAddEventListener.call(this, type, modifiedHandler);
-            // };
-
-            const keydownEvent = new KeyboardEvent('keydown', {
-                key: 'b',
-                ctrlKey: true
+                assert.strictEqual($activeFormats.length, 1);
+                assert.ok($activeFormats.eq(0).hasClass(`dx-${data.format}-format`));
             });
 
-            quillRootElement.dispatchEvent(keydownEvent);
+            test(`format buttons can set inactive state for ${data.format} button on shortkey combinations (T1027453)`, function(assert) {
+                const $container = $('#htmlEditor').html('<p>test</p>');
 
-            const $activeFormats = $(this.$container).find('.dx-format-active');
+                const instance = $container.dxHtmlEditor({
+                    toolbar: { items: ['bold', 'italic', 'underline'] },
+                    height: 100,
+                    width: 300,
+                    value: '<p>test</p>',
+                }).dxHtmlEditor('instance');
 
-            assert.strictEqual($activeFormats.length, 1);
+                const quillRootElement = $(ROOT_ELEMENT_SELECTOR).get(0);
+                const quill = instance.getQuillInstance();
+                const oldFormatBinding = quill.keyboard.bindings[data.which];
+                const newFormatBinding = {
+                    key: 'b',
+                    ctrlKey: true,
+                    handler: oldFormatBinding[1].handler.bind(quill.keyboard, null, null, { which: data.which })
+                };
+
+                quill.keyboard.addBinding(newFormatBinding);
+
+                instance.setSelection(4, 0);
+
+                $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).addClass(TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS);
+
+                const keydownEvent = new KeyboardEvent('keydown', {
+                    key: 'b',
+                    ctrlKey: true
+                });
+
+                quillRootElement.dispatchEvent(keydownEvent);
+
+                const $activeFormats = $container.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
+
+                assert.strictEqual($activeFormats.length, 2);
+                assert.notOk($activeFormats.eq(0).hasClass(`dx-${data.format}-format`));
+            });
         });
 
         test('history buttons are inactive after processing transcluded content', function(assert) {

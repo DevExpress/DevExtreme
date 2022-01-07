@@ -18,7 +18,7 @@ import localizationMessage from '../../../localization/message';
 import { titleize, camelize } from '../../../core/utils/inflector';
 
 import eventsEngine from '../../../events/core/events_engine';
-import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../../events/utils/index';
+import { addNamespace } from '../../../events/utils/index';
 
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/table_helper';
 import { getFormatHandlers, getDefaultClickHandler, ICON_MAP, applyFormat } from '../utils/toolbar_helper';
