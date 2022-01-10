@@ -121,7 +121,7 @@ if(Quill) {
                 e.preventDefault();
             });
 
-            this._detectKeyboardFormatChanging();
+            this._subscribeFormatHotKeys();
 
             this.toolbarInstance = this.editorInstance._createComponent(this._$toolbar, Toolbar, this.toolbarConfig);
 
@@ -189,23 +189,7 @@ if(Quill) {
             }
         }
 
-        _detectKeyboardFormatChanging() {
-            // eventsEngine.off(this.editorInstance._getQuillContainer(), namespace);
-            // eventsEngine.on(this.editorInstance._getQuillContainer(), namespace, ({ originalEvent }) => {
-            //     const pressedKey = originalEvent && normalizeKeyName(originalEvent);
-
-            //     if(pressedKey) {
-            //         // console.log(originalEvent);
-            //         // each(FORMAT_HOTKEYS, (index, { key, formatName }) => {
-            //         //     if(pressedKey.toLowerCase() === key && isCommandKeyPressed(originalEvent)) {
-            //         //         this._updateButtonState(formatName);
-
-            //         //         return false;
-            //         //     }
-            //         // });
-            //     }
-            // });
-
+        _subscribeFormatHotKeys() {
             this.quill.keyboard.addBinding({
                 which: 66,
                 shortKey: true,
