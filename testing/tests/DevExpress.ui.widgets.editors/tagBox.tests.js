@@ -7343,7 +7343,6 @@ QUnit.module('label integration', () => {
             const $tagBox = $('#tagBox').dxTagBox({
                 label: 'some'
             });
-            const borderWidth = 2;
 
             const borderWidth = 2;
             const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);

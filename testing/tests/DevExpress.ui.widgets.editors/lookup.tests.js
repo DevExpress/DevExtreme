@@ -26,8 +26,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
 
-import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
-
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
