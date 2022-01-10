@@ -18068,7 +18068,6 @@ QUnit.module('Edit Form', {
 
     QUnit.test('Edit form when group form items are specified and simple form items have editor type', function(assert) {
         // arrange
-
         this.options.editing.form = {
             items: [{ itemType: 'group', items: [{ dataField: 'name', editorType: 'dxAutocomplete' }] }]
         };
@@ -18134,9 +18133,9 @@ QUnit.module('Edit Form', {
 
     QUnit.test('Edit form when formItem is specified with editorType in the column and the editorName is overridden on the onEditorPreparing event', function(assert) {
         // arrange
-
         this.options.onEditorPreparing = (e) => {
             if(e.dataField === 'name') {
+                assert.strictEqual(e.editorName, 'dxColorBox', 'editorName arg');
                 e.editorName = 'dxAutocomplete';
             }
         };
@@ -21009,6 +21008,147 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 const $insertRow = $testElement.find('tbody > .dx-data-row').eq(4);
                 assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
                 assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
+            });
+        });
+    });
+});
+
+QUnit.module('Editing - public arguments of the events/templates', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        this.$element = () => $('#container');
+        this.gridContainer = $('#container > .dx-datagrid');
+
+        this.array = [
+            { name: 'Alex', age: 15, lastName: 'John', phone: '555555', room: 1 },
+            { name: 'Dan', age: 16, lastName: 'Skip', phone: '553355', room: 2 },
+            { name: 'Vadim', age: 17, lastName: 'Dog', phone: '225555', room: 3 },
+            { name: 'Dmitry', age: 18, lastName: 'Cat', phone: '115555', room: 4 },
+            { name: 'Sergey', age: 18, lastName: 'Larry', phone: '550055', room: 5 },
+            { name: 'Kate', age: 20, lastName: 'Glock', phone: '501555', room: 6 },
+            { name: 'Dan', age: 21, lastName: 'Zikerman', phone: '1228844', room: 7 }
+        ];
+        this.columns = ['name', 'age', 'lastName', 'phone', 'room'];
+
+        this.options = {
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: this.columns,
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: this.array,
+                paginate: true
+            }
+        };
+
+        this.$testElement = $('#container');
+
+        this.setupModules = () => {
+            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'masterDetail', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'errorHandling'], {
+                initViews: true
+            });
+
+            this.editingController.component.$element = function() {
+                return this.$testElement;
+            };
+        };
+
+        this.renderRowsView = () => {
+            this.rowsView.render(this.$testElement);
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+}, () => {
+    ['row', 'batch', 'cell', 'form', 'popup'].forEach((editMode) => {
+        // T1054619
+        QUnit.test(`Check arguments of the editCellTemplate in ${editMode} mode`, function(assert) {
+            // arrange
+            const editCellTemplateSpy = sinon.spy();
+
+            this.options.editing.mode = editMode;
+            this.columns[0] = { dataField: 'name', editCellTemplate: editCellTemplateSpy };
+            this.setupModules();
+            this.renderRowsView();
+
+            // act
+            if(editMode === 'batch' || editMode === 'cell') {
+                this.editCell(0, 0);
+            } else {
+                this.editRow(0);
+            }
+            this.clock.tick();
+
+            // assert
+            const args = editCellTemplateSpy.getCall(0).args[1];
+            assert.strictEqual(editCellTemplateSpy.callCount, 1, 'editCellTemplate is called');
+            assert.strictEqual(args.column.dataField, 'name', 'column arg');
+            assert.strictEqual(args.columnIndex, 0, 'columnIndex arg');
+            assert.strictEqual(args.component, this.editingController.component, 'component arg');
+            assert.deepEqual(args.data, this.array[0], 'data arg');
+            assert.strictEqual(args.row, this.getVisibleRows()[0], 'row arg');
+            assert.strictEqual(args.rowIndex, 0, 'rowIndex arg');
+            assert.strictEqual(args.rowType, editMode === 'form' ? 'detail' : 'data', 'rowType arg');
+            assert.strictEqual(typeof args.setValue, 'function', 'setValue arg');
+            assert.strictEqual(args.value, 'Alex', 'value arg');
+
+            if(editMode !== 'form' && editMode !== 'popup') {
+                assert.strictEqual(args.displayValue, 'Alex', 'displayValue arg');
+                assert.strictEqual(args.text, 'Alex', 'text arg');
+            }
+        });
+
+        [true, false].forEach((repaintChangesOnly) => {
+            QUnit.test(`Check the watch argument of the editCellTemplate in ${editMode} mode when repaintChangesOnly = ${repaintChangesOnly}`, function(assert) {
+                // arrange
+                const watchSpy = sinon.spy();
+                const editCellTemplateSpy = sinon.spy((container, cellInfo) => {
+                    cellInfo.watch && cellInfo.watch((data) => {
+                        return data;
+                    }, watchSpy);
+                });
+
+                this.options.editing.mode = editMode;
+                this.options.repaintChangesOnly = repaintChangesOnly;
+                this.columns[0] = { dataField: 'name', editCellTemplate: editCellTemplateSpy };
+                this.columns[1] = { dataField: 'age', setCellValue: (newData, value) => { newData.age = value; } };
+                this.setupModules();
+                this.renderRowsView();
+
+                // act
+                if(editMode === 'batch' || editMode === 'cell') {
+                    this.editCell(0, 0);
+                } else {
+                    this.editRow(0);
+                }
+                this.clock.tick();
+
+                // assert
+                const args = editCellTemplateSpy.getCall(0).args[1];
+                assert.strictEqual(editCellTemplateSpy.callCount, 1, 'editCellTemplate is called');
+
+                if(repaintChangesOnly) {
+                    assert.strictEqual(typeof args.watch, 'function', 'watch arg');
+
+                    if(editMode !== 'batch' && editMode !== 'cell') {
+                        // act
+                        $(this.getCellElement(0, 1)).find('.dx-numberbox').dxNumberBox('instance').option('value', 123);
+                        this.clock.tick();
+
+                        // assert
+                        assert.strictEqual(watchSpy.callCount, 1, 'watch update is called');
+                    }
+                } else {
+                    assert.strictEqual(args.watch, undefined, 'watch arg');
+                }
             });
         });
     });
