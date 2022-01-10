@@ -203,8 +203,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default "appointmentCollector"
-     * @type_function_param1_field1 appointmentCount:number
-     * @type_function_param1_field2 isCompact:boolean
      * @public
      */
     appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
@@ -233,12 +231,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1 e:object
        * @type_function_param1_field1 component:dxScheduler
        * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 itemData:any
        * @type_function_param1_field4 itemElement:DxElement
        * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 fromData:any
-       * @type_function_param1_field8 toData:any
        */
       onAdd?: ((e: AppointmentDraggingAddEvent) => void);
       /**
@@ -247,12 +243,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field1 component:dxScheduler
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 cancel:boolean
-       * @type_function_param1_field4 itemData:any
        * @type_function_param1_field5 itemElement:DxElement
        * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field8 fromData:any
-       * @type_function_param1_field9 toData:any
        */
       onDragEnd?: ((e: AppointmentDraggingEndEvent) => void);
       /**
@@ -261,12 +255,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field1 component:dxScheduler
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 cancel:boolean
-       * @type_function_param1_field4 itemData:any
        * @type_function_param1_field5 itemElement:DxElement
        * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field8 fromData:any
-       * @type_function_param1_field9 toData:any
        */
       onDragMove?: ((e: AppointmentDraggingMoveEvent) => void);
       /**
@@ -275,9 +267,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field1 component:dxScheduler
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 cancel:boolean
-       * @type_function_param1_field4 itemData:any
        * @type_function_param1_field5 itemElement:DxElement
-       * @type_function_param1_field6 fromData:any
        */
       onDragStart?: ((e: AppointmentDraggingStartEvent) => void);
       /**
@@ -285,7 +275,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1 e:object
        * @type_function_param1_field1 component:dxScheduler
        * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 itemData:any
        * @type_function_param1_field4 itemElement:DxElement
        * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
@@ -351,7 +340,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 info:object
      * @type_function_param1_field1 startDate:date
      * @type_function_param1_field2 endDate:date
-     * @type_function_param1_field3 text:string
      * @default undefined
      * @public
      */
@@ -517,9 +505,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field5 error:Error
      * @action
      * @public
      */
@@ -530,7 +516,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
      * @action
@@ -561,7 +546,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
      * @type_function_param1_field5 targetedAppointmentData:dxSchedulerAppointment
      * @type_function_param1_field6 appointmentElement:DxElement
@@ -593,9 +577,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field5 error:Error
      * @action
      * @public
      */
@@ -606,7 +588,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
      * @action
@@ -634,7 +615,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
      * @type_function_param1_field5 targetedAppointmentData:dxSchedulerAppointment|undefined
      * @type_function_param1_field6 appointmentElement:DxElement
@@ -648,9 +628,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field5 error:Error
      * @action
      * @public
      */
@@ -661,7 +639,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 oldData:Object
      * @type_function_param1_field5 newData:Object
      * @type_function_param1_field6 cancel:Boolean|Promise<Boolean>
@@ -692,7 +669,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cellData:object
      * @type_function_param1_field5 cellElement:DxElement
      * @type_function_param1_field6 event:event
@@ -872,8 +848,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default "appointmentCollector"
-       * @type_function_param1_field1 appointmentCount:number
-       * @type_function_param1_field2 isCompact:boolean
        */
       appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
       /**

@@ -291,7 +291,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:polarChartSeriesObject
      * @notUsedInTheme
@@ -306,7 +305,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:polarChartSeriesObject
      * @notUsedInTheme
@@ -320,7 +318,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:polarChartSeriesObject
      * @notUsedInTheme
      * @action
@@ -333,7 +330,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:polarChartSeriesObject
      * @notUsedInTheme
      * @action

@@ -45,9 +45,7 @@ export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
  * @param1_field1 title:String
  * @param1_field2 messageHtml:String
  * @param1_field3 buttons:Array<dxButtonOptions>
- * @param1_field4 showTitle:boolean
  * @param1_field5 message:String:deprecated(messageHtml)
- * @param1_field6 dragEnabled:boolean
  * @static
  * @namespace DevExpress.ui.dialog
  * @public

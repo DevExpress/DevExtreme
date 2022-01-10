@@ -162,10 +162,8 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 dataField:string
      * @type_function_param1_field1 component:dxForm
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -174,11 +172,9 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 dataField:string
      * @type_function_param1_field5 value:object
      * @type_function_param1_field1 component:dxForm
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -649,10 +645,7 @@ export interface dxFormSimpleItem {
      * @docid
      * @type_function_param1 data:object
      * @type_function_param1_field1 component:dxForm
-     * @type_function_param1_field2 dataField:string
      * @type_function_param1_field3 editorOptions:object
-     * @type_function_param1_field4 editorType:string
-     * @type_function_param1_field5 name:string
      * @type_function_return string|Element|jQuery
      * @public
      */

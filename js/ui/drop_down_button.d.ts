@@ -155,7 +155,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_param1_field5 selectedItem:object
      * @type_function_param1_field1 component:dxDropDownButton
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -170,7 +169,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_param1_field6 itemElement:DxElement
      * @type_function_param1_field1 component:dxDropDownButton
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -184,7 +182,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_param1_field5 previousItem:object
      * @type_function_param1_field1 component:dxDropDownButton
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -308,7 +305,6 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDropDownButton
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:object
      * @type_function_param1_field6 itemElement:DxElement

@@ -55,7 +55,6 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      * @docid
      * @type_function_param1_field1 component:dxRangeSlider
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @default null
      * @type_function_param1_field4 start:number

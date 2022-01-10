@@ -434,15 +434,11 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 area:string
      * @type_function_param1_field5 cellElement:DxElement
      * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
-     * @type_function_param1_field7 rowIndex:number
-     * @type_function_param1_field8 columnIndex:number
      * @default null
      * @type_function_param1_field1 component:dxPivotGrid
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -463,7 +459,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @default null
      * @type_function_param1_field1 component:dxPivotGrid
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -474,7 +469,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPivotGrid
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      * @deprecated

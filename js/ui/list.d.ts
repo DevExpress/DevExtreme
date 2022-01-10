@@ -255,10 +255,8 @@ export interface dxListOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field4 groupData:object
      * @type_function_param1_field5 groupElement:DxElement
-     * @type_function_param1_field6 groupIndex:number
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -274,7 +272,6 @@ export interface dxListOptions<
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -289,7 +286,6 @@ export interface dxListOptions<
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -303,7 +299,6 @@ export interface dxListOptions<
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @hidden false
      * @public
@@ -319,7 +314,6 @@ export interface dxListOptions<
      * @type_function_param1_field7 cancel:boolean | Promise<void>
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @hidden false
      * @public
@@ -335,7 +329,6 @@ export interface dxListOptions<
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -347,11 +340,8 @@ export interface dxListOptions<
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 fromIndex:number
-     * @type_function_param1_field8 toIndex:number
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @hidden false
      * @public
@@ -365,10 +355,8 @@ export interface dxListOptions<
      * @type_function_param1_field5 itemData:object
      * @type_function_param1_field6 itemElement:DxElement
      * @type_function_param1_field7 itemIndex:number | object
-     * @type_function_param1_field8 direction:string
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -379,7 +367,6 @@ export interface dxListOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -390,7 +377,6 @@ export interface dxListOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -401,13 +387,8 @@ export interface dxListOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
-     * @type_function_param1_field6 reachedLeft:boolean
-     * @type_function_param1_field7 reachedRight:boolean
-     * @type_function_param1_field8 reachedTop:boolean
-     * @type_function_param1_field9 reachedBottom:boolean
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -416,10 +397,8 @@ export interface dxListOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:boolean
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */

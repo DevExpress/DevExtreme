@@ -380,8 +380,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 selectedRowKey:any
      * @action
      * @public
      */
@@ -405,9 +403,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 targetKey:any
-     * @type_function_param1_field6 targetType:string
-     * @type_function_param1_field7 data:any
      * @type_function_param1_field8 items:Array<object>
      * @action
      * @public
@@ -421,7 +416,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 values:any
      * @action
      * @public
      */
@@ -432,9 +426,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 values:any
-     * @type_function_param1_field5 key:any
      * @action
      * @public
      */
@@ -447,8 +439,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 values:any
-     * @type_function_param1_field6 key:any
      * @action
      * @public
      */
@@ -459,9 +449,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 values:any
-     * @type_function_param1_field5 key:any
      * @action
      * @public
      */
@@ -474,9 +461,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 newValues:any
-     * @type_function_param1_field6 values:any
-     * @type_function_param1_field7 key:any
      * @action
      * @public
      */
@@ -487,9 +471,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 values:any
-     * @type_function_param1_field5 key:any
      * @action
      * @public
      */
@@ -502,9 +483,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 newValues:any
-     * @type_function_param1_field6 values:any
-     * @type_function_param1_field7 key:any
      * @action
      * @public
      */
@@ -517,8 +495,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 values:any
-     * @type_function_param1_field6 key:any
      * @type_function_param1_field7 readOnlyFields:Array<string>
      * @type_function_param1_field8 hiddenFields:Array<string>
      * @action
@@ -545,7 +521,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 values:any
      * @action
      * @public
      */
@@ -556,9 +531,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 values:any
-     * @type_function_param1_field5 key:any
      * @action
      * @public
      */
@@ -571,8 +543,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 values:any
-     * @type_function_param1_field6 key:any
      * @action
      * @public
      */
@@ -583,9 +553,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 values:any
-     * @type_function_param1_field5 key:any
      * @action
      * @public
      */
@@ -598,7 +565,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 values:any
      * @action
      * @public
      */
@@ -609,9 +575,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 values:any
-     * @type_function_param1_field5 key:any
      * @action
      * @public
      */
@@ -624,8 +587,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 values:any
-     * @type_function_param1_field6 key:any
      * @action
      * @public
      */
@@ -636,9 +597,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 values:any
-     * @type_function_param1_field5 key:any
      * @action
      * @public
      */
@@ -651,7 +609,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 values:any
      * @action
      * @public
      */
@@ -662,9 +619,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 values:any
-     * @type_function_param1_field5 key:any
      * @action
      * @public
      */
@@ -677,8 +631,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 values:any
-     * @type_function_param1_field6 key:any
      * @action
      * @public
      */
@@ -689,9 +641,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 values:any
-     * @type_function_param1_field5 key:any
      * @action
      * @public
      */
@@ -702,10 +651,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 key:any
-     * @type_function_param1_field6 data:any
      * @action
      * @public
      */
@@ -719,8 +665,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 key:any
-     * @type_function_param1_field7 data:any
      * @action
      * @public
      */
@@ -924,8 +868,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @type_function_param2 item:object
-     * @type_function_param2_field1 start:Date
-     * @type_function_param2_field2 end:Date
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -933,7 +875,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @type_function_param2 item:object
-     * @type_function_param2_field1 progress:number
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -942,7 +883,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @docid
      * @type_function_param2 item:object
      * @type_function_param2_field1 cellSize:object
-     * @type_function_param2_field2 isMilestone:boolean
      * @type_function_param2_field3 taskData:object
      * @type_function_param2_field4 taskHTML:object
      * @type_function_param2_field5 taskPosition:object

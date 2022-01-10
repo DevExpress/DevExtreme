@@ -429,7 +429,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyLink
      * @notUsedInTheme
@@ -443,7 +442,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:dxSankeyLink
      * @notUsedInTheme
      * @action
@@ -457,7 +455,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyNode
      * @notUsedInTheme
@@ -471,7 +468,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:dxSankeyNode
      * @notUsedInTheme
      * @action

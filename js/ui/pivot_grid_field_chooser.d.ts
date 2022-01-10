@@ -132,7 +132,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @default null
      * @type_function_param1_field1 component:dxPivotGridFieldChooser
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */

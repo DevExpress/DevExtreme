@@ -78,8 +78,6 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
      * @docid
      * @default "dropDownButton"
      * @type_function_param1 buttonData:object
-     * @type_function_param1_field1 text:string
-     * @type_function_param1_field2 icon:string
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -90,7 +88,6 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -101,7 +98,6 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */

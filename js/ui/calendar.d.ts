@@ -65,9 +65,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @docid
      * @default "cell"
      * @type_function_param1 itemData:object
-     * @type_function_param1_field1 date:Date
-     * @type_function_param1_field2 view:string
-     * @type_function_param1_field3 text:string
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -83,8 +80,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @default null
      * @type_function_param1 data:object
      * @type_function_param1_field1 component:object
-     * @type_function_param1_field2 date:Date
-     * @type_function_param1_field3 view:string
      * @public
      */
     disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);

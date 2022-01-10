@@ -227,18 +227,8 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFilterBuilder
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 value:any
      * @type_function_param1_field5 setValue(newValue):any
      * @type_function_param1_field6 editorElement:DxElement
-     * @type_function_param1_field7 editorName:string
-     * @type_function_param1_field8 dataField:string
-     * @type_function_param1_field9 filterOperation:string
-     * @type_function_param1_field10 updateValueTimeout:number
-     * @type_function_param1_field11 width:number
-     * @type_function_param1_field12 readOnly:boolean
-     * @type_function_param1_field13 disabled:boolean
-     * @type_function_param1_field14 rtlEnabled:boolean
      * @default null
      * @action
      * @public
@@ -254,15 +244,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @type_function_param1_field5 setValue(newValue):any
      * @type_function_param1_field6 cancel:boolean
      * @type_function_param1_field7 editorElement:DxElement
-     * @type_function_param1_field8 editorName:string
      * @type_function_param1_field9 editorOptions:object
-     * @type_function_param1_field10 dataField:string
-     * @type_function_param1_field11 filterOperation:string
-     * @type_function_param1_field12 updateValueTimeout:number
-     * @type_function_param1_field13 width:number
-     * @type_function_param1_field14 readOnly:boolean
-     * @type_function_param1_field15 disabled:boolean
-     * @type_function_param1_field16 rtlEnabled:boolean
      * @default null
      * @action
      * @public
@@ -274,7 +256,6 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFilterBuilder
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
      * @action
@@ -424,7 +405,6 @@ export interface dxFilterBuilderField {
      * @docid
      * @type_function_param1 conditionInfo:object
      * @type_function_param1_field1 value:string|number|date
-     * @type_function_param1_field2 filterOperation:string
      * @type_function_param1_field3 field:dxFilterBuilderField
      * @type_function_param1_field4 setValue:function
      * @type_function_return string|Element|jQuery

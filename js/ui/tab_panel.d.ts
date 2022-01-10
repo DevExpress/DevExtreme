@@ -122,7 +122,6 @@ export interface dxTabPanelOptions<
      * @type_function_param1_field6 event:event
      * @type_function_param1_field1 component:dxTabPanel
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -136,7 +135,6 @@ export interface dxTabPanelOptions<
      * @type_function_param1_field6 event:event
      * @type_function_param1_field1 component:dxTabPanel
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -149,7 +147,6 @@ export interface dxTabPanelOptions<
      * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field1 component:dxTabPanel
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */

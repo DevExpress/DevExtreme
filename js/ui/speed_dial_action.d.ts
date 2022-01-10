@@ -72,7 +72,6 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSpeedDialAction
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 actionElement:DxElement
      * @action
      * @public

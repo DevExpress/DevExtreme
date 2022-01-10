@@ -105,7 +105,6 @@ export interface dxMenuOptions<
      * @type_function_param1_field4 rootItem:DxElement
      * @type_function_param1_field1 component:dxMenu
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -130,7 +129,6 @@ export interface dxMenuOptions<
      * @type_function_param1_field4 rootItem:DxElement
      * @type_function_param1_field1 component:dxMenu
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -142,7 +140,6 @@ export interface dxMenuOptions<
      * @type_function_param1_field4 rootItem:DxElement
      * @type_function_param1_field1 component:dxMenu
      * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
