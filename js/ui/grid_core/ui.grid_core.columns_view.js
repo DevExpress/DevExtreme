@@ -952,10 +952,17 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
                         width = getWidthStyle(width);
                         minWidth = getWidthStyle(columns[i].minWidth || width);
-                        const $rows = $rows || $tableElement.children().children('.dx-row').not('.' + GROUP_ROW_CLASS).not('.' + DETAIL_ROW_CLASS);
+                        const $rows = $rows || $tableElement.children().children('.dx-row').not('.' + DETAIL_ROW_CLASS);
                         for(let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
+                            let cell;
                             const visibleIndex = this.getVisibleColumnIndex(i, rowIndex);
-                            const cell = $rows[rowIndex].cells[visibleIndex];
+                            if($rows[rowIndex].classList.contains(GROUP_ROW_CLASS)) {
+                                if(visibleIndex !== 1) {
+                                    cell = $rows.find(`td[aria-colindex='${visibleIndex + 1}']`).get(0);
+                                }
+                            } else {
+                                cell = $rows[rowIndex].cells[visibleIndex];
+                            }
                             if(cell) {
                                 setCellWidth(cell, columns[i], width);
                                 cell.style.minWidth = minWidth;
