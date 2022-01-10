@@ -22,6 +22,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 const CLEAR_BUTTON_SELECTOR = '.dx-clear-button-area';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
+const LABEL_CLASS = 'dx-texteditor-label';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
@@ -477,6 +478,7 @@ QUnit.module('label integration', {
                 .dxTextEditor($.extend(initialOptions, options))
                 .dxTextEditor('instance');
             this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
+            this.$label = this.$textEditor.find(`.${LABEL_CLASS}`);
         };
 
         class TextEditorLabelMock extends TextEditorLabel {
@@ -547,31 +549,6 @@ QUnit.module('label integration', {
 
             assert.strictEqual(this.getProps().beforeWidth, beforeButtonsContainerWidth);
         });
-
-        QUnit.test('editor should have aria-labelledby atrribute equal to label id', function(assert) {
-            this.init();
-            const inputAttr = this.$input.attr('aria-labelledby');
-
-            assert.strictEqual(this.getProps().id, inputAttr);
-        });
-
-        QUnit.test('editor should not have aria-labelledby atrribute if label is not defined', function(assert) {
-            this.init({
-                label: ''
-            });
-            const inputAttr = this.$input.attr('aria-labelledby');
-
-            assert.notOk(inputAttr);
-        });
-
-        QUnit.test('editor should not have aria-labelledby atrribute if labelMode is hidden', function(assert) {
-            this.init({
-                labelMode: 'hidden'
-            });
-            const inputAttr = this.$input.attr('aria-labelledby');
-
-            assert.notOk(inputAttr);
-        });
     });
 
     QUnit.module('option change', {
@@ -641,6 +618,40 @@ QUnit.module('label integration', {
             assert.strictEqual(updateMaxWidthCall.args[0], newLabelMaxWidth);
             assert.strictEqual(updateBeforeWidthCall.args[0], newLabelBeforeWidth);
         });
+    });
+});
+
+QUnit.module('check aria-labelledby attribute', {
+    beforeEach: function() {
+        this.$textEditor = $('#texteditor');
+        this.textEditor = this.$textEditor
+            .dxTextEditor({
+                label: 'some'
+            })
+            .dxTextEditor('instance');
+        this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
+        this.$label = this.$textEditor.find(`.${LABEL_CLASS}`);
+    }
+}, () => {
+    QUnit.test('if label is defined', function(assert) {
+        const inputAttr = this.$input.attr('aria-labelledby');
+        const labelId = this.$label.attr('id');
+
+        assert.strictEqual(labelId, inputAttr);
+    });
+
+    QUnit.test('if label is not defined', function(assert) {
+        this.textEditor.option('label', '');
+        const inputAttr = this.$input.attr('aria-labelledby');
+
+        assert.notOk(inputAttr);
+    });
+
+    QUnit.test('if label mode has value "hidden"', function(assert) {
+        this.textEditor.option('labelMode', 'hidden');
+        const inputAttr = this.$input.attr('aria-labelledby');
+
+        assert.notOk(inputAttr);
     });
 });
 

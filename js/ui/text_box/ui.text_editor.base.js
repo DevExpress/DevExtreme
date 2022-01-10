@@ -77,6 +77,7 @@ const TextEditorBase = Editor.inherit({
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
         this._labelContainerElement = null;
+        this._labelId = `dx-texteditor-label-${new Guid()}`;
 
         this.callBase.apply(this, arguments);
     },
@@ -445,9 +446,8 @@ const TextEditorBase = Editor.inherit({
         this._input().prop('spellcheck', this.option('spellcheck'));
     },
 
-
     _cleanLabelObservable: function() {
-        if(this._labelContainerElement && this._label.isVisible()) {
+        if(this._labelContainerElement) {
             resizeObserverSingleton.unobserve(this._labelContainerElement);
 
             this._labelContainerElement = null;
@@ -473,8 +473,10 @@ const TextEditorBase = Editor.inherit({
         this._label.updateMaxWidth(this._getLabelContainerWidth());
     },
 
-    _setLabelContainerAria: function(labelId) {
-        this.setAria('labelledby', labelId, this._getLabelContainer());
+    _setLabelContainerAria: function() {
+        const currentLabelId = this._label.isVisible() ? this._labelId : null;
+
+        this.setAria('labelledby', currentLabelId, this._getLabelContainer());
     },
 
     _renderLabel: function() {
@@ -484,10 +486,8 @@ const TextEditorBase = Editor.inherit({
 
         const { label, labelMode, labelMark } = this.option();
 
-        const labelId = `dx-texteditor-label-${new Guid()}`;
-
         const labelConfig = {
-            id: labelId,
+            id: this._labelId,
             $editor: this.$element(),
             text: label,
             mark: labelMark,
@@ -499,11 +499,9 @@ const TextEditorBase = Editor.inherit({
 
         this._label = new TextEditorLabelCreator(labelConfig);
 
-        if(this._label.isVisible()) {
-            this._setLabelContainerAria(labelId);
+        this._setLabelContainerAria();
 
-            resizeObserverSingleton.observe(this._labelContainerElement, this._updateLabelWidth.bind(this));
-        }
+        resizeObserverSingleton.observe(this._labelContainerElement, this._updateLabelWidth.bind(this));
     },
 
     _renderPlaceholder: function() {
@@ -774,12 +772,14 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'label':
                 this._label.updateText(value);
+                this._setLabelContainerAria();
                 break;
             case 'labelMark':
                 this._label.updateMark(value);
                 break;
             case 'labelMode':
                 this._label.updateMode(value);
+                this._setLabelContainerAria();
                 break;
             case 'width':
                 this.callBase(args);
