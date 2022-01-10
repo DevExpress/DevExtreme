@@ -65,7 +65,7 @@ export class TableContent extends JSXComponent(TableContentProps) {
     const allRows = this.divRef.current!.getElementsByClassName('dx-row');
     const index = Array.from(allRows).indexOf(e.currentTarget as Element);
     if (index >= 0) {
-      this.plugins.getValue(RowClick)?.(this.props.dataSource[index]);
+      this.plugins.callAction(RowClick, this.props.dataSource[index]);
     }
   }
 }

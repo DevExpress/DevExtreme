@@ -42,6 +42,6 @@ export class SelectionCheckbox extends JSXComponent<SelectionCheckboxProps, 'dat
   }
 
   setSelected(isSelected: boolean): void {
-    this.plugins.getValue(SetSelected)?.(this.props.data, isSelected);
+    this.plugins.callAction(SetSelected, this.props.data, isSelected);
   }
 }
