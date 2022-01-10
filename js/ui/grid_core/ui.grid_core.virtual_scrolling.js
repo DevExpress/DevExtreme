@@ -1167,7 +1167,13 @@ export const virtualScrollingModule = {
                         if(rowsScrollController && !byLoadedRows) {
                             if(newMode && isDefined(this._loadViewportParams)) {
                                 const { skipForCurrentPage, pageIndex } = this.getLoadPageParams(true);
-                                offset = pageIndex * this.pageSize() + skipForCurrentPage;
+                                const items = this.items(true);
+                                let skip = 0;
+                                if(items.length) {
+                                    const firstLoadIndex = items[0].loadIndex;
+                                    skip = items.filter(item => item.loadIndex < firstLoadIndex + skipForCurrentPage).length;
+                                }
+                                offset = pageIndex * this.pageSize() + skip;
                             } else {
                                 offset = rowsScrollController.beginPageIndex() * rowsScrollController.pageSize();
                             }
