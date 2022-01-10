@@ -674,6 +674,44 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [20], 'selected row key count equals pageSize');
     });
 
+    QUnit.test('selection after scrolling should works correctly uf remote paging/sorting/filtering and local grouping (T1056403)', function(assert) {
+        // arrange, act
+        const array = [];
+
+        for(let i = 1; i <= 10; i++) {
+            array.push({ group: i, id: i });
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 100,
+            dataSource: array,
+            keyExpr: 'id',
+            remoteOperations: { sorting: true, filtering: true, paging: true },
+            selection: {
+                mode: 'single'
+            },
+            scrolling: {
+                mode: 'virtual',
+                useNative: false,
+            },
+            columns: [{ dataField: 'group', groupIndex: 0 }, 'id']
+        }).dxDataGrid('instance');
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.getScrollable().scrollTo({ y: 300 });
+
+        $(dataGrid.getRowElement(1)).trigger('dxclick');
+
+        // assert
+        const visibleRows = dataGrid.getVisibleRows();
+        assert.deepEqual(visibleRows[0].key, [5], 'first visible row key');
+        assert.equal(visibleRows[1].key, 5, 'first visible row key');
+        assert.equal(visibleRows[1].isSelected, true, 'first visible row is selected');
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [5], 'selected row key count equals pageSize');
+    });
+
     QUnit.test('Selection with Shift should work properly when rowRenderingMode is virtual (T1046809)', function(assert) {
         // arrange, act
         const array = [];
