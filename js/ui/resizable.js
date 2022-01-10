@@ -103,6 +103,8 @@ const Resizable = DOMComponent.inherit({
         this._keyDownHandler = (e) => {
             if(normalizeKeyName(e) === 'shift') {
                 this._isShiftPressed = true;
+                // TODO: Remove after HtmlEditor content shift press processing fix
+                e.stopPropagation();
             }
         };
         this._keyUpHandler = (e) => {
@@ -111,9 +113,8 @@ const Resizable = DOMComponent.inherit({
             }
         };
 
-        $(domAdapter.getDocumentElement())
-            .on('keydown', this._keyDownHandler)
-            .on('keyup', this._keyUpHandler);
+        domAdapter.getDocumentElement().addEventListener('keydown', this._keyDownHandler, true);
+        domAdapter.getDocumentElement().addEventListener('keyup', this._keyUpHandler, true);
     },
 
     _renderHandles: function() {
@@ -236,33 +237,84 @@ const Resizable = DOMComponent.inherit({
         return parseInt(borderWidth) || 0;
     },
 
-    _dragHandler: function(e) {
-        const $element = this.$element();
+    _getDeltaByOffset: function(offset) {
+        const size = this._elementSize;
+        const sides = this._movingSides;
+        const shouldKeepAspectRatio = this._isShiftPressed && this._isCornerHandler(sides);
+
+        const widthDelta = offset.x * (sides.left ? -1 : 1);
+        const heightDelta = offset.y * (sides.top ? -1 : 1);
+
+        if(shouldKeepAspectRatio) {
+            const proportionalHeight = widthDelta * (size.height / size.width);
+            const proportionalWidth = heightDelta * (size.width / size.height);
+
+            if(proportionalHeight >= heightDelta) {
+                return {
+                    x: widthDelta,
+                    y: proportionalHeight
+                };
+            } else if(proportionalWidth >= widthDelta) {
+                return {
+                    x: proportionalWidth,
+                    y: heightDelta
+                };
+            } else {
+                return {
+                    x: 0,
+                    y: 0
+                };
+            }
+        } else {
+            return {
+                x: widthDelta,
+                y: heightDelta
+            };
+        }
+    },
+
+    _updatePosition: function(delta, { width, height }) {
+        const location = this._elementLocation;
         const sides = this._movingSides;
 
-        const location = this._elementLocation;
-        const size = this._elementSize;
-        const offset = this._getOffset(e);
+        const elementRect = getBoundingRect(this.$element().get(0));
+        const offsetTop = delta.y * (sides.top ? -1 : 1) - ((elementRect.height || height) - height);
+        const offsetLeft = delta.x * (sides.left ? -1 : 1) - ((elementRect.width || width) - width);
 
-        if(this._isShiftPressed && this._isCornerHandler(sides)) {
-            // should keep aspect ratio
-        }
-
-        const width = size.width + offset.x * (sides.left ? -1 : 1);
-        const height = size.height + offset.y * (sides.top ? -1 : 1);
-
-        if(offset.x || this.option('stepPrecision') === 'strict') this._renderWidth(width);
-        if(offset.y || this.option('stepPrecision') === 'strict') this._renderHeight(height);
-
-        const elementRect = getBoundingRect($element.get(0));
-        const offsetTop = offset.y - ((elementRect.height || height) - height);
-        const offsetLeft = offset.x - ((elementRect.width || width) - width);
-
-        move($element, {
+        move(this.$element(), {
             top: location.top + (sides.top ? offsetTop : 0),
             left: location.left + (sides.left ? offsetLeft : 0)
         });
+    },
 
+    _dragHandler: function(e) {
+        const offset = this._getOffset(e);
+        const delta = this._getDeltaByOffset(offset);
+
+        const dimensions = this._updateDimensions(delta);
+
+        this._updatePosition(delta, dimensions);
+        this._triggerResizeAction(e, dimensions);
+
+        this._prevDelta = delta;
+    },
+
+    _updateDimensions: function(delta) {
+        const isStepPrecisionStrict = this.option('stepPrecision') === 'strict';
+        const size = this._elementSize;
+
+        const width = size.width + delta.x;
+        const height = size.height + delta.y;
+        if(delta.x || isStepPrecisionStrict) this._renderWidth(width);
+        if(delta.y || isStepPrecisionStrict) this._renderHeight(height);
+
+        return {
+            width,
+            height
+        };
+    },
+
+    _triggerResizeAction: function(e, { width, height }) {
         this._resizeAction({
             event: e,
             width: this.option('width') || width,
@@ -270,7 +322,7 @@ const Resizable = DOMComponent.inherit({
             handles: this._movingSides
         });
 
-        triggerResizeEvent($element);
+        triggerResizeEvent(this.$element());
     },
 
     _isCornerHandler(sides) {
@@ -481,9 +533,8 @@ const Resizable = DOMComponent.inherit({
     },
 
     _clean: function() {
-        $(domAdapter.getDocumentElement())
-            .off('keydown', this._keyDownHandler)
-            .off('keyup', this._keyUpHandler);
+        domAdapter.getDocumentElement().removeEventListener('keydown', this._keyDownHandler);
+        domAdapter.getDocumentElement().removeEventListener('keyup', this._keyUpHandler);
 
         this.$element().find('.' + RESIZABLE_HANDLE_CLASS).remove();
     },
