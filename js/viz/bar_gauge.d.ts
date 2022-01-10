@@ -225,7 +225,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxBarGauge
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action
@@ -237,7 +236,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxBarGauge
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action

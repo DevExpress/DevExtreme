@@ -120,7 +120,6 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 event:event
      * @action
      * @public
@@ -131,7 +130,6 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 event:event
      * @action
      * @public
@@ -142,7 +140,6 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 event:event
      * @action
      * @public
@@ -152,9 +149,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 titleElement:DxElement
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */

@@ -162,7 +162,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
      * @docid
      * @type_function_param1 dragInfo:object
-     * @type_function_param1_field2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -177,7 +176,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
-     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      * @action
@@ -193,7 +191,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
-     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      * @action
@@ -209,7 +206,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
-     * @type_function_param1_field7 itemElement:DxElement
      * @action
      * @public
      */

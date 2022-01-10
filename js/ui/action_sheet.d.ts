@@ -183,7 +183,6 @@ export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
      * @docid
      * @default null
      * @type_function_param1_field1 component:dxActionSheet
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @type function

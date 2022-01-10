@@ -152,7 +152,6 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTagBox
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -164,7 +163,6 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
      * @type_function_param1_field4 addedItems:Array<string,number,Object>
      * @type_function_param1_field5 removedItems:Array<string,number,Object>
      * @type_function_param1_field1 component:dxTagBox
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */

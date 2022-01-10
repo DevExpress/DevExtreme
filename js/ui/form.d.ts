@@ -163,7 +163,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxForm
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -174,7 +173,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @type_function_param1 e:object
      * @type_function_param1_field5 value:object
      * @type_function_param1_field1 component:dxForm
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */

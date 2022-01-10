@@ -199,7 +199,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 request: XMLHttpRequest
      * @type_function_param1_field6 uploadInfo:UploadInfo
      * @action
@@ -211,7 +210,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 dropZoneElement:DxElement
      * @type_function_param1_field5 event:event
      * @action
@@ -223,7 +221,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 dropZoneElement:DxElement
      * @type_function_param1_field5 event:event
      * @action
@@ -235,7 +232,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -245,7 +241,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 segmentSize:Number
      * @type_function_param1_field6 bytesLoaded:Number
@@ -260,7 +255,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @action
@@ -272,7 +266,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @action
@@ -284,7 +277,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @action
@@ -296,7 +288,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @action
@@ -308,7 +299,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 value:Array<File>
      * @type_function_param1_field5 previousValue:Array<File>
      * @type_function_param1_field6 event:event

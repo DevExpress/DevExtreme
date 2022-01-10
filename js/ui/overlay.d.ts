@@ -124,7 +124,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -158,7 +157,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */

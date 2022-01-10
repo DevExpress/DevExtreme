@@ -379,7 +379,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -389,7 +388,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 name:String
      * @action
      * @public
@@ -425,7 +423,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 values:any
      * @action
      * @public
@@ -448,7 +445,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -470,7 +466,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -530,7 +525,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -552,7 +546,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -574,7 +567,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -596,7 +588,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -618,7 +609,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -640,7 +630,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -650,7 +639,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field4 event:event
      * @action
      * @public

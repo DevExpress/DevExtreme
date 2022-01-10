@@ -83,7 +83,6 @@ export interface CollectionWidgetOptions<
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -97,7 +96,6 @@ export interface CollectionWidgetOptions<
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -111,7 +109,6 @@ export interface CollectionWidgetOptions<
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -121,9 +118,7 @@ export interface CollectionWidgetOptions<
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
@@ -135,7 +130,6 @@ export interface CollectionWidgetOptions<
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
      * @action
      * @public
      */
