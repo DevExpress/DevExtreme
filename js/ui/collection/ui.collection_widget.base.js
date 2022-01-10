@@ -812,8 +812,8 @@ const CollectionWidget = Widget.inherit({
 
     _renderItem: function(index, itemData, $container, $itemToReplace) {
         const itemIndex = index?.item ?? index;
-        const uid = Math.random();
-        itemData.uid = uid;
+        const safeField = Math.random();
+        itemData.safeField = safeField;
         $container = $container || this._itemContainer();
         const $itemFrame = this._renderItemFrame(itemIndex, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, itemIndex);
