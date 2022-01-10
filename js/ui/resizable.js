@@ -237,8 +237,32 @@ const Resizable = DOMComponent.inherit({
         return parseInt(borderWidth) || 0;
     },
 
-    _getDeltaByOffset: function(offset) {
+    _getProportionalDelta: function(widthDelta, heightDelta) {
         const size = this._elementSize;
+
+        const proportionalHeight = widthDelta * (size.height / size.width);
+        if(proportionalHeight >= heightDelta) {
+            return {
+                x: widthDelta,
+                y: proportionalHeight
+            };
+        }
+
+        const proportionalWidth = heightDelta * (size.width / size.height);
+        if(proportionalWidth >= widthDelta) {
+            return {
+                x: proportionalWidth,
+                y: heightDelta
+            };
+        }
+
+        return {
+            x: 0,
+            y: 0
+        };
+    },
+
+    _getDeltaByOffset: function(offset) {
         const sides = this._movingSides;
         const shouldKeepAspectRatio = this._isShiftPressed && this._isCornerHandler(sides);
 
@@ -246,25 +270,9 @@ const Resizable = DOMComponent.inherit({
         const heightDelta = offset.y * (sides.top ? -1 : 1);
 
         if(shouldKeepAspectRatio) {
-            const proportionalHeight = widthDelta * (size.height / size.width);
-            const proportionalWidth = heightDelta * (size.width / size.height);
-
-            if(proportionalHeight >= heightDelta) {
-                return {
-                    x: widthDelta,
-                    y: proportionalHeight
-                };
-            } else if(proportionalWidth >= widthDelta) {
-                return {
-                    x: proportionalWidth,
-                    y: heightDelta
-                };
-            } else {
-                return {
-                    x: 0,
-                    y: 0
-                };
-            }
+            return this._roundOffset(
+                this._getProportionalDelta(widthDelta, heightDelta)
+            );
         } else {
             return {
                 x: widthDelta,
@@ -331,24 +339,35 @@ const Resizable = DOMComponent.inherit({
 
     _getOffset: function(e) {
         const offset = e.offset;
-        const steps = pairToObject(this.option('step'), !this.option('roundStepValue'));
-        const sides = this._getMovingSides(e);
-        const strictPrecision = this.option('stepPrecision') === 'strict';
+        const sides = this._movingSides;
 
         if(!sides.left && !sides.right) offset.x = 0;
         if(!sides.top && !sides.bottom) offset.y = 0;
 
-        return strictPrecision ? this._getStrictOffset(offset, steps, sides) : this._getSimpleOffset(offset, steps);
+        return this._roundOffset(offset);
     },
 
-    _getSimpleOffset: function(offset, steps) {
+    _roundOffset: function(offset) {
+        return this.option('stepPrecision') === 'strict'
+            ? this._getStrictOffset(offset)
+            : this._getSimpleOffset(offset);
+    },
+
+    _getSteps: function() {
+        return pairToObject(this.option('step'), !this.option('roundStepValue'));
+    },
+
+    _getSimpleOffset: function(offset) {
+        const steps = this._getSteps();
+
         return {
             x: offset.x - offset.x % steps.h,
             y: offset.y - offset.y % steps.v
         };
     },
 
-    _getStrictOffset: function(offset, steps, sides) {
+    _getStrictOffset: function(offset, sides) {
+        const steps = this._getSteps();
         const location = this._elementLocation;
         const size = this._elementSize;
         const xPos = sides.left ? location.left : location.left + size.width;
