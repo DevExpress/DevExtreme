@@ -704,10 +704,9 @@ export default function() {
             { format: 'bold', which: 66 },
             { format: 'italic', which: 73 },
             { format: 'underline', which: 85 }
-        ].forEach((data) => {
-            test(`format buttons can set active state for ${data.format} button on shortkey combinations (T1027453)`, function(assert) {
+        ].forEach(({ format, which }) => {
+            test(`hotkey handler can set active state for ${format} button (T1027453)`, function(assert) {
                 const $container = $('#htmlEditor').html('<p>test</p>');
-
                 const instance = $container.dxHtmlEditor({
                     toolbar: { items: ['bold', 'italic', 'underline'] },
                     height: 100,
@@ -717,11 +716,11 @@ export default function() {
 
                 const quillRootElement = $(ROOT_ELEMENT_SELECTOR).get(0);
                 const quill = instance.getQuillInstance();
-                const oldFormatBinding = quill.keyboard.bindings[data.which];
+                const oldFormatBinding = quill.keyboard.bindings[which];
                 const newFormatBinding = {
                     key: 'b',
                     ctrlKey: true,
-                    handler: oldFormatBinding[1].handler.bind(quill.keyboard, null, null, { which: data.which })
+                    handler: oldFormatBinding[1].handler.bind(quill.keyboard, null, null, { which: which })
                 };
 
                 quill.keyboard.addBinding(newFormatBinding);
@@ -740,13 +739,12 @@ export default function() {
 
                 const $activeFormats = $container.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
 
-                assert.strictEqual($activeFormats.length, 1);
-                assert.ok($activeFormats.eq(0).hasClass(`dx-${data.format}-format`));
+                assert.strictEqual($activeFormats.length, 1, 'one format button state is changed');
+                assert.ok($activeFormats.eq(0).hasClass(`dx-${format}-format`), 'correct toolbar item is active');
             });
 
-            test(`format buttons can set inactive state for ${data.format} button on shortkey combinations (T1027453)`, function(assert) {
+            test(`hotkey handler can set inactive state for ${format} button (T1027453)`, function(assert) {
                 const $container = $('#htmlEditor').html('<p>test</p>');
-
                 const instance = $container.dxHtmlEditor({
                     toolbar: { items: ['bold', 'italic', 'underline'] },
                     height: 100,
@@ -756,11 +754,11 @@ export default function() {
 
                 const quillRootElement = $(ROOT_ELEMENT_SELECTOR).get(0);
                 const quill = instance.getQuillInstance();
-                const oldFormatBinding = quill.keyboard.bindings[data.which];
+                const oldFormatBinding = quill.keyboard.bindings[which];
                 const newFormatBinding = {
                     key: 'b',
                     ctrlKey: true,
-                    handler: oldFormatBinding[1].handler.bind(quill.keyboard, null, null, { which: data.which })
+                    handler: oldFormatBinding[1].handler.bind(quill.keyboard, null, null, { which: which })
                 };
 
                 quill.keyboard.addBinding(newFormatBinding);
@@ -778,8 +776,8 @@ export default function() {
 
                 const $activeFormats = $container.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
 
-                assert.strictEqual($activeFormats.length, 2);
-                assert.notOk($activeFormats.eq(0).hasClass(`dx-${data.format}-format`));
+                assert.strictEqual($activeFormats.length, 2, 'other toolbar items are not changed');
+                assert.notOk($activeFormats.eq(0).hasClass(`dx-${format}-format`), 'toolbar item state is changed');
             });
         });
 

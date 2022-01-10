@@ -45,7 +45,6 @@ const BOLD_FORMAT_CLASS = 'dx-bold-format';
 const SIZE_FORMAT_CLASS = 'dx-size-format';
 const HEADER_FORMAT_CLASS = 'dx-header-format';
 const ITALIC_FORMAT_CLASS = 'dx-italic-format';
-const UNDERLINE_FORMAT_CLASS = 'dx-underline-format';
 const ALIGNCENTER_FORMAT_CLASS = 'dx-aligncenter-format';
 const CODEBLOCK_FORMAT_CLASS = 'dx-codeblock-format';
 const COLOR_FORMAT_CLASS = 'dx-color-format';
