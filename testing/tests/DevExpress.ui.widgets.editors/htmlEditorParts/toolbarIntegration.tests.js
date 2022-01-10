@@ -714,28 +714,15 @@ export default function() {
                     value: '<p>test</p>',
                 }).dxHtmlEditor('instance');
 
-                const quillRootElement = $(ROOT_ELEMENT_SELECTOR).get(0);
                 const quill = instance.getQuillInstance();
-                const oldFormatBinding = quill.keyboard.bindings[which];
-                const newFormatBinding = {
-                    key: 'b',
-                    ctrlKey: true,
-                    handler: oldFormatBinding[1].handler.bind(quill.keyboard, null, null, { which: which })
-                };
-
-                quill.keyboard.addBinding(newFormatBinding);
+                const formatHandler = quill.keyboard.bindings[which][1].handler;
 
                 instance.setSelection(4, 0);
                 instance.formatText(3, 1, { bold: true, italic: true, underline: true });
 
                 $container.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`).removeClass(TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS);
 
-                const keydownEvent = new KeyboardEvent('keydown', {
-                    key: 'b',
-                    ctrlKey: true
-                });
-
-                quillRootElement.dispatchEvent(keydownEvent);
+                formatHandler.call(quill.keyboard, null, null, { which: which });
 
                 const $activeFormats = $container.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
 
@@ -752,27 +739,14 @@ export default function() {
                     value: '<p>test</p>',
                 }).dxHtmlEditor('instance');
 
-                const quillRootElement = $(ROOT_ELEMENT_SELECTOR).get(0);
                 const quill = instance.getQuillInstance();
-                const oldFormatBinding = quill.keyboard.bindings[which];
-                const newFormatBinding = {
-                    key: 'b',
-                    ctrlKey: true,
-                    handler: oldFormatBinding[1].handler.bind(quill.keyboard, null, null, { which: which })
-                };
-
-                quill.keyboard.addBinding(newFormatBinding);
+                const formatHandler = quill.keyboard.bindings[which][1].handler;
 
                 instance.setSelection(4, 0);
 
                 $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).addClass(TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS);
 
-                const keydownEvent = new KeyboardEvent('keydown', {
-                    key: 'b',
-                    ctrlKey: true
-                });
-
-                quillRootElement.dispatchEvent(keydownEvent);
+                formatHandler.call(quill.keyboard, null, null, { which: which });
 
                 const $activeFormats = $container.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
 
