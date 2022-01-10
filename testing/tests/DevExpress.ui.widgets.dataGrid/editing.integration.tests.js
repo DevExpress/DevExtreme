@@ -530,6 +530,29 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(rows[0].values, [true, 'Test']);
     });
 
+    QUnit.test('Editing should work for class field that contains circular link (T1053794)', function(assert) {
+        // arrange
+        function Foo() {
+            this.text = 'Hello';
+            this.circular = this;
+        }
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            columns: ['id', 'foo.text'],
+            dataSource: [{ id: 1, foo: new Foo() }],
+            editing: { allowUpdating: true, mode: 'batch' }
+        }).dxDataGrid('instance');
+
+        // act
+        dataGrid.cellValue(0, 1, 'test');
+
+        // assert
+        const rows = dataGrid.getVisibleRows();
+        assert.equal(rows.length, 1);
+        assert.equal(rows[0].data.foo.text, 'test');
+        assert.deepEqual(rows[0].values, [1, 'test']);
+    });
+
     // T613804
     QUnit.test('calculateCellValue for edited cell fires twice and at the second time contains full data row as an argument', function(assert) {
         // arrange
@@ -3184,6 +3207,32 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         assert.equal(idCallCount, 200, 'key call count after paging');
     });
+
+    QUnit.test('Popup should render editor if columns[].renderAsync option is true)', function(assert) {
+        createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'test11', field2: 'test12' },
+            ],
+            columns: [{
+                dataField: 'field1',
+                renderAsync: true,
+                width: 100,
+            }],
+            editing: {
+                mode: 'popup',
+                allowUpdating: true,
+            },
+        });
+        this.clock.tick();
+
+        // act
+        $('.dx-link-edit').trigger('click');
+        this.clock.tick();
+
+        // assert
+        const $textBox = $('.dx-textbox');
+        assert.equal($textBox.length, 1);
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
@@ -5009,6 +5058,86 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getTotalSummaryValue('id'), 0, 'summary is updated');
     });
 
+    QUnit.test('Cascade lookup dataSource should be updated on editing if repaintChangesOnly and recalculateWhileEditing are true (T1055325)', function(assert) {
+        // arrange
+        const employees = [{
+            ID: 1, StateID: 1, CityID: 1,
+        }];
+
+        const states = [{
+            ID: 1, Name: 'Alabama',
+        }, {
+            ID: 2, Name: 'Alaska',
+        }];
+
+        const cities = [{
+            ID: 1, Name: 'Tuscaloosa', StateID: 1,
+        }, {
+            ID: 5, Name: 'Anchorage', StateID: 2,
+        }];
+
+        const dataGrid = createDataGrid({
+            keyExpr: 'ID',
+            dataSource: employees,
+            repaintChangesOnly: true,
+            editing: {
+                allowUpdating: true,
+                mode: 'row'
+            },
+            summary: {
+                recalculateWhileEditing: true,
+                totalItems: [{
+                    column: 'ID',
+                    summaryType: 'count'
+                }]
+            },
+            columns: ['ID',
+                {
+                    dataField: 'StateID',
+                    caption: 'State',
+                    setCellValue(rowData, value) {
+                        rowData.StateID = value;
+                        rowData.CityID = null;
+                    },
+                    lookup: {
+                        dataSource: states,
+                        valueExpr: 'ID',
+                        displayExpr: 'Name',
+                    },
+                },
+                {
+                    dataField: 'CityID',
+                    caption: 'City',
+                    lookup: {
+                        dataSource(options) {
+                            return {
+                                store: cities,
+                                filter: options.data ? ['StateID', '=', options.data.StateID] : null,
+                            };
+                        },
+                        valueExpr: 'ID',
+                        displayExpr: 'Name',
+                    },
+                },
+            ],
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        $(dataGrid.getCellElement(0, 'StateID')).find('.dx-selectbox').dxSelectBox('instance').option('value', 2);
+        this.clock.tick();
+
+        $(dataGrid.getCellElement(0, 'StateID')).find('.dx-selectbox').dxSelectBox('instance').option('value', 1);
+        this.clock.tick();
+
+        // assert
+        const selectBox = $(dataGrid.getCellElement(0, 'CityID')).find('.dx-selectbox').dxSelectBox('instance');
+        assert.strictEqual(selectBox.option().value, null, 'lookup value is updated');
+        assert.deepEqual(selectBox.option().dataSource.filter, ['StateID', '=', 1], 'lookup dataSource filter is correct');
+    });
 
     QUnit.testInActiveWindow('Validation message should be positioned relative cell in material theme', function(assert) {
         // arrange

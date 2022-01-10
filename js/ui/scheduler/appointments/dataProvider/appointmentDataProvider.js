@@ -1,6 +1,5 @@
 import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
-import { createAppointmentAdapter } from '../../appointmentAdapter';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -42,7 +41,6 @@ export class AppointmentDataProvider {
             dataAccessors: this.dataAccessors,
             startDayHour: this.options.startDayHour,
             endDayHour: this.options.endDayHour,
-            appointmentDuration: this.options.appointmentDuration,
             showAllDayPanel: this.options.showAllDayPanel,
             timeZoneCalculator: this.options.timeZoneCalculator,
             //
@@ -72,8 +70,8 @@ export class AppointmentDataProvider {
     }
 
     // Filter mapping
-    filter() {
-        return this.getFilterStrategy().filter();
+    filter(preparedItems) {
+        return this.getFilterStrategy().filter(preparedItems);
     }
 
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
@@ -81,9 +79,8 @@ export class AppointmentDataProvider {
     }
 
 
-    hasAllDayAppointments(rawAppointments) {
-        const adapters = rawAppointments.map((item) => createAppointmentAdapter(item, this.dataAccessors, this.timeZoneCalculator));
-        return this.getFilterStrategy().hasAllDayAppointments(adapters);
+    hasAllDayAppointments(filteredItems, preparedItems) {
+        return this.getFilterStrategy().hasAllDayAppointments(filteredItems, preparedItems);
     }
 
     filterLoadedAppointments(filterOption, preparedItems) {

@@ -55,8 +55,6 @@ const ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned',
 
 const OVERLAY_STACK = [];
 
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
-
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const TAB_KEY = 'tab';
@@ -1269,11 +1267,6 @@ const Overlay = Widget.inherit({
         zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
-    },
-
-    _toggleDisabledState: function(value) {
-        this.callBase(...arguments);
-        this._$content.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
     },
 
     _toggleRTLDirection: function(rtl) {

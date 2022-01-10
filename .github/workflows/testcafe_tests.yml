@@ -16,6 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         ARGS: [
+          { componentFolder: "treeList", name: "treeList", quarantineMode: true },
           { componentFolder: "dataGrid", name: "dataGrid", quarantineMode: true },
           { componentFolder: "scheduler", name: "scheduler", quarantineMode: true },
           { componentFolder: "scheduler", name: "scheduler renovation", quarantineMode: true, inProgressRenovation: true },

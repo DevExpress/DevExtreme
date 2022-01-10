@@ -40,6 +40,7 @@ const POPUP_FULL_SCREEN_WIDTH_CLASS = 'dx-popup-fullscreen-width';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
 const POPUP_TITLE_CLASS = 'dx-popup-title';
@@ -293,6 +294,7 @@ const Popup = Overlay.inherit({
     },
 
     _renderTemplateByType: function(optionName, data, $container, additionalToolbarOptions) {
+        const { rtlEnabled, useDefaultToolbarButtons, useFlatToolbarButtons, disabled } = this.option();
         const template = this._getTemplateByOption(optionName);
         const toolbarTemplate = template instanceof EmptyTemplate;
 
@@ -300,9 +302,10 @@ const Popup = Overlay.inherit({
             const integrationOptions = extend({}, this.option('integrationOptions'), { skipTemplates: ['content', 'title'] });
             const toolbarOptions = extend(additionalToolbarOptions, {
                 items: data,
-                rtlEnabled: this.option('rtlEnabled'),
-                useDefaultButtons: this.option('useDefaultToolbarButtons'),
-                useFlatButtons: this.option('useFlatToolbarButtons'),
+                rtlEnabled,
+                useDefaultButtons: useDefaultToolbarButtons,
+                useFlatButtons: useFlatToolbarButtons,
+                disabled,
                 integrationOptions
             });
 
@@ -463,6 +466,12 @@ const Popup = Overlay.inherit({
         } else {
             this._$bottom && this._$bottom.detach();
         }
+    },
+
+    _toggleDisabledState: function(value) {
+        this.callBase(...arguments);
+
+        this.$content().toggleClass(DISABLED_STATE_CLASS, Boolean(value));
     },
 
     _toggleClasses: function() {
@@ -662,6 +671,11 @@ const Popup = Overlay.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case 'disabled':
+                this.callBase(args);
+                this._renderTitle();
+                this._renderBottom();
+                break;
             case 'showTitle':
             case 'title':
             case 'titleTemplate':

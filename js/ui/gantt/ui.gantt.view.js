@@ -276,7 +276,7 @@ export class GanttView extends Widget {
         return this.option('resourceAssignments');
     }
     getGanttWorkTimeRules() {
-        return {};
+        return null;
     }
     getExternalTaskAreaContainer(element) {
         if(!this._taskAreaContainer) {

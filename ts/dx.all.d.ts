@@ -23307,6 +23307,8 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewItem.selected]
      */
     selected?: boolean;
+
+    [key: string]: any;
   }
   /**
    * [descr:dxTreeViewNode]

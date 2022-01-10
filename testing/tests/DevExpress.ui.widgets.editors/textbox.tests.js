@@ -320,6 +320,7 @@ QUnit.module('label integration', {
         Object.values(this.labelMock, (stub) => {
             stub.reset();
         });
+
         TextBox.restoreTextEditorLabel();
     }
 },
