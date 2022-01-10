@@ -3,6 +3,8 @@ import { locate, move } from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import DOMComponent from '../core/dom_component';
 import $ from '../core/renderer';
+import domAdapter from '../core/dom_adapter';
+import { normalizeKeyName, addNamespace } from '../events/utils';
 import { inArray } from '../core/utils/array';
 import { pairToObject } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
@@ -13,7 +15,6 @@ import { hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../events/drag';
 import { getBoundingRect } from '../core/utils/position';
-import { addNamespace } from '../events/utils/index';
 import { triggerResizeEvent } from '../events/visibility_change';
 
 const RESIZABLE = 'dxResizable';
@@ -89,12 +90,30 @@ const Resizable = DOMComponent.inherit({
     _render: function() {
         this.callBase();
         this._renderActions();
+        this._renderShiftKeyHandler();
     },
 
     _renderActions: function() {
         this._resizeStartAction = this._createActionByOption('onResizeStart');
         this._resizeEndAction = this._createActionByOption('onResizeEnd');
         this._resizeAction = this._createActionByOption('onResize');
+    },
+
+    _renderShiftKeyHandler: function() {
+        this._keyDownHandler = (e) => {
+            if(normalizeKeyName(e) === 'shift') {
+                this._isShiftPressed = true;
+            }
+        };
+        this._keyUpHandler = (e) => {
+            if(normalizeKeyName(e) === 'shift') {
+                this._isShiftPressed = false;
+            }
+        };
+
+        $(domAdapter.getDocumentElement())
+            .on('keydown', this._keyDownHandler)
+            .on('keyup', this._keyUpHandler);
     },
 
     _renderHandles: function() {
@@ -225,6 +244,10 @@ const Resizable = DOMComponent.inherit({
         const size = this._elementSize;
         const offset = this._getOffset(e);
 
+        if(this._isShiftPressed && this._isCornerHandler(sides)) {
+            // should keep aspect ratio
+        }
+
         const width = size.width + offset.x * (sides.left ? -1 : 1);
         const height = size.height + offset.y * (sides.top ? -1 : 1);
 
@@ -248,6 +271,10 @@ const Resizable = DOMComponent.inherit({
         });
 
         triggerResizeEvent($element);
+    },
+
+    _isCornerHandler(sides) {
+        return Object.values(sides).reduce((xor, value) => xor ^ value, 0) === 0;
     },
 
     _getOffset: function(e) {
@@ -454,6 +481,10 @@ const Resizable = DOMComponent.inherit({
     },
 
     _clean: function() {
+        $(domAdapter.getDocumentElement())
+            .off('keydown', this._keyDownHandler)
+            .off('keyup', this._keyUpHandler);
+
         this.$element().find('.' + RESIZABLE_HANDLE_CLASS).remove();
     },
 
