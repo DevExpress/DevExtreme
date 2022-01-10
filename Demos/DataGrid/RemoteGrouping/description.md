@@ -6,4 +6,4 @@ You can also specify properties that allow the DataGrid to load data on demand t
 
 The DataGrid communicates with the server according to a protocol. Refer to the [Server-Side Data Processing](/Documentation/Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/#Load_Data/Server-Side_Data_Processing) article for information on it.
 
-**NOTE:** The data source in this demo is configured to return only 1000 records per request.
+[note] The data source in this demo is configured to return only 1000 records per request.

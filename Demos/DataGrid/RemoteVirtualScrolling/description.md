@@ -2,4 +2,4 @@ With remote virtual scrolling, pages are loaded from the server when they enter 
 
 In this demo, the server contains 1,000,000 records and returns 100 records per page. The page size is set using the **paging**.[pageSize](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/paging/#pageSize) property. The larger it is, the fewer requests are sent to the server. To reduce the time required for rendering the loaded rows, set the **scrolling**.[rowRenderingMode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/scrolling/#rowRenderingMode) to *"virtual"*  &mdash; the DataGrid renders only rows that are in the viewport.
 
-**NOTE:** The data source in this demo is configured to return only 1000 records per request.
+[note] The data source in this demo is configured to return only 1000 records per request.
