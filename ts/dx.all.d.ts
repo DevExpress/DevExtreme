@@ -1513,15 +1513,6 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface JQueryXHR {}
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  interface JQueryXHR extends XMLHttpRequest, JQueryPromise<any> {}
-
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export interface PromiseType<T> {}
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1678,9 +1669,10 @@ declare module DevExpress.data {
     load: (
       options: LoadOptions<TItem>
     ) =>
-      | DevExpress.core.utils.DxPromise<DevExpress.data.CustomStore.ResolvedData>
-      | PromiseLike<DevExpress.data.CustomStore.ResolvedData>
-      | DevExpress.core.JQueryXHR
+      | DevExpress.core.utils.DxPromise<
+          DevExpress.data.CustomStore.ResolvedData<TItem>
+        >
+      | PromiseLike<DevExpress.data.CustomStore.ResolvedData<TItem>>
       | Array<DevExpress.data.CustomStore.GroupItem>
       | Array<TItem>;
     /**

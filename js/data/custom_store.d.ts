@@ -1,7 +1,6 @@
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 import Store, { Options as StoreOptions } from './abstract_store';
 import { DxPromise } from '../core/utils/deferred';
-import { JQueryXHR } from '../core/utils/ajax';
 
 /** @public */
 export type Options<
@@ -63,9 +62,8 @@ export interface CustomStoreOptions<
      * @public
      */
     load: ((options: LoadOptions<TItem>) =>
-      | DxPromise<ResolvedData>
-      | PromiseLike<ResolvedData>
-      | JQueryXHR
+      | DxPromise<ResolvedData<TItem>>
+      | PromiseLike<ResolvedData<TItem>>
       | Array<GroupItem>
       | Array<TItem>);
     /**

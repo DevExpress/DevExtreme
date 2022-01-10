@@ -3,11 +3,10 @@
   "name": "tests",
   "version": "1.1.0",
   "author": "Developer Express Inc.",
-  "dependencies": {
-    "@angular/common": "^11.0.4",
-    "jquery": "^3.6.0"
+  "scripts": {
+    "test-ts": "node ../../node_modules/typescript/bin/tsc -p ./tsconfig.json"
   },
-  "devDependencies": {
-    "@types/jquery": "^3.5.11"
+  "dependencies": {
+    "@angular/common": "^11.0.4"
   }
 }
