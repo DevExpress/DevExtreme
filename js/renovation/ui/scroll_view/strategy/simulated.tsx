@@ -632,15 +632,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const { scrollLeft, scrollTop } = this.containerRef.current!;
     const { top, left } = location;
 
-    const newScrollLeft = this.props.rtlEnabled
-      ? normalizeOffsetLeft(scrollLeft, -this.hScrollOffsetMax, !!this.props.rtlEnabled)
-      : scrollLeft;
-
     this.hScrollbarRef.current?.scrollTo(
-      clampIntoRange(newScrollLeft + left, -this.hScrollOffsetMax, 0), true,
+      clampIntoRange(
+        normalizeOffsetLeft(scrollLeft, -this.hScrollOffsetMax, !!this.props.rtlEnabled) + left,
+        -this.hScrollOffsetMax, 0,
+      ),
+      true,
     );
     this.vScrollbarRef.current?.scrollTo(
-      clampIntoRange(scrollTop + top, -this.vScrollOffsetMax, 0), true,
+      clampIntoRange(scrollTop + top, -this.vScrollOffsetMax, 0),
+      true,
     );
 
     this.scrolling = false;
@@ -665,11 +666,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     if (!this.scrolling && isElementVisible(this.containerRef.current)) {
       const { scrollLeft } = this.containerRef.current!;
 
-      const newScrollLeft = this.props.rtlEnabled
-        ? normalizeOffsetLeft(scrollLeft, -this.hScrollOffsetMax, !!this.props.rtlEnabled)
-        : scrollLeft;
-
-      this.hScrollbarRef.current?.scrollTo(newScrollLeft, false);
+      this.hScrollbarRef.current?.scrollTo(
+        normalizeOffsetLeft(scrollLeft, -this.hScrollOffsetMax, !!this.props.rtlEnabled),
+        false,
+      );
     }
   }
 
@@ -781,9 +781,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const { fullScrollProp, location } = eventData;
 
     if (fullScrollProp === 'scrollLeft') {
-      this.containerRef.current![fullScrollProp] = this.props.rtlEnabled
-        ? normalizeOffsetLeft(location, this.hScrollOffsetMax, !!this.props.rtlEnabled)
-        : location;
+      this.containerRef.current![fullScrollProp] = normalizeOffsetLeft(
+        location,
+        this.hScrollOffsetMax,
+        !!this.props.rtlEnabled,
+      );
+
       this.hScrollLocation = -location;
     } else {
       this.containerRef.current![fullScrollProp] = location;
