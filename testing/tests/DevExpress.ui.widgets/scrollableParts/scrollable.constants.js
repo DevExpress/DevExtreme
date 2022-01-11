@@ -33,3 +33,5 @@ export const calculateInertiaDistance = function(distance, duration) {
 
     return result;
 };
+
+export const RESIZE_WAIT_TIMEOUT = 50;

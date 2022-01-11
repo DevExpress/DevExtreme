@@ -98,7 +98,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @InternalState() wasRelease = false;
 
-  @Mutable() rightScrollLocation = 0;
+  // @Mutable() rightScrollLocation = 0;
 
   @Mutable() prevScrollLocation = 0;
 
@@ -207,7 +207,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.loading = false;
     this.refreshing = false;
 
-    this.moveTo(-clampIntoRange(value, -this.maxOffset, 0));
+    this.moveTo(-value); // -clampIntoRange(value, -this.maxOffset, 0)
 
     this.needRiseEnd = needRiseEnd;
   }
@@ -314,16 +314,16 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     }
   }
 
-  @Effect()
-  updateScrollLocationInRTL(): void {
-    if (this.props.containerHasSizes && this.isHorizontal && this.props.rtlEnabled) {
-      if (this.props.maxOffset === 0 && this.props.scrollLocation) {
-        this.rightScrollLocation = 0;
-      }
+  // @Effect()
+  // updateScrollLocationInRTL(): void {
+  //   if (this.props.containerHasSizes && this.isHorizontal && this.props.rtlEnabled) {
+  //     if (this.props.maxOffset === 0 && this.props.scrollLocation) {
+  //       this.rightScrollLocation = 0;
+  //     }
 
-      this.moveTo(this.props.maxOffset - this.rightScrollLocation);
-    }
-  }
+  //     this.moveTo(this.props.maxOffset - this.rightScrollLocation);
+  //   }
+  // }
 
   @Effect()
   performAnimation(): void {
@@ -399,7 +399,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   moveTo(value: number): void {
-    this.rightScrollLocation = this.props.maxOffset - value;
+    // this.rightScrollLocation = this.props.maxOffset - value;
 
     this.newScrollLocation = value;
 
