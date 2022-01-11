@@ -9,7 +9,8 @@ import 'generic_light.css!';
 import {
     SCROLLABLE_CONTAINER_CLASS,
     SCROLLABLE_CONTENT_CLASS,
-    calculateInertiaDistance
+    calculateInertiaDistance,
+    RESIZE_WAIT_TIMEOUT
 } from './scrollable.constants.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 
@@ -603,11 +604,15 @@ QUnit.test('velocity calculated correctly when content height less than containe
     });
 
     QUnit.test(`scrollable should have correct scrollPosition when content is cropped by overflow hidden, useNative: ${useNative}`, function(assert) {
+        this.clock.restore();
+        const done = assert.async();
+
         const $scrollable = $('#scrollable').height(50).width(50);
 
         const scrollable = $scrollable.dxScrollable({
             useNative,
             direction: 'both',
+            showScrollbar: 'always',
             scrollByContent: true,
             useSimulatedScrollbar: true
         }).dxScrollable('instance');
@@ -632,12 +637,15 @@ QUnit.test('velocity calculated correctly when content height less than containe
             overflow: 'hidden'
         });
 
-        $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
-        $scrollable.dxScrollable('instance').update();
-        $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
+        setTimeout(() => {
+            $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
+            $scrollable.dxScrollable('instance').update();
+            $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
 
-        assert.equal($scrollable.dxScrollable('instance').scrollTop(), 50);
-        assert.equal($scrollable.dxScrollable('instance').scrollLeft(), 50);
+            assert.equal($scrollable.dxScrollable('instance').scrollTop(), 50);
+            assert.equal($scrollable.dxScrollable('instance').scrollLeft(), 50);
+            done();
+        }, RESIZE_WAIT_TIMEOUT);
     });
 });
 

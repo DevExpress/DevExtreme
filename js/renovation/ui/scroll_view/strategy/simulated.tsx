@@ -39,6 +39,7 @@ import { isDefined } from '../../../../core/utils/type';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
 import eventsEngine from '../../../../events/core/events_engine';
 import { inRange } from '../../../../core/utils/math';
+import { normalizeOffsetLeft } from '../utils/normalize_offset_left';
 
 import {
   ScrollDirection,
@@ -87,6 +88,7 @@ import { isElementVisible } from '../utils/is_element_visible';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { subscribeToResize } from '../utils/subscribe_to_resize';
 import domAdapter from '../../../../core/dom_adapter';
+import { clampIntoRange } from '../utils/clamp_into_range';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -626,6 +628,20 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     }
   }
 
+  @Effect()
+  syncVScrollbar(): void {
+    if (this.vScrollOffsetMax) {
+      this.syncVScrollbarsWithContent();
+    }
+  }
+
+  @Effect()
+  syncHScrollbar(): void {
+    if (this.hScrollOffsetMax) {
+      this.syncHScrollbarsWithContent();
+    }
+  }
+
   @Method()
   scrollByLocation(location: ScrollOffset): void {
     // this.updateHandler();
@@ -637,26 +653,40 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const { scrollLeft, scrollTop } = this.containerRef.current!;
     const { top, left } = location;
 
-    this.hScrollbarRef.current?.scrollTo(scrollLeft + left, true);
-    this.vScrollbarRef.current?.scrollTo(scrollTop + top, true);
+    const newScrollLeft = this.props.rtlEnabled
+      ? normalizeOffsetLeft(scrollLeft, -this.hScrollOffsetMax, !!this.props.rtlEnabled)
+      : scrollLeft;
+
+    this.hScrollbarRef.current?.scrollTo(clampIntoRange(newScrollLeft + left, -this.hScrollOffsetMax, 0), true);
+    this.vScrollbarRef.current?.scrollTo(clampIntoRange(scrollTop + top, -this.vScrollOffsetMax, 0), true);
 
     this.scrolling = false;
   }
 
   handleScroll(): void {
-    if (!this.scrolling) {
-      this.syncScrollbarsWithContent();
-    }
+    this.syncVScrollbarsWithContent();
+    this.syncHScrollbarsWithContent();
 
     this.props.onScroll?.(this.getEventArgs());
   }
 
-  syncScrollbarsWithContent(): void {
-    const { scrollLeft, scrollTop } = this.containerRef.current!;
+  syncVScrollbarsWithContent(): void {
+    if (!this.scrolling && isElementVisible(this.containerRef.current)) {
+      const { scrollTop } = this.containerRef.current!;
 
-    this.vScrollbarRef.current?.scrollTo(scrollTop, false);
-    if (!this.props.rtlEnabled) { // TODO: support native rtl mode // require for Qunit test
-      this.hScrollbarRef.current?.scrollTo(scrollLeft, false);
+      this.vScrollbarRef.current?.scrollTo(scrollTop, false);
+    }
+  }
+
+  syncHScrollbarsWithContent(): void {
+    if (!this.scrolling && isElementVisible(this.containerRef.current)) {
+      const { scrollLeft } = this.containerRef.current!;
+
+      const newScrollLeft = this.props.rtlEnabled
+        ? normalizeOffsetLeft(scrollLeft, -this.hScrollOffsetMax, !!this.props.rtlEnabled)
+        : scrollLeft;
+
+      this.hScrollbarRef.current?.scrollTo(newScrollLeft, false);
     }
   }
 
@@ -771,11 +801,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     const { fullScrollProp, location } = eventData;
 
-    this.containerRef.current![fullScrollProp] = location;
-
     if (fullScrollProp === 'scrollLeft') {
+      this.containerRef.current![fullScrollProp] = this.props.rtlEnabled
+        ? normalizeOffsetLeft(location, this.hScrollOffsetMax, !!this.props.rtlEnabled)
+        : location;
       this.hScrollLocation = -location;
     } else {
+      this.containerRef.current![fullScrollProp] = location;
       this.vScrollLocation = -location;
     }
 
@@ -1169,7 +1201,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   get contentStyles(): { [key: string]: string } {
     return {
-      transform: `translate(${this.contentTranslateX}px, ${this.contentTranslateY}px)`,
+      transform: `translate(${this.contentTranslateX}px, ${this.contentTranslateY}px)`, // this.contentTranslateX
     };
   }
 
@@ -1240,6 +1272,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     const classesMap = {
       'dx-scrollable': true,
+      'dx-scrollable-renovated': true,
       [SCROLLABLE_SIMULATED_CLASS]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,

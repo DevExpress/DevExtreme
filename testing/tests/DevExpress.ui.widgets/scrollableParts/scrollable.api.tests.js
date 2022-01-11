@@ -6,7 +6,6 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
-import browser from 'core/utils/browser';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
@@ -356,6 +355,7 @@ QUnit.test('scrollTo to location with dynamic content', function(assert) {
 
     const $scrollable = $('#scrollable').empty().append($('<div>').height(150)).dxScrollable({
         useNative: false,
+        showScrollbar: 'always',
         onEnd: function() {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
@@ -849,6 +849,8 @@ QUnit.test('scrollTo should not reset unused position', function(assert) {
         }
 
         QUnit.test(`scrollTo(${JSON.stringify(scrollToValue)}), update scrollOffset value after resize, useNative: ${useNative}, dir: ${direction}`, function(assert) {
+            this.clock.restore();
+            const done = assert.async();
             const contentSize = 1000;
             const containerSize = 100;
             const $scrollable = $('#scrollable').width(containerSize).height(containerSize);
@@ -886,12 +888,16 @@ QUnit.test('scrollTo should not reset unused position', function(assert) {
             $('#scrollable').width(1000).height(1000);
             resizeCallbacks.fire();
 
-            assert.deepEqual(scrollable.scrollOffset(), {
-                top: 0,
-                left: 0,
-            }, 'scrollOffset()');
-            assert.strictEqual(scrollable.scrollTop(), 0, 'scrollTop()');
-            assert.strictEqual(scrollable.scrollLeft(), 0, 'scrollLeft()');
+            setTimeout(() => {
+                assert.deepEqual(scrollable.scrollOffset(), {
+                    top: 0,
+                    left: 0,
+                }, 'scrollOffset()');
+                assert.strictEqual(scrollable.scrollTop(), 0, 'scrollTop()');
+                assert.strictEqual(scrollable.scrollLeft(), 0, 'scrollLeft()');
+
+                done();
+            }, RESIZE_WAIT_TIMEOUT);
         });
     });
 });
@@ -981,12 +987,8 @@ class ScrollableTestHelper {
 
         let expectedScrollOffsetLeft = left;
 
-        if(this._useNative && this._rtlEnabled) {
+        if(this._rtlEnabled && (this._useNative || isRenovatedScrollable)) {
             expectedScrollOffsetLeft = left - this.getMaxScrollOffset().horizontal;
-
-            if(browser.msie && browser.version < 12) {
-                expectedScrollOffsetLeft = Math.abs(expectedScrollOffsetLeft);
-            }
         }
 
         QUnit.assert.roughEqual(-scrollOffset.left, expectedScrollOffsetLeft, epsilon, 'scrollOffset.left');
@@ -1252,19 +1254,29 @@ class ScrollableTestHelper {
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 0 });
             });
 
-            QUnit.test(`direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtl: true -> change content size`, function() {
-                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
+            QUnit.test(`direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtl: true -> change content size`, function(assert) {
+                this.clock.restore();
+                const done = assert.async();
 
+                const helper = new ScrollableTestHelper({ direction: DIRECTION_HORIZONTAL, useNative, useSimulatedScrollbar, rtlEnabled: true });
                 helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
 
                 helper.$scrollable.find('.content1').css('width', '200px');
-                helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative ? 25 : 35 });
 
-                helper.scrollable.update();
-                helper.checkScrollOffset({ left: useNative || isRenovatedScrollable ? 150 : 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative && !isRenovatedScrollable ? 12 : 35 });
+                setTimeout(() => {
+                    const isNativeRtlMode = useNative || isRenovatedScrollable;
+
+                    helper.checkScrollOffset({ left: isNativeRtlMode ? 150 : 50, top: 0, maxScrollOffset: 150 });
+                    helper.checkScrollTranslateValues({ vertical: 0, horizontal: isNativeRtlMode ? 35 : 25 });
+
+                    helper.scrollable.update();
+                    helper.checkScrollOffset({ left: isNativeRtlMode ? 150 : 50, top: 0, maxScrollOffset: 150 });
+                    helper.checkScrollTranslateValues({ vertical: 0, horizontal: isNativeRtlMode ? 35 : 12 });
+
+                    done();
+                }, RESIZE_WAIT_TIMEOUT);
+
             });
         });
 
@@ -1298,22 +1310,31 @@ class ScrollableTestHelper {
                     });
                 });
 
-                QUnit.test(`Direction: horizontal, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Left: ${scrollRight}), css.zoomIn -> css.zoomOut`, function() {
-                    const helper = new ScrollableTestHelper({
-                        direction: DIRECTION_HORIZONTAL,
-                        useNative,
-                        useSimulatedScrollbar,
-                        rtlEnabled: true
-                    });
+                [1, 1.1, 1].forEach(zoomLevel => {
+                    QUnit.test(`Direction: horizontal, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Left: ${scrollRight}), css.zoomIn -> css.zoomOut`, function(assert) {
+                        const done = assert.async();
 
-                    helper.scrollable.scrollTo({ left: scrollRight });
-                    helper.scrollable.update();
-                    [1, 1.1, 1].forEach(zoomLevel => {
+                        const helper = new ScrollableTestHelper({
+                            direction: DIRECTION_HORIZONTAL,
+                            useNative,
+                            useSimulatedScrollbar,
+                            rtlEnabled: true
+                        });
+
+                        helper.scrollable.scrollTo({ left: scrollRight });
+                        helper.scrollable.update();
+
                         helper.scrollable._getWindowDevicePixelRatio = () => zoomLevel;
                         helper.scrollable.$element().css('zoom', zoomLevel);
 
-                        helper.checkScrollOffset({ left: scrollRight, top: 0, maxScrollOffset: 50, epsilon: 1.1 });
-                        helper.checkScrollTranslateValues({ vertical: 0, horizontal: scrollRight * 0.5 });
+                        setTimeout(() => {
+                            helper.checkScrollOffset({ left: scrollRight, top: 0, maxScrollOffset: 50, epsilon: 1.1 });
+                            helper.checkScrollTranslateValues({ vertical: 0, horizontal: scrollRight * 0.5 });
+
+                            done();
+                        }, 50);
+
+
                     });
                 });
             });

@@ -191,10 +191,18 @@
     @at-root #{selector-append(".dx-scrollable-native", &)} {
       direction: rtl;
     }
+
+    @at-root #{selector-append(".dx-scrollable-simulated.dx-scrollable-renovated", &)} {
+      direction: rtl;
+    }
   }
 
   .dx-scrollable-content {
     @at-root #{selector-append(".dx-scrollable-native", &)} {
+      float: right;
+    }
+
+    @at-root #{selector-append(".dx-scrollable-simulated.dx-scrollable-renovated", &)} {
       float: right;
     }
   }

@@ -167,13 +167,13 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
       this.updateHandler();
     }
 
-    const currentScrollOffset = this.props.useNative
-      ? this.scrollOffset()
-      : { top: this.container().scrollTop, left: this.container().scrollLeft };
+    // const currentScrollOffset = this.props.useNative
+    //   ? this.scrollOffset()
+    //   : { top: this.container().scrollTop, left: this.container().scrollLeft };
 
     const distance = getOffsetDistance(
       convertToLocation(targetLocation, this.props.direction),
-      currentScrollOffset,
+      this.scrollOffset(),
     );
 
     this.scrollBy(distance);

@@ -786,22 +786,34 @@ QUnit.module('visibility events integration', {
     QUnit.test(`scroll should save position on visibility change useNative: ${useNative}`, function(assert) {
         const done = assert.async();
         const $scrollable = $('#scrollable');
+        const onScrollHandler = sinon.spy();
 
         const scrollable = $scrollable.dxScrollable({
             useNative: useNative,
-            direction: 'both'
+            direction: 'both',
+            showScrollbar: 'always',
+            onScroll: onScrollHandler
         }).dxScrollable('instance');
 
         scrollable.scrollTo({ left: 10, top: 20 });
-        $scrollable.hide();
-
         setTimeout(() => {
-            scrollable.scrollTo({ left: 0, top: 0 });
-            $scrollable.show();
-            scrollable.update();
+            onScrollHandler.reset();
+            $scrollable.hide();
+
             setTimeout(() => {
-                assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after shown');
-                done();
+                assert.strictEqual(onScrollHandler.callCount, 0, 'onScrollHandler.callCount on hide');
+                scrollable.scrollTo({ left: 0, top: 0 });
+
+                setTimeout(() => {
+                    onScrollHandler.reset();
+                    $scrollable.show();
+                    scrollable.update();
+                    setTimeout(() => {
+                        assert.strictEqual(onScrollHandler.callCount, 0, 'onScrollHandler.callCount on show');
+                        assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after shown');
+                        done();
+                    }, RESIZE_WAIT_TIMEOUT);
+                }, RESIZE_WAIT_TIMEOUT);
             }, RESIZE_WAIT_TIMEOUT);
         }, RESIZE_WAIT_TIMEOUT);
     });
