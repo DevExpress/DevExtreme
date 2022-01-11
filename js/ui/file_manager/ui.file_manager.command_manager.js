@@ -18,7 +18,6 @@ export class FileManagerCommandManager {
     constructor(permissions) {
         this._actions = {};
         this._permissions = permissions || {};
-        this._permissionsChangedCallbacks = [];
 
         this._initCommands();
     }
@@ -127,17 +126,6 @@ export class FileManagerCommandManager {
         this._permissions = resultPermissions;
         each(this._permissions, permission => {
             this._commandMap[permission].enabled = this._permissions[permission];
-        });
-        this.raisePermissionsChanged();
-    }
-
-    registerPermissionsChangedCallback(fn) {
-        this._permissionsChangedCallbacks.push(fn);
-    }
-
-    raisePermissionsChanged() {
-        this._permissionsChangedCallbacks.forEach(fn => {
-            fn(this._permissions);
         });
     }
 

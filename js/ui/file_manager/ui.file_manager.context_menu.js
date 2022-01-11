@@ -35,11 +35,6 @@ const DEFAULT_ITEM_ALLOWED_PROPERTIES = [
 
 class FileManagerContextMenu extends Widget {
 
-    _init() {
-        super._init();
-        this._commandManager.registerPermissionsChangedCallback(() => this._tryUpdateVisibleContextMenu());
-    }
-
     _initMarkup() {
         this._initActions();
 
@@ -207,7 +202,7 @@ class FileManagerContextMenu extends Widget {
         }
     }
 
-    _tryUpdateVisibleContextMenu() {
+    tryUpdateVisibleContextMenu() {
         if(this._isVisible) {
             const items = this.createContextMenuItems(this._targetFileItems);
             this._contextMenu.option('dataSource', items);
@@ -247,7 +242,7 @@ class FileManagerContextMenu extends Widget {
                 this.repaint();
                 break;
             case 'items':
-                this._tryUpdateVisibleContextMenu();
+                this.tryUpdateVisibleContextMenu();
                 break;
             case 'onItemClick':
             case 'onContextMenuShowing':
