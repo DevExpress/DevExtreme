@@ -34,16 +34,16 @@
 
   <div *dxTemplate="let model of 'appointment-template'">
     <div class="showtime-preview">
-      <div>{{ getMovieById(model.appointmentData.movieId).text }}</div>
+      <div>{{ getMovieById(model.targetedAppointmentData.movieId).text }}</div>
       <div
         >Ticket Price:
-        <strong>{{ "$" + model.appointmentData.price }}</strong>
+        <strong>{{ "$" + model.targetedAppointmentData.price }}</strong>
       </div>
       <div class="dropdown-appointment-dates">
         {{
-          (model.appointmentData.startDate | date: "shortTime") +
+          (model.targetedAppointmentData.displayStartDate | date: "shortTime") +
             " - " +
-            (model.appointmentData.endDate | date: "shortTime")
+            (model.targetedAppointmentData.displayEndDate | date: "shortTime")
         }}
       </div>
     </div>

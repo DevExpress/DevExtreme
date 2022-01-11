@@ -8,20 +8,20 @@ function getMovieById(id) {
 }
 
 export default function Appointment(model) {
-  const { appointmentData } = model.data;
+  const { targetedAppointmentData } = model.data;
 
-  const movieData = getMovieById(appointmentData.movieId) || {};
+  const movieData = getMovieById(targetedAppointmentData.movieId) || {};
 
   return (
     <div className="showtime-preview">
       <div> {movieData.text}</div>
       <div>
-        Ticket Price: <strong>${ appointmentData.price }</strong>
+        Ticket Price: <strong>${ targetedAppointmentData.price }</strong>
       </div>
       <div>
-        {localization.formatDate(appointmentData.startDate, 'shortTime')}
+        {localization.formatDate(targetedAppointmentData.displayStartDate, 'shortTime')}
         {' - '}
-        {localization.formatDate(appointmentData.endDate, 'shortTime')}
+        {localization.formatDate(targetedAppointmentData.displayEndDate, 'shortTime')}
       </div>
     </div>
   );

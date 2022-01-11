@@ -25,17 +25,17 @@ $(() => {
       dataSource: theatreData,
     }],
     appointmentTooltipTemplate(model) {
-      return getTooltipTemplate(getMovieById(model.appointmentData.movieId));
+      return getTooltipTemplate(getMovieById(model.targetedAppointmentData.movieId));
     },
     appointmentTemplate(model) {
-      const movieInfo = getMovieById(model.appointmentData.movieId) || {};
+      const movieInfo = getMovieById(model.targetedAppointmentData.movieId) || {};
 
       return $(`${"<div class='showtime-preview'>"
                         + '<div>'}${movieInfo.text}</div>`
-                        + `<div>Ticket Price: <strong>$${model.appointmentData.price}</strong>`
+                        + `<div>Ticket Price: <strong>$${model.targetedAppointmentData.price}</strong>`
                         + '</div>'
-                        + `<div>${DevExpress.localization.formatDate(model.appointmentData.startDate, 'shortTime')
-                        } - ${DevExpress.localization.formatDate(model.appointmentData.endDate, 'shortTime')
+                        + `<div>${DevExpress.localization.formatDate(model.targetedAppointmentData.displayStartDate, 'shortTime')
+                        } - ${DevExpress.localization.formatDate(model.targetedAppointmentData.displayEndDate, 'shortTime')
                         }</div>`
                     + '</div>');
     },

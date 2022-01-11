@@ -20,12 +20,12 @@
       <div id="scheduler" dx-scheduler="options" dx-item-alias="model">
         <div data-options="dxTemplate: {name: 'appointment-template'}">
           <div class="showtime-preview">
-            <div>{{getMovieById(model.appointmentData.movieId).text}}</div>
+            <div>{{getMovieById(model.targetedAppointmentData.movieId).text}}</div>
             <div
               >Ticket Price:
-              <strong>${{model.appointmentData.price}}</strong>
+              <strong>${{model.targetedAppointmentData.price}}</strong>
             </div>
-            <div> {{(model.appointmentData.startDate | date:'h:mm a') + ' - ' + (model.appointmentData.endDate | date:'h:mm a')}} </div>
+            <div> {{(model.targetedAppointmentData.displayStartDate | date:'h:mm a') + ' - ' + (model.targetedAppointmentData.displayEndDate | date:'h:mm a')}} </div>
           </div>
         </div>
 

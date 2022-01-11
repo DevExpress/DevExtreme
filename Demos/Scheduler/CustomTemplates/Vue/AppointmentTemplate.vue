@@ -2,11 +2,11 @@
   <div class="showtime-preview">
     <div> {{ movieData.text }}</div>
     <div>
-      Ticket Price: <strong>{{ '$' + templateModel.appointmentData.price }}</strong>
+      Ticket Price: <strong>{{ '$' + templateModel.targetedAppointmentData.price }}</strong>
     </div>
     <div>
-      {{ getFormatDate(templateModel.appointmentData.startDate) }} -
-      {{ getFormatDate(templateModel.appointmentData.endDate) }}
+      {{ getFormatDate(templateModel.targetedAppointmentData.displayStartDate) }} -
+      {{ getFormatDate(templateModel.targetedAppointmentData.displayEndDate) }}
     </div>
   </div>
 </template>
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       dayOfWeekNames,
-      movieData: getMovieById(this.templateModel.appointmentData.movieId),
+      movieData: getMovieById(this.templateModel.targetedAppointmentData.movieId),
     };
   },
   methods: {
