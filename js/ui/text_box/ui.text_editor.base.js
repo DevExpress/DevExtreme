@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import Guid from '../../core/guid';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { focused } from '../widget/selectors';
@@ -77,7 +76,6 @@ const TextEditorBase = Editor.inherit({
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
         this._labelContainerElement = null;
-        this._labelId = `dx-texteditor-label-${new Guid()}`;
 
         this.callBase.apply(this, arguments);
     },
@@ -474,9 +472,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _setLabelContainerAria: function() {
-        const currentLabelId = this._label.isVisible() ? this._labelId : null;
-
-        this.setAria('labelledby', currentLabelId, this._getLabelContainer());
+        this.setAria('labelledby', this._label.getId(), this._getLabelContainer());
     },
 
     _renderLabel: function() {
@@ -487,7 +483,6 @@ const TextEditorBase = Editor.inherit({
         const { label, labelMode, labelMark } = this.option();
 
         const labelConfig = {
-            id: this._labelId,
             $editor: this.$element(),
             text: label,
             mark: labelMark,
