@@ -5,5 +5,9 @@
   "author": "Developer Express Inc.",
   "dependencies": {
     "@angular/common": "^11.0.4"
+  },
+  "devDependencies": {
+    "jquery": "^3.6.0",
+    "@types/jquery": "^3.5.11"
   }
 }
