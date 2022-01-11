@@ -3,8 +3,7 @@ import { locate, move } from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import DOMComponent from '../core/dom_component';
 import $ from '../core/renderer';
-import domAdapter from '../core/dom_adapter';
-import { normalizeKeyName, addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils';
 import { inArray } from '../core/utils/array';
 import { pairToObject } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
@@ -89,31 +88,12 @@ const Resizable = DOMComponent.inherit({
     _render: function() {
         this.callBase();
         this._renderActions();
-        this._renderShiftKeyHandler();
     },
 
     _renderActions: function() {
         this._resizeStartAction = this._createActionByOption('onResizeStart');
         this._resizeEndAction = this._createActionByOption('onResizeEnd');
         this._resizeAction = this._createActionByOption('onResize');
-    },
-
-    _renderShiftKeyHandler: function() {
-        this._keyDownHandler = (e) => {
-            if(normalizeKeyName(e) === 'shift') {
-                this._isShiftPressed = true;
-                // TODO: Remove after HtmlEditor content shift press processing fix
-                e.stopPropagation();
-            }
-        };
-        this._keyUpHandler = (e) => {
-            if(normalizeKeyName(e) === 'shift') {
-                this._isShiftPressed = false;
-            }
-        };
-
-        domAdapter.getDocumentElement().addEventListener('keydown', this._keyDownHandler, true);
-        domAdapter.getDocumentElement().addEventListener('keyup', this._keyUpHandler, true);
     },
 
     _renderHandles: function() {
@@ -303,7 +283,7 @@ const Resizable = DOMComponent.inherit({
 
     _getDeltaByOffset: function(offset) {
         const sides = this._movingSides;
-        const shouldKeepAspectRatio = this._isShiftPressed && this._isCornerHandler(sides);
+        const shouldKeepAspectRatio = this._isCornerHandler(sides);
 
         const widthDelta = offset.x * (sides.left ? -1 : 1);
         const heightDelta = offset.y * (sides.top ? -1 : 1);
@@ -597,9 +577,6 @@ const Resizable = DOMComponent.inherit({
     },
 
     _clean: function() {
-        domAdapter.getDocumentElement().removeEventListener('keydown', this._keyDownHandler);
-        domAdapter.getDocumentElement().removeEventListener('keyup', this._keyUpHandler);
-
         this.$element().find('.' + RESIZABLE_HANDLE_CLASS).remove();
     },
 
