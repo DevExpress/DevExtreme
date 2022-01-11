@@ -158,7 +158,6 @@ class FileManager extends Widget {
 
         this._createBreadcrumbs(this._$itemsPanel);
         this._createItemView(this._$itemsPanel);
-        this._commandManager.registerPermissionsChangedCallback(() => this._updateUploadDropZone());
         this._updateUploadDropZone();
     }
 
@@ -582,6 +581,10 @@ class FileManager extends Widget {
                 break;
             case 'permissions':
                 this._commandManager.updatePermissions(this.option('permissions'));
+                this._filesTreeViewContextMenu.tryUpdateVisibleContextMenu();
+                this._itemViewContextMenu.tryUpdateVisibleContextMenu();
+                this._toolbar.updateItemPermissions();
+                this._updateUploadDropZone();
                 break;
             case 'selectionMode':
             case 'customizeThumbnail':
