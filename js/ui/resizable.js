@@ -14,7 +14,6 @@ import { isPlainObject, isFunction, isWindow } from '../core/utils/type';
 import { hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../events/drag';
-import { getBoundingRect } from '../core/utils/position';
 import { triggerResizeEvent } from '../events/visibility_change';
 
 const RESIZABLE = 'dxResizable';
@@ -187,11 +186,9 @@ const Resizable = DOMComponent.inherit({
 
         this._elementLocation = locate($element);
 
-        const elementRect = getBoundingRect($element.get(0));
-
         this._elementSize = {
-            width: elementRect.width,
-            height: elementRect.height
+            width: $element.width(),
+            height: $element.height()
         };
 
         this._renderDragOffsets(e);
@@ -262,6 +259,48 @@ const Resizable = DOMComponent.inherit({
         };
     },
 
+    _fitIntoMinMax: function(delta) {
+        const size = this._elementSize;
+        const { minWidth, minHeight, maxWidth, maxHeight } = this.option();
+
+        const width = size.width + delta.x;
+        const height = size.height + delta.y;
+
+        const fittedWidth = fitIntoRange(minWidth, width, maxWidth);
+        if(width !== fittedWidth) {
+            const proportionalHeight = fittedWidth * (size.height / size.width);
+            if(proportionalHeight !== fitIntoRange(minHeight, proportionalHeight, maxHeight)) {
+                return {
+                    x: 0,
+                    y: 0
+                };
+            } else {
+                return {
+                    x: fittedWidth - size.width,
+                    y: proportionalHeight - size.height
+                };
+            }
+        }
+
+        const fittedHeight = fitIntoRange(minHeight, height, maxHeight);
+        if(height !== fittedHeight) {
+            const proportionalWidth = fittedHeight * (size.width / size.height);
+            if(proportionalWidth !== fitIntoRange(minWidth, proportionalWidth, maxWidth)) {
+                return {
+                    x: 0,
+                    y: 0
+                };
+            } else {
+                return {
+                    x: proportionalWidth - size.width,
+                    y: fittedHeight - size.height
+                };
+            }
+        }
+
+        return delta;
+    },
+
     _getDeltaByOffset: function(offset) {
         const sides = this._movingSides;
         const shouldKeepAspectRatio = this._isShiftPressed && this._isCornerHandler(sides);
@@ -271,7 +310,9 @@ const Resizable = DOMComponent.inherit({
 
         if(shouldKeepAspectRatio) {
             return this._roundOffset(
-                this._getProportionalDelta(widthDelta, heightDelta)
+                this._fitIntoMinMax(
+                    this._getProportionalDelta(widthDelta, heightDelta)
+                )
             );
         } else {
             return {
@@ -284,12 +325,16 @@ const Resizable = DOMComponent.inherit({
     _updatePosition: function(delta, { width, height }) {
         const location = this._elementLocation;
         const sides = this._movingSides;
+        const $element = this.$element();
 
-        const elementRect = getBoundingRect(this.$element().get(0));
+        const elementRect = {
+            width: $element.width(),
+            height: $element.height()
+        };
         const offsetTop = delta.y * (sides.top ? -1 : 1) - ((elementRect.height || height) - height);
         const offsetLeft = delta.x * (sides.left ? -1 : 1) - ((elementRect.width || width) - width);
 
-        move(this.$element(), {
+        move($element, {
             top: location.top + (sides.top ? offsetTop : 0),
             left: location.left + (sides.left ? offsetLeft : 0)
         });
