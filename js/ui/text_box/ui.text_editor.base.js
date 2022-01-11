@@ -293,7 +293,7 @@ const TextEditorBase = Editor.inherit({
     _clean() {
         this._buttonCollection.clean();
         this._disposePendingIndicator();
-        this._cleanLabelObservable();
+        this._unobserveLabelContainerResize();
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
         this._$textEditorContainer = null;
@@ -446,7 +446,7 @@ const TextEditorBase = Editor.inherit({
         this._input().prop('spellcheck', this.option('spellcheck'));
     },
 
-    _cleanLabelObservable: function() {
+    _unobserveLabelContainerResize: function() {
         if(this._labelContainerElement) {
             resizeObserverSingleton.unobserve(this._labelContainerElement);
 
@@ -480,7 +480,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderLabel: function() {
-        this._cleanLabelObservable();
+        this._unobserveLabelContainerResize();
 
         this._labelContainerElement = $(this._getLabelContainer()).get(0);
 
