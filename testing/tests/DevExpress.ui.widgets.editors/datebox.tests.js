@@ -4790,9 +4790,11 @@ QUnit.module('aria accessibility', {}, () => {
 QUnit.module('pickerType', {
     beforeEach: function() {
         fx.off = true;
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
+        this.clock.restore();
     }
 }, () => {
     QUnit.test('T319039 - classes on DateBox should be correct after the \'pickerType\' option changed', function(assert) {
