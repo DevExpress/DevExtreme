@@ -1888,7 +1888,6 @@ QUnit.module('Fixed columns', {
         // arrange
         const that = this;
         let $fixedTable;
-        const done = assert.async();
 
         that.items = generateData(20);
         that.setupDataGrid();
@@ -1901,19 +1900,18 @@ QUnit.module('Fixed columns', {
         assert.equal($fixedTable.position().top, 0, 'fixed table - position top');
 
         // arrange
-        that.rowsView.scrollTo(500);
+        const scrollable = that.rowsView.getScrollable();
+        scrollable.scrollTo(500);
+        $(scrollable.container()).trigger('scroll');
+        that.clock.tick();
 
-        that.clock.restore();
-        setTimeout(function() {
-            // act
-            that.rowsView.render(that.gridContainer);
-            that.rowsView.resize();
+        // act
+        that.rowsView.render(that.gridContainer);
+        that.rowsView.resize();
 
-            // assert
-            $fixedTable = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
-            assert.equal($fixedTable.parent().scrollTop(), 500, 'scroll top of the fixed table');
-            done();
-        });
+        // assert
+        $fixedTable = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
+        assert.equal($fixedTable.parent().scrollTop(), 500, 'scroll top of the fixed table');
     });
 
     // T310680
@@ -1999,7 +1997,6 @@ QUnit.module('Fixed columns', {
     QUnit.test('Updating position of the fixed table (when scrollbar at the bottom) after delete the row', function(assert) {
         // arrange
         const that = this;
-        const done = assert.async();
 
         that.items = generateData(20);
         that.setupDataGrid();
@@ -2012,21 +2009,20 @@ QUnit.module('Fixed columns', {
         assert.equal($fixedTable.position().top, 0, 'fixed table - position top');
 
         // arrange
-        that.rowsView.scrollTo(600);
+        const scrollable = that.rowsView.getScrollable();
+        scrollable.scrollTo(600);
+        $(scrollable.container()).trigger('scroll');
+        that.clock.tick();
 
-        that.clock.restore();
-        setTimeout(function() {
-            const positionTop = $fixedTable.position().top;
+        const positionTop = $fixedTable.position().top;
 
-            // act
-            that.gridContainer.find('.dx-data-row').eq(1).remove(); // remove second row of the main table
-            that.gridContainer.find('.dx-data-row').eq(20).remove(); // remove second row of the fixed table
-            that.rowsView.resize();
+        // act
+        that.gridContainer.find('.dx-data-row').eq(1).remove(); // remove second row of the main table
+        that.gridContainer.find('.dx-data-row').eq(20).remove(); // remove second row of the fixed table
+        that.rowsView.resize();
 
-            // assert
-            assert.notStrictEqual($fixedTable.position().top, positionTop, 'scroll top of the fixed table is changed');
-            done();
-        });
+        // assert
+        assert.notStrictEqual($fixedTable.position().top, positionTop, 'scroll top of the fixed table is changed');
     });
 
     // T722330
