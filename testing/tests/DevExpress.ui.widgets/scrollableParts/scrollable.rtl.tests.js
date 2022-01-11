@@ -4,6 +4,7 @@ import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import {
+    RESIZE_WAIT_TIMEOUT,
     RTL_CLASS
 } from './scrollable.constants.js';
 
@@ -93,7 +94,7 @@ QUnit.test('rtlEnabled scrolls to very right position after shown event', functi
 
         assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
         done();
-    });
+    }, RESIZE_WAIT_TIMEOUT);
 });
 
 QUnit.test('init option \'rtl\' is true', function(assert) {

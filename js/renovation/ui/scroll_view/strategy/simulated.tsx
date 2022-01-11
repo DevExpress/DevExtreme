@@ -89,6 +89,7 @@ import { allowedDirection } from '../utils/get_allowed_direction';
 import { subscribeToResize } from '../utils/subscribe_to_resize';
 import domAdapter from '../../../../core/dom_adapter';
 import { clampIntoRange } from '../utils/clamp_into_range';
+import { getScrollLeftMax } from '../utils/get_scroll_left_max';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -629,13 +630,15 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.prepareDirections(true);
     this.onStart();
 
-    const { scrollLeft, scrollTop } = this.containerRef.current!;
+    const containerEl = this.containerRef.current!;
+    const maxOffsetLeft = getScrollLeftMax(containerEl);
+    const { scrollLeft, scrollTop } = containerEl;
     const { top, left } = location;
 
     this.hScrollbarRef.current?.scrollTo(
       clampIntoRange(
-        normalizeOffsetLeft(scrollLeft, -this.hScrollOffsetMax, !!this.props.rtlEnabled) + left,
-        -this.hScrollOffsetMax, 0,
+        normalizeOffsetLeft(scrollLeft, maxOffsetLeft, !!this.props.rtlEnabled) + left,
+        maxOffsetLeft, 0,
       ),
       true,
     );
@@ -663,11 +666,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   syncHScrollbarsWithContent(): void {
-    if (!this.scrolling && isElementVisible(this.containerRef.current)) {
-      const { scrollLeft } = this.containerRef.current!;
+    const containerEl = this.containerRef.current!;
+    if (!this.scrolling && isElementVisible(containerEl)) {
+      const { scrollLeft } = containerEl;
 
       this.hScrollbarRef.current?.scrollTo(
-        normalizeOffsetLeft(scrollLeft, -this.hScrollOffsetMax, !!this.props.rtlEnabled),
+        normalizeOffsetLeft(scrollLeft, getScrollLeftMax(containerEl), !!this.props.rtlEnabled),
         false,
       );
     }
@@ -778,18 +782,19 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       return;
     }
 
+    const containerEl = this.containerRef.current!;
     const { fullScrollProp, location } = eventData;
 
     if (fullScrollProp === 'scrollLeft') {
-      this.containerRef.current![fullScrollProp] = normalizeOffsetLeft(
+      containerEl[fullScrollProp] = normalizeOffsetLeft(
         location,
-        this.hScrollOffsetMax,
+        -getScrollLeftMax(containerEl),
         !!this.props.rtlEnabled,
       );
 
       this.hScrollLocation = -location;
     } else {
-      this.containerRef.current![fullScrollProp] = location;
+      containerEl[fullScrollProp] = location;
       this.vScrollLocation = -location;
     }
 
@@ -1115,7 +1120,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       const { scrollTop, scrollLeft } = this.savedScrollOffset;
       // restore scrollLocation on second and next opening of popup with data_view rollers
       this.vScrollbarRef.current?.scrollTo(scrollTop, false);
-      this.hScrollbarRef.current?.scrollTo(scrollLeft, false);
+      this.hScrollbarRef.current?.scrollTo(
+        normalizeOffsetLeft(
+          scrollLeft,
+          getScrollLeftMax(this.containerRef.current!),
+          !!this.props.rtlEnabled,
+        ),
+        false,
+      );
     }
 
     this.props.onVisibilityChange?.(visible);
