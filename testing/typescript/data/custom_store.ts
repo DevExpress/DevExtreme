@@ -5,11 +5,6 @@ import $ from 'jquery';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from '../../../js/data/custom_store';
 
-export function loadByFetch(url: string): CustomStore {
-  return new CustomStore({
-    load: () => fetch(url).then((response) => response.json()),
-  });
-}
 
 export function loadByFetchWithModification(url: string): CustomStore {
   return new CustomStore({
