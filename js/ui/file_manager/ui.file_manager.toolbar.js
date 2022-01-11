@@ -134,10 +134,6 @@ class FileManagerToolbar extends Widget {
             message: '',
             status: 'default'
         };
-        this._commandManager.registerPermissionsChangedCallback(() => {
-            this.repaint();
-            this._restoreRefreshItemState();
-        });
     }
 
     _initMarkup() {
@@ -586,6 +582,11 @@ class FileManagerToolbar extends Widget {
             default:
                 super._optionChanged(args);
         }
+    }
+
+    updateItemPermissions() {
+        this.repaint();
+        this._restoreRefreshItemState();
     }
 
     _restoreRefreshItemState() {
