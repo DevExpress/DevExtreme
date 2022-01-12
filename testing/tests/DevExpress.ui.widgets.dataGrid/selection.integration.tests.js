@@ -712,6 +712,43 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [5], 'selected row key count equals pageSize');
     });
 
+    QUnit.test('selection after paging should work correctly if rowRenderingMode is virtual (T1058757)', function(assert) {
+        // arrange, act
+        const array = [];
+
+        for(let i = 1; i <= 10; i++) {
+            array.push({ id: i });
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 100,
+            dataSource: array,
+            keyExpr: 'id',
+            selection: {
+                mode: 'single'
+            },
+            paging: {
+                pageSize: 5,
+                pageIndex: 1
+            },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            columns: ['id']
+        }).dxDataGrid('instance');
+
+        this.clock.tick(300);
+
+        // act
+        $(dataGrid.getRowElement(0)).trigger('dxclick');
+
+        // assert
+        const visibleRows = dataGrid.getVisibleRows();
+        assert.equal(visibleRows[0].key, 6, 'first visible row key');
+        assert.equal(visibleRows[0].isSelected, true, 'first visible row is selected');
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [6], 'selected row key');
+    });
+
     QUnit.test('Selection with Shift should work properly when rowRenderingMode is virtual (T1046809)', function(assert) {
         // arrange, act
         const array = [];
