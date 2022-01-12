@@ -531,19 +531,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     }
   }
 
-  @Effect() effectResetInactiveState(): void {
-    if (this.direction.isBoth) {
-      return;
-    }
-
-    const inactiveScrollProp = !this.direction.isVertical ? 'scrollTop' : 'scrollLeft';
-
-    this.scrollLocationChange({
-      fullScrollProp: inactiveScrollProp,
-      location: 0,
-    });
-  }
-
   @Effect()
   updatePocketState(): void {
     if (this.props.forceGeneratePockets) {
@@ -624,6 +611,20 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       this.pendingScrollEvent = false;
       eventsEngine.triggerHandler(this.containerRef.current, { type: 'scroll' });
     }
+  }
+
+  @Effect() effectResetInactiveState(): void {
+    if (this.direction.isBoth) {
+      return;
+    }
+
+    const inactiveScrollProp = !this.direction.isVertical ? 'scrollTop' : 'scrollLeft';
+
+    this.scrollLocationChange({
+      fullScrollProp: inactiveScrollProp,
+      // set default content position
+      location: this.props.rtlEnabled ? -this.hScrollOffsetMax : 0,
+    });
   }
 
   @Method()
