@@ -21,8 +21,6 @@ const config: Partial<ScrollableProps>[] = [];
 
 [false, true].forEach((useNative) => {
   [false, true].forEach((rtlEnabled) => {
-    // TODO: support true value
-    // it works incorrectly in angular and react
     ([
       DIRECTION_VERTICAL,
       DIRECTION_HORIZONTAL,
@@ -44,7 +42,7 @@ const config: Partial<ScrollableProps>[] = [];
 }].forEach(({ widgetName, page, Component }) => {
   const test = multiPlatformTest({
     page: `declaration/${page}`,
-    platforms: ['jquery', 'react', 'angular'],
+    platforms: ['jquery', 'react'],
   });
 
   fixture('Render strategies');
