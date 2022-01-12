@@ -58,3 +58,15 @@ export const getReducedIconTooltipText = (endDate?: Date | string): string => {
 
   return `${tooltipLabel}: ${monthAndDay}, ${year}`;
 };
+
+export const mergeStylesWithColor = (
+  color: string | undefined,
+  styles: CSSAttributes | undefined,
+): CSSAttributes | undefined => (
+  !color
+    ? styles
+    : addToStyles([{
+      attr: 'backgroundColor',
+      value: color,
+    }], styles)
+);

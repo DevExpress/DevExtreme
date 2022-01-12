@@ -19,12 +19,11 @@ import {
   AppointmentClickData,
   ReducedIconHoverData,
 } from './types';
-import { getAppointmentStyles } from './utils';
+import { getAppointmentStyles, mergeStylesWithColor } from './utils';
 import { AppointmentContent } from './content/layout';
 import { Widget } from '../../common/widget';
 import { combineClasses } from '../../../utils/combine_classes';
 import type { AppointmentTemplateData } from '../../../../ui/scheduler';
-import { addToStyles } from '../workspaces/utils';
 import { getAppointmentColor } from '../resources/utils';
 import { AppointmentsContext, IAppointmentContext } from '../appointments_context';
 
@@ -110,12 +109,10 @@ AppointmentProps,
   }
 
   get styles(): CSSAttributes | undefined {
-    return !this.color
-      ? this.appointmentStyles
-      : addToStyles([{
-        attr: 'backgroundColor',
-        value: this.color,
-      }], this.appointmentStyles);
+    return mergeStylesWithColor(
+      this.color,
+      this.appointmentStyles,
+    );
   }
 
   get text(): string { return this.props.viewModel.appointment.text; }
@@ -160,6 +157,7 @@ AppointmentProps,
   updateStylesEffect(): void {
     const { viewModel } = this.props;
     const groupIndex = viewModel.info.groupIndex ?? 0;
+    const { appointment } = viewModel;
 
     getAppointmentColor({
       resources: this.appointmentsContextValue.resources,
@@ -167,14 +165,12 @@ AppointmentProps,
       resourcesDataAccessors: this.appointmentsContextValue.dataAccessors.resources,
       loadedResources: this.appointmentsContextValue.loadedResources,
     }, {
-      itemData: viewModel.appointment,
+      itemData: appointment,
       groupIndex,
       groups: this.props.groups,
-    }).then((color) => {
-      if (color) {
-        this.color = color;
-      }
-    }).catch(() => '');
+    })
+      .then((color) => { this.color = color; })
+      .catch(() => '');
   }
 
   onItemClick(): void {
