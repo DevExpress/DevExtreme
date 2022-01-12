@@ -146,7 +146,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
       };
       /**
        * @docid
-       * @type_function_param1 itemInfo: dxSankeyNode
        * @notUsedInTheme
        */
       customizeText?: ((itemInfo: dxSankeyNode) => string);

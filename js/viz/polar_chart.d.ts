@@ -2099,7 +2099,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
 export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.areapolarseries.hoverMode
-     * @acceptValues 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -2112,7 +2111,6 @@ export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeri
     point?: dxPolarChartSeriesTypesAreapolarseriesPoint;
     /**
      * @docid dxPolarChartSeriesTypes.areapolarseries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -2131,14 +2129,12 @@ export interface dxPolarChartSeriesTypesAreapolarseriesPoint extends dxPolarChar
 export interface dxPolarChartSeriesTypesBarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.barpolarseries.hoverMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
     hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     /**
      * @docid dxPolarChartSeriesTypes.barpolarseries.selectionMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -2148,14 +2144,12 @@ export interface dxPolarChartSeriesTypesBarpolarseries extends dxPolarChartSerie
 export interface dxPolarChartSeriesTypesLinepolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.linepolarseries.hoverMode
-     * @acceptValues 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none'
      * @default 'excludePoints'
      * @public
      */
     hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
     /**
      * @docid dxPolarChartSeriesTypes.linepolarseries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -2165,7 +2159,6 @@ export interface dxPolarChartSeriesTypesLinepolarseries extends dxPolarChartSeri
 export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.hoverMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -2178,7 +2171,6 @@ export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarCha
     label?: dxPolarChartSeriesTypesStackedbarpolarseriesLabel;
     /**
      * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.selectionMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */

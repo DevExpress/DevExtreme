@@ -2840,7 +2840,6 @@ export interface dxChartSeriesTypesAreaSeries extends dxChartSeriesTypesCommonSe
     aggregation?: dxChartSeriesTypesAreaSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.AreaSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -2859,7 +2858,6 @@ export interface dxChartSeriesTypesAreaSeries extends dxChartSeriesTypesCommonSe
     point?: dxChartSeriesTypesAreaSeriesPoint;
     /**
      * @docid dxChartSeriesTypes.AreaSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -2904,7 +2902,6 @@ export interface dxChartSeriesTypesBarSeries extends dxChartSeriesTypesCommonSer
     aggregation?: dxChartSeriesTypesBarSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.BarSeries.hoverMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -2917,7 +2914,6 @@ export interface dxChartSeriesTypesBarSeries extends dxChartSeriesTypesCommonSer
     label?: dxChartSeriesTypesBarSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.BarSeries.selectionMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -2952,8 +2948,7 @@ export interface dxChartSeriesTypesBubbleSeries extends dxChartSeriesTypesCommon
      */
     aggregation?: dxChartSeriesTypesBubbleSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.BubbleSeries.hoverMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
+     * @docid dxChartSeriesTypes.BubbleSeries.hoverMode'
      * @default 'onlyPoint'
      * @public
      */
@@ -2966,7 +2961,6 @@ export interface dxChartSeriesTypesBubbleSeries extends dxChartSeriesTypesCommon
     label?: dxChartSeriesTypesBubbleSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.BubbleSeries.selectionMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -3008,7 +3002,6 @@ export interface dxChartSeriesTypesCandleStickSeries extends dxChartSeriesTypesC
     argumentField?: string;
     /**
      * @docid dxChartSeriesTypes.CandleStickSeries.hoverMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -3027,7 +3020,6 @@ export interface dxChartSeriesTypesCandleStickSeries extends dxChartSeriesTypesC
     label?: dxChartSeriesTypesCandleStickSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.CandleStickSeries.selectionMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -4023,7 +4015,6 @@ export interface dxChartSeriesTypesFullStackedAreaSeries extends dxChartSeriesTy
     aggregation?: dxChartSeriesTypesFullStackedAreaSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.FullStackedAreaSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4042,7 +4033,6 @@ export interface dxChartSeriesTypesFullStackedAreaSeries extends dxChartSeriesTy
     point?: dxChartSeriesTypesFullStackedAreaSeriesPoint;
     /**
      * @docid dxChartSeriesTypes.FullStackedAreaSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4087,7 +4077,6 @@ export interface dxChartSeriesTypesFullStackedBarSeries extends dxChartSeriesTyp
     aggregation?: dxChartSeriesTypesFullStackedBarSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.FullStackedBarSeries.hoverMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -4100,7 +4089,6 @@ export interface dxChartSeriesTypesFullStackedBarSeries extends dxChartSeriesTyp
     label?: dxChartSeriesTypesFullStackedBarSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.FullStackedBarSeries.selectionMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -4143,7 +4131,6 @@ export interface dxChartSeriesTypesFullStackedLineSeries extends dxChartSeriesTy
     aggregation?: dxChartSeriesTypesFullStackedLineSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.FullStackedLineSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4156,7 +4143,6 @@ export interface dxChartSeriesTypesFullStackedLineSeries extends dxChartSeriesTy
     label?: dxChartSeriesTypesFullStackedLineSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.FullStackedLineSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4192,7 +4178,6 @@ export interface dxChartSeriesTypesFullStackedSplineAreaSeries extends dxChartSe
     aggregation?: dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.FullStackedSplineAreaSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4211,7 +4196,6 @@ export interface dxChartSeriesTypesFullStackedSplineAreaSeries extends dxChartSe
     point?: dxChartSeriesTypesFullStackedSplineAreaSeriesPoint;
     /**
      * @docid dxChartSeriesTypes.FullStackedSplineAreaSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4256,7 +4240,6 @@ export interface dxChartSeriesTypesFullStackedSplineSeries extends dxChartSeries
     aggregation?: dxChartSeriesTypesFullStackedSplineSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.FullStackedSplineSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4269,7 +4252,6 @@ export interface dxChartSeriesTypesFullStackedSplineSeries extends dxChartSeries
     label?: dxChartSeriesTypesFullStackedSplineSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.FullStackedSplineSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4305,7 +4287,6 @@ export interface dxChartSeriesTypesLineSeries extends dxChartSeriesTypesCommonSe
     aggregation?: dxChartSeriesTypesLineSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.LineSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4318,7 +4299,6 @@ export interface dxChartSeriesTypesLineSeries extends dxChartSeriesTypesCommonSe
     label?: dxChartSeriesTypesLineSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.LineSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4354,7 +4334,6 @@ export interface dxChartSeriesTypesRangeAreaSeries extends dxChartSeriesTypesCom
     aggregation?: dxChartSeriesTypesRangeAreaSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.RangeAreaSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4373,7 +4352,6 @@ export interface dxChartSeriesTypesRangeAreaSeries extends dxChartSeriesTypesCom
     point?: dxChartSeriesTypesRangeAreaSeriesPoint;
     /**
      * @docid dxChartSeriesTypes.RangeAreaSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4418,7 +4396,6 @@ export interface dxChartSeriesTypesRangeBarSeries extends dxChartSeriesTypesComm
     aggregation?: dxChartSeriesTypesRangeBarSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.RangeBarSeries.hoverMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -4431,7 +4408,6 @@ export interface dxChartSeriesTypesRangeBarSeries extends dxChartSeriesTypesComm
     label?: dxChartSeriesTypesRangeBarSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.RangeBarSeries.selectionMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -4502,7 +4478,6 @@ export interface dxChartSeriesTypesSplineAreaSeries extends dxChartSeriesTypesCo
     aggregation?: dxChartSeriesTypesSplineAreaSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.SplineAreaSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4521,7 +4496,6 @@ export interface dxChartSeriesTypesSplineAreaSeries extends dxChartSeriesTypesCo
     point?: dxChartSeriesTypesSplineAreaSeriesPoint;
     /**
      * @docid dxChartSeriesTypes.SplineAreaSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4566,7 +4540,6 @@ export interface dxChartSeriesTypesSplineSeries extends dxChartSeriesTypesCommon
     aggregation?: dxChartSeriesTypesSplineSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.SplineSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4579,7 +4552,6 @@ export interface dxChartSeriesTypesSplineSeries extends dxChartSeriesTypesCommon
     label?: dxChartSeriesTypesSplineSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.SplineSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4615,7 +4587,6 @@ export interface dxChartSeriesTypesStackedAreaSeries extends dxChartSeriesTypesC
     aggregation?: dxChartSeriesTypesStackedAreaSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.StackedAreaSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4634,7 +4605,6 @@ export interface dxChartSeriesTypesStackedAreaSeries extends dxChartSeriesTypesC
     point?: dxChartSeriesTypesStackedAreaSeriesPoint;
     /**
      * @docid dxChartSeriesTypes.StackedAreaSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4679,7 +4649,6 @@ export interface dxChartSeriesTypesStackedBarSeries extends dxChartSeriesTypesCo
     aggregation?: dxChartSeriesTypesStackedBarSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.StackedBarSeries.hoverMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -4692,7 +4661,6 @@ export interface dxChartSeriesTypesStackedBarSeries extends dxChartSeriesTypesCo
     label?: dxChartSeriesTypesStackedBarSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.StackedBarSeries.selectionMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -4735,7 +4703,6 @@ export interface dxChartSeriesTypesStackedLineSeries extends dxChartSeriesTypesC
     aggregation?: dxChartSeriesTypesStackedLineSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.StackedLineSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4748,7 +4715,6 @@ export interface dxChartSeriesTypesStackedLineSeries extends dxChartSeriesTypesC
     label?: dxChartSeriesTypesStackedLineSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.StackedLineSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4784,7 +4750,6 @@ export interface dxChartSeriesTypesStackedSplineAreaSeries extends dxChartSeries
     aggregation?: dxChartSeriesTypesStackedSplineAreaSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.StackedSplineAreaSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4803,7 +4768,6 @@ export interface dxChartSeriesTypesStackedSplineAreaSeries extends dxChartSeries
     point?: dxChartSeriesTypesStackedSplineAreaSeriesPoint;
     /**
      * @docid dxChartSeriesTypes.StackedSplineAreaSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4848,7 +4812,6 @@ export interface dxChartSeriesTypesStackedSplineSeries extends dxChartSeriesType
     aggregation?: dxChartSeriesTypesStackedSplineSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.StackedSplineSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4861,7 +4824,6 @@ export interface dxChartSeriesTypesStackedSplineSeries extends dxChartSeriesType
     label?: dxChartSeriesTypesStackedSplineSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.StackedSplineSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -4903,7 +4865,6 @@ export interface dxChartSeriesTypesStepAreaSeries extends dxChartSeriesTypesComm
     border?: dxChartSeriesTypesStepAreaSeriesBorder;
     /**
      * @docid dxChartSeriesTypes.StepAreaSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -4928,7 +4889,6 @@ export interface dxChartSeriesTypesStepAreaSeries extends dxChartSeriesTypesComm
     point?: dxChartSeriesTypesStepAreaSeriesPoint;
     /**
      * @docid dxChartSeriesTypes.StepAreaSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -5024,7 +4984,6 @@ export interface dxChartSeriesTypesStepLineSeries extends dxChartSeriesTypesComm
     aggregation?: dxChartSeriesTypesStepLineSeriesAggregation;
     /**
      * @docid dxChartSeriesTypes.StepLineSeries.hoverMode
-     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
      * @default 'nearestPoint'
      * @public
      */
@@ -5037,7 +4996,6 @@ export interface dxChartSeriesTypesStepLineSeries extends dxChartSeriesTypesComm
     label?: dxChartSeriesTypesStepLineSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.StepLineSeries.selectionMode
-     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
      * @default 'includePoints'
      * @public
      */
@@ -5079,7 +5037,6 @@ export interface dxChartSeriesTypesStockSeries extends dxChartSeriesTypesCommonS
     argumentField?: string;
     /**
      * @docid dxChartSeriesTypes.StockSeries.hoverMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */
@@ -5092,7 +5049,6 @@ export interface dxChartSeriesTypesStockSeries extends dxChartSeriesTypesCommonS
     label?: dxChartSeriesTypesStockSeriesLabel;
     /**
      * @docid dxChartSeriesTypes.StockSeries.selectionMode
-     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
      * @default 'onlyPoint'
      * @public
      */

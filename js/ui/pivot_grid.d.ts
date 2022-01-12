@@ -729,7 +729,6 @@ export interface dxPivotGridPivotGridCell {
     columnPath?: Array<string | number | Date>;
     /**
      * @docid
-     * @acceptValues "D" | "T" | "GT"
      * @public
      */
     columnType?: 'D' | 'T' | 'GT';
@@ -755,7 +754,6 @@ export interface dxPivotGridPivotGridCell {
     rowPath?: Array<string | number | Date>;
     /**
      * @docid
-     * @acceptValues "D" | "T" | "GT"
      * @public
      */
     rowType?: 'D' | 'T' | 'GT';
@@ -766,7 +764,6 @@ export interface dxPivotGridPivotGridCell {
     text?: string;
     /**
      * @docid
-     * @acceptValues "D" | "T" | "GT"
      * @public
      */
     type?: 'D' | 'T' | 'GT';
