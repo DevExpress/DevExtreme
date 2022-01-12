@@ -941,7 +941,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
             },
             columns: ['id'],
             loadingTimeout: null
@@ -954,12 +954,55 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.deleteRow(0);
         dataGrid.deleteRow(0);
         dataGrid.getScrollable().scrollTo({ y: 10000 });
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
+        this.clock.tick();
+
+        for(let i = 0; i < 25; i++) {
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+        }
 
         // assert
         const rows = dataGrid.getVisibleRows();
         assert.equal(dataGrid.totalCount(), 147, 'totalCount');
         assert.equal(rows[rows.length - 1].key, 150, 'last row key');
+    });
+
+    QUnit.test('loading data on scroll after deleting using push API if scrolling mode is infinite (T1053933)', function(assert) {
+        // arrange
+        const array = [];
+
+        for(let i = 1; i <= 100; i++) {
+            array.push({ id: i });
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 500,
+            dataSource: array,
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'infinite',
+                useNative: false,
+            },
+            columns: ['id'],
+            loadingTimeout: null
+        }).dxDataGrid('instance');
+
+        // act
+        dataGrid.getDataSource().store().push([
+            { type: 'remove', key: 1 },
+            { type: 'remove', key: 2 },
+            { type: 'remove', key: 3 },
+        ]);
+        this.clock.tick();
+
+        for(let i = 0; i < 5; i++) {
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            this.clock.tick();
+        }
+
+        // assert
+        const rows = dataGrid.getVisibleRows();
+        assert.equal(dataGrid.totalCount(), 97, 'totalCount');
+        assert.equal(rows[rows.length - 1].key, 100, 'last row key');
     });
 
     ['repaint', 'reshape'].forEach((refreshMode) => {
