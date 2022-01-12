@@ -11,6 +11,7 @@ import fx from 'animation/fx';
 import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, FileManagerProgressPanelWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
 import { Deferred } from 'core/utils/deferred';
+import browser from 'core/utils/browser';
 
 const moduleConfig = {
 
