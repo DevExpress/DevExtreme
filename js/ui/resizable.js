@@ -169,8 +169,8 @@ const Resizable = DOMComponent.inherit({
         this._elementLocation = locate($element);
 
         this._elementSize = {
-            width: $element.width(),
-            height: $element.height()
+            width: getInnerWidth($element),
+            height: getInnerHeight($element)
         };
 
         this._renderDragOffsets(e);
@@ -294,8 +294,8 @@ const Resizable = DOMComponent.inherit({
         const $element = this.$element();
 
         const elementRect = {
-            width: $element.width(),
-            height: $element.height()
+            width: getInnerWidth($element),
+            height: getInnerHeight($element)
         };
         const offsetTop = delta.y * (sides.top ? -1 : 1) - ((elementRect.height || height) - height);
         const offsetLeft = delta.x * (sides.left ? -1 : 1) - ((elementRect.width || width) - width);
