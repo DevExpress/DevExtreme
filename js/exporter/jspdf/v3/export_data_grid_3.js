@@ -103,10 +103,28 @@ function exportDataGrid(doc, dataGrid, options) {
                 x: doc.internal.pageSize.getWidth() - options.margin.right
             };
             const onSeparateRectHorizontally = (sourceRect, leftRect, rightRect) => {
-                const newRectCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { text: '', debugSourceCellInfo: sourceRect.sourceCellInfo });
+                let leftRectTextOptions = {};
+                let rightRectTextOptions = {};
+                const isTextNotEmpty = isDefined(sourceRect.sourceCellInfo.text) && sourceRect.sourceCellInfo.text.length > 0;
+                if(isTextNotEmpty) {
+                    const isTextWidthGreaterThanRect = doc.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
+                    const isHorizontalAlignSpecified = isDefined(sourceRect.sourceCellInfo.horizontalAlign) && sourceRect.sourceCellInfo.horizontalAlign !== 'left';
+                    if(isTextWidthGreaterThanRect || isHorizontalAlignSpecified) {
+                        const leftTextOffset = sourceRect.sourceCellInfo._textOffset ?? { left: 0, top: 0 };
+                        const rightTextOffset = Object.assign({}, leftTextOffset, { left: leftTextOffset.left - leftRect.w });
+
+                        leftRectTextOptions = Object.assign({}, { _textOffset: leftTextOffset });
+                        rightRectTextOptions = Object.assign({}, { _textOffset: rightTextOffset });
+                    } else {
+                        rightRectTextOptions = Object.assign({}, { text: '' });
+                    }
+                }
+
+                const leftRectCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, leftRectTextOptions);
+                const rightRectCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, rightRectTextOptions);
                 return {
-                    left: Object.assign({}, leftRect, { sourceCellInfo: sourceRect.sourceCellInfo }),
-                    right: Object.assign({}, rightRect, { sourceCellInfo: newRectCellInfo })
+                    left: Object.assign({}, leftRect, { sourceCellInfo: leftRectCellInfo }),
+                    right: Object.assign({}, rightRect, { sourceCellInfo: rightRectCellInfo })
                 };
             };
             const rectsByPages = splitRectsByPages(rects, options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);

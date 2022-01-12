@@ -82,7 +82,14 @@ function drawCellText(doc, cell, docStyles) {
             w: _rect.w - (padding.left + padding.right),
             h: _rect.h - (padding.top + padding.bottom)
         };
+        if(isDefined(cell._textOffset)) {
+            textRect.x = textRect.x + cell._textOffset.left;
+            clipRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h);
+        }
         drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign, cell.wordWrapEnabled);
+        if(isDefined(cell._textOffset)) {
+            cancelClipping(doc);
+        }
     }
 }
 
@@ -218,6 +225,23 @@ function setDocumentStyles(doc, styles) {
     if(doc.getTextColor() !== textColor) {
         doc.setTextColor(textColor);
     }
+}
+
+function clipRect(doc, x, y, w, h) {
+    doc.saveGraphicsState();
+
+    doc.setLineJoin(0);
+    doc.moveTo(roundToThreeDecimals(x), roundToThreeDecimals(y));
+    doc.lineTo(roundToThreeDecimals(x + w), roundToThreeDecimals(y));
+    doc.lineTo(roundToThreeDecimals(x + w), roundToThreeDecimals(y + h));
+    doc.lineTo(roundToThreeDecimals(x), roundToThreeDecimals(y + h));
+    doc.close();
+    doc.clip();
+    doc.discardPath();
+}
+
+function cancelClipping(doc) {
+    doc.restoreGraphicsState();
 }
 
 export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, roundToThreeDecimals };

@@ -581,6 +581,175 @@ const JSPdfSplittingTests = {
                 });
             });
 
+            QUnit.test('3 cols - 2 rows, 1 level - 1 group - [{f1, groupIndex: 0}, f2, f3], columnWidth = 200, availablePageWidth = 300, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 300);
+
+                const f1 = 'f1_longtext_longtext_longtext_longtext';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: 'f1_2', f3: 'f1_3' },
+                        { f1: f1, f2: 'f2_2', f3: 'f2_3' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = '#CCCCCC';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F2,10,24.2,{baseline:middle}',
+                    'text,f1_2,20,61,{baseline:middle}',
+                    'text,f2_2,20,79.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,210,33.4',
+                    'lineTo,210,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_longtext_longtext_longtext,10,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,20,51.8,190,18.4',
+                    'setLineWidth,1',
+                    'rect,20,70.2,190,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,18.4',
+                    'addPage,',
+                    'text,F3,10,24.2,{baseline:middle}',
+                    'text,f1_3,10,61,{baseline:middle}',
+                    'text,f2_3,10,79.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,210,33.4',
+                    'lineTo,210,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_longtext_longtext_longtext,-190,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 2 rows, 1 level - 1 group - [{f1, groupIndex: 0}, f2, f3], columnWidth = 200, availablePageWidth = 300, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 300);
+
+                const f1 = 'f1_longtext_longtext_longtext_longtext';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: 'f1_2', f3: 'f1_3' },
+                        { f1: f1, f2: 'f2_2', f3: 'f2_3' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = '#CCCCCC';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F2,15,29.2,{baseline:middle}',
+                    'text,f1_2,25,86,{baseline:middle}',
+                    'text,f2_2,25,114.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,210,43.4',
+                    'lineTo,210,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_longtext_longtext_longtext,15,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,20,71.8,190,28.4',
+                    'setLineWidth,1',
+                    'rect,20,100.2,190,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,28.4',
+                    'addPage,',
+                    'text,F3,15,29.2,{baseline:middle}',
+                    'text,f1_3,15,86,{baseline:middle}',
+                    'text,f2_3,15,114.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,210,43.4',
+                    'lineTo,210,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_longtext_longtext_longtext,-185,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,28.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('4 cols - 2 rows, 1 level - 1 group - [{f1, groupIndex: 0}, f2, f3, f4], columnWidth = 200, availablePageWidth = 500', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -643,6 +812,195 @@ const JSPdfSplittingTests = {
                     'rect,10,70.2,200,18.4',
                     'setLineWidth,1',
                     'rect,10,33.4,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('4 cols - 2 rows, 1 level - 1 group - [{f1, groupIndex: 0}, f2, f3, f4], columnWidth = 200, availablePageWidth = 500, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: 'f1_2', f3: 'f1_3', f4: 'f1_3' },
+                        { f1: f1, f2: 'f2_2', f3: 'f2_3', f4: 'f2_3' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = '#CCCCCC';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F2,10,24.2,{baseline:middle}',
+                    'text,F3,210,24.2,{baseline:middle}',
+                    'text,f1_2,20,61,{baseline:middle}',
+                    'text,f1_3,210,61,{baseline:middle}',
+                    'text,f2_2,20,79.4,{baseline:middle}',
+                    'text,f2_3,210,79.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,10,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,20,51.8,190,18.4',
+                    'setLineWidth,1',
+                    'rect,210,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,20,70.2,190,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'addPage,',
+                    'text,F4,10,24.2,{baseline:middle}',
+                    'text,f1_3,10,61,{baseline:middle}',
+                    'text,f2_3,10,79.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,210,33.4',
+                    'lineTo,210,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-390,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('4 cols - 2 rows, 1 level - 1 group - [{f1, groupIndex: 0}, f2, f3, f4], columnWidth = 200, availablePageWidth = 500, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: 'f1_2', f3: 'f1_3', f4: 'f1_3' },
+                        { f1: f1, f2: 'f2_2', f3: 'f2_3', f4: 'f2_3' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = '#CCCCCC';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F2,15,29.2,{baseline:middle}',
+                    'text,F3,215,29.2,{baseline:middle}',
+                    'text,f1_2,25,86,{baseline:middle}',
+                    'text,f1_3,215,86,{baseline:middle}',
+                    'text,f2_2,25,114.4,{baseline:middle}',
+                    'text,f2_3,215,114.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,15,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,20,71.8,190,28.4',
+                    'setLineWidth,1',
+                    'rect,210,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,20,100.2,190,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'addPage,',
+                    'text,F4,15,29.2,{baseline:middle}',
+                    'text,f1_3,15,86,{baseline:middle}',
+                    'text,f2_3,15,114.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,210,43.4',
+                    'lineTo,210,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-385,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,28.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
@@ -724,6 +1082,215 @@ const JSPdfSplittingTests = {
                     'rect,210,70.2,200,18.4',
                     'setLineWidth,1',
                     'rect,10,33.4,400,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('5 cols - 2 rows, 1 level - 1 group - [{f1, groupIndex: 0}, f2, f3, f4, f5], columnWidth = 200, availablePageWidth = 500, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: 'f1_2', f3: 'f1_3', f4: 'f1_4', f5: 'f1_5' },
+                        { f1: f1, f2: 'f2_2', f3: 'f2_3', f4: 'f2_4', f5: 'f2_5' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = '#CCCCCC';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F2,10,24.2,{baseline:middle}',
+                    'text,F3,210,24.2,{baseline:middle}',
+                    'text,f1_2,20,61,{baseline:middle}',
+                    'text,f1_3,210,61,{baseline:middle}',
+                    'text,f2_2,20,79.4,{baseline:middle}',
+                    'text,f2_3,210,79.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,10,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,20,51.8,190,18.4',
+                    'setLineWidth,1',
+                    'rect,210,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,20,70.2,190,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'addPage,',
+                    'text,F4,10,24.2,{baseline:middle}',
+                    'text,F5,210,24.2,{baseline:middle}',
+                    'text,f1_4,10,61,{baseline:middle}',
+                    'text,f1_5,210,61,{baseline:middle}',
+                    'text,f2_4,10,79.4,{baseline:middle}',
+                    'text,f2_5,210,79.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-390,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('5 cols - 2 rows, 1 level - 1 group - [{f1, groupIndex: 0}, f2, f3, f4, f5], columnWidth = 200, availablePageWidth = 500, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: 'f1_2', f3: 'f1_3', f4: 'f1_4', f5: 'f1_5' },
+                        { f1: f1, f2: 'f2_2', f3: 'f2_3', f4: 'f2_4', f5: 'f2_5' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = '#CCCCCC';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F2,15,29.2,{baseline:middle}',
+                    'text,F3,215,29.2,{baseline:middle}',
+                    'text,f1_2,25,86,{baseline:middle}',
+                    'text,f1_3,215,86,{baseline:middle}',
+                    'text,f2_2,25,114.4,{baseline:middle}',
+                    'text,f2_3,215,114.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,15,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,20,71.8,190,28.4',
+                    'setLineWidth,1',
+                    'rect,210,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,20,100.2,190,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'addPage,',
+                    'text,F4,15,29.2,{baseline:middle}',
+                    'text,F5,215,29.2,{baseline:middle}',
+                    'text,f1_4,15,86,{baseline:middle}',
+                    'text,f1_5,215,86,{baseline:middle}',
+                    'text,f2_4,15,114.4,{baseline:middle}',
+                    'text,f2_5,215,114.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-385,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
@@ -829,6 +1396,267 @@ const JSPdfSplittingTests = {
                 });
             });
 
+            QUnit.test('6 cols - 2 rows, 1 level - 1 group - [{f1, groupIndex: 0}, f2, f3, f4, f5, f6], columnWidth = 200, availablePageWidth = 500, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' },
+                        { dataField: 'f6' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: 'f1_2', f3: 'f1_3', f4: 'f1_4', f5: 'f1_5', f6: 'f1_6' },
+                        { f1: f1, f2: 'f2_2', f3: 'f2_3', f4: 'f2_4', f5: 'f2_5', f6: 'f2_6' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = '#CCCCCC';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F2,10,24.2,{baseline:middle}',
+                    'text,F3,210,24.2,{baseline:middle}',
+                    'text,f1_2,20,61,{baseline:middle}',
+                    'text,f1_3,210,61,{baseline:middle}',
+                    'text,f2_2,20,79.4,{baseline:middle}',
+                    'text,f2_3,210,79.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,10,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,20,51.8,190,18.4',
+                    'setLineWidth,1',
+                    'rect,210,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,20,70.2,190,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'addPage,',
+                    'text,F4,10,24.2,{baseline:middle}',
+                    'text,F5,210,24.2,{baseline:middle}',
+                    'text,f1_4,10,61,{baseline:middle}',
+                    'text,f1_5,210,61,{baseline:middle}',
+                    'text,f2_4,10,79.4,{baseline:middle}',
+                    'text,f2_5,210,79.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-390,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'addPage,',
+                    'text,F6,10,24.2,{baseline:middle}',
+                    'text,f1_6,10,61,{baseline:middle}',
+                    'text,f2_6,10,79.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,210,33.4',
+                    'lineTo,210,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-790,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('6 cols - 2 rows, 1 level - 1 group - [{f1, groupIndex: 0}, f2, f3, f4, f5, f6], columnWidth = 200, availablePageWidth = 500, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' },
+                        { dataField: 'f6' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: 'f1_2', f3: 'f1_3', f4: 'f1_4', f5: 'f1_5', f6: 'f1_6' },
+                        { f1: f1, f2: 'f2_2', f3: 'f2_3', f4: 'f2_4', f5: 'f2_5', f6: 'f2_6' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = '#CCCCCC';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F2,15,29.2,{baseline:middle}',
+                    'text,F3,215,29.2,{baseline:middle}',
+                    'text,f1_2,25,86,{baseline:middle}',
+                    'text,f1_3,215,86,{baseline:middle}',
+                    'text,f2_2,25,114.4,{baseline:middle}',
+                    'text,f2_3,215,114.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,15,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,20,71.8,190,28.4',
+                    'setLineWidth,1',
+                    'rect,210,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,20,100.2,190,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'addPage,',
+                    'text,F4,15,29.2,{baseline:middle}',
+                    'text,F5,215,29.2,{baseline:middle}',
+                    'text,f1_4,15,86,{baseline:middle}',
+                    'text,f1_5,215,86,{baseline:middle}',
+                    'text,f2_4,15,114.4,{baseline:middle}',
+                    'text,f2_5,215,114.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-385,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'addPage,',
+                    'text,F6,15,29.2,{baseline:middle}',
+                    'text,f1_6,15,86,{baseline:middle}',
+                    'text,f2_6,15,114.4,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,210,43.4',
+                    'lineTo,210,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-785,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,28.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('4 cols - 2 rows, 2 level - 1 group - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], columnWidth = 200, availablePageWidth = 500', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -882,6 +1710,137 @@ const JSPdfSplittingTests = {
                     'rect,30,88.6,180,18.4',
                     'setLineWidth,1',
                     'rect,210,88.6,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('4 cols - 2 rows, 2 level - 1 group - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], columnWidth = 200, availablePageWidth = 500, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+                const f2 = 'f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: f2, f3: 'f1_3', f4: 'f1_4' },
+                        { f1: f1, f2: f2, f3: 'f2_3', f4: 'f2_4' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = gridCell.groupIndex === 0 ? '#CCFFCC' : '#CCCCFF';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F3,10,24.2,{baseline:middle}',
+                    'text,F4,210,24.2,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,10,42.6,{baseline:middle}',
+                    'setFillColor,#CCCCFF',
+                    'rect,20,51.8,390,18.4,F',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,20,61,{baseline:middle}',
+                    'text,f1_3,30,79.4,{baseline:middle}',
+                    'text,f1_4,210,79.4,{baseline:middle}',
+                    'text,f2_3,30,97.8,{baseline:middle}',
+                    'text,f2_4,210,97.8,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'setLineWidth,1',
+                    'rect,20,51.8,390,18.4',
+                    'setLineWidth,1',
+                    'rect,30,70.2,180,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,30,88.6,180,18.4',
+                    'setLineWidth,1',
+                    'rect,210,88.6,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('4 cols - 2 rows, 2 level - 1 group - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], columnWidth = 200, availablePageWidth = 500, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+                const f2 = 'f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: f2, f3: 'f1_3', f4: 'f1_4' },
+                        { f1: f1, f2: f2, f3: 'f2_3', f4: 'f2_4' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = gridCell.groupIndex === 0 ? '#CCFFCC' : '#CCCCFF';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F3,15,29.2,{baseline:middle}',
+                    'text,F4,215,29.2,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,15,57.6,{baseline:middle}',
+                    'setFillColor,#CCCCFF',
+                    'rect,20,71.8,390,28.4,F',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,25,86,{baseline:middle}',
+                    'text,f1_3,35,114.4,{baseline:middle}',
+                    'text,f1_4,215,114.4,{baseline:middle}',
+                    'text,f2_3,35,142.8,{baseline:middle}',
+                    'text,f2_4,215,142.8,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'setLineWidth,1',
+                    'rect,20,71.8,390,28.4',
+                    'setLineWidth,1',
+                    'rect,30,100.2,180,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,30,128.6,180,28.4',
+                    'setLineWidth,1',
+                    'rect,210,128.6,200,28.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
@@ -963,6 +1922,259 @@ const JSPdfSplittingTests = {
                     'rect,10,33.4,200,18.4',
                     'setLineWidth,1',
                     'rect,10,51.8,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('5 cols - 2 rows, 2 level - 1 group - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4, f5], columnWidth = 200, availablePageWidth = 500, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+                const f2 = 'f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: f2, f3: 'f1_3', f4: 'f1_4', f5: 'f1_5' },
+                        { f1: f1, f2: f2, f3: 'f2_3', f4: 'f2_4', f5: 'f2_5' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = gridCell.groupIndex === 0 ? '#CCFFCC' : '#CCCCFF';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F3,10,24.2,{baseline:middle}',
+                    'text,F4,210,24.2,{baseline:middle}',
+                    'text,f1_3,30,79.4,{baseline:middle}',
+                    'text,f1_4,210,79.4,{baseline:middle}',
+                    'text,f2_3,30,97.8,{baseline:middle}',
+                    'text,f2_4,210,97.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,10,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,20,51.8,390,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,20,51.8',
+                    'lineTo,410,51.8',
+                    'lineTo,410,70.2',
+                    'lineTo,20,70.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,20,61,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,30,70.2,180,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,30,88.6,180,18.4',
+                    'setLineWidth,1',
+                    'rect,210,88.6,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'setLineWidth,1',
+                    'rect,20,51.8,390,18.4',
+                    'addPage,',
+                    'text,F5,10,24.2,{baseline:middle}',
+                    'text,f1_5,10,79.4,{baseline:middle}',
+                    'text,f2_5,10,97.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,210,33.4',
+                    'lineTo,210,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-390,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,10,51.8,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,51.8',
+                    'lineTo,210,51.8',
+                    'lineTo,210,70.2',
+                    'lineTo,10,70.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-380,61,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,88.6,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('5 cols - 2 rows, 2 level - 1 group - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4, f5], columnWidth = 200, availablePageWidth = 500, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+                const f2 = 'f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: f2, f3: 'f1_3', f4: 'f1_4', f5: 'f1_5' },
+                        { f1: f1, f2: f2, f3: 'f2_3', f4: 'f2_4', f5: 'f2_5' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = gridCell.groupIndex === 0 ? '#CCFFCC' : '#CCCCFF';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F3,15,29.2,{baseline:middle}',
+                    'text,F4,215,29.2,{baseline:middle}',
+                    'text,f1_3,35,114.4,{baseline:middle}',
+                    'text,f1_4,215,114.4,{baseline:middle}',
+                    'text,f2_3,35,142.8,{baseline:middle}',
+                    'text,f2_4,215,142.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,15,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,20,71.8,390,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,20,71.8',
+                    'lineTo,410,71.8',
+                    'lineTo,410,100.2',
+                    'lineTo,20,100.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,25,86,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,30,100.2,180,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,30,128.6,180,28.4',
+                    'setLineWidth,1',
+                    'rect,210,128.6,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'setLineWidth,1',
+                    'rect,20,71.8,390,28.4',
+                    'addPage,',
+                    'text,F5,15,29.2,{baseline:middle}',
+                    'text,f1_5,15,114.4,{baseline:middle}',
+                    'text,f2_5,15,142.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,210,43.4',
+                    'lineTo,210,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-385,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,10,71.8,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,71.8',
+                    'lineTo,210,71.8',
+                    'lineTo,210,100.2',
+                    'lineTo,10,100.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-375,86,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,128.6,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
@@ -1054,6 +2266,279 @@ const JSPdfSplittingTests = {
                     'rect,10,33.4,400,18.4',
                     'setLineWidth,1',
                     'rect,10,51.8,400,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('6 cols - 2 rows, 2 level - 1 group - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4, f5, f6], columnWidth = 200, availablePageWidth = 500, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+                const f2 = 'f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' },
+                        { dataField: 'f6' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: f2, f3: 'f1_3', f4: 'f1_4', f5: 'f1_5', f6: 'f1_6' },
+                        { f1: f1, f2: f2, f3: 'f2_3', f4: 'f2_4', f5: 'f2_5', f6: 'f2_6' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = gridCell.groupIndex === 0 ? '#CCFFCC' : '#CCCCFF';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F3,10,24.2,{baseline:middle}',
+                    'text,F4,210,24.2,{baseline:middle}',
+                    'text,f1_3,30,79.4,{baseline:middle}',
+                    'text,f1_4,210,79.4,{baseline:middle}',
+                    'text,f2_3,30,97.8,{baseline:middle}',
+                    'text,f2_4,210,97.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,10,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,20,51.8,390,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,20,51.8',
+                    'lineTo,410,51.8',
+                    'lineTo,410,70.2',
+                    'lineTo,20,70.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,20,61,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,30,70.2,180,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,30,88.6,180,18.4',
+                    'setLineWidth,1',
+                    'rect,210,88.6,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'setLineWidth,1',
+                    'rect,20,51.8,390,18.4',
+                    'addPage,',
+                    'text,F5,10,24.2,{baseline:middle}',
+                    'text,F6,210,24.2,{baseline:middle}',
+                    'text,f1_5,10,79.4,{baseline:middle}',
+                    'text,f1_6,210,79.4,{baseline:middle}',
+                    'text,f2_5,10,97.8,{baseline:middle}',
+                    'text,f2_6,210,97.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-390,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,10,51.8,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,51.8',
+                    'lineTo,410,51.8',
+                    'lineTo,410,70.2',
+                    'lineTo,10,70.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-380,61,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,88.6,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,88.6,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'setLineWidth,1',
+                    'rect,10,51.8,400,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('6 cols - 2 rows, 2 level - 1 group - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4, f5, f6], columnWidth = 200, availablePageWidth = 500, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+                const f2 = 'f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' },
+                        { dataField: 'f6' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: f2, f3: 'f1_3', f4: 'f1_4', f5: 'f1_5', f6: 'f1_6' },
+                        { f1: f1, f2: f2, f3: 'f2_3', f4: 'f2_4', f5: 'f2_5', f6: 'f2_6' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = gridCell.groupIndex === 0 ? '#CCFFCC' : '#CCCCFF';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F3,15,29.2,{baseline:middle}',
+                    'text,F4,215,29.2,{baseline:middle}',
+                    'text,f1_3,35,114.4,{baseline:middle}',
+                    'text,f1_4,215,114.4,{baseline:middle}',
+                    'text,f2_3,35,142.8,{baseline:middle}',
+                    'text,f2_4,215,142.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,15,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,20,71.8,390,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,20,71.8',
+                    'lineTo,410,71.8',
+                    'lineTo,410,100.2',
+                    'lineTo,20,100.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,25,86,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,30,100.2,180,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,30,128.6,180,28.4',
+                    'setLineWidth,1',
+                    'rect,210,128.6,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'setLineWidth,1',
+                    'rect,20,71.8,390,28.4',
+                    'addPage,',
+                    'text,F5,15,29.2,{baseline:middle}',
+                    'text,F6,215,29.2,{baseline:middle}',
+                    'text,f1_5,15,114.4,{baseline:middle}',
+                    'text,f1_6,215,114.4,{baseline:middle}',
+                    'text,f2_5,15,142.8,{baseline:middle}',
+                    'text,f2_6,215,142.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-385,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,10,71.8,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,71.8',
+                    'lineTo,410,71.8',
+                    'lineTo,410,100.2',
+                    'lineTo,10,100.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-375,86,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,128.6,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,128.6,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'setLineWidth,1',
+                    'rect,10,71.8,400,28.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
@@ -1173,6 +2658,361 @@ const JSPdfSplittingTests = {
                 });
             });
 
+            QUnit.test('7 cols - 2 rows, 2 level - 1 group - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4, f5, f6, f7], columnWidth = 200, availablePageWidth = 500, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+                const f2 = 'f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' },
+                        { dataField: 'f6' },
+                        { dataField: 'f7' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: f2, f3: 'f1_3', f4: 'f1_4', f5: 'f1_5', f6: 'f1_6', f7: 'f1_7' },
+                        { f1: f1, f2: f2, f3: 'f2_3', f4: 'f2_4', f5: 'f2_5', f6: 'f2_6', f7: 'f2_7' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = gridCell.groupIndex === 0 ? '#CCFFCC' : '#CCCCFF';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F3,10,24.2,{baseline:middle}',
+                    'text,F4,210,24.2,{baseline:middle}',
+                    'text,f1_3,30,79.4,{baseline:middle}',
+                    'text,f1_4,210,79.4,{baseline:middle}',
+                    'text,f2_3,30,97.8,{baseline:middle}',
+                    'text,f2_4,210,97.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,10,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,20,51.8,390,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,20,51.8',
+                    'lineTo,410,51.8',
+                    'lineTo,410,70.2',
+                    'lineTo,20,70.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,20,61,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,30,70.2,180,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,30,88.6,180,18.4',
+                    'setLineWidth,1',
+                    'rect,210,88.6,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'setLineWidth,1',
+                    'rect,20,51.8,390,18.4',
+                    'addPage,',
+                    'text,F5,10,24.2,{baseline:middle}',
+                    'text,F6,210,24.2,{baseline:middle}',
+                    'text,f1_5,10,79.4,{baseline:middle}',
+                    'text,f1_6,210,79.4,{baseline:middle}',
+                    'text,f2_5,10,97.8,{baseline:middle}',
+                    'text,f2_6,210,97.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-390,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,10,51.8,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,51.8',
+                    'lineTo,410,51.8',
+                    'lineTo,410,70.2',
+                    'lineTo,10,70.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-380,61,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,88.6,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,88.6,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'setLineWidth,1',
+                    'rect,10,51.8,400,18.4',
+                    'addPage,',
+                    'text,F7,10,24.2,{baseline:middle}',
+                    'text,f1_7,10,79.4,{baseline:middle}',
+                    'text,f2_7,10,97.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,210,33.4',
+                    'lineTo,210,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-790,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,10,51.8,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,51.8',
+                    'lineTo,210,51.8',
+                    'lineTo,210,70.2',
+                    'lineTo,10,70.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-780,61,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,88.6,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('7 cols - 2 rows, 2 level - 1 group - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4, f5, f6, f7], columnWidth = 200, availablePageWidth = 500, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const f1 = 'f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+                const f2 = 'f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6';
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' },
+                        { dataField: 'f6' },
+                        { dataField: 'f7' },
+                    ],
+                    dataSource: [
+                        { f1: f1, f2: f2, f3: 'f1_3', f4: 'f1_4', f5: 'f1_5', f6: 'f1_6', f7: 'f1_7' },
+                        { f1: f1, f2: f2, f3: 'f2_3', f4: 'f2_4', f5: 'f2_5', f6: 'f2_6', f7: 'f2_7' },
+                    ],
+                });
+
+                const customizeCell = ({ pdfCell, gridCell }) => {
+                    if(gridCell.rowType === 'group') {
+                        pdfCell.backgroundColor = gridCell.groupIndex === 0 ? '#CCFFCC' : '#CCCCFF';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F3,15,29.2,{baseline:middle}',
+                    'text,F4,215,29.2,{baseline:middle}',
+                    'text,f1_3,35,114.4,{baseline:middle}',
+                    'text,f1_4,215,114.4,{baseline:middle}',
+                    'text,f2_3,35,142.8,{baseline:middle}',
+                    'text,f2_4,215,142.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,15,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,20,71.8,390,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,20,71.8',
+                    'lineTo,410,71.8',
+                    'lineTo,410,100.2',
+                    'lineTo,20,100.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,25,86,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,30,100.2,180,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,30,128.6,180,28.4',
+                    'setLineWidth,1',
+                    'rect,210,128.6,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'setLineWidth,1',
+                    'rect,20,71.8,390,28.4',
+                    'addPage,',
+                    'text,F5,15,29.2,{baseline:middle}',
+                    'text,F6,215,29.2,{baseline:middle}',
+                    'text,f1_5,15,114.4,{baseline:middle}',
+                    'text,f1_6,215,114.4,{baseline:middle}',
+                    'text,f2_5,15,142.8,{baseline:middle}',
+                    'text,f2_6,215,142.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-385,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,10,71.8,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,71.8',
+                    'lineTo,410,71.8',
+                    'lineTo,410,100.2',
+                    'lineTo,10,100.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-375,86,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,128.6,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,128.6,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'setLineWidth,1',
+                    'rect,10,71.8,400,28.4',
+                    'addPage,',
+                    'text,F7,15,29.2,{baseline:middle}',
+                    'text,f1_7,15,114.4,{baseline:middle}',
+                    'text,f2_7,15,142.8,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,210,43.4',
+                    'lineTo,210,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: f1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-785,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCCCFF',
+                    'rect,10,71.8,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,71.8',
+                    'lineTo,210,71.8',
+                    'lineTo,210,100.2',
+                    'lineTo,10,100.2',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,F2: f2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6,-775,86,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,128.6,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('[band1-[f1, f2]], columnWidth = 200, availablePageWidth = 300', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -1214,6 +3054,149 @@ const JSPdfSplittingTests = {
                     'rect,10,51.8,200,18.4',
                     'setLineWidth,1',
                     'rect,10,15,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[f1, f2]], columnWidth = 200, availablePageWidth = 300, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 300);
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { caption: 'Band1_longtext_1_longtext_2_longtext_3_longtext_4', columns: [ 'f1', 'f2', ] }
+                    ],
+                    dataSource: [{ f1: 'f1_1', f2: 'f2_1' }],
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text.startsWith('Band1')) {
+                        pdfCell.backgroundColor = '#CCCCCC';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F1,10,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,15,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,210,15',
+                    'lineTo,210,33.4',
+                    'lineTo,10,33.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4,10,24.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'addPage,',
+                    'text,F2,10,42.6,{baseline:middle}',
+                    'text,f2_1,10,61,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,15,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,210,15',
+                    'lineTo,210,33.4',
+                    'lineTo,10,33.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4,-190,24.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[f1, f2]], columnWidth = 200, availablePageWidth = 300, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 300);
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { caption: 'Band1_longtext_1_longtext_2_longtext_3_longtext_4', columns: [ 'f1', 'f2', ] }
+                    ],
+                    dataSource: [{ f1: 'f1_1', f2: 'f2_1' }],
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text.startsWith('Band1')) {
+                        pdfCell.backgroundColor = '#CCCCCC';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F1,15,57.6,{baseline:middle}',
+                    'text,f1_1,15,86,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,15,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,210,15',
+                    'lineTo,210,43.4',
+                    'lineTo,10,43.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4,15,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'addPage,',
+                    'text,F2,15,57.6,{baseline:middle}',
+                    'text,f2_1,15,86,{baseline:middle}',
+                    'setFillColor,#CCCCCC',
+                    'rect,10,15,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,210,15',
+                    'lineTo,210,43.4',
+                    'lineTo,10,43.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4,-185,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
@@ -1292,6 +3275,269 @@ const JSPdfSplittingTests = {
                     'rect,10,70.2,200,18.4',
                     'setLineWidth,1',
                     'rect,10,15,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[band1_1-[f1, f2], f3]], columnWidth = 200, availablePageWidth = 300, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 300);
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5',
+                            columns: [
+                                { caption: 'Band1_1_longtext_1_longtext_2_longtext_3', columns: [ 'f1', 'f2' ] },
+                                'f3',
+                            ]
+                        }
+                    ],
+                    dataSource: [{ f1: 'f1_1_1', f2: 'f2_1_1', f3: 'f3_1' }],
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text.startsWith('Band1')) {
+                        pdfCell.backgroundColor = '#CCFFCC';
+                    } else if(pdfCell.text.startsWith('Band1_1')) {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F1,10,61,{baseline:middle}',
+                    'text,f1_1_1,10,79.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,210,15',
+                    'lineTo,210,33.4',
+                    'lineTo,10,33.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,10,24.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,210,33.4',
+                    'lineTo,210,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3,10,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,18.4',
+                    'addPage,',
+                    'text,F2,10,61,{baseline:middle}',
+                    'text,f2_1_1,10,79.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,210,33.4',
+                    'lineTo,210,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3,-190,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,210,15',
+                    'lineTo,210,33.4',
+                    'lineTo,10,33.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-190,24.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4',
+                    'addPage,',
+                    'text,F3,10,51.8,{baseline:middle}',
+                    'text,f3_1,10,79.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,210,15',
+                    'lineTo,210,33.4',
+                    'lineTo,10,33.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-390,24.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,36.8',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,15,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[band1_1-[f1, f2], f3]], columnWidth = 200, availablePageWidth = 300, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 300);
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5',
+                            columns: [
+                                { caption: 'Band1_1_longtext_1_longtext_2_longtext_3', columns: [ 'f1', 'f2' ] },
+                                'f3',
+                            ]
+                        }
+                    ],
+                    dataSource: [{ f1: 'f1_1_1', f2: 'f2_1_1', f3: 'f3_1' }],
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text.startsWith('Band1')) {
+                        pdfCell.backgroundColor = '#CCFFCC';
+                    } else if(pdfCell.text.startsWith('Band1_1')) {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F1,15,86,{baseline:middle}',
+                    'text,f1_1_1,15,114.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,210,15',
+                    'lineTo,210,43.4',
+                    'lineTo,10,43.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,15,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,210,43.4',
+                    'lineTo,210,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3,15,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,28.4',
+                    'addPage,',
+                    'text,F2,15,86,{baseline:middle}',
+                    'text,f2_1_1,15,114.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,210,43.4',
+                    'lineTo,210,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3,-185,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,210,15',
+                    'lineTo,210,43.4',
+                    'lineTo,10,43.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-185,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4',
+                    'addPage,',
+                    'text,F3,15,71.8,{baseline:middle}',
+                    'text,f3_1,15,114.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,210,15',
+                    'lineTo,210,43.4',
+                    'lineTo,10,43.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-385,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,56.8',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,15,200,28.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
@@ -1414,6 +3660,381 @@ const JSPdfSplittingTests = {
                 });
             });
 
+            QUnit.test('[band1-[band1_1-[f1, f2, f3], band1_2-[f4, f5, f6]]], columnWidth = 200, availablePageWidth = 500, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11',
+                            columns: [
+                                {
+                                    caption: 'Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5',
+                                    columns: [ 'f1', 'f2', 'f3' ]
+                                },
+                                {
+                                    caption: 'Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5',
+                                    columns: [ 'f4', 'f5', 'f6' ]
+                                },
+                            ]
+                        }
+                    ],
+                    dataSource: [{ f1: 'f1_1_1', f2: 'f2_1_1', f3: 'f3_1_1', f4: 'f4_1_2', f5: 'f5_1_2', f6: 'f6_1_2' }],
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text.startsWith('Band1')) {
+                        pdfCell.backgroundColor = '#CCFFCC';
+                    } else if(pdfCell.text.startsWith('Band1_1')) {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    } else if(pdfCell.text.startsWith('Band1_2')) {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F1,10,61,{baseline:middle}',
+                    'text,F2,210,61,{baseline:middle}',
+                    'text,f1_1_1,10,79.4,{baseline:middle}',
+                    'text,f2_1_1,210,79.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,410,15',
+                    'lineTo,410,33.4',
+                    'lineTo,10,33.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,10,24.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,10,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,15,400,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'addPage,',
+                    'text,F3,10,61,{baseline:middle}',
+                    'text,F4,210,61,{baseline:middle}',
+                    'text,f3_1_1,10,79.4,{baseline:middle}',
+                    'text,f4_1_2,210,79.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,210,33.4',
+                    'lineTo,210,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-390,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,210,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,210,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,210,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,210,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,410,15',
+                    'lineTo,410,33.4',
+                    'lineTo,10,33.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,-390,24.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,15,400,18.4',
+                    'addPage,',
+                    'text,F5,10,61,{baseline:middle}',
+                    'text,F6,210,61,{baseline:middle}',
+                    'text,f5_1_2,10,79.4,{baseline:middle}',
+                    'text,f6_1_2,210,79.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,33.4',
+                    'lineTo,410,33.4',
+                    'lineTo,410,51.8',
+                    'lineTo,10,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-190,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,410,15',
+                    'lineTo,410,33.4',
+                    'lineTo,10,33.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,-790,24.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,210,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,10,33.4,400,18.4',
+                    'setLineWidth,1',
+                    'rect,10,15,400,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[band1_1-[f1, f2, f3], band1_2-[f4, f5, f6]]], columnWidth = 200, availablePageWidth = 500, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500);
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11',
+                            columns: [
+                                {
+                                    caption: 'Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5',
+                                    columns: [ 'f1', 'f2', 'f3' ]
+                                },
+                                {
+                                    caption: 'Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5',
+                                    columns: [ 'f4', 'f5', 'f6' ]
+                                },
+                            ]
+                        }
+                    ],
+                    dataSource: [{ f1: 'f1_1_1', f2: 'f2_1_1', f3: 'f3_1_1', f4: 'f4_1_2', f5: 'f5_1_2', f6: 'f6_1_2' }],
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text.startsWith('Band1')) {
+                        pdfCell.backgroundColor = '#CCFFCC';
+                    } else if(pdfCell.text.startsWith('Band1_1')) {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    } else if(pdfCell.text.startsWith('Band1_2')) {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F1,15,86,{baseline:middle}',
+                    'text,F2,215,86,{baseline:middle}',
+                    'text,f1_1_1,15,114.4,{baseline:middle}',
+                    'text,f2_1_1,215,114.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,410,15',
+                    'lineTo,410,43.4',
+                    'lineTo,10,43.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,15,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,15,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,15,400,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'addPage,',
+                    'text,F3,15,86,{baseline:middle}',
+                    'text,F4,215,86,{baseline:middle}',
+                    'text,f3_1_1,15,114.4,{baseline:middle}',
+                    'text,f4_1_2,215,114.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,210,43.4',
+                    'lineTo,210,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-385,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,210,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,210,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,210,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,215,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,410,15',
+                    'lineTo,410,43.4',
+                    'lineTo,10,43.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,-385,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,43.4,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,15,400,28.4',
+                    'addPage,',
+                    'text,F5,15,86,{baseline:middle}',
+                    'text,F6,215,86,{baseline:middle}',
+                    'text,f5_1_2,15,114.4,{baseline:middle}',
+                    'text,f6_1_2,215,114.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,43.4',
+                    'lineTo,410,43.4',
+                    'lineTo,410,71.8',
+                    'lineTo,10,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-185,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,10,15,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,10,15',
+                    'lineTo,410,15',
+                    'lineTo,410,43.4',
+                    'lineTo,10,43.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,-785,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,210,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,10,43.4,400,28.4',
+                    'setLineWidth,1',
+                    'rect,10,15,400,28.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('[band1-[band1_1-[f1, f2, f3], band1_2-[f4, f5, f6]]], topLeft.x = 10, margin.left = 15, columnWidth = 200, availablePageWidth = 500', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -1518,6 +4139,381 @@ const JSPdfSplittingTests = {
                     'rect,25,33.4,400,18.4',
                     'setLineWidth,1',
                     'rect,25,15,400,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[band1_1-[f1, f2, f3], band1_2-[f4, f5, f6]]], topLeft.x = 10, margin.left = 15, columnWidth = 200, availablePageWidth = 500, long text', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500, { left: 15 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11',
+                            columns: [
+                                {
+                                    caption: 'Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5',
+                                    columns: [ 'f1', 'f2', 'f3' ]
+                                },
+                                {
+                                    caption: 'Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5',
+                                    columns: [ 'f4', 'f5', 'f6' ]
+                                },
+                            ]
+                        }
+                    ],
+                    dataSource: [{ f1: 'f1_1_1', f2: 'f2_1_1', f3: 'f3_1_1', f4: 'f4_1_2', f5: 'f5_1_2', f6: 'f6_1_2' }],
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text.startsWith('Band1')) {
+                        pdfCell.backgroundColor = '#CCFFCC';
+                    } else if(pdfCell.text.startsWith('Band1_1')) {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    } else if(pdfCell.text.startsWith('Band1_2')) {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F1,25,61,{baseline:middle}',
+                    'text,F2,225,61,{baseline:middle}',
+                    'text,f1_1_1,25,79.4,{baseline:middle}',
+                    'text,f2_1_1,225,79.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,15,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,15',
+                    'lineTo,425,15',
+                    'lineTo,425,33.4',
+                    'lineTo,25,33.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,25,24.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,33.4',
+                    'lineTo,425,33.4',
+                    'lineTo,425,51.8',
+                    'lineTo,25,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,25,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,25,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,15,400,18.4',
+                    'setLineWidth,1',
+                    'rect,25,33.4,400,18.4',
+                    'addPage,',
+                    'text,F3,25,61,{baseline:middle}',
+                    'text,F4,225,61,{baseline:middle}',
+                    'text,f3_1_1,25,79.4,{baseline:middle}',
+                    'text,f4_1_2,225,79.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,33.4',
+                    'lineTo,225,33.4',
+                    'lineTo,225,51.8',
+                    'lineTo,25,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-375,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,225,33.4,200,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,225,33.4',
+                    'lineTo,425,33.4',
+                    'lineTo,425,51.8',
+                    'lineTo,225,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,225,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,15,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,15',
+                    'lineTo,425,15',
+                    'lineTo,425,33.4',
+                    'lineTo,25,33.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,-375,24.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,25,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,15,400,18.4',
+                    'addPage,',
+                    'text,F5,25,61,{baseline:middle}',
+                    'text,F6,225,61,{baseline:middle}',
+                    'text,f5_1_2,25,79.4,{baseline:middle}',
+                    'text,f6_1_2,225,79.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,33.4,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,33.4',
+                    'lineTo,425,33.4',
+                    'lineTo,425,51.8',
+                    'lineTo,25,51.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-175,42.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,15,400,18.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,15',
+                    'lineTo,425,15',
+                    'lineTo,425,33.4',
+                    'lineTo,25,33.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,-775,24.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,25,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,51.8,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,225,70.2,200,18.4',
+                    'setLineWidth,1',
+                    'rect,25,33.4,400,18.4',
+                    'setLineWidth,1',
+                    'rect,25,15,400,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[band1_1-[f1, f2, f3], band1_2-[f4, f5, f6]]], topLeft.x = 10, margin.left = 15, columnWidth = 200, availablePageWidth = 500, long text, paddings', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, 500, { left: 15 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11',
+                            columns: [
+                                {
+                                    caption: 'Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5',
+                                    columns: [ 'f1', 'f2', 'f3' ]
+                                },
+                                {
+                                    caption: 'Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5',
+                                    columns: [ 'f4', 'f5', 'f6' ]
+                                },
+                            ]
+                        }
+                    ],
+                    dataSource: [{ f1: 'f1_1_1', f2: 'f2_1_1', f3: 'f3_1_1', f4: 'f4_1_2', f5: 'f5_1_2', f6: 'f6_1_2' }],
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text.startsWith('Band1')) {
+                        pdfCell.backgroundColor = '#CCFFCC';
+                    } else if(pdfCell.text.startsWith('Band1_1')) {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    } else if(pdfCell.text.startsWith('Band1_2')) {
+                        pdfCell.backgroundColor = '#CCCCFF';
+                    }
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,F1,30,86,{baseline:middle}',
+                    'text,F2,230,86,{baseline:middle}',
+                    'text,f1_1_1,30,114.4,{baseline:middle}',
+                    'text,f2_1_1,230,114.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,15,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,15',
+                    'lineTo,425,15',
+                    'lineTo,425,43.4',
+                    'lineTo,25,43.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,30,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,43.4',
+                    'lineTo,425,43.4',
+                    'lineTo,425,71.8',
+                    'lineTo,25,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,30,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,25,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,225,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,25,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,225,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,25,15,400,28.4',
+                    'setLineWidth,1',
+                    'rect,25,43.4,400,28.4',
+                    'addPage,',
+                    'text,F3,30,86,{baseline:middle}',
+                    'text,F4,230,86,{baseline:middle}',
+                    'text,f3_1_1,30,114.4,{baseline:middle}',
+                    'text,f4_1_2,230,114.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,43.4',
+                    'lineTo,225,43.4',
+                    'lineTo,225,71.8',
+                    'lineTo,25,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-370,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,225,43.4,200,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,225,43.4',
+                    'lineTo,425,43.4',
+                    'lineTo,425,71.8',
+                    'lineTo,225,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,230,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,15,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,15',
+                    'lineTo,425,15',
+                    'lineTo,425,43.4',
+                    'lineTo,25,43.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,-370,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,25,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,225,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,25,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,225,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,25,43.4,200,28.4',
+                    'setLineWidth,1',
+                    'rect,225,43.4,200,28.4',
+                    'setLineWidth,1',
+                    'rect,25,15,400,28.4',
+                    'addPage,',
+                    'text,F5,30,86,{baseline:middle}',
+                    'text,F6,230,86,{baseline:middle}',
+                    'text,f5_1_2,30,114.4,{baseline:middle}',
+                    'text,f6_1_2,230,114.4,{baseline:middle}',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,43.4,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,43.4',
+                    'lineTo,425,43.4',
+                    'lineTo,425,71.8',
+                    'lineTo,25,71.8',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_2_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5,-170,57.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setFillColor,#CCFFCC',
+                    'rect,25,15,400,28.4,F',
+                    'saveGraphicsState,',
+                    'setLineJoin,0',
+                    'moveTo,25,15',
+                    'lineTo,425,15',
+                    'lineTo,425,43.4',
+                    'lineTo,25,43.4',
+                    'close,',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1_longtext_1_longtext_2_longtext_3_longtext_4_longtext_5_longtext_6_longtext_7_longtext_8_longtext_9_longtext_10_longtext_11,-770,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,25,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,225,71.8,200,28.4',
+                    'setLineWidth,1',
+                    'rect,25,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,225,100.2,200,28.4',
+                    'setLineWidth,1',
+                    'rect,25,43.4,400,28.4',
+                    'setLineWidth,1',
+                    'rect,25,15,400,28.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
