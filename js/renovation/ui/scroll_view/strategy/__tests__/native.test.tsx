@@ -624,7 +624,7 @@ describe('Native > Effects', () => {
   });
 
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
-    it('effectResetInactiveState()', () => {
+    it('resetInactiveOffsetToInitial()', () => {
       const containerRef = {
         current: {
           scrollTop: 20,
@@ -635,7 +635,7 @@ describe('Native > Effects', () => {
       const viewModel = new Scrollable({ direction });
       viewModel.containerRef = containerRef;
 
-      viewModel.effectResetInactiveState();
+      viewModel.resetInactiveOffsetToInitial();
 
       expect(viewModel.containerRef.current).toEqual({
         scrollTop: direction === 'horizontal' ? 0 : 20,

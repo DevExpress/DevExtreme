@@ -353,7 +353,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     }
   }
 
-  @Effect() effectResetInactiveState(): void {
+  @Effect() resetInactiveOffsetToInitial(): void {
     if (this.props.direction === DIRECTION_BOTH) {
       return;
     }

@@ -87,6 +87,7 @@ import { isElementVisible } from '../utils/is_element_visible';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { subscribeToResize } from '../utils/subscribe_to_resize';
 import domAdapter from '../../../../core/dom_adapter';
+import { getScrollLeftMax } from '../utils/get_scroll_left_max';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -292,7 +293,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @InternalState() pendingScrollEvent = false;
 
-  @Mutable() prevDirection = DIRECTION_VERTICAL;
+  @Mutable() prevDirection = 'initial';
 
   @Mutable() validateWheelTimer?: unknown;
 
@@ -615,17 +616,24 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     }
   }
 
-  @Effect() effectResetInactiveState(): void {
-    const directionChanged = this.prevDirection !== this.props.direction;
-    this.prevDirection = this.props.direction;
-
-    if (!directionChanged || this.direction.isBoth) {
+  @Effect() resetInactiveOffsetToInitial(): void {
+    if (this.direction.isBoth) {
+      this.prevDirection = this.props.direction;
       return;
     }
 
+    const maxScrollOffset = getScrollLeftMax(this.containerRef.current!);
+    const needResetInactiveOffset = this.prevDirection !== this.props.direction && maxScrollOffset;
+
+    if (!needResetInactiveOffset) {
+      return;
+    }
+
+    this.prevDirection = this.props.direction;
+
     const inactiveScrollProp = !this.direction.isVertical ? 'scrollTop' : 'scrollLeft';
     const location = this.props.rtlEnabled && inactiveScrollProp === 'scrollLeft'
-      ? -this.hScrollOffsetMax
+      ? maxScrollOffset
       : 0;
 
     this.scrollLocationChange({

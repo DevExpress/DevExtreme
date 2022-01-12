@@ -738,35 +738,55 @@ describe('Simulated > Behavior', () => {
     });
 
     each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
-      each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
-        it('effectResetInactiveState()', () => {
-          const scrollTop = 20;
-          const scrollLeft = 30;
+      each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH, 'initial']).describe('prevDirection: %o', (prevDirection) => {
+        each([{
+          contentSize: 300,
+          containerSize: 300,
+        }, {
+          contentSize: 200,
+          containerSize: 100,
+        }]).describe('rtlEnabled: %o', (dimensions) => {
+          each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
+            it('resetInactiveOffsetToInitial()', () => {
+              const scrollTop = 20;
+              const scrollLeft = 30;
 
-          const helper = new ScrollableTestHelper({ direction, rtlEnabled });
-          helper.initScrollbarSettings();
-          helper.initContainerPosition({ top: scrollTop, left: scrollLeft });
+              const helper = new ScrollableTestHelper({ direction, rtlEnabled, ...dimensions });
+              helper.initScrollbarSettings();
+              helper.initContainerPosition({ top: scrollTop, left: scrollLeft });
 
-          helper.viewModel.prevDirection = 'somevalue';
+              helper.viewModel.prevDirection = prevDirection;
 
-          helper.viewModel.effectResetInactiveState();
+              helper.viewModel.resetInactiveOffsetToInitial();
 
-          const expectedScrollTop = !helper.isVertical ? 0 : 20;
-          // eslint-disable-next-line no-nested-ternary
-          const expectedScrollLeft = !helper.isHorizontal ? rtlEnabled ? 100 : 0 : 30;
+              const isOverflowX = dimensions.contentSize > dimensions.containerSize;
+              expect(helper.viewModel.prevDirection).toEqual(
+                isOverflowX || direction === DIRECTION_BOTH
+                  ? direction
+                  : prevDirection,
+              );
 
-          const containerElement = helper.viewModel.containerRef.current!;
+              const needResetScrollOffset = isOverflowX && prevDirection !== direction;
+              const expectedScrollTop = !helper.isVertical && needResetScrollOffset
+                ? 0
+                : 20;
+              // eslint-disable-next-line no-nested-ternary
+              const expectedScrollLeft = !helper.isHorizontal && needResetScrollOffset
+                ? rtlEnabled ? 100 : 0
+                : 30;
 
-          expect(helper.viewModel.prevDirection).toEqual(direction);
-          expect(containerElement.scrollTop).toEqual(expectedScrollTop);
-          expect(containerElement.scrollLeft).toEqual(expectedScrollLeft);
+              const containerElement = helper.viewModel.containerRef.current!;
+              expect(containerElement.scrollTop).toEqual(expectedScrollTop);
+              expect(containerElement.scrollLeft).toEqual(expectedScrollLeft);
 
-          helper.viewModel.scrolling = false;
-          helper.viewModel.scrollEffect();
-          emit('scroll', {} as any);
+              helper.viewModel.scrolling = false;
+              helper.viewModel.scrollEffect();
+              emit('scroll', {} as any);
 
-          expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollLeft);
-          expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollTop);
+              expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollLeft);
+              expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollTop);
+            });
+          });
         });
       });
 
