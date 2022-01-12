@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, InternalState, Effect, Fragment,
+  Component, ComponentBindings, JSXComponent, InternalState, Effect, Fragment, Ref, RefObject,
 } from '@devextreme-generator/declarations';
 import React from 'react';
 import { ScrollViewProps } from '../../../../js/renovation/ui/scroll_view/common/scrollview_props';
@@ -14,24 +14,25 @@ const getContent = () => {
   return content;
 };
 
-export const viewFunction = ({ options }: App): JSX.Element => (
+export const viewFunction = ({ componentInstance, componentOptions }: App): JSX.Element => (
   <Fragment>
-    {options && (
+    {componentOptions && (
     <ScrollView
+      ref={componentInstance}
       id="container"
-      width={options.width}
-      height={options.height}
-      useNative={options.useNative}
-      rtlEnabled={options.rtlEnabled}
-      direction={options.direction}
-      showScrollbar={options.showScrollbar}
+      width={componentOptions.width}
+      height={componentOptions.height}
+      useNative={componentOptions.useNative}
+      rtlEnabled={componentOptions.rtlEnabled}
+      direction={componentOptions.direction}
+      showScrollbar={componentOptions.showScrollbar}
     >
       <div className="text-content" style={{ minHeight: 500, minWidth: 500 }}>
         {getContent()}
       </div>
     </ScrollView>
     )}
-    {!options && (
+    {!componentOptions && (
     <div>Something went wrong...</div>
     )}
   </Fragment>
@@ -46,6 +47,8 @@ class AppProps { }
   jQuery: { register: true },
 })
 export class App extends JSXComponent<AppProps>() {
+  @Ref() componentInstance!: RefObject<ScrollView>;
+
   @InternalState() options?: Partial<ScrollViewProps>;
 
   @Effect({ run: 'once' })
@@ -58,5 +61,16 @@ export class App extends JSXComponent<AppProps>() {
           ...newOptions,
         };
       };
+  }
+
+  @Effect({ run: 'always' })
+  initializeInstance(): void {
+    // eslint-disable-next-line no-restricted-globals
+    (window as unknown as { componentInstance: unknown })
+      .componentInstance = this.componentInstance.current ?? this.componentInstance;
+  }
+
+  get componentOptions(): Partial<ScrollViewProps> {
+    return this.options;
   }
 }
