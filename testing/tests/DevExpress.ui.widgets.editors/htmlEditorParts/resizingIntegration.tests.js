@@ -8,6 +8,7 @@ import PointerMock from '../../../helpers/pointerMock.js';
 const { test, module } = QUnit;
 
 const RESIZE_FRAME_CLASS = 'dx-resize-frame';
+const RESIZABLE_CLASS = 'dx-resizable';
 const RESIZABLE_HANDLER_CLASS = 'dx-resizable-handle-corner-bottom-right';
 
 const IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgZGT8DwABDQEDEkMQNQAAAABJRU5ErkJggg==';
@@ -134,6 +135,20 @@ module('Resizing integration', {
             .dragStart()
             .drag(hOffset, vOffset)
             .dragEnd();
+    });
+
+
+    test('integrated resizable should have _keepAspectRatio=true (T1049676)', function(assert) {
+        this.options.mediaResizing = { enabled: true };
+
+        this.createWidget();
+        this.$element
+            .find('img')
+            .trigger(clickEvent);
+
+        const resizable = $(`.${RESIZABLE_CLASS}`).dxResizable('instance');
+
+        assert.strictEqual(resizable.option('_keepAspectRatio'), true, 'aspect ratio keeping is enabled');
     });
 
     test('check frame position for list item with nested image', function(assert) {

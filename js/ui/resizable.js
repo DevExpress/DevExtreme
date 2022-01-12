@@ -71,7 +71,9 @@ const Resizable = DOMComponent.inherit({
 
             onResizeEnd: null,
 
-            roundStepValue: true
+            roundStepValue: true,
+
+            _keepAspectRatio: false
         });
     },
 
@@ -270,7 +272,7 @@ const Resizable = DOMComponent.inherit({
 
     _getDeltaByOffset: function(offset) {
         const sides = this._movingSides;
-        const shouldKeepAspectRatio = this._isCornerHandler(sides);
+        const shouldKeepAspectRatio = this._isCornerHandler(sides) && this.option('_keepAspectRatio');
 
         const delta = {
             x: offset.x * (sides.left ? -1 : 1),
@@ -551,6 +553,7 @@ const Resizable = DOMComponent.inherit({
             case 'stepPrecision':
             case 'step':
             case 'roundStepValue':
+            case '_keepAspectRatio':
                 break;
             default:
                 this.callBase(args);
