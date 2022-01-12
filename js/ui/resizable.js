@@ -260,7 +260,7 @@ const Resizable = DOMComponent.inherit({
             fittedDelta = this._getProportionalDelta({ x: fittedDelta.x, y: getFittedHeight() - size.height });
         }
 
-        if(!isFittedX()) {
+        if(!isFittedX() || !isFittedY()) {
             return {
                 x: 0,
                 y: 0
