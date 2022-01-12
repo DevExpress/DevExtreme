@@ -249,6 +249,10 @@ export class GanttContextMenuBar extends Bar {
         this._menu.show();
     }
 
+    hide() {
+        this._menu.hide();
+    }
+
     // IBar
     isContextMenu() {
         return true;
