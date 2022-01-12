@@ -959,54 +959,97 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
-    QUnit.test('loading data on scroll after deleting several rows if scrolling mode is infinite, rowRenderingMode is virtual and refreshMode is repaint (T862268)', function(assert) {
-        // arrange
-        const array = [];
+    [false, true].forEach((legacyMode) => {
+        QUnit.test(`loading data on scroll after deleting several rows if scrolling mode is infinite, rowRenderingMode is virtual and refreshMode is repaint (legacyMode=${legacyMode}) (T862268)`, function(assert) {
+            // arrange
+            const array = [];
 
-        for(let i = 1; i <= 150; i++) {
-            array.push({ id: i });
-        }
+            for(let i = 1; i <= 150; i++) {
+                array.push({ id: i });
+            }
 
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 100,
-            dataSource: array,
-            keyExpr: 'id',
-            editing: {
-                allowDeleting: true,
-                texts: {
-                    confirmDeleteMessage: ''
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 100,
+                dataSource: array,
+                keyExpr: 'id',
+                editing: {
+                    allowDeleting: true,
+                    texts: {
+                        confirmDeleteMessage: ''
+                    },
+                    refreshMode: 'repaint'
                 },
-                refreshMode: 'repaint'
-            },
-            paging: {
-                pageSize: 50
-            },
-            scrolling: {
-                mode: 'infinite',
-                rowRenderingMode: 'virtual',
-                useNative: false,
-            },
-            columns: ['id'],
-            loadingTimeout: null
-        }).dxDataGrid('instance');
+                paging: {
+                    pageSize: 50
+                },
+                scrolling: {
+                    mode: 'infinite',
+                    rowRenderingMode: 'virtual',
+                    useNative: false,
+                    legacyMode
+                },
+                columns: ['id'],
+                loadingTimeout: null
+            }).dxDataGrid('instance');
 
-        // act
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
-        dataGrid.getScrollable().scrollTo({ y: 0 });
-        dataGrid.deleteRow(0);
-        dataGrid.deleteRow(0);
-        dataGrid.deleteRow(0);
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
-        this.clock.tick();
-
-        for(let i = 0; i < 25; i++) {
+            // act
             dataGrid.getScrollable().scrollTo({ y: 10000 });
-        }
+            dataGrid.getScrollable().scrollTo({ y: 0 });
+            dataGrid.deleteRow(0);
+            dataGrid.deleteRow(0);
+            dataGrid.deleteRow(0);
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            this.clock.tick();
 
-        // assert
-        const rows = dataGrid.getVisibleRows();
-        assert.equal(dataGrid.totalCount(), 147, 'totalCount');
-        assert.equal(rows[rows.length - 1].key, 150, 'last row key');
+            for(let i = 0; i < 25; i++) {
+                dataGrid.getScrollable().scrollTo({ y: 10000 });
+            }
+
+            // assert
+            const rows = dataGrid.getVisibleRows();
+            assert.equal(dataGrid.totalCount(), 147, 'totalCount');
+            assert.equal(rows[rows.length - 1].key, 150, 'last row key');
+        });
+
+        QUnit.test(`loading data on scroll after deleting using push API if scrolling mode is infinite (legacyMode=${legacyMode}) (T1053933)`, function(assert) {
+            // arrange
+            const array = [];
+
+            for(let i = 1; i <= 100; i++) {
+                array.push({ id: i });
+            }
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 500,
+                dataSource: array,
+                keyExpr: 'id',
+                scrolling: {
+                    mode: 'infinite',
+                    useNative: false,
+                    legacyMode
+                },
+                columns: ['id'],
+                loadingTimeout: null
+            }).dxDataGrid('instance');
+
+            // act
+            dataGrid.getDataSource().store().push([
+                { type: 'remove', key: 1 },
+                { type: 'remove', key: 2 },
+                { type: 'remove', key: 3 },
+            ]);
+            this.clock.tick();
+
+            for(let i = 0; i < 5; i++) {
+                dataGrid.getScrollable().scrollTo({ y: 10000 });
+                this.clock.tick();
+            }
+
+            // assert
+            const rows = dataGrid.getVisibleRows();
+            assert.equal(dataGrid.totalCount(), 97, 'totalCount');
+            assert.equal(rows[rows.length - 1].key, 100, 'last row key');
+        });
     });
 
     ['repaint', 'reshape'].forEach((refreshMode) => {
