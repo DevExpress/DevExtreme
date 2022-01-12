@@ -47,7 +47,8 @@ import { getFilterStrategy } from './utils/filtering/local';
 import combineRemoteFilter from './utils/filtering/remote';
 import { ReducedIconTooltip } from './appointment/reduced_icon_tooltip/layout';
 import { AppointmentsContextProvider } from './appointments_context_provider';
-import { AppointmentsContextValue } from './appointments_context';
+import { IAppointmentContext } from './appointments_context';
+import { ResourceMapType } from './resources/utils';
 
 export const viewFunction = ({
   restAttributes,
@@ -217,7 +218,7 @@ export const viewFunction = ({
 export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState() workSpaceViewModel?: ViewMetaData;
 
-  @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
+  @InternalState() resourcePromisesMap: ResourceMapType = new Map();
 
   @InternalState() loadedResources?: Group[];
 
@@ -506,9 +507,14 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
   }
 
-  get appointmentsContextValue(): AppointmentsContextValue {
+  get appointmentsContextValue(): IAppointmentContext {
     return {
       viewModel: this.appointmentsViewModel,
+      groups: this.props.groups,
+      resources: this.props.resources,
+      resourceLoaderMap: this.resourcePromisesMap,
+      loadedResources: this.loadedResources,
+      dataAccessors: this.dataAccessors,
       appointmentTemplate: this.currentViewConfig.appointmentTemplate,
       overflowIndicatorTemplate: this.currentViewConfig.appointmentCollectorTemplate,
       onAppointmentClick: (data) => this.showTooltip(data),

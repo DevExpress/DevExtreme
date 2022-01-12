@@ -38,7 +38,11 @@ export class AppointmentViewModelGenerator {
 
         if(isRenovatedAppointments) {
             // TODO this structure should be by default after remove old render
-            return this.makeRenovatedViewModels(viewModel, options.supportAllDayRow, options.isVerticalGroupOrientation);
+            return this.makeRenovatedViewModels(
+                viewModel,
+                options.supportAllDayRow,
+                options.isVerticalGroupOrientation,
+            );
         }
 
         return {
@@ -127,6 +131,7 @@ export class AppointmentViewModelGenerator {
                 allDay: options.allDay,
                 direction: options.direction,
                 appointmentReduced: options.appointmentReduced,
+                groupIndex: options.groupIndex,
             },
         };
 

@@ -1,5 +1,4 @@
 import {
-  CSSAttributes,
   Component,
   ComponentBindings,
   JSXComponent,
@@ -9,6 +8,10 @@ import {
   RefObject,
   Event,
   ForwardRef,
+  Consumer,
+  InternalState,
+  Effect,
+  CSSAttributes,
 } from '@devextreme-generator/declarations';
 import {
   AppointmentTemplateProps,
@@ -21,6 +24,9 @@ import { AppointmentContent } from './content/layout';
 import { Widget } from '../../common/widget';
 import { combineClasses } from '../../../utils/combine_classes';
 import type { AppointmentTemplateData } from '../../../../ui/scheduler';
+import { addToStyles } from '../workspaces/utils';
+import { getAppointmentColor } from '../resources/utils';
+import { AppointmentsContext, IAppointmentContext } from '../appointments_context';
 
 export const viewFunction = ({
   text,
@@ -75,6 +81,8 @@ export class AppointmentProps {
 
   @OneWay() hideReducedIconTooltip!: () => void;
 
+  @OneWay() groups!: string[];
+
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
   @Event() onItemClick!: (e: AppointmentClickData) => void;
@@ -84,14 +92,33 @@ export class AppointmentProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'onItemClick' | 'showReducedIconTooltip' | 'hideReducedIconTooltip'>() {
-  @ForwardRef() ref!: RefObject<HTMLDivElement>;
+export class Appointment extends JSXComponent<
+AppointmentProps,
+'viewModel' | 'onItemClick' | 'showReducedIconTooltip' | 'hideReducedIconTooltip' | 'groups'
+>() {
+  @Consumer(AppointmentsContext)
+  appointmentsContextValue!: IAppointmentContext;
 
-  get text(): string { return this.props.viewModel.appointment.text; }
+  @ForwardRef()
+  ref!: RefObject<HTMLDivElement>;
 
-  get styles(): CSSAttributes {
+  @InternalState()
+  color?: string;
+
+  get appointmentStyles(): CSSAttributes | undefined {
     return getAppointmentStyles(this.props.viewModel);
   }
+
+  get styles(): CSSAttributes | undefined {
+    return !this.color
+      ? this.appointmentStyles
+      : addToStyles([{
+        attr: 'backgroundColor',
+        value: this.color,
+      }], this.appointmentStyles);
+  }
+
+  get text(): string { return this.props.viewModel.appointment.text; }
 
   get isReduced(): boolean {
     const { appointmentReduced } = this.props.viewModel.info;
@@ -127,6 +154,27 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'o
       appointmentData: this.props.viewModel.info.appointment,
       targetedAppointmentData: this.props.viewModel.appointment,
     };
+  }
+
+  @Effect()
+  updateStylesEffect(): void {
+    const { viewModel } = this.props;
+    const groupIndex = viewModel.info.groupIndex ?? 0;
+
+    getAppointmentColor({
+      resources: this.appointmentsContextValue.resources,
+      resourceLoaderMap: this.appointmentsContextValue.resourceLoaderMap,
+      resourcesDataAccessors: this.appointmentsContextValue.dataAccessors.resources,
+      loadedResources: this.appointmentsContextValue.loadedResources,
+    }, {
+      itemData: viewModel.appointment,
+      groupIndex,
+      groups: this.props.groups,
+    }).then((color) => {
+      if (color) {
+        this.color = color;
+      }
+    }).catch(() => '');
   }
 
   onItemClick(): void {

@@ -513,7 +513,8 @@ export const getAppointmentColor = (resourceConfig, appointmentConfig) => {
         const field = getFieldExpr(paintedResources);
 
         const cellGroups = getCellGroups(groupIndex, loadedResources);
-        const resourceValues = wrapToArray(getDataAccessors(dataAccessors, field, 'getter')(itemData));
+        const resourcesDataAccessors = getDataAccessors(dataAccessors, field, 'getter');
+        const resourceValues = wrapToArray(resourcesDataAccessors(itemData));
 
         let groupId = resourceValues[0];
 
@@ -527,7 +528,9 @@ export const getAppointmentColor = (resourceConfig, appointmentConfig) => {
         return getResourceColor(resources, resourceLoaderMap, field, groupId);
     }
 
-    return new Deferred().resolve().promise();
+    return new Deferred()
+        .resolve()
+        .promise();
 };
 
 export const createExpressions = (resources = []) => {

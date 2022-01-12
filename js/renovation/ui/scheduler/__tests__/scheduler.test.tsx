@@ -1473,6 +1473,9 @@ describe('Scheduler', () => {
           appointmentCollectorTemplate,
         });
 
+        jest.spyOn(scheduler, 'dataAccessors', 'get')
+          .mockReturnValue('dataAccessors-test' as any);
+
         expect(scheduler.appointmentsContextValue)
           .toEqual({
             viewModel: {
@@ -1481,6 +1484,11 @@ describe('Scheduler', () => {
               allDay: [],
               allDayCompact: [],
             },
+            groups: [],
+            resources: [],
+            resourceLoaderMap: new Map(),
+            loadedResources: undefined,
+            dataAccessors: 'dataAccessors-test',
             appointmentTemplate,
             overflowIndicatorTemplate: appointmentCollectorTemplate,
             onAppointmentClick: expect.any(Function),

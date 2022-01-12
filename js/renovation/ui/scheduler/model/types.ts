@@ -1,5 +1,4 @@
 import { ResourceProps } from '../props';
-import { AppointmentColorConfigType } from '../resources/utils';
 import { DataAccessorType, GroupOrientation, ViewType } from '../types';
 import { CellsMetaData, Group } from '../workspaces/types';
 
@@ -58,6 +57,5 @@ export interface AppointmentsModelType extends AppointmentsConfigType {
   leftVirtualCellCount: number;
   topVirtualCellCount: number;
   cellDuration: number;
-  getAppointmentColor: (config: AppointmentColorConfigType) => Promise<string>;
   DOMMetaData: CellsMetaData;
 }
