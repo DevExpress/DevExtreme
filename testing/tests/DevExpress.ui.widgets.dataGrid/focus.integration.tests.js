@@ -1505,6 +1505,29 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.pageIndex(), 2, 'page is changed');
         assert.ok($(dataGrid.getRowElement(dataGrid.getRowIndexByKey(6))).hasClass('dx-row-focused'), 'focused row is visible');
     });
+
+    QUnit.test('Change dataSource to empty and change caption should not cause exception (T1051512)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: [{ id: 1 }],
+            focusedRowEnabled: true,
+            focusedRowIndex: 0,
+            columns: ['id']
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.option('dataSource', []);
+        dataGrid.columnOption(0, 'caption', 'test');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'no rows');
+    });
+
 });
 
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {
