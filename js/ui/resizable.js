@@ -214,22 +214,22 @@ const Resizable = DOMComponent.inherit({
         return parseInt(borderWidth) || 0;
     },
 
-    _getProportionalDelta: function(widthDelta, heightDelta) {
+    _getProportionalDelta: function({ x, y }) {
         const size = this._elementSize;
 
-        const proportionalHeight = widthDelta * (size.height / size.width);
-        if(proportionalHeight >= heightDelta) {
+        const proportionalY = x * (size.height / size.width);
+        if(proportionalY >= y) {
             return {
-                x: widthDelta,
-                y: proportionalHeight
+                x,
+                y: proportionalY
             };
         }
 
-        const proportionalWidth = heightDelta * (size.width / size.height);
-        if(proportionalWidth >= widthDelta) {
+        const proportionalX = y * (size.width / size.height);
+        if(proportionalX >= x) {
             return {
-                x: proportionalWidth,
-                y: heightDelta
+                x: proportionalX,
+                y
             };
         }
 
@@ -239,7 +239,7 @@ const Resizable = DOMComponent.inherit({
         };
     },
 
-    _fitIntoMinMax: function(delta) {
+    _fitDelta: function(delta) {
         const size = this._elementSize;
         const { minWidth, minHeight, maxWidth, maxHeight } = this.option();
 
@@ -249,31 +249,30 @@ const Resizable = DOMComponent.inherit({
         const fittedWidth = fitIntoRange(minWidth, width, maxWidth);
         if(width !== fittedWidth) {
             const proportionalHeight = fittedWidth * (size.height / size.width);
-            if(proportionalHeight !== fitIntoRange(minHeight, proportionalHeight, maxHeight)) {
-                return {
-                    x: 0,
-                    y: 0
-                };
-            } else {
+            if(proportionalHeight === fitIntoRange(minHeight, proportionalHeight, maxHeight)) {
                 return {
                     x: fittedWidth - size.width,
                     y: proportionalHeight - size.height
                 };
             }
+            return {
+                x: 0,
+                y: 0
+            };
         }
 
         const fittedHeight = fitIntoRange(minHeight, height, maxHeight);
         if(height !== fittedHeight) {
             const proportionalWidth = fittedHeight * (size.width / size.height);
-            if(proportionalWidth !== fitIntoRange(minWidth, proportionalWidth, maxWidth)) {
-                return {
-                    x: 0,
-                    y: 0
-                };
-            } else {
+            if(proportionalWidth === fitIntoRange(minWidth, proportionalWidth, maxWidth)) {
                 return {
                     x: proportionalWidth - size.width,
                     y: fittedHeight - size.height
+                };
+            } else {
+                return {
+                    x: 0,
+                    y: 0
                 };
             }
         }
@@ -285,21 +284,20 @@ const Resizable = DOMComponent.inherit({
         const sides = this._movingSides;
         const shouldKeepAspectRatio = this._isCornerHandler(sides);
 
-        const widthDelta = offset.x * (sides.left ? -1 : 1);
-        const heightDelta = offset.y * (sides.top ? -1 : 1);
+        const delta = {
+            x: offset.x * (sides.left ? -1 : 1),
+            y: offset.y * (sides.top ? -1 : 1)
+        };
 
         if(shouldKeepAspectRatio) {
             return this._roundOffset(
-                this._fitIntoMinMax(
-                    this._getProportionalDelta(widthDelta, heightDelta)
+                this._fitDelta(
+                    this._getProportionalDelta(delta)
                 )
             );
-        } else {
-            return {
-                x: widthDelta,
-                y: heightDelta
-            };
         }
+
+        return delta;
     },
 
     _updatePosition: function(delta, { width, height }) {
@@ -328,8 +326,6 @@ const Resizable = DOMComponent.inherit({
 
         this._updatePosition(delta, dimensions);
         this._triggerResizeAction(e, dimensions);
-
-        this._prevDelta = delta;
     },
 
     _updateDimensions: function(delta) {
