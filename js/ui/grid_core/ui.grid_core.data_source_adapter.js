@@ -77,8 +77,15 @@ export default gridCore.Controller.inherit((function() {
             const skip = options.skip ?? storeLoadOptions.skip ?? 0;
             for(let i = 0; i < take; i++) {
                 const localIndex = fromEnd ? take - 1 - i : i;
-                const cacheItem = cachedItems[localIndex + skip];
+                const cacheItemIndex = localIndex + skip;
+                const cacheItem = cachedItems[cacheItemIndex];
+
+                if(cacheItem === undefined && cacheItemIndex in cachedItems) {
+                    return true;
+                }
+
                 const item = getItemFromCache(options, cacheItem, groupCount, localIndex, take);
+
                 if(item) {
                     items.push(item);
                 } else {
