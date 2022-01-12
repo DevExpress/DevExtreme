@@ -11,7 +11,6 @@ import fx from 'animation/fx';
 import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, FileManagerProgressPanelWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
 import { Deferred } from 'core/utils/deferred';
-import browser from 'core/utils/browser';
 
 const moduleConfig = {
 
@@ -668,10 +667,6 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     });
 
     test('Navigation to forbidden folder rises an error', function(assert) {
-        if(browser.msie) { // TODO: remove this after fix
-            assert.ok(true, 'This test hangs, need to be fixed');
-            return;
-        }
         this.fileManager.option('fileSystemProvider',
             new CustomFileSystemProvider({
                 getItems: pathInfo => {
@@ -707,10 +702,6 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     });
 
     test('Forbiddance of current folder and refresh leads to navigating up and rising an error', function(assert) {
-        if(browser.msie) { // TODO: remove this after fix
-            assert.ok(true, 'This test hangs, need to be fixed');
-            return;
-        }
         const provider = new CustomFileSystemProvider({
             getItems: function(pathInfo) {
                 if(pathInfo.path === '') {
