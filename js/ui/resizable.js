@@ -375,7 +375,8 @@ const Resizable = DOMComponent.inherit({
         };
     },
 
-    _getStrictOffset: function(offset, sides) {
+    _getStrictOffset: function(offset) {
+        const sides = this._movingSides;
         const steps = this._getSteps();
         const location = this._elementLocation;
         const size = this._elementSize;
