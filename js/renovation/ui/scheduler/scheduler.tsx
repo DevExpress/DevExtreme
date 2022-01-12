@@ -404,15 +404,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.currentViewConfig.groupOrientation,
     );
 
-    const validGroups = getValidGroups(this.props.groups, this.currentViewProps.groups);
-
     return getAppointmentsConfig(
       {
         adaptivityEnabled: this.props.adaptivityEnabled,
         rtlEnabled: this.props.rtlEnabled,
         resources: this.props.resources,
         timeZone: this.props.timeZone,
-        groups: validGroups,
+        groups: this.mergedGroups,
       },
       {
         startDayHour: this.currentViewConfig.startDayHour,
@@ -507,10 +505,17 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
   }
 
+  get mergedGroups(): string[] {
+    return getValidGroups(
+      this.props.groups,
+      this.currentViewProps.groups,
+    );
+  }
+
   get appointmentsContextValue(): IAppointmentContext {
     return {
       viewModel: this.appointmentsViewModel,
-      groups: this.props.groups,
+      groups: this.mergedGroups,
       resources: this.props.resources,
       resourceLoaderMap: this.resourcePromisesMap,
       loadedResources: this.loadedResources,
@@ -597,10 +602,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadGroupResources(): void {
-    const validGroups = getValidGroups(this.props.groups, this.currentViewProps.groups);
-
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    (loadResources(validGroups, this.props.resources, this.resourcePromisesMap) as Promise<Group[]>)
+    (loadResources(
+      this.mergedGroups,
+      this.props.resources,
+      this.resourcePromisesMap,
+    ) as Promise<Group[]>)
       .then((loadedResources) => {
         this.loadedResources = loadedResources;
       });

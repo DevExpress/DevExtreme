@@ -1462,6 +1462,27 @@ describe('Scheduler', () => {
       });
     });
 
+    describe('mergedGroups', () => {
+      [
+        { schedulerGroups: ['groups'], viewGroups: undefined, expected: ['groups'] },
+        { schedulerGroups: ['groups'], viewGroups: ['viewGroups'], expected: ['viewGroups'] },
+        { schedulerGroups: undefined, viewGroups: ['viewGroups'], expected: ['viewGroups'] },
+        { schedulerGroups: undefined, viewGroups: undefined, expected: undefined },
+      ].forEach(({ schedulerGroups, viewGroups, expected }) => {
+        it(`should return correct value if schedulerGroups=${schedulerGroups}, viewGroups=${viewGroups}`, () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            groups: schedulerGroups,
+            views: [{ type: 'day', groups: viewGroups }],
+            currentView: 'day',
+          });
+
+          expect(scheduler.mergedGroups)
+            .toEqual(expected);
+        });
+      });
+    });
+
     describe('appointmentsContextValue', () => {
       it('should return correct data', () => {
         const appointmentTemplate = jest.fn();
@@ -1472,6 +1493,9 @@ describe('Scheduler', () => {
           appointmentTemplate,
           appointmentCollectorTemplate,
         });
+
+        jest.spyOn(scheduler, 'mergedGroups', 'get')
+          .mockReturnValue(['mock-groups']);
 
         jest.spyOn(scheduler, 'dataAccessors', 'get')
           .mockReturnValue('dataAccessors-test' as any);
@@ -1484,7 +1508,7 @@ describe('Scheduler', () => {
               allDay: [],
               allDayCompact: [],
             },
-            groups: [],
+            groups: ['mock-groups'],
             resources: [],
             resourceLoaderMap: new Map(),
             loadedResources: undefined,
