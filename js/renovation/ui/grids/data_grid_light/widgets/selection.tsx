@@ -148,13 +148,14 @@ export class Selection extends JSXComponent(SelectionProps) {
       if (this.props.mode === 'multiple') {
         this.props.selectedRowKeys = [
           ...this.props.selectedRowKeys,
-          data.id as number,
+          data[this.keyExpr],
         ];
       } else {
-        this.props.selectedRowKeys = [data.id as number];
+        this.props.selectedRowKeys = [data[this.keyExpr]];
       }
     } else {
-      this.props.selectedRowKeys = this.props.selectedRowKeys.filter((i) => i !== data.id);
+      this.props.selectedRowKeys = this.props.selectedRowKeys
+        .filter((i) => i !== data[this.keyExpr]);
     }
   }
 

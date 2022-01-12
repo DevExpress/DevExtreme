@@ -32,7 +32,7 @@ export const viewFunction = (viewModel: DataRow): JSX.Element => (
           {
             CellTemplate
               ? <CellTemplate data={viewModel.props.data} />
-              : dataField && String(viewModel.props.data[dataField])
+              : dataField && `${viewModel.props.data[dataField]}`
           }
         </td>
       );

@@ -7,12 +7,10 @@ import { Table } from '../widgets/table';
 import { DataRow } from '../widgets/data_row';
 import { Column, RowData } from '../types';
 import {
-  createPlaceholder, createValue, Plugins, PluginsContext,
+  createValue, Plugins, PluginsContext,
 } from '../../../../utils/plugin/context';
 import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
-
-export const RowPlaceholder = createPlaceholder();
 
 export const viewFunction = (viewModel: TableContent): JSX.Element => (
   <div className="dx-datagrid-rowsview dx-datagrid-nowrap dx-datagrid-after-headers" role="presentation">
