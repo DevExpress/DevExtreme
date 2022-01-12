@@ -8,7 +8,7 @@ import { inArray } from '../core/utils/array';
 import { pairToObject } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
-import { fitIntoRange } from '../core/utils/math';
+import { fitIntoRange, inRange } from '../core/utils/math';
 import { isPlainObject, isFunction, isWindow } from '../core/utils/type';
 import { hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
@@ -240,44 +240,32 @@ const Resizable = DOMComponent.inherit({
     },
 
     _fitDelta: function(delta) {
+        let fittedDelta = { ...delta };
         const size = this._elementSize;
         const { minWidth, minHeight, maxWidth, maxHeight } = this.option();
 
-        const width = size.width + delta.x;
-        const height = size.height + delta.y;
+        const getWidth = () => size.width + fittedDelta.x;
+        const getHeight = () => size.height + fittedDelta.y;
+        const getFittedWidth = () => fitIntoRange(getWidth(), minWidth, maxWidth);
+        const getFittedHeight = () => fitIntoRange(getHeight(), minHeight, maxHeight);
+        const isFittedX = () => inRange(getWidth(), minWidth, maxWidth);
+        const isFittedY = () => inRange(getHeight(), minHeight, maxHeight);
 
-        const fittedWidth = fitIntoRange(minWidth, width, maxWidth);
-        if(width !== fittedWidth) {
-            const proportionalHeight = fittedWidth * (size.height / size.width);
-            if(proportionalHeight === fitIntoRange(minHeight, proportionalHeight, maxHeight)) {
-                return {
-                    x: fittedWidth - size.width,
-                    y: proportionalHeight - size.height
-                };
-            }
+        if(!isFittedX()) {
+            fittedDelta = this._getProportionalDelta({ x: getFittedWidth() - size.width, y: fittedDelta.y });
+        }
+        if(!isFittedY()) {
+            fittedDelta = this._getProportionalDelta({ x: fittedDelta.x, y: getFittedHeight() - size.height });
+        }
+
+        if(!isFittedX()) {
             return {
                 x: 0,
                 y: 0
             };
         }
 
-        const fittedHeight = fitIntoRange(minHeight, height, maxHeight);
-        if(height !== fittedHeight) {
-            const proportionalWidth = fittedHeight * (size.width / size.height);
-            if(proportionalWidth === fitIntoRange(minWidth, proportionalWidth, maxWidth)) {
-                return {
-                    x: proportionalWidth - size.width,
-                    y: fittedHeight - size.height
-                };
-            } else {
-                return {
-                    x: 0,
-                    y: 0
-                };
-            }
-        }
-
-        return delta;
+        return fittedDelta;
     },
 
     _getDeltaByOffset: function(offset) {
@@ -290,11 +278,9 @@ const Resizable = DOMComponent.inherit({
         };
 
         if(shouldKeepAspectRatio) {
-            return this._roundOffset(
-                this._fitDelta(
-                    this._getProportionalDelta(delta)
-                )
-            );
+            const proportionalDelta = this._getProportionalDelta(delta);
+            const fittedProportionalDelta = this._fitDelta(proportionalDelta);
+            return this._roundOffset(fittedProportionalDelta);
         }
 
         return delta;
