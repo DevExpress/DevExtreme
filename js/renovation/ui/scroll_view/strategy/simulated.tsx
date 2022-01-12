@@ -623,7 +623,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.scrollLocationChange({
       fullScrollProp: inactiveScrollProp,
       // set default content position
-      location: this.props.rtlEnabled ? -this.hScrollOffsetMax : 0,
+      location: this.props.rtlEnabled && inactiveScrollProp === 'scrollLeft' ? -this.hScrollOffsetMax : 0,
     });
   }
 
