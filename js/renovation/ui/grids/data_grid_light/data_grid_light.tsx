@@ -4,7 +4,9 @@ import {
   OneWay, Effect, InternalState, Provider, Slot,
 } from '@devextreme-generator/declarations';
 
-import { createGetter, Plugins, PluginsContext } from '../../../utils/plugin/context';
+import {
+  createValue, createGetter, Plugins, PluginsContext,
+} from '../../../utils/plugin/context';
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
@@ -15,6 +17,7 @@ import { TableHeader } from './views/table_header';
 import { Footer } from './views/footer';
 
 export const VisibleItems = createGetter<RowData[]>([]);
+export const TotalCount = createValue<number>();
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -75,10 +78,8 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   visibleItems: RowData[] = [];
 
   @Effect()
-  updateVisibleItems(): () => void {
-    return this.plugins.watch(VisibleItems, (items) => {
-      this.visibleItems = items;
-    });
+  updateTotalCount(): void {
+    this.plugins.set(TotalCount, this.props.dataSource.length);
   }
 
   @Effect()
@@ -86,5 +87,12 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     return this.plugins.extend(
       VisibleItems, -1, () => this.props.dataSource,
     );
+  }
+
+  @Effect()
+  updateVisibleItems(): () => void {
+    return this.plugins.watch(VisibleItems, (items) => {
+      this.visibleItems = items;
+    });
   }
 }

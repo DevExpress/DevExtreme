@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  DataGridLight, viewFunction as DataGridView, DataGridLightProps,
+  DataGridLight, viewFunction as DataGridView, DataGridLightProps, TotalCount,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
 import { generateData } from './test_data';
@@ -103,6 +103,19 @@ describe('DataGridLight', () => {
         grid.setDataSourceToVisibleItems();
 
         expect(extendMock.mock.calls[0][2]()).toBe(dataSource);
+      });
+    });
+
+    describe('updateTotalCount', () => {
+      it('should be equal to dataSource\'s length', () => {
+        const dataSource = generateData(10);
+        const grid = new DataGridLight({
+          dataSource,
+        });
+
+        grid.updateTotalCount();
+
+        expect(grid.plugins.getValue(TotalCount)).toEqual(dataSource.length);
       });
     });
   });

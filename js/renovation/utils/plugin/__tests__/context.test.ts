@@ -1,5 +1,5 @@
 import {
-  PluginEntity, PluginGetter, createValue, createGetter, Plugins, createPlaceholder,
+  PluginEntity, PluginGetter, createValue, createGetter, Plugins, createPlaceholder, createSelector,
 } from '../context';
 
 describe('PluginEntity', () => {
@@ -41,6 +41,17 @@ describe('PluginGetter', () => {
   });
 });
 
+describe('PluginSelector', () => {
+  it('deps and func fields should be correct', () => {
+    const deps = [createValue()];
+    const func = () => null;
+    const selector = createSelector(deps, func);
+
+    expect(selector.deps).toBe(deps);
+    expect(selector.func).toBe(func);
+  });
+});
+
 describe('Plugins', () => {
   const someValuePlugin = createValue();
   const someGetterPlugin = createGetter(0);
@@ -62,6 +73,89 @@ describe('Plugins', () => {
       plugins.set(someValuePlugin, 'some value');
 
       expect(mock).toBeCalledWith('some value');
+    });
+
+    it('should not call callback if set same value', () => {
+      const mock = jest.fn();
+      const plugins = new Plugins();
+
+      plugins.set(someValuePlugin, 'test');
+
+      plugins.watch(someValuePlugin, mock);
+
+      mock.mockReset();
+
+      plugins.set(someValuePlugin, 'test');
+
+      expect(mock).not.toHaveBeenCalled();
+    });
+
+    it('should call callback if set same value with force true parameter', () => {
+      const mock = jest.fn();
+      const plugins = new Plugins();
+
+      plugins.set(someValuePlugin, 'test');
+
+      plugins.watch(someValuePlugin, mock);
+
+      mock.mockReset();
+
+      plugins.set(someValuePlugin, 'test', true);
+
+      expect(mock).toHaveBeenCalledWith('test');
+    });
+  });
+
+  describe('getValue', () => {
+    it('should return undefined if PluginValue is not defined', () => {
+      const plugins = new Plugins();
+
+      expect(plugins.getValue(someValuePlugin)).toBeUndefined();
+    });
+
+    it('should return value from PluginValue', () => {
+      const plugins = new Plugins();
+      plugins.set(someValuePlugin, 'test');
+
+      expect(plugins.getValue(someValuePlugin)).toBe('test');
+    });
+
+    it('should return calculated value from PluginSelector', () => {
+      const plugins = new Plugins();
+      const Value1 = createValue<number>();
+      const Value2 = createValue<number>();
+      const SumSelector = createSelector(
+        [Value1, Value2],
+        (value1: number, value2: number) => value1 + value2,
+      );
+      plugins.set(Value1, 1);
+      plugins.set(Value2, 2);
+
+      expect(plugins.getValue(SumSelector)).toBe(3);
+    });
+  });
+
+  describe('hasValue', () => {
+    it('should return false if set is not called for PluginValue', () => {
+      const plugins = new Plugins();
+
+      expect(plugins.hasValue(someValuePlugin)).toBe(false);
+    });
+
+    it('should return true if set is called for PluginValue', () => {
+      const plugins = new Plugins();
+
+      plugins.set(someValuePlugin, 1);
+
+      expect(plugins.hasValue(someValuePlugin)).toBe(true);
+    });
+
+    it('should return true if set is called for PluginValue with undefined value', () => {
+      const plugins = new Plugins();
+
+      plugins.set(someValuePlugin, undefined);
+
+      expect(plugins.hasValue(someValuePlugin)).toBe(true);
     });
   });
 
@@ -195,6 +289,49 @@ describe('Plugins', () => {
       const dispose = plugins.watch(someValuePlugin, mock);
       dispose();
       expect(dispose).not.toThrow();
+    });
+
+    it('should not call callback immediately for selector if dependecies are not defined', () => {
+      const plugins = new Plugins();
+      const SomeSelector = createSelector(
+        [someValuePlugin],
+        (value: number) => value + 1,
+      );
+      const watchCallback = jest.fn();
+
+      plugins.watch(SomeSelector, watchCallback);
+
+      expect(watchCallback).not.toHaveBeenCalled();
+    });
+
+    it('should call callback immediately for selector if dependecies are defined', () => {
+      const plugins = new Plugins();
+      const SomeSelector = createSelector(
+        [someValuePlugin],
+        (value: number) => value + 1,
+      );
+      const watchCallback = jest.fn();
+
+      plugins.set(someValuePlugin, 3);
+
+      plugins.watch(SomeSelector, watchCallback);
+
+      expect(watchCallback).toHaveBeenCalledWith(4);
+    });
+
+    it('should call callback for selector on dependency change', () => {
+      const plugins = new Plugins();
+      const SomeSelector = createSelector(
+        [someValuePlugin],
+        (value: number) => value + 1,
+      );
+      const watchCallback = jest.fn();
+
+      plugins.watch(SomeSelector, watchCallback);
+
+      plugins.set(someValuePlugin, 3);
+
+      expect(watchCallback).toHaveBeenCalledWith(4);
     });
   });
 });
