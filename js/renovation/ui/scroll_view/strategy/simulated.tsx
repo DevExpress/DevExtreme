@@ -292,6 +292,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @InternalState() pendingScrollEvent = false;
 
+  @Mutable() prevDirection = DIRECTION_VERTICAL;
+
   @Mutable() validateWheelTimer?: unknown;
 
   @Mutable() locked = false;
@@ -614,22 +616,28 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   @Effect() effectResetInactiveState(): void {
-    if (this.direction.isBoth) {
+    const directionChanged = this.prevDirection !== this.props.direction;
+    this.prevDirection = this.props.direction;
+
+    if (!directionChanged || this.direction.isBoth) {
       return;
     }
 
     const inactiveScrollProp = !this.direction.isVertical ? 'scrollTop' : 'scrollLeft';
+    const location = this.props.rtlEnabled && inactiveScrollProp === 'scrollLeft'
+      ? -this.hScrollOffsetMax
+      : 0;
 
     this.scrollLocationChange({
       fullScrollProp: inactiveScrollProp,
       // set default content position
-      location: this.props.rtlEnabled && inactiveScrollProp === 'scrollLeft' ? -this.hScrollOffsetMax : 0,
+      location,
     });
   }
 
   @Method()
   scrollByLocation(location: ScrollOffset): void {
-    // this.updateHandler();
+    this.updateHandler();
 
     this.scrolling = true;
     this.prepareDirections(true);

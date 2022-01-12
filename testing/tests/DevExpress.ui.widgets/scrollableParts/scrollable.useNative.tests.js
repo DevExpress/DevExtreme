@@ -13,7 +13,8 @@ import {
     SCROLLABLE_SCROLL_CLASS,
     SCROLLBAR_VERTICAL_CLASS,
     SCROLLBAR_HORIZONTAL_CLASS,
-    SCROLLABLE_NATIVE_CLASS
+    SCROLLABLE_NATIVE_CLASS,
+    RESIZE_WAIT_TIMEOUT
 } from './scrollable.constants.js';
 
 const moduleConfig = {
@@ -94,7 +95,7 @@ QUnit.test('scroll action fired for simulated scroller during native scroll', fu
     setTimeout(() => {
         assert.equal($scrollable.dxScrollable('instance').scrollOffset().top, 10, 'scroll action fired with right offset');
         done();
-    });
+    }, RESIZE_WAIT_TIMEOUT);
 });
 
 QUnit.test('scroll action fired when scrollable scrolling', function(assert) {

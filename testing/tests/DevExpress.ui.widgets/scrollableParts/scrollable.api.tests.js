@@ -270,7 +270,6 @@ QUnit.test('scrollBy to location', function(assert) {
 
 QUnit.test('scrollBy to location with dynamic content', function(assert) {
     this.clock.restore();
-    const done = assert.async();
 
     const distance = 10;
     let wasFirstMove = false;
@@ -281,7 +280,6 @@ QUnit.test('scrollBy to location with dynamic content', function(assert) {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
                 assert.equal(location.top, -distance * 2, 'scroll to correctly vertical position');
-                done();
             }
             wasFirstMove = true;
         }
@@ -291,18 +289,12 @@ QUnit.test('scrollBy to location with dynamic content', function(assert) {
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
     $content.append($('<div>').height(100));
-    setTimeout(() => {
-        scrollable.scrollBy(distance);
-        scrollable.scrollBy(distance);
-    }, RESIZE_WAIT_TIMEOUT);
-
+    scrollable.scrollBy(distance);
+    scrollable.scrollBy(distance);
 });
 
 // T389058
 QUnit.test('scrollBy to location with dynamic content if auto update is prevented', function(assert) {
-    this.clock.restore();
-    const done = assert.async();
-
     const distance = 10;
     let wasFirstMove = false;
 
@@ -313,7 +305,6 @@ QUnit.test('scrollBy to location with dynamic content if auto update is prevente
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
                 assert.equal(location.top, isRenovatedScrollable ? -20 : 0, 'vertical location set correctly');
-                done();
             }
             wasFirstMove = true;
         }
@@ -323,11 +314,8 @@ QUnit.test('scrollBy to location with dynamic content if auto update is prevente
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
     $content.append($('<div>').height(100));
-    setTimeout(() => {
-        scrollable.scrollBy(distance);
-        scrollable.scrollBy(distance);
-    }, RESIZE_WAIT_TIMEOUT);
-
+    scrollable.scrollBy(distance);
+    scrollable.scrollBy(distance);
 });
 
 QUnit.test('scrollTo to location', function(assert) {
@@ -350,8 +338,6 @@ QUnit.test('scrollTo to location', function(assert) {
 });
 
 QUnit.test('scrollTo to location with dynamic content', function(assert) {
-    this.clock.restore();
-    const done = assert.async();
     let wasFirstMove = false;
 
     const $scrollable = $('#scrollable').empty().append($('<div>').height(150)).dxScrollable({
@@ -360,7 +346,6 @@ QUnit.test('scrollTo to location with dynamic content', function(assert) {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
                 assert.roughEqual(location.top, -50, 1.01, 'scroll to correctly vertical position');
-                done();
             }
             wasFirstMove = true;
         }
@@ -372,10 +357,7 @@ QUnit.test('scrollTo to location with dynamic content', function(assert) {
     scrollable.scrollTo(100);
     $content.empty().append($('<div>').height(101));
 
-    const resizeTimeout = 50;
-    setTimeout(() => {
-        scrollable.scrollTo(50);
-    }, resizeTimeout);
+    scrollable.scrollTo(50);
 });
 
 
@@ -849,6 +831,8 @@ QUnit.test('scrollTo should not reset unused position', function(assert) {
         }
 
         QUnit.test(`scrollTo(${JSON.stringify(scrollToValue)}), update scrollOffset value after resize, useNative: ${useNative}, dir: ${direction}`, function(assert) {
+            this.clock.restore();
+            const done = assert.async();
             const contentSize = 1000;
             const containerSize = 100;
             const $scrollable = $('#scrollable').width(containerSize).height(containerSize);
@@ -886,12 +870,16 @@ QUnit.test('scrollTo should not reset unused position', function(assert) {
             $('#scrollable').width(1000).height(1000);
             resizeCallbacks.fire();
 
-            assert.deepEqual(scrollable.scrollOffset(), {
-                top: 0,
-                left: 0,
-            }, 'scrollOffset()');
-            assert.strictEqual(scrollable.scrollTop(), 0, 'scrollTop()');
-            assert.strictEqual(scrollable.scrollLeft(), 0, 'scrollLeft()');
+            setTimeout(() => {
+                assert.deepEqual(scrollable.scrollOffset(), {
+                    top: 0,
+                    left: 0,
+                }, 'scrollOffset()');
+                assert.strictEqual(scrollable.scrollTop(), 0, 'scrollTop()');
+                assert.strictEqual(scrollable.scrollLeft(), 0, 'scrollLeft()');
+
+                done();
+            }, RESIZE_WAIT_TIMEOUT);
         });
     });
 });

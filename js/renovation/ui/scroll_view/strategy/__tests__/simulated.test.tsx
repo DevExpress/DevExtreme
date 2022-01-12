@@ -738,30 +738,36 @@ describe('Simulated > Behavior', () => {
     });
 
     each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
-      it('effectResetInactiveState()', () => {
-        const scrollTop = 20;
-        const scrollLeft = 30;
+      each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
+        it('effectResetInactiveState()', () => {
+          const scrollTop = 20;
+          const scrollLeft = 30;
 
-        const helper = new ScrollableTestHelper({ direction });
-        helper.initScrollbarSettings();
-        helper.initContainerPosition({ top: scrollTop, left: scrollLeft });
+          const helper = new ScrollableTestHelper({ direction, rtlEnabled });
+          helper.initScrollbarSettings();
+          helper.initContainerPosition({ top: scrollTop, left: scrollLeft });
 
-        helper.viewModel.effectResetInactiveState();
+          helper.viewModel.prevDirection = 'somevalue';
 
-        const expectedScrollTop = !helper.isVertical ? 0 : 20;
-        const expectedScrollLeft = !helper.isHorizontal ? 0 : 30;
+          helper.viewModel.effectResetInactiveState();
 
-        const containerElement = helper.viewModel.containerRef.current!;
+          const expectedScrollTop = !helper.isVertical ? 0 : 20;
+          // eslint-disable-next-line no-nested-ternary
+          const expectedScrollLeft = !helper.isHorizontal ? rtlEnabled ? 100 : 0 : 30;
 
-        expect(containerElement.scrollTop).toEqual(expectedScrollTop);
-        expect(containerElement.scrollLeft).toEqual(expectedScrollLeft);
+          const containerElement = helper.viewModel.containerRef.current!;
 
-        helper.viewModel.scrolling = false;
-        helper.viewModel.scrollEffect();
-        emit('scroll', {} as any);
+          expect(helper.viewModel.prevDirection).toEqual(direction);
+          expect(containerElement.scrollTop).toEqual(expectedScrollTop);
+          expect(containerElement.scrollLeft).toEqual(expectedScrollLeft);
 
-        expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollLeft);
-        expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollTop);
+          helper.viewModel.scrolling = false;
+          helper.viewModel.scrollEffect();
+          emit('scroll', {} as any);
+
+          expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollLeft);
+          expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollTop);
+        });
       });
 
       // eslint-disable-next-line jest/expect-expect
@@ -1743,7 +1749,7 @@ describe('Simulated > Behavior', () => {
           helper.viewModel.scrollByLocation({ left: 10, top: 10 });
 
           expect(scrollToMock).toHaveBeenCalledTimes(helper.getScrollbars().length);
-          expect(helper.viewModel.updateHandler).toHaveBeenCalledTimes(0);
+          expect(helper.viewModel.updateHandler).toHaveBeenCalledTimes(1);
           expect(helper.viewModel.onStart).toHaveBeenCalledTimes(1);
         });
 
@@ -1883,8 +1889,9 @@ describe('Simulated > Behavior', () => {
               expectedValidDirections = { horizontal: true, vertical: true };
               expectedEventArgs.scrollOffset = initialScrollPosition;
               helper.checkActionHandlerCalls(expect,
-                ['onStart'],
+                ['onStart', 'onUpdated'],
                 [
+                  [expectedEventArgs],
                   [expectedEventArgs],
                 ]);
               helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_VERTICAL, ['scrollTo'], [[expected]]);

@@ -641,12 +641,10 @@ QUnit.module('collapsible groups', moduleSetup, () => {
                 setTimeout(() => {
                     instance.collapseGroup(2);
 
-                    setTimeout(() => {
-                        assert.ok(releaseSpy.lastCall.args[0], 'The last call of \'release\' hides load indicator');
-                        fx.off = false;
+                    assert.ok(releaseSpy.lastCall.args[0], 'The last call of \'release\' hides load indicator');
+                    fx.off = false;
 
-                        done();
-                    }, RESIZE_WAIT_TIMEOUT);
+                    done();
                 }, RESIZE_WAIT_TIMEOUT);
             }, RESIZE_WAIT_TIMEOUT);
         }, RESIZE_WAIT_TIMEOUT);
@@ -3095,9 +3093,6 @@ QUnit.module('scrollView integration', {
     });
 
     QUnit.test('onScroll', function(assert) {
-        this.clock.restore();
-        const done = assert.async();
-
         const scrollActionSpy = sinon.spy();
         const list = $('#list').dxList({
             height: 100,
@@ -3106,18 +3101,11 @@ QUnit.module('scrollView integration', {
             onScroll: scrollActionSpy
         }).dxList('instance');
 
-        setTimeout(() => {
-            list.scrollToItem(5);
-            assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
-
-            done();
-        }, RESIZE_WAIT_TIMEOUT);
+        list.scrollToItem(5);
+        assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
     });
 
     QUnit.test('scroll event', function(assert) {
-        this.clock.restore();
-        const done = assert.async();
-
         const scrollActionSpy = sinon.spy();
         const list = $('#list').dxList({
             height: 100,
@@ -3127,12 +3115,8 @@ QUnit.module('scrollView integration', {
 
         list.on('scroll', scrollActionSpy);
 
-        setTimeout(() => {
-            list.scrollToItem(5);
-            assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
-
-            done();
-        }, RESIZE_WAIT_TIMEOUT);
+        list.scrollToItem(5);
+        assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
     });
 
     QUnit.test('list should be scrolled to item from bottom by scrollToItem', function(assert) {

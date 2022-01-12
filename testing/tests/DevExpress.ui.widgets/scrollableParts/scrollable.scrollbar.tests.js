@@ -396,9 +396,6 @@ QUnit.test('scroll not updated before start if auto update is prevented', functi
 });
 
 QUnit.test('scroll not updated after scrollTo if auto update is prevented', function(assert) {
-    this.clock.restore();
-    const done = assert.async();
-
     const scrollHeight = 100;
     const $scrollable = $('#scrollable').height(scrollHeight);
     const $innerWrapper = $scrollable.wrapInner('<div>').children().eq(0).height(scrollHeight / 2);
@@ -414,12 +411,9 @@ QUnit.test('scroll not updated after scrollTo if auto update is prevented', func
 
     $innerWrapper.height(2 * scrollHeight);
 
-    setTimeout(() => {
-        scrollable.scrollTo(10);
+    scrollable.scrollTo(10);
 
-        assert.equal(scrollable.scrollOffset().top, isRenovatedScrollable ? 10 : 0, 'scrollable not moved');
-        done();
-    }, RESIZE_WAIT_TIMEOUT);
+    assert.equal(scrollable.scrollOffset().top, isRenovatedScrollable ? 10 : 0, 'scrollable not moved');
 });
 
 QUnit.test('native scrollable should be updated before dxscrollinit', function(assert) {

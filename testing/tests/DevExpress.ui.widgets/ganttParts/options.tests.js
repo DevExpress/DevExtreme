@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import 'ui/gantt';
 import { Consts, data, options, getGanttViewCore } from '../../../helpers/ganttHelpers.js';
-import { RESIZE_WAIT_TIMEOUT } from '../scrollableParts/scrollable.constants.js';
 const { test } = QUnit;
 
 const moduleConfig = {
@@ -233,49 +232,26 @@ QUnit.module('Options', moduleConfig, () => {
         this.createInstance(options.tasksOnlyOptions);
         this.clock.tick();
 
-        this.clock.restore();
-        const done = assert.async();
-        setTimeout(() => {
-            assert.ok(isHeaderContainsText('January'), 'is months scale type (auto)');
-            this.instance.option('scaleType', 'minutes');
-            setTimeout(() => {
-                assert.ok(isHeaderContainsText('30'), 'is minutes scale type');
-                this.instance.option('scaleType', 'hours');
-                setTimeout(() => {
-                    assert.ok(isHeaderContainsText('9:00 PM'), 'is hours scale type');
-                    this.instance.option('scaleType', 'days');
-                    setTimeout(() => {
-                        assert.ok(isHeaderContainsText('Sat, 23 Feb'), 'is days scale type');
-                        this.instance.option('scaleType', 'weeks');
-                        setTimeout(() => {
-                            assert.ok(isHeaderContainsText('Sun, 20 Jan - Sat, 26 Jan'), 'is weeks scale type');
-                            this.instance.option('scaleType', 'months');
-                            setTimeout(() => {
-                                assert.ok(isHeaderContainsText('January'), 'is months scale type');
-                                this.instance.option('scaleType', 'quarters');
-                                setTimeout(() => {
-                                    assert.ok(isHeaderContainsText('Q1'), 'is quarters scale type');
-                                    this.instance.option('scaleType', 'years');
+        assert.ok(isHeaderContainsText('January'), 'is months scale type (auto)');
+        this.instance.option('scaleType', 'minutes');
+        assert.ok(isHeaderContainsText('30'), 'is minutes scale type');
+        this.instance.option('scaleType', 'hours');
+        assert.ok(isHeaderContainsText('9:00 PM'), 'is hours scale type');
+        this.instance.option('scaleType', 'days');
+        assert.ok(isHeaderContainsText('Sat, 23 Feb'), 'is days scale type');
+        this.instance.option('scaleType', 'weeks');
+        assert.ok(isHeaderContainsText('Sun, 20 Jan - Sat, 26 Jan'), 'is weeks scale type');
+        this.instance.option('scaleType', 'months');
+        assert.ok(isHeaderContainsText('January'), 'is months scale type');
+        this.instance.option('scaleType', 'quarters');
+        assert.ok(isHeaderContainsText('Q1'), 'is quarters scale type');
+        this.instance.option('scaleType', 'years');
+        assert.ok(isHeaderContainsText('2008'), 'is years scale type');
 
-                                    setTimeout(() => {
-                                        assert.ok(isHeaderContainsText('2008'), 'is years scale type');
-
-                                        this.clock = sinon.useFakeTimers();
-                                        this.instance.option('tasks.dataSource', [{ 'id': 0, 'title': 't', 'start': '2019-02-21', 'end': '2019-02-26' }]);
-
-                                        assert.ok(isHeaderContainsText('2008'), 'is still years scale type');
-                                        this.instance.option('scaleType', 'auto');
-                                        assert.ok(isHeaderContainsText('Sun, 10 Feb'), 'is days scale type (auto)');
-                                        done();
-                                    }, RESIZE_WAIT_TIMEOUT);
-                                }, RESIZE_WAIT_TIMEOUT);
-                            }, RESIZE_WAIT_TIMEOUT);
-                        }, RESIZE_WAIT_TIMEOUT);
-                    }, RESIZE_WAIT_TIMEOUT);
-                }, RESIZE_WAIT_TIMEOUT);
-            }, RESIZE_WAIT_TIMEOUT);
-        }, RESIZE_WAIT_TIMEOUT);
-
+        this.instance.option('tasks.dataSource', [{ 'id': 0, 'title': 't', 'start': '2019-02-21', 'end': '2019-02-26' }]);
+        assert.ok(isHeaderContainsText('2008'), 'is still years scale type');
+        this.instance.option('scaleType', 'auto');
+        assert.ok(isHeaderContainsText('Sun, 10 Feb'), 'is days scale type (auto)');
     });
     test('calculateCellValue for key', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
