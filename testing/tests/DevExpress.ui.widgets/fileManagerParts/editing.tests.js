@@ -1801,4 +1801,12 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual($folderNode.find('span').text(), 'Test 4', 'folder created');
         assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
     });
+
+    test('the entire widget must not be repainted when the permissions option changed (T1051605)', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        const initMarkupSpy = sinon.stub(fileManager, '_initMarkup');
+        assert.ok(initMarkupSpy.notCalled, '_initMarkup not called yet');
+        fileManager.option('permissions', { copy: true });
+        assert.ok(initMarkupSpy.notCalled, '_initMarkup not called yet');
+    });
 });
