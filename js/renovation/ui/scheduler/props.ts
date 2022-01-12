@@ -420,7 +420,7 @@ export class SchedulerProps extends BaseWidgetProps {
       defaultElement: 'viewSwitcher',
       location: 'after',
     },
-  ] as SchedulerToolbarItem[];
+  ];
 }
 
 export type DataAccessorsProps = Pick<

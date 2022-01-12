@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable max-classes-per-file */
 import {
-  Component, JSXComponent, ComponentBindings, OneWay, InternalState, Consumer, Effect,
+  Component, JSXComponent, ComponentBindings, OneWay, Consumer,
 } from '@devextreme-generator/declarations';
 import { PlaceholderExtender } from '../../../../utils/plugin/placeholder_extender';
 
 import messageLocalization from '../../../../../localization/message';
 
 import { PagerContent } from '../../../pager/content';
-import { PagingPlugin, PagingPluginData } from './paging';
+import {
+  PageIndex, PageSize, PageCount, SetPageIndex, SetPageSize,
+} from '../paging/plugins';
+import { TotalCount } from '../data_grid_light';
 import { FooterPlaceholder } from '../views/footer';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
@@ -18,7 +21,8 @@ export const viewFunction = (viewModel: Pager): JSX.Element => (
   <PlaceholderExtender
     type={FooterPlaceholder}
     order={1}
-    template={(): JSX.Element => (
+    deps={[PageIndex, PageSize, TotalCount, PageCount]}
+    template={([pageIndex, pageSize, totalCount, pageCount]): JSX.Element => (
       <PagerContent
         className={DATAGRID_PAGER_CLASS}
         pageSizes={viewModel.allowedPageSizes}
@@ -27,14 +31,14 @@ export const viewFunction = (viewModel: Pager): JSX.Element => (
         showInfo={viewModel.props.showInfo}
         showNavigationButtons={viewModel.props.showNavigationButtons}
         showPageSizes={viewModel.props.showPageSizeSelector}
-        pageCount={viewModel.pageCount}
+        pageCount={pageCount}
         visible={viewModel.props.visible}
-        totalCount={viewModel.totalCount}
+        totalCount={totalCount}
 
-        pageIndex={viewModel.pageIndex}
+        pageIndex={pageIndex}
         pageIndexChange={viewModel.onPageIndexChange}
 
-        pageSize={viewModel.pageSize === 'all' ? 0 : viewModel.pageSize}
+        pageSize={pageSize === 'all' ? 0 : pageSize}
         pageSizeChange={viewModel.onPageSizeChange}
       />
     )}
@@ -73,30 +77,8 @@ export class Pager extends JSXComponent(PagerProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
 
-  @InternalState()
-  pageIndex = 0;
-
-  @InternalState()
-  pageSize: number | 'all' = 0;
-
-  @InternalState()
-  totalCount = 0;
-
-  @InternalState()
-  pageCount = 0;
-
-  @Effect()
-  subscribeToPagingPluginUpdates(): void {
-    this.plugins.watch(PagingPlugin, (prop: PagingPluginData) => {
-      this.pageIndex = prop.pageIndex;
-      this.pageSize = prop.pageSize;
-      this.totalCount = prop.totalCount;
-      this.pageCount = prop.pageCount;
-    });
-  }
-
   onPageSizeChange(pageSize: number): void {
-    const setPageSize = this.plugins.getValue(PagingPlugin)?.setPageSize;
+    const setPageSize = this.plugins.getValue(SetPageSize);
     if (!setPageSize) {
       return;
     }
@@ -109,12 +91,11 @@ export class Pager extends JSXComponent(PagerProps) {
   }
 
   onPageIndexChange(pageIndex: number): void {
-    this.plugins.getValue(PagingPlugin)?.setPageIndex?.(pageIndex);
+    this.plugins.getValue(SetPageIndex)?.(pageIndex);
   }
 
   get allowedPageSizes(): (number | 'all')[] {
-    // eslint-disable-next-line prefer-destructuring
-    const pageSize = this.pageSize;
+    const pageSize = this.plugins.getValue(PageSize) ?? 'all';
 
     if (this.props.allowedPageSizes === 'auto') {
       if (pageSize === 'all') {

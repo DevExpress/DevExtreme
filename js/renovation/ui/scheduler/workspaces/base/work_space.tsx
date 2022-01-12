@@ -301,7 +301,7 @@ export const viewFunction = ({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onViewRendered'>() {
+export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onViewRendered' | 'startViewDate'>() {
   @InternalState()
   groupPanelHeight: number | undefined;
 
@@ -404,32 +404,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     );
   }
 
-  // TODO: WA because memoization does not work in React.
-  // It should be inside Scheduler.tsx (and already is)
-  get startViewDate(): Date {
-    const {
-      currentDate,
-      startDayHour,
-      startDate,
-      intervalCount,
-      firstDayOfWeek,
-      type,
-    } = this.props;
-
-    const options = {
-      currentDate,
-      startDayHour,
-      startDate,
-      intervalCount,
-      firstDayOfWeek,
-    };
-
-    const viewDataGenerator = getViewDataGeneratorByViewType(type);
-    const startViewDate = viewDataGenerator.getStartViewDate(options) as Date;
-
-    return startViewDate;
-  }
-
   get completeViewDataMap(): ViewCellData[][] {
     const {
       currentDate,
@@ -456,7 +430,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       firstDayOfWeek,
       hoursInterval,
       cellDuration,
-      startViewDate: this.startViewDate,
+      startViewDate: this.props.startViewDate,
       groupOrientation: this.groupOrientation,
       isVerticalGrouping: this.isVerticalGrouping,
       isHorizontalGrouping: this.isHorizontalGrouping,
@@ -563,7 +537,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         headerCellTextFormat: this.renderConfig.headerCellTextFormat,
         getDateForHeaderText: this.renderConfig.getDateForHeaderText,
         interval: this.viewDataGenerator.getInterval(hoursInterval),
-        startViewDate: this.startViewDate,
+        startViewDate: this.props.startViewDate,
         currentDate,
         viewType,
 
@@ -615,7 +589,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
     return this.timePanelDataGenerator.getCompleteTimePanelMap(
       {
-        startViewDate: this.startViewDate,
+        startViewDate: this.props.startViewDate,
         cellDuration,
         startDayHour,
         endDayHour,

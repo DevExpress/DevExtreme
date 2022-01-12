@@ -1,16 +1,40 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import each from 'jest-each';
+import { Paging, PagingProps, viewFunction as PagingView } from '../paging';
 import {
-  Paging, viewFunction as PagingView,
-} from '../paging';
+  PageIndex, PageSize, SetPageIndex, PageCount,
+} from '../plugins';
 import { generateData } from '../../__tests__/test_data';
 import { Plugins } from '../../../../../utils/plugin/context';
+import { ValueSetter } from '../../../../../utils/plugin/value_setter';
+import { GetterExtender } from '../../../../../utils/plugin/getter_extender';
+import { TotalCount, VisibleItems } from '../../data_grid_light';
 
 describe('Paging', () => {
   describe('View', () => {
-    it('should be empty', () => {
-      const tree = mount(<PagingView />);
-      expect(tree.html()).toEqual(null);
+    it('should render ValueSetters and GetterExtender', () => {
+      const viewProps = {
+        props: new PagingProps(),
+        pageSize: 30,
+        setPageIndex: () => null,
+        setPageSize: () => null,
+        calculateVisibleItems: () => [],
+      } as Partial<Paging>;
+
+      const tree = mount(<PagingView {...viewProps as any} />);
+      expect(tree.find(ValueSetter).at(0).props()).toEqual({
+        type: PageIndex, value: 0,
+      });
+      expect(tree.find(ValueSetter).at(1).props()).toEqual({
+        type: PageSize, value: viewProps.pageSize,
+      });
+      expect(tree.find(ValueSetter).at(2).props()).toEqual({
+        type: SetPageIndex, value: viewProps.setPageIndex,
+      });
+      expect(tree.find(GetterExtender).at(0).props()).toEqual({
+        type: VisibleItems, order: 1, func: viewProps.calculateVisibleItems,
+      });
     });
   });
 
@@ -80,52 +104,6 @@ describe('Paging', () => {
   });
 
   describe('Getters', () => {
-    describe('totalCount', () => {
-      it('should be equal to dataSource\'s length', () => {
-        const dataSource = generateData(10);
-
-        const paging = new Paging({});
-        paging.dataSource = dataSource;
-
-        expect(paging.totalCount).toEqual(dataSource.length);
-      });
-    });
-
-    describe('pageCount', () => {
-      it('should be 1 if pageSize = "all"', () => {
-        const dataSource = generateData(10);
-
-        const paging = new Paging({
-          pageSize: 'all',
-        });
-        paging.dataSource = dataSource;
-
-        expect(paging.pageCount).toEqual(1);
-      });
-
-      it('should be calculated', () => {
-        const dataSource = generateData(10);
-
-        const paging = new Paging({
-          pageSize: 5,
-        });
-        paging.dataSource = dataSource;
-
-        expect(paging.pageCount).toEqual(2);
-      });
-
-      it('should be rounded right', () => {
-        const dataSource = generateData(11);
-
-        const paging = new Paging({
-          pageSize: 5,
-        });
-        paging.dataSource = dataSource;
-
-        expect(paging.pageCount).toEqual(3);
-      });
-    });
-
     describe('pageSize', () => {
       it('should be equal to "all" if prop is zero', () => {
         const paging = new Paging({
@@ -141,53 +119,6 @@ describe('Paging', () => {
         });
 
         expect(paging.pageSize).toEqual(10);
-      });
-    });
-  });
-
-  describe('Effects', () => {
-    describe('addPagingHandler', () => {
-      it('should update dataSource', () => {
-        const extendMock = jest.fn();
-        const paging = new Paging({});
-        const dataSource = generateData(10);
-
-        paging.plugins = {
-          extend: extendMock,
-        } as unknown as Plugins;
-
-        paging.addPagingHandler();
-
-        const extendCallback = extendMock.mock.calls[0][2];
-
-        extendCallback(dataSource);
-        expect(paging.dataSource).toEqual(dataSource);
-      });
-    });
-
-    describe('updatePagingProps', () => {
-      it('should set paging data for plugin', () => {
-        const setMock = jest.fn();
-
-        const paging = new Paging({
-          pageIndex: 1,
-          pageSize: 5,
-        });
-        paging.dataSource = generateData(10);
-
-        paging.plugins = {
-          set: setMock,
-        } as any;
-
-        paging.updatePagingProps();
-        expect(setMock.mock.calls[0][1]).toMatchObject({
-          pageIndex: 1,
-          pageSize: 5,
-          pageCount: 2,
-          totalCount: 10,
-          setPageIndex: paging.setPageIndex,
-          setPageSize: paging.setPageSize,
-        });
       });
     });
   });
@@ -210,5 +141,29 @@ describe('Paging', () => {
         expect(paging.props.pageSize).toEqual(10);
       });
     });
+  });
+
+  describe('Selectors', () => {
+    each`
+        totalCount    | pageSize    | pageCount  
+        ${100}        | ${'all'}    | ${1}
+        ${10}         | ${5}        | ${2}
+        ${11}         | ${5}        | ${3}
+    `
+      .describe('PageCount', ({
+        totalCount, pageSize, pageCount,
+      }) => {
+        const name = JSON.stringify({
+          totalCount, pageSize, pageCount,
+        });
+
+        it(name, () => {
+          const plugins = new Plugins();
+          plugins.set(TotalCount, totalCount);
+          plugins.set(PageSize, pageSize);
+
+          expect(plugins.getValue(PageCount)).toEqual(pageCount);
+        });
+      });
   });
 });

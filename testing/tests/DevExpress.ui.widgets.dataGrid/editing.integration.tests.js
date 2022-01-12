@@ -959,54 +959,97 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
-    QUnit.test('loading data on scroll after deleting several rows if scrolling mode is infinite, rowRenderingMode is virtual and refreshMode is repaint (T862268)', function(assert) {
-        // arrange
-        const array = [];
+    [false, true].forEach((legacyMode) => {
+        QUnit.test(`loading data on scroll after deleting several rows if scrolling mode is infinite, rowRenderingMode is virtual and refreshMode is repaint (legacyMode=${legacyMode}) (T862268)`, function(assert) {
+            // arrange
+            const array = [];
 
-        for(let i = 1; i <= 150; i++) {
-            array.push({ id: i });
-        }
+            for(let i = 1; i <= 150; i++) {
+                array.push({ id: i });
+            }
 
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 100,
-            dataSource: array,
-            keyExpr: 'id',
-            editing: {
-                allowDeleting: true,
-                texts: {
-                    confirmDeleteMessage: ''
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 100,
+                dataSource: array,
+                keyExpr: 'id',
+                editing: {
+                    allowDeleting: true,
+                    texts: {
+                        confirmDeleteMessage: ''
+                    },
+                    refreshMode: 'repaint'
                 },
-                refreshMode: 'repaint'
-            },
-            paging: {
-                pageSize: 50
-            },
-            scrolling: {
-                mode: 'infinite',
-                rowRenderingMode: 'virtual',
-                useNative: false,
-            },
-            columns: ['id'],
-            loadingTimeout: null
-        }).dxDataGrid('instance');
+                paging: {
+                    pageSize: 50
+                },
+                scrolling: {
+                    mode: 'infinite',
+                    rowRenderingMode: 'virtual',
+                    useNative: false,
+                    legacyMode
+                },
+                columns: ['id'],
+                loadingTimeout: null
+            }).dxDataGrid('instance');
 
-        // act
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
-        dataGrid.getScrollable().scrollTo({ y: 0 });
-        dataGrid.deleteRow(0);
-        dataGrid.deleteRow(0);
-        dataGrid.deleteRow(0);
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
-        this.clock.tick();
-
-        for(let i = 0; i < 25; i++) {
+            // act
             dataGrid.getScrollable().scrollTo({ y: 10000 });
-        }
+            dataGrid.getScrollable().scrollTo({ y: 0 });
+            dataGrid.deleteRow(0);
+            dataGrid.deleteRow(0);
+            dataGrid.deleteRow(0);
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            this.clock.tick();
 
-        // assert
-        const rows = dataGrid.getVisibleRows();
-        assert.equal(dataGrid.totalCount(), 147, 'totalCount');
-        assert.equal(rows[rows.length - 1].key, 150, 'last row key');
+            for(let i = 0; i < 25; i++) {
+                dataGrid.getScrollable().scrollTo({ y: 10000 });
+            }
+
+            // assert
+            const rows = dataGrid.getVisibleRows();
+            assert.equal(dataGrid.totalCount(), 147, 'totalCount');
+            assert.equal(rows[rows.length - 1].key, 150, 'last row key');
+        });
+
+        QUnit.test(`loading data on scroll after deleting throw push API if scrolling mode is infinite (legacyMode=${legacyMode}) (T1053933)`, function(assert) {
+            // arrange
+            const array = [];
+
+            for(let i = 1; i <= 100; i++) {
+                array.push({ id: i });
+            }
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 500,
+                dataSource: array,
+                keyExpr: 'id',
+                scrolling: {
+                    mode: 'infinite',
+                    useNative: false,
+                    legacyMode
+                },
+                columns: ['id'],
+                loadingTimeout: null
+            }).dxDataGrid('instance');
+
+            // act
+            dataGrid.getDataSource().store().push([
+                { type: 'remove', key: 1 },
+                { type: 'remove', key: 2 },
+                { type: 'remove', key: 3 },
+            ]);
+            this.clock.tick();
+
+            for(let i = 0; i < 5; i++) {
+                dataGrid.getScrollable().scrollTo({ y: 10000 });
+                this.clock.tick();
+            }
+
+            // assert
+            const rows = dataGrid.getVisibleRows();
+            assert.equal(dataGrid.totalCount(), 97, 'totalCount');
+            assert.equal(rows[rows.length - 1].key, 100, 'last row key');
+        });
     });
 
     ['repaint', 'reshape'].forEach((refreshMode) => {
@@ -5058,6 +5101,86 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getTotalSummaryValue('id'), 0, 'summary is updated');
     });
 
+    QUnit.test('Cascade lookup dataSource should be updated on editing if repaintChangesOnly and recalculateWhileEditing are true (T1055325)', function(assert) {
+        // arrange
+        const employees = [{
+            ID: 1, StateID: 1, CityID: 1,
+        }];
+
+        const states = [{
+            ID: 1, Name: 'Alabama',
+        }, {
+            ID: 2, Name: 'Alaska',
+        }];
+
+        const cities = [{
+            ID: 1, Name: 'Tuscaloosa', StateID: 1,
+        }, {
+            ID: 5, Name: 'Anchorage', StateID: 2,
+        }];
+
+        const dataGrid = createDataGrid({
+            keyExpr: 'ID',
+            dataSource: employees,
+            repaintChangesOnly: true,
+            editing: {
+                allowUpdating: true,
+                mode: 'row'
+            },
+            summary: {
+                recalculateWhileEditing: true,
+                totalItems: [{
+                    column: 'ID',
+                    summaryType: 'count'
+                }]
+            },
+            columns: ['ID',
+                {
+                    dataField: 'StateID',
+                    caption: 'State',
+                    setCellValue(rowData, value) {
+                        rowData.StateID = value;
+                        rowData.CityID = null;
+                    },
+                    lookup: {
+                        dataSource: states,
+                        valueExpr: 'ID',
+                        displayExpr: 'Name',
+                    },
+                },
+                {
+                    dataField: 'CityID',
+                    caption: 'City',
+                    lookup: {
+                        dataSource(options) {
+                            return {
+                                store: cities,
+                                filter: options.data ? ['StateID', '=', options.data.StateID] : null,
+                            };
+                        },
+                        valueExpr: 'ID',
+                        displayExpr: 'Name',
+                    },
+                },
+            ],
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        $(dataGrid.getCellElement(0, 'StateID')).find('.dx-selectbox').dxSelectBox('instance').option('value', 2);
+        this.clock.tick();
+
+        $(dataGrid.getCellElement(0, 'StateID')).find('.dx-selectbox').dxSelectBox('instance').option('value', 1);
+        this.clock.tick();
+
+        // assert
+        const selectBox = $(dataGrid.getCellElement(0, 'CityID')).find('.dx-selectbox').dxSelectBox('instance');
+        assert.strictEqual(selectBox.option().value, null, 'lookup value is updated');
+        assert.deepEqual(selectBox.option().dataSource.filter, ['StateID', '=', 1], 'lookup dataSource filter is correct');
+    });
 
     QUnit.testInActiveWindow('Validation message should be positioned relative cell in material theme', function(assert) {
         // arrange
