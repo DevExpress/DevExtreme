@@ -1011,7 +1011,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             assert.equal(rows[rows.length - 1].key, 150, 'last row key');
         });
 
-        QUnit.test(`loading data on scroll after deleting throw push API if scrolling mode is infinite (legacyMode=${legacyMode}) (T1053933)`, function(assert) {
+        QUnit.test(`loading data on scroll after deleting using push API if scrolling mode is infinite (legacyMode=${legacyMode}) (T1053933)`, function(assert) {
             // arrange
             const array = [];
 
