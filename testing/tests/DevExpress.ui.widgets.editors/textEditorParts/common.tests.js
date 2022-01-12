@@ -478,7 +478,6 @@ QUnit.module('label integration', {
                 .dxTextEditor($.extend(initialOptions, options))
                 .dxTextEditor('instance');
             this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
-            this.$label = this.$textEditor.find(`.${LABEL_CLASS}`);
         };
 
         class TextEditorLabelMock extends TextEditorLabel {
