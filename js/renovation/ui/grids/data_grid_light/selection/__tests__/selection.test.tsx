@@ -2,14 +2,14 @@ import React from 'react';
 import { mount } from 'enzyme';
 import {
   ClearSelection, IsSelected, SelectableCount, SelectAll, SelectedCount, SetSelected,
-} from '../selection_plugins';
+} from '../plugins';
 import {
   Selection, SelectionProps, viewFunction as SelectionView,
 } from '../selection';
 import {
   DataSource, KeyExprPlugin, VisibleColumns, VisibleItems,
 } from '../../data_grid_light';
-import { DataRowClassesGetter, DataRowPropertiesGetter } from '../data_row';
+import { DataRowClassesGetter, DataRowPropertiesGetter } from '../../widgets/data_row';
 import { RowClick } from '../../views/table_content';
 
 describe('Selection', () => {

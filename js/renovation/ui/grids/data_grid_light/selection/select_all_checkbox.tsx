@@ -8,7 +8,7 @@ import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 import { CheckBox } from '../../../editors/check_box/check_box';
 import {
   ClearSelection, SelectableCount, SelectAll, SelectedCount,
-} from './selection_plugins';
+} from './plugins';
 
 export const viewFunction = (viewModel: SelectAllCheckbox): JSX.Element => (
   <CheckBox

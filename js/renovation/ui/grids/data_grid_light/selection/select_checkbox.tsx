@@ -6,7 +6,7 @@ import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
 import { CheckBox } from '../../../editors/check_box/check_box';
 import { RowData } from '../types';
-import { IsSelected, SetSelected } from './selection_plugins';
+import { IsSelected, SetSelected } from './plugins';
 
 export const viewFunction = (viewModel: SelectionCheckbox): JSX.Element => (
   <CheckBox

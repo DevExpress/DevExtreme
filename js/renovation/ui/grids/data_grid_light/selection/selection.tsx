@@ -15,11 +15,11 @@ import {
 import {
   Column, KeyExpr, RowData, Key,
 } from '../types';
-import { DataRowClassesGetter, DataRowPropertiesGetter } from './data_row';
+import { DataRowClassesGetter, DataRowPropertiesGetter } from '../widgets/data_row';
 import { RowClick } from '../views/table_content';
 import {
   ClearSelection, IsSelected, SelectableCount, SelectAll, SelectedCount, SetSelected,
-} from './selection_plugins';
+} from './plugins';
 
 export const viewFunction = (): JSX.Element => <Fragment />;
 

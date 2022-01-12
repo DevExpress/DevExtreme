@@ -10,7 +10,7 @@ import messageLocalization from '../../../../../localization/message';
 import { PagerContent } from '../../../pager/content';
 import {
   PageIndex, PageSize, PageCount, SetPageIndex, SetPageSize,
-} from './paging';
+} from '../paging/plugins';
 import { TotalCount } from '../data_grid_light';
 import { FooterPlaceholder } from '../views/footer';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
