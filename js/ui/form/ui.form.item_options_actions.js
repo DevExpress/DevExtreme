@@ -30,6 +30,17 @@ class TabOptionItemOptionAction extends ItemOptionAction {
     }
 }
 
+class GroupItemTemplateChangedAction extends ItemOptionAction {
+    tryExecute() {
+        const preparedItem = this.findPreparedItem();
+        if(preparedItem != null && preparedItem._prepareGroupItemTemplate && preparedItem._renderGroupContentTemplate) {
+            preparedItem._prepareGroupItemTemplate(this._options.item.template);
+            preparedItem._renderGroupContentTemplate();
+            return true;
+        }
+        return false;
+    }
+}
 class TabsOptionItemOptionAction extends ItemOptionAction {
     tryExecute() {
         const tabPanel = this.findInstance();
@@ -84,12 +95,17 @@ const tryCreateItemOptionAction = (optionName, itemActionOptions) => {
         case 'badge': // TabbedItem/tabs/#badge
         case 'disabled': // TabbedItem/tabs/#disabled
         case 'icon': // TabbedItem/tabs/#icon
-        case 'template': // TODO: TabbedItem/tabs/#template or SimpleItem/#template or GroupItem/#template
         case 'tabTemplate': // TabbedItem/tabs/#tabTemplate
         case 'title': // TabbedItem/tabs/#title
             return new TabOptionItemOptionAction(extend(itemActionOptions, { optionName }));
         case 'tabs': // TabbedItem/tabs
             return new TabsOptionItemOptionAction(itemActionOptions);
+        case 'template': // TODO: TabbedItem/tabs/#template or SimpleItem/#template or GroupItem/#template
+            if(itemActionOptions.item?.itemType === 'group') {
+                return new GroupItemTemplateChangedAction(itemActionOptions);
+            } else {
+                return new TabOptionItemOptionAction(extend(itemActionOptions, { optionName }));
+            }
         default:
             return null;
     }

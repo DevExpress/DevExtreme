@@ -154,4 +154,24 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
 
         assert.strictEqual($dataGridContent.width(), $fixedDataGridContent.width(), 'fixed content has correct width');
     });
+
+    QUnit.test('Focused cell should be reseted on drag start (T1050509)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            keyExpr: 'id',
+            rowDragging: {
+                allowReordering: true
+            }
+        });
+
+        this.clock.tick(1000);
+
+        // act
+        pointerMock(dataGrid.getCellElement(0, 0)).start().down().move(0, 10);
+        this.clock.tick(1000);
+
+        // assert
+        assert.equal(dataGrid.getController('keyboardNavigation')._getFocusedCell().length, 0, 'foccused cell is reseted');
+    });
 });

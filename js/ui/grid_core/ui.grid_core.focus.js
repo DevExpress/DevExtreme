@@ -857,7 +857,7 @@ export const focusModule = {
                 scrollToElementVertically: function($row) {
                     const scrollable = this.getScrollable();
 
-                    if(scrollable) {
+                    if(scrollable && $row.length) {
                         const position = scrollable.getScrollElementPosition($row, 'vertical');
 
                         return this._scrollTopPosition(position);
