@@ -674,7 +674,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [20], 'selected row key count equals pageSize');
     });
 
-    QUnit.test('selection after scrolling should works correctly uf remote paging/sorting/filtering and local grouping (T1056403)', function(assert) {
+    QUnit.test('selection after scrolling should work correctly if remote paging/sorting/filtering and local grouping (T1056403)', function(assert) {
         // arrange, act
         const array = [];
 
