@@ -466,16 +466,14 @@ QUnit.module('drag integration', () => {
     QUnit.module('drag offset calculation', {
         beforeEach: function() {
             this.$resizable = $('#resizable').dxResizable({});
-            this.border = this.$resizable.css('border');
-            this.boxSizing = this.$resizable.css('box-sizing');
-            this.padding = this.$resizable.css('padding');
+            this.cachedStyles = ['border', 'boxSizing', 'padding'].reduce((cache, prop) => {
+                cache[prop] = this.$resizable.css(prop);
+                return cache;
+            }, {});
             this.getRect = () => this.$resizable.get(0).getBoundingClientRect();
         },
         afterEach: function() {
-            this.$resizable.css({
-                border: this.border,
-                boxSizing: this.boxSizing
-            });
+            this.$resizable.css(this.cachedStyles);
         }
     }, () => {
         [{
@@ -513,7 +511,13 @@ QUnit.module('drag integration', () => {
     [true, false].forEach(_keepAspectRatio => {
         QUnit.module(`resize by non-corner handles if _keepAspectRatio=${_keepAspectRatio}`, {
             beforeEach: function() {
-                this.$resizable = $('#resizable')
+                this.$resizable = $('#resizable');
+                this.cachedStyles = ['left, top'].reduce((cache, prop) => {
+                    cache[prop] = this.$resizable.css(prop);
+                    return cache;
+                }, {});
+
+                this.$resizable
                     .css({
                         left: 200,
                         top: 200
@@ -525,6 +529,9 @@ QUnit.module('drag integration', () => {
 
                 this.initialRect = this.getRect();
             },
+            afterEach: function() {
+                this.$resizable.css(this.cachedStyles);
+            }
         }, () => {
             [1, -1].forEach(sign => {
                 const offsetX = 10 * sign;
@@ -591,7 +598,12 @@ QUnit.module('drag integration', () => {
 
     QUnit.module('resize by corner handles if _keepAspectRatio=false', {
         beforeEach: function() {
-            this.$resizable = $('#resizable')
+            this.$resizable = $('#resizable');
+            this.cachedStyles = ['left, top'].reduce((cache, prop) => {
+                cache[prop] = this.$resizable.css(prop);
+                return cache;
+            }, {});
+            this.$resizable
                 .css({
                     left: 200,
                     top: 200
@@ -601,6 +613,9 @@ QUnit.module('drag integration', () => {
 
             this.initialRect = this.getRect();
         },
+        afterEach: function() {
+            this.$resizable.css(this.cachedStyles);
+        }
     }, () => {
         [1, -1].forEach(sign => {
             QUnit.test(`bottom-right handle - ${sign > 0 ? 'outside' : 'inside'}`, function(assert) {
