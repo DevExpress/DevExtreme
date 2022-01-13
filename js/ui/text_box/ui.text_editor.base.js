@@ -445,9 +445,11 @@ const TextEditorBase = Editor.inherit({
     },
 
     _unobserveLabelContainerResize: function() {
-        resizeObserverSingleton.unobserve(this._labelContainerElement);
+        if(this._labelContainerElement) {
+            resizeObserverSingleton.unobserve(this._labelContainerElement);
 
-        this._labelContainerElement = null;
+            this._labelContainerElement = null;
+        }
     },
 
     _getLabelContainer: function() {
