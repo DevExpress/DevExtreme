@@ -6,9 +6,18 @@ import {
   OverflowIndicatorTemplateProps,
   ReducedIconHoverData,
 } from './appointment/types';
+import { ResourceProps } from './props';
+import { ResourceMapType } from './resources/utils';
+import { DataAccessorType } from './types';
+import { Group } from './workspaces/types';
 
-export interface AppointmentsContextValue {
+export interface IAppointmentContext {
   viewModel: AppointmentsViewModelType;
+  groups: string[];
+  resources: ResourceProps[];
+  dataAccessors: DataAccessorType;
+  loadedResources?: Group[];
+  resourceLoaderMap: ResourceMapType;
   appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
   overflowIndicatorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
   onAppointmentClick: (e: AppointmentClickData) => void;
@@ -16,4 +25,4 @@ export interface AppointmentsContextValue {
   hideReducedIconTooltip: () => void;
 }
 
-export const AppointmentsContext = createContext<AppointmentsContextValue | undefined>(undefined);
+export const AppointmentsContext = createContext<IAppointmentContext | undefined>(undefined);

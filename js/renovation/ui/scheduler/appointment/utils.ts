@@ -6,7 +6,9 @@ import dateLocalization from '../../../../localization/date';
 
 const EditorLabelLocalizationConst = 'dxScheduler-editorLabelEndDate';
 
-export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes => {
+export const getAppointmentStyles = (
+  viewModel: AppointmentViewModel,
+): CSSAttributes | undefined => {
   const defaultSize = 50;
   const {
     geometry: {
@@ -15,12 +17,9 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
       top,
       left,
     },
-    info: {
-      resourceColor,
-    },
-  } = item;
+  } = viewModel;
 
-  let result = addToStyles([{
+  return addToStyles([{
     attr: 'height',
     value: `${height || defaultSize}px`,
   }, {
@@ -33,15 +32,6 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
     attr: 'left',
     value: `${left}px`,
   }]);
-
-  if (resourceColor) {
-    result = addToStyles([{
-      attr: 'backgroundColor',
-      value: resourceColor,
-    }], result);
-  }
-
-  return result;
 };
 
 export const getAppointmentKey = (geometry: AppointmentGeometry): string => {
@@ -68,3 +58,15 @@ export const getReducedIconTooltipText = (endDate?: Date | string): string => {
 
   return `${tooltipLabel}: ${monthAndDay}, ${year}`;
 };
+
+export const mergeStylesWithColor = (
+  color: string | undefined,
+  styles: CSSAttributes | undefined,
+): CSSAttributes | undefined => (
+  !color
+    ? styles
+    : addToStyles([{
+      attr: 'backgroundColor',
+      value: color,
+    }], styles)
+);
