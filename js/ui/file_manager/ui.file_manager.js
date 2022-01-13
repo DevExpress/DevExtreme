@@ -322,15 +322,21 @@ class FileManager extends Widget {
         this._itemView.refresh().then(() => !onlyFileItemsView && this._filesTreeView.refresh());
     }
 
+    log() {
+        // eslint-disable-next-line no-console, no-undef
+        window.canLog && console.log(...arguments);
+    }
+
     _getItemViewItems() {
         const showFolders = this.option('itemView').showFolders;
+        this.log('_getItemViewItems');
         let result = this._controller.getCurrentItems(!showFolders);
 
         this._updateToolbarWithSelectionOnFirstLoad(result);
 
         if(this.option('itemView.showParentFolder')) {
             result = when(result)
-                .then(items => this._getPreparedItemViewItems(items));
+                .then(items => { this.log('_getItemViewItems AFTER'); return this._getPreparedItemViewItems(items); });
         }
 
         return result;
@@ -518,17 +524,19 @@ class FileManager extends Widget {
         switch(name) {
             case 'currentPath':
                 this._lockCurrentPathProcessing = true;
-
+                this.log('# set path option');
                 this._providerUpdateDeferred.then(() => {
                     this._lockCurrentPathProcessing = false;
+                    this.log('# set path option -> call');
                     return this._controller.setCurrentPath(args.value);
                 });
                 break;
             case 'currentPathKeys':
                 this._lockCurrentPathProcessing = true;
-
+                this.log('# set pathKeys option');
                 this._providerUpdateDeferred.then(() => {
                     this._lockCurrentPathProcessing = false;
+                    this.log('# set pathKeys option -> call');
                     this._controller.setCurrentPathByKeys(args.value);
                 });
                 break;
