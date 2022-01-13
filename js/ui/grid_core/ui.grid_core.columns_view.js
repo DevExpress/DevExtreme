@@ -945,14 +945,16 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         minWidth = getWidthStyle(columns[i].minWidth || width);
                         const $rows = $rows || $tableElement.children().children('.dx-row').not('.' + DETAIL_ROW_CLASS);
                         for(let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
+                            const row = $rows[rowIndex];
+
                             let cell;
                             const visibleIndex = this.getVisibleColumnIndex(i, rowIndex);
-                            if($rows[rowIndex].classList.contains(GROUP_ROW_CLASS)) {
+                            if(row.classList.contains(GROUP_ROW_CLASS)) {
                                 if(visibleIndex !== 1) {
-                                    cell = $rows.find(`td[aria-colindex='${visibleIndex + 1}']`).get(0);
+                                    cell = $(row).find(`td[aria-colindex='${visibleIndex + 1}']`).get(0);
                                 }
                             } else {
-                                cell = $rows[rowIndex].cells[visibleIndex];
+                                cell = row.cells[visibleIndex];
                             }
                             if(cell) {
                                 setCellWidth(cell, columns[i], width);
