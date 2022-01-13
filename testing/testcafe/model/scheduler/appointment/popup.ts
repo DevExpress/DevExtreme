@@ -1,6 +1,6 @@
 import { Selector, ClientFunction } from 'testcafe';
 
-const CLASS = {
+export const CLASS = {
   appointmentPopup: 'dx-scheduler-appointment-popup',
   popup: 'dx-popup',
   popupWrapper: 'dx-popup-wrapper',
@@ -35,6 +35,8 @@ export default class AppointmentPopup {
 
   endRepeatDateElement: Selector;
 
+  repeatEveryElement: Selector;
+
   constructor(scheduler: Selector) {
     this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
     this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
@@ -52,6 +54,7 @@ export default class AppointmentPopup {
     this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
 
     this.endRepeatDateElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(2);
+    this.repeatEveryElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(1);
   }
 
   isVisible(): Promise<boolean> {
