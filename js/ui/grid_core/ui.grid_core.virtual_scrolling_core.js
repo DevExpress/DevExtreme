@@ -112,6 +112,7 @@ export const VirtualScrollController = Class.inherit((function() {
             this._viewportItemSize = 20;
             this._viewportItemIndex = 0;
             this._position = 0;
+            this._isScrollingBack = false;
             this._contentSize = 0;
             this._itemSizes = {};
             this._sizeRatio = 1;
@@ -217,12 +218,16 @@ export const VirtualScrollController = Class.inherit((function() {
         },
 
         isScrollingBack: function() {
-            return this._position < this._prevPosition;
+            return this._isScrollingBack;
         },
 
         _setViewportPositionCore: function(position) {
-            this._prevPosition = this._position || 0;
+            const prevPosition = this._position || 0;
             this._position = position;
+
+            if(prevPosition !== this._position) {
+                this._isScrollingBack = this._position < prevPosition;
+            }
 
             const itemIndex = this.getItemIndexByPosition();
             const result = this.setViewportItemIndex(itemIndex);
