@@ -323,6 +323,9 @@ class DiagramToolbox extends DiagramFloatingPanel {
         this.updateMaxHeight();
         this._scrollView.update();
     }
+    updateFilter() {
+        this._onInputChanged(this._filterText);
+    }
     updateTooltips() {
         this._toolboxes.forEach($element => {
             const $tooltipContainer = $($element);
