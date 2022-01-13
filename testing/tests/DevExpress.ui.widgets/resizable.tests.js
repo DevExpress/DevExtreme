@@ -509,6 +509,85 @@ QUnit.module('drag integration', () => {
             });
         });
     });
+
+    [true, false].forEach(_keepAspectRatio => {
+        QUnit.module(`resize by non-corner handles if _keepAspectRatio=${_keepAspectRatio}`, {
+            beforeEach: function() {
+                this.$resizable = $('#resizable')
+                    .css({
+                        left: 200,
+                        top: 200
+                    })
+                    .dxResizable({
+                        _keepAspectRatio
+                    });
+                this.getRect = () => this.$resizable.get(0).getBoundingClientRect();
+
+                this.initialRect = this.getRect();
+            },
+        }, () => {
+            [1, -1].forEach(sign => {
+                const offsetX = 10 * sign;
+                const offsetY = 15 * sign;
+
+                QUnit.test(`right handle - to the ${sign > 0 ? 'right' : 'left'}`, function(assert) {
+                    const $handle = getHandle('right');
+                    const pointer = pointerMock($handle).start();
+
+                    pointer.dragStart().drag(offsetX, offsetY);
+
+                    const rect = this.getRect();
+
+                    assert.strictEqual(rect.width, this.initialRect.width + offsetX, `width is ${sign > 0 ? 'increased' : 'decreased'}`);
+                    assert.strictEqual(rect.height, this.initialRect.height, 'height is not changed');
+
+                    assert.strictEqual(rect.right, this.initialRect.right + offsetX, `right bound is moved to the ${sign > 0 ? 'right' : 'left'}`);
+                });
+
+                QUnit.test(`left handle - to the ${sign > 0 ? 'right' : 'left'}`, function(assert) {
+                    const $handle = getHandle('left');
+                    const pointer = pointerMock($handle).start();
+
+                    pointer.dragStart().drag(offsetX, offsetY);
+
+                    const rect = this.getRect();
+
+                    assert.strictEqual(rect.width, this.initialRect.width - offsetX, `width is ${sign > 0 ? 'decreased' : 'increased'}`);
+                    assert.strictEqual(rect.height, this.initialRect.height, 'height is not changed');
+
+                    assert.strictEqual(rect.left, this.initialRect.left + offsetX, `left bound is moved to the ${sign > 0 ? 'right' : 'left'}`);
+                });
+
+                QUnit.test(`bottom handle - ${sign > 0 ? 'down' : 'up'}`, function(assert) {
+                    const $handle = getHandle('bottom');
+                    const pointer = pointerMock($handle).start();
+
+                    pointer.dragStart().drag(offsetX, offsetY);
+
+                    const rect = this.getRect();
+
+                    assert.strictEqual(rect.width, this.initialRect.width, 'width is not changed');
+                    assert.strictEqual(rect.height, this.initialRect.height + offsetY, `height is ${sign > 0 ? 'increased' : 'decreased'}`);
+
+                    assert.strictEqual(rect.bottom, this.initialRect.bottom + offsetY, `bottom bound is moved ${ sign > 0 ? 'down' : 'up' }`);
+                });
+
+                QUnit.test(`top handle - ${sign > 0 ? 'down' : 'up'}`, function(assert) {
+                    const $handle = getHandle('top');
+                    const pointer = pointerMock($handle).start();
+
+                    pointer.dragStart().drag(offsetX, offsetY);
+
+                    const rect = this.getRect();
+
+                    assert.strictEqual(rect.width, this.initialRect.width, 'width is not changed');
+                    assert.strictEqual(rect.height, this.initialRect.height - offsetY, `height is ${sign > 0 ? 'decreased' : 'increased'}`);
+
+                    assert.strictEqual(rect.top, this.initialRect.top + offsetY, `top bound is moved ${ sign > 0 ? 'down' : 'up' }`);
+                });
+            });
+        });
+    });
 });
 
 QUnit.module('options', () => {
