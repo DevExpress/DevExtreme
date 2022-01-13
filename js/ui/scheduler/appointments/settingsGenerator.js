@@ -607,8 +607,6 @@ export class AppointmentSettingsGenerator {
                 isRecurrent,
             };
 
-            this._setResourceColor(info, coordinates.groupIndex);
-
             infos.push({
                 ...coordinates,
                 info
@@ -625,15 +623,5 @@ export class AppointmentSettingsGenerator {
             allDay,
             format: APPOINTMENT_DATE_TEXT_FORMAT
         });
-    }
-
-    _setResourceColor(info, groupIndex) {
-        const appointmentConfig = {
-            itemData: this.rawAppointment,
-            groupIndex,
-            groups: this.groups
-        };
-
-        this.options.getAppointmentColor(appointmentConfig).done((color) => info.resourceColor = color);
     }
 }
