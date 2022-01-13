@@ -153,14 +153,20 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
     userData?: any;
 }
 
-/** @public */
+/**
+ * @public
+ * @namespace DevExpress.data.utils
+ */
 export type Store<TItem = any, TKey = any> =
     CustomStore<TItem, TKey> |
     ArrayStore<TItem, TKey> |
     LocalStore<TItem, TKey> |
     ODataStore<TItem, TKey>;
 
-/** @public */
+/**
+ * @public
+ * @namespace DevExpress.data.utils
+ */
 export type StoreOptions<TItem = any, TKey = any> =
     CustomStoreOptions<TItem, TKey> |
     ArrayStoreOptions<TItem, TKey> & { type: 'array' } |
