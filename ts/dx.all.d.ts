@@ -1655,6 +1655,16 @@ declare module DevExpress.data {
       TItem,
       TKey
     >;
+    export type ResolvedData<TItem = any> =
+      | Object
+      | Array<TItem>
+      | Array<GroupItem>
+      | {
+          data: Array<TItem> | Array<GroupItem>;
+          totalCount?: number;
+          summary?: Array<any>;
+          groupCount?: number;
+        };
   }
   /**
    * @deprecated Use Options instead
@@ -1677,17 +1687,13 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load: (options: LoadOptions<TItem>) =>
+    load: (
+      options: LoadOptions<TItem>
+    ) =>
       | DevExpress.core.utils.DxPromise<
-          | Array<TItem>
-          | Array<DevExpress.data.CustomStore.GroupItem>
-          | {
-              data: Array<TItem> | Array<DevExpress.data.CustomStore.GroupItem>;
-              totalCount?: number;
-              summary?: Array<any>;
-              groupCount?: number;
-            }
+          DevExpress.data.CustomStore.ResolvedData<TItem>
         >
+      | PromiseLike<DevExpress.data.CustomStore.ResolvedData<TItem>>
       | Array<DevExpress.data.CustomStore.GroupItem>
       | Array<TItem>;
     /**
