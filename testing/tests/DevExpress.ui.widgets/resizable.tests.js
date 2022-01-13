@@ -15,14 +15,10 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-const RESIZABLE_HANDLE_RIGHT_CLASS = 'dx-resizable-handle-right';
-const RESIZABLE_HANDLE_BOTTOM_CLASS = 'dx-resizable-handle-bottom';
-const RESIZABLE_HANDLE_TOP_CLASS = 'dx-resizable-handle-top';
-const RESIZABLE_HANDLE_LEFT_CLASS = 'dx-resizable-handle-left';
 const RESIZABLE_HANDLE_CLASS = 'dx-resizable-handle';
 const RESIZABLE_HANDLE_CORNER_CLASS = 'dx-resizable-handle-corner';
 
-const getHandler = (direction) => {
+const getHandle = (direction) => {
     return direction.indexOf('-') !== -1
         ? $(`.${RESIZABLE_HANDLE_CORNER_CLASS}-${direction}`)
         : $(`.${RESIZABLE_HANDLE_CLASS}-${direction}`);
@@ -34,7 +30,8 @@ QUnit.module('behavior', () => {
             handles: 'right'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS); const pointer = pointerMock($handle).start();
+        const $handle = getHandle('right');
+        const pointer = pointerMock($handle).start();
 
         assert.ok(!$resizable.hasClass('dx-resizable-resizing'), 'element has not appropriate class before resizing');
 
@@ -50,7 +47,9 @@ QUnit.module('behavior', () => {
             handles: 'right'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS); const pointer = pointerMock($handle).start(); const elementWidth = $resizable.outerWidth();
+        const $handle = getHandle('right');
+        const pointer = pointerMock($handle).start();
+        const elementWidth = $resizable.outerWidth();
 
         pointer.dragStart().drag(10, 0);
         assert.equal($resizable.outerWidth(), elementWidth + 10, 'width of element was changed');
@@ -61,7 +60,9 @@ QUnit.module('behavior', () => {
             handles: 'bottom'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS); const pointer = pointerMock($handle).start(); const elementHeight = $resizable.outerHeight();
+        const $handle = getHandle('bottom');
+        const pointer = pointerMock($handle).start();
+        const elementHeight = $resizable.outerHeight();
 
         pointer.dragStart().drag(0, 10);
         assert.equal($resizable.outerHeight(), elementHeight + 10, 'height of element was changed');
@@ -72,7 +73,10 @@ QUnit.module('behavior', () => {
             handles: 'top'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_TOP_CLASS); const pointer = pointerMock($handle).start(); const elementHeight = $resizable.outerHeight(); const elementTop = $resizable.offset().top;
+        const $handle = getHandle('top');
+        const pointer = pointerMock($handle).start();
+        const elementHeight = $resizable.outerHeight();
+        const elementTop = $resizable.offset().top;
 
         pointer.dragStart().drag(0, -10);
         assert.equal($resizable.outerHeight(), elementHeight + 10, 'height of element was changed');
@@ -86,7 +90,10 @@ QUnit.module('behavior', () => {
             minHeight: 15
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_TOP_CLASS); const pointer = pointerMock($handle).start(); const elementHeight = $resizable.outerHeight(); const elementTop = $resizable.offset().top;
+        const $handle = getHandle('top');
+        const pointer = pointerMock($handle).start();
+        const elementHeight = $resizable.outerHeight();
+        const elementTop = $resizable.offset().top;
 
         pointer.dragStart().drag(0, 10);
         assert.equal($resizable.outerHeight(), elementHeight, 'height of element was not changed');
@@ -100,7 +107,10 @@ QUnit.module('behavior', () => {
             minWidth: 15
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_LEFT_CLASS); const pointer = pointerMock($handle).start(); const elementWidth = $resizable.outerWidth(); const elementLeft = $resizable.offset().left;
+        const $handle = getHandle('left');
+        const pointer = pointerMock($handle).start();
+        const elementWidth = $resizable.outerWidth();
+        const elementLeft = $resizable.offset().left;
 
         pointer.dragStart().drag(10, 0);
         assert.equal($resizable.outerWidth(), elementWidth, 'height of element was not changed');
@@ -114,7 +124,8 @@ QUnit.module('behavior', () => {
 
         translator.move($resizable, { top: 100, left: 100 });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_LEFT_CLASS); const elementLeft = $resizable.offset().left;
+        const $handle = getHandle('left');
+        const elementLeft = $resizable.offset().left;
 
         pointerMock($handle).start().dragStart().drag(0, 0);
         assert.equal(elementLeft, $resizable.offset().left, 'element position is correct');
@@ -130,11 +141,11 @@ QUnit.module('behavior', () => {
         const elementWidth = $resizable.outerWidth();
         const elementHeight = $resizable.outerHeight();
 
-        $handle = $resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS);
+        $handle = getHandle('bottom');
         pointerMock($handle).start().dragStart().drag(0, 10).drag(0, 1);
         assert.equal($resizable.outerHeight(), elementHeight + 11, 'height of element was changed correctly');
 
-        $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS);
+        $handle = getHandle('right');
         pointerMock($handle).start().dragStart().drag(10, 0).drag(1, 0);
         assert.equal($resizable.outerWidth(), elementWidth + 11, 'width of element was changed correctly');
     });
@@ -146,7 +157,8 @@ QUnit.module('behavior with auto size', () => {
             handles: 'left'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_LEFT_CLASS); const pointer = pointerMock($handle).start();
+        const $handle = getHandle('left');
+        const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(-10, 0);
         assert.equal($resizable[0].style.height, 'auto', 'height of element was not changed');
@@ -157,7 +169,8 @@ QUnit.module('behavior with auto size', () => {
             handles: 'right'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS); const pointer = pointerMock($handle).start();
+        const $handle = getHandle('right');
+        const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(10, 0);
         assert.equal($resizable[0].style.height, 'auto', 'height of element was not changed');
@@ -168,7 +181,8 @@ QUnit.module('behavior with auto size', () => {
             handles: 'top'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_TOP_CLASS); const pointer = pointerMock($handle).start();
+        const $handle = getHandle('top');
+        const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(0, -10);
         assert.equal($resizable[0].style.width, 'auto', 'width of element was not changed');
@@ -179,7 +193,8 @@ QUnit.module('behavior with auto size', () => {
             handles: 'bottom'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS); const pointer = pointerMock($handle).start();
+        const $handle = getHandle('bottom');
+        const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(0, 10);
         assert.equal($resizable[0].style.width, 'auto', 'width of element was not changed');
@@ -192,7 +207,9 @@ QUnit.module('drag integration', () => {
             handles: 'right'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS); const pointer = pointerMock($handle).start(); const elementHeight = $resizable.outerHeight();
+        const $handle = getHandle('right');
+        const pointer = pointerMock($handle).start();
+        const elementHeight = $resizable.outerHeight();
 
         pointer.down().move(0, 20);
         assert.equal($resizable.outerHeight(), elementHeight, 'height of element was not changed');
@@ -203,7 +220,9 @@ QUnit.module('drag integration', () => {
             handles: 'bottom'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS); const pointer = pointerMock($handle).start(); const elementWidth = $resizable.outerWidth();
+        const $handle = getHandle('bottom');
+        const pointer = pointerMock($handle).start();
+        const elementWidth = $resizable.outerWidth();
 
         pointer.down().move(20, 0);
         assert.equal($resizable.outerWidth(), elementWidth, 'height of element was not changed');
@@ -214,7 +233,12 @@ QUnit.module('drag integration', () => {
             handles: 'top left'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-top-left'); const pointer = pointerMock($handle).start(); const width = $resizable.outerWidth(); const height = $resizable.outerHeight(); const top = $resizable.offset().top; const left = $resizable.offset().left;
+        const $handle = getHandle('top-left');
+        const pointer = pointerMock($handle).start();
+        const width = $resizable.outerWidth();
+        const height = $resizable.outerHeight();
+        const top = $resizable.offset().top;
+        const left = $resizable.offset().left;
 
         pointer.down().move(-20, -20);
         assert.equal($resizable.outerWidth(), width + 20, 'width was enlarged');
@@ -235,7 +259,10 @@ QUnit.module('drag integration', () => {
             handles: 'top left'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-top-left'); const pointer = pointerMock($handle).start(); const top = $resizable.offset().top; const left = $resizable.offset().left;
+        const $handle = getHandle('top-left');
+        const pointer = pointerMock($handle).start();
+        const top = $resizable.offset().top;
+        const left = $resizable.offset().left;
 
         pointer.down().move(-100, -100);
         assert.equal($resizable.outerWidth(), 300, 'width was enlarged');
@@ -249,7 +276,12 @@ QUnit.module('drag integration', () => {
             handles: 'top right'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-top-right'); const pointer = pointerMock($handle).start(); const width = $resizable.outerWidth(); const height = $resizable.outerHeight(); const top = $resizable.offset().top; const left = $resizable.offset().left;
+        const $handle = getHandle('top-right');
+        const pointer = pointerMock($handle).start();
+        const width = $resizable.outerWidth();
+        const height = $resizable.outerHeight();
+        const top = $resizable.offset().top;
+        const left = $resizable.offset().left;
 
         pointer.down().move(20, -20);
         assert.equal($resizable.outerWidth(), width + 20, 'width was enlarged');
@@ -263,7 +295,12 @@ QUnit.module('drag integration', () => {
             handles: 'bottom left'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-left'); const pointer = pointerMock($handle).start(); const width = $resizable.outerWidth(); const height = $resizable.outerHeight(); const top = $resizable.offset().top; const left = $resizable.offset().left;
+        const $handle = getHandle('bottom-left');
+        const pointer = pointerMock($handle).start();
+        const width = $resizable.outerWidth();
+        const height = $resizable.outerHeight();
+        const top = $resizable.offset().top;
+        const left = $resizable.offset().left;
 
         pointer.down().move(-20, 20);
         assert.equal($resizable.outerWidth(), width + 20, 'width was enlarged');
@@ -277,7 +314,12 @@ QUnit.module('drag integration', () => {
             handles: 'bottom right'
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right'); const pointer = pointerMock($handle).start(); const width = $resizable.outerWidth(); const height = $resizable.outerHeight(); const top = $resizable.offset().top; const left = $resizable.offset().left;
+        const $handle = getHandle('bottom-right');
+        const pointer = pointerMock($handle).start();
+        const width = $resizable.outerWidth();
+        const height = $resizable.outerHeight();
+        const top = $resizable.offset().top;
+        const left = $resizable.offset().left;
 
         pointer.down().move(20, 20);
         assert.equal($resizable.outerWidth(), width + 20, 'width was enlarged');
@@ -293,7 +335,9 @@ QUnit.module('drag integration', () => {
 
         translator.move($resizable, { top: 100, left: 100 });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS); const pointer = pointerMock($handle).start(); const elementOffset = $resizable.offset();
+        const $handle = getHandle('right');
+        const pointer = pointerMock($handle).start();
+        const elementOffset = $resizable.offset();
 
         pointer.dragStart().drag(20, 20);
 
@@ -304,13 +348,13 @@ QUnit.module('drag integration', () => {
     QUnit.test('onResizeEnd right handle', function(assert) {
         assert.expect(2);
 
-        const $resizable = $('#resizable').dxResizable({
+        $('#resizable').dxResizable({
             handles: 'all',
             'onResizeEnd': function(args) {
                 assert.deepEqual(args.handles, { left: false, right: true, top: false, bottom: false }, 'right handle returns correct handles');
             }
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS);
+        const $handle = getHandle('right');
         const handlePointer = pointerMock($handle).start();
 
         handlePointer.dragStart().drag(20, 0).dragEnd();
@@ -320,13 +364,13 @@ QUnit.module('drag integration', () => {
     QUnit.test('onResizeEnd left handle', function(assert) {
         assert.expect(2);
 
-        const $resizable = $('#resizable').dxResizable({
+        $('#resizable').dxResizable({
             handles: 'all',
             'onResizeEnd': function(args) {
                 assert.deepEqual(args.handles, { left: true, right: false, top: false, bottom: false }, 'left handle returns correct handles');
             }
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_LEFT_CLASS);
+        const $handle = getHandle('left');
         const handlePointer = pointerMock($handle).start();
 
         handlePointer.dragStart().drag(20, 0).dragEnd();
@@ -336,13 +380,13 @@ QUnit.module('drag integration', () => {
     QUnit.test('onResizeEnd top handle', function(assert) {
         assert.expect(2);
 
-        const $resizable = $('#resizable').dxResizable({
+        $('#resizable').dxResizable({
             handles: 'all',
             'onResizeEnd': function(args) {
                 assert.deepEqual(args.handles, { left: false, right: false, top: true, bottom: false }, 'top handle returns correct handles');
             }
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_TOP_CLASS);
+        const $handle = getHandle('top');
         const handlePointer = pointerMock($handle).start();
 
         handlePointer.dragStart().drag(0, 20).dragEnd();
@@ -352,13 +396,13 @@ QUnit.module('drag integration', () => {
     QUnit.test('onResizeEnd bottom handle', function(assert) {
         assert.expect(2);
 
-        const $resizable = $('#resizable').dxResizable({
+        $('#resizable').dxResizable({
             handles: 'all',
             'onResizeEnd': function(args) {
                 assert.deepEqual(args.handles, { left: false, right: false, top: false, bottom: true }, 'bottom handle returns correct handles');
             }
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS);
+        const $handle = getHandle('bottom');
         const handlePointer = pointerMock($handle).start();
 
         handlePointer.dragStart().drag(0, 20).dragEnd();
@@ -373,7 +417,8 @@ QUnit.module('drag integration', () => {
             width: 60
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS); const pointer = pointerMock($handle).start();
+        const $handle = getHandle('right');
+        const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(20, 0);
         assert.equal($resizable.outerWidth(), 80, 'right offset - correct width');
@@ -384,7 +429,8 @@ QUnit.module('drag integration', () => {
         pointer.dragStart().drag(-40, 0);
         assert.equal($resizable.outerWidth(), 40, 'back offset - correct width');
 
-        const $leftHandle = $resizable.find('.' + RESIZABLE_HANDLE_LEFT_CLASS); const leftPointer = pointerMock($leftHandle).start();
+        const $leftHandle = getHandle('left');
+        const leftPointer = pointerMock($leftHandle).start();
 
         leftPointer.dragStart().drag(-40, 0);
         assert.equal($resizable.outerWidth(), 80, 'left offset - correct width');
@@ -398,7 +444,8 @@ QUnit.module('drag integration', () => {
             height: 60
         });
 
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS); const pointer = pointerMock($handle).start();
+        const $handle = getHandle('bottom');
+        const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(0, 20);
         assert.equal($resizable.outerHeight(), 80, 'bottom offset - correct width');
@@ -409,7 +456,8 @@ QUnit.module('drag integration', () => {
         pointer.dragStart().drag(0, -40);
         assert.equal($resizable.outerHeight(), 40, 'back offset - correct height');
 
-        const $topHandle = $resizable.find('.' + RESIZABLE_HANDLE_TOP_CLASS); const topPointer = pointerMock($topHandle).start();
+        const $topHandle = getHandle('top');
+        const topPointer = pointerMock($topHandle).start();
 
         topPointer.dragStart().drag(0, -40);
         assert.equal($resizable.outerHeight(), 80, 'top offset - correct width');
@@ -446,7 +494,7 @@ QUnit.module('drag integration', () => {
             QUnit.test(`drag offset should be expected if ${JSON.stringify(sizeStyles)}`, function(assert) {
                 $('#resizable').css(sizeStyles);
 
-                const $rightBottomHandle = getHandler('bottom-right');
+                const $rightBottomHandle = getHandle('bottom-right');
                 const pointer = pointerMock($rightBottomHandle).start();
 
                 const offsetX = 1;
@@ -470,7 +518,7 @@ QUnit.module('options', () => {
             width: 50
         });
         const pointerDrag = function() {
-            const pointer = pointerMock($resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS)).start();
+            const pointer = pointerMock(getHandle('right')).start();
             pointer.dragStart().drag(-10, 0);
         };
 
@@ -491,7 +539,7 @@ QUnit.module('options', () => {
             width: 50
         });
         const pointerDrag = function() {
-            const pointer = pointerMock($resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS)).start();
+            const pointer = pointerMock(getHandle('right')).start();
             pointer.down().move(-10, 0).up();
         };
 
@@ -509,7 +557,7 @@ QUnit.module('options', () => {
             minWidth: 50,
             maxWidth: 60
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS);
+        const $handle = getHandle('right');
         const pointer = pointerMock($handle).start();
 
         $resizable.width(55);
@@ -526,7 +574,7 @@ QUnit.module('options', () => {
             minHeight: 50,
             maxHeight: 60
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS);
+        const $handle = getHandle('bottom');
         const pointer = pointerMock($handle).start();
 
         $resizable.height(55);
@@ -567,7 +615,7 @@ QUnit.module('options', () => {
             step: '10 7',
             width: 50
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS);
+        const $handle = getHandle('right');
         const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(12, 0).dragEnd();
@@ -579,7 +627,7 @@ QUnit.module('options', () => {
             step: '7 10',
             height: 50
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS);
+        const $handle = getHandle('bottom');
         const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(0, 12).dragEnd();
@@ -592,7 +640,7 @@ QUnit.module('area', () => {
         const $resizable = $('#resizable').dxResizable({
             area: $('#areaDiv')
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS);
+        const $handle = getHandle('bottom');
         const pointer = pointerMock($handle).start();
         const areaBottomBoundary = $('#areaDiv').offset().top + $('#areaDiv').outerHeight();
 
@@ -606,7 +654,7 @@ QUnit.module('area', () => {
         const $resizable = $('#resizable').dxResizable({
             area: $('#areaDiv')
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_TOP_CLASS);
+        const $handle = getHandle('top');
         const pointer = pointerMock($handle).start();
         const areaTopBoundary = $('#areaDiv').offset().top;
 
@@ -620,7 +668,7 @@ QUnit.module('area', () => {
         const $resizable = $('#resizable').dxResizable({
             area: $('#areaDiv')
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_LEFT_CLASS);
+        const $handle = getHandle('left');
         const pointer = pointerMock($handle).start();
         const areaLeftBoundary = $('#areaDiv').offset().left;
 
@@ -634,7 +682,7 @@ QUnit.module('area', () => {
         const $resizable = $('#resizable').dxResizable({
             area: function() { return $('#areaDiv'); }
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS);
+        const $handle = getHandle('right');
         const pointer = pointerMock($handle).start();
         const areaRightBoundary = $('#areaDiv').offset().left + $('#areaDiv').outerWidth();
 
@@ -653,16 +701,16 @@ QUnit.module('area', () => {
         $area.css('border', '6px solid red');
         $resizable.css('border', '8px solid red');
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_LEFT_CLASS)).start().down().move(-70, 0).dragEnd();
+        pointerMock(getHandle('left')).start().down().move(-70, 0).dragEnd();
         assert.equal($resizable.offset().left, $area.offset().left + 6);
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_TOP_CLASS)).start().down().move(0, -70).dragEnd();
+        pointerMock(getHandle('top')).start().down().move(0, -70).dragEnd();
         assert.equal($resizable.offset().top, $area.offset().top + 6);
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS)).start().down().move(70, 0).dragEnd();
+        pointerMock(getHandle('right')).start().down().move(70, 0).dragEnd();
         assert.equal($resizable.offset().left + $resizable.outerWidth(), $area.offset().left + 6 + $area.innerWidth());
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS)).start().down().move(0, 70).dragEnd();
+        pointerMock(getHandle('bottom')).start().down().move(0, 70).dragEnd();
         assert.equal($resizable.offset().top + $resizable.outerHeight(), $area.offset().top + 6 + $area.innerHeight());
     });
 
@@ -680,15 +728,18 @@ QUnit.module('area', () => {
             }
         });
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_LEFT_CLASS)).start().down().move(-70, 0).dragEnd();
+        pointerMock(getHandle('left')).start().down().move(-70, 0).dragEnd();
         assert.equal($resizable.offset().left, areaOffsetLeft);
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_TOP_CLASS)).start().down().move(0, -70).dragEnd();
+        pointerMock(getHandle('top')).start().down().move(0, -70).dragEnd();
         assert.equal($resizable.offset().top, areaOffsetTop);
     });
 
     QUnit.test('Borders should be included in drag offset if area is object with coordinates', function(assert) {
-        const $area = $('#areaDiv'); const areaOffset = $area.offset(); const areaOffsetLeft = areaOffset.left; const areaOffsetTop = areaOffset.top;
+        const $area = $('#areaDiv');
+        const areaOffset = $area.offset();
+        const areaOffsetLeft = areaOffset.left;
+        const areaOffsetTop = areaOffset.top;
 
         const $resizable = $('#resizable').dxResizable({
             area: function() {
@@ -703,16 +754,16 @@ QUnit.module('area', () => {
 
         $resizable.css('border', '8px solid red');
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_LEFT_CLASS)).start().down().move(-70, 0).dragEnd();
+        pointerMock(getHandle('left')).start().down().move(-70, 0).dragEnd();
         assert.equal($resizable.offset().left, areaOffsetLeft);
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_TOP_CLASS)).start().down().move(0, -70).dragEnd();
+        pointerMock(getHandle('top')).start().down().move(0, -70).dragEnd();
         assert.equal($resizable.offset().top, areaOffsetTop);
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS)).start().down().move(70, 0).dragEnd();
+        pointerMock(getHandle('right')).start().down().move(70, 0).dragEnd();
         assert.equal($resizable.offset().left + $resizable.outerWidth(), areaOffsetLeft + $area.innerWidth());
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS)).start().down().move(0, 70).dragEnd();
+        pointerMock(getHandle('bottom')).start().down().move(0, 70).dragEnd();
         assert.equal($resizable.offset().top + $resizable.outerHeight(), areaOffsetTop + $area.innerHeight());
     });
 
@@ -727,23 +778,23 @@ QUnit.module('area', () => {
 
         $resizable.css('border', '8px solid red');
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_LEFT_CLASS)).start().down().move(-20, 0).dragEnd();
+        pointerMock(getHandle('left')).start().down().move(-20, 0).dragEnd();
         assert.equal($resizable.offset().left, resizableLeft - 20);
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_TOP_CLASS)).start().down().move(0, -20).dragEnd();
+        pointerMock(getHandle('top')).start().down().move(0, -20).dragEnd();
         assert.equal($resizable.offset().top, resizableTop - 20);
 
         const resizableRight = $resizable.offset().left + $resizable.outerWidth();
         const resizableBottom = $resizable.offset().top + $resizable.outerHeight();
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS)).start().down().move(20, 0).dragEnd();
+        pointerMock(getHandle('right')).start().down().move(20, 0).dragEnd();
         assert.equal($resizable.offset().left + $resizable.outerWidth(), resizableRight + 20);
 
-        pointerMock($resizable.find('.' + RESIZABLE_HANDLE_BOTTOM_CLASS)).start().down().move(0, 20).dragEnd();
+        pointerMock(getHandle('bottom')).start().down().move(0, 20).dragEnd();
         assert.equal($resizable.offset().top + $resizable.outerHeight(), resizableBottom + 20);
     });
 
-    QUnit.test('resizing with \'window\' area that have a scroll offset', function(assert) {
+    QUnit.test('resizing with "window" area that have a scroll offset', function(assert) {
         const scrollY = 1500;
         const scrollX = 2500;
         const $resizable = $('#resizable')
@@ -762,14 +813,14 @@ QUnit.module('area', () => {
             area: $(window)
         });
 
-        pointerMock($resizable.find(`.${RESIZABLE_HANDLE_LEFT_CLASS}`))
+        pointerMock(getHandle('left'))
             .start({ x: scrollX, y: scrollY })
             .down()
             .move(-20, 0)
             .dragEnd();
         assert.strictEqual($resizable.outerWidth(), 70, 'width changed correctly');
 
-        pointerMock($resizable.find(`.${RESIZABLE_HANDLE_TOP_CLASS}`))
+        pointerMock(getHandle('top'))
             .start({ x: scrollX, y: scrollY })
             .down()
             .move(0, -20)
@@ -789,7 +840,7 @@ QUnit.module('actions', () => {
                 assert.equal(e.height, $resizable.outerHeight(), 'height passed as event argument');
             }
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
+        const $handle = getHandle('bottom-right');
         const pointer = pointerMock($handle).start();
 
         pointer.dragStart();
@@ -806,7 +857,7 @@ QUnit.module('actions', () => {
         };
 
         const resize = () => {
-            const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
+            const $handle = getHandle('bottom-right');
             const pointer = pointerMock($handle).start();
             pointer.dragStart();
         };
@@ -832,7 +883,7 @@ QUnit.module('actions', () => {
                 assert.equal(e.height, $resizable.outerHeight(), 'height passed as event argument');
             }
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
+        const $handle = getHandle('bottom-right');
         const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(10, 0);
@@ -849,7 +900,7 @@ QUnit.module('actions', () => {
         };
 
         const resize = () => {
-            const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
+            const $handle = getHandle('bottom-right');
             const pointer = pointerMock($handle).start();
             pointer.dragStart().drag(10, 0);
         };
@@ -865,7 +916,9 @@ QUnit.module('actions', () => {
     });
 
     QUnit.test('dxresize event should be fired during resize', function(assert) {
-        const $resizable = $('#resizable').dxResizable(); const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right'); const pointer = pointerMock($handle).start();
+        $('#resizable').dxResizable();
+        const $handle = getHandle('bottom-right');
+        const pointer = pointerMock($handle).start();
 
         const triggerFunction = visibilityChange.triggerResizeEvent;
         assert.expect(1);
@@ -892,7 +945,7 @@ QUnit.module('actions', () => {
                 assert.equal(e.width, 100, 'width passed as event argument');
             }
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
+        const $handle = getHandle('bottom-right');
         const resizable = $resizable.dxResizable('instance');
         const pointer = pointerMock($handle).start();
 
@@ -914,7 +967,7 @@ QUnit.module('actions', () => {
                 assert.equal(e.height, $resizable.outerHeight(), 'height passed as event argument');
             }
         });
-        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
+        const $handle = getHandle('bottom-right');
         const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(10, 0).dragEnd();
@@ -929,7 +982,7 @@ QUnit.module('actions', () => {
         };
 
         const resize = () => {
-            const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
+            const $handle = getHandle('bottom-right');
             const pointer = pointerMock($handle).start();
             pointer.dragStart().drag(10, 0).dragEnd();
         };
