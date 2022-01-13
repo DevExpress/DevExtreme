@@ -1,4 +1,4 @@
-import { getOuterWidth, getOuterHeight, getInnerWidth, getInnerHeight } from '../core/utils/size';
+import { getOuterWidth, getOuterHeight, getInnerWidth, getInnerHeight, getWidth, getHeight } from '../core/utils/size';
 import { locate, move } from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import DOMComponent from '../core/dom_component';
@@ -14,6 +14,7 @@ import { hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../events/drag';
 import { triggerResizeEvent } from '../events/visibility_change';
+import { getBoundingRect } from '../core/utils/position';
 
 const RESIZABLE = 'dxResizable';
 const RESIZABLE_CLASS = 'dx-resizable';
@@ -156,6 +157,17 @@ const Resizable = DOMComponent.inherit({
         shouldAttachEvents ? this._attachEventHandlers() : this._detachEventHandlers();
     },
 
+    _getElementSize: function() {
+        const $element = this.$element();
+
+        return $element.css('boxSizing') === 'border-box'
+            ? getBoundingRect($element.get(0))
+            : {
+                width: getWidth($element),
+                height: getHeight($element)
+            };
+    },
+
     _dragStartHandler: function(e) {
         const $element = this.$element();
         if($element.is('.dx-state-disabled, .dx-state-disabled *')) {
@@ -168,10 +180,7 @@ const Resizable = DOMComponent.inherit({
 
         this._elementLocation = locate($element);
 
-        this._elementSize = {
-            width: getInnerWidth($element),
-            height: getInnerHeight($element)
-        };
+        this._elementSize = this._getElementSize();
 
         this._renderDragOffsets(e);
 
@@ -293,10 +302,7 @@ const Resizable = DOMComponent.inherit({
         const sides = this._movingSides;
         const $element = this.$element();
 
-        const elementRect = {
-            width: getInnerWidth($element),
-            height: getInnerHeight($element)
-        };
+        const elementRect = this._getElementSize();
         const offsetTop = delta.y * (sides.top ? -1 : 1) - ((elementRect.height || height) - height);
         const offsetLeft = delta.x * (sides.left ? -1 : 1) - ((elementRect.width || width) - width);
 

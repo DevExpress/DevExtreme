@@ -148,11 +148,9 @@ export default class ResizingModule extends BaseModule {
                     return;
                 }
 
-                const correction = 2 * FRAME_PADDING;
-
                 $(this._$target).attr({
-                    height: e.height - correction,
-                    width: e.width - correction
+                    height: e.height,
+                    width: e.width
                 });
                 this.updateFramePosition();
             }

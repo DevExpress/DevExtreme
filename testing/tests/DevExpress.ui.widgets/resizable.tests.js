@@ -19,7 +19,14 @@ const RESIZABLE_HANDLE_RIGHT_CLASS = 'dx-resizable-handle-right';
 const RESIZABLE_HANDLE_BOTTOM_CLASS = 'dx-resizable-handle-bottom';
 const RESIZABLE_HANDLE_TOP_CLASS = 'dx-resizable-handle-top';
 const RESIZABLE_HANDLE_LEFT_CLASS = 'dx-resizable-handle-left';
+const RESIZABLE_HANDLE_CLASS = 'dx-resizable-handle';
 const RESIZABLE_HANDLE_CORNER_CLASS = 'dx-resizable-handle-corner';
+
+const getHandler = (direction) => {
+    return direction.indexOf('-') !== -1
+        ? $(`.${RESIZABLE_HANDLE_CORNER_CLASS}-${direction}`)
+        : $(`.${RESIZABLE_HANDLE_CLASS}-${direction}`);
+};
 
 QUnit.module('behavior', () => {
     QUnit.test('resizable should have dx-resizable-resizing class while resizing', function(assert) {
@@ -406,6 +413,53 @@ QUnit.module('drag integration', () => {
 
         topPointer.dragStart().drag(0, -40);
         assert.equal($resizable.outerHeight(), 80, 'top offset - correct width');
+    });
+
+    QUnit.module('drag offset calculation', {
+        beforeEach: function() {
+            this.$resizable = $('#resizable').dxResizable({});
+            this.border = this.$resizable.css('border');
+            this.boxSizing = this.$resizable.css('box-sizing');
+            this.padding = this.$resizable.css('padding');
+            this.getRect = () => this.$resizable.get(0).getBoundingClientRect();
+        },
+        afterEach: function() {
+            this.$resizable.css({
+                border: this.border,
+                boxSizing: this.boxSizing
+            });
+        }
+    }, () => {
+        [{
+            border: '17px solid black',
+            'box-sizing': 'content-box'
+        }, {
+            border: '17px solid black',
+            'box-sizing': 'border-box'
+        }, {
+            padding: '17px',
+            'box-sizing': 'content-box'
+        }, {
+            padding: '17px',
+            'box-sizing': 'border-box'
+        }].forEach(sizeStyles => {
+            QUnit.test(`drag offset should be expected if ${JSON.stringify(sizeStyles)}`, function(assert) {
+                $('#resizable').css(sizeStyles);
+
+                const $rightBottomHandle = getHandler('bottom-right');
+                const pointer = pointerMock($rightBottomHandle).start();
+
+                const offsetX = 1;
+                const offsetY = 3;
+                const initialRect = this.getRect();
+
+                pointer.dragStart().drag(offsetX, offsetY);
+
+                const rect = this.getRect();
+                assert.strictEqual(rect.width, initialRect.width + offsetX, 'border is not included in x offset');
+                assert.strictEqual(rect.height, initialRect.height + offsetY, 'border is not included in y offset');
+            });
+        });
     });
 });
 
