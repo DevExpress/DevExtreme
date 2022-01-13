@@ -525,7 +525,7 @@ test.skip('New virtual mode. Virtual rows should not be in view port', async (t)
     const $rows = $((window as any).widget.element()).find('.dx-data-row');
 
     $rows.each((_, el) => {
-      result += $(el).height();
+      result += $(el).height() ?? 0;
     });
 
     return result;
