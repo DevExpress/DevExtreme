@@ -588,6 +588,94 @@ QUnit.module('drag integration', () => {
             });
         });
     });
+
+    QUnit.module('resize by corner handles if _keepAspectRatio=false', {
+        beforeEach: function() {
+            this.$resizable = $('#resizable')
+                .css({
+                    left: 200,
+                    top: 200
+                })
+                .dxResizable();
+            this.getRect = () => this.$resizable.get(0).getBoundingClientRect();
+
+            this.initialRect = this.getRect();
+        },
+    }, () => {
+        [1, -1].forEach(sign => {
+            QUnit.test(`bottom-right handle - ${sign > 0 ? 'outside' : 'inside'}`, function(assert) {
+                const $handle = getHandle('bottom-right');
+                const pointer = pointerMock($handle).start();
+                const offsetX = 10 * sign;
+                const offsetY = 15 * sign;
+                const dimensionChange = sign > 0 ? 'increased' : 'decreased';
+
+                pointer.dragStart().drag(offsetX, offsetY);
+
+                const rect = this.getRect();
+
+                assert.strictEqual(rect.width, this.initialRect.width + offsetX, `width is ${dimensionChange}`);
+                assert.strictEqual(rect.height, this.initialRect.height + offsetY, `height is ${dimensionChange}`);
+
+                assert.strictEqual(rect.right, this.initialRect.right + offsetX, `right bound is moved to the ${sign > 0 ? 'right' : 'left'}`);
+                assert.strictEqual(rect.bottom, this.initialRect.bottom + offsetY, `bottom bound is moved ${sign > 0 ? 'down' : 'up'}`);
+            });
+
+            QUnit.test(`bottom-left handle - ${sign > 0 ? 'inside' : 'outside'}`, function(assert) {
+                const $handle = getHandle('bottom-left');
+                const pointer = pointerMock($handle).start();
+                const offsetX = 10 * sign;
+                const offsetY = 15 * sign * -1;
+                const dimensionChange = sign > 0 ? 'decreased' : 'increased';
+
+                pointer.dragStart().drag(offsetX, offsetY);
+
+                const rect = this.getRect();
+
+                assert.strictEqual(rect.width, this.initialRect.width - offsetX, `width is ${dimensionChange}`);
+                assert.strictEqual(rect.height, this.initialRect.height + offsetY, `height is ${dimensionChange}`);
+
+                assert.strictEqual(rect.left, this.initialRect.left + offsetX, `left bound is moved to the ${sign > 0 ? 'right' : 'left'}`);
+                assert.strictEqual(rect.bottom, this.initialRect.bottom + offsetY, `bottom bound is moved to the ${sign > 0 ? 'right' : 'left'}`);
+            });
+
+            QUnit.test(`top-right handle - ${sign > 0 ? 'outside' : 'inside'}`, function(assert) {
+                const $handle = getHandle('top-right');
+                const pointer = pointerMock($handle).start();
+                const offsetX = 10 * sign;
+                const offsetY = 15 * sign * -1;
+                const dimensionChange = sign > 0 ? 'increased' : 'decreased';
+
+                pointer.dragStart().drag(offsetX, offsetY);
+
+                const rect = this.getRect();
+
+                assert.strictEqual(rect.width, this.initialRect.width + offsetX, `width is ${dimensionChange}`);
+                assert.strictEqual(rect.height, this.initialRect.height - offsetY, `height is ${dimensionChange}`);
+
+                assert.strictEqual(rect.right, this.initialRect.right + offsetX, `right bound is moved to the ${ sign > 0 ? 'right' : 'left' }`);
+                assert.strictEqual(rect.top, this.initialRect.top + offsetY, `top bound is moved ${ sign > 0 ? 'up' : 'down' }`);
+            });
+
+            QUnit.test(`top-left handle - ${sign > 0 ? 'inside' : 'outside'}`, function(assert) {
+                const $handle = getHandle('top-left');
+                const pointer = pointerMock($handle).start();
+                const offsetX = 10 * sign;
+                const offsetY = 15 * sign;
+                const dimensionChange = sign > 0 ? 'decreased' : 'increased';
+
+                pointer.dragStart().drag(offsetX, offsetY);
+
+                const rect = this.getRect();
+
+                assert.strictEqual(rect.width, this.initialRect.width - offsetX, `width is ${dimensionChange}`);
+                assert.strictEqual(rect.height, this.initialRect.height - offsetY, `height is ${dimensionChange}`);
+
+                assert.strictEqual(rect.left, this.initialRect.left + offsetX, `left bound is moved to the ${ sign > 0 ? 'right' : 'left' }`);
+                assert.strictEqual(rect.top, this.initialRect.top + offsetY, `top bound is moved ${ sign > 0 ? 'down' : 'up' }`);
+            });
+        });
+    });
 });
 
 QUnit.module('options', () => {
