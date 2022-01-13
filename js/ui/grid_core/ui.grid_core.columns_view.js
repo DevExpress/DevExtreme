@@ -951,7 +951,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                             const visibleIndex = this.getVisibleColumnIndex(i, rowIndex);
                             if(row.classList.contains(GROUP_ROW_CLASS)) {
                                 if(visibleIndex !== 1) {
-                                    cell = $(row).find(`td[aria-colindex='${visibleIndex + 1}']`).get(0);
+                                    cell = row.querySelector(`td[aria-colindex='${visibleIndex + 1}']`);
                                 }
                             } else {
                                 cell = row.cells[visibleIndex];
