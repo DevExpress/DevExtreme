@@ -1125,7 +1125,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Refresh').trigger('dxclick');
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
         this.clock.tick(400);
         assert.ok(customClick.notCalled, 'refresh has its default action');
         this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
