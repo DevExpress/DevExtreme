@@ -1160,20 +1160,24 @@ export const virtualScrollingModule = {
                         let offset = 0;
                         const dataSource = this.dataSource();
                         const rowsScrollController = this._rowsScrollController;
-                        const virtualMode = isVirtualMode(this);
-                        const appendMode = isAppendMode(this);
                         const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
+                        const virtualPaging = isVirtualPaging(this);
 
                         if(rowsScrollController && !byLoadedRows) {
                             if(newMode && isDefined(this._loadViewportParams)) {
                                 const { skipForCurrentPage, pageIndex } = this.getLoadPageParams(true);
-                                offset = pageIndex * this.pageSize() + skipForCurrentPage;
+                                const items = this.items(true);
+                                offset = virtualPaging ? pageIndex * this.pageSize() : 0;
+                                if(items.length) {
+                                    const firstLoadIndex = items[0].loadIndex;
+                                    offset += items.filter(item => item.loadIndex < firstLoadIndex + skipForCurrentPage).length;
+                                }
                             } else {
                                 offset = rowsScrollController.beginPageIndex() * rowsScrollController.pageSize();
                             }
-                        } else if((virtualMode || appendMode) && newMode && dataSource) {
+                        } else if(virtualPaging && newMode && dataSource) {
                             offset = dataSource.lastLoadOptions().skip ?? 0;
-                        } else if(virtualMode && dataSource) {
+                        } else if(isVirtualMode(this) && dataSource) {
                             offset = dataSource.beginPageIndex() * dataSource.pageSize();
                         }
 

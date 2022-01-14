@@ -5016,6 +5016,66 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.strictEqual($('.dx-data-row:eq(1)').text(), 'value 1', 'second row is "value 1"');
         assert.strictEqual($('.dx-data-row:eq(2)').text(), 'value 2', 'third row is "value 2"');
     });
+
+    QUnit.test('Redundant requests should not be sent on scroll (T1056318)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 130; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`,
+                });
+            }
+            return items;
+        };
+
+        const store = new ArrayStore({
+            key: 'id',
+            data: getData()
+        });
+
+        const spyLoad = sinon.spy(store, 'load');
+
+        const dataGrid = createDataGrid({
+            dataSource: store,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            height: 300
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 4000 });
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(spyLoad.callCount, 2, 'load count');
+        assert.equal(spyLoad.args[spyLoad.callCount - 1][0].skip, 100, 'skip');
+        assert.equal(spyLoad.args[spyLoad.callCount - 1][0].take, 40, 'take');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 4200 });
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(spyLoad.callCount, 2, 'load count is not changed after scrolling down');
+        assert.equal(spyLoad.args[spyLoad.callCount - 1][0].skip, 100, 'skip is not changed after scrolling down');
+        assert.equal(spyLoad.args[spyLoad.callCount - 1][0].take, 40, 'take is not changed after scrolling down');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 4000 });
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(spyLoad.callCount, 2, 'load count is not changed after scrolling up');
+        assert.equal(spyLoad.args[spyLoad.callCount - 1][0].skip, 100, 'skip is not changed after scrolling up');
+        assert.equal(spyLoad.args[spyLoad.callCount - 1][0].take, 40, 'take is not changed after scrolling up');
+    });
 });
 
 
@@ -6057,5 +6117,62 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.equal(loadSpy.callCount, 1, 'call count');
         assert.equal(loadSpy.getCall(0).args[0].skip, 0, 'skip');
         assert.equal(loadSpy.getCall(0).args[0].take, 10, 'take');
+    });
+
+    QUnit.test('Redundant requests should not be sent on scroll (T1056318)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 130; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`,
+                });
+            }
+            return items;
+        };
+
+        const store = new ArrayStore({
+            key: 'id',
+            data: getData()
+        });
+
+        const spyLoad = sinon.spy(store, 'load');
+
+        const dataGrid = createDataGrid({
+            dataSource: store,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'infinite',
+                useNative: false
+            },
+            height: 300
+        });
+
+        this.clock.tick(300);
+
+        // act
+        for(let i = 0; i < 8; i++) {
+            dataGrid.getScrollable().scrollTo({ top: 4200 });
+            this.clock.tick(300);
+        }
+
+        // assert
+        assert.equal(spyLoad.callCount, 7, 'load count');
+        assert.equal(spyLoad.args[spyLoad.callCount - 1][0].skip, 120, 'skip');
+        assert.equal(spyLoad.args[spyLoad.callCount - 1][0].take, 20, 'take');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 4000 });
+        this.clock.tick(300);
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 4000 });
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(spyLoad.callCount, 7, 'load count is not changed after scrolling up');
+        assert.equal(spyLoad.args[spyLoad.callCount - 1][0].skip, 120, 'skip is not changed after scrolling up');
+        assert.equal(spyLoad.args[spyLoad.callCount - 1][0].take, 20, 'take is not changed after scrolling up');
     });
 });

@@ -77,8 +77,15 @@ export default gridCore.Controller.inherit((function() {
             const skip = options.skip ?? storeLoadOptions.skip ?? 0;
             for(let i = 0; i < take; i++) {
                 const localIndex = fromEnd ? take - 1 - i : i;
-                const cacheItem = cachedItems[localIndex + skip];
+                const cacheItemIndex = localIndex + skip;
+                const cacheItem = cachedItems[cacheItemIndex];
+
+                if(cacheItem === undefined && cacheItemIndex in cachedItems) {
+                    return true;
+                }
+
                 const item = getItemFromCache(options, cacheItem, groupCount, localIndex, take);
+
                 if(item) {
                     items.push(item);
                 } else {
@@ -640,12 +647,16 @@ export default gridCore.Controller.inherit((function() {
             let currentTotalCount;
             const dataSource = this._dataSource;
             let isLoading = false;
+            const isDataLoading = !args || isDefined(args.changeType);
+
             const itemsCount = this.itemsCount();
 
-            this._isLastPage = !itemsCount || !this._loadPageSize() || itemsCount < this._loadPageSize();
+            if(isDataLoading) {
+                this._isLastPage = !itemsCount || !this._loadPageSize() || itemsCount < this._loadPageSize();
 
-            if(this._isLastPage) {
-                this._hasLastPage = true;
+                if(this._isLastPage) {
+                    this._hasLastPage = true;
+                }
             }
 
             if(dataSource.totalCount() >= 0) {
@@ -656,11 +667,13 @@ export default gridCore.Controller.inherit((function() {
                     dataSource.load();
                     isLoading = true;
                 }
-            } else if(!args || isDefined(args.changeType)) {
+            } else if(isDataLoading) {
                 currentTotalCount = dataSource.pageIndex() * this.pageSize() + itemsCount;
                 if(currentTotalCount > this._currentTotalCount) {
                     this._currentTotalCount = currentTotalCount;
-                    this._totalCountCorrection = 0;
+                    if(dataSource.pageIndex() === 0 || !this.option('scrolling.legacyMode')) {
+                        this._totalCountCorrection = 0;
+                    }
                 }
                 if(itemsCount === 0 && dataSource.pageIndex() >= this.pageCount()) {
                     dataSource.pageIndex(this.pageCount() - 1);
