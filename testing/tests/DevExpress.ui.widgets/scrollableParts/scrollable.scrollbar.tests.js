@@ -26,6 +26,7 @@ import {
     SCROLLABLE_SCROLLBAR_ACTIVE_CLASS,
     SCROLLABLE_SCROLLBARS_HIDDEN,
     SCROLLABLE_CLASS,
+    RESIZE_WAIT_TIMEOUT,
 } from './scrollable.constants.js';
 
 const SCROLLBAR_MIN_HEIGHT = 15;
@@ -334,6 +335,9 @@ QUnit.test('scrollbar has correct position after update', function(assert) {
 });
 
 QUnit.test('scroll updated before start', function(assert) {
+    this.clock.restore();
+    const done = assert.async();
+
     const scrollHeight = 100;
     const $scrollable = $('#scrollable').height(scrollHeight);
     const $innerWrapper = $scrollable.wrapInner('<div>').children().eq(0).height(scrollHeight / 2);
@@ -347,15 +351,22 @@ QUnit.test('scroll updated before start', function(assert) {
     }).dxScrollable('instance');
 
     $innerWrapper.height(2 * scrollHeight);
-    pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
-        .start()
-        .down()
-        .move(0, -10);
 
-    assert.equal(scrollable.scrollOffset().top, 10, 'scrollable moved');
+    setTimeout(() => {
+        pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
+            .start()
+            .down()
+            .move(0, -10);
+
+        assert.equal(scrollable.scrollOffset().top, 10, 'scrollable moved');
+        done();
+    }, RESIZE_WAIT_TIMEOUT);
 });
 
 QUnit.test('scroll not updated before start if auto update is prevented', function(assert) {
+    this.clock.restore();
+    const done = assert.async();
+
     const scrollHeight = 100;
     const $scrollable = $('#scrollable').height(scrollHeight);
     const $innerWrapper = $scrollable.wrapInner('<div>').children().eq(0).height(scrollHeight / 2);
@@ -370,12 +381,18 @@ QUnit.test('scroll not updated before start if auto update is prevented', functi
     }).dxScrollable('instance');
 
     $innerWrapper.height(2 * scrollHeight);
-    pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
-        .start()
-        .down()
-        .move(0, -10);
 
-    assert.equal(scrollable.scrollOffset().top, isRenovatedScrollable ? 10 : 0, 'scrollable not moved');
+    setTimeout(() => {
+        pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
+            .start()
+            .down()
+            .move(0, -10);
+
+        assert.equal(scrollable.scrollOffset().top, isRenovatedScrollable ? 10 : 0, 'scrollable not moved');
+
+        done();
+    }, RESIZE_WAIT_TIMEOUT);
+
 });
 
 QUnit.test('scroll not updated after scrollTo if auto update is prevented', function(assert) {
@@ -674,6 +691,8 @@ QUnit.module('scrollbar visibility', {
         const scrollable = $scrollable.dxScrollable('instance');
         const outerScrollableContainerEl = $(scrollable.container()).get(0);
 
+        assert.ok(true, `showScrollbar: ${showScrollbar}`);
+
         const expectedOverflowX = useNative && direction !== DIRECTION_VERTICAL && showScrollbar !== 'never' ? 'auto' : 'hidden';
         const expectedOverflowY = useNative && direction !== DIRECTION_HORIZONTAL && showScrollbar !== 'never' ? 'auto' : 'hidden';
 
@@ -692,11 +711,9 @@ QUnit.module('scrollbar visibility', {
 
     const configs = [];
     [true, false].forEach((useNative) => {
-        ['onScroll', 'onHover', 'always', 'never'].forEach((showScrollbar) => {
-            [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BOTH].forEach((direction) => {
-                [true, false].forEach((useSimulatedScrollbar) => {
-                    configs.push({ useNative, direction, showScrollbar, useSimulatedScrollbar });
-                });
+        [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BOTH].forEach((direction) => {
+            [true, false].forEach((useSimulatedScrollbar) => {
+                configs.push({ useNative, direction, useSimulatedScrollbar });
             });
         });
     });
@@ -704,11 +721,20 @@ QUnit.module('scrollbar visibility', {
     configs.forEach(outerScrollableOptions => {
         configs.forEach(innerScrollableOptions => {
             QUnit.test(`check scrollbar visibility: outerScrollable: ${JSON.stringify(outerScrollableOptions)}, innerScrollable: ${JSON.stringify(innerScrollableOptions)}`, function(assert) {
-                this.$outerScrollable.dxScrollable(outerScrollableOptions);
-                this.$innerScrollable.dxScrollable(innerScrollableOptions);
+                const showScrollbarValues = ['onScroll', 'onHover', 'always', 'never'];
 
-                checkStyles(assert, this.$outerScrollable, outerScrollableOptions);
-                checkStyles(assert, this.$innerScrollable, innerScrollableOptions);
+                showScrollbarValues.forEach((outerShowScrollbarValue) => {
+                    this.$outerScrollable.dxScrollable({ showScrollbar: outerShowScrollbarValue, ...outerScrollableOptions });
+
+                    showScrollbarValues.forEach((innerShowScrollbarValue) => {
+                        this.$innerScrollable.dxScrollable({ showScrollbar: innerShowScrollbarValue, ...innerScrollableOptions });
+
+                        checkStyles(assert, this.$outerScrollable, { showScrollbar: outerShowScrollbarValue, ...outerScrollableOptions });
+                        checkStyles(assert, this.$innerScrollable, { showScrollbar: innerShowScrollbarValue, ...innerScrollableOptions });
+                    });
+                });
+
+
             });
         });
     });

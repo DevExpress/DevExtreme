@@ -87,6 +87,7 @@ import { isElementVisible } from '../utils/is_element_visible';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { subscribeToResize } from '../utils/subscribe_to_resize';
 import domAdapter from '../../../../core/dom_adapter';
+import { getScrollLeftMax } from '../utils/get_scroll_left_max';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -291,6 +292,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   @InternalState() hScrollLocation = 0;
 
   @InternalState() pendingScrollEvent = false;
+
+  @Mutable() prevDirection = 'initial';
 
   @Mutable() validateWheelTimer?: unknown;
 
@@ -499,7 +502,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       return false;
     }
 
-    this.updateHandler();
+    // this.updateHandler();
 
     return this.moveIsAllowed(event);
   }
@@ -529,19 +532,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     } else {
       this.unlock();
     }
-  }
-
-  @Effect() effectResetInactiveState(): void {
-    if (this.direction.isBoth) {
-      return;
-    }
-
-    const inactiveScrollProp = !this.direction.isVertical ? 'scrollTop' : 'scrollLeft';
-
-    this.scrollLocationChange({
-      fullScrollProp: inactiveScrollProp,
-      location: 0,
-    });
   }
 
   @Effect()
@@ -585,10 +575,31 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   @Effect({ run: 'once' })
-  subscribeContentToResize(): EffectReturn {
+  subscribeToResizeContent(): EffectReturn {
+    if (this.props.needScrollViewContentWrapper) {
+      const unsubscribeHeightResize = subscribeToResize(
+        this.content(),
+        (element: HTMLDivElement) => { this.setContentHeight(element); },
+      );
+
+      const unsubscribeWidthResize = subscribeToResize(
+        this.contentRef.current,
+        (element: HTMLDivElement) => { this.setContentWidth(element); },
+      );
+
+      /* istanbul ignore next */
+      return (): void => {
+        unsubscribeHeightResize?.();
+        unsubscribeWidthResize?.();
+      };
+    }
+
     return subscribeToResize(
-      this.content(),
-      (element: HTMLDivElement) => { this.setContentDimensions(element); },
+      this.contentRef.current,
+      (element: HTMLDivElement) => {
+        this.setContentHeight(element);
+        this.setContentWidth(element);
+      },
     );
   }
 
@@ -603,6 +614,33 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       this.pendingScrollEvent = false;
       eventsEngine.triggerHandler(this.containerRef.current, { type: 'scroll' });
     }
+  }
+
+  @Effect() resetInactiveOffsetToInitial(): void {
+    if (this.direction.isBoth) {
+      this.prevDirection = this.props.direction;
+      return;
+    }
+
+    const maxScrollOffset = getScrollLeftMax(this.containerRef.current!);
+    const needResetInactiveOffset = this.prevDirection !== this.props.direction && maxScrollOffset;
+
+    if (!needResetInactiveOffset) {
+      return;
+    }
+
+    this.prevDirection = this.props.direction;
+
+    const inactiveScrollProp = !this.direction.isVertical ? 'scrollTop' : 'scrollLeft';
+    const location = this.props.rtlEnabled && inactiveScrollProp === 'scrollLeft'
+      ? maxScrollOffset
+      : 0;
+
+    this.scrollLocationChange({
+      fullScrollProp: inactiveScrollProp,
+      // set default content position
+      location,
+    });
   }
 
   @Method()
@@ -730,7 +768,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     this.loadingIndicatorEnabled = true;
     this.finishLoading();
-    this.updateHandler();
+    // this.updateHandler();
+
+    // the resizeObserver handler calls too late
+    // in case when List visibility was changed
+    this.updateElementDimensions();
   }
 
   onReachBottom(): void {
@@ -1071,7 +1113,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   // onVisibilityChangeHandler uses for date_view_roller purposes only
   onVisibilityChangeHandler(visible: boolean): void {
     if (visible) {
-      this.updateHandler();
+      // this.updateHandler();
 
       const { scrollTop, scrollLeft } = this.savedScrollOffset;
       // restore scrollLocation on second and next opening of popup with data_view rollers
@@ -1088,7 +1130,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       this.setBottomPocketDimensions(this.bottomPocketRef.current!);
     }
 
-    this.setContentDimensions(this.content());
+    this.setContentWidth(this.contentRef.current!);
+    this.setContentHeight(this.content());
     this.setContainerDimensions(this.containerRef.current!);
   }
 
@@ -1104,14 +1147,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       : 0;
   }
 
-  setContentDimensions(contentEl: HTMLDivElement): void {
+  setContentHeight(contentEl: HTMLDivElement): void {
     this.contentClientHeight = contentEl.clientHeight;
     this.contentScrollHeight = contentEl.scrollHeight;
 
+    this.contentPaddingBottom = getElementPadding(this.contentRef.current, 'bottom');
+  }
+
+  setContentWidth(contentEl: HTMLDivElement): void {
     this.contentClientWidth = contentEl.clientWidth;
     this.contentScrollWidth = contentEl.scrollWidth;
-
-    this.contentPaddingBottom = getElementPadding(this.contentRef.current, 'bottom');
   }
 
   setContainerDimensions(containerEl: HTMLDivElement): void {
