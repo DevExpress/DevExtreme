@@ -309,7 +309,6 @@ const Resizable = DOMComponent.inherit({
             const fittedProportionalDelta = this._fitDeltaProportionally(proportionalDelta);
             const roundedDelta = this._roundOffset(fittedProportionalDelta);
 
-
             delta = this._isDeltaProportional(roundedDelta)
                 ? roundedDelta
                 : { x: 0, y: 0 };
