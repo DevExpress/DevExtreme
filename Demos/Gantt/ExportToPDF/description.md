@@ -22,7 +22,7 @@ Start date (task)- Restricts data output by start date.
 End date (task) – Restricts data output by end date. 
 
 
-Click the “Export” toolbar item to call the [exportToPdf](/Documentation/ApiReference/UI_Components/dxGantt/Methods/#exportToPdfoptions) method (exports Gantt data with specified export options).
+Click the “Export” toolbar item to call the [exportGantt(options)](/Documentation/ApiReference/Common/Utils/pdfExporter/#exportGanttoptions) method (exports Gantt data with specified export options).
  
 
 To enable PDF export operations, you must reference or import the following:
