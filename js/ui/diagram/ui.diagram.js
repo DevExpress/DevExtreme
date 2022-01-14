@@ -1572,6 +1572,7 @@ class Diagram extends Widget {
         this._diagramInstance && this._diagramInstance.refreshToolbox();
         if(this._toolbox) {
             this._toolbox.updateTooltips();
+            this._toolbox.updateFilter();
             this._toolbox.updateMaxHeight();
         }
     }
