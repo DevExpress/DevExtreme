@@ -170,6 +170,7 @@ class Gantt extends Widget {
             onScroll: (e) => { this._ganttTreeList.scrollBy(e.scrollTop); },
             onDialogShowing: this._showDialog.bind(this),
             onPopupMenuShowing: this._showPopupMenu.bind(this),
+            onPopupMenuHiding: this._hidePopupMenu.bind(this),
             onExpandAll: this._expandAll.bind(this),
             onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: ModelChangesListener.create(this),
@@ -388,6 +389,9 @@ class Gantt extends Widget {
                 this._contextMenuBar.show(info.position, args.items);
             }
         }
+    }
+    _hidePopupMenu() {
+        this._contextMenuBar.hide();
     }
 
     _getLoadPanel() {
