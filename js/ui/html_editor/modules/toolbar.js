@@ -45,6 +45,12 @@ if(Quill) {
         85: 'underline'
     };
 
+    const KEY_CODES = {
+        b: 66,
+        i: 73,
+        u: 85
+    };
+
     const localize = (name) => {
         return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
     };
@@ -191,17 +197,17 @@ if(Quill) {
 
         _subscribeFormatHotKeys() {
             this.quill.keyboard.addBinding({
-                which: 66,
+                which: KEY_CODES.b,
                 shortKey: true,
             }, this._handleFormatHotKey.bind(this));
 
             this.quill.keyboard.addBinding({
-                which: 73,
+                which: KEY_CODES.i,
                 shortKey: true,
             }, this._handleFormatHotKey.bind(this));
 
             this.quill.keyboard.addBinding({
-                which: 85,
+                which: KEY_CODES.u,
                 shortKey: true,
             }, this._handleFormatHotKey.bind(this));
         }
