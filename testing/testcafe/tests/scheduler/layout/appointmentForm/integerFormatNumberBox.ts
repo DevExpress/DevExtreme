@@ -17,7 +17,12 @@ test('dxNumberBox should not allow to enter not integer chars(T1002864)', async 
     .doubleClick(scheduler.getAppointment('Website Re-Design Plan').element);
 
   await t
-    .typeText(appointmentPopup.repeatEveryElement, '.,2', { speed: 0.1 })
+    .typeText(appointmentPopup.repeatEveryElement, '.,2', { speed: 0.1 });
+
+  await t
+    .click(appointmentPopup.wrapper.find('.dx-item.dx-radiobutton').nth(2));
+
+  await t
     .typeText(appointmentPopup.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(3), '.,2', { speed: 0.1 })
 
     .expect(await takeScreenshot('dx-number-boxes-not-integer-chars.png', scheduler.appointmentPopup.wrapper))
@@ -31,7 +36,7 @@ test('dxNumberBox should not allow to enter not integer chars(T1002864)', async 
     text: 'Website Re-Design Plan',
     startDate: new Date(2021, 3, 26, 10),
     endDate: new Date(2021, 3, 26, 11),
-    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=3',
+    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;UNTIL=20220114T205959Z',
   }],
   views: ['day', 'week', 'workWeek', 'month'],
   currentView: 'week',
