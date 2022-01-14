@@ -4,8 +4,8 @@ import {
 } from '@devextreme-generator/declarations';
 import React from 'react';
 import { DataGridLight, DataGridLightProps } from '../../../../js/renovation/ui/grids/data_grid_light/data_grid_light';
-import { Pager, PagerProps } from '../../../../js/renovation/ui/grids/data_grid_light/widgets/pager';
-import { Paging, PagingProps } from '../../../../js/renovation/ui/grids/data_grid_light/widgets/paging';
+import { Pager, PagerProps } from '../../../../js/renovation/ui/grids/data_grid_light/pager/pager';
+import { Paging, PagingProps } from '../../../../js/renovation/ui/grids/data_grid_light/paging/paging';
 
 export const viewFunction = ({
   options, pager, paging, setPageIndex, setPageSize,

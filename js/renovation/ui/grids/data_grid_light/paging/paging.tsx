@@ -4,30 +4,16 @@ import {
   Component, JSXComponent, ComponentBindings, OneWay,
   TwoWay, Fragment,
 } from '@devextreme-generator/declarations';
-import {
-  createValue, createSelector,
-} from '../../../../utils/plugin/context';
 
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
-import { VisibleItems, TotalCount } from '../data_grid_light';
+import { VisibleItems } from '../data_grid_light';
 import { RowData } from '../types';
 
-export const PageIndex = createValue<number>();
-export const SetPageIndex = createValue<(pageIndex: number) => void>();
-export const PageSize = createValue<number | 'all'>();
-export const SetPageSize = createValue<(pageSize: number | 'all') => void>();
-
-export const PageCount = createSelector(
-  [TotalCount, PageSize],
-  (totalCount, pageSize) => {
-    if (pageSize === 'all') {
-      return 1;
-    }
-    return Math.ceil(totalCount / pageSize);
-  },
-);
+import {
+  PageIndex, PageSize, SetPageIndex, SetPageSize,
+} from './plugins';
 
 export const viewFunction = (viewModel: Paging): JSX.Element => (
   <Fragment>

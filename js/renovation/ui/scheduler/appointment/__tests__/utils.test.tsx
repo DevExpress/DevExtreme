@@ -40,7 +40,6 @@ describe('Appointment utils', () => {
     it('generate styles for the full model', () => {
       expect(getAppointmentStyles(testViewModel as any))
         .toEqual({
-          backgroundColor: '#1A2BC',
           height: '20px',
           left: '1px',
           top: '2px',
@@ -73,7 +72,6 @@ describe('Appointment utils', () => {
         },
       }))
         .toEqual({
-          backgroundColor: '#1A2BC',
           height: '50px',
           left: '1px',
           top: '2px',
@@ -90,7 +88,6 @@ describe('Appointment utils', () => {
         },
       }))
         .toEqual({
-          backgroundColor: '#1A2BC',
           height: '20px',
           left: '1px',
           top: '2px',
