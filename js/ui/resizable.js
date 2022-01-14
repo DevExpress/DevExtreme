@@ -225,10 +225,17 @@ const Resizable = DOMComponent.inherit({
         return parseInt(borderWidth) || 0;
     },
 
-    _getProportionalDelta: function({ x, y }) {
+    _proportionate: function(direction, value) {
         const size = this._elementSize;
 
-        const proportionalY = x * (size.height / size.width);
+        const factor = direction === 'x'
+            ? size.width / size.height
+            : size.height / size.width;
+        return value * factor;
+    },
+
+    _getProportionalDelta: function({ x, y }) {
+        const proportionalY = this._proportionate('y', x);
         if(proportionalY >= y) {
             return {
                 x,
@@ -236,7 +243,7 @@ const Resizable = DOMComponent.inherit({
             };
         }
 
-        const proportionalX = y * (size.width / size.height);
+        const proportionalX = this._proportionate('x', y);
         if(proportionalX >= x) {
             return {
                 x: proportionalX,
@@ -250,7 +257,7 @@ const Resizable = DOMComponent.inherit({
         };
     },
 
-    _fitDelta: function(delta) {
+    _fitDeltaProportionally: function(delta) {
         let fittedDelta = { ...delta };
         const size = this._elementSize;
         const { minWidth, minHeight, maxWidth, maxHeight } = this.option();
@@ -263,10 +270,12 @@ const Resizable = DOMComponent.inherit({
         const isFittedY = () => inRange(getHeight(), minHeight, maxHeight);
 
         if(!isFittedX()) {
-            fittedDelta = this._getProportionalDelta({ x: getFittedWidth() - size.width, y: fittedDelta.y });
+            const x = getFittedWidth() - size.width;
+            fittedDelta = { x, y: this._proportionate('y', x) };
         }
         if(!isFittedY()) {
-            fittedDelta = this._getProportionalDelta({ x: fittedDelta.x, y: getFittedHeight() - size.height });
+            const y = getFittedHeight() - size.height;
+            fittedDelta = { x: this._proportionate('x', y), y };
         }
 
         if(!isFittedX() || !isFittedY()) {
@@ -277,6 +286,13 @@ const Resizable = DOMComponent.inherit({
         }
 
         return fittedDelta;
+    },
+
+    _isDeltaProportional: function(delta) {
+        const deltaRatio = delta.x / delta.y;
+        const dimensionsRatio = this._elementSize.width / this._elementSize.height;
+
+        return dimensionsRatio - 0.1 < deltaRatio && deltaRatio < dimensionsRatio + 0.1;
     },
 
     _getDeltaByOffset: function(offset) {
@@ -290,8 +306,13 @@ const Resizable = DOMComponent.inherit({
 
         if(shouldKeepAspectRatio) {
             const proportionalDelta = this._getProportionalDelta(delta);
-            const fittedProportionalDelta = this._fitDelta(proportionalDelta);
-            return this._roundOffset(fittedProportionalDelta);
+            const fittedProportionalDelta = this._fitDeltaProportionally(proportionalDelta);
+            const roundedDelta = this._roundOffset(fittedProportionalDelta);
+
+
+            return this._isDeltaProportional(roundedDelta)
+                ? roundedDelta
+                : { x: 0, y: 0 };
         }
 
         return delta;
