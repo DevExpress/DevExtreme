@@ -6,8 +6,9 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
-  ScrollViewLoadPanel, ScrollViewLoadPanelProps,
+  ScrollViewLoadPanel,
 } from '../load_panel';
+import { ScrollViewLoadPanelProps } from '../../common/scrollview_loadpanel_props';
 
 describe('LoadPanel integration', () => {
   it('render with defaults', () => {

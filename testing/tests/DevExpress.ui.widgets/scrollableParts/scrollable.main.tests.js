@@ -796,24 +796,15 @@ QUnit.module('visibility events integration', {
         }).dxScrollable('instance');
 
         scrollable.scrollTo({ left: 10, top: 20 });
+        $scrollable.hide();
+
         setTimeout(() => {
-            onScrollHandler.reset();
-            $scrollable.hide();
+            scrollable.scrollTo({ left: 0, top: 0 });
+            $scrollable.show();
 
             setTimeout(() => {
-                assert.strictEqual(onScrollHandler.callCount, 0, 'onScrollHandler.callCount on hide');
-                scrollable.scrollTo({ left: 0, top: 0 });
-
-                setTimeout(() => {
-                    onScrollHandler.reset();
-                    $scrollable.show();
-                    scrollable.update();
-                    setTimeout(() => {
-                        assert.strictEqual(onScrollHandler.callCount, 0, 'onScrollHandler.callCount on show');
-                        assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after shown');
-                        done();
-                    }, RESIZE_WAIT_TIMEOUT);
-                }, RESIZE_WAIT_TIMEOUT);
+                assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after shown');
+                done();
             }, RESIZE_WAIT_TIMEOUT);
         }, RESIZE_WAIT_TIMEOUT);
     });
@@ -837,9 +828,9 @@ QUnit.test('scroll should save position on dxhiding and restore on dxshown', fun
         scrollable.scrollTo({ left: 0, top: 0 });
 
         $scrollable.show();
-        triggerShownEvent($scrollable);
-
         setTimeout(() => {
+            triggerShownEvent($scrollable);
+
             assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after dxshown');
             done();
         }, RESIZE_WAIT_TIMEOUT);
@@ -881,9 +872,10 @@ QUnit.test('scroll should save position on dxhiding when scroll is hidden', func
         scrollable.scrollTo({ left: 0, top: 0 });
 
         $scrollable.show();
-        triggerShownEvent($scrollable);
 
         setTimeout(() => {
+            triggerShownEvent($scrollable);
+
             assert.deepEqual(scrollable.scrollOffset(), { left: 0, top: 20 }, 'scroll position restored after dxshown');
             done();
         }, RESIZE_WAIT_TIMEOUT);

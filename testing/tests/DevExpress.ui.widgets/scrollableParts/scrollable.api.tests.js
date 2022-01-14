@@ -77,6 +77,7 @@ QUnit.test('update', function(assert) {
     const done = assert.async();
     const moveDistance = -10;
     const moveDuration = 10;
+    const onUpdatedHandler = sinon.spy();
     const inertiaDistance = calculateInertiaDistance(moveDistance, moveDuration);
     const distance = moveDistance + inertiaDistance;
     const $scrollable = $('#scrollable');
@@ -86,6 +87,7 @@ QUnit.test('update', function(assert) {
 
     $scrollable.dxScrollable({
         useNative: false,
+        onUpdated: onUpdatedHandler,
         onEnd: function() {
             const location = getScrollOffset($scrollable);
 
@@ -97,7 +99,10 @@ QUnit.test('update', function(assert) {
     const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
 
     $scrollableChild.height(-1 * distance + 1);
+    onUpdatedHandler.reset();
     $scrollable.dxScrollable('instance').update();
+
+    assert.strictEqual(onUpdatedHandler.callCount, 1, 'onUpdatedHandler.callCount');
 
     mouse
         .down()
@@ -263,6 +268,8 @@ QUnit.test('scrollBy to location', function(assert) {
 });
 
 QUnit.test('scrollBy to location with dynamic content', function(assert) {
+    this.clock.restore();
+
     const distance = 10;
     let wasFirstMove = false;
 
@@ -279,7 +286,6 @@ QUnit.test('scrollBy to location with dynamic content', function(assert) {
 
     const scrollable = $scrollable.dxScrollable('instance');
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
-
 
     $content.append($('<div>').height(100));
     scrollable.scrollBy(distance);
@@ -350,6 +356,7 @@ QUnit.test('scrollTo to location with dynamic content', function(assert) {
 
     scrollable.scrollTo(100);
     $content.empty().append($('<div>').height(101));
+
     scrollable.scrollTo(50);
 });
 
