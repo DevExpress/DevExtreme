@@ -525,6 +525,7 @@ QUnit.module('drag integration', () => {
                     .dxResizable({
                         _keepAspectRatio
                     });
+                this.resizable = this.$resizable.dxResizable('instance');
                 this.getRect = () => this.$resizable.get(0).getBoundingClientRect();
 
                 this.initialRect = this.getRect();
@@ -592,6 +593,23 @@ QUnit.module('drag integration', () => {
 
                     assert.strictEqual(rect.top, this.initialRect.top + offsetY, `top bound is moved ${ sign > 0 ? 'down' : 'up' }`);
                 });
+            });
+
+            QUnit.test('dimensions should be updated if handle is returned to the start position (offset = 0)', function(assert) {
+                this.resizable.option('step', 20);
+
+                const $handle = getHandle('right');
+                const pointer = pointerMock($handle).start();
+
+                pointer
+                    .dragStart()
+                    .drag(20, 0)
+                    .drag(-20, 0);
+
+                const rect = this.getRect();
+
+                assert.strictEqual(rect.width, this.initialRect.width, 'width is rerendered on start position');
+                assert.strictEqual(rect.height, this.initialRect.height, 'height is rerendered on start position');
             });
         });
     });
@@ -935,6 +953,23 @@ QUnit.module('drag integration', () => {
 
                 assert.strictEqual(rect.top, this.initialRect.top, 'top coordinate is not changed');
                 assert.strictEqual(rect.left, this.initialRect.left, 'left coordinate is not changed');
+            });
+
+            QUnit.test('dimensions should be updated if handle is returned to the start position (offset = 0)', function(assert) {
+                this.resizable.option('step', 20);
+
+                const $handle = getHandle('bottom-right');
+                const pointer = pointerMock($handle).start();
+
+                pointer
+                    .dragStart()
+                    .drag(20, 20)
+                    .drag(-20, -20);
+
+                const rect = this.getRect();
+
+                assert.strictEqual(rect.width, this.initialRect.width, 'width is rerendered on start position');
+                assert.strictEqual(rect.height, this.initialRect.height, 'height is rerendered on start position');
             });
         });
 

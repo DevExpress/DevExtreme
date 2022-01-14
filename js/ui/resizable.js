@@ -299,7 +299,7 @@ const Resizable = DOMComponent.inherit({
         const sides = this._movingSides;
         const shouldKeepAspectRatio = this._isCornerHandler(sides) && this.option('_keepAspectRatio');
 
-        const delta = {
+        let delta = {
             x: offset.x * (sides.left ? -1 : 1),
             y: offset.y * (sides.top ? -1 : 1)
         };
@@ -310,12 +310,15 @@ const Resizable = DOMComponent.inherit({
             const roundedDelta = this._roundOffset(fittedProportionalDelta);
 
 
-            return this._isDeltaProportional(roundedDelta)
+            delta = this._isDeltaProportional(roundedDelta)
                 ? roundedDelta
                 : { x: 0, y: 0 };
         }
 
-        return delta;
+        return {
+            ...delta,
+            isStartPosition: offset.x === 0 && offset.y === 0
+        };
     },
 
     _updatePosition: function(delta, { width, height }) {
@@ -349,8 +352,8 @@ const Resizable = DOMComponent.inherit({
 
         const width = size.width + delta.x;
         const height = size.height + delta.y;
-        if(delta.x || isStepPrecisionStrict) this._renderWidth(width);
-        if(delta.y || isStepPrecisionStrict) this._renderHeight(height);
+        if(delta.x || delta.isStartPosition || isStepPrecisionStrict) this._renderWidth(width);
+        if(delta.y || delta.isStartPosition || isStepPrecisionStrict) this._renderHeight(height);
 
         return {
             width,
