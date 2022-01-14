@@ -288,7 +288,7 @@ export default class FileItemsController {
         this.log('3 (1.6) - _getFileItems - called', parentDirectoryInfo.fileItem.name);
         return when(loadItemsDeferred).then(
             fileItems => this._securityController.getAllowedItems(fileItems),
-            errorInfo => { this.log('3 - handle error'); this._handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError); });
+            errorInfo => { this.log('3 - handle error'); return this._handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError); });
     }
 
     createDirectory(parentDirectoryInfo, name) {
