@@ -3,41 +3,37 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {
   JSXComponent, Component, ComponentBindings,
-  OneWay, Fragment, Slot, Consumer, InternalState, Effect,
+  OneWay, Fragment, Slot, InternalState, Effect,
 } from '@devextreme-generator/declarations';
-import { PluginEntity, Plugins, PluginsContext } from './context';
+import { PluginEntity, Plugins } from './context';
+
+import { PlaceholderItemRenderer } from './placeholder_item_renderer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   // eslint-disable-next-line react/prop-types
-  currentComponent, args, props: {
+  currentTemplate, args, props: {
     componentTypes, column, index, children,
   },
 }: PlaceholderItem): JSX.Element => (
   <Fragment>
-    {
-  currentComponent ? currentComponent(
-    args,
-    column,
-    <PlaceholderItem componentTypes={componentTypes} column={column} index={index + 1}>
-      {children}
-    </PlaceholderItem>,
-  ) : <Fragment>{children}</Fragment>
-  /* CurrentComponent && (
-    <CurrentComponent
-      column={column}
-      childrenTemplate={(
-        <PlaceholderItem componentTypes={componentTypes} column={column} index={index + 1} />
-      )}
-    />
-
-  ) */
-}
+    {currentTemplate ? (
+      <PlaceholderItemRenderer
+        deps={args}
+        column={column}
+        currentTemplate={currentTemplate}
+        baseTemplate={(): JSX.Element => (
+          <PlaceholderItem componentTypes={componentTypes} column={column} index={index + 1} />
+        )}
+      />
+    ) : <Fragment>{children}</Fragment>}
   </Fragment>
 );
 
 @ComponentBindings()
 export class PlaceholderItemProps {
+  @OneWay() plugins!: Plugins;
+
   @OneWay() componentTypes: any[] = [];
 
   @OneWay() componentDeps: PluginEntity<unknown, unknown>[][] = [];
@@ -50,16 +46,16 @@ export class PlaceholderItemProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PlaceholderItem extends JSXComponent(PlaceholderItemProps) {
-  @Consumer(PluginsContext)
-  plugins!: Plugins;
+export class PlaceholderItem extends JSXComponent<PlaceholderItemProps, 'plugins'>(PlaceholderItemProps) {
+  // @Consumer(PluginsContext)
+  // plugins!: Plugins;
 
   @InternalState()
   args: unknown[] = [];
 
   @Effect()
   updateArgs(): () => void {
-    const disposers = this.componentDeps.map((entity) => this.plugins.watch(entity, () => {
+    const disposers = this.componentDeps.map((entity) => this.props.plugins.watch(entity, () => {
       this.args = this.getArgs();
     }));
 
@@ -70,13 +66,13 @@ export class PlaceholderItem extends JSXComponent(PlaceholderItemProps) {
 
   getArgs(): unknown[] {
     return this.componentDeps.map(
-      (entity) => this.plugins.getValue(entity),
+      (entity) => this.props.plugins.getValue(entity),
     );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  get currentComponent(): any {
-    if (this.componentDeps.every((entity) => this.plugins.hasValue(entity))) {
+  get currentTemplate(): any {
+    if (this.componentDeps.every((entity) => this.props.plugins.hasValue(entity))) {
       return this.props.componentTypes[this.props.index];
     }
 

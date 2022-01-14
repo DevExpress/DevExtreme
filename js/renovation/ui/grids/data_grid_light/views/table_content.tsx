@@ -19,6 +19,7 @@ export const viewFunction = (viewModel: TableContent): JSX.Element => (
         <Fragment>
           {viewModel.props.dataSource.map((data, rowIndex) => (
             <DataRow
+              plugins={viewModel.plugins}
               data={data}
               rowIndex={rowIndex}
               columns={viewModel.props.columns}

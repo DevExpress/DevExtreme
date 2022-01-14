@@ -1,29 +1,40 @@
-/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings, OneWay,
-  TwoWay, Fragment, Consumer, Effect, InternalState,
+  TwoWay, Fragment,
 } from '@devextreme-generator/declarations';
+import {
+  createValue, createSelector,
+} from '../../../../utils/plugin/context';
 
-import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 // import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
-import { VisibleItems } from '../data_grid_light';
+import { TotalCount } from '../data_grid_light';
 import { RowData } from '../types';
 
-import {
-  PageIndex, PageSize, SetPageIndex, SetPageSize,
-} from './plugins';
+export const PageIndex = createValue<number>();
+export const SetPageIndex = createValue<(pageIndex: number) => void>();
+export const PageSize = createValue<number | 'all'>();
+export const SetPageSize = createValue<(pageSize: number | 'all') => void>();
+
+export const PageCount = createSelector(
+  [TotalCount, PageSize],
+  (totalCount, pageSize) => {
+    if (pageSize === 'all') {
+      return 1;
+    }
+    return Math.ceil(totalCount / pageSize);
+  },
+);
 
 export const viewFunction = (viewModel: Paging): JSX.Element => (
   <Fragment>
-    <ValueSetter plugins={viewModel.plugins} type={PageIndex} value={viewModel.props.pageIndex} />
-    <ValueSetter plugins={viewModel.plugins} type={PageSize} value={viewModel.pageSize} />
-    {/* <ValueSetter type={SetPageIndex} value={viewModel.setPageIndex} /> */}
-    {/* <ValueSetter type={SetPageSize} value={viewModel.setPageSize} /> */}
+    <ValueSetter type={PageIndex} func={viewModel.props.pageIndex} />
+    <ValueSetter type={PageSize} value={viewModel.pageSize} />
+    <ValueSetter type={SetPageIndex} value={viewModel.setPageIndex} />
+    <ValueSetter type={SetPageSize} value={viewModel.setPageSize} />
     {/* <GetterExtender type={VisibleItems} order={1} func={viewModel.calculateVisibleItems} /> */}
   </Fragment>
 );
@@ -42,40 +53,9 @@ export class PagingProps {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
   view: viewFunction,
 })
 export class Paging extends JSXComponent(PagingProps) {
-  @Consumer(PluginsContext)
-  plugins!: Plugins;
-
-  @InternalState() forceCounter = 0;
-
-  @Effect()
-  updateVisibleItems(): () => void {
-    return this.plugins.extend(
-      VisibleItems,
-      1,
-      this.calculateVisibleItems.bind(this),
-    );
-  }
-
-  @Effect()
-  updatePageIndexSetter(): void {
-    this.plugins.set(
-      SetPageIndex,
-      this.setPageIndex.bind(this),
-    );
-  }
-
-  @Effect()
-  updatePageSizeSetter(): void {
-    this.plugins.set(
-      SetPageSize,
-      this.setPageSize.bind(this),
-    );
-  }
-
   get pageSize(): number | 'all' {
     if (this.props.pageSize === 0) {
       return 'all';
@@ -85,16 +65,13 @@ export class Paging extends JSXComponent(PagingProps) {
 
   setPageIndex(pageIndex: number): void {
     this.props.pageIndex = pageIndex;
-    this.forceCounter += 1;
   }
 
   setPageSize(pageSize: number | 'all'): void {
     this.props.pageSize = pageSize;
-    this.forceCounter += 1;
   }
 
   calculateVisibleItems(dataSource: RowData[]): RowData[] {
-    const { forceCounter } = this;
     if (!this.props.enabled || this.pageSize === 'all') {
       return dataSource;
     }

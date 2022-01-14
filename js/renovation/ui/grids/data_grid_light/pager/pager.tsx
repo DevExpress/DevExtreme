@@ -17,29 +17,39 @@ import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
 const DATAGRID_PAGER_CLASS = 'dx-datagrid-pager';
 
-export const viewFunction = (viewModel: Pager): JSX.Element => (
+export const viewFunction = ({
+  plugins, allowedPageSizes, onPageIndexChange, onPageSizeChange,
+  props: {
+    displayMode, infoText, showInfo, showNavigationButtons, showPageSizeSelector, visible,
+  },
+}: Pager): JSX.Element => (
   <PlaceholderExtender
+    plugins={plugins}
     type={FooterPlaceholder}
     order={1}
     deps={[PageIndex, PageSize, TotalCount, PageCount]}
-    template={([pageIndex, pageSize, totalCount, pageCount]): JSX.Element => (
+    template={({ deps }): JSX.Element => (
       <PagerContent
         className={DATAGRID_PAGER_CLASS}
-        pageSizes={viewModel.allowedPageSizes}
-        displayMode={viewModel.props.displayMode}
-        infoText={viewModel.props.infoText}
-        showInfo={viewModel.props.showInfo}
-        showNavigationButtons={viewModel.props.showNavigationButtons}
-        showPageSizes={viewModel.props.showPageSizeSelector}
-        pageCount={pageCount}
-        visible={viewModel.props.visible}
-        totalCount={totalCount}
+        pageSizes={allowedPageSizes}
+        displayMode={displayMode}
+        infoText={infoText}
+        showInfo={showInfo}
+        showNavigationButtons={showNavigationButtons}
+        showPageSizes={showPageSizeSelector}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        pageCount={deps[3]}
+        visible={visible}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        totalCount={deps[2]}
 
-        pageIndex={pageIndex}
-        pageIndexChange={viewModel.onPageIndexChange}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        pageIndex={deps[0]}
+        pageIndexChange={onPageIndexChange}
 
-        pageSize={pageSize === 'all' ? 0 : pageSize}
-        pageSizeChange={viewModel.onPageSizeChange}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        pageSize={deps[1] === 'all' ? 0 : deps[1]}
+        pageSizeChange={onPageSizeChange}
       />
     )}
   />
@@ -71,6 +81,7 @@ export class PagerProps {
 
 @Component({
   defaultOptionRules: null,
+  jQuery: { register: true },
   view: viewFunction,
 })
 export class Pager extends JSXComponent(PagerProps) {

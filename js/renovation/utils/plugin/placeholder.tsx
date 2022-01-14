@@ -10,9 +10,14 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
-  componentTypes, componentDeps, props: { column, children },
+  plugins, componentTypes, componentDeps, props: { column, children },
 }: Placeholder): JSX.Element => (
-  <PlaceholderItem componentTypes={componentTypes} componentDeps={componentDeps} column={column}>
+  <PlaceholderItem
+    plugins={plugins}
+    componentTypes={componentTypes}
+    componentDeps={componentDeps}
+    column={column}
+  >
     { children }
   </PlaceholderItem>
 );

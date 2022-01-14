@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { PlaceholderItem, PlaceholderItemProps, viewFunction as PlaceholderItemView } from '../placeholder_item';
+import { PlaceholderItem, viewFunction as PlaceholderItemView } from '../placeholder_item';
 import { createValue, Plugins } from '../context';
 
 describe('PlaceholderItem', () => {
@@ -58,12 +58,12 @@ describe('PlaceholderItem', () => {
         componentTypes,
         componentDeps: [],
         index: 0,
-      } as Partial<PlaceholderItemProps>;
+        plugins: new Plugins(),
+      };
 
       const placeholderItem = new PlaceholderItem(props);
-      placeholderItem.plugins = new Plugins();
 
-      expect(placeholderItem.currentComponent).toEqual(componentTypes[0]);
+      expect(placeholderItem.currentTemplate).toEqual(componentTypes[0]);
     });
 
     it('currentComponent returns undefined for next index', () => {
@@ -73,12 +73,12 @@ describe('PlaceholderItem', () => {
         componentTypes,
         componentDeps: [],
         index: 1,
-      } as Partial<PlaceholderItemProps>;
+        plugins: new Plugins(),
+      };
 
       const placeholderItem = new PlaceholderItem(props);
-      placeholderItem.plugins = new Plugins();
 
-      expect(placeholderItem.currentComponent).toBeUndefined();
+      expect(placeholderItem.currentTemplate).toBeUndefined();
     });
 
     it('currentComponent returns null if deps do not have values', () => {
@@ -90,12 +90,12 @@ describe('PlaceholderItem', () => {
         componentTypes,
         componentDeps: [[SomeValue1]],
         index: 0,
-      } as Partial<PlaceholderItemProps>;
+        plugins: new Plugins(),
+      };
 
       const placeholderItem = new PlaceholderItem(props);
-      placeholderItem.plugins = new Plugins();
 
-      expect(placeholderItem.currentComponent).toBeNull();
+      expect(placeholderItem.currentTemplate).toBeNull();
     });
 
     it('currentComponent returns component if deps have values', () => {
@@ -107,13 +107,13 @@ describe('PlaceholderItem', () => {
         componentTypes,
         componentDeps: [[SomeValue]],
         index: 0,
-      } as Partial<PlaceholderItemProps>;
+        plugins: new Plugins(),
+      };
 
       const placeholderItem = new PlaceholderItem(props);
-      placeholderItem.plugins = new Plugins();
-      placeholderItem.plugins.set(SomeValue, 1);
+      props.plugins.set(SomeValue, 1);
 
-      expect(placeholderItem.currentComponent).toEqual(componentTypes[0]);
+      expect(placeholderItem.currentTemplate).toEqual(componentTypes[0]);
     });
 
     it('args returns values for componentDeps', () => {
@@ -125,12 +125,12 @@ describe('PlaceholderItem', () => {
         componentTypes,
         componentDeps: [[SomeValue]],
         index: 0,
-      } as Partial<PlaceholderItemProps>;
+        plugins: new Plugins(),
+      };
 
       const placeholderItem = new PlaceholderItem(props);
-      placeholderItem.plugins = new Plugins();
       placeholderItem.updateArgs();
-      placeholderItem.plugins.set(SomeValue, 1);
+      props.plugins.set(SomeValue, 1);
 
       expect(placeholderItem.args).toEqual([1]);
     });
@@ -146,15 +146,15 @@ describe('PlaceholderItem', () => {
         componentTypes: [(values) => <SomeComponent values={values} />],
         componentDeps: [[SomeValue1, SomeValue2]],
         index: 0,
-      } as Partial<PlaceholderItemProps>;
+        plugins: new Plugins(),
+      };
 
       const placeholderItem = new PlaceholderItem(props);
-      placeholderItem.plugins = new Plugins();
 
       placeholderItem.updateArgs();
 
-      placeholderItem.plugins.set(SomeValue1, 1);
-      placeholderItem.plugins.set(SomeValue2, 2);
+      props.plugins.set(SomeValue1, 1);
+      props.plugins.set(SomeValue2, 2);
 
       expect(placeholderItem.args).toEqual([1, 2]);
     });
@@ -167,18 +167,18 @@ describe('PlaceholderItem', () => {
         componentTypes: [(values) => <SomeComponent values={values} />],
         componentDeps: [[SomeValue1]],
         index: 0,
-      } as Partial<PlaceholderItemProps>;
+        plugins: new Plugins(),
+      };
 
       const placeholderItem = new PlaceholderItem(props);
-      placeholderItem.plugins = new Plugins();
 
-      placeholderItem.plugins.set(SomeValue1, 0);
+      props.plugins.set(SomeValue1, 0);
 
       const dispose = placeholderItem.updateArgs();
 
       dispose();
 
-      placeholderItem.plugins.set(SomeValue1, 1);
+      props.plugins.set(SomeValue1, 1);
 
       expect(placeholderItem.args).toEqual([0]);
     });
