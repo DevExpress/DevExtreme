@@ -291,8 +291,9 @@ const Resizable = DOMComponent.inherit({
     _isDeltaProportional: function(delta) {
         const deltaRatio = delta.x / delta.y;
         const dimensionsRatio = this._elementSize.width / this._elementSize.height;
+        const epsilon = 0.5;
 
-        return dimensionsRatio - 0.1 < deltaRatio && deltaRatio < dimensionsRatio + 0.1;
+        return dimensionsRatio - epsilon < deltaRatio && deltaRatio < dimensionsRatio + epsilon;
     },
 
     _getDeltaByOffset: function(offset) {
