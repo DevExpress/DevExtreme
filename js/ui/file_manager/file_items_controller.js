@@ -130,7 +130,6 @@ export default class FileItemsController {
     }
 
     setCurrentPath(path) {
-        this.log(1, 'set path', path);
         const pathParts = getPathParts(path);
         const rawPath = pathCombine(...pathParts);
         if(this.getCurrentDirectory().fileItem.relativeName === rawPath) {
@@ -141,7 +140,6 @@ export default class FileItemsController {
     }
 
     setCurrentPathByKeys(pathKeys) {
-        this.log(2, 'set path keys', pathKeys);
         if(equalByValue(this.getCurrentDirectory().fileItem.pathKeys, pathKeys, 0, true)) {
             return new Deferred().resolve().promise();
         }
@@ -178,7 +176,6 @@ export default class FileItemsController {
         }
 
         if(this._currentDirectoryInfo && this._currentDirectoryInfo === directoryInfo) {
-            this.log('# setCurrentDirectory.then(_raisePathPotentiallyChanged)');
             this._raisePathPotentiallyChanged();
             return;
         }
@@ -199,7 +196,6 @@ export default class FileItemsController {
     }
 
     getCurrentItems(onlyFiles) {
-        this.log('# getCurrentItems');
         return this._dataLoadingDeferred
             ? this._dataLoadingDeferred.then(() => this._getCurrentItemsInternal(onlyFiles))
             : this._getCurrentItemsInternal(onlyFiles);
@@ -216,7 +212,6 @@ export default class FileItemsController {
     }
 
     getDirectories(parentDirectoryInfo, skipNavigationOnError) {
-        this.log(1.4, 'getDirectories');
         return this.getDirectoryContents(parentDirectoryInfo, skipNavigationOnError)
             .then(itemInfos => itemInfos.filter(info => info.fileItem.isDirectory));
     }
@@ -229,19 +224,13 @@ export default class FileItemsController {
     }
 
     getDirectoryContents(parentDirectoryInfo, skipNavigationOnError) {
-        this.log(1.5, 'getDirectoryContents', parentDirectoryInfo?.fileItem?.name);
-        // if(window.canLog && parentDirectoryInfo?.fileItem?.name === 'Folder 2') {
-        //     console.trace('1.5');
-        // }
         if(!parentDirectoryInfo) {
-            this.log('!!! loadItemsDeferred !parentDirectoryInfo');
             return new Deferred()
                 .resolve([ this._rootDirectoryInfo ])
                 .promise();
         }
 
         if(parentDirectoryInfo.itemsLoaded) {
-            this.log('!!! loadItemsDeferred itemsLoaded');
             return new Deferred()
                 .resolve(parentDirectoryInfo.items)
                 .promise();
@@ -250,7 +239,6 @@ export default class FileItemsController {
         const dirKey = parentDirectoryInfo.getInternalKey();
         let loadItemsDeferred = this._loadedItems[dirKey];
         if(loadItemsDeferred) {
-            this.log('!!! loadItemsDeferred exists');
             return loadItemsDeferred;
         }
 
@@ -272,23 +260,17 @@ export default class FileItemsController {
         return loadItemsDeferred;
     }
 
-    log() {
-        // eslint-disable-next-line no-console, no-undef
-        window.canLog && console.log(...arguments);
-    }
-
     _getFileItems(parentDirectoryInfo, skipNavigationOnError) {
-        this.log(1.6, '_getFileItems');
         let loadItemsDeferred = null;
         try {
             loadItemsDeferred = this._fileProvider.getItems(parentDirectoryInfo.fileItem);
         } catch(error) {
             return this._handleItemLoadError(parentDirectoryInfo, error, skipNavigationOnError);
         }
-        this.log('3 (1.6) - _getFileItems - called', parentDirectoryInfo.fileItem.name);
-        return when(loadItemsDeferred).then(
-            fileItems => this._securityController.getAllowedItems(fileItems),
-            errorInfo => { this.log('3 - handle error'); return this._handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError); });
+        return when(loadItemsDeferred)
+            .then(
+                fileItems => this._securityController.getAllowedItems(fileItems),
+                errorInfo => this._handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError));
     }
 
     createDirectory(parentDirectoryInfo, name) {
@@ -521,16 +503,13 @@ export default class FileItemsController {
     }
 
     _setCurrentDirectoryByPathPartsInternal(pathParts, useKeys) {
-        this.log(1.2, '_setCurrentDirectoryByPathPartsInternal');
         return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts, useKeys)
             .then(directoryInfo => {
                 for(let info = directoryInfo.parentDirectory; info; info = info.parentDirectory) {
                     info.expanded = true;
                 }
-                this.log(1.2, '_setCurrentDirectoryByPathPartsInternal.then(setCurrentDirectory)', directoryInfo.fileItem.name);
                 this.setCurrentDirectory(directoryInfo);
             }, () => {
-                this.log(1.2, '_setCurrentDirectoryByPathPartsInternal.then(())=> {},_raisePathPotentiallyChanged)');
                 this._raisePathPotentiallyChanged();
             });
     }
@@ -546,9 +525,7 @@ export default class FileItemsController {
             this._raiseDataLoading(operation);
         }
 
-        this.log(1.1, '_executeDataLoad');
         return action().always(() => {
-            this.log('(1.1) _executeDataLoad._setCurrentDirectoryByPathPartsInternal.always()');
             const tempDeferred = this._dataLoadingDeferred;
             this._dataLoadingDeferred = null;
             this._dataLoading = false;
@@ -557,7 +534,6 @@ export default class FileItemsController {
     }
 
     _getDirectoryByPathParts(parentDirectoryInfo, pathParts, useKeys) {
-        this.log(1.3, '_getDirectoryByPathParts');
         if(pathParts.length < 1) {
             return new Deferred()
                 .resolve(parentDirectoryInfo)
