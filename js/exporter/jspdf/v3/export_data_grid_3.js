@@ -108,13 +108,13 @@ function exportDataGrid(doc, dataGrid, options) {
                 const isTextNotEmpty = isDefined(sourceRect.sourceCellInfo.text) && sourceRect.sourceCellInfo.text.length > 0;
                 if(isTextNotEmpty) {
                     const isTextWidthGreaterThanRect = doc.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
-                    const isHorizontalAlignSpecified = isDefined(sourceRect.sourceCellInfo.horizontalAlign) && sourceRect.sourceCellInfo.horizontalAlign !== 'left';
-                    if(isTextWidthGreaterThanRect || isHorizontalAlignSpecified) {
-                        const leftTextOffset = sourceRect.sourceCellInfo._textOffset ?? { left: 0, top: 0 };
-                        const rightTextOffset = Object.assign({}, leftTextOffset, { left: leftTextOffset.left - leftRect.w });
+                    const isTextLeftAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'left';
+                    if(isTextWidthGreaterThanRect || !isTextLeftAlignment) {
+                        const leftTextTopOffset = sourceRect.sourceCellInfo._textTopOffset ?? 0;
+                        const rightTextTopOffset = leftTextTopOffset - leftRect.w;
 
-                        leftRectTextOptions = Object.assign({}, { _textOffset: leftTextOffset });
-                        rightRectTextOptions = Object.assign({}, { _textOffset: rightTextOffset });
+                        leftRectTextOptions = Object.assign({}, { _textTopOffset: leftTextTopOffset });
+                        rightRectTextOptions = Object.assign({}, { _textTopOffset: rightTextTopOffset });
                     } else {
                         rightRectTextOptions = Object.assign({}, { text: '' });
                     }

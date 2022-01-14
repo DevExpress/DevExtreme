@@ -131,12 +131,6 @@ function createMockPdfDoc(options) {
         this.__text.apply(this, arguments);
     };
 
-    result.__setLineJoin = result.setLineJoin;
-    result.setLineJoin = function() {
-        this.__log.push('setLineJoin,' + argumentsToString.apply(null, arguments));
-        this.__setLineJoin.apply(this, arguments);
-    };
-
     result.__moveTo = result.moveTo;
     result.moveTo = function() {
         this.__log.push('moveTo,' + argumentsToString.apply(null, arguments));
@@ -147,12 +141,6 @@ function createMockPdfDoc(options) {
     result.lineTo = function() {
         this.__log.push('lineTo,' + argumentsToString.apply(null, arguments));
         this.__lineTo.apply(this, arguments);
-    };
-
-    result.__close = result.close;
-    result.close = function() {
-        this.__log.push('close,' + argumentsToString.apply(null, arguments));
-        this.__close.apply(this, arguments);
     };
 
     result.__clip = result.clip;
