@@ -63,7 +63,7 @@ export class App extends JSXComponent<AppProps>() {
       };
   }
 
-  @Effect({ run: 'always' })
+  @Effect()
   initializeInstance(): void {
     // eslint-disable-next-line no-restricted-globals
     (window as unknown as { componentInstance: unknown })
