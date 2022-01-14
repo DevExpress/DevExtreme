@@ -39,6 +39,7 @@ import EdgesOption from './diagram.edges_option';
 
 const DIAGRAM_CLASS = 'dx-diagram';
 const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
+const DIAGRAM_OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + '-content-wrapper';
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + '-content';
@@ -332,7 +333,8 @@ class Diagram extends Widget {
                     {
                         shapeIconSpacing: DIAGRAM_TOOLBOX_SHAPE_SPACING,
                         shapeIconCountInRow: this.option('toolbox.shapeIconsPerRow'),
-                        shapeIconAttributes: { 'data-toggle': e.dataToggle }
+                        shapeIconAttributes: { 'data-toggle': e.dataToggle },
+                        toolboxClass: DIAGRAM_OVERLAY_CONTENT_CLASS
                     }
                 );
             },
@@ -854,8 +856,8 @@ class Diagram extends Widget {
         let startLineEndingSetter;
         let endLineEndingGetter;
         let endLineEndingSetter;
-        let containerKeyGetter;
-        let containerKeySetter;
+        let containerChildrenGetter;
+        let containerChildrenSetter;
 
         const data = {
             nodeDataSource: this._nodesOption && this._nodesOption.getItems(),
@@ -898,10 +900,10 @@ class Diagram extends Widget {
                 getItems: this._createOptionGetter('nodes.itemsExpr'),
                 setItems: this._createOptionSetter('nodes.itemsExpr'),
 
-                getContainerKey: (containerKeyGetter = this._createOptionGetter('nodes.containerKeyExpr')),
-                setContainerKey: (containerKeySetter = this._createOptionSetter('nodes.containerKeyExpr')),
-                getChildren: !containerKeyGetter && !containerKeySetter && this._createOptionGetter('nodes.containerChildrenExpr'),
-                setChildren: !containerKeyGetter && !containerKeySetter && this._createOptionSetter('nodes.containerChildrenExpr')
+                getChildren: (containerChildrenGetter = this._createOptionGetter('nodes.containerChildrenExpr')),
+                setChildren: (containerChildrenSetter = this._createOptionSetter('nodes.containerChildrenExpr')),
+                getContainerKey: !containerChildrenGetter && !containerChildrenSetter && this._createOptionGetter('nodes.containerKeyExpr'),
+                setContainerKey: !containerChildrenGetter && !containerChildrenSetter && this._createOptionSetter('nodes.containerKeyExpr'),
             },
             edgeDataImporter: {
                 getKey: this._createOptionGetter('edges.keyExpr'),
@@ -1579,6 +1581,7 @@ class Diagram extends Widget {
         this._diagramInstance && this._diagramInstance.refreshToolbox();
         if(this._toolbox) {
             this._toolbox.updateTooltips();
+            this._toolbox.updateFilter();
             this._toolbox.updateMaxHeight();
         }
     }

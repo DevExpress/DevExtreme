@@ -1117,6 +1117,27 @@ declare module DevExpress {
    */
   export function hideTopOverlay(): boolean;
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface PdfExportGanttFont {
+    /**
+     * [descr:PdfExportGanttFont.fontObject]
+     */
+    fontObject: object;
+    /**
+     * [descr:PdfExportGanttFont.name]
+     */
+    name: string;
+    /**
+     * [descr:PdfExportGanttFont.style]
+     */
+    style?: string;
+    /**
+     * [descr:PdfExportGanttFont.weight]
+     */
+    weight?: string | number;
+  }
+  /**
    * [descr:PositionConfig]
    */
   export interface PositionConfig {
@@ -1634,6 +1655,16 @@ declare module DevExpress.data {
       TItem,
       TKey
     >;
+    export type ResolvedData<TItem = any> =
+      | Object
+      | Array<TItem>
+      | Array<GroupItem>
+      | {
+          data: Array<TItem> | Array<GroupItem>;
+          totalCount?: number;
+          summary?: Array<any>;
+          groupCount?: number;
+        };
   }
   /**
    * @deprecated Use Options instead
@@ -1656,17 +1687,13 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load: (options: LoadOptions<TItem>) =>
+    load: (
+      options: LoadOptions<TItem>
+    ) =>
       | DevExpress.core.utils.DxPromise<
-          | Array<TItem>
-          | Array<DevExpress.data.CustomStore.GroupItem>
-          | {
-              data: Array<TItem> | Array<DevExpress.data.CustomStore.GroupItem>;
-              totalCount?: number;
-              summary?: Array<any>;
-              groupCount?: number;
-            }
+          DevExpress.data.CustomStore.ResolvedData<TItem>
         >
+      | PromiseLike<DevExpress.data.CustomStore.ResolvedData<TItem>>
       | Array<DevExpress.data.CustomStore.GroupItem>
       | Array<TItem>;
     /**
@@ -4188,6 +4215,10 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportGanttProps.dateRange]
      */
     dateRange?: 'all' | 'visible' | object;
+    /**
+     * [descr:PdfExportGanttProps.font]
+     */
+    font?: PdfExportGanttFont;
   }
 }
 declare module DevExpress.ui {
@@ -18287,7 +18318,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxProgressBarOptions.value]
      */
-    value?: number | boolean;
+    value?: number | false;
   }
   /**
    * [descr:dxRadioGroup]

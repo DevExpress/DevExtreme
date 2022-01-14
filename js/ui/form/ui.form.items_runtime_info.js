@@ -108,6 +108,10 @@ export default class FormItemsRunTimeInfo {
         return this._findFieldByCondition(({ item }) => item === targetItem, 'itemIndex');
     }
 
+    findPreparedItemByItem(item) {
+        return this._findFieldByCondition(({ item: currentItem }) => currentItem === item, 'preparedItem');
+    }
+
     getItems() {
         return this._map;
     }

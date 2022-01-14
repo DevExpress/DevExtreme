@@ -40,7 +40,8 @@ const IGNORE_PATHS_BY_FRAMEWORKS = {
     vue: [],
     react: [],
     angular: [
-        '!js/renovation/ui/pager/pager.tsx'
+        '!js/renovation/ui/pager/pager.tsx',
+        '!js/renovation/ui/grids/data_grid_light/**/*',
     ]
 };
 

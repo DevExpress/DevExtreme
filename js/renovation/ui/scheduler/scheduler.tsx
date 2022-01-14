@@ -37,14 +37,18 @@ import {
   AppointmentsViewModelType,
   AppointmentViewModel,
   AppointmentClickData,
+  ReducedIconHoverData,
 } from './appointment/types';
-import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
 import { getPreparedDataItems, resolveDataItems } from './utils/data';
 import { getFilterStrategy } from './utils/filtering/local';
 import combineRemoteFilter from './utils/filtering/remote';
+import { ReducedIconTooltip } from './appointment/reduced_icon_tooltip/layout';
+import { AppointmentsContextProvider } from './appointments_context_provider';
+import { IAppointmentContext } from './appointments_context';
+import { ResourceMapType } from './resources/utils';
 
 export const viewFunction = ({
   restAttributes,
@@ -54,13 +58,15 @@ export const viewFunction = ({
   setCurrentDate,
   setCurrentView,
   startViewDate,
-  appointmentsViewModel,
   tooltipData,
   tooltipTarget,
   tooltipVisible,
+  reducedIconTooltipVisible,
+  reducedIconEndDate,
+  reducedIconTarget,
   changeTooltipVisible,
-  showTooltip,
   workSpaceKey,
+  appointmentsContextValue,
 
   props: {
     accessKey,
@@ -110,8 +116,6 @@ export const viewFunction = ({
     dateCellTemplate,
     timeCellTemplate,
     resourceCellTemplate,
-    appointmentTemplate,
-    appointmentCollectorTemplate,
   } = currentViewConfig;
 
   return (
@@ -152,65 +156,54 @@ export const viewFunction = ({
             viewType={type}
           />
         )}
-        <WorkSpace
-          firstDayOfWeek={firstDayOfWeek}
-          startDayHour={startDayHour}
-          endDayHour={endDayHour}
-          cellDuration={cellDuration}
-          groupByDate={groupByDate}
-          scrolling={scrolling}
-          currentDate={currentDate}
-          intervalCount={intervalCount}
-          groupOrientation={groupOrientation}
-          startDate={startDate}
-          showAllDayPanel={showAllDayPanel}
-          showCurrentTimeIndicator={showCurrentTimeIndicator}
-          indicatorUpdateInterval={indicatorUpdateInterval}
-          shadeUntilCurrentTime={shadeUntilCurrentTime}
-          crossScrollingEnabled={crossScrollingEnabled}
-          hoursInterval={hoursInterval}
-          groups={loadedResources}
-          type={type}
-          schedulerHeight={height}
-          schedulerWidth={width}
+        <AppointmentsContextProvider
+          appointmentsContextValue={appointmentsContextValue}
+        >
+          <WorkSpace
+            firstDayOfWeek={firstDayOfWeek}
+            startDayHour={startDayHour}
+            endDayHour={endDayHour}
+            cellDuration={cellDuration}
+            groupByDate={groupByDate}
+            scrolling={scrolling}
+            currentDate={currentDate}
+            intervalCount={intervalCount}
+            groupOrientation={groupOrientation}
+            startDate={startDate}
+            startViewDate={startViewDate}
+            showAllDayPanel={showAllDayPanel}
+            showCurrentTimeIndicator={showCurrentTimeIndicator}
+            indicatorUpdateInterval={indicatorUpdateInterval}
+            shadeUntilCurrentTime={shadeUntilCurrentTime}
+            crossScrollingEnabled={crossScrollingEnabled}
+            hoursInterval={hoursInterval}
+            groups={loadedResources}
+            type={type}
+            schedulerHeight={height}
+            schedulerWidth={width}
 
-          allowMultipleCellSelection={allowMultipleCellSelection}
-          allDayPanelExpanded={allDayPanelExpanded}
-          onViewRendered={onViewRendered}
+            allowMultipleCellSelection={allowMultipleCellSelection}
+            allDayPanelExpanded={allDayPanelExpanded}
+            onViewRendered={onViewRendered}
 
-          dataCellTemplate={dataCellTemplate}
-          timeCellTemplate={timeCellTemplate}
-          dateCellTemplate={dateCellTemplate}
-          resourceCellTemplate={resourceCellTemplate}
+            dataCellTemplate={dataCellTemplate}
+            timeCellTemplate={timeCellTemplate}
+            dateCellTemplate={dateCellTemplate}
+            resourceCellTemplate={resourceCellTemplate}
 
-          allDayAppointments={(
-            <AppointmentLayout
-              isAllDay
-              appointments={appointmentsViewModel.allDay}
-              overflowIndicators={appointmentsViewModel.allDayCompact}
-              appointmentTemplate={appointmentTemplate}
-              overflowIndicatorTemplate={appointmentCollectorTemplate}
-              onAppointmentClick={showTooltip}
-            />
-          )}
-
-          appointments={(
-            <AppointmentLayout
-              appointments={appointmentsViewModel.regular}
-              overflowIndicators={appointmentsViewModel.regularCompact}
-              appointmentTemplate={appointmentTemplate}
-              overflowIndicatorTemplate={appointmentCollectorTemplate}
-              onAppointmentClick={showTooltip}
-            />
-          )}
-
-          key={workSpaceKey}
-        />
+            key={workSpaceKey}
+          />
+        </AppointmentsContextProvider>
         <AppointmentTooltip
           visible={tooltipVisible}
           onVisibleChange={changeTooltipVisible}
           target={tooltipTarget}
           dataList={tooltipData}
+        />
+        <ReducedIconTooltip
+          visible={reducedIconTooltipVisible}
+          endDate={reducedIconEndDate}
+          target={reducedIconTarget}
         />
       </div>
     </Widget>
@@ -225,7 +218,7 @@ export const viewFunction = ({
 export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState() workSpaceViewModel?: ViewMetaData;
 
-  @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
+  @InternalState() resourcePromisesMap: ResourceMapType = new Map();
 
   @InternalState() loadedResources?: Group[];
 
@@ -239,6 +232,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() lastViewDateByEndDayHour?: Date;
 
+  @InternalState() reducedIconTooltipVisible = false;
+
+  @InternalState() reducedIconEndDate?: Date | string;
+
+  @InternalState() reducedIconTarget!: HTMLDivElement;
+
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
     const { views, currentView } = this.props;
@@ -250,9 +249,9 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     const {
       firstDayOfWeek, startDayHour, endDayHour, cellDuration, groupByDate, scrolling,
       dataCellTemplate, timeCellTemplate, resourceCellTemplate, dateCellTemplate,
-      appointmentTemplate, appointmentCollectorTemplate, maxAppointmentsPerCell, currentDate,
-      showAllDayPanel, showCurrentTimeIndicator, indicatorUpdateInterval, shadeUntilCurrentTime,
-      crossScrollingEnabled, height, width,
+      appointmentTemplate, appointmentCollectorTemplate, appointmentTooltipTemplate,
+      maxAppointmentsPerCell, currentDate, showAllDayPanel, showCurrentTimeIndicator,
+      indicatorUpdateInterval, shadeUntilCurrentTime, crossScrollingEnabled, height, width,
     } = this.props;
 
     return getCurrentViewConfig(
@@ -270,6 +269,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         dateCellTemplate,
         appointmentTemplate,
         appointmentCollectorTemplate,
+        appointmentTooltipTemplate,
         maxAppointmentsPerCell,
         showAllDayPanel,
         showCurrentTimeIndicator,
@@ -404,15 +404,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.currentViewConfig.groupOrientation,
     );
 
-    const validGroups = getValidGroups(this.props.groups, this.currentViewProps.groups);
-
     return getAppointmentsConfig(
       {
         adaptivityEnabled: this.props.adaptivityEnabled,
         rtlEnabled: this.props.rtlEnabled,
         resources: this.props.resources,
         timeZone: this.props.timeZone,
-        groups: validGroups,
+        groups: this.mergedGroups,
       },
       {
         startDayHour: this.currentViewConfig.startDayHour,
@@ -507,6 +505,29 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
   }
 
+  get mergedGroups(): string[] {
+    return getValidGroups(
+      this.props.groups,
+      this.currentViewProps.groups,
+    );
+  }
+
+  get appointmentsContextValue(): IAppointmentContext {
+    return {
+      viewModel: this.appointmentsViewModel,
+      groups: this.mergedGroups,
+      resources: this.props.resources,
+      resourceLoaderMap: this.resourcePromisesMap,
+      loadedResources: this.loadedResources,
+      dataAccessors: this.dataAccessors,
+      appointmentTemplate: this.currentViewConfig.appointmentTemplate,
+      overflowIndicatorTemplate: this.currentViewConfig.appointmentCollectorTemplate,
+      onAppointmentClick: (data) => this.showTooltip(data),
+      showReducedIconTooltip: (data) => this.showReducedIconTooltip(data),
+      hideReducedIconTooltip: () => this.hideReducedIconTooltip(),
+    };
+  }
+
   @Method()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addAppointment(_appointment: Appointment): void {
@@ -581,10 +602,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadGroupResources(): void {
-    const validGroups = getValidGroups(this.props.groups, this.currentViewProps.groups);
-
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    (loadResources(validGroups, this.props.resources, this.resourcePromisesMap) as Promise<Group[]>)
+    (loadResources(
+      this.mergedGroups,
+      this.props.resources,
+      this.resourcePromisesMap,
+    ) as Promise<Group[]>)
       .then((loadedResources) => {
         this.loadedResources = loadedResources;
       });
@@ -647,5 +670,15 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   changeTooltipVisible(value: boolean): void {
     this.tooltipVisible = value;
+  }
+
+  showReducedIconTooltip(data: ReducedIconHoverData): void {
+    this.reducedIconTarget = data.target;
+    this.reducedIconEndDate = data.endDate;
+    this.reducedIconTooltipVisible = true;
+  }
+
+  hideReducedIconTooltip(): void {
+    this.reducedIconTooltipVisible = false;
   }
 }

@@ -66,6 +66,7 @@ const createScheduler = async (
     for (const view of views) {
       await updateComponentOptions(platform, { currentView: view });
 
+      await t.wait(1000);
       await t
         .expect(scheduler.checkViewType(view))
         .ok();

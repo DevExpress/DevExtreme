@@ -11,19 +11,26 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
 
         const scrollable = this._viewRef.current.scrollableRef.current.scrollableRef;
 
-        const setContainerDimensions = scrollable.setContainerDimensions;
+        // const setContainerDimensions = scrollable.setContainerDimensions;
 
-        scrollable.setContainerDimensions = function() {
-            setContainerDimensions.apply(this, arguments);
-            reRender();
-        };
+        // scrollable.setContainerDimensions = function() {
+        //     setContainerDimensions.apply(this, arguments);
+        //     reRender();
+        // };
 
-        const setContentDimensions = scrollable.setContentDimensions;
+        // const setContentHeight = scrollable.setContentHeight;
 
-        scrollable.setContentDimensions = function() {
-            setContentDimensions.apply(this, arguments);
-            reRender();
-        };
+        // scrollable.setContentHeight = function() {
+        //     setContentHeight.apply(this, arguments);
+        //     reRender();
+        // };
+
+        // const setContentWidth = scrollable.setContentWidth;
+
+        // scrollable.setContentWidth = function() {
+        //     setContentWidth.apply(this, arguments);
+        //     reRender();
+        // };
 
         const handleScroll = scrollable.handleScroll;
 
@@ -41,19 +48,8 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
             };
         }
 
-        let vScrollbar;
-        let hScrollbar;
-
-        if(this.option('useNative')) {
-            vScrollbar = scrollable.vScrollbarRef.current;
-            hScrollbar = scrollable.hScrollbarRef.current;
-        } else {
-            const animatedVScrollbar = scrollable.vScrollbarRef.current;
-            const animatedHScrollbar = scrollable.hScrollbarRef.current;
-
-            vScrollbar = animatedVScrollbar?.scrollbarRef?.current;
-            hScrollbar = animatedHScrollbar?.scrollbarRef?.current;
-        }
+        const vScrollbar = scrollable.vScrollbarRef.current;
+        const hScrollbar = scrollable.hScrollbarRef.current;
 
         if(vScrollbar) {
             const moveTo = vScrollbar.moveTo;

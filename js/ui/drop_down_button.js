@@ -420,10 +420,8 @@ const DropDownButton = Widget.inherit({
 
     _popupHidingHandler() {
         this.option('opened', false);
-        this.setAria({
-            expanded: false,
-            owns: undefined
-        });
+
+        this._setAriaExpanded(false);
     },
 
     _popupOptionChanged: function(args) {
@@ -451,9 +449,16 @@ const DropDownButton = Widget.inherit({
 
     _popupShowingHandler() {
         this.option('opened', true);
-        this.setAria({
-            expanded: true,
-            owns: this._popupContentId
+        this._setAriaExpanded(true);
+    },
+
+    _setAriaExpanded(value) {
+        this._ariaExpandedElements.forEach((ariaElement) => {
+            this.setAria({
+                expanded: value,
+                owns: value ? this._popupContentId : undefined,
+            },
+            $(ariaElement));
         });
     },
 
@@ -465,12 +470,18 @@ const DropDownButton = Widget.inherit({
 
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
 
+        const buttonElements = this._buttonGroup.$element().find('.dx-button').toArray();
+
+        this._ariaExpandedElements = [ ...buttonElements, this.$element() ];
+
         this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
         this._buttonGroup.registerKeyHandler('upArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('escape', this._escHandler.bind(this));
 
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
+
+        this._setAriaExpanded(this.option('opened'));
     },
 
     _updateArrowClass() {
@@ -548,12 +559,14 @@ const DropDownButton = Widget.inherit({
             this._setListOption('selectionMode', 'single');
             const selectedItemKey = this.option('selectedItemKey');
             this._setListOption('selectedItemKeys', isDefined(selectedItemKey) ? [selectedItemKey] : []);
+            this._selectedItemKeyChanged(this.option('selectedItemKey'));
         } else {
             this._setListOption('selectionMode', 'none');
             this.option({
                 'selectedItemKey': undefined,
                 'selectedItem': undefined
             });
+            this._actionButtonOptionChanged({ text: this.option('text') });
         }
     },
 

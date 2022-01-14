@@ -91,6 +91,11 @@ describe('AppointmentContent', () => {
 
       expect(reducedIcon)
         .toHaveLength(1);
+
+      expect(reducedIcon.props())
+        .toEqual({
+          className: 'dx-scheduler-appointment-reduced-icon',
+        });
     });
 
     it('it should has correct render with template', () => {
@@ -119,6 +124,119 @@ describe('AppointmentContent', () => {
 
       expect(appointmentTemplate.props())
         .toEqual(templateProps);
+    });
+  });
+
+  describe('Behavior', () => {
+    describe('bindHoverEffect', () => {
+      it('should correctly handle events from the reduced icon element', () => {
+        const addEventListener = jest.fn();
+        const removeEventListener = jest.fn();
+        const showReducedIconTooltip = jest.fn();
+        const hideReducedIconTooltip = jest.fn();
+
+        const content = new AppointmentContent({
+          ...new AppointmentContentProps(),
+          showReducedIconTooltip,
+          hideReducedIconTooltip,
+          data: { appointmentData: {} },
+        });
+
+        content.refReducedIcon = {
+          current: {
+            addEventListener,
+            removeEventListener,
+          },
+        } as any;
+
+        const freeResources = content.bindHoverEffect() as any;
+
+        expect(addEventListener)
+          .toHaveBeenCalledTimes(2);
+
+        expect(addEventListener)
+          .toBeCalledWith('mouseenter', expect.any(Function));
+        expect(addEventListener)
+          .lastCalledWith('mouseleave', expect.any(Function));
+
+        addEventListener.mock.calls[0][1]();
+        expect(showReducedIconTooltip)
+          .toBeCalled();
+        addEventListener.mock.calls[1][1]();
+        expect(hideReducedIconTooltip)
+          .toBeCalled();
+
+        freeResources();
+
+        expect(removeEventListener)
+          .toHaveBeenCalledTimes(2);
+
+        expect(removeEventListener)
+          .toBeCalledWith('mouseenter', expect.any(Function));
+        expect(removeEventListener)
+          .lastCalledWith('mouseleave', expect.any(Function));
+
+        removeEventListener.mock.calls[0][1]();
+        expect(showReducedIconTooltip)
+          .toBeCalledTimes(2);
+        removeEventListener.mock.calls[1][1]();
+        expect(hideReducedIconTooltip)
+          .toBeCalledTimes(2);
+      });
+
+      it('should do nothing if reduced icon ref is not defined', () => {
+        const content = new AppointmentContent({
+          ...new AppointmentContentProps(),
+        });
+
+        content.refReducedIcon = {
+          undefined,
+        } as any;
+
+        expect(() => {
+          const freeResources = content.bindHoverEffect();
+          expect(freeResources)
+            .not.toThrow();
+        }).not.toThrow();
+      });
+    });
+
+    describe('onReducedIconMouseEnter', () => {
+      it('should invoke showReducedIconTooltip', () => {
+        const showReducedIconTooltip = jest.fn();
+        const content = new AppointmentContent({
+          data: {
+            appointmentData: {
+              endDate: 'some value 0',
+            },
+          },
+          showReducedIconTooltip,
+        } as any);
+
+        content.refReducedIcon = { current: 'some ref' } as any;
+
+        content.onReducedIconMouseEnter();
+
+        expect(showReducedIconTooltip)
+          .toBeCalledWith({
+            target: 'some ref',
+            endDate: 'some value 0',
+          });
+      });
+    });
+
+    describe('onReducedIconMouseLeave', () => {
+      it('should invoke hideReducedIconTooltip', () => {
+        const hideReducedIconTooltip = jest.fn();
+        const content = new AppointmentContent({
+          hideReducedIconTooltip,
+        } as any);
+
+        content.onReducedIconMouseLeave();
+
+        expect(hideReducedIconTooltip)
+          .toBeCalledTimes(1);
+      });
     });
   });
 

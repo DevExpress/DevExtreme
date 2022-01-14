@@ -1229,6 +1229,37 @@ QUnit.module('columnWidth auto option', {
         assert.equal($groupSpaceCells.length, 2, 'two group space cells in second row');
         assert.equal($groupSpaceCells.eq(0).width(), $groupSpaceCells.eq(1).width(), 'group space cell widths are equals');
     });
+
+    QUnit.test('Group summary cells should update width via setColumnWidths', function(assert) {
+        $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ value0: 0, value1: 1, value2: 2 }],
+            columnAutoWidth: true,
+            width: 300,
+            columns: [
+                {
+                    dataField: 'value0',
+                    groupIndex: 0
+                }, {
+                    dataField: 'value1',
+                    width: 100,
+                }, {
+                    dataField: 'value2',
+                    width: 100,
+                }
+            ],
+            summary: {
+                groupItems: [{
+                    column: 'value2',
+                    alignByColumn: true,
+                }]
+            },
+        });
+
+        // assert
+        const width = $('.dx-group-row td')[2].style.width;
+        assert.strictEqual(width, '');
+    });
 });
 
 

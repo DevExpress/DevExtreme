@@ -59,20 +59,20 @@ export default class ButtonWrapper extends Component {
         const validationGroup = this._validationGroupConfig;
 
         if (validationGroup !== undefined && validationGroup !== '') {
-          const { status, complete } = validationGroup.validate();
+          const validationResult = validationGroup.validate();
 
-          validationStatus = status;
+          validationStatus = validationResult.status;
 
-          if (status === 'pending') {
+          if (validationResult.status === 'pending') {
             needValidate = false;
             this.option('disabled', true);
 
-            complete.then(() => {
-              needValidate = true;
+            validationResult.complete.then(({ status }) => {
               this.option('disabled', false);
 
               validationStatus = status;
               validationStatus === 'valid' && submitInput.click();
+              needValidate = true;
             });
           }
         }

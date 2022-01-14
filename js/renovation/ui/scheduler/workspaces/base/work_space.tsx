@@ -301,7 +301,7 @@ export const viewFunction = ({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onViewRendered'>() {
+export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onViewRendered' | 'startViewDate'>() {
   @InternalState()
   groupPanelHeight: number | undefined;
 
@@ -404,32 +404,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     );
   }
 
-  // TODO: WA because memoization does not work in React.
-  // It should be inside Scheduler.tsx (and already is)
-  get startViewDate(): Date {
-    const {
-      currentDate,
-      startDayHour,
-      startDate,
-      intervalCount,
-      firstDayOfWeek,
-      type,
-    } = this.props;
-
-    const options = {
-      currentDate,
-      startDayHour,
-      startDate,
-      intervalCount,
-      firstDayOfWeek,
-    };
-
-    const viewDataGenerator = getViewDataGeneratorByViewType(type);
-    const startViewDate = viewDataGenerator.getStartViewDate(options) as Date;
-
-    return startViewDate;
-  }
-
   get completeViewDataMap(): ViewCellData[][] {
     const {
       currentDate,
@@ -456,7 +430,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       firstDayOfWeek,
       hoursInterval,
       cellDuration,
-      startViewDate: this.startViewDate,
+      startViewDate: this.props.startViewDate,
       groupOrientation: this.groupOrientation,
       isVerticalGrouping: this.isVerticalGrouping,
       isHorizontalGrouping: this.isHorizontalGrouping,
@@ -563,7 +537,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         headerCellTextFormat: this.renderConfig.headerCellTextFormat,
         getDateForHeaderText: this.renderConfig.getDateForHeaderText,
         interval: this.viewDataGenerator.getInterval(hoursInterval),
-        startViewDate: this.startViewDate,
+        startViewDate: this.props.startViewDate,
         currentDate,
         viewType,
 
@@ -615,7 +589,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
     return this.timePanelDataGenerator.getCompleteTimePanelMap(
       {
-        startViewDate: this.startViewDate,
+        startViewDate: this.props.startViewDate,
         cellDuration,
         startDayHour,
         endDayHour,
@@ -894,7 +868,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     if (this.virtualScrolling.isAttachWindowScrollEvent()) {
       return subscribeToScrollEvent(
         domAdapter.getDocument(),
-        this.onWindowScroll,
+        () => this.onWindowScroll(),
       );
     }
 
@@ -905,11 +879,11 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   pointerEventsEffect(): EffectReturn {
     const disposePointerDown = subscribeToDXPointerDownEvent(
       this.widgetElementRef.current,
-      this.onPointerDown,
+      (e) => this.onPointerDown(e),
     );
     const disposePointerMove = subscribeToDXPointerMoveEvent(
       this.widgetElementRef.current,
-      this.onPointerMove,
+      (e) => this.onPointerMove(e),
     );
 
     return (): void => {
@@ -993,8 +967,13 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   }
 
   @Effect({ run: 'once' })
-  disposeEffect(): void {
-    eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
+  pointerUpEffect(): EffectReturn {
+    const onPointerUp = (e): void => this.onPointerUp(e);
+    eventsEngine.on(domAdapter.getDocument(), pointerEvents.up, onPointerUp);
+
+    return (): void => {
+      eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, onPointerUp);
+    };
   }
 
   createDateTableElementsMeta(totalCellCount: number): DOMRect[][] {
@@ -1080,9 +1059,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       const cellData = this.viewDataProvider.getCellData(
         cellIndices.rowIndex, cellIndices.columnIndex, isAllDay,
       );
-
-      eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
-      eventsEngine.on(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
 
       this.cellsSelectionState = {
         focusedCell: {

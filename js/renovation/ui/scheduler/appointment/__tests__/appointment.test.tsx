@@ -4,6 +4,20 @@ import { Widget } from '../../../common/widget';
 import { viewFunction as ViewFunction, Appointment, AppointmentProps } from '../appointment';
 import { AppointmentContent } from '../content/layout';
 import { AppointmentViewModel, ReduceType } from '../types';
+import { getAppointmentColor } from '../../resources/utils';
+
+const colorPromise = Promise.resolve('#aabbcc');
+const undefinedColorPromise = Promise.resolve(undefined);
+const rejectedPromise = Promise.reject();
+jest.mock('../../resources/utils', () => ({
+  ...jest.requireActual('../../resources/utils'),
+  getAppointmentColor: jest.fn(({ resources }) => {
+    if (!resources) return rejectedPromise;
+    return resources.length
+      ? colorPromise
+      : undefinedColorPromise;
+  }),
+}));
 
 describe('Appointment', () => {
   const defaultViewModel: AppointmentViewModel = {
@@ -29,6 +43,7 @@ describe('Appointment', () => {
       allDay: false,
       isRecurrent: false,
       direction: 'vertical',
+      groupIndex: 0,
       appointment: {
         startDate: new Date('2021-08-05T10:00:00.000Z'),
         endDate: new Date('2021-08-05T12:00:00.000Z'),
@@ -37,7 +52,6 @@ describe('Appointment', () => {
         groupIndex: 1,
       },
       dateText: '1AM - 2PM',
-      resourceColor: '#1A2BC',
     },
   };
 
@@ -67,6 +81,8 @@ describe('Appointment', () => {
             },
           },
           index: 123,
+          showReducedIconTooltip: 'test value 1',
+          hideReducedIconTooltip: 'test value 2',
           appointmentTemplate: 'some template',
         },
       });
@@ -96,6 +112,8 @@ describe('Appointment', () => {
           isRecurrent: true,
           index: 123,
           data: { data: 'someData' },
+          showReducedIconTooltip: 'test value 1',
+          hideReducedIconTooltip: 'test value 2',
           appointmentTemplate: 'some template',
         });
     });
@@ -110,7 +128,7 @@ describe('Appointment', () => {
             viewModel: defaultViewModel,
             index: 2021,
             onItemClick: mockCallback,
-          });
+          } as any);
           appointment.ref = {
             current: 'element',
           } as any;
@@ -123,6 +141,105 @@ describe('Appointment', () => {
             data: [defaultViewModel],
             target: 'element',
             index: 2021,
+          });
+        });
+      });
+    });
+
+    describe('Effects', () => {
+      describe('updateStylesEffect', () => {
+        [
+          {
+            groupIndex: undefined,
+            resources: [],
+            expectedGroupIndex: 0,
+            expectedColor: undefined,
+          },
+          {
+            groupIndex: 123,
+            resources: [{ id: 1, color: '#aabbcc' }],
+            expectedGroupIndex: 123,
+            expectedColor: '#aabbcc',
+          },
+        ].forEach(({
+          groupIndex, resources, expectedGroupIndex, expectedColor,
+        }) => {
+          it(`should return correct value if groupIndex is ${groupIndex}`, () => {
+            const appointmentsContextValue = {
+              resources,
+              resourceLoaderMap: [] as any,
+              dataAccessors: {
+                resources: [],
+              },
+              loadedResources: [],
+            } as any;
+            const appointment = new Appointment({
+              viewModel: {
+                ...defaultViewModel,
+                info: {
+                  ...defaultViewModel.info,
+                  groupIndex,
+                },
+              },
+              groups: ['someGroups'],
+            } as any);
+
+            appointment.appointmentsContextValue = appointmentsContextValue;
+
+            appointment.updateStylesEffect();
+
+            expect(getAppointmentColor)
+              .toBeCalledWith({
+                resources: appointmentsContextValue.resources,
+                resourceLoaderMap: appointmentsContextValue.resourceLoaderMap,
+                resourcesDataAccessors: appointmentsContextValue.dataAccessors.resources,
+                loadedResources: appointmentsContextValue.loadedResources,
+              }, {
+                itemData: defaultViewModel.appointment,
+                groupIndex: expectedGroupIndex,
+                groups: ['someGroups'],
+              });
+
+            expect(getAppointmentColor)
+              .toReturnWith(colorPromise);
+
+            return colorPromise.then(() => {
+              expect(appointment.color)
+                .toBe(expectedColor);
+            });
+          });
+        });
+
+        it('should return correct value if rejected color', () => {
+          const appointmentsContextValue = {
+            resources: undefined,
+            resourceLoaderMap: [] as any,
+            dataAccessors: {
+              resources: [],
+            },
+            loadedResources: [],
+          } as any;
+          const appointment = new Appointment({
+            viewModel: {
+              ...defaultViewModel,
+              info: {
+                ...defaultViewModel.info,
+                groupIndex: 1,
+              },
+            },
+            groups: ['someGroups'],
+          } as any);
+
+          appointment.appointmentsContextValue = appointmentsContextValue;
+
+          appointment.updateStylesEffect();
+
+          expect(getAppointmentColor)
+            .toReturnWith(rejectedPromise);
+
+          return colorPromise.then(() => {
+            expect(appointment.color)
+              .toBe(undefined);
           });
         });
       });
@@ -140,19 +257,51 @@ describe('Appointment', () => {
     });
 
     describe('Getters', () => {
+      describe('appointmentStyles', () => {
+        it('should return correct values', () => {
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+          } as any);
+
+          expect(appointment.appointmentStyles)
+            .toEqual({
+              height: '20px',
+              left: '1px',
+              top: '2px',
+              width: '10px',
+            });
+        });
+      });
+
       describe('styles', () => {
-        it('should return correct styles', () => {
+        it('should return correct value without color', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
           } as any);
 
           expect(appointment.styles)
             .toEqual({
-              backgroundColor: '#1A2BC',
               height: '20px',
               left: '1px',
               top: '2px',
               width: '10px',
+            });
+        });
+
+        it('should return correct value with color', () => {
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+          } as any);
+
+          appointment.color = '#aabbcc';
+
+          expect(appointment.styles)
+            .toEqual({
+              height: '20px',
+              left: '1px',
+              top: '2px',
+              width: '10px',
+              backgroundColor: '#aabbcc',
             });
         });
       });

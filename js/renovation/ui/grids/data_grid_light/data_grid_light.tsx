@@ -1,18 +1,28 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings,
-  OneWay, Effect, InternalState, Nested,
+  OneWay, Effect, InternalState, Provider, Slot,
 } from '@devextreme-generator/declarations';
 
+import {
+  createValue, createGetter, Plugins, PluginsContext,
+} from '../../../utils/plugin/context';
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
-import type { RowData } from './types';
+import type {
+  Column, ColumnUserConfig, KeyExpr, RowData,
+} from './types';
 
 import { TableContent } from './views/table_content';
 import { TableHeader } from './views/table_header';
+import { Footer } from './views/footer';
 
-import { GridPager, GridPagerUserProps } from './widgets/pager';
+export const VisibleItems = createGetter<RowData[]>([]);
+export const VisibleColumns = createGetter<Column[]>([]);
+export const DataSource = createValue<RowData[]>();
+export const KeyExprPlugin = createValue<KeyExpr>();
+export const TotalCount = createValue<number>();
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -31,35 +41,13 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
     {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
     <div className="dx-datagrid dx-gridbase-container" role="grid" aria-label="Data grid">
-      <TableHeader columns={viewModel.props.columns} />
-      <TableContent columns={viewModel.props.columns} dataSource={viewModel.visibleItems} />
-      <GridPager
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        pager={viewModel.props.pager}
-        pageCount={viewModel.pagingPageCount}
-        totalCount={viewModel.props.dataSource.length}
-
-        pageIndex={viewModel.pagingPageIndex}
-        pageIndexChange={viewModel.onPageIndexChange}
-
-        pageSize={viewModel.pagingPageSize}
-        pageSizeChange={viewModel.onPageSizeChange}
-      />
+      <TableHeader columns={viewModel.visibleColumns} />
+      <TableContent columns={viewModel.visibleColumns} dataSource={viewModel.visibleItems} />
+      <Footer />
+      { viewModel.props.children }
     </div>
   </Widget>
 );
-
-@ComponentBindings()
-export class PagingProps {
-  @OneWay()
-  enabled = true;
-
-  @OneWay()
-  pageIndex = 0;
-
-  @OneWay()
-  pageSize: number | 'all' = 20;
-}
 
 @ComponentBindings()
 export class DataGridLightProps extends BaseWidgetProps {
@@ -67,17 +55,13 @@ export class DataGridLightProps extends BaseWidgetProps {
   dataSource: RowData[] = [];
 
   @OneWay()
-  columns: string[] = [];
+  keyExpr?: KeyExpr;
 
-  @Nested()
-  pager: GridPagerUserProps = new GridPagerUserProps();
+  @OneWay()
+  columns: ColumnUserConfig[] = [];
 
-  @Nested()
-  paging: PagingProps = {
-    pageSize: 20,
-    pageIndex: 0,
-    enabled: true,
-  };
+  @Slot()
+  children?: JSX.Element | JSX.Element[];
 }
 
 const aria = {
@@ -95,47 +79,63 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     return aria;
   }
 
-  get visibleItems(): RowData[] {
-    if (!this.props.paging.enabled || this.pagingPageSize === 'all') {
-      return this.props.dataSource;
-    }
-
-    const start = this.pagingPageIndex * this.pagingPageSize;
-    const end = start + this.pagingPageSize;
-
-    return this.props.dataSource.slice(start, end);
-  }
-
-  get pagingPageCount(): number {
-    if (this.pagingPageSize === 'all') {
-      return 1;
-    }
-
-    return Math.ceil(this.props.dataSource.length / this.pagingPageSize);
-  }
+  @Provider(PluginsContext)
+  plugins = new Plugins();
 
   @InternalState()
-  pagingPageIndex = 0;
+  visibleItems: RowData[] = [];
 
   @InternalState()
-  pagingPageSize: number | 'all' = 20;
+  visibleColumns: Column[] = [];
 
   @Effect()
-  updatePagingProps(): void {
-    this.pagingPageIndex = this.props.paging.pageIndex;
-
-    if (this.props.paging.pageSize === 0) {
-      this.pagingPageSize = 'all';
-    } else {
-      this.pagingPageSize = this.props.paging.pageSize;
-    }
+  updateTotalCount(): void {
+    this.plugins.set(TotalCount, this.props.dataSource.length);
   }
 
-  onPageSizeChange(pageSize: number | 'all'): void {
-    this.pagingPageSize = pageSize;
+  @Effect()
+  updateVisibleItems(): () => void {
+    return this.plugins.watch(VisibleItems, (items) => {
+      this.visibleItems = items;
+    });
   }
 
-  onPageIndexChange(pageIndex: number): void {
-    this.pagingPageIndex = pageIndex;
+  @Effect()
+  setDataSourceToVisibleItems(): () => void {
+    return this.plugins.extend(
+      VisibleItems, -1, () => this.props.dataSource,
+    );
+  }
+
+  @Effect()
+  updateVisibleColumns(): () => void {
+    return this.plugins.watch(VisibleColumns, (columns) => {
+      this.visibleColumns = columns;
+    });
+  }
+
+  @Effect()
+  setInitialColumnsToVisibleColumns(): () => void {
+    return this.plugins.extend(
+      VisibleColumns, -1, () => this.columns,
+    );
+  }
+
+  @Effect()
+  updateKeyExpr(): void {
+    this.plugins.set(KeyExprPlugin, this.props.keyExpr);
+  }
+
+  @Effect()
+  updateDataSource(): void {
+    this.plugins.set(DataSource, this.props.dataSource);
+  }
+
+  get columns(): Column[] {
+    const userColumns = this.props.columns;
+
+    return userColumns.map((userColumn) => ({
+      dataField: userColumn,
+    }));
   }
 }

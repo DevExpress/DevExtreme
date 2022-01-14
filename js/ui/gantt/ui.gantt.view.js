@@ -16,6 +16,7 @@ export class GanttView extends Widget {
         this._onScroll = this._createActionByOption('onScroll');
         this._onDialogShowing = this._createActionByOption('onDialogShowing');
         this._onPopupMenuShowing = this._createActionByOption('onPopupMenuShowing');
+        this._onPopupMenuHiding = this._createActionByOption('onPopupMenuHiding');
         this._expandAll = this._createActionByOption('onExpandAll');
         this._collapseAll = this._createActionByOption('onCollapseAll');
         this._taskClick = this._createActionByOption('onTaskClick');
@@ -276,7 +277,7 @@ export class GanttView extends Widget {
         return this.option('resourceAssignments');
     }
     getGanttWorkTimeRules() {
-        return {};
+        return null;
     }
     getExternalTaskAreaContainer(element) {
         if(!this._taskAreaContainer) {
@@ -311,6 +312,9 @@ export class GanttView extends Widget {
     }
     showPopupMenu(info) {
         this._onPopupMenuShowing(info);
+    }
+    hidePopupMenu(info) {
+        this._onPopupMenuHiding(info);
     }
     getMainElement() {
         return this.option('mainElement').get(0);
