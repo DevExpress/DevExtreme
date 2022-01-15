@@ -10,7 +10,7 @@ import { GroupPanel } from '../group_panel/group_panel';
 import { AllDayPanelLayout, AllDayPanelLayoutProps } from '../date_table/all_day_panel/layout';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { HeaderPanelEmptyCell } from '../header_panel_empty_cell';
-import { Semaphore } from '../../../semaphore';
+import { ScrollSemaphore } from '../../../utils/semaphore/scrollSemaphore';
 import { HeaderPanelLayout } from '../header_panel/layout';
 import { TimelineHeaderPanelLayout } from '../../timeline/header_panel/layout';
 import { DateTableLayoutBase, DateTableLayoutProps } from '../date_table/layout';
@@ -614,11 +614,11 @@ describe('OrdinaryLayout', () => {
         it('should initialize semaphores correctly', () => {
           const layout = new CrossScrollingLayout({} as any);
 
-          expect(layout.dateTableSemaphore instanceof Semaphore)
+          expect(layout.dateTableSemaphore instanceof ScrollSemaphore)
             .toBe(true);
-          expect(layout.sideBarSemaphore instanceof Semaphore)
+          expect(layout.sideBarSemaphore instanceof ScrollSemaphore)
             .toBe(true);
-          expect(layout.headerSemaphore instanceof Semaphore)
+          expect(layout.headerSemaphore instanceof ScrollSemaphore)
             .toBe(true);
         });
       });
