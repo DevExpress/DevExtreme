@@ -44,12 +44,12 @@ for (let i = 1; i <= 100; i++) {
   });
 }
 
-const productsStore: ArrayStore = new ArrayStore({
+const productsStore = new ArrayStore({
   data: products,
   key: 'ProductID',
 });
 
-const orders = [];
+const orders: Order[] = [];
 
 const ordersStore = new ArrayStore({
   key: 'OrderID',

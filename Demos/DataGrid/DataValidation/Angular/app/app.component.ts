@@ -4,6 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import CustomStore from 'devextreme/data/custom_store';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -14,16 +15,18 @@ if (!/localhost/.test(document.location.host)) {
   templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
-  pattern: any = /^\(\d{3}\) \d{3}-\d{4}$/i;
+  dataSource: CustomStore;
+
+  pattern: any = /^\(\d{3}\) \d{3}-\d{4 }$/i;
 
   constructor(private httpClient: HttpClient) {
-    this.url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridEmployeesValidation';
+    const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridEmployeesValidation';
     this.dataSource = AspNetData.createStore({
       key: 'ID',
-      loadUrl: this.url,
-      insertUrl: this.url,
-      updateUrl: this.url,
-      deleteUrl: this.url,
+      loadUrl: url,
+      insertUrl: url,
+      updateUrl: url,
+      deleteUrl: url,
       onBeforeSend(method, ajaxOptions) {
         ajaxOptions.xhrFields = { withCredentials: true };
       },

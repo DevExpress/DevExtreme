@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 export class ViewportCoordinate {
   continent: string;
 
-  coordinates: number[];
+  coordinates: number[] | 'null';
 }
 
 const viewportCoordinates: ViewportCoordinate[] = [{

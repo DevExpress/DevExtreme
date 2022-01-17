@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 export class FlowNode {
-  id: string;
+  id: number;
 
   text: string;
 
@@ -9,11 +9,11 @@ export class FlowNode {
 }
 
 export class FlowEdge {
-  id: string;
+  id: number;
 
-  fromId: string;
+  fromId: number;
 
-  toId: string;
+  toId: number;
 
   text: string;
 }

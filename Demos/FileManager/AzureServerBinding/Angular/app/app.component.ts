@@ -38,7 +38,7 @@ export class AppComponent {
   }
 
   checkAzureStatus(http: HttpClient) {
-    http.get('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
+    http.get<{ active: boolean }>('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
       .toPromise()
       .then((result) => {
         this.wrapperClassName = result.active ? 'show-widget' : 'show-message';

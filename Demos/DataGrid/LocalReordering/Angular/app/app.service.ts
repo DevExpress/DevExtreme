@@ -9,7 +9,7 @@ export class Task {
 
   Owner: number;
 
-  AssignedEmployee: Array<number>;
+  AssignedEmployee: number;
 
   OrderIndex: number;
 

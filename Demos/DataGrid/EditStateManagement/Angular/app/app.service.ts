@@ -27,6 +27,10 @@ export class Change<T> {
   data: Partial<T>;
 }
 
+class Response<T> {
+  data: T[];
+}
+
 @Injectable()
 export class Service {
   private orders$ = new BehaviorSubject<Order[]>([]);
@@ -42,7 +46,7 @@ export class Service {
   }
 
   getOrders(): Observable<Order[]> {
-    this.http.get(`${this.url}/Orders?skip=700`, { withCredentials: true }).toPromise().then((data) => {
+    this.http.get(`${this.url}/Orders?skip=700`, { withCredentials: true }).toPromise().then((data: Response<Order>) => {
       this.orders$.next(data.data);
     });
 

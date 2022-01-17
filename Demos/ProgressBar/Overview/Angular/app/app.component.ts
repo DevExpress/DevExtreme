@@ -43,7 +43,7 @@ export class AppComponent {
         this.seconds = 10;
       }
 
-      this.intervalId = setInterval(() => this.timer(), 1000);
+      this.intervalId = window.setInterval(() => this.timer(), 1000);
     }
     this.inProgress = !this.inProgress;
   }
