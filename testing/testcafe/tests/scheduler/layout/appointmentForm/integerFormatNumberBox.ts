@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { CLASS } from '../../../../model/scheduler/appointment/popup';
 
 fixture`Layout:AppointmentForm:IntegerFormatNumberBox`
   .page(url(__dirname, '../../../container.html'));
@@ -20,11 +19,6 @@ test('dxNumberBox should not allow to enter not integer chars(T1002864)', async 
     .typeText(appointmentPopup.repeatEveryElement, '.,2', { speed: 0.1 });
 
   await t
-    .click(appointmentPopup.wrapper.find('.dx-item.dx-radiobutton').nth(2));
-
-  await t
-    .typeText(appointmentPopup.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(3), '.,2', { speed: 0.1 })
-
     .expect(await takeScreenshot('dx-number-boxes-not-integer-chars.png', scheduler.appointmentPopup.wrapper))
     .ok();
 
