@@ -1709,7 +1709,7 @@ declare module DevExpress.data {
         | DevExpress.data.CustomStore.Options<TItem, TKey>
         | DevExpress.data.DataSource.Options<any, any, TItem, TKey>
     );
-    constructor(store: Store<TItem, TKey>);
+    constructor(store: DevExpress.data.utils.Store<TItem, TKey>);
     constructor(url: string);
     /**
      * [descr:DataSource.cancel(operationId)]
@@ -1868,7 +1868,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.store()]
      */
-    store(): Store<TItem, TKey>;
+    store(): DevExpress.data.utils.Store<TItem, TKey>;
     /**
      * [descr:DataSource.totalCount()]
      */
@@ -1882,7 +1882,7 @@ declare module DevExpress.data {
     export type DataSourceLike<TItem, TKey = any> =
       | string
       | Array<TItem>
-      | Store<TItem, TKey>
+      | DevExpress.data.utils.Store<TItem, TKey>
       | DataSourceOptionsStub<any, any, TItem>
       | DataSource<TItem, TKey>;
     /**
@@ -1914,17 +1914,8 @@ declare module DevExpress.data {
       sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
       store?:
         | Array<TStoreItem>
-        | Store<TStoreItem, any>
-        | (DevExpress.data.ArrayStore.Options<TStoreItem, any> & {
-            type: 'array';
-          })
-        | (DevExpress.data.LocalStore.Options<TStoreItem, any> & {
-            type: 'local';
-          })
-        | (DevExpress.data.ODataStore.Options<TStoreItem, any> & {
-            type: 'odata';
-          })
-        | DevExpress.data.CustomStore.Options<TStoreItem, any>;
+        | DevExpress.data.utils.Store<TStoreItem, any>
+        | DevExpress.data.utils.StoreOptions<TStoreItem, any>;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -2028,17 +2019,8 @@ declare module DevExpress.data {
      */
     store?:
       | Array<TStoreItem>
-      | Store<TStoreItem, TKey>
-      | (DevExpress.data.ArrayStore.Options<TStoreItem, TKey> & {
-          type: 'array';
-        })
-      | (DevExpress.data.LocalStore.Options<TStoreItem, TKey> & {
-          type: 'local';
-        })
-      | (DevExpress.data.ODataStore.Options<TStoreItem, TKey> & {
-          type: 'odata';
-        })
-      | DevExpress.data.CustomStore.Options<TStoreItem, TKey>;
+      | DevExpress.data.utils.Store<TStoreItem, TKey>
+      | DevExpress.data.utils.StoreOptions<TStoreItem, TKey>;
   }
   /**
    * [descr:EdmLiteral]
@@ -2781,10 +2763,10 @@ declare module DevExpress.data {
      * [descr:PivotGridDataSourceOptions.store]
      */
     store?:
-      | Store
-      | DevExpress.data.Store.Options
+      | DevExpress.data.utils.Store
+      | DevExpress.data.utils.StoreOptions
       | XmlaStore
-      | XmlaStoreOptions
+      | (XmlaStoreOptions & { type: 'xmla' })
       | Array<{
           /**
            * [descr:PivotGridDataSourceOptions.store.type]
@@ -3154,6 +3136,16 @@ declare module DevExpress.data.utils {
    * [descr:Utils.compileSetter(expr)]
    */
   export function compileSetter(expr: string | Array<string>): Function;
+  export type Store<TItem = any, TKey = any> =
+    | CustomStore<TItem, TKey>
+    | ArrayStore<TItem, TKey>
+    | LocalStore<TItem, TKey>
+    | ODataStore<TItem, TKey>;
+  export type StoreOptions<TItem = any, TKey = any> =
+    | DevExpress.data.CustomStore.Options<TItem, TKey>
+    | (DevExpress.data.ArrayStore.Options<TItem, TKey> & { type: 'array' })
+    | (DevExpress.data.LocalStore.Options<TItem, TKey> & { type: 'local' })
+    | (DevExpress.data.ODataStore.Options<TItem, TKey> & { type: 'odata' });
 }
 declare module DevExpress.data.utils.odata {
   /**
