@@ -96,7 +96,7 @@ jobs:
     - name: Prepare test project
       working-directory: ./testing/renovation-npm
       run: |
-        npm i
+        npm i --legacy-peer-deps
 
         npm run pack:renovation ${{ matrix.framework }}
         npm run install-all ${{ matrix.framework }}
