@@ -55,7 +55,7 @@ jobs:
   test_npm_renovation:
     name: Renovated NPM - ${{ matrix.framework }}
     needs: build
-    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 30
     strategy:
       fail-fast: false
