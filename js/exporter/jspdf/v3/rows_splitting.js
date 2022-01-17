@@ -40,20 +40,25 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
         });
 
         rectsToSeparate.forEach(rect => {
-            const separatedRects = onSeparateRectHorizontally(rect, {
-                x: rect.x,
-                y: rect.y,
-                w: currentPageMaxRectRight - rect.x,
-                h: rect.h
-            }, {
-                x: currentPageMaxRectRight,
-                y: rect.y,
-                w: rect.w - (currentPageMaxRectRight - rect.x),
-                h: rect.h
-            });
+            const args = {
+                sourceRect: rect,
+                leftRect: {
+                    x: rect.x,
+                    y: rect.y,
+                    w: currentPageMaxRectRight - rect.x,
+                    h: rect.h
+                },
+                rightRect: {
+                    x: currentPageMaxRectRight,
+                    y: rect.y,
+                    w: rect.w - (currentPageMaxRectRight - rect.x),
+                    h: rect.h
+                }
+            };
+            onSeparateRectHorizontally(args);
 
-            currentPageRects.push(separatedRects.left);
-            rectsToSplit.push(separatedRects.right);
+            currentPageRects.push(args.leftRect);
+            rectsToSplit.push(args.rightRect);
 
             const index = rectsToSplit.indexOf(rect);
             if(index !== -1) {

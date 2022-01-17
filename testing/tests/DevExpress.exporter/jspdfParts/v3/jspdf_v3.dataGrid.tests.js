@@ -131,6 +131,42 @@ function createMockPdfDoc(options) {
         this.__text.apply(this, arguments);
     };
 
+    result.__moveTo = result.moveTo;
+    result.moveTo = function() {
+        this.__log.push('moveTo,' + argumentsToString.apply(null, arguments));
+        this.__moveTo.apply(this, arguments);
+    };
+
+    result.__lineTo = result.lineTo;
+    result.lineTo = function() {
+        this.__log.push('lineTo,' + argumentsToString.apply(null, arguments));
+        this.__lineTo.apply(this, arguments);
+    };
+
+    result.__clip = result.clip;
+    result.clip = function() {
+        this.__log.push('clip,' + argumentsToString.apply(null, arguments));
+        this.__clip.apply(this, arguments);
+    };
+
+    result.__discardPath = result.discardPath;
+    result.discardPath = function() {
+        this.__log.push('discardPath,' + argumentsToString.apply(null, arguments));
+        this.__discardPath.apply(this, arguments);
+    };
+
+    result.__saveGraphicsState = result.saveGraphicsState;
+    result.saveGraphicsState = function() {
+        this.__log.push('saveGraphicsState,' + argumentsToString.apply(null, arguments));
+        this.__saveGraphicsState.apply(this, arguments);
+    };
+
+    result.__restoreGraphicsState = result.restoreGraphicsState;
+    result.restoreGraphicsState = function() {
+        this.__log.push('restoreGraphicsState,' + argumentsToString.apply(null, arguments));
+        this.__restoreGraphicsState.apply(this, arguments);
+    };
+
     result.__addPage = result.addPage;
     result.addPage = function() {
         this.__log.push('addPage,' + argumentsToString.apply(null, arguments));

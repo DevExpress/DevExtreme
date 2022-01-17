@@ -102,12 +102,26 @@ function exportDataGrid(doc, dataGrid, options) {
             const maxBottomRight = {
                 x: doc.internal.pageSize.getWidth() - options.margin.right
             };
-            const onSeparateRectHorizontally = (sourceRect, leftRect, rightRect) => {
-                const newRectCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { text: '', debugSourceCellInfo: sourceRect.sourceCellInfo });
-                return {
-                    left: Object.assign({}, leftRect, { sourceCellInfo: sourceRect.sourceCellInfo }),
-                    right: Object.assign({}, rightRect, { sourceCellInfo: newRectCellInfo })
-                };
+            const onSeparateRectHorizontally = ({ sourceRect, leftRect, rightRect }) => {
+                let leftRectTextOptions = {};
+                let rightRectTextOptions = {};
+                const isTextNotEmpty = isDefined(sourceRect.sourceCellInfo.text) && sourceRect.sourceCellInfo.text.length > 0;
+                if(isTextNotEmpty) {
+                    const isTextWidthGreaterThanRect = doc.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
+                    const isTextLeftAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'left';
+                    if(isTextWidthGreaterThanRect || !isTextLeftAlignment) {
+                        const leftTextTopOffset = sourceRect.sourceCellInfo._textTopOffset ?? 0;
+                        const rightTextTopOffset = leftTextTopOffset - leftRect.w;
+
+                        leftRectTextOptions = Object.assign({}, { _textTopOffset: leftTextTopOffset });
+                        rightRectTextOptions = Object.assign({}, { _textTopOffset: rightTextTopOffset });
+                    } else {
+                        rightRectTextOptions = Object.assign({}, { text: '' });
+                    }
+                }
+
+                leftRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, leftRectTextOptions);
+                rightRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, rightRectTextOptions);
             };
             const rectsByPages = splitRectsByPages(rects, options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);
             const pdfCellsInfoByPages = rectsByPages.map(rects => {
