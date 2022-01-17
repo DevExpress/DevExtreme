@@ -102,7 +102,7 @@ function exportDataGrid(doc, dataGrid, options) {
             const maxBottomRight = {
                 x: doc.internal.pageSize.getWidth() - options.margin.right
             };
-            const onSeparateRectHorizontally = (sourceRect, leftRect, rightRect) => {
+            const onSeparateRectHorizontally = ({ sourceRect, leftRect, rightRect }) => {
                 let leftRectTextOptions = {};
                 let rightRectTextOptions = {};
                 const isTextNotEmpty = isDefined(sourceRect.sourceCellInfo.text) && sourceRect.sourceCellInfo.text.length > 0;
@@ -120,12 +120,8 @@ function exportDataGrid(doc, dataGrid, options) {
                     }
                 }
 
-                const leftRectCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, leftRectTextOptions);
-                const rightRectCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, rightRectTextOptions);
-                return {
-                    left: Object.assign({}, leftRect, { sourceCellInfo: leftRectCellInfo }),
-                    right: Object.assign({}, rightRect, { sourceCellInfo: rightRectCellInfo })
-                };
+                leftRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, leftRectTextOptions);
+                rightRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, rightRectTextOptions);
             };
             const rectsByPages = splitRectsByPages(rects, options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);
             const pdfCellsInfoByPages = rectsByPages.map(rects => {
