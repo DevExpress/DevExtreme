@@ -1,15 +1,30 @@
 import { isDefined } from '../../../core/utils/type';
 import { roundToThreeDecimals } from './draw_utils';
+import { getPageWidth } from './pdf_utils_v3';
 
-function splitRectsByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally) {
+function splitRectsByPages(doc, rowsInfo, options, onSeparateRectHorizontally) {
+    const rects = [].concat.apply([],
+        rowsInfo.map(rowInfo => {
+            return rowInfo.cells
+                .filter(cell => !isDefined(cell.pdfCell.isMerged))
+                .map(cellInfo => {
+                    return Object.assign({}, cellInfo.pdfCell._rect, { sourceCellInfo: { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell } });
+                });
+        })
+    );
+
     if(!isDefined(rects) || rects.length === 0) { // Empty Table
         return [[]];
     }
 
-    const rectsByPage = splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally);
+    const maxBottomRight = { x: getPageWidth(doc) - options.margin.right };
+    const rectsByPage = splitRectsHorizontalByPages(rects, options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);
+
     // TODO: splitRectsVerticalByPages
 
-    return rectsByPage;
+    return rectsByPage.map(rects => {
+        return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
+    });
 }
 
 function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally) {

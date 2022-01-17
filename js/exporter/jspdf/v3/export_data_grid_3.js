@@ -12,8 +12,8 @@ import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, set
 //    topLeft: {x: number, y: number},
 //    indent: number,
 //    margin: { top:number, left:number, right:number, bottom:number } | number
-//    customizeCell: (IPdfRowInfo): void
-//    customDrawCell: (rect, pdfCell, gridCell, cancel): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
+//    customizeCell: ({ gridCell, pdfCell }): void
+//    customDrawCell: ({ rect, pdfCell, gridCell, cancel }): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
 // }
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -49,7 +49,7 @@ function exportDataGrid(doc, dataGrid, options) {
                     //
                     // And, you can read values of these properties ('readonly'):
                     // - e.gridCell (TODO: list of properties)
-                    // - e.pdfRowInfo (TODO: list of properties)
+                    // - e.pdfCell (TODO: list of properties)
                     options.customizeCell(cellInfo)
                 ));
             }
@@ -86,22 +86,8 @@ function exportDataGrid(doc, dataGrid, options) {
             // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
             // TODO: applySplitting()
 
-            const pdfCellsInfo = [].concat.apply([],
-                rowsInfo.map(rowInfo => {
-                    return rowInfo.cells
-                        .filter(cell => !isDefined(cell.pdfCell.isMerged))
-                        .map(cellInfo => {
-                            return { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell, pdfRowInfo: cellInfo.pdfRowInfo };
-                        });
-                })
-            );
-
             const docStyles = getDocumentStyles(doc);
 
-            const rects = pdfCellsInfo.map(cellInfo => Object.assign({}, cellInfo._rect, { sourceCellInfo: cellInfo }));
-            const maxBottomRight = {
-                x: doc.internal.pageSize.getWidth() - options.margin.right
-            };
             const onSeparateRectHorizontally = ({ sourceRect, leftRect, rightRect }) => {
                 let leftRectTextOptions = {};
                 let rightRectTextOptions = {};
@@ -123,12 +109,9 @@ function exportDataGrid(doc, dataGrid, options) {
                 leftRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, leftRectTextOptions);
                 rightRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, rightRectTextOptions);
             };
-            const rectsByPages = splitRectsByPages(rects, options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);
-            const pdfCellsInfoByPages = rectsByPages.map(rects => {
-                return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
-            });
 
-            pdfCellsInfoByPages.forEach((pdfCellsInfo, index) => {
+            const rectsByPages = splitRectsByPages(doc, rowsInfo, options, onSeparateRectHorizontally);
+            rectsByPages.forEach((pdfCellsInfo, index) => {
                 if(index > 0) {
                     doc.addPage();
                 }
