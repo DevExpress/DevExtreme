@@ -32,6 +32,7 @@ const ROW_CLASS = 'dx-row';
 const GROUP_ROW_CLASS = 'dx-group-row';
 const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FILTER_ROW_CLASS = 'filter-row';
+const ERROR_ROW_CLASS = 'dx-error-row';
 const CELL_UPDATED_ANIMATION_CLASS = 'cell-updated-animation';
 
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
@@ -903,7 +904,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             for(let i = 0; i < $rows.length; i++) {
                 const $row = $rows.eq(i);
                 const isRowVisible = $row.get(0).style.display !== 'none' && !$row.hasClass('dx-state-invisible');
-                if(!$row.is('.' + GROUP_ROW_CLASS) && !$row.is('.' + DETAIL_ROW_CLASS) && isRowVisible) {
+                if(!$row.is('.' + GROUP_ROW_CLASS) && !$row.is('.' + DETAIL_ROW_CLASS) && !$row.is('.' + ERROR_ROW_CLASS) && isRowVisible) {
                     $cells = $row.children('td');
                     break;
                 }
