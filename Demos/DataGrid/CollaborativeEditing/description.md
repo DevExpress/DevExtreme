@@ -1,4 +1,4 @@
-Multiple users can edit the DataGrid's data in real-time. In this demo, changes made in one DataGrid are broadcasted to the other DataGrid via the <a href="https://dotnet.microsoft.com/apps/aspnet/signalr" target="blank">SignalR</a> service.
+Multiple users can edit the DataGrid's data in real-time. In this demo, changes made in one DataGrid are broadcasted to the other DataGrid via the <a href="https://dotnet.microsoft.com/en-us/apps/aspnet/signalr" target="blank">SignalR</a> service.
 
 To implement this functionality:
 
