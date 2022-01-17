@@ -29,7 +29,7 @@
     "eslint-plugin-testcafe": "^0.2.1",
     "glob": "^7.2.0",
     "gulp": "^4.0.2",
-    "testcafe": "file:../../testcafe-1.18.1.tgz",
+    "testcafe": "file:testcafe-1.18.1.tgz",
     "yargs": "^17.2.1"
   }
 }

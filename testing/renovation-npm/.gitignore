@@ -1,4 +1,7 @@
-*.tgz
+angular-app/devextreme-22.1.0-dev.tgz
+angular-app/devextreme-angular-22.1.0-dev.tgz
+react-app/devextreme-22.1.0-dev.tgz
+react-app/devextreme-react-22.1.0-dev.tgz
 package-lock.json
 screenshots
 artifacts
