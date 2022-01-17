@@ -5640,6 +5640,30 @@ QUnit.module('Virtual scrolling preload', {
         // assert
         assert.strictEqual(calculateCellValueCallCount, 0, 'rows are not regenerated');
     });
+
+    QUnit.test('New mode. Load page params should not be changed if the viewport position is not changed after scrolling back (T1052705)', function(assert) {
+        // act
+        this.option('scrolling.prerenderedRowCount', 5);
+        this.dataController.setViewportPosition(1000);
+        let loadPageParams = this.dataController.getLoadPageParams();
+
+        // assert
+        assert.deepEqual(loadPageParams, { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 10 }, 'params after scrolling down');
+
+        // act
+        this.dataController.setViewportPosition(800);
+        loadPageParams = this.dataController.getLoadPageParams();
+
+        // assert
+        assert.deepEqual(loadPageParams, { pageIndex: 1, loadPageCount: 2, skipForCurrentPage: 15 }, 'params after scrolling up');
+
+        // act
+        this.dataController.setViewportPosition(800);
+        loadPageParams = this.dataController.getLoadPageParams();
+
+        // assert
+        assert.deepEqual(loadPageParams, { pageIndex: 1, loadPageCount: 2, skipForCurrentPage: 15 }, 'params are not changed');
+    });
 });
 
 QUnit.module('Infinite scrolling', {
