@@ -2,7 +2,7 @@ import { isDefined } from '../../../core/utils/type';
 import { roundToThreeDecimals } from './draw_utils';
 import { getPageWidth } from './pdf_utils_v3';
 
-function splitRectsByPages(doc, rowsInfo, options, onSeparateRectHorizontally) {
+function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally) {
     const rects = [].concat.apply([],
         rowsInfo.map(rowInfo => {
             return rowInfo.cells
@@ -103,4 +103,4 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
     return pages;
 }
 
-export { splitRectsByPages };
+export { splitByPages };

@@ -4,7 +4,7 @@ import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
-import { splitRectsByPages } from './rows_splitting';
+import { splitByPages } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
 
 // TODO: check names with techwritters
@@ -110,7 +110,7 @@ function exportDataGrid(doc, dataGrid, options) {
                 rightRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, rightRectTextOptions);
             };
 
-            const rectsByPages = splitRectsByPages(doc, rowsInfo, options, onSeparateRectHorizontally);
+            const rectsByPages = splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally);
             rectsByPages.forEach((pdfCellsInfo, index) => {
                 if(index > 0) {
                     doc.addPage();
