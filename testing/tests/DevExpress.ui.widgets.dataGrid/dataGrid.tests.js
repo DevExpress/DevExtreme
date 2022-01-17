@@ -4299,26 +4299,37 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     QUnit.test('rowElement argument of rowTemplate option is correct', function(assert) {
+        assert.expect(2);
+
         // arrange, act
-        createDataGrid({
+        $('#dataGrid').dxDataGrid({
             rowTemplate: function(rowElement) {
                 assert.equal(typeUtils.isRenderer(rowElement), !!config().useJQuery, 'rowElement is correct');
+                assert.ok($(rowElement).closest(document).length, 'rowElement is attached to DOM');
             },
             dataSource: [{ column1: 'test1', column2: 'test2' }],
             columns: [{ dataField: 'column1' }, { dataField: 'column2' }]
         });
+
+        this.clock.tick();
     });
 
     QUnit.test('rowElement argument of dataRowTemplate option is correct', function(assert) {
+        assert.expect(3);
+
         // arrange, act
-        createDataGrid({
+        $('#dataGrid').dxDataGrid({
             dataRowTemplate: function(rowElement) {
                 assert.equal(typeUtils.isRenderer(rowElement), !!config().useJQuery, 'rowElement is correct');
                 assert.equal($(rowElement)[0].tagName.toLowerCase(), 'tbody', 'rowElement tagName is tbody');
+                // T1054609
+                assert.ok($(rowElement).closest(document).length, 'rowElement is attached to DOM');
             },
             dataSource: [{ column1: 'test1', column2: 'test2' }],
             columns: [{ dataField: 'column1' }, { dataField: 'column2' }]
         });
+
+        this.clock.tick();
     });
 
     QUnit.test('deprecate warnings should not be fired for dataRowTemplate', function(assert) {
