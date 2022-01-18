@@ -10,7 +10,7 @@ function roundToThreeDecimals(value) {
 
 function drawCellsContent(doc, customDrawCell, cellsArray, docStyles) {
     cellsArray.forEach(cell => {
-        const { _rect, pdfRowInfo, gridCell, ...pdfCell } = cell;
+        const { _rect, gridCell, ...pdfCell } = cell;
         const { x, y, w, h } = _rect;
         const rect = { x, y, w, h };
         const eventArg = { doc, rect, pdfCell, gridCell, cancel: false };
