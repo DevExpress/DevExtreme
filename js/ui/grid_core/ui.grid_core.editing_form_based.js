@@ -24,6 +24,7 @@ import {
 const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
 const EDIT_POPUP_CLASS = 'edit-popup';
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const EDIT_POPUP_FORM_CLASS = 'edit-popup-form';
 const BUTTON_CLASS = 'dx-button';
 
 const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
@@ -200,7 +201,7 @@ export const editingFormBasedModule = {
 
                         this._$popupContent = scrollable.$content();
 
-                        formTemplate(this._$popupContent, templateOptions, { renderFormOnly: true });
+                        formTemplate(this._$popupContent, templateOptions, { isPopupForm: true });
                         this._rowsView.renderDelayedTemplates();
                     };
                 },
@@ -403,12 +404,17 @@ export const editingFormBasedModule = {
                     return ($container, detailOptions, options) => {
                         const editFormOptions = this.option(EDITING_FORM_OPTION_NAME);
                         const baseEditFormOptions = this.getEditFormOptions(detailOptions);
+                        const $formContainer = $('<div>').appendTo($container);
+                        const isPopupForm = options?.isPopupForm;
 
                         this._firstFormItem = undefined;
 
-                        this._editForm = this._createComponent($('<div>').appendTo($container), Form, extend({}, editFormOptions, baseEditFormOptions));
+                        if(isPopupForm) {
+                            $formContainer.addClass(this.addWidgetPrefix(EDIT_POPUP_FORM_CLASS));
+                        }
+                        this._editForm = this._createComponent($formContainer, Form, extend({}, editFormOptions, baseEditFormOptions));
 
-                        if(!options?.renderFormOnly) {
+                        if(!isPopupForm) {
                             const $buttonsContainer = $('<div>').addClass(this.addWidgetPrefix(FORM_BUTTONS_CONTAINER_CLASS)).appendTo($container);
                             this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getSaveButtonConfig());
                             this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getCancelButtonConfig());
