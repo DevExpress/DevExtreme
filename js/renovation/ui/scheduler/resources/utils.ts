@@ -1,25 +1,33 @@
 import type { Appointment } from '../../../../ui/scheduler';
-import { getAppointmentColor } from '../../../../ui/scheduler/resources/utils';
+import {
+  getAppointmentColor as getDeferredAppointmentColor,
+} from '../../../../ui/scheduler/resources/utils';
 import { ResourceProps } from '../props';
 import { DataAccessorType } from '../types';
 import { Group } from '../workspaces/types';
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+export type ResourceMapType = Map<string, Promise<Group[]>>;
 export interface ResourcesConfigType {
   resources: ResourceProps[];
-  dataAccessors: DataAccessorType;
-  loadedResources: Group[];
-  resourceLoaderMap: unknown;
+  resourcesDataAccessors?: DataAccessorType;
+  loadedResources?: Group[];
+  resourceLoaderMap: ResourceMapType;
 }
 
 export interface AppointmentColorConfigType {
   groupIndex: number;
-  groups: [];
+  groups: string[];
   itemData: Appointment;
 }
 
-export const createGetAppointmentColor = (resourceConfig: ResourcesConfigType) => (
+export const getAppointmentColor = (
+  resourceConfig: ResourcesConfigType,
   appointmentConfig: AppointmentColorConfigType,
-): Promise<string> => getAppointmentColor(
-  resourceConfig,
+): Promise<string> => getDeferredAppointmentColor(
+  {
+    ...resourceConfig,
+    dataAccessors: resourceConfig.resourcesDataAccessors,
+  },
   appointmentConfig,
 ) as Promise<string>;

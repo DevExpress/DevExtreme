@@ -10,13 +10,18 @@ import {
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
-import type { RowData } from './types';
+import type {
+  Column, ColumnUserConfig, KeyExpr, RowData,
+} from './types';
 
 import { TableContent } from './views/table_content';
 import { TableHeader } from './views/table_header';
 import { Footer } from './views/footer';
 
 export const VisibleItems = createGetter<RowData[]>([]);
+export const VisibleColumns = createGetter<Column[]>([]);
+export const DataSource = createValue<RowData[]>();
+export const KeyExprPlugin = createValue<KeyExpr>();
 export const TotalCount = createValue<number>();
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
@@ -36,8 +41,8 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
     {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
     <div className="dx-datagrid dx-gridbase-container" role="grid" aria-label="Data grid">
-      <TableHeader columns={viewModel.props.columns} />
-      <TableContent columns={viewModel.props.columns} dataSource={viewModel.visibleItems} />
+      <TableHeader columns={viewModel.visibleColumns} />
+      <TableContent columns={viewModel.visibleColumns} dataSource={viewModel.visibleItems} />
       <Footer />
       { viewModel.props.children }
     </div>
@@ -50,7 +55,10 @@ export class DataGridLightProps extends BaseWidgetProps {
   dataSource: RowData[] = [];
 
   @OneWay()
-  columns: string[] = [];
+  keyExpr?: KeyExpr;
+
+  @OneWay()
+  columns: ColumnUserConfig[] = [];
 
   @Slot()
   children?: JSX.Element | JSX.Element[];
@@ -77,9 +85,19 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   @InternalState()
   visibleItems: RowData[] = [];
 
+  @InternalState()
+  visibleColumns: Column[] = [];
+
   @Effect()
   updateTotalCount(): void {
     this.plugins.set(TotalCount, this.props.dataSource.length);
+  }
+
+  @Effect()
+  updateVisibleItems(): () => void {
+    return this.plugins.watch(VisibleItems, (items) => {
+      this.visibleItems = items;
+    });
   }
 
   @Effect()
@@ -90,9 +108,34 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   }
 
   @Effect()
-  updateVisibleItems(): () => void {
-    return this.plugins.watch(VisibleItems, (items) => {
-      this.visibleItems = items;
+  updateVisibleColumns(): () => void {
+    return this.plugins.watch(VisibleColumns, (columns) => {
+      this.visibleColumns = columns;
     });
+  }
+
+  @Effect()
+  setInitialColumnsToVisibleColumns(): () => void {
+    return this.plugins.extend(
+      VisibleColumns, -1, () => this.columns,
+    );
+  }
+
+  @Effect()
+  updateKeyExpr(): void {
+    this.plugins.set(KeyExprPlugin, this.props.keyExpr);
+  }
+
+  @Effect()
+  updateDataSource(): void {
+    this.plugins.set(DataSource, this.props.dataSource);
+  }
+
+  get columns(): Column[] {
+    const userColumns = this.props.columns;
+
+    return userColumns.map((userColumn) => ({
+      dataField: userColumn,
+    }));
   }
 }

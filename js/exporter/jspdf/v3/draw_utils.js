@@ -10,7 +10,7 @@ function roundToThreeDecimals(value) {
 
 function drawCellsContent(doc, customDrawCell, cellsArray, docStyles) {
     cellsArray.forEach(cell => {
-        const { _rect, pdfRowInfo, gridCell, ...pdfCell } = cell;
+        const { _rect, gridCell, ...pdfCell } = cell;
         const { x, y, w, h } = _rect;
         const rect = { x, y, w, h };
         const eventArg = { doc, rect, pdfCell, gridCell, cancel: false };
@@ -82,7 +82,15 @@ function drawCellText(doc, cell, docStyles) {
             w: _rect.w - (padding.left + padding.right),
             h: _rect.h - (padding.top + padding.bottom)
         };
+        if(isDefined(cell._textTopOffset)) {
+            textRect.x = textRect.x + cell._textTopOffset;
+            doc.saveGraphicsState(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#saveGraphicsState
+            clipOutsideRectContent(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h);
+        }
         drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign, cell.wordWrapEnabled);
+        if(isDefined(cell._textTopOffset)) {
+            doc.restoreGraphicsState(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#restoreGraphicsState
+        }
     }
 }
 
@@ -218,6 +226,15 @@ function setDocumentStyles(doc, styles) {
     if(doc.getTextColor() !== textColor) {
         doc.setTextColor(textColor);
     }
+}
+
+function clipOutsideRectContent(doc, x, y, w, h) {
+    doc.moveTo(roundToThreeDecimals(x), roundToThreeDecimals(y)); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#moveTo - Begin a new subpath by moving the current point to coordinates (x, y)
+    doc.lineTo(roundToThreeDecimals(x + w), roundToThreeDecimals(y)); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#lineTo - Append a straight line segment from the current point to the point (x, y)
+    doc.lineTo(roundToThreeDecimals(x + w), roundToThreeDecimals(y + h));
+    doc.lineTo(roundToThreeDecimals(x), roundToThreeDecimals(y + h));
+    doc.clip(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#clip - Clip all outside path content after calling drawing ops
+    doc.discardPath(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#discardPath - Consumes the current path without any effect. Mainly used in combination with clip or clipEvenOdd.
 }
 
 export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, roundToThreeDecimals };
