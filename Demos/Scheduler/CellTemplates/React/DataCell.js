@@ -5,15 +5,19 @@ export default function DataCell(props) {
   const { startDate } = props.itemData;
   const isDisableDate = Utils.isHoliday(startDate) || Utils.isWeekend(startDate);
   const isDinner = Utils.isDinner(startDate);
-  const cssClasses = [];
+  let cssClasses = props.className
+    ? props.className
+    : '';
 
   if (isDisableDate) {
-    cssClasses.push('disable-date');
+    cssClasses += ' disable-date';
   } else if (isDinner) {
-    cssClasses.push('dinner');
+    cssClasses += ' dinner';
   }
 
   return (
-    <div className={cssClasses} />
+    <div className={cssClasses}>
+      {props.children}
+    </div>
   );
 }

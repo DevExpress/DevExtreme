@@ -21,6 +21,12 @@ $(() => {
         element.addClass('dinner');
       }
 
+      const isMonth = this.option('currentView') === 'month';
+      if (isMonth) {
+        element.text(date.getDate());
+        element.addClass('dx-scheduler-date-table-cell-text');
+      }
+
       return itemElement.append(element);
     },
 

@@ -1,3 +1,4 @@
+/* eslint-disable func-style */
 import React from 'react';
 
 import Scheduler from 'devextreme-react/scheduler';
@@ -6,92 +7,87 @@ import notify from 'devextreme/ui/notify';
 import { data, holidays } from './data.js';
 import Utils from './utils.js';
 import DataCell from './DataCell.js';
+import DataCellMonth from './DataCellMonth.js';
 import DateCell from './DateCell.js';
 import TimeCell from './TimeCell.js';
 
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek', 'month'];
-const currentView = views[0];
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+const notifyDisableDate = () => {
+  notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
+};
 
-    this.onAppointmentFormOpening = this.onAppointmentFormOpening.bind(this);
-    this.onAppointmentAdding = this.onAppointmentAdding.bind(this);
-    this.onAppointmentUpdating = this.onAppointmentUpdating.bind(this);
-  }
+function App() {
+  const [currentView, setCurrentView] = React.useState(views[0]);
 
-  onAppointmentFormOpening(e) {
+  const onAppointmentFormOpening = (e) => {
     const startDate = new Date(e.appointmentData.startDate);
     if (!Utils.isValidAppointmentDate(startDate)) {
       e.cancel = true;
-      this.notifyDisableDate();
+      notifyDisableDate();
     }
-    this.applyDisableDatesToDateEditors(e.form);
-  }
+    applyDisableDatesToDateEditors(e.form);
+  };
 
-  onAppointmentAdding(e) {
+  const onAppointmentAdding = (e) => {
     const isValidAppointment = Utils.isValidAppointment(e.component, e.appointmentData);
     if (!isValidAppointment) {
       e.cancel = true;
-      this.notifyDisableDate();
+      notifyDisableDate();
     }
-  }
+  };
 
-  onAppointmentUpdating(e) {
+  const onAppointmentUpdating = (e) => {
     const isValidAppointment = Utils.isValidAppointment(e.component, e.newData);
     if (!isValidAppointment) {
       e.cancel = true;
-      this.notifyDisableDate();
+      notifyDisableDate();
     }
-  }
+  };
 
-  notifyDisableDate() {
-    notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
-  }
+  const onCurrentViewChange = (value) => (setCurrentView(value));
 
-  applyDisableDatesToDateEditors(form) {
+  const applyDisableDatesToDateEditors = (form) => {
     const startDateEditor = form.getEditor('startDate');
     startDateEditor.option('disabledDates', holidays);
 
     const endDateEditor = form.getEditor('endDate');
     endDateEditor.option('disabledDates', holidays);
-  }
+  };
 
-  renderDataCell(itemData) {
-    return <DataCell itemData={itemData} />;
-  }
+  const renderDataCell = (itemData) => {
+    const CellTemplate = currentView === 'month'
+      ? DataCellMonth
+      : DataCell;
 
-  renderDateCell(itemData) {
-    return <DateCell itemData={itemData} />;
-  }
+    return <CellTemplate itemData={itemData} />;
+  };
 
-  renderTimeCell(itemData) {
-    return <TimeCell itemData={itemData} />;
-  }
+  const renderDateCell = (itemData) => <DateCell itemData={itemData} />;
 
-  render() {
-    return (
-      <Scheduler
-        dataSource={data}
-        views={views}
-        defaultCurrentView={currentView}
-        defaultCurrentDate={currentDate}
-        height={600}
-        showAllDayPanel={false}
-        firstDayOfWeek={0}
-        startDayHour={9}
-        endDayHour={19}
-        dataCellRender={this.renderDataCell}
-        dateCellRender={this.renderDateCell}
-        timeCellRender={this.renderTimeCell}
-        onAppointmentFormOpening={this.onAppointmentFormOpening}
-        onAppointmentAdding={this.onAppointmentAdding}
-        onAppointmentUpdating={this.onAppointmentUpdating}
-      />
-    );
-  }
+  const renderTimeCell = (itemData) => <TimeCell itemData={itemData} />;
+
+  return (
+    <Scheduler
+      dataSource={data}
+      views={views}
+      defaultCurrentDate={currentDate}
+      currentView={currentView}
+      onCurrentViewChange={onCurrentViewChange}
+      height={600}
+      showAllDayPanel={false}
+      firstDayOfWeek={0}
+      startDayHour={9}
+      endDayHour={19}
+      dataCellRender={renderDataCell}
+      dateCellRender={renderDateCell}
+      timeCellRender={renderTimeCell}
+      onAppointmentFormOpening={onAppointmentFormOpening}
+      onAppointmentAdding={onAppointmentAdding}
+      onAppointmentUpdating={onAppointmentUpdating}
+    />
+  );
 }
 
 export default App;

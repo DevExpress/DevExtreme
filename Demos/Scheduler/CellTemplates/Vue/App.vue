@@ -3,7 +3,7 @@
     :data-source="dataSource"
     :current-date="currentDate"
     :views="views"
-    :current-view="currentView"
+    v-model:current-view="currentView"
     :height="600"
     :show-all-day-panel="false"
     :first-day-of-week="0"
@@ -18,7 +18,14 @@
   >
 
     <template #dataCellTemplate="{ data: cellData }">
-      <DataCell :cell-data="cellData"/>
+      <DataCellMonth
+        v-if="isMonthView"
+        :cell-data="cellData"
+      />
+      <DataCell
+        v-else
+        :cell-data="cellData"
+      />
     </template>
 
     <template #dateCellTemplate="{ data: cellData }">
@@ -39,6 +46,7 @@ import { data, holidays } from './data.js';
 import Utils from './utils.js';
 
 import DataCell from './DataCell.vue';
+import DataCellMonth from './DataCellMonth.vue';
 import DateCell from './DateCell.vue';
 import TimeCell from './TimeCell.vue';
 
@@ -46,6 +54,7 @@ export default {
   components: {
     DxScheduler,
     DataCell,
+    DataCellMonth,
     DateCell,
     TimeCell,
   },
@@ -56,6 +65,11 @@ export default {
       currentDate: new Date(2021, 3, 27),
       dataSource: data,
     };
+  },
+  computed: {
+    isMonthView() {
+      return this.currentView === 'month';
+    },
   },
   methods: {
     onAppointmentFormOpening(e) {
