@@ -1704,7 +1704,7 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
       form: {
         colCount: 1,
         items: [{
-          template() {
+          template(): any {
             return ($('<div>') as any).dxDataGrid({
               showColumnLines: true,
               dataSource: [{
