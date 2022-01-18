@@ -10,6 +10,7 @@
 @use "../common/mixins" as *;
 @use "../common/sizes" as *;
 @use "../popup/colors" as *;
+@use "../popup/sizes" as *;
 @use "../menu/colors" as *;
 @use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
@@ -316,14 +317,17 @@ $grid-masterdetail-padding: 16px;
   }
 
   .dx-#{$widget-name}-edit-popup {
-    .dx-scrollable-container {
-      margin-left: -10px;
-      padding-left: 10px;
+    .dx-popup-content {
+      padding: 0;
     }
 
     .dx-error-message {
       padding: $material-grid-base-cell-padding;
     }
+  }
+
+  .dx-#{$widget-name}-edit-popup-form {
+    padding: $material-popup-content-padding;
   }
 
   .dx-#{$widget-name}-headers,
