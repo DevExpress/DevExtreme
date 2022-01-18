@@ -10,6 +10,7 @@ const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
 const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
+const TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS = 'dx-format-active';
 const DROPDOWNMENU_CLASS = 'dx-dropdownmenu-button';
 const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
 const BUTTON_CONTENT_CLASS = 'dx-button-content';
@@ -695,6 +696,61 @@ export default function() {
                 .change();
 
             $okDialogButton.trigger('dxclick');
+        });
+
+        [
+            { format: 'bold', which: 66 },
+            { format: 'italic', which: 73 },
+            { format: 'underline', which: 85 }
+        ].forEach(({ format, which }) => {
+            test(`hotkey handler can set active state for ${format} button (T1027453)`, function(assert) {
+                const $container = $('#htmlEditor').html('<p>test</p>');
+                const instance = $container.dxHtmlEditor({
+                    toolbar: { items: ['bold', 'italic', 'underline'] },
+                    height: 100,
+                    width: 300,
+                    value: '<p>test</p>',
+                }).dxHtmlEditor('instance');
+
+                const quill = instance.getQuillInstance();
+                const formatHandler = quill.keyboard.bindings[which][1].handler;
+
+                instance.setSelection(4, 0);
+                instance.formatText(3, 1, { bold: true, italic: true, underline: true });
+
+                $container.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`).removeClass(TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS);
+
+                formatHandler.call(quill.keyboard, null, null, { which: which });
+
+                const $activeFormats = $container.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
+
+                assert.strictEqual($activeFormats.length, 1, 'one format button state is changed');
+                assert.ok($activeFormats.eq(0).hasClass(`dx-${format}-format`), 'correct toolbar item is active');
+            });
+
+            test(`hotkey handler can set inactive state for ${format} button (T1027453)`, function(assert) {
+                const $container = $('#htmlEditor').html('<p>test</p>');
+                const instance = $container.dxHtmlEditor({
+                    toolbar: { items: ['bold', 'italic', 'underline'] },
+                    height: 100,
+                    width: 300,
+                    value: '<p>test</p>',
+                }).dxHtmlEditor('instance');
+
+                const quill = instance.getQuillInstance();
+                const formatHandler = quill.keyboard.bindings[which][1].handler;
+
+                instance.setSelection(4, 0);
+
+                $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).addClass(TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS);
+
+                formatHandler.call(quill.keyboard, null, null, { which: which });
+
+                const $activeFormats = $container.find(`.${TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS}`);
+
+                assert.strictEqual($activeFormats.length, 2, 'other toolbar items are not changed');
+                assert.notOk($activeFormats.eq(0).hasClass(`dx-${format}-format`), 'toolbar item state is changed');
+            });
         });
 
         test('history buttons are inactive after processing transcluded content', function(assert) {
