@@ -845,10 +845,8 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
 
   // assert
   await t
-    .expect(scrollTopPosition)
-    .gt(2560)
-    .expect(scrollTopPosition)
-    .lt(2930);
+    .expect(dataGrid.isFocusedRowInViewport())
+    .ok();
 
   // act
   await dataGrid.scrollTo({ top: 0 });
@@ -870,10 +868,8 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
 
   // assert
   await t
-    .expect(scrollTopPosition)
-    .gt(2560)
-    .expect(scrollTopPosition)
-    .lt(2930);
+    .expect(dataGrid.isFocusedRowInViewport())
+    .ok();
 }).before(async () => {
   await clearLocalStorage();
   return createWidget('dxDataGrid', getDataGridConfig());
