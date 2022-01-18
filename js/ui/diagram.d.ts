@@ -735,7 +735,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
      * @type_function_param1_field4 operation:Enums.DiagramModelOperation
-     * @type_function_param1_field5 args:dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs
      * @type_function_param1_field6 reason:Enums.DiagramRequestEditOperationReason
      * @action
      * @public

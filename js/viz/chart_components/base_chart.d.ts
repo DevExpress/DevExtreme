@@ -163,7 +163,6 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
      * @action
      * @public
@@ -174,7 +173,6 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
      * @action
      * @public

@@ -3494,7 +3494,6 @@ export type Export<TRowData = any, TKey = any> = {
    * @type_function_param1_field2 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
    * @type_function_param1_field3 verticalAlignment:Enums.ExcelCellVerticalAlignment
    * @type_function_param1_field6 fillPatternType:Enums.ExcelCellPatternType
-   * @type_function_param1_field8 font:ExcelFont
    * @type_function_param1_field9 value:string|number|date
    * @type_function_param1_field11 gridCell:ExcelDataGridCell
    */

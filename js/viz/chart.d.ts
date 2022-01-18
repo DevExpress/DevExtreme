@@ -2948,7 +2948,7 @@ export interface dxChartSeriesTypesBubbleSeries extends dxChartSeriesTypesCommon
      */
     aggregation?: dxChartSeriesTypesBubbleSeriesAggregation;
     /**
-     * @docid dxChartSeriesTypes.BubbleSeries.hoverMode'
+     * @docid dxChartSeriesTypes.BubbleSeries.hoverMode
      * @default 'onlyPoint'
      * @public
      */
