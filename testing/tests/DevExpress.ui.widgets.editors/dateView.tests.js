@@ -330,7 +330,7 @@ QUnit.module('dateView', {
             });
 
             done();
-        }, RESIZE_WAIT_TIMEOUT * 2);
+        }, RESIZE_WAIT_TIMEOUT * 4);
     });
 
     QUnit.test('render rollers', function(assert) {
