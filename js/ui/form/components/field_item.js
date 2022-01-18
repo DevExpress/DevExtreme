@@ -121,7 +121,9 @@ export function renderFieldItem({
         try {
             widgetInstance = createComponentCallback($div, item.editorType, editorOptions);
             widgetInstance.setAria('describedby', helpID);
-            widgetInstance.setAria('labelledby', labelID);
+            if(widgetInstance.getAria('labelledby')) {
+                widgetInstance.setAria('labelledby', labelID);
+            }
             widgetInstance.setAria('required', isRequired);
         } catch(e) {
             errors.log('E1035', e.message);
