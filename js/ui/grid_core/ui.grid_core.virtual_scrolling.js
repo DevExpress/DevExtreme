@@ -298,7 +298,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
 
             options.loadPageCount = loadPageCount;
             if(!options.isCustomLoading && newMode && takeIsDefined && loadPageCount > 1 && pageSize > 0) {
-                options.storeLoadOptions.take = loadPageCount * pageSize;
+                storeLoadOptions.take = loadPageCount * pageSize;
             }
             this.callBase.apply(this, arguments);
         },
