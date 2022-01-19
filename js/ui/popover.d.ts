@@ -70,7 +70,6 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     /**
      * @docid
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @default true
      * @public
      */

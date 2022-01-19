@@ -210,7 +210,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field4 dropZoneElement:DxElement
      * @type_function_param1_field5 event:event
      * @action
      * @public
@@ -221,7 +220,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field4 dropZoneElement:DxElement
      * @type_function_param1_field5 event:event
      * @action
      * @public
@@ -241,10 +239,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field4 file:File
-     * @type_function_param1_field5 segmentSize:Number
-     * @type_function_param1_field6 bytesLoaded:Number
-     * @type_function_param1_field7 bytesTotal:Number
      * @type_function_param1_field8 event:event
      * @action
      * @public
@@ -255,7 +249,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @action
      * @public
@@ -266,7 +259,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @action
      * @public
@@ -277,7 +269,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @action
      * @public
@@ -288,7 +279,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
-     * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @action
      * @public

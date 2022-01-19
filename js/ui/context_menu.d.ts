@@ -86,7 +86,6 @@ export interface dxContextMenuOptions<
      * @docid
      * @default true
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @public
      */
     closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
@@ -116,10 +115,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:dxContextMenu
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -138,10 +134,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:dxContextMenu
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */

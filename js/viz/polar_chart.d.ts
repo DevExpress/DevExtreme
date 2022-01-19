@@ -255,7 +255,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
        * @type_function_param1_field2 val:Date|Number|string
        * @type_function_param2_field1 arg:Date|Number|string
        * @type_function_param2_field2 val:Date|Number|string
-       * @type_function_return Number
        * @default true
        */
       sortingMethod?: boolean | ((a: { arg?: Date | number | string; val?: Date | number | string }, b: { arg?: Date | number | string; val?: Date | number | string }) => number);
@@ -333,16 +332,8 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 axis:chartAxisObject
-     * @type_function_param1_field6 range:VizRange
-     * @type_function_param1_field7 previousRange:VizRange
-     * @type_function_param1_field8 cancel:boolean
      * @type_function_param1_field9 actionType:Enums.ChartZoomPanActionType
-     * @type_function_param1_field10 zoomFactor:Number
-     * @type_function_param1_field11 shift:Number
      * @notUsedInTheme
      * @action
      * @public
@@ -353,12 +344,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 axis:chartAxisObject
-     * @type_function_param1_field6 range:VizRange
-     * @type_function_param1_field7 cancel:boolean
      * @type_function_param1_field8 actionType:Enums.ChartZoomPanActionType
      * @notUsedInTheme
      * @action

@@ -265,7 +265,6 @@ export interface dxListOptions<
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:dxList
@@ -278,7 +277,6 @@ export interface dxListOptions<
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:dxList
@@ -316,7 +314,6 @@ export interface dxListOptions<
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:dxList
@@ -516,7 +513,6 @@ export default class dxList<
     /**
      * @docid
      * @publicName collapseGroup(groupIndex)
-     * @param1 groupIndex:Number
      * @return Promise<void>
      * @public
      */
@@ -539,7 +535,6 @@ export default class dxList<
     /**
      * @docid
      * @publicName expandGroup(groupIndex)
-     * @param1 groupIndex:Number
      * @return Promise<void>
      * @public
      */

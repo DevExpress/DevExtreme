@@ -187,7 +187,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @type_function_param1_field2 val:Date|Number|string
          * @type_function_param2_field1 arg:Date|Number|string
          * @type_function_param2_field2 val:Date|Number|string
-         * @type_function_return Number
          * @default true
          */
         sortingMethod?: boolean | ((a: { arg?: Date | number | string; val?: Date | number | string }, b: { arg?: Date | number | string; val?: Date | number | string }) => number);

@@ -332,7 +332,6 @@ export interface baseSeriesObject {
     /**
      * @docid
      * @publicName getPointsByArg(pointArg)
-     * @param1 pointArg:number|string|date
      * @public
      */
     getPointsByArg(pointArg: number | string | Date): Array<basePointObject>;
@@ -839,7 +838,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
        * @docid
        * @type_function_param1 a:object
        * @type_function_param2 b:object
-       * @type_function_return Number
        * @default true
        */
       sortingMethod?: boolean | ((a: any, b: any) => number);
@@ -885,7 +883,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
      * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 argument:Date|Number|string
      * @notUsedInTheme
      * @action
      * @public
@@ -940,18 +937,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
      * @type_function_param1_field6 rangeEnd:Date|Number:deprecated(range)
-     * @type_function_param1_field7 axis:chartAxisObject
-     * @type_function_param1_field8 range:VizRange
-     * @type_function_param1_field9 previousRange:VizRange
-     * @type_function_param1_field10 cancel:boolean
      * @type_function_param1_field11 actionType:Enums.ChartZoomPanActionType
-     * @type_function_param1_field12 zoomFactor:Number
-     * @type_function_param1_field13 shift:Number
      * @notUsedInTheme
      * @action
      * @public
@@ -962,12 +951,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 axis:chartAxisObject
-     * @type_function_param1_field6 range:VizRange
-     * @type_function_param1_field7 cancel:boolean
      * @type_function_param1_field8 actionType:Enums.ChartZoomPanActionType
      * @notUsedInTheme
      * @action
@@ -2597,8 +2581,6 @@ export default class dxChart extends BaseChart<dxChartOptions> {
     /**
      * @docid
      * @publicName zoomArgument(startValue,endValue)
-     * @param1 startValue:Number|Date|string
-     * @param2 endValue:Number|Date|string
      * @public
      */
     zoomArgument(startValue: number | Date | string, endValue: number | Date | string): void;

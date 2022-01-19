@@ -236,11 +236,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFilterBuilder
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 value:any
      * @type_function_param1_field5 setValue(newValue):any
-     * @type_function_param1_field6 cancel:boolean
      * @type_function_param1_field9 editorOptions:object
      * @default null
      * @action
@@ -322,9 +318,7 @@ export interface dxFilterBuilderCustomOperation {
     /**
      * @docid
      * @type_function_param1 conditionInfo:object
-     * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 field:dxFilterBuilderField
-     * @type_function_param1_field3 setValue:function
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -400,9 +394,7 @@ export interface dxFilterBuilderField {
     /**
      * @docid
      * @type_function_param1 conditionInfo:object
-     * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field3 field:dxFilterBuilderField
-     * @type_function_param1_field4 setValue:function
      * @type_function_return string|Element|jQuery
      * @public
      */

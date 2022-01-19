@@ -126,7 +126,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 items:Array<Object>
-     * @type_function_param1_field5 area:string
      * @type_function_param1_field6 field:PivotGridDataSourceOptions.fields
      * @type_function_param1_field7 event:event
      * @default null

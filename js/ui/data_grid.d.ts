@@ -350,7 +350,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 event:event
-     * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
@@ -361,7 +360,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 event:event
-     * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
@@ -372,7 +370,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 event:event
-     * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
@@ -383,7 +380,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 event:event
-     * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
      */
     onDragStart?: ((e: Cancelable & DragStartEventInfo<T, TRowData, TKey>) => void);
@@ -666,10 +662,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 changes:Array<DataChange>
-     * @type_function_param1_field5 cancel:boolean
      * @default null
      * @action
      * @public
@@ -710,10 +703,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 key:any
-     * @type_function_param1_field5 cancel:boolean
      * @default null
      * @action
      * @public
@@ -733,10 +723,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 key:any
-     * @type_function_param1_field5 cancel:boolean
      * @default null
      * @action
      * @public
@@ -2313,7 +2300,6 @@ export interface ColumnBase<TRowData = any> {
     /**
      * @docid GridBaseColumn.customizeText
      * @type_function_param1 cellInfo:object
-     * @type_function_param1_field1 value:string|number|date
      * @public
      */
     customizeText?: ((cellInfo: ColumnCustomizeTextArg) => string);
@@ -3172,7 +3158,6 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type_function_param1_field5 key:any
      * @type_function_param1_field10 column:dxDataGridColumn
      * @type_function_param1_field13 row:dxDataGridRowObject
-     * @type_function_param1_field18 watch:function
      * @default null
      * @action
      * @public
@@ -3194,11 +3179,8 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
-     * @type_function_param1_field6 cancel:boolean
      * @type_function_param1_field7 column:object
      * @default null
      * @action
@@ -3242,10 +3224,6 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 fileName:string
-     * @type_function_param1_field5 cancel:boolean
      * @default null
      * @action
      * @public
@@ -3254,12 +3232,6 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 fileName:string
-     * @type_function_param1_field4 format:string
-     * @type_function_param1_field5 data:BLOB
-     * @type_function_param1_field6 cancel:boolean
      * @default null
      * @action
      * @public
@@ -3281,17 +3253,9 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 cellElement:DxElement
-     * @type_function_param1_field5 prevColumnIndex:number
-     * @type_function_param1_field6 prevRowIndex:number
-     * @type_function_param1_field7 newColumnIndex:number
-     * @type_function_param1_field8 newRowIndex:number
      * @type_function_param1_field9 event:event
      * @type_function_param1_field10 rows:Array<dxDataGridRowObject>
      * @type_function_param1_field11 columns:Array<dxDataGridColumn>
-     * @type_function_param1_field12 cancel:boolean
      * @default null
      * @action
      * @public
@@ -3311,14 +3275,8 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 rowElement:DxElement
-     * @type_function_param1_field5 prevRowIndex:number
-     * @type_function_param1_field6 newRowIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 rows:Array<dxDataGridRowObject>
-     * @type_function_param1_field9 cancel:boolean
      * @default null
      * @action
      * @public
@@ -3494,7 +3452,6 @@ export type Export<TRowData = any, TKey = any> = {
    * @type_function_param1_field2 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
    * @type_function_param1_field3 verticalAlignment:Enums.ExcelCellVerticalAlignment
    * @type_function_param1_field6 fillPatternType:Enums.ExcelCellPatternType
-   * @type_function_param1_field9 value:string|number|date
    * @type_function_param1_field11 gridCell:ExcelDataGridCell
    */
   customizeExcelCell?: ((options: ExcelCellInfo<TRowData, TKey>) => void);
@@ -3656,7 +3613,6 @@ export type MasterDetail<TRowData = any, TKey = any> = {
    * @type_function_param2 detailInfo:object
    * @type_function_param2_field1 key:any
    * @type_function_param2_field2 data:object
-   * @type_function_param2_field3 watch:function
    */
   template?: template | ((detailElement: DxElement, detailInfo: MasterDetailTemplateData<TRowData, TKey>) => any);
 };
@@ -3748,7 +3704,6 @@ export type SummaryGroupItem = {
     /**
      * @docid dxDataGridOptions.summary.groupItems.customizeText
      * @type_function_param1 itemInfo:object
-     * @type_function_param1_field1 value:string|number|date
      */
     customizeText?: ((itemInfo: SummaryItemTextInfo) => string);
     /**
@@ -3809,7 +3764,6 @@ export type SummaryTotalItem = {
   /**
    * @docid dxDataGridOptions.summary.totalItems.customizeText
    * @type_function_param1 itemInfo:object
-   * @type_function_param1_field1 value:string|number|date
    */
   customizeText?: ((itemInfo: SummaryItemTextInfo) => string);
   /**
@@ -3966,7 +3920,6 @@ export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & 
      * @type boolean|function
      * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 row:dxDataGridRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowDeleting?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: Row<TRowData, TKey> }) => boolean);
@@ -3976,7 +3929,6 @@ export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & 
      * @type boolean|function
      * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 row:dxDataGridRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowUpdating?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: Row<TRowData, TKey> }) => boolean);
@@ -4122,7 +4074,6 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     /**
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
-     * @param1 summaryItemName:String
      * @public
      */
     getTotalSummaryValue(summaryItemName: string): any;
@@ -4281,7 +4232,6 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
      * @type_function_param2_field1 data:object
      * @type_function_param2_field9 column:dxDataGridColumn
      * @type_function_param2_field10 row:dxDataGridRowObject
-     * @type_function_param2_field12 watch:function
      * @public
      */
     cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData<TRowData, TKey>) => any);
@@ -4299,7 +4249,6 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
      * @type_function_param2_field2 data:object
      * @type_function_param2_field9 column:dxDataGridColumn
      * @type_function_param2_field10 row:dxDataGridRowObject
-     * @type_function_param2_field12 watch:function
      * @public
      */
     editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData<TRowData, TKey>) => any);
@@ -4386,7 +4335,6 @@ export interface dxDataGridColumnButton<TRowData = any, TKey = any> extends Colu
      * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_param1_field3 column:dxDataGridColumn
-     * @type_function_return Boolean
      * @public
      */
     visible?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: Row<TRowData, TKey>; column?: Column<TRowData, TKey> }) => boolean);
@@ -4397,7 +4345,6 @@ export interface dxDataGridColumnButton<TRowData = any, TKey = any> extends Colu
      * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_param1_field3 column:dxDataGridColumn
-     * @type_function_return Boolean
      * @public
      */
     disabled?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: Row<TRowData, TKey>; column?: Column<TRowData, TKey> }) => boolean);

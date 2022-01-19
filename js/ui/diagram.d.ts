@@ -147,7 +147,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field3 name:String
      * @action
      * @public
      */
@@ -1040,7 +1039,6 @@ export default class dxDiagram extends Widget<dxDiagramOptions> {
     /**
      * @docid
      * @publicName getItemById(id)
-     * @param1 id:String
      * @return dxDiagramItem
      * @public
      */
@@ -1258,7 +1256,6 @@ export interface dxDiagramShape extends Item {
     attachedConnectorIds?: Array<String>;
     /**
      * @docid dxDiagramShape.containerId
-     * @type String
      * @public
      */
     containerId?: string;
@@ -1269,7 +1266,6 @@ export interface dxDiagramShape extends Item {
     containerChildItemIds?: Array<String>;
     /**
      * @docid dxDiagramShape.containerExpanded
-     * @type Boolean
      * @public
      */
     containerExpanded?: boolean;
