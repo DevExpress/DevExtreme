@@ -283,6 +283,16 @@ const Resizable = DOMComponent.inherit({
             : { x: 0, y: 0 };
     },
 
+    _fitDelta: function({ x, y }) {
+        const size = this._elementSize;
+        const { minWidth, minHeight, maxWidth, maxHeight } = this.option();
+
+        return {
+            x: fitIntoRange(size.width + x, minWidth, maxWidth) - size.width,
+            y: fitIntoRange(size.height + y, minHeight, maxHeight) - size.height,
+        };
+    },
+
     _getDeltaByOffset: function(offset) {
         const sides = this._movingSides;
         const shouldKeepAspectRatio = this._isCornerHandler(sides) && this.option('_keepAspectRatio');
@@ -298,7 +308,10 @@ const Resizable = DOMComponent.inherit({
 
             delta = fittedProportionalDelta;
         } else {
-            delta = this._roundByStep(delta);
+            const fittedDelta = this._fitDelta(delta);
+            const roundedFittedDelta = this._roundByStep(fittedDelta);
+
+            delta = roundedFittedDelta;
         }
 
         return delta;

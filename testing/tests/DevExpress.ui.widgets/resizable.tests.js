@@ -641,6 +641,39 @@ QUnit.module('drag integration', () => {
                 assert.strictEqual(rect.width, this.initialRect.width, 'width is rerendered on start position');
                 assert.strictEqual(rect.height, this.initialRect.height, 'height is rerendered on start position');
             });
+
+            QUnit.test('horizontal resize should not be done is result offset is smaller than step', function(assert) {
+                this.resizable.option({
+                    minWidth: 40,
+                    step: 20
+                });
+
+                const $handle = getHandle('right');
+                const pointer = pointerMock($handle).start();
+
+                pointer.dragStart().drag(-20, 0);
+
+                const rect = this.getRect();
+
+                assert.strictEqual(rect.width, this.initialRect.width, 'width is not changed(only resize by 10px can be done because of min width)');
+            });
+
+
+            QUnit.test('vertical resize should not be done is result offset is smaller than step', function(assert) {
+                this.resizable.option({
+                    minHeight: 40,
+                    step: 20
+                });
+
+                const $handle = getHandle('right');
+                const pointer = pointerMock($handle).start();
+
+                pointer.dragStart().drag(0, -20);
+
+                const rect = this.getRect();
+
+                assert.strictEqual(rect.height, this.initialRect.height, 'height is not changed(only resize by 10px can be done because of min height)');
+            });
         });
     });
 
