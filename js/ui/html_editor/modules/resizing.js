@@ -8,6 +8,7 @@ import Resizable from '../../resizable';
 import { getBoundingRect } from '../../../core/utils/position';
 import Quill from 'devextreme-quill';
 import BaseModule from './base';
+import { getHeight, getOuterHeight, getOuterWidth, getWidth } from '../../../core/utils/size';
 
 const DX_RESIZE_FRAME_CLASS = 'dx-resize-frame';
 const DX_TOUCH_DEVICE_CLASS = 'dx-touch-device';
@@ -53,6 +54,12 @@ export default class ResizingModule extends BaseModule {
             }
 
             this._$target = e.target;
+
+            const $target = $(this._$target);
+            const minWidth = Math.max(getOuterWidth($target) - getWidth($target), this.resizable.option('minWidth'));
+            const minHeight = Math.max(getOuterHeight($target) - getHeight($target), this.resizable.option('minHeight'));
+
+            this.resizable.option({ minWidth, minHeight });
 
             this.updateFramePosition();
             this.showFrame();
@@ -141,7 +148,7 @@ export default class ResizingModule extends BaseModule {
             e.preventDefault();
         });
 
-        this.editorInstance._createComponent(this._$resizeFrame, Resizable, {
+        this.resizable = this.editorInstance._createComponent(this._$resizeFrame, Resizable, {
             _keepAspectRatio: true,
             onResize: (e) => {
                 if(!this._$target) {
