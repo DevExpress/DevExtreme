@@ -441,6 +441,12 @@ describe('option', () => {
     expect($('#component').dxOptionsTestWidget('option').text).toBe('default text');
   });
 
+  it('should patch options without freezing', () => {
+    $('#component').dxOptionsTestWidget({});
+    expect(Object.isFrozen($('#component')
+      .dxOptionsTestWidget('instance')._patchOptionValues({ objectProp: undefined }).objectProp)).toBe(false);
+  });
+
   it('should copy default props of component (not by reference)', () => {
     document.body.innerHTML = `
       <div id="components">

@@ -79,6 +79,9 @@ const simpleModuleConfig = {
             focus: noop,
             on: noop,
             off: noop,
+            keyboard: {
+                addBinding: noop
+            },
             table: {
                 insertTable: sinon.stub(),
                 insertRowAbove: sinon.stub(),
@@ -104,6 +107,9 @@ const simpleModuleConfig = {
                 },
                 _createComponent: ($element, widget, options) => {
                     return new widget($element, options);
+                },
+                _getQuillContainer: () => {
+                    return this.$element;
                 },
                 _saveValueChangeEvent: noop,
                 option: noop,
@@ -136,6 +142,9 @@ const dialogModuleConfig = {
             },
             on: noop,
             off: noop,
+            keyboard: {
+                addBinding: noop
+            },
             table: {
                 insertTable: sinon.stub(),
                 insertRowAbove: sinon.stub(),
@@ -164,6 +173,9 @@ const dialogModuleConfig = {
                 },
                 _createComponent: ($element, widget, options) => {
                     return new widget($element, options);
+                },
+                _getQuillContainer: () => {
+                    return this.$element;
                 },
                 _saveValueChangeEvent: noop,
                 on: noop,
