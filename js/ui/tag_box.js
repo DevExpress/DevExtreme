@@ -578,7 +578,7 @@ const TagBox = SelectBox.inherit({
 
     _renderInput: function() {
         this.callBase();
-        this._renderPreventBlur(this._inputWrapper());
+        this._renderPreventBlur(this._inputWrapper(), [this._input()[0]]);
     },
 
     _renderInputValueImpl: function() {
