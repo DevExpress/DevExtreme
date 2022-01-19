@@ -496,7 +496,7 @@ const TextEditorBase = Editor.inherit({
 
         this._setLabelContainerAria();
 
-        if(this._labelContainerElement) {
+        if(this._labelContainerElement) { // NOTE: element can be not in DOM yet in React and Vue
             resizeObserverSingleton.observe(this._labelContainerElement, this._updateLabelWidth.bind(this));
         }
     },
