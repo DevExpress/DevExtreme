@@ -48,6 +48,5 @@ test('HtmlEditor should keep actual format after "enter" key pressed (T922236)',
     .pressKey('k')
     .pressKey('enter')
     .expect(selectBox.value)
-    .eql('Arial')
-    .wait(1000);
+    .eql('Arial');
 });
