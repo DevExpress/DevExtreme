@@ -160,11 +160,11 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
     ]),
     () => gulp
         .src(esmTranspileSrc)
-        .pipe(flatMap((stream, file) => {
-            // NOTE: flatmap thinks that the 'js/viz/vector_map.utils' folder is a file.
-            if(file.extname === '.utils') return stream;
-            searchSideEffectModules(file.path, sideEffectModulesSet);          
-            return stream;
+        .pipe(through2.obj((chunk, enc, callback) => {
+            if (chunk.isNull())
+                return callback(null, chunk);
+            searchSideEffectModules(chunk.path, sideEffectModulesSet); 
+            callback(null, chunk);
         })),
     () => gulp
         .src(esmTranspileSrc)
