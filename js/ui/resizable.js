@@ -45,6 +45,7 @@ const Resizable = DOMComponent.inherit({
 
             handles: 'all',
 
+            // NOTE: does not affect proportional resize
             step: '1',
 
             /**
