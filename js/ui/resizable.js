@@ -278,22 +278,9 @@ const Resizable = DOMComponent.inherit({
             fittedDelta = { x: this._proportionate('x', y), y };
         }
 
-        if(!isFittedX() || !isFittedY()) {
-            return {
-                x: 0,
-                y: 0
-            };
-        }
-
-        return fittedDelta;
-    },
-
-    _isDeltaProportional: function(delta) {
-        const deltaRatio = delta.x / delta.y;
-        const dimensionsRatio = this._elementSize.width / this._elementSize.height;
-        const epsilon = 0.5;
-
-        return dimensionsRatio - epsilon < deltaRatio && deltaRatio < dimensionsRatio + epsilon;
+        return isFittedX() && isFittedY()
+            ? fittedDelta
+            : { x: 0, y: 0 };
     },
 
     _getDeltaByOffset: function(offset) {
@@ -308,17 +295,11 @@ const Resizable = DOMComponent.inherit({
         if(shouldKeepAspectRatio) {
             const proportionalDelta = this._getProportionalDelta(delta);
             const fittedProportionalDelta = this._fitDeltaProportionally(proportionalDelta);
-            const roundedDelta = this._roundOffset(fittedProportionalDelta);
 
-            delta = this._isDeltaProportional(roundedDelta)
-                ? roundedDelta
-                : { x: 0, y: 0 };
+            delta = fittedProportionalDelta;
         }
 
-        return {
-            ...delta,
-            isStartPosition: offset.x === 0 && offset.y === 0
-        };
+        return delta;
     },
 
     _updatePosition: function(delta, { width, height }) {
@@ -352,8 +333,12 @@ const Resizable = DOMComponent.inherit({
 
         const width = size.width + delta.x;
         const height = size.height + delta.y;
-        if(delta.x || delta.isStartPosition || isStepPrecisionStrict) this._renderWidth(width);
-        if(delta.y || delta.isStartPosition || isStepPrecisionStrict) this._renderHeight(height);
+        const elementStyle = this.$element().get(0).style;
+        const shouldRenderWidth = delta.x || isStepPrecisionStrict || elementStyle.width !== 'auto';
+        const shouldRenderHeight = delta.y || isStepPrecisionStrict || elementStyle.height !== 'auto';
+
+        if(shouldRenderWidth) this._renderWidth(width);
+        if(shouldRenderHeight) this._renderHeight(height);
 
         return {
             width,

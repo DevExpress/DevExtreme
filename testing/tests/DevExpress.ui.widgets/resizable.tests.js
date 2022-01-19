@@ -176,6 +176,36 @@ QUnit.module('behavior with auto size', () => {
         assert.equal($resizable[0].style.height, 'auto', 'height of element was not changed');
     });
 
+    QUnit.test('horizontal resize back to the start position should not change height', function(assert) {
+        const $resizable = $('#resizableAutoSize').dxResizable({
+            handles: 'right'
+        });
+
+        const $handle = getHandle('right');
+        const pointer = pointerMock($handle).start();
+
+        pointer.dragStart()
+            .drag(10, 0)
+            .drag(-10, 0);
+
+        assert.strictEqual($resizable[0].style.height, 'auto', 'height of element was not changed');
+    });
+
+    QUnit.test('vertical resize back to the start position should not change width', function(assert) {
+        const $resizable = $('#resizableAutoSize').dxResizable({
+            handles: 'bottom'
+        });
+
+        const $handle = getHandle('right');
+        const pointer = pointerMock($handle).start();
+
+        pointer.dragStart()
+            .drag(0, 10)
+            .drag(0, -10);
+
+        assert.strictEqual($resizable[0].style.width, 'auto', 'width of element was not changed');
+    });
+
     QUnit.test('drag on top handle should not change width', function(assert) {
         const $resizable = $('#resizableAutoSize').dxResizable({
             handles: 'top'
@@ -886,75 +916,6 @@ QUnit.module('drag integration', () => {
                 assert.strictEqual(rect.left, this.initialRect.left, 'left coordinate is not changed');
             });
 
-            QUnit.test('horizontal resize should not be done if it is impossible to save proportion because of the step', function(assert) {
-                const step = 20;
-                this.resizable.option({ step });
-
-                const offsetX = 30;
-                this.pointer.dragStart().drag(offsetX, 0);
-
-                const rect = this.getRect();
-                assert.strictEqual(rect.width, this.width, 'width is not changed');
-                assert.strictEqual(rect.height, this.height, 'height is not changed');
-
-                assert.strictEqual(rect.top, this.initialRect.top, 'top coordinate is not changed');
-                assert.strictEqual(rect.left, this.initialRect.left, 'left coordinate is not changed');
-            });
-
-            QUnit.test('horizontal resize should be proportional with any step', function(assert) {
-                const step = 20;
-                this.resizable.option({ step });
-
-                const offsetX = 50;
-                const flooredOffsetX = offsetX - offsetX % step;
-                this.pointer.dragStart().drag(offsetX, 0);
-
-                const rect = this.getRect();
-                assert.strictEqual(rect.width, this.width + flooredOffsetX, 'width is changed correctly');
-                assert.strictEqual(rect.height, this.height + flooredOffsetX * this.heightToWidthRatio, 'height is changed proportionally');
-
-                assert.strictEqual(rect.top, this.initialRect.top, 'top coordinate is not changed');
-                assert.strictEqual(rect.left, this.initialRect.left, 'left coordinate is not changed');
-            });
-
-            QUnit.test('vertical resize should not be done if it is impossible to save proportion because of the step', function(assert) {
-                const step = 20;
-                const width = 30;
-                const height = 60;
-                this.$resizable.css({ width, height });
-                this.resizable.option({ step });
-
-                const offsetY = 39;
-                this.pointer.dragStart().drag(0, offsetY);
-
-                const rect = this.getRect();
-                assert.strictEqual(rect.height, height, 'height is not changed');
-                assert.strictEqual(rect.width, width, 'width is not changed');
-
-                assert.strictEqual(rect.top, this.initialRect.top, 'top coordinate is not changed');
-                assert.strictEqual(rect.left, this.initialRect.left, 'left coordinate is not changed');
-            });
-
-            QUnit.test('vertical resize should be proportional with any step', function(assert) {
-                const step = 20;
-                const width = 30;
-                const height = 60;
-                this.$resizable.css({ width, height });
-                this.resizable.option({ step });
-
-                const offsetY = 50;
-
-                const flooredOffsetY = offsetY - offsetY % step;
-                this.pointer.dragStart().drag(0, offsetY);
-
-                const rect = this.getRect();
-                assert.strictEqual(rect.height, height + flooredOffsetY, 'height is changed correctly');
-                assert.strictEqual(rect.width, width + flooredOffsetY * width / height, 'width is changed proportionally to height');
-
-                assert.strictEqual(rect.top, this.initialRect.top, 'top coordinate is not changed');
-                assert.strictEqual(rect.left, this.initialRect.left, 'left coordinate is not changed');
-            });
-
             QUnit.test('dimensions should be updated if handle is returned to the start position (offset = 0)', function(assert) {
                 this.resizable.option('step', 20);
 
@@ -1136,77 +1097,6 @@ QUnit.module('drag integration', () => {
 
                 assert.strictEqual(rect.top, this.initialRect.top, 'top coordinate is not changed');
                 assert.strictEqual(rect.left, this.initialRect.left, 'left coordinate is not changed');
-            });
-
-            QUnit.test('horizontal resize should not be done if it is impossible to save proportion because of the step', function(assert) {
-                const step = 20;
-                this.resizable.option({ step });
-
-                const offsetX = -30;
-                this.pointer.dragStart().drag(offsetX, 0);
-
-                const rect = this.getRect();
-                assert.strictEqual(rect.width, this.width, 'width is not changed');
-                assert.strictEqual(rect.height, this.height, 'height is not changed');
-
-                assert.strictEqual(rect.top, this.initialRect.top, 'top coordinate is not changed');
-                assert.strictEqual(rect.left, this.initialRect.left, 'left coordinate is not changed');
-            });
-
-            QUnit.test('horizontal resize should be proportional with any step', function(assert) {
-                const step = 20;
-                this.resizable.option({ step });
-
-                const offsetX = -50;
-                const deltaX = offsetX - offsetX % step;
-                const deltaY = deltaX * this.heightToWidthRatio;
-                this.pointer.dragStart().drag(offsetX, 0);
-
-                const rect = this.getRect();
-                assert.strictEqual(rect.width, this.width - deltaX, 'width is changed correctly');
-                assert.strictEqual(rect.height, this.height - deltaY, 'height is changed proportionally');
-
-                assert.strictEqual(rect.top, this.initialRect.top + deltaY, 'top coordinate is moved up');
-                assert.strictEqual(rect.left, this.initialRect.left + deltaX, 'left coordinate is moved right');
-            });
-
-            QUnit.test('vertical resize should not be done if it is impossible to save proportion because of the step', function(assert) {
-                const step = 20;
-                const width = 30;
-                const height = 60;
-                this.$resizable.css({ width, height });
-                this.resizable.option({ step });
-
-                const offsetY = -39;
-                this.pointer.dragStart().drag(0, offsetY);
-
-                const rect = this.getRect();
-                assert.strictEqual(rect.height, height, 'height is not changed');
-                assert.strictEqual(rect.width, width, 'width is not changed');
-
-                assert.strictEqual(rect.top, this.initialRect.top, 'top coordinate is not changed');
-                assert.strictEqual(rect.left, this.initialRect.left, 'left coordinate is not changed');
-            });
-
-            QUnit.test('vertical resize should be proportional with any step', function(assert) {
-                const step = 20;
-                const width = 30;
-                const height = 60;
-                this.$resizable.css({ width, height });
-                this.resizable.option({ step });
-
-                const offsetY = -50;
-
-                const deltaY = offsetY - offsetY % step;
-                const deltaX = deltaY * width / height;
-                this.pointer.dragStart().drag(0, offsetY);
-
-                const rect = this.getRect();
-                assert.strictEqual(rect.height, height - deltaY, 'height is changed correctly');
-                assert.strictEqual(rect.width, width - deltaX, 'width is changed proportionally to height');
-
-                assert.strictEqual(rect.top, this.initialRect.top + deltaY, 'top coordinate is moved up');
-                assert.strictEqual(rect.left, this.initialRect.left + deltaX, 'left coordinate is moved to the left');
             });
         });
     });
