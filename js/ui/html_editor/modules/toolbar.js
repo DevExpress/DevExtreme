@@ -38,6 +38,7 @@ if(Quill) {
     const SELECTION_CHANGE_EVENT = 'selection-change';
 
     const USER_ACTION = 'user';
+    const SILENT_ACTION = 'silent';
 
     const FORMAT_HOTKEYS = {
         66: 'bold',
@@ -77,7 +78,7 @@ if(Quill) {
                 this._renderToolbar();
 
                 this.quill.on('editor-change', (eventName, newValue, oldValue, eventSource) => {
-                    const isSilentMode = eventSource === 'silent' && isEmptyObject(this.quill.getFormat());
+                    const isSilentMode = eventSource === SILENT_ACTION && isEmptyObject(this.quill.getFormat());
 
                     if(!isSilentMode) {
                         const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
