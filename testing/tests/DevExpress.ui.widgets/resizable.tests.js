@@ -932,6 +932,23 @@ QUnit.module('drag integration', () => {
                 assert.strictEqual(rect.width, this.initialRect.width, 'width is rerendered on start position');
                 assert.strictEqual(rect.height, this.initialRect.height, 'height is rerendered on start position');
             });
+
+            QUnit.test('step should not affect proportional resize', function(assert) {
+                this.resizable.option('step', 50);
+
+                const $handle = getHandle('bottom-right');
+                const pointer = pointerMock($handle).start();
+
+                const offsetX = 40;
+                const offsetY = 20;
+
+                pointer.dragStart().drag(offsetX, offsetY);
+
+                const rect = this.getRect();
+
+                assert.strictEqual(rect.width, this.initialRect.width + offsetX, 'width is changed');
+                assert.strictEqual(rect.height, this.initialRect.height + offsetY, 'height is changed');
+            });
         });
 
         QUnit.module('top-left handle', {

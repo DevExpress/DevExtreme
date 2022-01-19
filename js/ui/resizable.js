@@ -297,6 +297,8 @@ const Resizable = DOMComponent.inherit({
             const fittedProportionalDelta = this._fitDeltaProportionally(proportionalDelta);
 
             delta = fittedProportionalDelta;
+        } else {
+            delta = this._roundByStep(delta);
         }
 
         return delta;
@@ -368,10 +370,10 @@ const Resizable = DOMComponent.inherit({
         if(!sides.left && !sides.right) offset.x = 0;
         if(!sides.top && !sides.bottom) offset.y = 0;
 
-        return this._roundOffset(offset);
+        return offset;
     },
 
-    _roundOffset: function(offset) {
+    _roundByStep: function(offset) {
         return this.option('stepPrecision') === 'strict'
             ? this._getStrictOffset(offset)
             : this._getSimpleOffset(offset);
