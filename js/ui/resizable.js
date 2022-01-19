@@ -352,12 +352,12 @@ const Resizable = DOMComponent.inherit({
         const shouldRenderWidth = delta.x || isStepPrecisionStrict || elementStyle.width !== 'auto';
         const shouldRenderHeight = delta.y || isStepPrecisionStrict || elementStyle.height !== 'auto';
 
-        if(shouldRenderWidth) this._renderWidth(width);
-        if(shouldRenderHeight) this._renderHeight(height);
+        if(shouldRenderWidth) this.option({ width });
+        if(shouldRenderHeight) this.option({ height });
 
         return {
-            width,
-            height
+            width: shouldRenderWidth ? width : size.width,
+            height: shouldRenderHeight ? height : size.height
         };
     },
 
