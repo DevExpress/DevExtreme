@@ -79,6 +79,7 @@ import { renderAppointments } from './appointments/render';
 import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
 import { AppointmentDataProvider } from './appointments/dataProvider/appointmentDataProvider';
 import { getAppointmentTakesAllDay } from './appointments/dataProvider/utils';
+import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
 
 
 // STYLE scheduler
@@ -358,6 +359,17 @@ class Scheduler extends Widget {
         this._filteredItems = value;
     }
 
+    get preparedItems() {
+        if(!this._preparedItems) {
+            this._preparedItems = [];
+        }
+        return this._preparedItems;
+    }
+
+    set preparedItems(value) {
+        this._preparedItems = value;
+    }
+
     _setDeprecatedOptions() {
         super._setDeprecatedOptions();
 
@@ -541,6 +553,7 @@ class Scheduler extends Widget {
                     this._appointments.option('items', []);
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
+                    this._createAppointmentPopupForm();
                 });
                 break;
             case 'startDayHour':
@@ -790,8 +803,11 @@ class Scheduler extends Widget {
         return this.modelProvider.supportAllDayResizing();
     }
 
-    _isAllDayExpanded(items) {
-        return this.option('showAllDayPanel') && this.appointmentDataProvider.hasAllDayAppointments(items);
+    _isAllDayExpanded() {
+        return this.option('showAllDayPanel') && this.appointmentDataProvider.hasAllDayAppointments(
+            this.filteredItems,
+            this.preparedItems
+        );
     }
 
     _getTimezoneOffsetByOption(date) {
@@ -862,7 +878,7 @@ class Scheduler extends Widget {
         const workspace = this.getWorkSpace();
 
         if(!this._isAgenda() && this.filteredItems && this._isVisible() && workspace) {
-            workspace.option('allDayExpanded', this._isAllDayExpanded(this.filteredItems));
+            workspace.option('allDayExpanded', this._isAllDayExpanded());
             workspace._dimensionChanged();
 
             const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
@@ -1032,12 +1048,21 @@ class Scheduler extends Widget {
         this._renderContentImpl();
     }
 
+    _updatePreparedItems(items) {
+        this.preparedItems = getPreparedDataItems(
+            items,
+            this._dataAccessors,
+            this._getCurrentViewOption('cellDuration'),
+            getTimeZoneCalculator(this.key)
+        );
+    }
+
     _dataSourceChangedHandler(result) {
         if(this._readyToRenderAppointments) {
             this._workSpaceRecalculation.done((function() {
+                this._updatePreparedItems(result);
                 this._renderAppointments();
                 this.getWorkSpace().onDataSourceChanged(this.filteredItems);
-
             }).bind(this));
         }
     }
@@ -1057,14 +1082,14 @@ class Scheduler extends Widget {
     }
 
     _filterAppointments() {
-        this.filteredItems = this.appointmentDataProvider.filter();
+        this.filteredItems = this.appointmentDataProvider.filter(this.preparedItems);
     }
 
     _renderAppointments() {
         const workspace = this.getWorkSpace();
         this._filterAppointments();
 
-        workspace.option('allDayExpanded', this._isAllDayExpanded(this.filteredItems));
+        workspace.option('allDayExpanded', this._isAllDayExpanded());
 
         let viewModel = [];
         if(this._isVisible()) {
@@ -1216,8 +1241,7 @@ class Scheduler extends Widget {
             ? MobileTooltipStrategy
             : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
 
-        this._appointmentForm = this.createAppointmentForm();
-        this._appointmentPopup = this.createAppointmentPopup(this._appointmentForm);
+        this._createAppointmentPopupForm();
 
         if(this._isDataSourceLoaded() || this._isDataSourceLoading()) {
             this._initMarkupCore(this.option('loadedResources'));
@@ -1231,6 +1255,16 @@ class Scheduler extends Widget {
                 this._reloadDataSource();
             });
         }
+    }
+
+    _createAppointmentPopupForm() {
+        if(this._appointmentForm) {
+            this._appointmentForm.form?.dispose();
+        }
+        this._appointmentForm = this.createAppointmentForm();
+
+        this._appointmentPopup?.dispose();
+        this._appointmentPopup = this.createAppointmentPopup(this._appointmentForm);
     }
 
     _renderMainContainer() {
@@ -1439,7 +1473,7 @@ class Scheduler extends Widget {
             isRenovatedAppointments: this.option('isRenovatedAppointments'),
             getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
             onContentReady: () => {
-                this._workSpace?.option('allDayExpanded', this._isAllDayExpanded(this.filteredItems));
+                this._workSpace?.option('allDayExpanded', this._isAllDayExpanded());
             }
         };
 
@@ -2015,7 +2049,7 @@ class Scheduler extends Widget {
     }
 
     _expandAllDayPanel(appointment) {
-        if(!this._isAllDayExpanded(this.filteredItems) && this.appointmentTakesAllDay(appointment)) {
+        if(!this._isAllDayExpanded() && this.appointmentTakesAllDay(appointment)) {
             this._workSpace.option('allDayExpanded', true);
         }
     }

@@ -68,6 +68,8 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() startDate?: Date;
 
+  @OneWay() startViewDate!: Date;
+
   @OneWay() hoursInterval = 0.5;
 
   @OneWay() showAllDayPanel = false;
@@ -115,7 +117,6 @@ WorkSpaceProps,
 | 'endDayHour'
 | 'cellDuration'
 | 'groupByDate'
-| 'groups'
 | 'scrolling'
 | 'currentDate'
 | 'intervalCount'
@@ -131,11 +132,9 @@ WorkSpaceProps,
 | 'tabIndex'
 | 'accessKey'
 | 'focusStateEnabled'
-| 'indicatorTime'
 | 'allowMultipleCellSelection'
 | 'allDayPanelExpanded'
 | 'hoursInterval'
-| 'selectedCellData'
 | 'type'
 | 'dataCellTemplate'
 | 'dateCellTemplate'

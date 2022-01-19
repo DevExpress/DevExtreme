@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>T1051831</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.light.css" />
+
+    <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
+</head>
+
+<body>
+    <div id="filter-builder"></div>
+    <script>
+        $('#filter-builder').dxFilterBuilder({
+            fields: [{
+                dataField: 'datetime',
+                dataType: 'datetime',
+                editorOptions: {
+                    pickerType: "rollers",
+                },
+            }],
+            value: ['datetime', "=", new Date()],
+        })
+    </script>
+</body>
+
+</html>

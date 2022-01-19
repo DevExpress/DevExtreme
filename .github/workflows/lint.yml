@@ -60,13 +60,23 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
+    - name: Run npm install TS testing
+      run: |
+        pushd testing/typescript
+        npm install --no-audit --no-fund
+        popd
+
     - name: Build
       run: npm run build
 
     - name: Lint TS
+      env: 
+        DEBUG: eslint:cli-engine
       run: npm run lint-ts
 
     - name: Lint .d.ts
+      env: 
+        DEBUG: eslint:cli-engine
       run: npm run lint-dts
 
   JS:
@@ -95,6 +105,8 @@ jobs:
       run: npm run build
 
     - name: Lint JS
+      env: 
+        DEBUG: eslint:cli-engine
       run: npm run lint-js
 
   CSS:

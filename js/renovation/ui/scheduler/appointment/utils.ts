@@ -1,8 +1,14 @@
 import { CSSAttributes } from '@devextreme-generator/declarations';
 import { addToStyles } from '../workspaces/utils';
 import { AppointmentGeometry, AppointmentViewModel } from './types';
+import messageLocalization from '../../../../localization/message';
+import dateLocalization from '../../../../localization/date';
 
-export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes => {
+const EditorLabelLocalizationConst = 'dxScheduler-editorLabelEndDate';
+
+export const getAppointmentStyles = (
+  viewModel: AppointmentViewModel,
+): CSSAttributes | undefined => {
   const defaultSize = 50;
   const {
     geometry: {
@@ -11,12 +17,9 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
       top,
       left,
     },
-    info: {
-      resourceColor,
-    },
-  } = item;
+  } = viewModel;
 
-  let result = addToStyles([{
+  return addToStyles([{
     attr: 'height',
     value: `${height || defaultSize}px`,
   }, {
@@ -29,15 +32,6 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
     attr: 'left',
     value: `${left}px`,
   }]);
-
-  if (resourceColor) {
-    result = addToStyles([{
-      attr: 'backgroundColor',
-      value: resourceColor,
-    }], result);
-  }
-
-  return result;
 };
 
 export const getAppointmentKey = (geometry: AppointmentGeometry): string => {
@@ -50,3 +44,29 @@ export const getAppointmentKey = (geometry: AppointmentGeometry): string => {
 
   return `${left}-${top}-${width}-${height}`;
 };
+
+export const getReducedIconTooltipText = (endDate?: Date | string): string => {
+  const tooltipLabel = messageLocalization.format(EditorLabelLocalizationConst);
+
+  if (!endDate) {
+    return tooltipLabel;
+  }
+
+  const date = new Date(endDate);
+  const monthAndDay = dateLocalization.format(date, 'monthAndDay');
+  const year = dateLocalization.format(date, 'year');
+
+  return `${tooltipLabel}: ${monthAndDay}, ${year}`;
+};
+
+export const mergeStylesWithColor = (
+  color: string | undefined,
+  styles: CSSAttributes | undefined,
+): CSSAttributes | undefined => (
+  !color
+    ? styles
+    : addToStyles([{
+      attr: 'backgroundColor',
+      value: color,
+    }], styles)
+);

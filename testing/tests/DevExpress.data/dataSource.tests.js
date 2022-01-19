@@ -1320,6 +1320,26 @@ QUnit.test('items should be deleted on dataSource disposing(T1045202)', function
     });
 });
 
+QUnit.test('_dalayedLoadTask should be deleted on dataSource disposing(T1045202)', function(assert) {
+    this.clock = sinon.useFakeTimers();
+    const source = new DataSource({
+        store: TEN_NUMBERS,
+    });
+
+    source.on('customizeStoreLoadOptions', function(options) {
+        options.delay = 5;
+    });
+
+    source.load();
+    this.clock.tick(4);
+
+    assert.notEqual(source._delayedLoadTask, undefined);
+    source.dispose();
+    assert.equal(source._delayedLoadTask, undefined);
+
+    this.clock.restore();
+});
+
 QUnit.module('Changing store load options', moduleConfig);
 
 QUnit.test('sort', function(assert) {

@@ -2,10 +2,11 @@ import React from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  DataGridLight, viewFunction as DataGridView, DataGridLightProps, PagingProps,
+  DataGridLight, viewFunction as DataGridView, DataGridLightProps,
+  TotalCount, KeyExprPlugin, DataSource,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
-import { columns, generateData } from './test_data';
+import { generateData } from './test_data';
 
 describe('DataGridLight', () => {
   describe('View', () => {
@@ -28,10 +29,10 @@ describe('DataGridLight', () => {
     it('render with dataSource and 1 column', () => {
       const props = new DataGridLightProps();
       props.dataSource = [{ id: 1 }, { id: 2 }];
-      props.columns = ['id'];
       const viewProps = {
         props,
         visibleItems: props.dataSource,
+        visibleColumns: [{ dataField: 'id' }],
       } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
@@ -45,10 +46,13 @@ describe('DataGridLight', () => {
     it('render with dataSource and 2 columns', () => {
       const props = new DataGridLightProps();
       props.dataSource = [{ id: 1, name: 'name 1' }];
-      props.columns = ['id', 'name'];
       const viewProps = {
         props,
         visibleItems: props.dataSource,
+        visibleColumns: [
+          { dataField: 'id' },
+          { dataField: 'name' },
+        ],
       } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
@@ -61,122 +65,133 @@ describe('DataGridLight', () => {
     });
   });
 
-  describe('Logic', () => {
-    describe('Getters', () => {
-      describe('aria', () => {
-        it('should have role "presentation"', () => {
-          expect(new DataGridLight({}).aria).toEqual({ role: 'presentation' });
-        });
-      });
-
-      // todo: move when paging will be in different module
-      describe('paging', () => {
-        describe('visibleItems', () => {
-          const dataSource = generateData(20);
-          const paging = new PagingProps();
-
-          it('should be calculated on first page', () => {
-            paging.pageIndex = 0;
-            paging.pageSize = 5;
-
-            const dataGrid = new DataGridLight({
-              dataSource,
-              columns,
-              paging,
-            });
-            dataGrid.updatePagingProps();
-            expect(dataGrid.visibleItems).toEqual(dataSource.slice(0, 5));
-          });
-
-          it('should be calculated on second page', () => {
-            paging.pageIndex = 1;
-            paging.pageSize = 5;
-
-            const dataGrid = new DataGridLight({
-              dataSource,
-              columns,
-              paging,
-            });
-            dataGrid.updatePagingProps();
-            expect(dataGrid.visibleItems).toEqual(dataSource.slice(5, 10));
-          });
-
-          it('should be calculated when pageSize is "all"', () => {
-            paging.pageSize = 'all';
-
-            const dataGrid = new DataGridLight({
-              dataSource,
-              columns,
-              paging,
-            });
-            dataGrid.updatePagingProps();
-            expect(dataGrid.visibleItems).toEqual(dataSource);
-          });
-        });
-
-        describe('pageCount', () => {
-          const dataSource = generateData(22);
-
-          it('should be calculated when pageSize is a number', () => {
-            const dataGrid = new DataGridLight({
-              dataSource,
-            });
-
-            dataGrid.pagingPageSize = 10;
-            expect(dataGrid.pagingPageCount).toEqual(3);
-          });
-
-          it('should be calculated when pageSize is "all"', () => {
-            const dataGrid = new DataGridLight({
-              dataSource,
-            });
-
-            dataGrid.pagingPageSize = 'all';
-            expect(dataGrid.pagingPageCount).toEqual(1);
-          });
-        });
+  describe('Getters', () => {
+    describe('aria', () => {
+      it('should have role "presentation"', () => {
+        expect(new DataGridLight({}).aria).toEqual({ role: 'presentation' });
       });
     });
 
-    describe('Callbacks', () => {
-      it('onPageIndexChange', () => {
-        const grid = new DataGridLight({});
+    describe('columns', () => {
+      it('should handle user input', () => {
+        const grid = new DataGridLight({
+          columns: ['id', 'name'],
+        });
 
-        grid.onPageIndexChange(100);
-        expect(grid.pagingPageIndex).toEqual(100);
+        expect(grid.columns).toEqual([
+          { dataField: 'id' },
+          { dataField: 'name' },
+        ]);
       });
+    });
+  });
 
-      it('onPageSizeChange', () => {
-        const grid = new DataGridLight({});
+  describe('Effects', () => {
+    describe('updateKeyExpr', () => {
+      it('should update keyExpr', () => {
+        const grid = new DataGridLight({
+          keyExpr: 'some key',
+        });
 
-        grid.onPageSizeChange(100);
-        expect(grid.pagingPageSize).toEqual(100);
+        grid.updateKeyExpr();
+        expect(grid.plugins.getValue(KeyExprPlugin)).toEqual('some key');
       });
     });
 
-    describe('Effects', () => {
-      describe('updatePagingProps', () => {
-        it('should update two way props', () => {
-          const paging = new PagingProps();
-          paging.pageSize = 10;
-          paging.pageIndex = 20;
-          const dataGrid = new DataGridLight({
-            paging,
-          });
-          dataGrid.updatePagingProps();
-          expect(dataGrid.pagingPageSize).toEqual(10);
-          expect(dataGrid.pagingPageIndex).toEqual(20);
+    describe('updateDataSource', () => {
+      it('should update updateDataSource', () => {
+        const dataSource = [{ id: 1 }, { id: 2 }, { id: 3 }];
+        const grid = new DataGridLight({
+          dataSource,
         });
 
-        it('should set pageSize to "all" if prop is zero', () => {
-          const paging = new PagingProps();
-          paging.pageSize = 0;
-          const dataGrid = new DataGridLight({
-            paging,
-          });
-          dataGrid.updatePagingProps();
-          expect(dataGrid.pagingPageSize).toEqual('all');
+        grid.updateDataSource();
+        expect(grid.plugins.getValue(DataSource)).toBe(dataSource);
+      });
+    });
+
+    describe('updateVisibleItems', () => {
+      const watchMock = jest.fn();
+      const grid = new DataGridLight({});
+      grid.plugins = {
+        watch: watchMock,
+      } as any;
+
+      it('should update visibleItems', () => {
+        grid.updateVisibleItems();
+
+        const data = generateData(10);
+
+        const callback = watchMock.mock.calls[0][1];
+        callback(data);
+
+        expect(grid.visibleItems).toBe(data);
+      });
+    });
+
+    describe('setDataSourceToVisibleItems', () => {
+      const extendMock = jest.fn();
+      const dataSource = generateData(10);
+      const grid = new DataGridLight({
+        dataSource,
+      });
+      grid.plugins = {
+        extend: extendMock,
+      } as any;
+
+      it('should return dataSource', () => {
+        grid.setDataSourceToVisibleItems();
+
+        expect(extendMock.mock.calls[0][2]()).toBe(dataSource);
+      });
+    });
+
+    describe('updateVisibleColumns', () => {
+      const watchMock = jest.fn();
+      const grid = new DataGridLight({});
+      grid.plugins = {
+        watch: watchMock,
+      } as any;
+
+      it('should update visibleColumns', () => {
+        grid.updateVisibleColumns();
+
+        const columns = [{ dataField: 'id' }];
+
+        const callback = watchMock.mock.calls[0][1];
+        callback(columns);
+
+        expect(grid.visibleColumns).toBe(columns);
+      });
+    });
+
+    describe('setInitialColumnsToVisibleColumns', () => {
+      const extendMock = jest.fn();
+      const columns = ['id'];
+      const grid = new DataGridLight({
+        columns,
+      });
+      grid.plugins = {
+        extend: extendMock,
+      } as any;
+
+      it('should return columns', () => {
+        grid.setInitialColumnsToVisibleColumns();
+
+        expect(extendMock.mock.calls[0][2]()).toEqual([{ dataField: 'id' }]);
+      });
+    });
+
+    describe('updateTotalCount', () => {
+      it('should be equal to dataSource\'s length', () => {
+        const dataSource = generateData(10);
+        const grid = new DataGridLight({
+          dataSource,
         });
+
+        grid.updateTotalCount();
+
+        expect(grid.plugins.getValue(TotalCount)).toEqual(dataSource.length);
       });
     });
   });

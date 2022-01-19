@@ -18,12 +18,11 @@ import {
   subscribeToDXScrollStopEvent,
 } from '../../../utils/subscribe_to_event';
 import { Widget } from '../../common/widget';
-import { ScrollViewLoadPanel } from '../internal/load_panel';
 
 import { combineClasses } from '../../../utils/combine_classes';
 import { getScrollLeftMax } from '../utils/get_scroll_left_max';
 import { getBoundaryProps } from '../utils/get_boundary_props';
-import { getScrollSign, normalizeOffsetLeft } from '../utils/normalize_offset_left';
+import { normalizeOffsetLeft } from '../utils/normalize_offset_left';
 import {
   getElementOverflowX,
   getElementOverflowY,
@@ -80,10 +79,11 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
-      needScrollViewLoadPanel, needRenderScrollbars,
+      needRenderScrollbars,
       pullingDownText, pulledDownText, refreshingText, reachBottomText, refreshStrategy,
       pullDownEnabled, reachBottomEnabled, showScrollbar,
       useSimulatedScrollbar,
+      loadPanelTemplate: LoadPanelTemplate,
     },
     restAttributes,
   } = viewModel;
@@ -141,12 +141,12 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           </div>
         </div>
       </div>
-      { needScrollViewLoadPanel && (
-        <ScrollViewLoadPanel
-          targetElement={scrollableRef}
-          refreshingText={refreshingText}
-          visible={isLoadPanelVisible}
-        />
+      { LoadPanelTemplate && (
+      <LoadPanelTemplate
+        targetElement={scrollableRef}
+        refreshingText={refreshingText}
+        visible={isLoadPanelVisible}
+      />
       )}
       { needRenderScrollbars && showScrollbar !== 'never' && useSimulatedScrollbar && direction.isHorizontal && (
         <Scrollbar
@@ -353,7 +353,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     }
   }
 
-  @Effect() effectResetInactiveState(): void {
+  @Effect() resetInactiveOffsetToInitial(): void {
     if (this.props.direction === DIRECTION_BOTH) {
       return;
     }
@@ -409,7 +409,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       return false;
     }
 
-    this.updateHandler();
+    // this.updateHandler();
 
     return this.moveIsAllowed(event);
   }
@@ -448,7 +448,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   subscribeContentToResize(): EffectReturn {
     return subscribeToResize(
       this.content(),
-      (element: HTMLDivElement) => { this.setContentDimensions(element); },
+      (element: HTMLDivElement) => {
+        this.setContentHeight(element);
+        this.setContentWidth(element);
+      },
     );
   }
 
@@ -460,7 +463,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       containerEl.scrollTop += location.top;
     }
     if (this.direction.isHorizontal) {
-      containerEl.scrollLeft += getScrollSign(!!this.props.rtlEnabled) * location.left;
+      containerEl.scrollLeft += location.left;
     }
   }
 
@@ -472,7 +475,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   onRelease(): void {
     this.loadingIndicatorEnabled = true;
     this.finishLoading();
-    this.updateHandler();
+    // this.updateHandler();
   }
 
   onUpdated(): void {
@@ -591,7 +594,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   updateElementDimensions(): void {
-    this.setContentDimensions(this.content());
+    this.setContentHeight(this.content());
+    this.setContentWidth(this.content());
     this.setContainerDimensions(this.containerRef.current!);
   }
 
@@ -600,17 +604,19 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.containerClientHeight = containerEl.clientHeight;
   }
 
-  setContentDimensions(contentEl: HTMLDivElement): void {
-    this.contentClientWidth = contentEl.clientWidth;
+  setContentHeight(contentEl: HTMLDivElement): void {
     this.contentClientHeight = contentEl.clientHeight;
-
-    this.contentScrollWidth = contentEl.scrollWidth;
     this.contentScrollHeight = contentEl.scrollHeight;
 
     if (this.props.forceGeneratePockets) {
       this.topPocketHeight = this.topPocketRef?.current!.clientHeight || 0; // ?. for angular
       this.bottomPocketHeight = this.bottomPocketRef?.current!.clientHeight || 0; // ?. for angular
     }
+  }
+
+  setContentWidth(contentEl: HTMLDivElement): void {
+    this.contentClientWidth = contentEl.clientWidth;
+    this.contentScrollWidth = contentEl.scrollWidth;
   }
 
   syncScrollbarsWithContent(): void {

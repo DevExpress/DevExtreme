@@ -12,6 +12,8 @@ const { removeUnusedModules, cleanEmptyFolders } = require('./remove-unused-modu
 const babel = require('gulp-babel');
 const transpileConfig = require('../transpile-config');
 const { run } = require('./utils');
+const messages = require('./data/messages');
+const through2 = require('through2');
 
 function copyMiscFiles(context, additionalReplacements) {
     return () => merge(
@@ -22,6 +24,16 @@ function copyMiscFiles(context, additionalReplacements) {
             .pipe(gulp.dest(context.destination)),
         gulp
             .src('README.md')
+            .pipe(through2.obj((chunk, enc, callback) => {
+                if (chunk.isNull())
+                    return callback(null, chunk);
+                
+                const fileContents = chunk.contents.toString();
+                const patchedContents = messages.getReadmeNote(context.name) + fileContents;
+
+                chunk.contents = Buffer.from(patchedContents, enc);
+                callback(null, chunk);
+            }))
             .pipe(gulp.dest(context.destination)),
     );
 }
@@ -79,7 +91,7 @@ function buildSeries(steps, context) {
 
 function addCompilationTask(frameworkData) {
     const context = {
-        source: `artifacts/${frameworkData.name}/renovation`,
+        source: `artifacts/${frameworkData.artifactsFolder || frameworkData.name}/renovation`,
         destination: `artifacts/npm-${frameworkData.name}`,
         extensions: ['.js', '.ts', '.d.ts', '.tsx'],
         production: (process.env['NPM_PRODUCTION'] || '').toLowerCase() === 'true',
@@ -149,6 +161,7 @@ addCompilationTask({
 });
 addCompilationTask({
     name: 'angular',
+    artifactsFolder: 'angular-typescript',
     generator: 'generate-angular-typescript',
 
     switches: {

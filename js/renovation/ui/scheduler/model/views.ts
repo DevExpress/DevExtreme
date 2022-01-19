@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { isObject, isString } from '../../../../core/utils/type';
 import { CurrentViewConfigProps, ViewProps } from '../props';
 import { ViewType } from '../types';
@@ -62,27 +63,13 @@ export const getCurrentViewConfig = (
   // https://github.com/DevExpress/devextreme-renovation/issues/831
   currentDate: Date | string | number,
 ): CurrentViewConfigType => {
-  const { scrolling: schedulerScrolling } = schedulerProps;
-
   const {
-    firstDayOfWeek,
-    startDayHour,
-    endDayHour,
-    cellDuration,
-    groupByDate,
-    intervalCount,
-    groupOrientation,
-    startDate,
-    type,
-    scrolling,
-    dataCellTemplate,
-    timeCellTemplate,
-    resourceCellTemplate,
-    dateCellTemplate,
-    appointmentTemplate,
-    appointmentCollectorTemplate,
-    maxAppointmentsPerCell,
-  } = currentViewProps;
+    scrolling: schedulerScrolling,
+    width,
+    height,
+    ...restSchedulerProps
+  } = schedulerProps;
+  const { scrolling } = currentViewProps;
 
   const isVirtualScrolling = schedulerScrolling.mode === 'virtual'
         || scrolling?.mode === 'virtual';
@@ -90,69 +77,34 @@ export const getCurrentViewConfig = (
         || isVirtualScrolling;
 
   const result = {
-    firstDayOfWeek: getViewConfigProp(schedulerProps.firstDayOfWeek, firstDayOfWeek),
-    startDayHour: getViewConfigProp(schedulerProps.startDayHour, startDayHour),
-    endDayHour: getViewConfigProp(schedulerProps.endDayHour, endDayHour),
-    cellDuration: getViewConfigProp(schedulerProps.cellDuration, cellDuration),
-    groupByDate: getViewConfigProp(schedulerProps.groupByDate, groupByDate),
-    scrolling: getViewConfigProp(schedulerScrolling, scrolling),
+    scrolling: schedulerScrolling,
+    ...restSchedulerProps,
+    ...currentViewProps,
 
-    dataCellTemplate: getViewConfigProp(schedulerProps.dataCellTemplate, dataCellTemplate),
-    timeCellTemplate: getViewConfigProp(schedulerProps.timeCellTemplate, timeCellTemplate),
-    resourceCellTemplate: getViewConfigProp(
-      schedulerProps.resourceCellTemplate, resourceCellTemplate,
-    ),
-    dateCellTemplate: getViewConfigProp(schedulerProps.dateCellTemplate, dateCellTemplate),
-    appointmentTemplate: getViewConfigProp(schedulerProps.appointmentTemplate, appointmentTemplate),
-    appointmentCollectorTemplate: getViewConfigProp(
-      schedulerProps.appointmentCollectorTemplate,
-      appointmentCollectorTemplate,
-    ),
-    maxAppointmentsPerCell: getViewConfigProp(
-      schedulerProps.maxAppointmentsPerCell,
-      maxAppointmentsPerCell,
-    ),
-
-    // currentDate: dateUtils.trimTime(new Date(schedulerProps.currentDate)), // TODO
-    currentDate,
-    intervalCount,
-    groupOrientation,
-    startDate,
-    type,
-    showAllDayPanel: schedulerProps.showAllDayPanel,
-    showCurrentTimeIndicator: schedulerProps.showCurrentTimeIndicator,
-    indicatorUpdateInterval: schedulerProps.indicatorUpdateInterval,
-    shadeUntilCurrentTime: schedulerProps.shadeUntilCurrentTime,
-    crossScrollingEnabled,
     schedulerHeight: schedulerProps.height,
     schedulerWidth: schedulerProps.width,
+    crossScrollingEnabled,
 
-    tabIndex: schedulerProps.tabIndex,
-    accessKey: schedulerProps.accessKey,
-    focusStateEnabled: schedulerProps.focusStateEnabled,
-
-    // indicatorTime: new Date(), // TODO
-    allowMultipleCellSelection: true, // TODO
-    allDayPanelExpanded: true, // TODO
-
-    // noDataText: this.props.noDataText, // TODO: necessary for agenda
-    // selectedCellData: this.props.selectedCellData,
-    // onSelectionChanged: (args) => { TODO
-    //   this.option('selectedCellData', args.selectedCellData);
-    // },
-    // timeZoneCalculator: getTimeZoneCalculator(this.key), // TODO
-    // onSelectedCellsClick: this.showAddAppointmentPopup.bind(this) // TODO,
-    // onVirtualScrollingUpdated: this._renderAppointments.bind(this) // TODO,
-    // getHeaderHeight: () => utils.DOM.getHeaderHeight(this._header) // TODO,
-    // onScrollEnd: () => this._appointments.updateResizableArea() // TODO or refactor,
-    // onCellClick = this._createActionByOption('onCellClick') // TODO
-    // onCellContextMenu = this._createActionByOption('onCellContextMenu') // TODO
+    // Default value for templates in Angular is null
+    appointmentTemplate: currentViewProps.appointmentTemplate
+      || restSchedulerProps.appointmentTemplate,
+    dataCellTemplate: currentViewProps.dataCellTemplate || restSchedulerProps.dataCellTemplate,
+    dateCellTemplate: currentViewProps.dateCellTemplate || restSchedulerProps.dateCellTemplate,
+    timeCellTemplate: currentViewProps.timeCellTemplate || restSchedulerProps.timeCellTemplate,
+    resourceCellTemplate: currentViewProps.resourceCellTemplate
+      || restSchedulerProps.resourceCellTemplate,
+    appointmentCollectorTemplate: currentViewProps.appointmentCollectorTemplate
+      || restSchedulerProps.appointmentCollectorTemplate,
+    appointmentTooltipTemplate: currentViewProps.appointmentTooltipTemplate
+      || restSchedulerProps.appointmentTooltipTemplate,
   };
 
   return {
     ...result,
     hoursInterval: result.cellDuration / 60,
-    // selectedCellData: [], // TODO
+    allDayPanelExpanded: true,
+    allowMultipleCellSelection: true,
+    currentDate,
   } as CurrentViewConfigType;
 };
 

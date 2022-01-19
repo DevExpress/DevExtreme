@@ -608,7 +608,7 @@
         "dxGantt-dialogResourceManagerTitle": "Gestionnaire de ressources",
         "dxGantt-dialogTaskDetailsTitle": "Détails de la tâche",
         "dxGantt-dialogEditResourceListHint": "Modifier la liste des ressources",
-        "dxGantt-dialogEditNoResources": "Aucune ressource",
+        "dxGantt-dialogEditNoResources": "Pas de ressources",
         "dxGantt-dialogButtonAdd": "Ajouter",
         "dxGantt-contextMenuNewTask": "Nouvelle tâche",
         "dxGantt-contextMenuNewSubtask": "Nouvelle sous-tâche",

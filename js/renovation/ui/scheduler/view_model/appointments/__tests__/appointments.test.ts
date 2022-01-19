@@ -494,6 +494,7 @@ describe('Appointments view model', () => {
             info: {
               allDay: true,
               direction: 'horizontal',
+              groupIndex: 0,
               isRecurrent: false,
               appointment: {
                 startDate: new Date(2021, 8, 23),

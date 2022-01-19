@@ -17,6 +17,9 @@ import {
     getDateNavigator
 } from './dateNavigator';
 
+import '../../../ui/button_group';
+import '../../../ui/drop_down_button';
+
 import {
     getCaption,
     getNextIntervalDate,

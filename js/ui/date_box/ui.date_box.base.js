@@ -26,6 +26,7 @@ const DX_AUTO_WIDTH_CLASS = 'dx-auto-width';
 const DX_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 const DX_CLEAR_BUTTON_CLASS = 'dx-clear-button-area';
 const DATEBOX_WRAPPER_CLASS = 'dx-datebox-wrapper';
+const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 
 const PICKER_TYPE = {
     calendar: 'calendar',
@@ -372,7 +373,8 @@ const DateBox = DropDownEditor.inherit({
 
         this._popup.$wrapper()
             .addClass(DATEBOX_WRAPPER_CLASS + '-' + this.option('type'))
-            .addClass(DATEBOX_WRAPPER_CLASS + '-' + this._pickerType);
+            .addClass(DATEBOX_WRAPPER_CLASS + '-' + this._pickerType)
+            .addClass(DROPDOWNEDITOR_OVERLAY_CLASS);
     },
 
     _renderPopupContent: function() {

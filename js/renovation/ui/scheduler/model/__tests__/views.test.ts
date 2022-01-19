@@ -232,10 +232,6 @@ describe('Model views', () => {
         height: 500,
         width: 500,
         scrolling: { mode: 'standard' },
-
-        tabIndex: 3,
-        accessKey: undefined,
-        focusStateEnabled: true,
       } as any;
       const currentViewProps = {
         type: 'month',
@@ -254,6 +250,70 @@ describe('Model views', () => {
           allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
           crossScrollingEnabled: true,
+        });
+    });
+
+    it('return correct templates when some of them are null (in angular defulat templates are nulls)', () => {
+      const dataCellTemplate = () => null;
+      const dateCellTemplate = () => null;
+      const timeCellTemplate = () => null;
+      const resourceCellTemplate = () => null;
+      const appointmentTemplate = () => null;
+      const appointmentCollectorTemplate = () => null;
+      const appointmentTooltipTemplate = () => null;
+
+      const schedulerProps = {
+        firstDayOfWeek: 3,
+        startDayHour: 5,
+        endDayHour: 8,
+        cellDuration: 15,
+        groupByDate: true,
+        currentDate: new Date(2021, 8, 10),
+        showAllDayPanel: true,
+        showCurrentTimeIndicator: true,
+        indicatorUpdateInterval: 3000,
+        shadeUntilCurrentTime: true,
+        crossScrollingEnabled: false,
+        height: 500,
+        width: 500,
+        scrolling: { mode: 'standard' },
+        dataCellTemplate,
+        dateCellTemplate,
+        timeCellTemplate,
+        resourceCellTemplate,
+        appointmentTemplate,
+        appointmentCollectorTemplate,
+        appointmentTooltipTemplate,
+      } as any;
+      const currentViewProps = {
+        type: 'month',
+        dataCellTemplate: null,
+        dateCellTemplate: null,
+        timeCellTemplate: null,
+        resourceCellTemplate: null,
+        appointmentTemplate: null,
+        appointmentCollectorTemplate: null,
+        appointmentTooltipTemplate: null,
+      } as any;
+
+      const { height, width, ...viewProps } = schedulerProps;
+
+      expect(getCurrentViewConfig(currentViewProps, schedulerProps, schedulerProps.currentDate))
+        .toEqual({
+          ...viewProps,
+          ...currentViewProps,
+          hoursInterval: 0.25,
+          schedulerHeight: 500,
+          schedulerWidth: 500,
+          allDayPanelExpanded: true,
+          allowMultipleCellSelection: true,
+          dataCellTemplate,
+          dateCellTemplate,
+          timeCellTemplate,
+          resourceCellTemplate,
+          appointmentTemplate,
+          appointmentCollectorTemplate,
+          appointmentTooltipTemplate,
         });
     });
   });

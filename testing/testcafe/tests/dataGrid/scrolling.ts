@@ -525,7 +525,7 @@ test.skip('New virtual mode. Virtual rows should not be in view port', async (t)
     const $rows = $((window as any).widget.element()).find('.dx-data-row');
 
     $rows.each((_, el) => {
-      result += $(el).height();
+      result += $(el).height() ?? 0;
     });
 
     return result;
@@ -713,7 +713,7 @@ test('Scroll to the bottom after expand several group', async (t) => {
   const visibleRows = await dataGrid.apiGetVisibleRows();
   await t
     .expect(visibleRows[0].key)
-    .eql(939302);
+    .eql(932043);
 })
   .before(async () => createWidget('dxDataGrid', () => ({
     width: 1000,
