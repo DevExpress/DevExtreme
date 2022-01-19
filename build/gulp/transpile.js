@@ -55,7 +55,12 @@ const generatedTs = [
 
 const bundlesSrc = ['js/bundles/**/*.js'];
 
-const sideEffectModulesSet = new Set();
+const sideEffectModulesSet = new Set([
+    path.join(srcDir, '/localization/globalize/currency'),
+    path.join(srcDir, '/localization/globalize/date'),
+    path.join(srcDir, '/localization/globalize/message'),
+    path.join(srcDir, '/localization/globalize/number')
+]);
 
 const searchSideEffectModules = (filePath, modules) => {
     const content = fs.readFileSync(filePath);
