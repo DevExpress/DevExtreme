@@ -711,13 +711,14 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         });
 
         QUnit.test('should not search if composition is in progress (T1003899)', function(assert) {
+            const expectedResult = devices.real().platform === 'android' ? 0 : 2;
             this.$input.trigger($.Event('compositionstart'));
             this.keyboard.type('ㅇ');
             this.clock.tick(TIME_TO_WAIT);
             this.keyboard.type('ㅡ');
             this.clock.tick(TIME_TO_WAIT);
 
-            assert.strictEqual(this.getListItemsCount(), 2, 'was no search');
+            assert.strictEqual(this.getListItemsCount(), expectedResult, 'was no search');
         });
 
         QUnit.test('should not cancel search on input if composition is in progress', function(assert) {
@@ -730,6 +731,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         });
 
         QUnit.test('should not get composite characters as search value when compositionend is raised because of next composition start', function(assert) {
+            const expectedResult = devices.real().platform === 'android' ? 0 : 1;
             this.$input.trigger($.Event('compositionstart'));
             this.keyboard.type('ㅏ');
             this.$input.trigger($.Event('compositionend'));
@@ -737,7 +739,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
             this.keyboard.type('ㅇ');
             this.clock.tick(TIME_TO_WAIT);
 
-            assert.strictEqual(this.getListItemsCount(), 1, 'last input composite character is not in search value');
+            assert.strictEqual(this.getListItemsCount(), expectedResult, 'last input composite character is not in search value');
         });
 
         QUnit.test('should search if composition is finished', function(assert) {
