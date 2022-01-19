@@ -487,12 +487,14 @@ const DropDownList = DropDownEditor.inherit({
         this._setListFocusedElementOptionChange();
     },
 
-    _renderPreventBlur: function($target) {
+    _renderPreventBlur: function($target, exclusionElements = []) {
         const eventName = addNamespace('mousedown', 'dxDropDownList');
 
         eventsEngine.off($target, eventName);
         eventsEngine.on($target, eventName, function(e) {
-            e.preventDefault();
+            if(!exclusionElements.includes(e.target)) {
+                e.preventDefault();
+            }
         }.bind(this));
     },
 
