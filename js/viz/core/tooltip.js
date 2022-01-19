@@ -26,7 +26,7 @@ function replaceWith(element, newElement) {
     if(!(newElement && newElement[0])) return;
     if(newElement.is(element)) return element;
 
-    domAdapter.insertElement(element[0].parentNode, newElement, element);
+    domAdapter.insertElement(element[0].parentNode, newElement[0], element[0]);
     element.remove();
 
     return newElement;
