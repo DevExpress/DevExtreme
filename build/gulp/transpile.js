@@ -164,7 +164,7 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
             if (chunk.isNull())
                 return callback(null, chunk);
             searchSideEffectModules(chunk.path, sideEffectModulesSet); 
-            callback(null, chunk);
+            callback();
         })),
     () => gulp
         .src(esmTranspileSrc)
