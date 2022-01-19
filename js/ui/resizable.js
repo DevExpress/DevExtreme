@@ -228,10 +228,10 @@ const Resizable = DOMComponent.inherit({
 
     _proportionate: function(direction, value) {
         const size = this._elementSize;
-
         const factor = direction === 'x'
             ? size.width / size.height
             : size.height / size.width;
+
         return value * factor;
     },
 
