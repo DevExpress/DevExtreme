@@ -19,32 +19,34 @@ export interface AppointmentData {
   text: string;
 }
 
+export interface AppointmentInfo {
+  allDay: boolean;
+  direction: Direction;
+  isRecurrent: boolean;
+  appointmentReduced?: ReduceType;
+  groupIndex: number;
+  appointment: {
+    startDate: Date;
+    endDate: Date;
+  };
+  sourceAppointment: {
+    groupIndex: number;
+  };
+  dateText: string;
+}
+
 export interface AppointmentViewModel {
   key: string;
   appointment: AppointmentData;
   geometry: AppointmentGeometry;
-  info: {
-    allDay: boolean;
-    direction: Direction;
-    isRecurrent: boolean;
-    appointmentReduced?: ReduceType;
-    appointment: {
-      startDate: Date;
-      endDate: Date;
-    };
-    sourceAppointment: {
-      groupIndex: number;
-    };
-    dateText: string;
-    resourceColor?: string;
-  };
+  info: AppointmentInfo;
 }
 
 export interface OverflowIndicatorViewModel {
   key: string;
   isAllDay: boolean;
   isCompact: boolean;
-  color: string;
+  groupIndex: number;
   geometry: {
     top: number;
     left: number;
