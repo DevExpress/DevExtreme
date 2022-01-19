@@ -667,7 +667,6 @@ const DropDownList = DropDownEditor.inherit({
                     this._isTextCompositionInProgress(undefined);
                     this._searchHandler(e, this._searchValue());
                 });
-
             }
         }
     },
