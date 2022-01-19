@@ -48,7 +48,6 @@ import { isElementVisible } from '../../utils/is_element_visible';
 import { subscribeToResize } from '../../utils/subscribe_to_resize';
 import * as allowedDirectionModule from '../../utils/get_allowed_direction';
 import * as permissibleWheelDirectionModule from '../../utils/get_permissible_wheel_direction';
-import { DisposeEffectReturn } from '../../../../utils/effect_return';
 
 jest.mock('../../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../../core/devices').default;
@@ -397,64 +396,17 @@ describe('Simulated > Behavior', () => {
       });
     });
 
-    each([true, false]).describe('needScrollViewContentWrapper: %o', (needScrollViewContentWrapper) => {
-      it('should subscribe contentElement to resize dimensions', () => {
-        const subscribeToResizeHandler = jest.fn();
-        (subscribeToResize as jest.Mock).mockImplementation(subscribeToResizeHandler);
-
-        const viewModel = new Scrollable({ needScrollViewContentWrapper });
-        viewModel.contentRef = { current: { clientHeight: 10 } as HTMLElement } as RefObject;
-        viewModel.scrollViewContentRef = {
-          current: { clientHeight: 6 } as HTMLElement,
-        } as RefObject;
-        viewModel.setContentHeight = jest.fn();
-        viewModel.setContentWidth = jest.fn();
-
-        const disposeResizeEffect = viewModel.subscribeToResizeContent() as DisposeEffectReturn;
-
-        if (needScrollViewContentWrapper) {
-          expect(subscribeToResizeHandler).toBeCalledTimes(2);
-
-          expect(subscribeToResizeHandler.mock.calls[0][0]).toEqual({ clientHeight: 6 });
-          expect(subscribeToResizeHandler.mock.calls[1][0]).toEqual({ clientHeight: 10 });
-
-          subscribeToResizeHandler
-            .mock.calls[0][1](viewModel.scrollViewContentRef);
-          subscribeToResizeHandler
-            .mock.calls[1][1](viewModel.contentRef);
-        } else {
-          expect(subscribeToResizeHandler).toBeCalledTimes(1);
-          expect(subscribeToResizeHandler.mock.calls[0][0]).toEqual({ clientHeight: 10 });
-
-          subscribeToResizeHandler
-            .mock.calls[0][1](viewModel.contentRef);
-        }
-
-        expect(viewModel.setContentWidth).toBeCalledTimes(1);
-        expect(viewModel.setContentWidth).toBeCalledWith(viewModel.contentRef);
-
-        const expectedContentElement = needScrollViewContentWrapper
-          ? viewModel.scrollViewContentRef
-          : viewModel.contentRef;
-
-        expect(viewModel.setContentHeight).toBeCalledTimes(1);
-        expect(viewModel.setContentHeight).toBeCalledWith(expectedContentElement);
-
-        // TODO: check unsubscribe from resize
-
-        if (needScrollViewContentWrapper) {
-          expect(disposeResizeEffect()).toEqual(undefined);
-        }
-      });
-    });
-
     each([true, false]).describe('Disabled: %o', (disabled) => {
       it('effectDisabledState()', () => {
         const viewModel = new Scrollable({ disabled });
 
         viewModel.effectDisabledState();
 
-        expect(viewModel.locked).toEqual(disabled);
+        if (disabled) {
+          expect(viewModel.locked).toEqual(true);
+        } else {
+          expect(viewModel.locked).toEqual(false);
+        }
       });
     });
 
@@ -738,56 +690,30 @@ describe('Simulated > Behavior', () => {
     });
 
     each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
-      each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH, 'initial']).describe('prevDirection: %o', (prevDirection) => {
-        each([{
-          contentSize: 300,
-          containerSize: 300,
-        }, {
-          contentSize: 200,
-          containerSize: 100,
-        }]).describe('rtlEnabled: %o', (dimensions) => {
-          each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
-            it('resetInactiveOffsetToInitial()', () => {
-              const scrollTop = 20;
-              const scrollLeft = 30;
+      it('effectResetInactiveState()', () => {
+        const scrollTop = 20;
+        const scrollLeft = 30;
 
-              const helper = new ScrollableTestHelper({ direction, rtlEnabled, ...dimensions });
-              helper.initScrollbarSettings();
-              helper.initContainerPosition({ top: scrollTop, left: scrollLeft });
+        const helper = new ScrollableTestHelper({ direction });
+        helper.initScrollbarSettings();
+        helper.initContainerPosition({ top: scrollTop, left: scrollLeft });
 
-              helper.viewModel.prevDirection = prevDirection;
+        helper.viewModel.effectResetInactiveState();
 
-              helper.viewModel.resetInactiveOffsetToInitial();
+        const expectedScrollTop = !helper.isVertical ? 0 : 20;
+        const expectedScrollLeft = !helper.isHorizontal ? 0 : 30;
 
-              const isOverflowX = dimensions.contentSize > dimensions.containerSize;
-              expect(helper.viewModel.prevDirection).toEqual(
-                isOverflowX || direction === DIRECTION_BOTH
-                  ? direction
-                  : prevDirection,
-              );
+        const containerElement = helper.viewModel.containerRef.current!;
 
-              const needResetScrollOffset = isOverflowX && prevDirection !== direction;
-              const expectedScrollTop = !helper.isVertical && needResetScrollOffset
-                ? 0
-                : 20;
-              // eslint-disable-next-line no-nested-ternary
-              const expectedScrollLeft = !helper.isHorizontal && needResetScrollOffset
-                ? rtlEnabled ? 100 : 0
-                : 30;
+        expect(containerElement.scrollTop).toEqual(expectedScrollTop);
+        expect(containerElement.scrollLeft).toEqual(expectedScrollLeft);
 
-              const containerElement = helper.viewModel.containerRef.current!;
-              expect(containerElement.scrollTop).toEqual(expectedScrollTop);
-              expect(containerElement.scrollLeft).toEqual(expectedScrollLeft);
+        helper.viewModel.scrolling = false;
+        helper.viewModel.scrollEffect();
+        emit('scroll', {} as any);
 
-              helper.viewModel.scrolling = false;
-              helper.viewModel.scrollEffect();
-              emit('scroll', {} as any);
-
-              expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollLeft);
-              expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollTop);
-            });
-          });
-        });
+        expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollLeft);
+        expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollTop);
       });
 
       // eslint-disable-next-line jest/expect-expect
@@ -1220,7 +1146,7 @@ describe('Simulated > Behavior', () => {
           viewModel.updateHandler = jest.fn();
 
           expect(viewModel.validate(event)).toEqual(true);
-          expect(viewModel.updateHandler).toHaveBeenCalledTimes(0);
+          expect(viewModel.updateHandler).toHaveBeenCalledTimes(1);
         });
 
         each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
@@ -1439,7 +1365,7 @@ describe('Simulated > Behavior', () => {
             let expectedContainerScrollLeft = 20;
             const containerEl = helper.viewModel.containerRef.current!;
             if (visible) {
-              expect(helper.viewModel.updateHandler).toBeCalledTimes(0);
+              expect(helper.viewModel.updateHandler).toBeCalledTimes(1);
               expect(helper.viewModel.savedScrollOffset).toEqual(initialSavedScrollOffset);
 
               expectedContainerScrollTop = direction !== DIRECTION_HORIZONTAL
@@ -1578,7 +1504,7 @@ describe('Simulated > Behavior', () => {
         expect(helper.viewModel.locked).toEqual(true);
       });
 
-      it('UpdateHandler() should call onUpdated action', () => {
+      it('Update() should call onUpdated action', () => {
         const helper = new ScrollableTestHelper({
           onUpdated: actionHandler,
         });
@@ -1708,14 +1634,18 @@ describe('Simulated > Behavior', () => {
           onUpdated: actionHandler,
         });
 
-        helper.viewModel.updateHandler = jest.fn();
+        helper.viewModel.updateElementDimensions = jest.fn();
         helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
         helper.viewModel.topPocketState = TopPocketState.STATE_READY;
 
         helper.viewModel.onRelease();
 
-        helper.checkActionHandlerCalls(expect, [], []);
-        expect(helper.viewModel.updateHandler).toBeCalledTimes(0);
+        if (actionHandler) {
+          helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ scrollOffset: { top: 5, left: 10 } }]]);
+        } else {
+          helper.checkActionHandlerCalls(expect, [], []);
+        }
+        expect(helper.viewModel.updateElementDimensions).toBeCalledTimes(1);
         expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_RELEASED);
         expect(helper.viewModel.loadingIndicatorEnabled).toEqual(true);
         expect(helper.viewModel.isLoadPanelVisible).toEqual(false);

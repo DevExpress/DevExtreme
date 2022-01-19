@@ -1,30 +1,26 @@
 import { ClientFunction, Selector } from 'testcafe';
-import { getComponentInstance } from '../../../helpers/multi-platform-test';
 import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/renovation/ui/scroll_view/common/consts';
 
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
-import type { PlatformType } from '../../../helpers/multi-platform-test/platform-type';
 
 const CLASS = {
   scrollable: 'dx-scrollable',
   scrollableContainer: 'dx-scrollable-container',
   scrollableContent: 'dx-scrollable-content',
 };
-
-const getScrollable = (platform: PlatformType) => class Scrollable extends Widget {
+export default class Scrollable extends Widget {
   scrollbar: Scrollbar;
 
   vScrollbar?: Scrollbar;
 
   hScrollbar?: Scrollbar;
 
-  getInstance: () => Promise<unknown>;
+  getInstance: ClientFunction;
 
   name: string;
 
-  platform: string;
-
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(id: string | Selector, options?: any, name = 'dxScrollable') {
     super(id);
 
@@ -45,9 +41,10 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     const scrollable = this.element;
 
     this.name = name;
-    this.platform = platform || 'jquery';
-
-    this.getInstance = getComponentInstance(this.platform as PlatformType, scrollable);
+    this.getInstance = ClientFunction(
+      () => $(scrollable())[`${name}`]('instance'),
+      { dependencies: { scrollable, name } },
+    );
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -147,12 +144,4 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
       { dependencies: { getInstance, value } },
     )();
   }
-};
-
-export const ScrollableFactory = {
-  jquery: getScrollable('jquery'),
-  angular: getScrollable('angular'),
-  react: getScrollable('react'),
-};
-
-export default ScrollableFactory.jquery;
+}

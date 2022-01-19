@@ -231,7 +231,6 @@ QUnit.module('Options', moduleConfig, () => {
         };
         this.createInstance(options.tasksOnlyOptions);
         this.clock.tick();
-
         assert.ok(isHeaderContainsText('January'), 'is months scale type (auto)');
         this.instance.option('scaleType', 'minutes');
         assert.ok(isHeaderContainsText('30'), 'is minutes scale type');

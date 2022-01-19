@@ -1,5 +1,3 @@
-// eslint-disable-next-line spellcheck/spell-checker
-const { rerender } = require('inferno');
 const $ = require('jquery');
 const ko = require('knockout');
 const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
@@ -79,9 +77,6 @@ QUnit.test('default with ko approach', function(assert) {
 QUnit.module('regressions', moduleSetup);
 
 QUnit.test('scrollView size updated on onContentReady (B253584)', function(assert) {
-    this.clock.restore();
-    const done = assert.async();
-
     let scrollView;
     const itemHeight = 20;
 
@@ -91,16 +86,8 @@ QUnit.test('scrollView size updated on onContentReady (B253584)', function(asser
             paginate: false
         },
         onContentReady: function(e) {
-            setTimeout(() => {
-                scrollView = $(e.element).dxScrollView('instance');
-                // eslint-disable-next-line spellcheck/spell-checker
-                rerender();
-                scrollView.scrollTo(itemHeight);
-
-                assert.equal(scrollView.scrollOffset().top, itemHeight, 'scroll view scrolled correctly');
-
-                done();
-            }, 50);
+            scrollView = $(e.element).dxScrollView('instance');
+            scrollView.scrollTo(itemHeight);
         }
     };
 
@@ -108,7 +95,7 @@ QUnit.test('scrollView size updated on onContentReady (B253584)', function(asser
 
     ko.applyBindings(vm, $('#testListContentReady').get(0));
 
-
+    assert.equal(scrollView.scrollOffset().top, itemHeight, 'scroll view scrolled correctly');
 });
 
 QUnit.test('observableArray.push must refresh', function(assert) {

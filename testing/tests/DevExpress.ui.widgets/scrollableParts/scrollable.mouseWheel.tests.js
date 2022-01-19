@@ -10,8 +10,7 @@ import {
     SCROLLABLE_WRAPPER_CLASS,
     SCROLLABLE_CONTENT_CLASS,
     SCROLLABLE_SCROLL_CLASS,
-    SCROLLBAR_HORIZONTAL_CLASS,
-    RESIZE_WAIT_TIMEOUT
+    SCROLLBAR_HORIZONTAL_CLASS
 } from './scrollable.constants.js';
 
 import { setWindow, getWindow } from 'core/utils/window';
@@ -119,8 +118,6 @@ QUnit.test('preventDefault should not be called on delayed mousewheel at the end
 });
 
 QUnit.test('mousewheel calls update before validation', function(assert) {
-    this.clock.restore();
-    const done = assert.async();
     const distance = 10;
 
     const $scrollable = $('#scrollable').height(1000);
@@ -137,14 +134,11 @@ QUnit.test('mousewheel calls update before validation', function(assert) {
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS).children().height(2000);
 
-    setTimeout(() => {
-        pointerMock($container)
-            .start()
-            .wheel(-distance);
+    pointerMock($container)
+        .start()
+        .wheel(-distance);
 
-        assert.equal(scrollable.scrollOffset().top, distance, 'scrollable was scrolled');
-        done();
-    }, RESIZE_WAIT_TIMEOUT);
+    assert.equal(scrollable.scrollOffset().top, distance, 'scrollable was scrolled');
 });
 
 QUnit.test('mousewheel scrolls correctly when mouse is located over scrollbar', function(assert) {

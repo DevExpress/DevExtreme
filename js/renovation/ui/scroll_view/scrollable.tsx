@@ -161,11 +161,7 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
-    if (!this.props.useNative) {
-      // the resizeObserver handler calls too late
-      // in case when DataGrid call dxresize when data was loaded
-      this.updateHandler();
-    }
+    !this.props.useNative && this.updateHandler();
 
     const currentScrollOffset = this.props.useNative
       ? this.scrollOffset()

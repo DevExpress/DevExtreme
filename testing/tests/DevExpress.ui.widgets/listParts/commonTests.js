@@ -22,7 +22,6 @@ import { setScrollView } from 'ui/list/ui.list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
-import { RESIZE_WAIT_TIMEOUT } from '../scrollableParts/scrollable.constants.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
@@ -585,69 +584,66 @@ QUnit.module('collapsible groups', moduleSetup, () => {
     });
 
     QUnit.test('scrollView should update its position after a group has been collapsed', function(assert) {
-        this.clock.restore();
-        const done = assert.async();
+        try {
+            setScrollView(this.originalScrollView);
+            fx.off = true;
 
-        setScrollView(this.originalScrollView);
-        fx.off = true;
-
-        const $element = this.element.dxList({
-            pageLoadMode: 'scrollBottom',
-            height: 160,
-            scrollingEnabled: true,
-            useNativeScrolling: false,
-            dataSource: {
-                load(options) {
-                    const d = $.Deferred();
-                    const items = [{
-                        key: 'first',
-                        items: [{ a: 0 }, { a: 1 }, { a: 2 }]
+            const $element = this.element.dxList({
+                pageLoadMode: 'scrollBottom',
+                height: 160,
+                scrollingEnabled: true,
+                useNativeScrolling: false,
+                dataSource: {
+                    load(options) {
+                        const d = $.Deferred();
+                        const items = [{
+                            key: 'first',
+                            items: [{ a: 0 }, { a: 1 }, { a: 2 }]
+                        },
+                        {
+                            key: 'second',
+                            items: [{ a: 3 }, { a: 4 }, { a: 5 }]
+                        },
+                        {
+                            key: 'third',
+                            items: [{ a: 6 }, { a: 7 }, { a: 8 }]
+                        }];
+                        setTimeout(() => {
+                            d.resolve(items.slice(options.skip, options.skip + options.take));
+                        }, 50);
+                        return d.promise();
                     },
-                    {
-                        key: 'second',
-                        items: [{ a: 3 }, { a: 4 }, { a: 5 }]
-                    },
-                    {
-                        key: 'third',
-                        items: [{ a: 6 }, { a: 7 }, { a: 8 }]
-                    }];
-                    setTimeout(() => {
-                        d.resolve(items.slice(options.skip, options.skip + options.take));
-                    }, 50);
-                    return d.promise();
+                    group: 'key',
+                    pageSize: 1
                 },
-                group: 'key',
-                pageSize: 1
-            },
-            grouped: true,
-            collapsibleGroups: true,
-            groupTemplate(data) {
-                return $('<div>').text(data.key);
-            },
-            itemTemplate(data) {
-                return $('<div>').text(data.a);
-            }
-        });
+                grouped: true,
+                collapsibleGroups: true,
+                groupTemplate(data) {
+                    return $('<div>').text(data.key);
+                },
+                itemTemplate(data) {
+                    return $('<div>').text(data.a);
+                }
+            });
 
-        const instance = $element.dxList('instance');
-        const releaseSpy = sinon.spy(instance._scrollView, 'release');
+            const instance = $element.dxList('instance');
+            const releaseSpy = sinon.spy(instance._scrollView, 'release');
 
-        setTimeout(() => {
+            this.clock.tick(50);
+
             instance.scrollTo(200);
+            this.clock.tick(50);
 
-            setTimeout(() => {
-                instance.scrollTo(200);
+            instance.scrollTo(200);
+            this.clock.tick(50);
 
-                setTimeout(() => {
-                    instance.collapseGroup(2);
+            instance.collapseGroup(2);
+            this.clock.tick(50);
 
-                    assert.ok(releaseSpy.lastCall.args[0], 'The last call of \'release\' hides load indicator');
-                    fx.off = false;
-
-                    done();
-                }, RESIZE_WAIT_TIMEOUT);
-            }, RESIZE_WAIT_TIMEOUT);
-        }, RESIZE_WAIT_TIMEOUT);
+            assert.ok(releaseSpy.lastCall.args[0], 'The last call of \'release\' hides load indicator');
+        } finally {
+            fx.off = false;
+        }
     });
 
     QUnit.test('more button shouldn\'t disappear after group collapsed with array store', function(assert) {
@@ -2969,9 +2965,6 @@ QUnit.module('scrollView integration', {
     });
 
     QUnit.test('on start scrollbar has correct height', function(assert) {
-        this.clock.restore();
-        const done = assert.async();
-
         const $list = $('#list');
         $list.height(100);
 
@@ -2983,12 +2976,10 @@ QUnit.module('scrollView integration', {
         const $scrollViewContent = $list.find('.dx-scrollview-content');
         const $scrollableScroll = $list.find('.dx-scrollable-scroll');
 
-        setTimeout(() => {
-            const scrollBarSize = Math.round(Math.pow($list.height(), 2) / $scrollViewContent.height());
-            assert.equal($scrollableScroll.outerHeight(), scrollBarSize, 'scrollbar has correct height');
+        this.clock.tick(1);
 
-            done();
-        }, RESIZE_WAIT_TIMEOUT);
+        const scrollBarSize = Math.round(Math.pow($list.height(), 2) / $scrollViewContent.height());
+        assert.equal($scrollableScroll.outerHeight(), scrollBarSize, 'scrollbar has correct height');
     });
 
     QUnit.test('update scroll after change items', function(assert) {

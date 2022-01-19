@@ -10,26 +10,19 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
 
         const scrollable = this._viewRef.current.scrollableRef;
 
-        // const setContainerDimensions = scrollable.setContainerDimensions;
+        const setContainerDimensions = scrollable.setContainerDimensions;
 
-        // scrollable.setContainerDimensions = function() {
-        //     setContainerDimensions.apply(this, arguments);
-        //     reRender();
-        // };
+        scrollable.setContainerDimensions = function() {
+            setContainerDimensions.apply(this, arguments);
+            reRender();
+        };
 
-        // const setContentHeight = scrollable.setContentHeight;
+        const setContentDimensions = scrollable.setContentDimensions;
 
-        // scrollable.setContentHeight = function() {
-        //     setContentHeight.apply(this, arguments);
-        //     reRender();
-        // };
-
-        // const setContentWidth = scrollable.setContentWidth;
-
-        // scrollable.setContentWidth = function() {
-        //     setContentWidth.apply(this, arguments);
-        //     reRender();
-        // };
+        scrollable.setContentDimensions = function() {
+            setContentDimensions.apply(this, arguments);
+            reRender();
+        };
 
         const handleScroll = scrollable.handleScroll;
 

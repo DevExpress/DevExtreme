@@ -23,7 +23,6 @@ import '../../helpers/calendarFixtures.js';
 import 'ui/validator';
 import 'generic_light.css!';
 import { implementationsMap } from 'core/utils/size';
-import { RESIZE_WAIT_TIMEOUT } from '../DevExpress.ui.widgets/scrollableParts/scrollable.constants.js';
 
 QUnit.testStart(() => {
     const markup =
@@ -1354,22 +1353,16 @@ QUnit.module('dateView integration', {
     });
 
     QUnit.test('T170478 - no picker rollers should be chosen after click on \'cancel\' button', function(assert) {
-        this.clock.restore();
-        const done = assert.async();
+        const pointer = pointerMock($('.dx-dateviewroller').eq(0).find('.dx-scrollable-container'));
 
-        setTimeout(() => {
-            const pointer = pointerMock($('.dx-dateviewroller').eq(0).find('.dx-scrollable-container'));
+        assert.equal($('.dx-dateviewroller-current').length, 0, 'no rollers are chosen after widget is opened first time');
 
-            assert.equal($('.dx-dateviewroller-current').length, 0, 'no rollers are chosen after widget is opened first time');
+        pointer.start().down().move(0, -20).up();
+        assert.equal($('.dx-dateviewroller-current').length, 1, 'one roller is chosen after scrolling');
+        $('.dx-popup-cancel').trigger('dxclick');
 
-            pointer.start().down().move(0, -20).up();
-            assert.equal($('.dx-dateviewroller-current').length, 1, 'one roller is chosen after scrolling');
-            $('.dx-popup-cancel').trigger('dxclick');
-
-            this.instance.open();
-            assert.equal($('.dx-dateviewroller-current').length, 0, 'no rollers are chosen after widget is opened second time');
-            done();
-        }, RESIZE_WAIT_TIMEOUT);
+        this.instance.open();
+        assert.equal($('.dx-dateviewroller-current').length, 0, 'no rollers are chosen after widget is opened second time');
     });
 
     QUnit.test('T207178 - error should not be thrown if value is null', function(assert) {
@@ -2978,16 +2971,15 @@ QUnit.module('datebox with time component', {
             return;
         }
 
-        const done = assert.async();
+        const clock = sinon.useFakeTimers();
+        try {
+            const date = new Date(2015, 0, 1);
+            $('#dateBox').dxDateBox({
+                pickerType: 'rollers',
+                value: date,
+                opened: true
+            });
 
-        const date = new Date(2015, 0, 1);
-        $('#dateBox').dxDateBox({
-            pickerType: 'rollers',
-            value: date,
-            opened: true
-        });
-
-        setTimeout(() => {
             const $monthRollerView = $('.dx-dateviewroller-month');
             const monthRollerView = $monthRollerView.dxDateViewRoller('instance');
             const deltaY = 100;
@@ -3009,9 +3001,9 @@ QUnit.module('datebox with time component', {
 
             pointer.start().wheel(-deltaY * 10).wait(500);
             assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
-
-            done();
-        }, RESIZE_WAIT_TIMEOUT);
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test('dateview selectedIndex should not be changed after dateBox reopen (T934663)', function(assert) {

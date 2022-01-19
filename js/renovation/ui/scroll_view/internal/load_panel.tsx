@@ -1,12 +1,15 @@
 import {
   JSXComponent,
   Component,
+  ComponentBindings,
+  OneWay,
+  Ref,
+  RefObject,
 } from '@devextreme-generator/declarations';
 
 import { isDefined } from '../../../../core/utils/type';
 import messageLocalization from '../../../../localization/message';
 import { LoadPanel } from '../../overlays/load_panel';
-import { ScrollViewLoadPanelProps } from '../common/scrollview_loadpanel_props';
 
 const SCROLLVIEW_LOADPANEL = 'dx-scrollview-loadpanel';
 
@@ -27,6 +30,15 @@ export const viewFunction = (viewModel: ScrollViewLoadPanel): JSX.Element => {
     />
   );
 };
+
+@ComponentBindings()
+export class ScrollViewLoadPanelProps {
+  @Ref() targetElement?: RefObject<HTMLDivElement>;
+
+  @OneWay() refreshingText?: string;
+
+  @OneWay() visible = false;
+}
 
 @Component({
   defaultOptionRules: null,

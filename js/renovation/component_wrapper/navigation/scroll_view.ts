@@ -9,7 +9,8 @@ export class ScrollViewWrapper extends Component {
     return Deferred().resolve();
   }
 
-  // https://github.com/DevExpress/devextreme-renovation/issues/859
+  // TODO: the public method in component override this method
+  // waits for generator squad. Need to pass.
   release(preventScrollBottom: boolean): unknown {
     (this.viewRef as ScrollView).release(preventScrollBottom);
     return Deferred().resolve();

@@ -13,8 +13,7 @@ import {
     SCROLLABLE_SCROLL_CLASS,
     SCROLLBAR_VERTICAL_CLASS,
     SCROLLBAR_HORIZONTAL_CLASS,
-    SCROLLABLE_NATIVE_CLASS,
-    RESIZE_WAIT_TIMEOUT
+    SCROLLABLE_NATIVE_CLASS
 } from './scrollable.constants.js';
 
 const moduleConfig = {
@@ -95,7 +94,7 @@ QUnit.test('scroll action fired for simulated scroller during native scroll', fu
     setTimeout(() => {
         assert.equal($scrollable.dxScrollable('instance').scrollOffset().top, 10, 'scroll action fired with right offset');
         done();
-    }, RESIZE_WAIT_TIMEOUT);
+    });
 });
 
 QUnit.test('scroll action fired when scrollable scrolling', function(assert) {
@@ -231,13 +230,11 @@ QUnit.test('simulatedScrollbar visibility', function(assert) {
 QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is true', function(assert) {
     const containerHeight = 50;
     const contentHeight = 100;
-    const onUpdatedHandler = sinon.spy();
     const scrollHeight = (containerHeight / contentHeight) * containerHeight;
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
-        useSimulatedScrollbar: true,
-        onUpdated: onUpdatedHandler
+        useSimulatedScrollbar: true
     });
 
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
@@ -247,10 +244,8 @@ QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is tru
     $container.height(containerHeight);
     $content.height(contentHeight);
 
-    onUpdatedHandler.reset();
     $scrollable.dxScrollable('instance').update();
 
-    assert.strictEqual(onUpdatedHandler.callCount, 1, 'onUpdatedHandler.callCount');
     assert.equal($scroll.outerHeight(), scrollHeight, 'scrollbar height calculated correctly');
 });
 
