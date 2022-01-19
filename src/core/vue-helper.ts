@@ -172,16 +172,17 @@ function findConfigurationComponents(children: VNode[]) {
 function hasInlineTemplate(children: VNode[]): boolean {
     let hasTemplate = false;
     children.forEach((child) => {
-        if (!isConfiguration(child) && !isFragment(child) && !isComment(child.type)) {
+        if (!isConfiguration(child) && !isFragment(child) && !isComment(child)) {
             hasTemplate = true;
         }
     });
     return hasTemplate;
 }
 
-function isComment(nodeType) {
+function isComment(node) {
+    const nodeType = node.type;
     const type = typeof nodeType === "symbol" ? nodeType.toString() : nodeType;
-    return type === "Symbol(Comment)";
+    return type === "Symbol(Comment)" || (type === "Symbol()" && !node.children);
 }
 
 function isConfiguration(child): boolean {
