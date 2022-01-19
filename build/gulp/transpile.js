@@ -55,7 +55,24 @@ const generatedTs = [
 
 const bundlesSrc = ['js/bundles/**/*.js'];
 
+const sideEffectModulesSet = new Set();
+
+const searchSideEffectModules = (filePath, modules) => {
+    const content = fs.readFileSync(filePath);
+    const lines = content.toString().split('\n');
+
+    lines.forEach(line => {
+        const sideEffectModuleRelativePath = line.match(/^import '(\..*)';/)?.[1];
+        if (sideEffectModuleRelativePath) {
+            const dirPath = path.parse(filePath).dir;
+            const sideEffectModulePath = path.join(dirPath, sideEffectModuleRelativePath);
+            modules.add(sideEffectModulePath);
+        }
+    });
+};
+
 const createModuleConfig = (name, dir, filePath) => {
+    const isSideEffectModule = sideEffectModulesSet.has(filePath.replace(/\.js$/, ''));
     const isIndex = name === 'index.js';
     const relative = path.join('./', dir.replace(srcDir, ''), name);
     const currentPath = isIndex ? path.join(relative, '../') : relative;
@@ -66,7 +83,7 @@ const createModuleConfig = (name, dir, filePath) => {
     const hasDTS = hasRealDTS || hasGeneratedDTS;
 
     const result = {
-        sideEffects: false,
+        sideEffects: isSideEffectModule,
         main: normalize(cjsFile),
         module: normalize(esmFile)
     };
@@ -136,7 +153,14 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
         removeDebug(),
         babelCjs(),
     ]),
-
+    () => gulp
+        .src(esmTranspileSrc)
+        .pipe(flatMap((stream, file) => {
+            // NOTE: flatmap thinks that the 'js/viz/vector_map.utils' folder is a file.
+            if(file.extname === '.utils') return stream;
+            searchSideEffectModules(file.path, sideEffectModulesSet);          
+            return stream;
+        })),
     () => gulp
         .src(esmTranspileSrc)
         .pipe(flatMap((stream, file) => {
