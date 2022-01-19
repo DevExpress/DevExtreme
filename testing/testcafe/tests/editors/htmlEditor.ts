@@ -1,6 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
+import SelectBox from '../../model/selectBox';
 import url from '../../helpers/getPageUrl';
+
+const pureClick = async (t, selector): Promise<void> => {
+  await t
+    .click(selector.element)
+    .wait(500);
+};
 
 fixture`HtmlEditor`
   .page(url(__dirname, './pages/t1025549.html'));
@@ -21,4 +28,26 @@ fixture`HtmlEditor`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   });
+});
+
+fixture`HtmlEditor - formats`
+  .page(url(__dirname, './pages/t922236.html'));
+
+test('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async (t) => {
+  const selectBox = new SelectBox('.dx-font-format');
+
+  await pureClick(t, selectBox);
+
+  const list = await selectBox.getList();
+
+  await t.click(list.getItem().element);
+
+  await t
+    .expect(selectBox.value)
+    .eql('Arial')
+    .pressKey('k')
+    .pressKey('enter')
+    .expect(selectBox.value)
+    .eql('Arial')
+    .wait(1000);
 });
