@@ -214,10 +214,10 @@ const Resizable = DOMComponent.inherit({
         const scrollOffset = this._getAreaScrollOffset();
 
 
-        e.maxLeftOffset = handleOffset.left - areaOffset.left - scrollOffset.scrollX;
-        e.maxRightOffset = areaOffset.left + area.width - handleOffset.left - handleWidth + scrollOffset.scrollX;
-        e.maxTopOffset = handleOffset.top - areaOffset.top - scrollOffset.scrollY;
-        e.maxBottomOffset = areaOffset.top + area.height - handleOffset.top - handleHeight + scrollOffset.scrollY;
+        e.maxLeftOffset = this._leftMaxOffset = handleOffset.left - areaOffset.left - scrollOffset.scrollX;
+        e.maxRightOffset = this._rightMaxOffset = areaOffset.left + area.width - handleOffset.left - handleWidth + scrollOffset.scrollX;
+        e.maxTopOffset = this._topMaxOffset = handleOffset.top - areaOffset.top - scrollOffset.scrollY;
+        e.maxBottomOffset = this._bottomMaxOffset = areaOffset.top + area.height - handleOffset.top - handleHeight + scrollOffset.scrollY;
     },
 
     _getBorderWidth: function($element, direction) {
@@ -258,6 +258,21 @@ const Resizable = DOMComponent.inherit({
         };
     },
 
+    _getDirectionName: function(axis) {
+        const sides = this._movingSides;
+
+        if(axis === 'x') {
+            return sides.left ? 'left' : 'right';
+        } else {
+            return sides.top ? 'top' : 'bottom';
+        }
+    },
+
+    _fitIntoArea: function(axis, value) {
+        const directionName = this._getDirectionName(axis);
+        return Math.min(value, this[`_${directionName}MaxOffset`] ?? Infinity);
+    },
+
     _fitDeltaProportionally: function(delta) {
         let fittedDelta = { ...delta };
         const size = this._elementSize;
@@ -267,15 +282,16 @@ const Resizable = DOMComponent.inherit({
         const getHeight = () => size.height + fittedDelta.y;
         const getFittedWidth = () => fitIntoRange(getWidth(), minWidth, maxWidth);
         const getFittedHeight = () => fitIntoRange(getHeight(), minHeight, maxHeight);
-        const isFittedX = () => inRange(getWidth(), minWidth, maxWidth);
-        const isFittedY = () => inRange(getHeight(), minHeight, maxHeight);
+        const isInArea = (axis) => fittedDelta[axis] === this._fitIntoArea(axis, fittedDelta[axis]);
+        const isFittedX = () => inRange(getWidth(), minWidth, maxWidth) && isInArea('x');
+        const isFittedY = () => inRange(getHeight(), minHeight, maxHeight) && isInArea('y');
 
         if(!isFittedX()) {
-            const x = getFittedWidth() - size.width;
+            const x = this._fitIntoArea('x', getFittedWidth() - size.width);
             fittedDelta = { x, y: this._proportionate('y', x) };
         }
         if(!isFittedY()) {
-            const y = getFittedHeight() - size.height;
+            const y = this._fitIntoArea('y', getFittedHeight() - size.height);
             fittedDelta = { x: this._proportionate('x', y), y };
         }
 
