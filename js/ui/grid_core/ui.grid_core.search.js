@@ -85,6 +85,10 @@ export const searchModule = {
                         }
                     }
 
+                    if(filters.length === 0) {
+                        return ['!'];
+                    }
+
                     return gridCoreUtils.combineFilters(filters, 'or');
                 };
 
