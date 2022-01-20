@@ -16,6 +16,7 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
     }
 
     _inputHandler({ originalEvent }) {
+        console.log('_inputHandler');
         if(!originalEvent) {
             return;
         }
