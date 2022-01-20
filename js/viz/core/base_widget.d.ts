@@ -99,7 +99,6 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field5 cancel:boolean
      * @default null
      * @action
      * @public
