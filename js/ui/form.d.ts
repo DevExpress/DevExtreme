@@ -255,14 +255,12 @@ export default class dxForm extends Widget<dxFormOptions> {
     /**
      * @docid
      * @publicName getButton(name)
-     * @return dxButton | undefined
      * @public
      */
     getButton(name: string): dxButton | undefined;
     /**
      * @docid
      * @publicName getEditor(dataField)
-     * @return Editor | undefined
      * @public
      */
     getEditor(dataField: string): Editor | undefined;

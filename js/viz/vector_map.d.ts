@@ -536,7 +536,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
      * @public
@@ -547,7 +546,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
      * @public

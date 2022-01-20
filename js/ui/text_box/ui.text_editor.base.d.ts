@@ -261,7 +261,6 @@ export default class dxTextEditor<TProperties = Properties> extends Editor<TProp
     /**
      * @docid
      * @publicName getButton(name)
-     * @return dxButton | undefined
      * @public
      */
     getButton(name: string): dxButton | undefined;

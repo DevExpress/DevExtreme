@@ -233,7 +233,6 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:boolean | undefined
      * @type_function_param1_field1 component:dxTreeView
      * @action
      * @public

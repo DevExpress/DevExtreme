@@ -660,7 +660,6 @@ export default class dxPivotGrid extends Widget<dxPivotGridOptions> {
      * @param2_field5 processCell:function(cellData)
      * @param2_field6 customizeChart:function(chartOptions)
      * @param2_field7 customizeSeries:function(seriesName, seriesOptions)
-     * @return function | null
      * @public
      */
     bindChart(chart: string | DxElement | any, integrationOptions: { inverted?: boolean; dataFieldsDisplayMode?: string; putDataFieldsInto?: string; alternateDataFields?: boolean; processCell?: Function; customizeChart?: Function; customizeSeries?: Function }): Function & null;
