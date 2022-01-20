@@ -133,8 +133,8 @@ test('Resize without navigation buttons', async (t) => {
     .ok(compareResults.errorMessages());
 });
 
-['generic.light', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
-  test(`Compact pager in the ${theme} theme`, async (t) => {
+['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
+  test(`Compact pager in the ${theme} theme (T1057735)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const pagerElement = dataGrid.getPager().element;
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
