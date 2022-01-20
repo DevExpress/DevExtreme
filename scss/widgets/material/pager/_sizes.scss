@@ -9,7 +9,16 @@ $material-pager-page-line-height: 12px !default;
 $material-pager-page-font-size: 12px !default;
 $material-pager-navbutton-paddings: $material-pager-page-padding !default;
 $material-pager-navbutton-height: 12px !default;
+$material-pager-light-navbutton-paddings: null !default;
 $material-pager-pagesize-padding-top: 7px !default;
 $material-pager-pagesize-padding-bottom: 8px !default;
 $material-pager-pagesize-padding-left: 10px !default;
 $material-pager-pagesize-padding-right: 9px !default;
+
+@if $size == "default" {
+  $material-pager-light-navbutton-paddings: 18px 12px !default;
+}
+
+@else if $size == "compact" {
+  $material-pager-light-navbutton-paddings: $material-pager-navbutton-paddings !default;
+}

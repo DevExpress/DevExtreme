@@ -21,6 +21,12 @@
     .dx-page-index {
       min-width: 19px;
     }
+
+    .dx-pages {
+      .dx-navigate-button {
+        padding: $material-pager-light-navbutton-paddings;
+      }
+    }
   }
 
   .dx-pages {
