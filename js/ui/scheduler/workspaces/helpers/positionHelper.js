@@ -136,9 +136,10 @@ export class PositionHelper {
         };
 
         if(this.isGroupedByDate) {
+            const viewPortGroupCount = this.viewDataProvider.getViewPortGroupCount();
             return Math.max(
                 getMaxPosition(groupIndex),
-                getMaxPosition(this.groupCount - 1),
+                getMaxPosition(viewPortGroupCount - 1),
             );
         }
 
