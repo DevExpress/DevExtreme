@@ -6,7 +6,7 @@ import {
 } from '../pager';
 import { PagerContent } from '../../../../pager/content';
 import { PlaceholderExtender } from '../../../../../utils/plugin/placeholder_extender';
-import { PageSize, SetPageIndex, SetPageSize } from '../paging';
+import { PageSize, SetPageIndex, SetPageSize } from '../../paging/plugins';
 
 describe('Pager', () => {
   each`

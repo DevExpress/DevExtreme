@@ -10,6 +10,7 @@ import fx from 'animation/fx';
 import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, FileManagerProgressPanelWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
 import { implementationsMap } from 'core/utils/size';
+import { Deferred } from 'core/utils/deferred';
 
 const moduleConfig = {
 
@@ -731,7 +732,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(infos.length, 0, 'No notifications');
 
         provider.forbidAll = true;
-        this.wrapper.getToolbarButton('Refresh').trigger('dxclick');
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
         this.clock.tick(700);
 
         infos = this.progressPanelWrapper.getInfos();
@@ -826,7 +827,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(infos.length, 0, 'No notifications');
 
         changeableFolder.name = 'Folder1';
-        this.wrapper.getToolbarButton('Refresh').trigger('dxclick');
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
         this.clock.tick(400);
 
         infos = this.progressPanelWrapper.getInfos();
@@ -1344,6 +1345,85 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
         assert.strictEqual(this.fileManager.getCurrentDirectory().key, '', 'Current directory is the target one');
         assert.strictEqual(this.wrapper.getFolderNodes().length, 4, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'NavPane current folder text is correct');
+    });
+
+    test('notification does not disappear when permissions set dynamically (T1051605)', function(assert) {
+        const optionChangedSpy = sinon.spy();
+        const objectProvider = new ObjectFileSystemProvider({ data: createTestFileSystem() });
+        const customProvider = new CustomFileSystemProvider({
+            getItems1: function(parentDirectory) {
+                return new Promise((resolve, reject) => {
+                    if(parentDirectory.key === 'Folder 2') {
+                        const error = new FileSystemError(42, parentDirectory, 'Custom text');
+                        reject(error);
+                    } else {
+                        objectProvider.getItems(parentDirectory).then(result => resolve(result));
+                    }
+                });
+            },
+            getItems: function(parentDirectory) {
+                const deferred = new Deferred();
+                if(parentDirectory.key === 'Folder 2') {
+                    const error = new FileSystemError(42, parentDirectory, 'Custom text');
+                    deferred.reject(error);
+                } else {
+                    objectProvider.getItems(parentDirectory).then(result => deferred.resolve(result));
+                }
+                return deferred.promise();
+            }
+        });
+        this.fileManager.option({
+            fileSystemProvider: customProvider,
+            currentPath: 'Folder 1',
+            onCurrentDirectoryChanged: ({ component }) => component.option('permissions', component.option('permissions')),
+            onOptionChanged: optionChangedSpy
+        });
+        this.clock.tick(400);
+
+        let currentPath = this.fileManager.option('currentPath');
+        let currentPathKeys = this.fileManager.option('currentPathKeys');
+        assert.strictEqual(currentPath, 'Folder 1', 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 1, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], 'Folder 1', 'Current path keys are correct');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/Folder 1', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, 'Folder 1', 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1', 'NavPane current folder text is correct');
+
+        optionChangedSpy.reset();
+        this.fileManager.option('currentPath', 'Folder 2');
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is visible');
+        assert.ok(this.wrapper.getToolbarRefreshButtonState().isError, 'refresh button is in error state');
+
+        assert.strictEqual(optionChangedSpy.callCount, 6, 'Three options have changed');
+        assert.strictEqual(optionChangedSpy.args[0][0].name, 'currentPath', 'CurrentPath changed');
+        assert.strictEqual(optionChangedSpy.args[0][0].value, 'Folder 2', 'CurrentPath changed');
+        assert.strictEqual(optionChangedSpy.args[1][0].name, 'currentPathKeys', 'CurrentPathKeys changed');
+        assert.deepEqual(optionChangedSpy.args[1][0].value, ['Folder 2'], 'CurrentPathKeys changed');
+        assert.strictEqual(optionChangedSpy.args[2][0].name, 'permissions', 'Permissions changed');
+        assert.strictEqual(optionChangedSpy.args[3][0].name, 'currentPath', 'CurrentPath changed');
+        assert.strictEqual(optionChangedSpy.args[3][0].value, '', 'CurrentPath changed');
+        assert.strictEqual(optionChangedSpy.args[4][0].name, 'currentPathKeys', 'CurrentPathKeys changed');
+        assert.strictEqual(optionChangedSpy.args[4][0].value.length, 0, 'CurrentPathKeys changed');
+        assert.strictEqual(optionChangedSpy.args[5][0].name, 'permissions', 'Permissions changed');
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+        assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 1, 'Notification has one details section');
+        assert.strictEqual(details[0].commonText, 'Folder 2', 'Common text is correct');
+        assert.strictEqual(details[0].errorText, 'Custom text', 'Error text is correct');
+
+        currentPath = this.fileManager.option('currentPath');
+        currentPathKeys = this.fileManager.option('currentPathKeys');
+        assert.strictEqual(currentPath, '', 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 0, 'Current path keys has correct size');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, '', 'Current directory is the target one');
         assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'NavPane current folder text is correct');
     });
 });

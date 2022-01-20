@@ -158,10 +158,10 @@ class FileManagerFileUploader extends Widget {
     }
 
     _adjustDropZonePlaceholder() {
-        if(!hasWindow()) {
+        const $dropZoneTarget = this.option('dropZone');
+        if(!hasWindow() || $dropZoneTarget.length === 0) {
             return;
         }
-        const $dropZoneTarget = this.option('dropZone');
         const placeholderBorderTopWidth = parseFloat(this._$dropZonePlaceholder.css('borderTopWidth'));
         const placeholderBorderLeftWidth = parseFloat(this._$dropZonePlaceholder.css('borderLeftWidth'));
 
