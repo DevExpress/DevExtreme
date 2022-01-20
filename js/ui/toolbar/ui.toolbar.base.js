@@ -46,9 +46,10 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         }
     },
 
-    _getSynchronizableOptionsForCreateComponent: function() {
-        return this.callBase().filter(item => item !== 'disabled');
-    },
+    // _getSynchronizableOptionsForCreateComponent: function() {
+    //     debugger;
+    //     return [...this.callBase().filter(item => item !== 'disabled'), 'focusStateEnabled'];
+    // },
 
     _initTemplates: function() {
         this.callBase();
@@ -86,7 +87,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
 
             this._getTemplate('dx-polymorph-widget').render({
                 container: $container,
-                model: rawModel,
+                model: extend(true, {}, rawModel),
                 parent: this
             });
         }.bind(this), ['text', 'html', 'widget', 'options'], this.option('integrationOptions.watchMethod'));
