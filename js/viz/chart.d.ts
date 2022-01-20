@@ -936,10 +936,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
-     * @type_function_param1_field6 rangeEnd:Date|Number:deprecated(range)
+     * @type_function_param1_field2 component:dxChart
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 rangeStart:Date|Number:deprecated(range)
+     * @type_function_param1_field7 rangeEnd:Date|Number:deprecated(range)
      * @type_function_param1_field11 actionType:Enums.ChartZoomPanActionType
      * @notUsedInTheme
      * @action
@@ -950,8 +950,8 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field2 component:dxChart
+     * @type_function_param1_field5 event:event
      * @type_function_param1_field8 actionType:Enums.ChartZoomPanActionType
      * @notUsedInTheme
      * @action

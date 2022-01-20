@@ -235,7 +235,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFilterBuilder
+     * @type_function_param1_field2 component:dxFilterBuilder
      * @type_function_param1_field5 setValue(newValue):any
      * @type_function_param1_field9 editorOptions:object
      * @default null

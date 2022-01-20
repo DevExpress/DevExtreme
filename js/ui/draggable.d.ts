@@ -171,8 +171,8 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDraggable
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field2 component:dxDraggable
+     * @type_function_param1_field5 event:event
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      * @action
@@ -183,8 +183,8 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDraggable
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field2 component:dxDraggable
+     * @type_function_param1_field5 event:event
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      * @action
@@ -195,8 +195,8 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDraggable
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field2 component:dxDraggable
+     * @type_function_param1_field5 event:event
      * @action
      * @public
      */

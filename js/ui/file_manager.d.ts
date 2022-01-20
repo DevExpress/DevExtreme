@@ -282,8 +282,8 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field4 event:event
      * @type_function_param1_field8 fileSystemItem:FileSystemItem
      * @type_function_param1_field9 viewArea:Enums.FileManagerViewArea
      * @action
@@ -294,9 +294,9 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field4 fileSystemItem:FileSystemItem
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field2 component:dxFileManager
+     * @type_function_param1_field6 fileSystemItem:FileSystemItem
+     * @type_function_param1_field5 event:event
      * @type_function_param1_field8 viewArea:Enums.FileManagerViewArea
      * @action
      * @public
@@ -339,8 +339,8 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field4 event:event
      * @action
      * @public
      */

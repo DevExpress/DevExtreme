@@ -502,10 +502,10 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field5 data:object
-     * @type_function_param1_field6 key:any
-     * @type_function_param1_field12 column:dxTreeListColumn
-     * @type_function_param1_field15 row:dxTreeListRowObject
+     * @type_function_param1_field4 data:object
+     * @type_function_param1_field5 key:any
+     * @type_function_param1_field10 column:dxTreeListColumn
+     * @type_function_param1_field14 row:dxTreeListRowObject
      * @default null
      * @action
      * @public
@@ -518,7 +518,7 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field10 column:dxTreeListColumn
-     * @type_function_param1_field13 row:dxTreeListRowObject
+     * @type_function_param1_field14 row:dxTreeListRowObject
      * @default null
      * @action
      * @public
@@ -539,9 +539,9 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field4 data:object
-     * @type_function_param1_field5 key:any
+     * @type_function_param1_field2 component:dxTreeList
+     * @type_function_param1_field5 data:object
+     * @type_function_param1_field6 key:any
      * @type_function_param1_field7 column:object
      * @default null
      * @action
@@ -562,7 +562,7 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeList
+     * @type_function_param1_field2 component:dxTreeList
      * @type_function_param1_field6 setValue(newValue, newText):any
      * @type_function_param1_field15 editorOptions:object
      * @type_function_param1_field17 row:dxTreeListRowObject
@@ -585,10 +585,10 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field9 event:event
-     * @type_function_param1_field10 rows:Array<dxTreeListRowObject>
-     * @type_function_param1_field11 columns:Array<dxTreeListColumn>
+     * @type_function_param1_field2 component:dxTreeList
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field11 rows:Array<dxTreeListRowObject>
+     * @type_function_param1_field12 columns:Array<dxTreeListColumn>
      * @default null
      * @action
      * @public
@@ -608,7 +608,7 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field4 event:event
      * @type_function_param1_field8 rows:Array<dxTreeListRowObject>
      * @default null
      * @action
