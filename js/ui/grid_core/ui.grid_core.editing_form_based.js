@@ -186,8 +186,11 @@ export const editingFormBasedModule = {
                     const templateOptions = {
                         row: row,
                         rowType: row.rowType,
-                        key: row.key
+                        key: row.key,
+                        rowIndex
                     };
+
+                    this._rowsView._addWatchMethod(templateOptions, row);
 
                     return (container) => {
                         const formTemplate = this.getEditFormTemplate();
@@ -196,6 +199,7 @@ export const editingFormBasedModule = {
                         this._$popupContent = scrollable.$content();
 
                         formTemplate(this._$popupContent, templateOptions, true);
+                        this._rowsView.renderDelayedTemplates();
                     };
                 },
 

@@ -503,12 +503,16 @@ export default gridCore.Controller.inherit((function() {
             let currentTotalCount;
             const dataSource = this._dataSource;
             let isLoading = false;
+            const isDataLoading = !args || isDefined(args.changeType);
+
             const itemsCount = this.itemsCount();
 
-            this._isLastPage = !itemsCount || !this._loadPageSize() || itemsCount < this._loadPageSize();
+            if(isDataLoading) {
+                this._isLastPage = !itemsCount || !this._loadPageSize() || itemsCount < this._loadPageSize();
 
-            if(this._isLastPage) {
-                this._hasLastPage = true;
+                if(this._isLastPage) {
+                    this._hasLastPage = true;
+                }
             }
 
             if(dataSource.totalCount() >= 0) {
@@ -519,9 +523,14 @@ export default gridCore.Controller.inherit((function() {
                     dataSource.load();
                     isLoading = true;
                 }
-            } else if(!args || isDefined(args.changeType)) {
+            } else if(isDataLoading) {
                 currentTotalCount = dataSource.pageIndex() * this.pageSize() + itemsCount;
-                this._currentTotalCount = Math.max(this._currentTotalCount, currentTotalCount);
+                if(currentTotalCount > this._currentTotalCount) {
+                    this._currentTotalCount = currentTotalCount;
+                    if(dataSource.pageIndex() === 0) {
+                        this._skipCorrection = 0;
+                    }
+                }
                 if(itemsCount === 0 && dataSource.pageIndex() >= this.pageCount()) {
                     dataSource.pageIndex(this.pageCount() - 1);
                     if(this.option('scrolling.mode') !== 'infinite') {

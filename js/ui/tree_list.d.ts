@@ -1,4 +1,8 @@
 import {
+    Skip,
+} from '../core/index';
+
+import {
     UserDefinedElement,
     DxElement,
     UserDefinedElementsArray,
@@ -72,6 +76,9 @@ interface CellInfo {
     readonly cellElement: DxElement;
     readonly row: Row;
 }
+
+/** @public */
+export type Scrollable = Skip<dxScrollable, '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'>;
 
 /** @public */
 export type AdaptiveDetailRowPreparingEvent = EventInfo<dxTreeList> & AdaptiveDetailRowPreparingInfo;
@@ -1128,7 +1135,7 @@ export default class dxTreeList extends Widget implements GridBase {
     getKeyByRowIndex(rowIndex: number): any;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: any | string | number): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;

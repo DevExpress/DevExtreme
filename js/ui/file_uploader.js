@@ -1,3 +1,4 @@
+import { getOffset } from '../core/utils/size';
 import $ from '../core/renderer';
 import Guid from '../core/guid';
 import { getWindow } from '../core/utils/window';
@@ -15,10 +16,11 @@ import Button from './button';
 import ProgressBar from './progress_bar';
 import browser from '../core/utils/browser';
 import devices from '../core/devices';
-import { addNamespace } from '../events/utils/index';
+import { addNamespace, isTouchEvent } from '../events/utils/index';
 import { name as clickEventName } from '../events/click';
 import messageLocalization from '../localization/message';
 import { isMaterial } from './themes';
+import domAdapter from '../core/dom_adapter';
 
 // STYLE fileUploader
 
@@ -374,6 +376,7 @@ class FileUploader extends Editor {
         this._renderUploadButton();
 
         this._preventRecreatingFiles = true;
+        this._activeDropZone = null;
     }
 
     _render() {
@@ -891,10 +894,8 @@ class FileUploader extends Editor {
         this._detachDragEventHandlers(target);
         target = $(target);
 
-        this._dragEventsTargets = [];
-
         eventsEngine.on(target, addNamespace('dragenter', this.NAME), this._dragEnterHandler.bind(this, isCustomTarget));
-        eventsEngine.on(target, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this));
+        eventsEngine.on(target, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this, isCustomTarget));
         eventsEngine.on(target, addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this, isCustomTarget));
         eventsEngine.on(target, addNamespace('drop', this.NAME), this._dropHandler.bind(this, isCustomTarget));
     }
@@ -907,6 +908,16 @@ class FileUploader extends Editor {
         return this.option('nativeDropSupported') && this.option('uploadMode') === 'useForm';
     }
 
+    _getDropZoneElement(isCustomTarget, e) {
+        const targetList = [];
+        if(isCustomTarget) {
+            $(this.option('dropZone')).each((i, element) => targetList.push($(element).get(0)));
+        } else {
+            targetList.push(this._$inputWrapper.get(0));
+        }
+        return targetList[targetList.indexOf(e.currentTarget)];
+    }
+
     _dragEnterHandler(isCustomTarget, e) {
         if(this.option('disabled')) {
             return false;
@@ -916,54 +927,64 @@ class FileUploader extends Editor {
             e.preventDefault();
         }
 
-        this._tryToggleDropZoneActive(true, isCustomTarget, e);
-        this._updateEventTargets(e);
+        const dropZoneElement = this._getDropZoneElement(isCustomTarget, e);
+        if(isDefined(dropZoneElement) && this._activeDropZone === null && this.isMouseOverElement(e, dropZoneElement, false)) {
+            this._activeDropZone = dropZoneElement;
+            this._tryToggleDropZoneActive(true, isCustomTarget, e);
+        }
     }
 
-    _dragOverHandler(e) {
+    _dragOverHandler(isCustomTarget, e) {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
         e.originalEvent.dataTransfer.dropEffect = 'copy';
+
+        if(!isCustomTarget) { // only default dropzone has pseudoelements
+            const dropZoneElement = this._getDropZoneElement(false, e);
+            if(this._activeDropZone === null && this.isMouseOverElement(e, dropZoneElement, false)) {
+                this._dragEnterHandler(false, e);
+            }
+            if(this._activeDropZone !== null && this._shouldRaiseDragLeave(e, false)) {
+                this._dragLeaveHandler(false, e);
+            }
+        }
     }
 
     _dragLeaveHandler(isCustomTarget, e) {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
+        if(this._activeDropZone === null) {
+            return;
+        }
 
-        this._updateEventTargets(e);
-        this._tryToggleDropZoneActive(false, isCustomTarget, e);
+        if(this._shouldRaiseDragLeave(e, isCustomTarget)) {
+            this._tryToggleDropZoneActive(false, isCustomTarget, e);
+            this._activeDropZone = null;
+        }
     }
 
-    _updateEventTargets(e) {
-        const targetIndex = this._dragEventsTargets.indexOf(e.target);
-        const isTargetExists = targetIndex !== -1;
-
-        if(e.type === 'dragenter') {
-            !isTargetExists && this._dragEventsTargets.push(e.target);
-        } else {
-            isTargetExists && this._dragEventsTargets.splice(targetIndex, 1);
-        }
+    _shouldRaiseDragLeave(e, isCustomTarget) {
+        return !this.isMouseOverElement(e, this._activeDropZone, !isCustomTarget);
     }
 
     _tryToggleDropZoneActive(active, isCustom, event) {
         const classAction = active ? 'addClass' : 'removeClass';
         const mouseAction = active ? '_dropZoneEnterAction' : '_dropZoneLeaveAction';
 
-        if(!this._dragEventsTargets.length) {
-            this[mouseAction]({
-                event,
-                dropZoneElement: event.currentTarget
-            });
-            if(!isCustom) {
-                this.$element()[classAction](FILEUPLOADER_DRAGOVER_CLASS);
-            }
+        this[mouseAction]({
+            event,
+            dropZoneElement: this._activeDropZone
+        });
+        if(!isCustom) {
+            this.$element()[classAction](FILEUPLOADER_DRAGOVER_CLASS);
         }
     }
 
     _dropHandler(isCustomTarget, e) {
-        this._dragEventsTargets = [];
+        this._activeDropZone = null;
+
         if(!isCustomTarget) {
             this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
         }
@@ -1202,6 +1223,69 @@ class FileUploader extends Editor {
         this._totalFilesSize = 0;
         this._totalLoadedFilesSize = 0;
         this._updateTotalProgress(this._getTotalFilesSize(), this._getTotalLoadedFilesSize());
+    }
+
+    isMouseOverElement(mouseEvent, element, correctPseudoElements) {
+        if(!element) return false;
+
+        const beforeHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':before').height) : 0;
+        const afterHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':after').height) : 0;
+        const x = getOffset(element).left;
+        const y = getOffset(element).top + beforeHeight;
+        const w = element.offsetWidth;
+        const h = element.offsetHeight - beforeHeight - afterHeight;
+        const eventX = this._getEventX(mouseEvent);
+        const eventY = this._getEventY(mouseEvent);
+
+        return eventX >= x && eventX < (x + w) && eventY >= y && eventY < (y + h);
+    }
+    _getEventX(e) {
+        return isTouchEvent(e) ? this._getTouchEventX(e) : e.clientX + this._getDocumentScrollLeft();
+    }
+    _getEventY(e) {
+        return isTouchEvent(e) ? this._getTouchEventY(e) : e.clientY + this._getDocumentScrollTop();
+    }
+    _getTouchEventX(e) {
+        if(browser.msie) {
+            return e.pageX;
+        }
+        let touchPoint = null;
+        if(e.changedTouches.length > 0) {
+            touchPoint = e.changedTouches;
+        } else if(e.targetTouches.length > 0) {
+            touchPoint = e.targetTouches;
+        }
+        return touchPoint ? touchPoint[0].pageX : 0;
+    }
+    _getTouchEventY(e) {
+        if(browser.msie) {
+            return e.pageY;
+        }
+        let touchPoint = null;
+        if(e.changedTouches.length > 0) {
+            touchPoint = e.changedTouches;
+        } else if(e.targetTouches.length > 0) {
+            touchPoint = e.targetTouches;
+        }
+        return touchPoint ? touchPoint[0].pageY : 0;
+    }
+    _getDocumentScrollTop() {
+        const document = domAdapter.getDocument();
+        const isScrollBodyIE = browser.msie && window.getComputedStyle(document.body).overflow === 'hidden' && document.body.scrollTop > 0;
+        if(isScrollBodyIE) {
+            return document.body.scrollTop;
+        } else {
+            return document.documentElement.scrollTop || document.body.scrollTop;
+        }
+    }
+    _getDocumentScrollLeft() {
+        const document = domAdapter.getDocument();
+        const isScrollBodyIE = browser.msie && window.getComputedStyle(document.body).overflow === 'hidden' && document.body.scrollLeft > 0;
+        if(isScrollBodyIE) {
+            return document.body ? document.body.scrollLeft : document.documentElement.scrollLeft;
+        } else {
+            return document.documentElement.scrollLeft || document.body.scrollLeft;
+        }
     }
 
     _updateReadOnlyState() {
@@ -1489,6 +1573,18 @@ class FileUploadStrategyBase {
         return callback && isFunction(callback);
     }
 
+    _handleProgress(file, e) {
+        if(file._isError) {
+            return;
+        }
+
+        file._isProgressStarted = true;
+        this._handleProgressCore(file, e);
+    }
+
+    _handleProgressCore(file, e) {
+    }
+
     _handleFileError(file, error) {
         file._isError = true;
         file.onError.fire(error);
@@ -1510,6 +1606,10 @@ class FileUploadStrategyBase {
         file.onAbort.add(this._onAbortHandler.bind(this, file));
         file.onProgress.add(this._onProgressHandler.bind(this, file));
         file.isInitialized = true;
+    }
+
+    _shouldHandleError(file, e) {
+        return (this._isStatusError(e.status) || !file._isProgressStarted) && !file.isAborted;
     }
 
     _isStatusError(status) {
@@ -1642,7 +1742,7 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
                     setTimeout(() => this._sendChunk(file, chunksData));
                 })
                 .fail(error => {
-                    if(this._shouldHandleError(error)) {
+                    if(this._shouldHandleError(file, error)) {
                         this._handleFileError(file, error);
                     }
                 });
@@ -1650,9 +1750,6 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     }
 
     _sendChunkCore(file, chunksData, chunk) {
-    }
-
-    _shouldHandleError(error) {
     }
 
     _tryRaiseStartLoad(file) {
@@ -1691,6 +1788,7 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
             headers: this.fileUploader.option('uploadHeaders'),
             beforeSend: xhr => this._beforeSend(xhr, file),
             upload: {
+                'onprogress': e => this._handleProgress(file, e),
                 'onloadstart': () => this._tryRaiseStartLoad(file),
                 'onabort': () => file.onAbort.fire()
             },
@@ -1705,10 +1803,6 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
                 size: chunksData.fileSize
             })
         });
-    }
-
-    _shouldHandleError(e) {
-        return this._isStatusError(e.status);
     }
 
     _createFormData(options) {
@@ -1743,7 +1837,7 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
         }
     }
 
-    _shouldHandleError(e) {
+    _shouldHandleError(file, error) {
         return true;
     }
 }
@@ -1768,15 +1862,7 @@ class WholeFileUploadStrategyBase extends FileUploadStrategyBase {
     _uploadFile(file) {
     }
 
-    _shouldHandleError(file, e) {
-    }
-
-    _handleProgress(file, e) {
-        if(file._isError) {
-            return;
-        }
-
-        file._isProgressStarted = true;
+    _handleProgressCore(file, e) {
         file.onProgress.fire(e);
     }
 
@@ -1802,10 +1888,6 @@ class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
             },
             data: this._createFormData(this.fileUploader.option('name'), file.value)
         });
-    }
-
-    _shouldHandleError(file, e) {
-        return (this._isStatusError(e.status) || !file._isProgressStarted) && !file.isAborted;
     }
 
     _createFormData(fieldName, fieldValue) {

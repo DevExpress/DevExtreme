@@ -77,7 +77,7 @@ export type ValueChangedEvent = EventInfo<dxFilterBuilder> & {
 /** @public */
 export type CustomOperationEditorTemplate = {
     readonly value?: string | number | Date;
-    readonly field: dxFilterBuilderField;
+    readonly field: Field;
     readonly setValue: Function;
 };
 
@@ -85,7 +85,7 @@ export type CustomOperationEditorTemplate = {
 export type FieldEditorTemplate = {
     readonly value?: string | number | Date;
     readonly filterOperation?: string;
-    readonly field: dxFilterBuilderField;
+    readonly field: Field;
     readonly setValue: Function;
 };
 
@@ -103,15 +103,17 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid
      * @default []
+     * @type Array<dxFilterBuilderCustomOperation>
      * @public
      */
-    customOperations?: Array<dxFilterBuilderCustomOperation>;
+    customOperations?: Array<CustomOperation>;
     /**
      * @docid
      * @default []
+     * @type Array<dxFilterBuilderField>
      * @public
      */
-    fields?: Array<dxFilterBuilderField>;
+    fields?: Array<Field>;
     /**
      * @docid
      * @public
@@ -308,17 +310,22 @@ export default class dxFilterBuilder extends Widget {
 }
 
 /**
- * @docid
- * @type object
+ * @public
+ */
+export type CustomOperation = dxFilterBuilderCustomOperation;
+
+/**
  * @namespace DevExpress.ui
+ * @deprecated Use the CustomOperation type instead
  */
 export interface dxFilterBuilderCustomOperation {
     /**
      * @docid
+     * @type_function_param2 field:dxFilterBuilderField
      * @type_function_return Filter expression
      * @public
      */
-    calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | Array<any> | Function);
+    calculateFilterExpression?: ((filterValue: any, field: Field) => string | Array<any> | Function);
     /**
      * @docid
      * @default undefined
@@ -327,9 +334,12 @@ export interface dxFilterBuilderCustomOperation {
     caption?: string;
     /**
      * @docid
+     * @type_function_param1_field1 value:string|number|Date:optional
+     * @type_function_param1_field2 valueText:string:optional
+     * @type_function_param1_field3 field:dxFilterBuilderField:optional
      * @public
      */
-    customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: dxFilterBuilderField }) => string);
+    customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: Field }) => string);
     /**
      * @docid
      * @type Array<Enums.FilterBuilderFieldDataType>
@@ -368,9 +378,13 @@ export interface dxFilterBuilderCustomOperation {
 }
 
 /**
- * @@docid
- * @type object
+ * @public
+ */
+export type Field = dxFilterBuilderField;
+
+/**
  * @namespace DevExpress.ui
+ * @deprecated Use the Field type instead
  */
 export interface dxFilterBuilderField {
     /**

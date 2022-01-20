@@ -9,7 +9,8 @@ QUnit.testStart(function() {
 
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
+import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 
 import $ from 'jquery';
 import ArrayStore from 'data/array_store';
@@ -23,7 +24,9 @@ import { setupDataGridModules, MockDataController, MockColumnsController } from 
 import viewPortUtils from 'core/utils/view_port';
 import fx from 'animation/fx';
 import messageLocalization from 'localization/message';
+import dateSerialization from 'core/utils/date_serialization';
 import { ListSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
+import browser from 'core/utils/browser';
 
 QUnit.module('Header Filter dataController', {
     beforeEach: function() {
@@ -2319,8 +2322,8 @@ QUnit.module('Header Filter with real columnsController', {
     },
     afterEach: function() {
         this.clock.restore();
-        this.headerFilterController.hideHeaderFilterMenu();
-        this.dispose();
+        this.headerFilterController && this.headerFilterController.hideHeaderFilterMenu();
+        this.dispose && this.dispose();
     }
 }, () => {
 
@@ -3988,65 +3991,78 @@ QUnit.module('Header Filter with real columnsController', {
     });
 
     [null, 'yyyy-MM-ddTHH:mm:ssZ', 'yyyy-MM-ddTHH:mm:ss\'Z\'', 'yyyy-MM-dd HH:mm:ss'].forEach(dateSerializationFormat => {
-        QUnit.test('Load data for column with dataType is \'datetime\' if remoteOperations is enabled and dates are formatted in UTC (T1029128)', function(assert) {
-        // arrange
-            let items;
-            const getTreeText = function(items) {
-                const result = [];
-                let item = items[0];
-
-                while(item) {
-                    result.push(item.text);
-                    item = item.items && item.items[0];
+        [false, true].forEach(remoteOperations => {
+            QUnit.test(`Load data for column with dataType is 'datetime' if remoteOperations is enabled and dates are formatted in UTC (dateSerializationFormat=${dateSerializationFormat}, remoteOperations=${remoteOperations}) (T1029128, T1051815)`, function(assert) {
+                if(dateSerializationFormat === 'yyyy-MM-dd HH:mm:ss' && !remoteOperations && browser.msie && parseInt(browser.version) <= 11) {
+                    assert.ok(true, 'Date.parse in IE11 does not support yyyy-MM-dd HH:mm:ss format');
+                    return;
                 }
+                // arrange
+                let items;
+                const getTreeText = function(items) {
+                    const result = [];
+                    let item = items[0];
 
-                return result;
-            };
+                    while(item) {
+                        result.push(item.text);
+                        item = item.items && item.items[0];
+                    }
 
-            const loadArgs = [];
-            const date = new Date(2021, 3, 26, 16, 30);
+                    return result;
+                };
 
-            this.options.columns = [{ dataField: 'birthday', dataType: 'datetime' }];
-            this.options.remoteOperations = true;
-            this.options.dateSerializationFormat = dateSerializationFormat;
+                const loadArgs = [];
+                const date = new Date(2021, 3, 26, 16, 30);
 
-            const isUTCFormat = dateSerializationFormat && dateSerializationFormat.indexOf('Z') >= 0;
-            this.options.dataSource = {
-                load: function(options) {
-                    loadArgs.push(options);
-                    return $.Deferred().resolve([{
-                        key: 2021, items: [{
-                            key: date.getMonth() + 1, items: [{
-                                key: isUTCFormat ? date.getUTCDate() : date.getDate(), items: [{
-                                    key: isUTCFormat ? date.getUTCHours() : date.getHours(), items: [{
-                                        key: isUTCFormat ? date.getUTCMinutes() : date.getMinutes(), items: null
+                this.options.columns = [{ dataField: 'birthday', dataType: 'datetime' }];
+                this.options.remoteOperations = remoteOperations;
+                this.options.dateSerializationFormat = dateSerializationFormat;
+
+                const isUTCFormat = dateSerializationFormat && dateSerializationFormat.indexOf('Z') >= 0;
+                this.options.dataSource = {
+                    load: function(options) {
+                        loadArgs.push(options);
+                        if(!remoteOperations) {
+                            const birthday = dateSerialization.serializeDate(date, dateSerializationFormat);
+                            return $.Deferred().resolve([{ birthday }]);
+                        }
+                        return $.Deferred().resolve([{
+                            key: 2021, items: [{
+                                key: date.getMonth() + 1, items: [{
+                                    key: isUTCFormat ? date.getUTCDate() : date.getDate(), items: [{
+                                        key: isUTCFormat ? date.getUTCHours() : date.getHours(), items: [{
+                                            key: isUTCFormat ? date.getUTCMinutes() : date.getMinutes(), items: null
+                                        }]
                                     }]
                                 }]
                             }]
-                        }]
-                    }], { totalCount: 1 });
-                }
-            };
-            this.setupDataGrid();
-            const column = this.columnsController.getVisibleColumns()[0];
-            const dataSourceOptions = this.headerFilterController.getDataSource(column);
+                        }], { totalCount: 1 });
+                    }
+                };
+                this.setupDataGrid();
+                const column = this.columnsController.getVisibleColumns()[0];
+                const dataSourceOptions = this.headerFilterController.getDataSource(column);
 
-            // act
-            dataSourceOptions.load({}).done(function(data) {
-                items = data;
+                // act
+                const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteOperations);
+
+                dataSourceOptions.load({
+                    group
+                }).done(function(data) {
+                    items = data;
+                });
+                this.clock.tick();
+
+                // assert
+                assert.deepEqual(getTreeText(items), [
+                    '2021',
+                    'April',
+                    date.getDate().toString(),
+                    date.getHours().toString(),
+                    date.getMinutes().toString()
+                ], 'loaded data');
             });
-            this.clock.tick();
-
-            // assert
-            assert.deepEqual(getTreeText(items), [
-                '2021',
-                'April',
-                date.getDate().toString(),
-                date.getHours().toString(),
-                date.getMinutes().toString()
-            ], 'loaded data');
         });
-
     });
 
     QUnit.test('Load null data for column with dataType is \'datetime\' if remoteOperations is enabled and dates are formatted in UTC (T1029128)', function(assert) {

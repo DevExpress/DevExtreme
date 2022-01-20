@@ -1,12 +1,9 @@
 const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
 const commons = require('./chartParts/commons.js');
 const rendererModule = require('viz/core/renderers/renderer');
 const legendModule = require('viz/components/legend');
-const translator2DModule = require('viz/translators/translator2d');
 const crosshairModule = require('viz/chart_components/crosshair');
 const trackerModule = require('viz/chart_components/tracker');
-const Translator = vizMocks.stubClass(translator2DModule.Translator2D);
 const _test_prepareSegmentRectPoints = require('viz/utils')._test_prepareSegmentRectPoints;
 const chartMocks = require('../../helpers/chartMocks.js');
 const MockSeries = chartMocks.MockSeries;
@@ -32,19 +29,6 @@ function checkSegmentRectCommon(assert, chart, i, x1, y1, w, h, fill, dashStyle,
     assert.equal(chart._renderer.path.getCall(i).returnValue.attr.firstCall.args[0]['stroke-linecap'], 'square');
 }
 
-QUnit.module('dxChart Translators', $.extend({}, commons.environment, {
-    beforeEach: function() {
-        commons.environment.beforeEach.call(this);
-
-        this.createTranslator2D = sinon.stub(translator2DModule, 'Translator2D', function() {
-            return new Translator();
-        });
-    },
-    afterEach: function() {
-        commons.environment.afterEach.call(this);
-        this.createTranslator2D.restore();
-    }
-}));
 
 // ////////////////////////////////
 //      Axes
@@ -149,6 +133,9 @@ QUnit.test('create axes with crosshair', function(assert) {
     const chart = this.createChart({
         crosshair: {
             enabled: true,
+            label: {
+                visible: true
+            },
             horizontalLine: {
                 visible: true
             },
@@ -178,8 +165,13 @@ QUnit.test('create axes with crosshair. horizontal line is invisible', function(
     const chart = this.createChart({
         crosshair: {
             enabled: true,
+            label: {
+                visible: true
+            },
             horizontalLine: {
-                visible: false
+                label: {
+                    visible: false
+                }
             },
             verticalLine: {
                 visible: true
@@ -212,7 +204,10 @@ QUnit.test('create axes with crosshair. horizontal line is invisible. rotated', 
                 visible: false
             },
             verticalLine: {
-                visible: true
+                visible: true,
+                label: {
+                    visible: true
+                }
             }
         },
         series: {
@@ -241,7 +236,10 @@ QUnit.test('create axes with crosshair. vertical line is invisible', function(as
                 visible: false
             },
             horizontalLine: {
-                visible: true
+                visible: true,
+                label: {
+                    visible: true
+                }
             }
         },
         series: {
@@ -271,7 +269,10 @@ QUnit.test('create axes with crosshair. vertical line is invisible. rotated', fu
                 visible: false
             },
             horizontalLine: {
-                visible: true
+                visible: true,
+                label: {
+                    visible: true
+                }
             }
         },
         series: {
@@ -301,6 +302,9 @@ QUnit.test('T543486. Named value axis in non-existent pane should have crosshair
         }],
         crosshair: {
             enabled: true,
+            label: {
+                visible: true
+            },
             horizontalLine: {
                 visible: true
             },
@@ -334,6 +338,9 @@ QUnit.test('T543486. Named value axis in non-existent pane should have crosshair
         }],
         crosshair: {
             enabled: true,
+            label: {
+                visible: true
+            },
             horizontalLine: {
                 visible: true
             },
@@ -350,6 +357,71 @@ QUnit.test('T543486. Named value axis in non-existent pane should have crosshair
     assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 4);
 });
 
+QUnit.test('crosshairMargin. line invisible', function(assert) {
+    // Arrange
+    const stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    // act
+    const chart = this.createChart({
+        crosshair: {
+            enabled: true,
+            verticalLine: {
+                visible: false,
+                label: {
+                    visible: true
+                }
+            },
+            horizontalLine: {
+                visible: false,
+                label: {
+                    visible: true
+                }
+            }
+        },
+        series: {
+            type: 'line'
+        }
+    });
+
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 0);
+    assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 0);
+});
+
+QUnit.test('crosshairMargin. crosshair disabled', function(assert) {
+    // Arrange
+    const stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    // act
+    const chart = this.createChart({
+        crosshair: {
+            enabled: false,
+            verticalLine: {
+                visible: true,
+                label: {
+                    visible: true
+                }
+            },
+            horizontalLine: {
+                visible: true,
+                label: {
+                    visible: true
+                }
+            }
+        },
+        series: {
+            type: 'line'
+        }
+    });
+
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 0);
+    assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 0);
+});
 
 QUnit.test('Create Horizontal Continuous Axis, Vertical Continuous axis', function(assert) {
     // Arrange

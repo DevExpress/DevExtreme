@@ -38,6 +38,7 @@ import EdgesOption from './diagram.edges_option';
 
 const DIAGRAM_CLASS = 'dx-diagram';
 const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
+const DIAGRAM_OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + '-content-wrapper';
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + '-content';
@@ -331,7 +332,8 @@ class Diagram extends Widget {
                     {
                         shapeIconSpacing: DIAGRAM_TOOLBOX_SHAPE_SPACING,
                         shapeIconCountInRow: this.option('toolbox.shapeIconsPerRow'),
-                        shapeIconAttributes: { 'data-toggle': e.dataToggle }
+                        shapeIconAttributes: { 'data-toggle': e.dataToggle },
+                        toolboxClass: DIAGRAM_OVERLAY_CONTENT_CLASS
                     }
                 );
             },
@@ -1568,7 +1570,11 @@ class Diagram extends Widget {
     }
     updateToolbox() {
         this._diagramInstance && this._diagramInstance.refreshToolbox();
-        this._toolbox && this._toolbox.updateMaxHeight();
+        if(this._toolbox) {
+            this._toolbox.updateTooltips();
+            this._toolbox.updateFilter();
+            this._toolbox.updateMaxHeight();
+        }
     }
 
     _getDefaultOptions() {

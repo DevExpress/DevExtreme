@@ -13,12 +13,12 @@ import { hasWindow } from '../core/utils/window';
 import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
+import browser from '../core/utils/browser';
 import messageLocalization from '../localization/message';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/utils/index';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
-import getScrollRtlBehavior from '../core/utils/scroll_rtl_behavior';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -246,15 +246,20 @@ const TagBox = SelectBox.inherit({
             : this._getBorderPosition('end');
     },
 
+    _getScrollRtlBehavior: function() {
+        return (browser.msie && browser.version < 12)
+            ? { decreasing: false, positive: true }
+            : { decreasing: true, positive: false };
+    },
+
     _getBorderPosition: function(direction) {
         const rtlEnabled = this.option('rtlEnabled');
         const isScrollLeft = (direction === 'end') ^ rtlEnabled;
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = rtlEnabled && (scrollBehavior.decreasing ^ scrollBehavior.positive);
+        const scrollBehavior = this._getScrollRtlBehavior();
         const scrollSign = !rtlEnabled || scrollBehavior.positive ? 1 : -1;
 
-        return (isScrollLeft ^ !isScrollInverted)
+        return (isScrollLeft ^ !rtlEnabled)
             ? 0
             : scrollSign * (this._$tagsContainer.get(0).scrollWidth - this._$tagsContainer.outerWidth());
     },
@@ -270,7 +275,7 @@ const TagBox = SelectBox.inherit({
         }
 
         if(isScrollLeft ^ (scrollOffset < 0)) {
-            const scrollBehavior = getScrollRtlBehavior();
+            const scrollBehavior = this._getScrollRtlBehavior();
             const scrollCorrection = rtlEnabled && !scrollBehavior.decreasing && scrollBehavior.positive ? -1 : 1;
             scrollLeft += scrollOffset * scrollCorrection;
         }

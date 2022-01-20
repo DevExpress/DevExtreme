@@ -40,6 +40,23 @@ rendererModule.Renderer = function(parameters) {
     return new vizMocks.Renderer(parameters);
 };
 
+const defaultCrosshairOptions = {
+    horizontalLine: {},
+    verticalLine: {}
+};
+
+const defaultCommonPaneSettings = {
+    backgroundColor: 'none',
+    border: {
+        visible: false,
+        top: true,
+        bottom: true,
+        left: true,
+        right: true,
+        dashStyle: 'solid'
+    }
+};
+
 const ExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
 exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
     return new ExportMenu();
@@ -90,17 +107,8 @@ const environment = {
         that.themeManager.getOptions.withArgs('series').returnsArg(1);
         that.themeManager.getOptions.withArgs('seriesTemplate').returns(false);
         that.themeManager.getOptions.withArgs('export').returns({ enabled: true });
-        that.themeManager.getOptions.withArgs('commonPaneSettings').returns({
-            backgroundColor: 'none',
-            border: {
-                visible: false,
-                top: true,
-                bottom: true,
-                left: true,
-                right: true,
-                dashStyle: 'solid'
-            }
-        });
+        that.themeManager.getOptions.withArgs('commonPaneSettings').returns(defaultCommonPaneSettings);
+        that.themeManager.getOptions.withArgs('crosshair').returns(defaultCrosshairOptions);
 
         that.themeManager.getOptions.withArgs('dataPrepareSettings').returns({
             checkTypeForAllData: true,
@@ -127,17 +135,9 @@ const environment = {
             }, options);
             $.each(options || {}, function(k, v) {
                 if(k === 'commonPaneSettings') {
-                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {
-                        backgroundColor: 'none',
-                        border: {
-                            visible: false,
-                            top: true,
-                            bottom: true,
-                            left: true,
-                            right: true,
-                            dashStyle: 'solid'
-                        }
-                    }, v));
+                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCommonPaneSettings, v));
+                } else if(k === 'crosshair') {
+                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCrosshairOptions, v));
                 } else if(k !== 'valueAxis' && k !== 'argumentAxis' && k !== 'series') {
                     that.themeManager.getOptions.withArgs(k).returns(v);
                 }

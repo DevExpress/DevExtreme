@@ -99,6 +99,14 @@ QUnit.module('API methods', {
         assert.deepEqual(this.columnsView.getColumnWidths(), this.widths);
     });
 
+    QUnit.test('Get column widths with error row (editForm) (T1058684)', function(assert) {
+        // arrange
+        this.columnsView.element().find('table').prepend($('<tr class="dx-error-row"><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr>'));
+
+        // act, assert
+        assert.deepEqual(this.columnsView.getColumnWidths(), this.widths);
+    });
+
     QUnit.test('Set column widths', function(assert) {
         // arrange
         const that = this;

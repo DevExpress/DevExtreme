@@ -709,38 +709,55 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
 
-        itemViewPanel.trigger('dragenter');
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragenter');
         assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
         assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
         assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
 
-        itemViewPanel.trigger('dragleave');
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragleave');
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+    });
+
+    test('upload drop zone must hide on dragleave at the left edge (splitter issue)', function(assert) {
+        const itemViewPanel = this.wrapper.getItemsViewPanel();
+        const dropZonePlaceholder = this.wrapper.getUploaderDropZonePlaceholder();
+
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
+
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragenter');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        const splitterHalfWidth = parseFloat(this.wrapper.getSplitter().css('margin-left'));
+
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragleave', { top: 1, left: splitterHalfWidth - 1 });
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
     });
 
     test('upload drop zone does not hide on drag interaction', function(assert) {
         const itemViewPanel = this.wrapper.getItemsViewPanel();
-        const detailsItemRow = $(this.wrapper.getRowsInDetailsView()[0]);
+        const detailsItemNameCell = $(this.wrapper.getDetailsCell('Name', 1));
         const dropZonePlaceholder = this.wrapper.getUploaderDropZonePlaceholder();
 
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
 
-        itemViewPanel.trigger('dragenter');
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragenter');
         assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
         assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
         assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
 
-        detailsItemRow.trigger('dragenter');
+        this.wrapper.triggerDragEvent(detailsItemNameCell, 'dragenter');
         assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
         assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
         assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
 
-        detailsItemRow.trigger('dragleave');
+        this.wrapper.triggerDragEvent(detailsItemNameCell, 'dragleave');
         assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
         assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
         assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
 
-        itemViewPanel.trigger('dragleave');
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragleave');
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
     });
 
@@ -793,10 +810,10 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
 
-        itemViewPanel.trigger('dragenter');
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragenter');
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
 
-        itemViewPanel.trigger('dragleave');
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragleave');
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
 
         fileManager.option('permissions.upload', true);
@@ -807,12 +824,12 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
 
-        itemViewPanel.trigger('dragenter');
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragenter');
         assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
         assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
         assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
 
-        itemViewPanel.trigger('dragleave');
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragleave');
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
     });
 
@@ -1805,5 +1822,13 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $folderNode = this.wrapper.getFolderNode(4);
         assert.strictEqual($folderNode.find('span').text(), 'Test 4', 'folder created');
         assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
+    });
+
+    test('the entire widget must not be repainted when the permissions option changed (T1051605)', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        const initMarkupSpy = sinon.stub(fileManager, '_initMarkup');
+        assert.ok(initMarkupSpy.notCalled, '_initMarkup not called yet');
+        fileManager.option('permissions', { copy: true });
+        assert.ok(initMarkupSpy.notCalled, '_initMarkup not called yet');
     });
 });
