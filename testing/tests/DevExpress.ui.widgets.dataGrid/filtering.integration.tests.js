@@ -1115,6 +1115,32 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(visibleRows[0].data, { text: 'text', num: 1 }, 'visible row\'s data');
     });
 
+    QUnit.test('Should not display all rows when no search results and lookup is used', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ text: 'text', num: 1 }, { text: 'text', num: 2 }],
+            searchPanel: {
+                visible: true
+            },
+            columns: [{
+                dataField: 'num',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, name: 'one' }, { id: 2, name: 'two' }],
+                    valueExpr: 'id',
+                    displayExpr: 'name'
+                }
+            }]
+        });
+
+        dataGrid.option('searchPanel.text', 'three');
+        this.clock.tick();
+
+        const visibleRows = dataGrid.getVisibleRows();
+
+        assert.equal(visibleRows.length, 0, 'no visible rows');
+    });
+
     QUnit.test('Correct number parsing in search', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
