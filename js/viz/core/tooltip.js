@@ -1,6 +1,7 @@
 import { getWidth, getHeight } from '../../core/utils/size';
 import domAdapter from '../../core/dom_adapter';
 import { getWindow } from '../../core/utils/window';
+import { replaceWith } from '../../core/utils/dom';
 import { camelize } from '../../core/utils/inflector';
 import $ from '../../core/renderer';
 import { Renderer } from './renderers/renderer';
@@ -36,19 +37,27 @@ function getSpecialFormatOptions(options, specialFormat) {
     return result;
 }
 
+function createTextHtml() {
+    return $('<div>').css({ position: 'relative', display: 'inline-block', padding: 0, margin: 0, border: '0px solid transparent' });
+}
+
+function removeElements(elements) {
+    elements.forEach(el => el.remove());
+}
+
 export let Tooltip = function(params) {
     const that = this;
-    let renderer;
 
     that._eventTrigger = params.eventTrigger;
     that._widgetRoot = params.widgetRoot;
     that._widget = params.widget;
+    that._textHtmlContainers = [];// T1015148
 
     that._wrapper = $('<div>')
         .css({ position: 'absolute', overflow: 'hidden', 'pointerEvents': 'none' }) // T265557, T447623
         .addClass(params.cssClass);
 
-    that._renderer = renderer = new Renderer({ pathModified: params.pathModified, container: that._wrapper[0] });
+    const renderer = that._renderer = new Renderer({ pathModified: params.pathModified, container: that._wrapper[0] });
     const root = renderer.root;
     root.attr({ 'pointer-events': 'none' });
 
@@ -57,7 +66,7 @@ export let Tooltip = function(params) {
 
     // html text
     that._textGroupHtml = $('<div>').css({ position: 'absolute', padding: 0, margin: 0, border: '0px solid transparent' }).appendTo(that._wrapper);
-    that._textHtml = $('<div>').css({ position: 'relative', display: 'inline-block', padding: 0, margin: 0, border: '0px solid transparent' }).appendTo(that._textGroupHtml);
+    that._textHtml = createTextHtml().appendTo(that._textGroupHtml);
 };
 
 Tooltip.prototype = {
@@ -96,7 +105,6 @@ Tooltip.prototype = {
         that._customizeTooltip = options.customizeTooltip;
 
         const textGroupHtml = that._textGroupHtml;
-        const textHtml = that._textHtml;
 
         if(this.plaque) {
             this.plaque.clear();
@@ -117,9 +125,19 @@ Tooltip.prototype = {
                 if(state.html || useTemplate) {
                     textGroupHtml.css({ color: state.textColor, width: DEFAULT_HTML_GROUP_WIDTH, 'pointerEvents': pointerEvents });
                     if(useTemplate) {
-                        template.render({ model: state.formatObject, container: textHtml, onRendered: () => {
-                            state.html = textHtml.html();
-                            if(getWidth(textHtml) === 0 && getHeight(textHtml) === 0) {
+                        const htmlContainers = that._textHtmlContainers;
+                        const containerToTemplateRender = createTextHtml();
+                        htmlContainers.push(containerToTemplateRender);
+
+                        template.render({ model: state.formatObject, container: containerToTemplateRender, onRendered: () => {
+                            removeElements(htmlContainers.splice(0, htmlContainers.length - 1));
+                            const containerWithContent = htmlContainers[0];
+
+                            replaceWith(that._textHtml, containerWithContent);
+                            that._textHtml = containerWithContent;
+
+                            state.html = containerWithContent.html();
+                            if(getWidth(containerWithContent) === 0 && getHeight(containerWithContent) === 0) {
                                 this.plaque.clear();
                                 templateCallback(false);
                                 return;
@@ -130,11 +148,12 @@ Tooltip.prototype = {
                             that._moveWrapper();
                             that.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor, 'pointer-events': pointerEvents });
                             templateCallback(true);
+                            that._textHtmlContainers = [];
                         } });
                         return;
                     } else {
                         that._text.attr({ text: '' });
-                        textHtml.html(state.html);
+                        that._textHtml.html(state.html);
                     }
                 } else {
                     that._text
@@ -163,15 +182,8 @@ Tooltip.prototype = {
         }, that, that._renderer.root, drawTooltip, true, (tooltip, g) => {
             const state = tooltip._state;
             if(state.html) {
-                let bBox;
-                const getComputedStyle = window.getComputedStyle;
-                if(getComputedStyle) { // IE9 compatibility (T298249)
-                    bBox = getComputedStyle(textHtml.get(0));
-                    bBox = { x: 0, y: 0, width: mathCeil(parseFloat(bBox.width)), height: mathCeil(parseFloat(bBox.height)) };
-                } else {
-                    bBox = textHtml.get(0).getBoundingClientRect();
-                    bBox = { x: 0, y: 0, width: mathCeil(bBox.width ? bBox.width : (bBox.right - bBox.left)), height: mathCeil(bBox.height ? bBox.height : (bBox.bottom - bBox.top)) };
-                }
+                let bBox = window.getComputedStyle(that._textHtml.get(0));
+                bBox = { x: 0, y: 0, width: mathCeil(parseFloat(bBox.width)), height: mathCeil(parseFloat(bBox.height)) };
                 return bBox;
             }
             return g.getBBox();
