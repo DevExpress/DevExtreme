@@ -15,11 +15,11 @@
 
   &.dx-light-mode {
     .dx-page-sizes {
-      min-width: 62px;
+      min-width: $material-pager-light-pagesizes-min-width;
     }
 
     .dx-page-index {
-      min-width: 32px;
+      min-width: $material-pager-light-pageindex-min-width;
     }
 
     .dx-pages {
