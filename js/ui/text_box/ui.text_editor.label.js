@@ -1,4 +1,5 @@
 import $ from '../../core/renderer';
+import Guid from '../../core/guid';
 
 const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
@@ -25,6 +26,8 @@ class TextEditorLabel {
             beforeWidth
         };
 
+        this._id = `${TEXTEDITOR_LABEL_CLASS}-${new Guid()}`;
+
         this._render();
         this._toggleMarkupVisibility();
     }
@@ -45,6 +48,7 @@ class TextEditorLabel {
 
         this._$root = $('<div>')
             .addClass(TEXTEDITOR_LABEL_CLASS)
+            .attr('id', this._id)
             .append(this._$before)
             .append(this._$label)
             .append(this._$after);
@@ -114,6 +118,10 @@ class TextEditorLabel {
 
     isVisible() {
         return this._isVisible();
+    }
+
+    getId() {
+        if(this._isVisible()) return this._id;
     }
 
     updateMode(mode) {
