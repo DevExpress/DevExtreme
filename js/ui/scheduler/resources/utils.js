@@ -266,14 +266,21 @@ export const getResourcesFromItem = (resources = [], dataAccessors, itemData, wr
                 if(!result) {
                     result = {};
                 }
+
                 if(resourceData.length === 1) {
                     resourceData = resourceData[0];
                 }
-                if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(resources, field))) {
-                    getDataAccessors(dataAccessors, field, 'setter')(tempObject, wrapToArray(resourceData));
-                } else {
-                    getDataAccessors(dataAccessors, field, 'setter')(tempObject, resourceData);
-                }
+
+                // const method = getDataAccessors(dataAccessors, field, 'setter');
+                const isWrap = !wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(resources, field));
+
+                tempObject[field] = isWrap ? wrapToArray(resourceData) : resourceData;
+
+                // if(isWrap) {
+                //     method(tempObject, wrapToArray(resourceData));
+                // } else {
+                //     method(tempObject, resourceData);
+                // }
 
                 extend(result, tempObject);
 
