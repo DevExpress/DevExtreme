@@ -1150,6 +1150,214 @@ QUnit.module('drag integration', () => {
             });
         });
     });
+
+    QUnit.module('proportional resize: proportionated dimension should be fitted to the area', {
+        beforeEach: function() {
+            this.$resizable = $('#resizable');
+            this.cachedStyles = ['left', 'top', 'width', 'height'].reduce((cache, prop) => {
+                cache[prop] = this.$resizable.css(prop);
+                return cache;
+            }, {});
+            this.$area = $('#areaDiv');
+            this.areaRect = this.$area.get(0).getBoundingClientRect();
+            this.getRect = () => this.$resizable.get(0).getBoundingClientRect();
+        },
+        afterEach: function() {
+            this.$resizable.css(this.cachedStyles);
+        }
+    }, () => {
+        QUnit.test('bottom-right handler - to the right', function(assert) {
+            const { bottom: areaBottom, right: areaRight } = this.areaRect;
+            const width = 50;
+            const height = 75;
+            const left = 30;
+            const top = 20;
+
+            this.$resizable
+                .css({ width, height, left, top })
+                .dxResizable({
+                    _keepAspectRatio: true,
+                    area: this.$area
+                });
+            const initialRect = this.getRect();
+
+            const $handle = getHandle('bottom-right');
+            const pointer = pointerMock($handle).start();
+
+            pointer.dragStart().drag(areaRight - initialRect.right, 0);
+
+            const rect = this.getRect();
+            assert.strictEqual(rect.height, height + areaBottom - initialRect.bottom, 'height is fitted to the area');
+        });
+
+        QUnit.test('bottom-right handler - down', function(assert) {
+            const { bottom: areaBottom, right: areaRight } = this.areaRect;
+            const width = 75;
+            const height = 50;
+            const left = 20;
+            const top = 30;
+
+            this.$resizable
+                .css({ width, height, left, top })
+                .dxResizable({
+                    _keepAspectRatio: true,
+                    area: this.$area
+                });
+            const initialRect = this.getRect();
+
+            const $handle = getHandle('bottom-right');
+            const pointer = pointerMock($handle).start();
+
+            pointer.dragStart().drag(0, areaBottom - initialRect.bottom);
+
+            const rect = this.getRect();
+            assert.strictEqual(rect.width, width + areaRight - initialRect.right, 'width is fitted to the area');
+        });
+
+        QUnit.test('top-right handler - up', function(assert) {
+            const { top: areaTop, right: areaRight } = this.areaRect;
+            const width = 75;
+            const height = 50;
+            const left = 20;
+            const top = 30;
+
+            this.$resizable
+                .css({ width, height, left, top })
+                .dxResizable({
+                    _keepAspectRatio: true,
+                    area: this.$area
+                });
+            const initialRect = this.getRect();
+
+            const $handle = getHandle('top-right');
+            const pointer = pointerMock($handle).start();
+
+            pointer.dragStart().drag(0, -(initialRect.top - areaTop));
+
+            const rect = this.getRect();
+            assert.strictEqual(rect.width, width + areaRight - initialRect.right, 'width is fitted to the area');
+        });
+
+        QUnit.test('top-right handler - to the right', function(assert) {
+            const { top: areaTop, right: areaRight } = this.areaRect;
+            const width = 50;
+            const height = 75;
+            const left = 30;
+            const top = 15;
+
+            this.$resizable
+                .css({ width, height, left, top })
+                .dxResizable({
+                    _keepAspectRatio: true,
+                    area: this.$area
+                });
+            const initialRect = this.getRect();
+
+            const $handle = getHandle('top-right');
+            const pointer = pointerMock($handle).start();
+
+            pointer.dragStart().drag(areaRight - initialRect.right, 0);
+
+            const rect = this.getRect();
+            assert.strictEqual(rect.height, height + initialRect.top - areaTop, 'height is fitted to the area');
+        });
+
+        QUnit.test('top-left handler - up', function(assert) {
+            const { top: areaTop, left: areaLeft } = this.areaRect;
+            const width = 75;
+            const height = 50;
+            const left = 5;
+            const top = 15;
+
+            this.$resizable
+                .css({ width, height, left, top })
+                .dxResizable({
+                    _keepAspectRatio: true,
+                    area: this.$area
+                });
+            const initialRect = this.getRect();
+
+            const $handle = getHandle('top-left');
+            const pointer = pointerMock($handle).start();
+
+            pointer.dragStart().drag(0, -(initialRect.top - areaTop));
+
+            const rect = this.getRect();
+            assert.strictEqual(rect.width, width + initialRect.left - areaLeft, 'width is fitted to the area');
+        });
+
+        QUnit.test('top-left handler - to the left', function(assert) {
+            const { top: areaTop, left: areaLeft } = this.areaRect;
+            const width = 50;
+            const height = 75;
+            const left = 30;
+            const top = 15;
+
+            this.$resizable
+                .css({ width, height, left, top })
+                .dxResizable({
+                    _keepAspectRatio: true,
+                    area: this.$area
+                });
+            const initialRect = this.getRect();
+
+            const $handle = getHandle('top-left');
+            const pointer = pointerMock($handle).start();
+
+            pointer.dragStart().drag(-(initialRect.left - areaLeft), 0);
+
+            const rect = this.getRect();
+            assert.strictEqual(rect.height, height + initialRect.top - areaTop, 'height is fitted to the area');
+        });
+
+        QUnit.test('bottom-left handler - to the left', function(assert) {
+            const { bottom: areaBottom, left: areaLeft } = this.areaRect;
+            const width = 50;
+            const height = 75;
+            const left = 30;
+            const top = 15;
+
+            this.$resizable
+                .css({ width, height, left, top })
+                .dxResizable({
+                    _keepAspectRatio: true,
+                    area: this.$area
+                });
+            const initialRect = this.getRect();
+
+            const $handle = getHandle('bottom-left');
+            const pointer = pointerMock($handle).start();
+
+            pointer.dragStart().drag(-(initialRect.left - areaLeft), 0);
+
+            const rect = this.getRect();
+            assert.strictEqual(rect.height, height + areaBottom - initialRect.bottom, 'height is fitted to the area');
+        });
+
+        QUnit.test('bottom-left handler - down', function(assert) {
+            const { bottom: areaBottom, left: areaLeft } = this.areaRect;
+            const width = 75;
+            const height = 50;
+            const left = 5;
+            const top = 15;
+
+            this.$resizable
+                .css({ width, height, left, top })
+                .dxResizable({
+                    _keepAspectRatio: true,
+                    area: this.$area
+                });
+            const initialRect = this.getRect();
+
+            const $handle = getHandle('bottom-left');
+            const pointer = pointerMock($handle).start();
+
+            pointer.dragStart().drag(0, areaBottom - initialRect.bottom);
+
+            const rect = this.getRect();
+            assert.strictEqual(rect.width, width + initialRect.left - areaLeft, 'width is fitted to the area');
+        });
+    });
 });
 
 QUnit.module('options', () => {
