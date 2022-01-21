@@ -563,7 +563,7 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field2 component:dxTreeList
-     * @type_function_param1_field6 setValue(newValue, newText):any
+     * @type_function_param1_field7 setValue(newValue, newText):any
      * @type_function_param1_field15 editorOptions:object
      * @type_function_param1_field17 row:dxTreeListRowObject
      * @default null
