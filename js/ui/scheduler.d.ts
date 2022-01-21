@@ -780,9 +780,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     useDropDownViewSwitcher?: boolean;
     /**
      * @docid
-     * @type Array<string,object>
      * @default ['day', 'week']
-     * @acceptValues 'day'|'week'|'workWeek'|'month'|'timelineDay'|'timelineWeek'|'timelineWorkWeek'|'timelineMonth'|'agenda'
      * @public
      */
     views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | {

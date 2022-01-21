@@ -742,7 +742,6 @@ export default class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> 
     /**
      * @docid
      * @publicName getValue()
-     * @return Array<number,string,Date>
      * @public
      */
     getValue(): Array<number | string | Date>;
