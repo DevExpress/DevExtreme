@@ -672,7 +672,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           backgroundColor?: string;
           /**
            * @docid
-           * @type_function_param1_field1 value:Date|Number|string
            * @notUsedInTheme
            */
           customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
@@ -719,7 +718,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
         backgroundColor?: string;
         /**
          * @docid
-         * @type_function_param1_field1 value:Date|Number|string
          * @notUsedInTheme
          */
         customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
@@ -770,7 +768,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           backgroundColor?: string;
           /**
            * @docid
-           * @type_function_param1_field1 value:Date|Number|string
            * @notUsedInTheme
            */
           customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
@@ -1427,13 +1424,11 @@ export interface dxChartArgumentAxisConstantLinesLabel extends dxChartCommonAxis
 export interface dxChartArgumentAxisLabel extends dxChartCommonAxisSettingsLabel {
     /**
      * @docid dxChartOptions.argumentAxis.label.customizeHint
-     * @type_function_param1_field1 value:Date|Number|string
      * @public
      */
     customizeHint?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxChartOptions.argumentAxis.label.customizeText
-     * @type_function_param1_field1 value:Date|Number|string
      * @notUsedInTheme
      * @public
      */
@@ -2153,13 +2148,11 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
 export interface dxChartLegend extends BaseChartLegend {
     /**
      * @docid dxChartOptions.legend.customizeHint
-     * @type_function_param1_field2 seriesIndex:Number
      * @public
      */
     customizeHint?: ((seriesInfo: { seriesName?: any; seriesIndex?: number; seriesColor?: string }) => string);
     /**
      * @docid dxChartOptions.legend.customizeText
-     * @type_function_param1_field2 seriesIndex:Number
      * @notUsedInTheme
      * @public
      */
@@ -2484,13 +2477,11 @@ export interface dxChartValueAxisConstantLinesLabel extends dxChartCommonAxisSet
 export interface dxChartValueAxisLabel extends dxChartCommonAxisSettingsLabel {
     /**
      * @docid dxChartOptions.valueAxis.label.customizeHint
-     * @type_function_param1_field1 value:Date|Number|string
      * @public
      */
     customizeHint?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxChartOptions.valueAxis.label.customizeText
-     * @type_function_param1_field1 value:Date|Number|string
      * @notUsedInTheme
      * @public
      */

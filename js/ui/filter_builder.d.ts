@@ -369,7 +369,6 @@ export interface dxFilterBuilderField {
     caption?: string;
     /**
      * @docid
-     * @type_function_param1_field1 value:string|number|date
      * @public
      */
     customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string }) => string);

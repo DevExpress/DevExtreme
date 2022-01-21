@@ -183,10 +183,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
         convertToAxisDataType?: boolean;
         /**
          * @docid
-         * @type_function_param1_field1 arg:Date|Number|string
-         * @type_function_param1_field2 val:Date|Number|string
-         * @type_function_param2_field1 arg:Date|Number|string
-         * @type_function_param2_field2 val:Date|Number|string
          * @default true
          */
         sortingMethod?: boolean | ((a: { arg?: Date | number | string; val?: Date | number | string }, b: { arg?: Date | number | string; val?: Date | number | string }) => number);
@@ -414,7 +410,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       label?: {
         /**
          * @docid
-         * @type_function_param1_field1 value:Date|Number|string
          * @notUsedInTheme
          */
         customizeText?: ((scaleValue: { value?: Date | number | string; valueText?: string }) => string);
@@ -466,7 +461,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
         label?: {
           /**
            * @docid
-           * @type_function_param1_field1 value:Date|Number
            * @notUsedInTheme
            */
           customizeText?: ((markerValue: { value?: Date | number; valueText?: string }) => string);
@@ -682,7 +676,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       color?: string;
       /**
        * @docid
-       * @type_function_param1_field1 value:Date|Number|string
        * @notUsedInTheme
        */
       customizeText?: ((scaleValue: { value?: Date | number | string; valueText?: string }) => string);

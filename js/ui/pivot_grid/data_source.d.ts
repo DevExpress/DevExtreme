@@ -285,7 +285,6 @@ export interface PivotGridDataSourceField {
     caption?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.customizeText
-     * @type_function_param1_field1 value:string|number|date
      * @public
      */
     customizeText?: ((cellInfo: { value?: string | number | Date; valueText?: string }) => string);

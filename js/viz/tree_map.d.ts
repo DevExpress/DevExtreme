@@ -510,7 +510,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
 export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.contentTemplate
-     * @type_function_param1_field1 value:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -519,7 +518,6 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1_field1 value:Number
      * @type_function_return object
      * @public
      */
