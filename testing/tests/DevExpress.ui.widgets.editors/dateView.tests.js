@@ -315,6 +315,7 @@ QUnit.module('dateView', {
 
     QUnit.test('active roller class', function(assert) {
         const datePickerElement = this.wrapper;
+        this.instance.option('value', new Date(2020, 5, 5, 8, 0));
         this.clock.restore();
         const done = assert.async();
         // NOTE: simulate triggering visibility change event in popup
