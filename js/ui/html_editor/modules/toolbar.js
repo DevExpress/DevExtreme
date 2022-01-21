@@ -38,6 +38,7 @@ if(Quill) {
     const SELECTION_CHANGE_EVENT = 'selection-change';
 
     const USER_ACTION = 'user';
+    const SILENT_ACTION = 'silent';
 
     const FORMAT_HOTKEYS = {
         66: 'bold',
@@ -70,17 +71,20 @@ if(Quill) {
 
             this._toolbarWidgets = new WidgetCollector();
             this._formatHandlers = getFormatHandlers(this);
-            // this._formatHandlers = new FormatHelper(this);
             this._tableFormats = getTableFormats(quill);
 
             if(isDefined(options.items)) {
                 this._addCallbacks();
                 this._renderToolbar();
 
-                this.quill.on('editor-change', (eventName) => {
-                    const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
+                this.quill.on('editor-change', (eventName, newValue, oldValue, eventSource) => {
+                    const isSilentMode = eventSource === SILENT_ACTION && isEmptyObject(this.quill.getFormat());
 
-                    this._updateToolbar(isSelectionChanged);
+                    if(!isSilentMode) {
+                        const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
+
+                        this._updateToolbar(isSelectionChanged);
+                    }
                 });
             }
         }
