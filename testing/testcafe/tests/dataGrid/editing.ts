@@ -1673,6 +1673,61 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
   await changeTheme('generic.light');
 });
 
+test('DataGrid inside editing popup should have synchronized columns (T1059401)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0));
+
+  await t
+    .expect('.dx-popup-content .dx-data-grid .dx-data-row')
+    .ok();
+
+  // assert
+  await t
+    .expect(await takeScreenshot('grid-popup-editing-grid.png', '.dx-overlay-content'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme('material.blue.light');
+  return createWidget('dxDataGrid', {
+    dataSource: [{
+      ID: 1,
+    }],
+    keyExpr: 'ID',
+    editing: {
+      allowUpdating: true,
+      mode: 'popup',
+      form: {
+        colCount: 1,
+        items: [{
+          template(): any {
+            return ($('<div>') as any).dxDataGrid({
+              showColumnLines: true,
+              dataSource: [{
+                ID: 1,
+                FirstName: 'John',
+                LastName: 'Heart',
+              }],
+              height: 200,
+              editing: {
+                allowUpdating: true,
+                allowDeleting: true,
+              },
+            });
+          },
+        }],
+      },
+    },
+  });
+}).after(async () => {
+  await disposeWidgets();
+  await changeTheme('generic.light');
+});
+
 test('The "Cannot read property "brokenRules" of undefined" error occurs T978286', async (t) => {
   const dataGrid = new DataGrid('#container');
   const lastName0 = dataGrid.getDataCell(0, 1);
