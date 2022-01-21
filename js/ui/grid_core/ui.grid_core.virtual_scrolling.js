@@ -292,10 +292,13 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         _handleDataLoading: function(options) {
             const loadPageCount = this.loadPageCount();
             const pageSize = this.pageSize();
+            const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
+            const storeLoadOptions = options.storeLoadOptions;
+            const takeIsDefined = isDefined(storeLoadOptions.take);
 
             options.loadPageCount = loadPageCount;
-            if(!options.isCustomLoading && this.option(LEGACY_SCROLLING_MODE) === false && loadPageCount > 1 && pageSize > 0) {
-                options.storeLoadOptions.take = loadPageCount * pageSize;
+            if(!options.isCustomLoading && newMode && takeIsDefined && loadPageCount > 1 && pageSize > 0) {
+                storeLoadOptions.take = loadPageCount * pageSize;
             }
             this.callBase.apply(this, arguments);
         },
