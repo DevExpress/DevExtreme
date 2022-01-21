@@ -46,11 +46,6 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         }
     },
 
-    // _getSynchronizableOptionsForCreateComponent: function() {
-    //     debugger;
-    //     return [...this.callBase().filter(item => item !== 'disabled'), 'focusStateEnabled'];
-    // },
-
     _initTemplates: function() {
         this.callBase();
         const template = new BindableTemplate(function($container, data, rawModel) {
@@ -85,9 +80,18 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
                 $container.text(String(data));
             }
 
+            const isDeepExtend = true;
+            const model = { ...rawModel };
+            model.options = extend(isDeepExtend, {}, rawModel.options);
+
+            // in dom_component we prevent syncronization disabled in nested component if property exists in model
+            if(this.option('disabled') && rawModel.options.disabled === false) {
+                delete model.options.disabled;
+            }
+
             this._getTemplate('dx-polymorph-widget').render({
                 container: $container,
-                model: extend(true, {}, rawModel),
+                model,
                 parent: this
             });
         }.bind(this), ['text', 'html', 'widget', 'options'], this.option('integrationOptions.watchMethod'));
@@ -467,6 +471,9 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
                 this._applyCompactMode();
                 break;
             case 'grouped':
+                break;
+            case 'disabled':
+                this._invalidate();
                 break;
             default:
                 this.callBase.apply(this, arguments);
