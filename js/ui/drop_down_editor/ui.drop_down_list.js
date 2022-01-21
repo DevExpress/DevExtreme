@@ -658,7 +658,7 @@ const DropDownList = DropDownEditor.inherit({
         eventsEngine.on(this._input(), this._getSetFocusPolicyEvent(), () => { this._setFocusPolicy(); });
 
         if(this._shouldRenderSearchEvent()) {
-            eventsEngine.on(this._input(), 'input', (e) => { console.log('ddl input event'); this._searchHandler(e); });
+            eventsEngine.on(this._input(), this._getSearchEvent(), (e) => { this._searchHandler(e); });
             eventsEngine.on(this._input(), this._getCompositionStartEvent(), () => { this._isTextCompositionInProgress(true); });
             eventsEngine.on(this._input(), this._getCompositionEndEvent(), (e) => {
                 this._isTextCompositionInProgress(undefined);
@@ -689,7 +689,6 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _searchHandler: function(e, searchValue) {
-        console.log('ddl _searchHandler');
         if(this._isTextCompositionInProgress()) {
             return;
         }

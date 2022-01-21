@@ -29,7 +29,6 @@ const SelectBox = DropDownList.inherit({
         const parent = this.callBase();
         const clearSelectBox = function(e) {
             const isEditable = this._isEditable();
-            // console.log('clearSelectBox _isSubstitutionRendered:' + this._isSubstitutionRendered);
 
             if(!isEditable) {
                 if(this.option('showClearButton')) {
@@ -38,9 +37,6 @@ const SelectBox = DropDownList.inherit({
                 }
             } else if(this._valueSubstituted()) {
                 this._preventFiltering = true;
-                // this._isSubstitutionRendered = false;
-
-                console.log('_clearValueHandler 1');
             }
             this._savedTextRemoveEvent = e;
             this._preventSubstitution = true;
@@ -745,7 +741,6 @@ const SelectBox = DropDownList.inherit({
     },
 
     _clearValueHandler: function(e) {
-        console.log('_clearValueHandler 2');
         this._preventFiltering = true;
         this.callBase(e);
         this._searchCanceled();
@@ -761,13 +756,10 @@ const SelectBox = DropDownList.inherit({
     },
 
     _searchHandler: function() {
-        console.log('sb _searchHandler 1, this._preventFiltering: ' + this._preventFiltering);
         if(this._preventFiltering) {
             delete this._preventFiltering;
             return;
         }
-
-        // this._isSubstitutionRendered = false;
 
         if(this._needPassDataSourceToList()) {
             this._wasSearch(true);
@@ -826,7 +818,6 @@ const SelectBox = DropDownList.inherit({
 
         inputElement.value = displayValue;
         this._caret({ start: valueLength, end: displayValue.length });
-        // this._isSubstitutionRendered = true;
     },
 
     _dispose: function() {

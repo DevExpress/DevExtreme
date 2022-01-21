@@ -3652,7 +3652,6 @@ QUnit.module('search substitution', {
     });
 
     QUnit.test('items should be loaded after the selection was changed and removed on the \'backspace\' key press (T1058326)', function(assert) {
-        debugger;
         const loadMock = sinon.stub().returns([this.testItem]);
 
         this.reinit({
@@ -3661,21 +3660,17 @@ QUnit.module('search substitution', {
         });
 
         this.keyboard
-            .type(this.testItem.substring(0, 1));
-
+            .type(this.testItem.substring(0, 2));
         loadMock.reset();
 
-        // this.keyboard.press('left');
         this.$input.get(0).setSelectionRange(0, 1);
-
         this.keyboard
             .press('backspace');
 
         assert.equal(loadMock.callCount, 1, 'items are loaded');
     });
 
-    QUnit.test('items should be loaded after the substitution selection was changed and removed on the \'backspace\' key press if searchMode = \'startswith\'', function(assert) {
-        debugger;
+    QUnit.test('items should be loaded if the substitution was added and after selection was changed and removed on the \'backspace\' key press', function(assert) {
         const loadMock = sinon.stub().returns([this.testItem]);
 
         this.reinit({
@@ -3684,12 +3679,9 @@ QUnit.module('search substitution', {
 
         this.keyboard
             .type(this.testItem.substring(0, 1));
-
         loadMock.reset();
 
-        // this.keyboard.press('left');
         this.$input.get(0).setSelectionRange(0, 1);
-
         this.keyboard
             .press('backspace');
 
