@@ -5849,8 +5849,6 @@ QUnit.module('single line mode', {
     });
 
     QUnit.test('focusOut should be prevented when tagContainer clicked - T454876', function(assert) {
-        assert.expect(1);
-
         const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
 
         $inputWrapper.on('mousedown', e => {
@@ -5863,8 +5861,6 @@ QUnit.module('single line mode', {
     });
 
     QUnit.test('mousedown should not be prevented when input field clicked (T1046705)', function(assert) {
-        assert.expect(1);
-
         const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
         const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
 

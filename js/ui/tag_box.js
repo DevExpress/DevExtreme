@@ -578,7 +578,18 @@ const TagBox = SelectBox.inherit({
 
     _renderInput: function() {
         this.callBase();
-        this._renderPreventBlur(this._inputWrapper(), [this._input()[0]]);
+        this._renderPreventBlurOnInputClick();
+    },
+
+    _renderPreventBlurOnInputClick: function() {
+        const eventName = addNamespace('mousedown', 'dxTagBox');
+
+        eventsEngine.off(this._inputWrapper(), eventName);
+        eventsEngine.on(this._inputWrapper(), eventName, (e) => {
+            if(e.target !== this._input()[0]) {
+                e.preventDefault();
+            }
+        });
     },
 
     _renderInputValueImpl: function() {
