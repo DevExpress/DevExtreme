@@ -804,10 +804,12 @@ const SelectBox = DropDownList.inherit({
 
     _valueSubstituted: function() {
         const input = this._input().get(0);
-        const isAllSelected = input.selectionStart === 0 && input.selectionEnd === this._searchValue().length;
+        const currentSearchLength = this._searchValue().length;
+        const isAllSelected = input.selectionStart === 0 && input.selectionEnd === currentSearchLength;
         const inputHasSelection = input.selectionStart !== input.selectionEnd;
+        const isLastSymbolSelected = currentSearchLength === input.selectionEnd;
 
-        return this._wasSearch() && inputHasSelection && !isAllSelected;
+        return this._wasSearch() && inputHasSelection && !isAllSelected && isLastSymbolSelected && this._shouldSubstitutionBeRendered();
     },
 
     _shouldSubstitutionBeRendered: function() {
