@@ -3,7 +3,6 @@ import { locate, move } from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import DOMComponent from '../core/dom_component';
 import $ from '../core/renderer';
-import { addNamespace } from '../events/utils';
 import { inArray } from '../core/utils/array';
 import { pairToObject } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
@@ -13,8 +12,8 @@ import { isPlainObject, isFunction, isWindow } from '../core/utils/type';
 import { hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../events/drag';
+import { addNamespace } from '../events/utils';
 import { triggerResizeEvent } from '../events/visibility_change';
-import { getBoundingRect } from '../core/utils/position';
 
 const RESIZABLE = 'dxResizable';
 const RESIZABLE_CLASS = 'dx-resizable';
@@ -162,7 +161,10 @@ const Resizable = DOMComponent.inherit({
         const $element = this.$element();
 
         return $element.css('boxSizing') === 'border-box'
-            ? getBoundingRect($element.get(0))
+            ? {
+                width: getOuterWidth($element),
+                height: getOuterHeight($element),
+            }
             : {
                 width: getWidth($element),
                 height: getHeight($element)
