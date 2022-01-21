@@ -584,7 +584,7 @@ class SchedulerAppointments extends CollectionWidget {
         const resources = getResourcesFromItem(resourceList, this.option('getResourceDataAccessors')(), this._getItemData($appointment));
 
         if(resources) {
-            each(resources, function(name, values) {
+            each(resources, function(name, values) { // TODO too refact
                 const attr = 'data-' + normalizeKey(name.toLowerCase()) + '-';
                 for(let i = 0; i < values.length; i++) {
                     $appointment.attr(attr + normalizeKey(values[i]), true);

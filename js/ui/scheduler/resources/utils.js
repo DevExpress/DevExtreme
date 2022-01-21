@@ -272,7 +272,8 @@ export const getResourcesFromItem = (resources = [], dataAccessors, itemData, wr
                 }
 
                 // const method = getDataAccessors(dataAccessors, field, 'setter');
-                const isWrap = !wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(resources, field));
+                // const isWrap = !wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(resources, field));
+                const isWrap = true;
 
                 tempObject[field] = isWrap ? wrapToArray(resourceData) : resourceData;
 
@@ -333,7 +334,7 @@ export const groupAppointmentsByResourcesCore = (config, appointments, resources
             appointment
         );
 
-        const treeLeaves = getResourceTreeLeaves((field, action) => getDataAccessors(config.dataAccessors, field, action), tree, appointmentResources);
+        const treeLeaves = getResourceTreeLeaves(tree, appointmentResources);
 
         for(let i = 0; i < treeLeaves.length; i++) {
             if(!result[treeLeaves[i]]) {
@@ -348,11 +349,11 @@ export const groupAppointmentsByResourcesCore = (config, appointments, resources
     return result;
 };
 
-export const getResourceTreeLeaves = (getDataAccessors, tree, appointmentResources, result) => {
+export const getResourceTreeLeaves = (tree, appointmentResources, result) => {
     result = result || [];
 
     for(let i = 0; i < tree.length; i++) {
-        if(!hasGroupItem(getDataAccessors, appointmentResources, tree[i].name, tree[i].value)) {
+        if(!hasGroupItem(appointmentResources, tree[i].name, tree[i].value)) {
             continue;
         }
 
@@ -361,15 +362,15 @@ export const getResourceTreeLeaves = (getDataAccessors, tree, appointmentResourc
         }
 
         if(tree[i].children) {
-            getResourceTreeLeaves(getDataAccessors, tree[i].children, appointmentResources, result);
+            getResourceTreeLeaves(tree[i].children, appointmentResources, result);
         }
     }
 
     return result;
 };
 
-const hasGroupItem = (getDataAccessors, appointmentResources, groupName, itemValue) => {
-    const group = getDataAccessors(groupName, 'getter')(appointmentResources);
+const hasGroupItem = (appointmentResources, groupName, itemValue) => {
+    const group = appointmentResources[groupName];
 
     if(group) {
         if(inArray(itemValue, group) > -1) {
