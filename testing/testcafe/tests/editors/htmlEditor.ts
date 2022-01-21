@@ -14,6 +14,7 @@ fixture`HtmlEditor`
 
 [false, true].forEach((toolbar) => {
   const selector = toolbar ? '#htmleditor-toolbar' : '#htmleditor-simple';
+  const clickTarget = toolbar ? '#htmleditor-toolbar .dx-bold-format' : '#htmleditor-simple';
   const baseScreenName = toolbar ? 'htmleditor-with-toolbar' : 'htmleditor-without-toolbar';
 
   test(`T1025549 - ${baseScreenName}`, async (t) => {
@@ -22,7 +23,7 @@ fixture`HtmlEditor`
     await t
       .expect(await takeScreenshot(`${baseScreenName}.png`, selector))
       .ok()
-      .click(Selector(selector))
+      .click(Selector(clickTarget))
       .expect(await takeScreenshot(`${baseScreenName}-focused.png`, selector))
       .ok()
       .expect(compareResults.isValid())
