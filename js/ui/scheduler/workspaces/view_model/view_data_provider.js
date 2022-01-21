@@ -449,4 +449,9 @@ export default class ViewDataProvider {
     getViewOptions() {
         return this._options;
     }
+
+    getViewPortGroupCount() {
+        const { dateTableGroupedMap } = this.groupedDataMap;
+        return dateTableGroupedMap?.length || 0;
+    }
 }
