@@ -83,12 +83,8 @@ function drawCellText(doc, cell, docStyles) {
             h: _rect.h - (padding.top + padding.bottom)
         };
         if(isDefined(cell._textLeftOffset) || isDefined(cell._textTopOffset)) {
-            if(isDefined(cell._textLeftOffset)) {
-                textRect.x = textRect.x + cell._textLeftOffset;
-            }
-            if(isDefined(cell._textTopOffset)) {
-                textRect.y = textRect.y + cell._textTopOffset;
-            }
+            textRect.x = textRect.x + (cell._textLeftOffset ?? 0);
+            textRect.y = textRect.y + (cell._textTopOffset ?? 0);
             doc.saveGraphicsState(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#saveGraphicsState
             clipOutsideRectContent(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h);
         }
