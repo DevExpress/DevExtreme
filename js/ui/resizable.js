@@ -409,27 +409,31 @@ const Resizable = DOMComponent.inherit({
         return offset;
     },
 
-    _roundByStep: function(offset) {
+    _roundByStep: function(delta) {
         return this.option('stepPrecision') === 'strict'
-            ? this._getStrictOffset(offset)
-            : this._getSimpleOffset(offset);
+            ? this._roundStrict(delta)
+            : this._roundNotStrict(delta);
     },
 
     _getSteps: function() {
         return pairToObject(this.option('step'), !this.option('roundStepValue'));
     },
 
-    _getSimpleOffset: function(offset) {
+    _roundNotStrict: function(delta) {
         const steps = this._getSteps();
 
         return {
-            x: offset.x - offset.x % steps.h,
-            y: offset.y - offset.y % steps.v
+            x: delta.x - delta.x % steps.h,
+            y: delta.y - delta.y % steps.v
         };
     },
 
-    _getStrictOffset: function(offset) {
+    _roundStrict: function(delta) {
         const sides = this._movingSides;
+        const offset = {
+            x: delta.x * (sides.left ? -1 : 1),
+            y: delta.y * (sides.top ? -1 : 1)
+        };
         const steps = this._getSteps();
         const location = this._elementLocation;
         const size = this._elementSize;
@@ -462,9 +466,14 @@ const Resizable = DOMComponent.inherit({
             newOffsetY += steps.v;
         }
 
-        return {
+        const roundedOffset = {
             x: (sides.left || sides.right) && !isSmallOffset(offset.x, steps.h) ? newOffsetX : 0,
             y: (sides.top || sides.bottom) && !isSmallOffset(offset.y, steps.v) ? newOffsetY : 0
+        };
+
+        return {
+            x: roundedOffset.x * (sides.left ? -1 : 1),
+            y: roundedOffset.y * (sides.top ? -1 : 1)
         };
     },
 
