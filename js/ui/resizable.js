@@ -362,14 +362,18 @@ const Resizable = DOMComponent.inherit({
     },
 
     _updateDimensions: function(delta) {
+        const isAbsoluteSize = (size) => {
+            return size.substring(size.length - 2) === 'px';
+        };
+
         const isStepPrecisionStrict = this.option('stepPrecision') === 'strict';
         const size = this._elementSize;
 
         const width = size.width + delta.x;
         const height = size.height + delta.y;
         const elementStyle = this.$element().get(0).style;
-        const shouldRenderWidth = delta.x || isStepPrecisionStrict || elementStyle.width !== 'auto';
-        const shouldRenderHeight = delta.y || isStepPrecisionStrict || elementStyle.height !== 'auto';
+        const shouldRenderWidth = delta.x || isStepPrecisionStrict || isAbsoluteSize(elementStyle.width);
+        const shouldRenderHeight = delta.y || isStepPrecisionStrict || isAbsoluteSize(elementStyle.height);
 
         if(shouldRenderWidth) this.option({ width });
         if(shouldRenderHeight) this.option({ height });
