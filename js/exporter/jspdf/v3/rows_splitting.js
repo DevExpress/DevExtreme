@@ -1,15 +1,30 @@
 import { isDefined } from '../../../core/utils/type';
 import { roundToThreeDecimals } from './draw_utils';
+import { getPageWidth } from './pdf_utils_v3';
 
-function splitRectsByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally) {
+function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally) {
+    const rects = [].concat.apply([],
+        rowsInfo.map(rowInfo => {
+            return rowInfo.cells
+                .filter(cell => !isDefined(cell.pdfCell.isMerged))
+                .map(cellInfo => {
+                    return Object.assign({}, cellInfo.pdfCell._rect, { sourceCellInfo: { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell } });
+                });
+        })
+    );
+
     if(!isDefined(rects) || rects.length === 0) { // Empty Table
         return [[]];
     }
 
-    const rectsByPage = splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally);
+    const maxBottomRight = { x: getPageWidth(doc) - options.margin.right };
+    const rectsByPage = splitRectsHorizontalByPages(rects, options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);
+
     // TODO: splitRectsVerticalByPages
 
-    return rectsByPage;
+    return rectsByPage.map(rects => {
+        return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
+    });
 }
 
 function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally) {
@@ -40,20 +55,25 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
         });
 
         rectsToSeparate.forEach(rect => {
-            const separatedRects = onSeparateRectHorizontally(rect, {
-                x: rect.x,
-                y: rect.y,
-                w: currentPageMaxRectRight - rect.x,
-                h: rect.h
-            }, {
-                x: currentPageMaxRectRight,
-                y: rect.y,
-                w: rect.w - (currentPageMaxRectRight - rect.x),
-                h: rect.h
-            });
+            const args = {
+                sourceRect: rect,
+                leftRect: {
+                    x: rect.x,
+                    y: rect.y,
+                    w: currentPageMaxRectRight - rect.x,
+                    h: rect.h
+                },
+                rightRect: {
+                    x: currentPageMaxRectRight,
+                    y: rect.y,
+                    w: rect.w - (currentPageMaxRectRight - rect.x),
+                    h: rect.h
+                }
+            };
+            onSeparateRectHorizontally(args);
 
-            currentPageRects.push(separatedRects.left);
-            rectsToSplit.push(separatedRects.right);
+            currentPageRects.push(args.leftRect);
+            rectsToSplit.push(args.rightRect);
 
             const index = rectsToSplit.indexOf(rect);
             if(index !== -1) {
@@ -83,4 +103,4 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
     return pages;
 }
 
-export { splitRectsByPages };
+export { splitByPages };

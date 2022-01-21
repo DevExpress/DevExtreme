@@ -1,9 +1,10 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
+import { Paging, PagingProps, viewFunction as PagingView } from '../paging';
 import {
-  Paging, PagingProps, viewFunction as PagingView, PageIndex, PageSize, SetPageIndex, PageCount,
-} from '../paging';
+  PageIndex, PageSize, SetPageIndex, PageCount,
+} from '../plugins';
 import { generateData } from '../../__tests__/test_data';
 import { Plugins } from '../../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../../utils/plugin/value_setter';

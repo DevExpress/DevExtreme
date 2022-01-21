@@ -12,7 +12,7 @@ import notify from '../notify';
 
 import { findItemsByKeys, extendAttributes } from './ui.file_manager.common';
 import FileItemsController from './file_items_controller';
-import { FileManagerCommandManager } from './ui.file_manager.command_manager';
+import { defaultPermissions, FileManagerCommandManager } from './ui.file_manager.command_manager';
 import FileManagerContextMenu from './ui.file_manager.context_menu';
 import FileManagerFilesTreeView from './ui.file_manager.files_tree_view';
 import FileManagerDetailsItemList from './ui.file_manager.item_list.details';
@@ -49,7 +49,7 @@ class FileManager extends Widget {
         super._init();
         this._initActions();
 
-        this._providerUpdateDeferred = new Deferred().resolve();
+        this._providerUpdateDeferred = null;
         this._lockCurrentPathProcessing = false;
 
         this._controller = new FileItemsController({
@@ -158,9 +158,12 @@ class FileManager extends Widget {
 
         this._createBreadcrumbs(this._$itemsPanel);
         this._createItemView(this._$itemsPanel);
-        if(this._commandManager.isCommandAvailable('upload')) {
-            this._editing.setUploaderDropZone(this._$itemsPanel);
-        }
+        this._updateUploadDropZone();
+    }
+
+    _updateUploadDropZone() {
+        const dropZone = this._commandManager.isCommandAvailable('upload') ? this._$itemsPanel : $();
+        this._editing.setUploaderDropZone(dropZone);
     }
 
     _createFilesTreeView(container) {
@@ -492,15 +495,7 @@ class FileManager extends Widget {
                 chunkSize: 200000
             },
 
-            permissions: {
-                create: false,
-                copy: false,
-                move: false,
-                delete: false,
-                rename: false,
-                upload: false,
-                download: false
-            },
+            permissions: extend({}, defaultPermissions),
 
             notifications: {
                 showPanel: true,
@@ -537,20 +532,24 @@ class FileManager extends Widget {
 
         switch(name) {
             case 'currentPath':
-                this._lockCurrentPathProcessing = true;
-
-                this._providerUpdateDeferred.then(() => {
-                    this._lockCurrentPathProcessing = false;
-                    return this._controller.setCurrentPath(args.value);
-                });
+                {
+                    const updateFunc = () => {
+                        this._lockCurrentPathProcessing = false;
+                        return this._controller.setCurrentPath(args.value);
+                    };
+                    this._lockCurrentPathProcessing = true;
+                    this._providerUpdateDeferred ? this._providerUpdateDeferred.then(updateFunc) : updateFunc();
+                }
                 break;
             case 'currentPathKeys':
-                this._lockCurrentPathProcessing = true;
-
-                this._providerUpdateDeferred.then(() => {
-                    this._lockCurrentPathProcessing = false;
-                    this._controller.setCurrentPathByKeys(args.value);
-                });
+                {
+                    const updateFunc = () => {
+                        this._lockCurrentPathProcessing = false;
+                        return this._controller.setCurrentPathByKeys(args.value);
+                    };
+                    this._lockCurrentPathProcessing = true;
+                    this._providerUpdateDeferred ? this._providerUpdateDeferred.then(updateFunc) : updateFunc();
+                }
                 break;
             case 'selectedItemKeys':
                 if(!this._lockSelectionProcessing && this._itemView) {
@@ -573,7 +572,10 @@ class FileManager extends Widget {
                 const pathKeys = this._lockCurrentPathProcessing ? undefined : this.option('currentPathKeys');
                 this._controller.updateProvider(args.value, pathKeys)
                     .then(() => this._providerUpdateDeferred.resolve())
-                    .then(() => this.repaint());
+                    .always(() => {
+                        this._providerUpdateDeferred = null;
+                        this.repaint();
+                    });
                 break;
             }
             case 'allowedFileExtensions':
@@ -585,6 +587,12 @@ class FileManager extends Widget {
                 this._invalidate();
                 break;
             case 'permissions':
+                this._commandManager.updatePermissions(this.option('permissions'));
+                this._filesTreeViewContextMenu.tryUpdateVisibleContextMenu();
+                this._itemViewContextMenu.tryUpdateVisibleContextMenu();
+                this._toolbar.updateItemPermissions();
+                this._updateUploadDropZone();
+                break;
             case 'selectionMode':
             case 'customizeThumbnail':
             case 'customizeDetailColumns':

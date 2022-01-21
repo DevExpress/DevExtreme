@@ -4,7 +4,7 @@ import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
-import { splitRectsByPages } from './rows_splitting';
+import { splitByPages } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
 
 // TODO: check names with techwritters
@@ -12,8 +12,8 @@ import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, set
 //    topLeft: {x: number, y: number},
 //    indent: number,
 //    margin: { top:number, left:number, right:number, bottom:number } | number
-//    customizeCell: (IPdfRowInfo): void
-//    customDrawCell: (rect, pdfCell, gridCell, cancel): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
+//    customizeCell: ({ gridCell, pdfCell }): void
+//    customDrawCell: ({ rect, pdfCell, gridCell, cancel }): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
 // }
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -49,7 +49,7 @@ function exportDataGrid(doc, dataGrid, options) {
                     //
                     // And, you can read values of these properties ('readonly'):
                     // - e.gridCell (TODO: list of properties)
-                    // - e.pdfRowInfo (TODO: list of properties)
+                    // - e.pdfCell (TODO: list of properties)
                     options.customizeCell(cellInfo)
                 ));
             }
@@ -86,35 +86,32 @@ function exportDataGrid(doc, dataGrid, options) {
             // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
             // TODO: applySplitting()
 
-            const pdfCellsInfo = [].concat.apply([],
-                rowsInfo.map(rowInfo => {
-                    return rowInfo.cells
-                        .filter(cell => !isDefined(cell.pdfCell.isMerged))
-                        .map(cellInfo => {
-                            return { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell, pdfRowInfo: cellInfo.pdfRowInfo };
-                        });
-                })
-            );
-
             const docStyles = getDocumentStyles(doc);
 
-            const rects = pdfCellsInfo.map(cellInfo => Object.assign({}, cellInfo._rect, { sourceCellInfo: cellInfo }));
-            const maxBottomRight = {
-                x: doc.internal.pageSize.getWidth() - options.margin.right
-            };
-            const onSeparateRectHorizontally = (sourceRect, leftRect, rightRect) => {
-                const newRectCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { text: '', debugSourceCellInfo: sourceRect.sourceCellInfo });
-                return {
-                    left: Object.assign({}, leftRect, { sourceCellInfo: sourceRect.sourceCellInfo }),
-                    right: Object.assign({}, rightRect, { sourceCellInfo: newRectCellInfo })
-                };
-            };
-            const rectsByPages = splitRectsByPages(rects, options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);
-            const pdfCellsInfoByPages = rectsByPages.map(rects => {
-                return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
-            });
+            const onSeparateRectHorizontally = ({ sourceRect, leftRect, rightRect }) => {
+                let leftRectTextOptions = {};
+                let rightRectTextOptions = {};
+                const isTextNotEmpty = isDefined(sourceRect.sourceCellInfo.text) && sourceRect.sourceCellInfo.text.length > 0;
+                if(isTextNotEmpty) {
+                    const isTextWidthGreaterThanRect = doc.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
+                    const isTextLeftAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'left';
+                    if(isTextWidthGreaterThanRect || !isTextLeftAlignment) {
+                        const leftTextTopOffset = sourceRect.sourceCellInfo._textTopOffset ?? 0;
+                        const rightTextTopOffset = leftTextTopOffset - leftRect.w;
 
-            pdfCellsInfoByPages.forEach((pdfCellsInfo, index) => {
+                        leftRectTextOptions = Object.assign({}, { _textTopOffset: leftTextTopOffset });
+                        rightRectTextOptions = Object.assign({}, { _textTopOffset: rightTextTopOffset });
+                    } else {
+                        rightRectTextOptions = Object.assign({}, { text: '' });
+                    }
+                }
+
+                leftRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, leftRectTextOptions);
+                rightRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, rightRectTextOptions);
+            };
+
+            const rectsByPages = splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally);
+            rectsByPages.forEach((pdfCellsInfo, index) => {
                 if(index > 0) {
                     doc.addPage();
                 }

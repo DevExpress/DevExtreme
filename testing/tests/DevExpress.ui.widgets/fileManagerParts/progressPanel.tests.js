@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import { Consts, createTestFileSystem, FileManagerProgressPanelWrapper, FileManagerWrapper } from '../../../helpers/fileManagerHelpers.js';
+import { createTestFileSystem, FileManagerProgressPanelWrapper, FileManagerWrapper } from '../../../helpers/fileManagerHelpers.js';
 import FileManagerProgressPanelMock from '../../../helpers/fileManager/notification.progress_panel.mock.js';
 import FileManagerLogger from '../../../helpers/fileManager/logger.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
@@ -621,10 +621,8 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
 
         const $refresh = this.wrapper.getToolbarButton('Refresh');
         assert.strictEqual($refresh.length, 2, 'refresh buttons exists');
-        const refreshIcon0 = $refresh.eq(0).find(`.${Consts.TOOLBAR_REFRESH_ITEM_ICON_CLASS}`);
-        const refreshIcon1 = $refresh.eq(1).find(`.${Consts.TOOLBAR_REFRESH_ITEM_ICON_CLASS}`);
-        assert.ok(refreshIcon0.hasClass(Consts.TOOLBAR_REFRESH_ITEM_ICON_DEAFULT_CLASS), 'refresh button is in default state');
-        assert.ok(refreshIcon1.hasClass(Consts.TOOLBAR_REFRESH_ITEM_ICON_DEAFULT_CLASS), 'refresh button is in default state');
+        assert.ok(this.wrapper.getToolbarRefreshButtonState().isDefault, 'refresh button is in default state');
+        assert.ok(this.wrapper.getToolbarRefreshButtonState(true).isDefault, 'refresh button is in default state');
     });
 
     test('long-running operation cannot be shown in case of showPanel is dynamically set to true-false-true', function(assert) {

@@ -158,12 +158,12 @@ export const DataSource = Class.inherit({
         this._eventsStrategy.dispose();
         clearTimeout(this._aggregationTimeoutId);
 
+        this._delayedLoadTask?.abort();
+        this._operationManager.cancelAll();
+
         delete this._store;
         delete this._items;
-
-        this._delayedLoadTask?.abort();
-
-        this._operationManager.cancelAll();
+        delete this._delayedLoadTask;
 
         this._disposed = true;
     },

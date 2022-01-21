@@ -647,7 +647,7 @@ export const rowsModule = {
                 _createTable: function() {
                     const $table = this.callBase.apply(this, arguments);
 
-                    if(this.option().rowTemplate && !this.option('dataRowTemplate')) {
+                    if(this.option().rowTemplate || this.option().dataRowTemplate) {
                         $table.appendTo(this.component.$element());
                     }
 

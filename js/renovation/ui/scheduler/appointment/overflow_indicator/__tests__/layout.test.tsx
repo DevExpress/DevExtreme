@@ -1,6 +1,16 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Button } from '../../../../button';
 import { viewFunction, OverflowIndicator } from '../layout';
+import { getIndicatorColor } from '../utils';
+
+const colorPromise = Promise.resolve('#aabbcc');
+const rejectedColorPromise = Promise.resolve('');
+jest.mock('../utils', () => ({
+  ...jest.requireActual('../utils'),
+  getIndicatorColor: jest.fn(({ resources }) => (resources
+    ? colorPromise
+    : rejectedColorPromise)),
+}));
 
 describe('OverflowIndicator', () => {
   const defaultViewModel = {
@@ -8,6 +18,7 @@ describe('OverflowIndicator', () => {
 
     isAllDay: false,
     isCompact: true,
+    groupIndex: 0,
 
     appointment: {
       startDate: new Date('2021-08-05T10:00:00.000Z'),
@@ -24,7 +35,16 @@ describe('OverflowIndicator', () => {
 
     items: {
       data: [{}, {}, {}],
-      settings: [{}, {}, {}],
+      settings: [{
+        appointment: {
+          startDate: new Date('2021-08-05T10:00:00.000Z'),
+          endDate: new Date('2021-08-05T12:00:00.000Z'),
+          text: 'Some text',
+        },
+      },
+      {},
+      {},
+      ],
     },
   };
 
@@ -111,6 +131,53 @@ describe('OverflowIndicator', () => {
     });
   });
 
+  describe('Behavior', () => {
+    describe('Effects', () => {
+      describe('updateStylesEffect', () => {
+        it('should call getIndicatorColor with correct arguments', () => {
+          const appointmentsContextValue = {
+            resources: [],
+            resourceLoaderMap: [] as any,
+            dataAccessors: {
+              resources: [],
+            },
+            loadedResources: [],
+          } as any;
+          const viewModel = {
+            ...defaultViewModel,
+            groupIndex: 123,
+          };
+          const overflowIndicator = new OverflowIndicator({
+            viewModel: {
+              ...defaultViewModel,
+              groupIndex: 123,
+            },
+            groups: ['someGroups'],
+          } as any);
+
+          overflowIndicator.appointmentsContextValue = appointmentsContextValue;
+
+          overflowIndicator.updateStylesEffect();
+
+          expect(getIndicatorColor)
+            .toReturnWith(colorPromise);
+
+          expect(getIndicatorColor)
+            .toBeCalledWith(
+              appointmentsContextValue,
+              viewModel,
+              ['someGroups'],
+            );
+
+          return colorPromise.then(() => {
+            expect(overflowIndicator.color)
+              .toBe('#aabbcc');
+          });
+        });
+      });
+    });
+  });
+
   describe('Logic', () => {
     describe('Getters', () => {
       describe('appointmentCount', () => {
@@ -140,8 +207,25 @@ describe('OverflowIndicator', () => {
         });
       });
 
+      describe('appointmentStyles', () => {
+        it('should return correct values', () => {
+          const appointment = new OverflowIndicator({
+            viewModel: defaultViewModel,
+          } as any);
+
+          expect(appointment.appointmentStyles)
+            .toEqual({
+              left: '1px',
+              top: '2px',
+              width: '3px',
+              height: '4px',
+              boxShadow: 'inset 3px 0 0 0 rgba(0, 0, 0, 0.3)',
+            });
+        });
+      });
+
       describe('styles', () => {
-        it('should return correct styles', () => {
+        it('should return correct value without color', () => {
           const overflowIndicator = new OverflowIndicator({
             viewModel: defaultViewModel as any,
           });
@@ -153,6 +237,24 @@ describe('OverflowIndicator', () => {
               width: '3px',
               height: '4px',
               boxShadow: 'inset 3px 0 0 0 rgba(0, 0, 0, 0.3)',
+            });
+        });
+
+        it('should return correct value with color', () => {
+          const overflowIndicator = new OverflowIndicator({
+            viewModel: defaultViewModel as any,
+          });
+
+          overflowIndicator.color = '#aabbcc';
+
+          expect(overflowIndicator.styles)
+            .toEqual({
+              left: '1px',
+              top: '2px',
+              width: '3px',
+              height: '4px',
+              boxShadow: 'inset 3px 0 0 0 rgba(0, 0, 0, 0.3)',
+              backgroundColor: '#aabbcc',
             });
         });
       });

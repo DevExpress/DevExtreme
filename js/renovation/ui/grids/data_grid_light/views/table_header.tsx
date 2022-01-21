@@ -4,6 +4,7 @@ import {
 
 import { Table } from '../widgets/table';
 import { HeaderRow } from '../widgets/header_row';
+import { Column } from '../types';
 
 export const viewFunction = (viewModel: TableHeader): JSX.Element => (
   <div className="dx-datagrid-headers dx-datagrid-nowrap" role="presentation">
@@ -18,7 +19,7 @@ export const viewFunction = (viewModel: TableHeader): JSX.Element => (
 @ComponentBindings()
 export class TableHeaderProps {
   @OneWay()
-  columns: string[] = [];
+  columns: Column[] = [];
 }
 
 @Component({

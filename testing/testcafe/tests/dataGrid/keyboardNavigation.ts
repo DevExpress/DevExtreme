@@ -2951,3 +2951,110 @@ test('Lookup editor should update cell value on down or up key when cell is focu
     ],
   }));
 });
+
+test('Checkbox value is changed properly on tab when the batch editing mode and focused row are enabled (T1059412)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
+
+  // act
+  await t
+    .click(addRowButton);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).isInserted)
+    .ok();
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element.nth(1));
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).element.nth(1).hasClass('dx-row-focused'))
+    .ok();
+
+  // act
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('right');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('space');
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(0, 1))
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).isModified)
+    .ok();
+
+  // act
+  await t
+    .pressKey('space');
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(0, 1))
+    .notOk()
+    .expect(dataGrid.getDataCell(0, 1).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).isModified)
+    .ok();
+
+  // act
+  await t
+    .pressKey('space');
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(0, 1))
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).isModified)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  keyExpr: 'id',
+  columns: [
+    {
+      dataField: 'id',
+      allowEditing: false,
+    },
+    {
+      dataField: 'checked',
+      dataType: 'boolean',
+    },
+  ],
+  dataSource: [
+    {
+      id: 1,
+      checked: false,
+    },
+  ],
+  editing: {
+    allowAdding: true,
+    allowUpdating: true,
+    mode: 'batch',
+  },
+  focusedRowEnabled: true,
+  keyboardNavigation: {
+    editOnKeyPress: true,
+  },
+}));

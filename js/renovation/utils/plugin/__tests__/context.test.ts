@@ -334,4 +334,19 @@ describe('Plugins', () => {
       expect(watchCallback).toHaveBeenCalledWith(4);
     });
   });
+
+  describe('callAction', () => {
+    const actionPlugin = createValue<(n: number) => number>();
+
+    it('should return undefined if no such action', () => {
+      const plugins = new Plugins();
+      expect(plugins.callAction(actionPlugin, 1)).toBeUndefined();
+    });
+
+    it('should return func result if such action exists', () => {
+      const plugins = new Plugins();
+      plugins.set(actionPlugin, (n) => n + 1);
+      expect(plugins.callAction(actionPlugin, 1)).toEqual(2);
+    });
+  });
 });
