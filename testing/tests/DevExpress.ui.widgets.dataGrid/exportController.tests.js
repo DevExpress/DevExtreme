@@ -2566,6 +2566,38 @@ QUnit.module('Export menu', {
         assert.notStrictEqual($exportButton.css('display'), 'none', 'export button is shown');
     });
 
+    QUnit.test('Export button customization in menu (T1061071)', function(assert) {
+        // arrange
+        this.setupModules({
+            'export': {
+                enabled: true
+            },
+            toolbar: {
+                items: [{
+                    name: 'exportButton',
+                    locateInMenu: 'always',
+                    widget: 'dxButton',
+                    options: {
+                        icon: 'arrowdown',
+                        text: 'Save Excel'
+                    },
+                }],
+            }
+        }, true);
+
+        const $container = $('#container');
+
+        this.headerPanel.render($container);
+        this.headerPanel._$element = $container;
+
+        // act
+        $('.dx-toolbar-menu-container .dx-button').trigger('dxclick');
+
+        // assert
+        const text = $('.dx-list-item-content').text();
+        assert.strictEqual(text, 'Save Excel');
+    });
+
     QUnit.test('The export context menu is shown', function(assert) {
         this.setupModules({
             'export': {
