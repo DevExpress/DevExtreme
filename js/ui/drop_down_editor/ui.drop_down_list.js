@@ -484,17 +484,15 @@ const DropDownList = DropDownEditor.inherit({
         this._setAriaTargetForList();
         this._list.option('_listAttributes', { 'role': 'combobox' });
 
-        this._renderPreventBlur(this._$list);
+        this._renderPreventBlurOnListClick();
         this._setListFocusedElementOptionChange();
     },
 
-    _renderPreventBlur: function($target) {
+    _renderPreventBlurOnListClick: function() {
         const eventName = addNamespace('mousedown', 'dxDropDownList');
 
-        eventsEngine.off($target, eventName);
-        eventsEngine.on($target, eventName, function(e) {
-            e.preventDefault();
-        }.bind(this));
+        eventsEngine.off(this._$list, eventName);
+        eventsEngine.on(this._$list, eventName, (e) => e.preventDefault());
     },
 
     _renderOpenedState: function() {
