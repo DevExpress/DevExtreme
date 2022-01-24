@@ -85,10 +85,14 @@ if(Quill) {
                 this._addCallbacks();
                 this._renderToolbar();
 
-                this.quill.on('editor-change', (eventName) => {
-                    const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
+                this.quill.on('editor-change', (eventName, newValue, oldValue, eventSource) => {
+                    const isSilentMode = eventSource === SILENT_ACTION && isEmptyObject(this.quill.getFormat());
 
-                    this._updateToolbar(isSelectionChanged);
+                    if(!isSilentMode) {
+                        const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
+
+                        this._updateToolbar(isSelectionChanged);
+                    }
                 });
             }
         }
