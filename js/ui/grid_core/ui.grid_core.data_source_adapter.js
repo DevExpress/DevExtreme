@@ -449,7 +449,10 @@ export default gridCore.Controller.inherit((function() {
         },
         _handleCustomizeStoreLoadOptions(options) {
             this._handleDataLoading(options);
-            options.data = getPageDataFromCache(options, true) || options.cachedStoreData;
+            const cache = getPageDataFromCache(options, true) || options.cachedStoreData;
+            if(cache) {
+                options.data = cache;
+            }
         },
         _handleDataLoading: function(options) {
             const dataSource = this._dataSource;
