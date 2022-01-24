@@ -1,11 +1,14 @@
 import {
   Component, JSXComponent, ComponentBindings, OneWay, JSXTemplate,
 } from '@devextreme-generator/declarations';
+import { combineClasses } from '../../../../utils/combine_classes';
+
 import { Column } from '../types';
 
 export const viewFunction = ({
   props: { column, columnIndex },
   headerTemplate: HeaderTemplate,
+  classes,
 }: HeaderCell): JSX.Element => (
   <td
     aria-selected="false"
@@ -14,7 +17,7 @@ export const viewFunction = ({
     // aria-colindex={index + 1}
     id={`dx-col-${columnIndex + 1}`}
     aria-label={`Column ${column.dataField}`}
-    className="dx-datagrid-action dx-cell-focus-disabled"
+    className={classes}
     aria-sort="none"
     tabIndex={0}
   >
@@ -40,5 +43,13 @@ export class HeaderCellProps {
 export class HeaderCell extends JSXComponent(HeaderCellProps) {
   get headerTemplate(): JSXTemplate | undefined {
     return this.props.column.headerTemplate;
+  }
+
+  get classes(): string {
+    return combineClasses({
+      'dx-datagrid-action': true,
+      'dx-cell-focus-disabled': true,
+      'dx-first-child': this.props.columnIndex === 0,
+    });
   }
 }

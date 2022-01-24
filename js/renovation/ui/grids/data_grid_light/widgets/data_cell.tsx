@@ -6,6 +6,7 @@ import { Column, RowData } from '../types';
 export const viewFunction = ({
   cellText,
   cellTemplate: CellTemplate,
+  classes,
   props: {
     data,
   },
@@ -15,6 +16,7 @@ export const viewFunction = ({
     // aria-describedby={`dx-col-${columnIndex + 1}`}
     aria-selected="false"
     role="gridcell"
+    className={classes}
   >
     { CellTemplate && <CellTemplate data={data} /> }
     { !CellTemplate && cellText}
@@ -46,5 +48,9 @@ export class DataCell extends JSXComponent(DataCellProps) {
     const { dataField } = this.props.column;
     const value = dataField && this.props.data[dataField];
     return value !== undefined ? String(value) : '';
+  }
+
+  get classes(): string {
+    return this.props.columnIndex === 0 ? 'dx-first-child' : '';
   }
 }
