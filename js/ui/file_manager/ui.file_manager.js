@@ -49,7 +49,7 @@ class FileManager extends Widget {
         super._init();
         this._initActions();
 
-        this._providerUpdateDeferred = new Deferred().resolve();
+        this._providerUpdateDeferred = null;
         this._lockCurrentPathProcessing = false;
 
         this._controller = new FileItemsController({
@@ -532,20 +532,24 @@ class FileManager extends Widget {
 
         switch(name) {
             case 'currentPath':
-                this._lockCurrentPathProcessing = true;
-
-                this._providerUpdateDeferred.then(() => {
-                    this._lockCurrentPathProcessing = false;
-                    return this._controller.setCurrentPath(args.value);
-                });
+                {
+                    const updateFunc = () => {
+                        this._lockCurrentPathProcessing = false;
+                        return this._controller.setCurrentPath(args.value);
+                    };
+                    this._lockCurrentPathProcessing = true;
+                    this._providerUpdateDeferred ? this._providerUpdateDeferred.then(updateFunc) : updateFunc();
+                }
                 break;
             case 'currentPathKeys':
-                this._lockCurrentPathProcessing = true;
-
-                this._providerUpdateDeferred.then(() => {
-                    this._lockCurrentPathProcessing = false;
-                    this._controller.setCurrentPathByKeys(args.value);
-                });
+                {
+                    const updateFunc = () => {
+                        this._lockCurrentPathProcessing = false;
+                        return this._controller.setCurrentPathByKeys(args.value);
+                    };
+                    this._lockCurrentPathProcessing = true;
+                    this._providerUpdateDeferred ? this._providerUpdateDeferred.then(updateFunc) : updateFunc();
+                }
                 break;
             case 'selectedItemKeys':
                 if(!this._lockSelectionProcessing && this._itemView) {
@@ -568,7 +572,10 @@ class FileManager extends Widget {
                 const pathKeys = this._lockCurrentPathProcessing ? undefined : this.option('currentPathKeys');
                 this._controller.updateProvider(args.value, pathKeys)
                     .then(() => this._providerUpdateDeferred.resolve())
-                    .then(() => this.repaint());
+                    .always(() => {
+                        this._providerUpdateDeferred = null;
+                        this.repaint();
+                    });
                 break;
             }
             case 'allowedFileExtensions':
