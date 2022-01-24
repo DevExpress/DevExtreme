@@ -99,9 +99,8 @@ export class Paging extends JSXComponent(PagingProps) {
       return dataSource;
     }
 
-    const pageSize = this.pageSize as number;
-    const start = (this.props.pageIndex as number) * pageSize;
-    const end = start + pageSize;
+    const start = (this.props.pageIndex as number) * (this.pageSize as number);
+    const end = start + (this.pageSize as number);
 
     return dataSource.slice(start, end);
   }

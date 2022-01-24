@@ -28,5 +28,5 @@ export class PlaceholderItemRendererProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PlaceholderItemRenderer extends JSXComponent(PlaceholderItemRendererProps) {
+export class PlaceholderItemRenderer extends JSXComponent<PlaceholderItemRendererProps, 'currentTemplate'>(PlaceholderItemRendererProps) {
 }
