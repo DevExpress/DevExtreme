@@ -18,13 +18,12 @@ import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 const DATAGRID_PAGER_CLASS = 'dx-datagrid-pager';
 
 export const viewFunction = ({
-  plugins, allowedPageSizes, onPageIndexChange, onPageSizeChange,
+  allowedPageSizes, onPageIndexChange, onPageSizeChange,
   props: {
     displayMode, infoText, showInfo, showNavigationButtons, showPageSizeSelector, visible,
   },
 }: Pager): JSX.Element => (
   <PlaceholderExtender
-    plugins={plugins}
     type={FooterPlaceholder}
     order={1}
     deps={[PageIndex, PageSize, TotalCount, PageCount]}

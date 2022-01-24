@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  JSXComponent, Component, ComponentBindings, OneWay, Effect, Template,
+  JSXComponent, Component, ComponentBindings, OneWay, Effect, Template, Consumer,
 } from '@devextreme-generator/declarations';
 
 import {
-  Plugins, PluginEntity,
+  Plugins, PluginEntity, PluginsContext,
 } from './context';
 
 @ComponentBindings()
 export class PlaceholderExtenderProps {
-  @OneWay() plugins!: Plugins;
-
   @OneWay() type!: any /* TODO PluginPlaceholder */;
 
   @OneWay() order!: number;
@@ -24,13 +22,13 @@ export class PlaceholderExtenderProps {
 export const viewFunction = (): JSX.Element => <div />;
 
 @Component({ defaultOptionRules: null, jQuery: { register: true }, view: viewFunction })
-export class PlaceholderExtender extends JSXComponent<PlaceholderExtenderProps, 'plugins' | 'type' | 'order' | 'template'>(PlaceholderExtenderProps) {
-  // @Consumer(PluginsContext)
-  // plugins!: Plugins;
+export class PlaceholderExtender extends JSXComponent<PlaceholderExtenderProps, 'type' | 'order' | 'template'>(PlaceholderExtenderProps) {
+  @Consumer(PluginsContext)
+  plugins!: Plugins;
 
   @Effect()
   extendPlaceholder(): () => void {
-    return this.props.plugins.extendPlaceholder(
+    return this.plugins.extendPlaceholder(
       this.props.type,
       this.props.order,
       this.props.template,

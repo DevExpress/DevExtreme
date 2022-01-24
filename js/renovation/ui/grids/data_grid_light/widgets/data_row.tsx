@@ -1,8 +1,8 @@
 import {
-  Component, JSXComponent, ComponentBindings, OneWay, Effect, InternalState,
+  Component, JSXComponent, ComponentBindings, OneWay, Effect, InternalState, Consumer,
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../utils/combine_classes';
-import { createGetter, Plugins } from '../../../../utils/plugin/context';
+import { createGetter, Plugins, PluginsContext } from '../../../../utils/plugin/context';
 import { Column, RowData } from '../types';
 import { DataCell } from './data_cell';
 
@@ -17,7 +17,7 @@ export const viewFunction = (viewModel: DataRow): JSX.Element => (
     role="row"
     aria-selected="false"
     // eslint-disable-next-line react/jsx-props-no-spreading
-    // {...viewModel.additionalParams}
+    {...viewModel.additionalParams}
   >
     {viewModel.props.columns.map((column, index) => (
       <DataCell
@@ -34,9 +34,6 @@ export const viewFunction = (viewModel: DataRow): JSX.Element => (
 @ComponentBindings()
 export class DataRowProps {
   @OneWay()
-  plugins!: Plugins;
-
-  @OneWay()
   data: RowData = {};
 
   @OneWay()
@@ -50,9 +47,9 @@ export class DataRowProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DataRow extends JSXComponent<DataRowProps, 'plugins'>(DataRowProps) {
-  // @Consumer(PluginsContext)
-  // plugins = new Plugins();
+export class DataRow extends JSXComponent<DataRowProps>(DataRowProps) {
+  @Consumer(PluginsContext)
+  plugins = new Plugins();
 
   get cssClasses(): string {
     return combineClasses({
@@ -71,14 +68,14 @@ export class DataRow extends JSXComponent<DataRowProps, 'plugins'>(DataRowProps)
 
   @Effect()
   watchAdditionalParams(): () => void {
-    return this.props.plugins.watch(DataRowPropertiesGetter, (getter) => {
+    return this.plugins.watch(DataRowPropertiesGetter, (getter) => {
       this.additionalParams = getter(this.props.data);
     });
   }
 
   @Effect()
   watchAdditionalClasses(): () => void {
-    return this.props.plugins.watch(DataRowClassesGetter, (getter) => {
+    return this.plugins.watch(DataRowClassesGetter, (getter) => {
       this.additionalClasses = getter(this.props.data);
     });
   }

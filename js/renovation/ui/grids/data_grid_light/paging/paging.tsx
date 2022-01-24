@@ -20,8 +20,8 @@ import {
 
 export const viewFunction = (viewModel: Paging): JSX.Element => (
   <Fragment>
-    <ValueSetter plugins={viewModel.plugins} type={PageIndex} value={viewModel.props.pageIndex} />
-    <ValueSetter plugins={viewModel.plugins} type={PageSize} value={viewModel.pageSize} />
+    <ValueSetter type={PageIndex} value={viewModel.props.pageIndex} />
+    <ValueSetter type={PageSize} value={viewModel.pageSize} />
     {/* <ValueSetter type={SetPageIndex} value={viewModel.setPageIndex} /> */}
     {/* <ValueSetter type={SetPageSize} value={viewModel.setPageSize} /> */}
     {/* <GetterExtender type={VisibleItems} order={1} func={viewModel.calculateVisibleItems} /> */}
@@ -49,7 +49,7 @@ export class Paging extends JSXComponent(PagingProps) {
   @Consumer(PluginsContext)
   plugins!: Plugins;
 
-  @InternalState() forceCounter = 0;
+  @InternalState() forceCounter = 1;
 
   @Effect()
   updateVisibleItems(): () => void {
@@ -94,7 +94,8 @@ export class Paging extends JSXComponent(PagingProps) {
   }
 
   calculateVisibleItems(dataSource: RowData[]): RowData[] {
-    const { forceCounter } = this;
+    let { forceCounter } = this;
+    if (!forceCounter) { forceCounter = 0; }
     if (!this.props.enabled || this.pageSize === 'all') {
       return dataSource;
     }
