@@ -586,6 +586,7 @@ $generic-texteditor-label-transition:
     border: 0;
     outline: none;
     position: relative;
+    margin-top: $label-offset-y;
 
     &.dx-textarea {
       .dx-texteditor-input-container {

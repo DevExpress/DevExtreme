@@ -1395,6 +1395,7 @@ QUnit.module('label integration', () => {
             });
 
             const borderWidth = 2;
+
             const fieldWidth = getWidth($(`.${LOOKUP_FIELD_CLASS}`));
             assert.strictEqual(this.labelArgs.containerWidth + borderWidth, fieldWidth);
         } finally {
