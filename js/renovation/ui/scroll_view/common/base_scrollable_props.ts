@@ -7,7 +7,7 @@ import { touch } from '../../../../core/utils/support';
 import { getDefaultBounceEnabled, isDesktop } from '../utils/get_default_option_value';
 import { current, isMaterial } from '../../../../ui/themes';
 import messageLocalization from '../../../../localization/message';
-import { ScrollViewLoadPanelProps } from '../internal/load_panel';
+import { ScrollViewLoadPanelProps } from './scrollview_loadpanel_props';
 
 @ComponentBindings()
 export class BaseScrollableProps {

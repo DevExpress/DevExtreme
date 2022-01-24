@@ -90,19 +90,20 @@ export default class FileItemsController {
             return this._updateProviderOnly(fileProvider);
         }
 
-        return this._getDirectoryByPathParts(this._rootDirectoryInfo, currentPathKeys, true).then(newDirectory => {
-            if(newDirectory !== this._rootDirectoryInfo) {
-                this._resetCurrentDirectory();
-            }
-            this._setProvider(fileProvider);
-            return this.setCurrentPathByKeys(currentPathKeys);
-        });
+        return when(this._getDirectoryByPathParts(this._rootDirectoryInfo, currentPathKeys, true))
+            .then(newDirectory => {
+                if(newDirectory !== this._rootDirectoryInfo) {
+                    this._resetCurrentDirectory();
+                }
+                this._setProvider(fileProvider);
+            })
+            .then(() => this.setCurrentPathByKeys(currentPathKeys));
     }
 
     _updateProviderOnly(fileProvider) {
         this._resetCurrentDirectory();
         this._setProvider(fileProvider);
-        return this.refresh();
+        return when(this.refresh());
     }
 
     _createFileProvider(fileProvider) {

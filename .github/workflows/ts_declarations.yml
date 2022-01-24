@@ -70,14 +70,40 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Validate declarations
-      run: |
-        npm run validate-ts
-        npm run validate-declarations
+      run: npm run validate-declarations
+
+  check-ts-compilation:
+    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Check sources compilation
+      run: npm run validate-ts
+
+    - name: Check test cases
+      run: npm run test-typescript
 
   notify:
     runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
     name: Send notifications
-    needs: [check-ts-bundle, validate-declarations]
+    needs: [check-ts-bundle, validate-declarations, check-ts-compilation]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:

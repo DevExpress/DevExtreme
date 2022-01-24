@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 
-
 import 'ui/list';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -315,8 +314,8 @@ QUnit.module('live update', {
                 key: 1
             }
         ]);
-        list.scrollTo(100);
 
+        list.scrollTo(100);
         assert.strictEqual(list.itemElements().length, 4, '2nd page is loaded');
     });
 
