@@ -1122,10 +1122,17 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(visibleRows[0].data, { text: 'text', num: 1 }, 'visible row\'s data');
     });
 
-    QUnit.test('Should not display all rows when no search results and lookup is used', function(assert) {
+    QUnit.test('Should not display all rows when no search results and lookup is used (T1059631)', function(assert) {
+        // arrange
+        let loadingTimes = 0;
         const dataGrid = createDataGrid({
             loadingTimeout: null,
-            dataSource: [{ text: 'text', num: 1 }, { text: 'text', num: 2 }],
+            dataSource: {
+                load(e) {
+                    loadingTimes += 1;
+                    return [{ text: 'text', num: 1 }, { text: 'text', num: 2 }];
+                }
+            },
             searchPanel: {
                 visible: true
             },
@@ -1140,12 +1147,21 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }]
         });
 
+        // act
+        this.clock.tick();
+
+        // assert
+        const visibleRowsBeforeSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsBeforeSearch.length, 2, 'two visible rows');
+
+        // act
         dataGrid.option('searchPanel.text', 'three');
         this.clock.tick();
 
-        const visibleRows = dataGrid.getVisibleRows();
-
-        assert.equal(visibleRows.length, 0, 'no visible rows');
+        // assert
+        const visibleRowsAfterSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsAfterSearch.length, 0, 'no visible rows');
+        assert.strictEqual(loadingTimes, 1, 'doesn\'t load items if no search results');
     });
 
     QUnit.test('search editor have not been recreated when search text is changed', function(assert) {
