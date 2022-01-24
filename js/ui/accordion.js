@@ -246,6 +246,12 @@ const Accordion = CollectionWidget.inherit({
     _updateItems: function(addedSelection, removedSelection) {
         const $items = this._itemElements();
 
+        iteratorUtils.each(removedSelection, (_, index) => {
+            const $item = $items.eq(index)
+                .removeClass(ACCORDION_ITEM_OPENED_CLASS);
+            this.setAria('hidden', true, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
+        });
+
         iteratorUtils.each(addedSelection, (_, index) => {
             this._deferredItems[index].resolve();
 
@@ -253,12 +259,6 @@ const Accordion = CollectionWidget.inherit({
                 .addClass(ACCORDION_ITEM_OPENED_CLASS)
                 .removeClass(ACCORDION_ITEM_CLOSED_CLASS);
             this.setAria('hidden', false, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
-        });
-
-        iteratorUtils.each(removedSelection, (_, index) => {
-            const $item = $items.eq(index)
-                .removeClass(ACCORDION_ITEM_OPENED_CLASS);
-            this.setAria('hidden', true, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
         });
     },
 
