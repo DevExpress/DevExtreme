@@ -247,13 +247,17 @@ const Accordion = CollectionWidget.inherit({
         const $items = this._itemElements();
 
         iteratorUtils.each(removedSelection, (_, index) => {
+            if(index < 0) {
+                return;
+            }
             const $item = $items.eq(index)
                 .removeClass(ACCORDION_ITEM_OPENED_CLASS);
             this.setAria('hidden', true, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
         });
 
         iteratorUtils.each(addedSelection, (_, index) => {
-            this._deferredItems[index].resolve();
+            const item = this._deferredItems[index];
+            item && item.resolve();
 
             const $item = $items.eq(index)
                 .addClass(ACCORDION_ITEM_OPENED_CLASS)

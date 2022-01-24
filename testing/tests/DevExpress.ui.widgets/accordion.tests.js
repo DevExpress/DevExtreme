@@ -1426,6 +1426,18 @@ QUnit.module('optionChanged', moduleSetup, () => {
 
             checkItems_T992552($element, assert);
         });
+
+        QUnit.test(config.message + 'it is possible ti expand item after changing dataSource (T1060150)', function(assert) {
+            const instance = this.$element
+                .dxAccordion(extend(config, { dataSource: [ { id: 1, title: 'item 1', text: 'item 1' } ] }))
+                .dxAccordion('instance');
+
+            instance.option('dataSource', [ { id: 1, title: 'item 2', text: 'item 2' } ]);
+            instance.expandItem(0);
+
+            const $items = this.$element.find('.' + ACCORDION_ITEM_CLASS);
+            assert.equal($items.eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), true, 'item is expamded');
+        });
     });
 });
 
