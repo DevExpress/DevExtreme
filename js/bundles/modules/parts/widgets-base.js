@@ -35,6 +35,7 @@ ui.dxDropDownBox = require('../../../ui/drop_down_box');
 ui.dxDropDownMenu = require('../../../ui/drop_down_menu');
 ui.dxFileUploader = require('../../../ui/file_uploader');
 ui.dxForm = require('../../../ui/form');
+ui.stub = require('../../../ui/stub');
 ui.dxGallery = require('../../../ui/gallery');
 ui.dxHtmlEditor = require('../../../ui/html_editor');
 ui.dxList = require('../../../ui/list');
