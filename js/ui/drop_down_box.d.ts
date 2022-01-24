@@ -108,7 +108,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @docid
      * @default 'content'
      * @type_function_param1 templateData:object
-     * @type_function_param1_field1 component:dxDropDownBox
      * @type_function_return string|Element|jQuery
      * @public
      */

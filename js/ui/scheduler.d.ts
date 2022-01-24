@@ -229,44 +229,31 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field1 component:dxScheduler
        * @type_function_param1_field2 event:event
-       * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
        */
       onAdd?: ((e: AppointmentDraggingAddEvent) => void);
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field2 component:dxScheduler
        * @type_function_param1_field3 event:event
-       * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
        */
       onDragEnd?: ((e: AppointmentDraggingEndEvent) => void);
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field2 component:dxScheduler
        * @type_function_param1_field3 event:event
-       * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
        */
       onDragMove?: ((e: AppointmentDraggingMoveEvent) => void);
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field2 component:dxScheduler
        * @type_function_param1_field3 event:event
        */
       onDragStart?: ((e: AppointmentDraggingStartEvent) => void);
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field1 component:dxScheduler
        * @type_function_param1_field2 event:event
-       * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
        */
       onRemove?: ((e: AppointmentDraggingRemoveEvent) => void);
       /**
@@ -561,8 +548,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field2 component:dxScheduler
-     * @type_function_param1_field6 form:dxForm
-     * @type_function_param1_field7 popup:dxPopup
      * @action
      * @public
      */

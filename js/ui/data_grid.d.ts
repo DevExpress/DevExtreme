@@ -341,8 +341,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 itemData:any
-     * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
      */
     onAdd?: ((e: RowDraggingEventInfo<T, TRowData, TKey> & DragDropInfo) => void);
     /**
@@ -351,8 +349,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field2 component:this
      * @type_function_param1_field3 event:event
      * @type_function_param1_field4 itemData:any
-     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      */
     onDragChange?: ((e: Cancelable & RowDraggingEventInfo<T, TRowData, TKey> & DragDropInfo) => void);
     /**
@@ -361,8 +357,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field2 component:this
      * @type_function_param1_field3 event:event
      * @type_function_param1_field4 itemData:any
-     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      */
     onDragEnd?: ((e: Cancelable & RowDraggingEventInfo<T, TRowData, TKey> & DragDropInfo) => void);
     /**
@@ -371,8 +365,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field2 component:this
      * @type_function_param1_field3 event:event
      * @type_function_param1_field4 itemData:any
-     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      */
     onDragMove?: ((e: Cancelable & RowDraggingEventInfo<T, TRowData, TKey> & DragDropInfo) => void);
     /**
@@ -389,8 +381,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 itemData:any
-     * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
      */
     onRemove?: ((e: RowDraggingEventInfo<T, TRowData, TKey>) => void);
     /**
@@ -399,8 +389,6 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 itemData:any
-     * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
      * @type_function_param1_field12 promise:Promise<void>
      */
     onReorder?: ((e: RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> & DragReorderInfo) => void);

@@ -200,7 +200,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileUploader
      * @type_function_param1_field4 request: XMLHttpRequest
-     * @type_function_param1_field6 uploadInfo:UploadInfo
      * @action
      * @public
      */

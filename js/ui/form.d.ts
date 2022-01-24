@@ -517,7 +517,6 @@ export interface dxFormGroupItem {
     /**
      * @docid
      * @type_function_param1 data:object
-     * @type_function_param1_field1 component:dxForm
      * @type_function_param1_field2 formData:object
      * @type_function_return string|Element|jQuery
      * @public
@@ -640,7 +639,6 @@ export interface dxFormSimpleItem {
     /**
      * @docid
      * @type_function_param1 data:object
-     * @type_function_param1_field1 component:dxForm
      * @type_function_param1_field3 editorOptions:object
      * @type_function_return string|Element|jQuery
      * @public

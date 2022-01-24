@@ -387,7 +387,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxGantt
      * @action
      * @public
      */
@@ -396,7 +395,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxGantt
      * @type_function_param1_field4 event:event
      * @type_function_param1_field8 items:Array<object>
      * @action

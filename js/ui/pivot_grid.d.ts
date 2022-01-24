@@ -472,7 +472,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @docid
      * @type_function_param1 e:object
      * @default null
-     * @type_function_param1_field2 component:dxPivotGrid
      * @action
      * @public
      * @deprecated
