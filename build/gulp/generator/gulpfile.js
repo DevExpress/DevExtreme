@@ -279,7 +279,7 @@ function addGenerationTaskWithSuffix(
                 )
                 .pipe(gulp.dest(frameworkDest));
         },
-        function declarationBuild() {
+        function watchDeclarationBuild() {
             gulp.watch(SRC, gulp.series(`generate-${frameworkName}${suffix}-declaration-only`));
         }
     ];
