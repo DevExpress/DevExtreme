@@ -1164,6 +1164,54 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual(loadingTimes, 1, 'doesn\'t load items if no search results');
     });
 
+    QUnit.test('Should not display all rows when no search results and lookup is used (remoteOperations: true, additionalFilter is used) (T1059631)', function(assert) {
+        // arrange
+        let loadingTimes = 0;
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: {
+                load() {
+                    loadingTimes += 1;
+                    return $.Deferred().resolve({
+                        data: [{ text: 'text', num: 1 }, { text: 'text', num: 2 }],
+                        totalCount: 2,
+                    });
+                }
+            },
+            filterValue: ['num', '<=', '2'],
+            searchPanel: {
+                visible: true
+            },
+            remoteOperations: true,
+            columns: [{
+                dataField: 'num',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, name: 'one' }, { id: 2, name: 'two' }],
+                    valueExpr: 'id',
+                    displayExpr: 'name'
+                }
+            }]
+        });
+
+        // act
+        this.clock.tick();
+
+        // assert
+        const visibleRowsBeforeSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsBeforeSearch.length, 2, 'two visible rows');
+        assert.strictEqual(loadingTimes, 2, 'loads before search request');
+
+        // act
+        dataGrid.option('searchPanel.text', 'three');
+        this.clock.tick();
+
+        // assert
+        const visibleRowsAfterSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsAfterSearch.length, 0, 'no visible rows');
+        assert.strictEqual(loadingTimes, 2, 'doesn\'t load items if no search results');
+    });
+
     QUnit.test('search editor have not been recreated when search text is changed', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
