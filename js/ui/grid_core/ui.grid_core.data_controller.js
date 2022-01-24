@@ -253,7 +253,7 @@ export const dataControllerModule = {
                     storeLoadOptions.filter = this.combinedFilter(storeLoadOptions.filter);
 
                     if(storeLoadOptions.filter?.length === 1 && storeLoadOptions.filter[0] === '!') {
-                        e.data = [];
+                        e.data = { data: [], totalCount: 0 };
                     }
 
                     if(!columnsController.isDataSourceApplied()) {
