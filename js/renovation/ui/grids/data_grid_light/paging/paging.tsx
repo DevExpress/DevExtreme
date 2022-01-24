@@ -92,9 +92,9 @@ export class Paging extends JSXComponent(PagingProps) {
   }
 
   calculateVisibleItems(dataSource: RowData[]): RowData[] {
-    let { forceCounter } = this;
+    let counter = this.forceCounter;
     /* istanbul ignore next */
-    if (!forceCounter) { forceCounter = 0; }
+    if (!counter) { counter = 0; }
     if (!this.props.enabled || this.pageSize === 'all') {
       return dataSource;
     }
