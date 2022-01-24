@@ -1,13 +1,14 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
+import { Fragment } from '@devextreme-generator/declarations';
 import { PlaceholderItem, viewFunction as PlaceholderItemView } from '../placeholder_item';
 import { createValue, Plugins } from '../context';
 
 describe('PlaceholderItem', () => {
   describe('View', () => {
-    it('should be empty if no currentComponent', () => {
+    it('should be empty if no currentTemplate', () => {
       const placeholderItem: PlaceholderItem = {
-        currentComponent: null,
+        currentTemplate: null,
         props: {
           index: 1,
         },
@@ -17,41 +18,56 @@ describe('PlaceholderItem', () => {
       expect(tree.html()).toEqual(null);
     });
 
-    it('should render currentComponent', () => {
-      const SomeComponent: any = () => {};
+    it('should render currentTemplate', () => {
+      const SomeComponent: any = () => <Fragment />;
 
       const placeholderItem: PlaceholderItem = {
-        currentComponent: () => <SomeComponent />,
+        currentTemplate: () => <SomeComponent />,
         props: {
           index: 1,
         },
       } as any;
 
-      const tree = shallow(<PlaceholderItemView {...placeholderItem as any} />);
+      const tree = mount(<PlaceholderItemView {...placeholderItem as any} />);
       expect(tree.find(SomeComponent).length).toEqual(1);
     });
 
-    it('should pass args to currentComponent', () => {
-      const SomeComponent: any = () => {};
-
+    it('should pass args to currentTemplate', () => {
+      const SomeComponent: any = () => <Fragment />;
       const placeholderItem: PlaceholderItem = {
-        currentComponent: (args) => <SomeComponent args={args} />,
+        currentTemplate: ({ deps }) => <SomeComponent args={deps} />,
         args: [1, 2],
         props: {
           index: 0,
         },
       } as any;
 
-      const tree = shallow(<PlaceholderItemView {...placeholderItem as any} />);
+      const tree = mount(<PlaceholderItemView {...placeholderItem as any} />);
       expect(tree.find(SomeComponent).length).toEqual(1);
       expect(tree.find(SomeComponent).props()).toMatchObject({
         args: [1, 2],
       });
     });
+
+    it('should pass baseTemplate to currentTemplate', () => {
+      const SomeComponent: any = () => <Fragment />;
+      const currentTemplate = ({ baseTemplate: BaseTemplate }) => <BaseTemplate />;
+      const placeholderItem: PlaceholderItem = {
+        currentTemplate,
+        args: [],
+        props: {
+          index: 0,
+          componentTypes: [currentTemplate, SomeComponent],
+          componentDeps: [[], []],
+        },
+      } as any;
+      const tree = mount(<PlaceholderItemView {...placeholderItem as any} />);
+      expect(tree.find(SomeComponent).length).toEqual(1);
+    });
   });
 
   describe('Getters', () => {
-    it('currentComponent returns component from componentTypes by index', () => {
+    it('currentTemplate returns component from componentTypes by index', () => {
       const SomeComponent: any = () => {};
       const componentTypes = [() => <SomeComponent />];
       const props = {
@@ -66,7 +82,7 @@ describe('PlaceholderItem', () => {
       expect(placeholderItem.currentTemplate).toEqual(componentTypes[0]);
     });
 
-    it('currentComponent returns undefined for next index', () => {
+    it('currentTemplate returns undefined for next index', () => {
       const SomeComponent: any = () => {};
       const componentTypes = [() => <SomeComponent />];
       const props = {
@@ -81,7 +97,7 @@ describe('PlaceholderItem', () => {
       expect(placeholderItem.currentTemplate).toBeUndefined();
     });
 
-    it('currentComponent returns null if deps do not have values', () => {
+    it('currentTemplate returns null if deps do not have values', () => {
       const SomeComponent: any = () => {};
       const componentTypes = [() => <SomeComponent />];
       const SomeValue1 = createValue();
@@ -90,15 +106,15 @@ describe('PlaceholderItem', () => {
         componentTypes,
         componentDeps: [[SomeValue1]],
         index: 0,
-        plugins: new Plugins(),
       };
 
       const placeholderItem = new PlaceholderItem(props);
+      placeholderItem.plugins = new Plugins();
 
       expect(placeholderItem.currentTemplate).toBeNull();
     });
 
-    it('currentComponent returns component if deps have values', () => {
+    it('currentTemplate returns component if deps have values', () => {
       const SomeComponent: any = () => {};
       const componentTypes = [() => <SomeComponent />];
       const SomeValue = createValue();
@@ -107,11 +123,11 @@ describe('PlaceholderItem', () => {
         componentTypes,
         componentDeps: [[SomeValue]],
         index: 0,
-        plugins: new Plugins(),
       };
 
       const placeholderItem = new PlaceholderItem(props);
-      props.plugins.set(SomeValue, 1);
+      placeholderItem.plugins = new Plugins();
+      placeholderItem.plugins.set(SomeValue, 1);
 
       expect(placeholderItem.currentTemplate).toEqual(componentTypes[0]);
     });
@@ -125,12 +141,12 @@ describe('PlaceholderItem', () => {
         componentTypes,
         componentDeps: [[SomeValue]],
         index: 0,
-        plugins: new Plugins(),
       };
 
       const placeholderItem = new PlaceholderItem(props);
+      placeholderItem.plugins = new Plugins();
       placeholderItem.updateArgs();
-      props.plugins.set(SomeValue, 1);
+      placeholderItem.plugins.set(SomeValue, 1);
 
       expect(placeholderItem.args).toEqual([1]);
     });
@@ -146,15 +162,15 @@ describe('PlaceholderItem', () => {
         componentTypes: [(values) => <SomeComponent values={values} />],
         componentDeps: [[SomeValue1, SomeValue2]],
         index: 0,
-        plugins: new Plugins(),
       };
 
       const placeholderItem = new PlaceholderItem(props);
+      placeholderItem.plugins = new Plugins();
 
       placeholderItem.updateArgs();
 
-      props.plugins.set(SomeValue1, 1);
-      props.plugins.set(SomeValue2, 2);
+      placeholderItem.plugins.set(SomeValue1, 1);
+      placeholderItem.plugins.set(SomeValue2, 2);
 
       expect(placeholderItem.args).toEqual([1, 2]);
     });
@@ -167,18 +183,18 @@ describe('PlaceholderItem', () => {
         componentTypes: [(values) => <SomeComponent values={values} />],
         componentDeps: [[SomeValue1]],
         index: 0,
-        plugins: new Plugins(),
       };
 
       const placeholderItem = new PlaceholderItem(props);
+      placeholderItem.plugins = new Plugins();
 
-      props.plugins.set(SomeValue1, 0);
+      placeholderItem.plugins.set(SomeValue1, 0);
 
       const dispose = placeholderItem.updateArgs();
 
       dispose();
 
-      props.plugins.set(SomeValue1, 1);
+      placeholderItem.plugins.set(SomeValue1, 1);
 
       expect(placeholderItem.args).toEqual([0]);
     });

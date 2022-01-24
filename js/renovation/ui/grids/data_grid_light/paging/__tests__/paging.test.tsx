@@ -3,12 +3,11 @@ import { mount } from 'enzyme';
 import each from 'jest-each';
 import { Paging, PagingProps, viewFunction as PagingView } from '../paging';
 import {
-  PageIndex, PageSize, SetPageIndex, PageCount,
+  PageIndex, PageSize, SetPageIndex, SetPageSize, PageCount,
 } from '../plugins';
 import { generateData } from '../../__tests__/test_data';
 import { Plugins } from '../../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../../utils/plugin/value_setter';
-import { GetterExtender } from '../../../../../utils/plugin/getter_extender';
 import { TotalCount, VisibleItems } from '../../data_grid_light';
 
 describe('Paging', () => {
@@ -29,12 +28,12 @@ describe('Paging', () => {
       expect(tree.find(ValueSetter).at(1).props()).toEqual({
         type: PageSize, value: viewProps.pageSize,
       });
-      expect(tree.find(ValueSetter).at(2).props()).toEqual({
-        type: SetPageIndex, value: viewProps.setPageIndex,
-      });
-      expect(tree.find(GetterExtender).at(0).props()).toEqual({
-        type: VisibleItems, order: 1, func: viewProps.calculateVisibleItems,
-      });
+      // expect(tree.find(ValueSetter).at(2).props()).toEqual({
+      //   type: SetPageIndex, value: viewProps.setPageIndex,
+      // });
+      // expect(tree.find(GetterExtender).at(0).props()).toEqual({
+      //   type: VisibleItems, order: 1, func: viewProps.calculateVisibleItems,
+      // });
     });
   });
 
@@ -140,6 +139,45 @@ describe('Paging', () => {
 
         expect(paging.props.pageSize).toEqual(10);
       });
+    });
+  });
+
+  describe('Effects', () => {
+    it('updateVisibleItems', () => {
+      const paging = new Paging({
+        enabled: true,
+        pageIndex: 1,
+        pageSize: 2,
+      });
+      paging.plugins = new Plugins();
+      paging.plugins.extend(VisibleItems, -1, () => [
+        { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 },
+      ]);
+      paging.updateVisibleItems();
+
+      expect(paging.plugins.getValue(VisibleItems)).toEqual([{ id: 3 }, { id: 4 }]);
+    });
+
+    it('updatePageIndexSetter', () => {
+      const paging = new Paging({
+        pageIndex: 0,
+      });
+      paging.plugins = new Plugins();
+      paging.updatePageIndexSetter();
+      paging.plugins.callAction(SetPageIndex, 3);
+
+      expect(paging.props.pageIndex).toBe(3);
+    });
+
+    it('updatePageSizeSetter', () => {
+      const paging = new Paging({
+        pageSize: 10,
+      });
+      paging.plugins = new Plugins();
+      paging.updatePageSizeSetter();
+      paging.plugins.callAction(SetPageSize, 20);
+
+      expect(paging.props.pageSize).toBe(20);
     });
   });
 

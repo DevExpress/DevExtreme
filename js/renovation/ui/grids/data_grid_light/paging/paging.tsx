@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable max-classes-per-file */
 import {
@@ -95,6 +93,7 @@ export class Paging extends JSXComponent(PagingProps) {
 
   calculateVisibleItems(dataSource: RowData[]): RowData[] {
     let { forceCounter } = this;
+    /* istanbul ignore next */
     if (!forceCounter) { forceCounter = 0; }
     if (!this.props.enabled || this.pageSize === 'all') {
       return dataSource;

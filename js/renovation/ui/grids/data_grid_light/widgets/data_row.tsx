@@ -47,7 +47,7 @@ export class DataRowProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DataRow extends JSXComponent<DataRowProps>(DataRowProps) {
+export class DataRow extends JSXComponent(DataRowProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
 

@@ -19,7 +19,8 @@ export const viewFunction = (viewModel: TableContent): JSX.Element => (
         <Fragment>
           {viewModel.props.dataSource.map((data, rowIndex) => (
             <DataRow
-              plugins={viewModel.plugins}
+              // eslint-disable-next-line react/no-array-index-key
+              key={rowIndex}
               data={data}
               rowIndex={rowIndex}
               columns={viewModel.props.columns}
