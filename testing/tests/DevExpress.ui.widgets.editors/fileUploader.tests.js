@@ -3689,7 +3689,8 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             useDragOver: true,
             uploadMode: 'instantly',
-            accept: 'image/jpeg'
+            accept: 'image/jpeg',
+            allowedFileExtensions: ['.jpeg']
         });
         const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
 
@@ -3717,14 +3718,14 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
         const request = this.xhrMock.getInstanceAt();
         assert.notOk(!!request, 'xhr is not created');
-        assert.notOk(request.uploadStarted, 'upload is not started');
     });
 
     QUnit.test('invalid files should be added with error on dnd - useButtons mode (T1061979)', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             useDragOver: true,
             uploadMode: 'useButtons',
-            accept: 'image/jpeg'
+            accept: 'image/jpeg',
+            allowedFileExtensions: ['.jpeg']
         });
         const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
 
