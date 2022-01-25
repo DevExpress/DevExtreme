@@ -130,17 +130,12 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
 function splitRectsVerticallyByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectVertically, headersInfo) {
     const pages = [];
 
-    const getHeadersRects = () => {
-        return [...headersInfo.rects
-            .map(rect => Object.assign({}, rect))
-        ];
+    const cloneHeadersRects = () => {
+        return headersInfo.rects.map(rect => Object.assign({}, rect));
     };
 
-    let rectsToSplit = [...getHeadersRects(), ...rects];
+    const rectsToSplit = [...cloneHeadersRects(), ...rects];
     while(rectsToSplit.length > 0) {
-        const needDisplayHeaderOnNextPage = headersInfo.displayHeaderOnEachPage === true;
-        const nextPageHeaderHeight = needDisplayHeaderOnNextPage ? headersInfo.height : 0;
-
         let currentPageMaxRectBottom = 0;
         const currentPageRects = rectsToSplit.filter(rect => {
             const currentRectBottom = roundToThreeDecimals(rect.y + rect.h);
@@ -174,7 +169,7 @@ function splitRectsVerticallyByPages(rects, margin, topLeft, maxBottomRight, onS
                 },
                 bottomRect: {
                     x: rect.x,
-                    y: currentPageMaxRectBottom + nextPageHeaderHeight,
+                    y: currentPageMaxRectBottom,
                     w: rect.w,
                     h: rect.h - (currentPageMaxRectBottom - rect.y)
                 }
@@ -198,17 +193,23 @@ function splitRectsVerticallyByPages(rects, margin, topLeft, maxBottomRight, onS
         });
 
         rectsToSplit.forEach(rect => {
-            rect.y = isDefined(currentPageMaxRectBottom) ? (rect.y - currentPageMaxRectBottom + nextPageHeaderHeight + margin.top) : rect.y + nextPageHeaderHeight;
+            rect.y = isDefined(currentPageMaxRectBottom)
+                ? (rect.y - currentPageMaxRectBottom + margin.top)
+                : rect.y;
         });
 
         if(currentPageRects.length > 0) {
             pages.push(currentPageRects);
-            if(headersInfo.displayHeaderOnEachPage && rectsToSplit.length) {
-                rectsToSplit = [...getHeadersRects(), ...rectsToSplit];
-            }
         } else {
             pages.push(rectsToSplit);
             break;
+        }
+    }
+
+    if(headersInfo.displayHeaderOnEachPage) {
+        for(let i = 1; i < pages.length; i++) {
+            pages[i].forEach(rect => rect.y += headersInfo.height);
+            pages[i] = [...cloneHeadersRects(), ...pages[i]];
         }
     }
 
