@@ -447,6 +447,36 @@ describe('resizable-container', () => {
 
         dispose?.();
       });
+
+      it('updateAdaptivityProps should not be called when the invisible container is resized', () => {
+        const component = createComponent({
+          width: 100, pageSizes: 20, info: 30, pages: 30,
+        });
+        const updateAdaptivityPropsSpy = jest.spyOn(component, 'updateAdaptivityProps');
+        const addMock = (resizeCallbacks as any).add.mock;
+        component.effectUpdateChildProps();
+        expect(updateAdaptivityPropsSpy).toBeCalledTimes(1);
+
+        const dispose = component.subscribeToResize();
+        expect(addMock.calls.length).toBe(1);
+
+        const resizeFire = addMock.calls[0][0];
+        updateComponent(component, {
+          width: 110, pageSizes: 20, pages: 30, info: 30,
+        });
+        resizeFire(); // resizeCallbacks.fire() - jest mock bug
+        expect(updateAdaptivityPropsSpy).toBeCalledTimes(2);
+        expect(component.isLargeDisplayMode).toBe(true);
+
+        updateComponent(component, {
+          width: 0, pageSizes: 20, pages: 30, info: 30,
+        });
+        resizeFire();
+        expect(updateAdaptivityPropsSpy).toBeCalledTimes(2);
+        expect(component.isLargeDisplayMode).toBe(true);
+
+        dispose?.();
+      });
     });
   });
 

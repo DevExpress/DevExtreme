@@ -96,6 +96,23 @@ module('Cells Selection', {
                 });
             });
         });
-    }
 
+        test('Header should not rerender while selection', function(assert) {
+            const scheduler = createWrapper({
+                views: ['week'],
+                currentView: 'week',
+                currentDate: new Date(2021, 0, 11),
+                startDayHour: 0,
+                endDayHour: 2,
+                height: 600,
+                width: 800,
+            });
+
+            const renderRHeaderPanelSpy = sinon.spy(scheduler.instance.getWorkSpace(), 'renderRHeaderPanel');
+
+            scheduler.workSpace.selectCells(2, 4);
+
+            assert.equal(renderRHeaderPanelSpy.callCount, 0, 'Header was not render');
+        });
+    }
 });

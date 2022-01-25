@@ -292,18 +292,21 @@ QUnit.module('dateView', {
             minDate: new Date(2014, 1, 1, 1, 1),
             type: 'datetime'
         });
-        triggerShownEvent('#qunit-fixture');
 
         setTimeout(() => {
-            const instance = $dateView.dxDateView('instance');
+            triggerShownEvent('#qunit-fixture');
 
-            assert.notEqual(instance._rollers.year.scrollTop(), 0, 'year scroll correctly');
-            assert.notEqual(instance._rollers.month.scrollTop(), 0, 'month scroll correctly');
-            assert.notEqual(instance._rollers.day.scrollTop(), 0, 'day scroll correctly');
-            assert.notEqual(instance._rollers.hours.scrollTop(), 0, 'hours scroll correctly');
-            assert.notEqual(instance._rollers.minutes.scrollTop(), 0, 'minutes scroll correctly');
+            setTimeout(() => {
+                const instance = $dateView.dxDateView('instance');
 
-            done();
+                assert.notEqual(instance._rollers.year.scrollTop(), 0, 'year scroll correctly');
+                assert.notEqual(instance._rollers.month.scrollTop(), 0, 'month scroll correctly');
+                assert.notEqual(instance._rollers.day.scrollTop(), 0, 'day scroll correctly');
+                assert.notEqual(instance._rollers.hours.scrollTop(), 0, 'hours scroll correctly');
+                assert.notEqual(instance._rollers.minutes.scrollTop(), 0, 'minutes scroll correctly');
+
+                done();
+            }, RESIZE_WAIT_TIMEOUT);
         }, RESIZE_WAIT_TIMEOUT);
     });
 
@@ -315,22 +318,25 @@ QUnit.module('dateView', {
 
     QUnit.test('active roller class', function(assert) {
         const datePickerElement = this.wrapper;
+        this.instance.option('value', new Date(2020, 5, 5, 8, 0));
         this.clock.restore();
         const done = assert.async();
-        // NOTE: simulate triggering visibility change event in popup
-        triggerShownEvent('#qunit-fixture');
-
         setTimeout(() => {
-            $.each(this.instance._rollers, function(type) {
-                const pointer = pointerMock(this.container());
-                pointer.start().down().move(0, -20).up();
+            // NOTE: simulate triggering visibility change event in popup
+            triggerShownEvent('#qunit-fixture');
 
-                assert.equal(datePickerElement.find('.' + DATEVIEW_ROLLER_CURRENT_CLASS).length, 1, 'active roller [' + type + '] only one');
-                assert.ok(this.$element().hasClass(DATEVIEW_ROLLER_CURRENT_CLASS), 'this roller [' + type + '] is active');
-            });
+            setTimeout(() => {
+                $.each(this.instance._rollers, function(type) {
+                    const pointer = pointerMock(this.container());
+                    pointer.start().down().move(0, -20).up();
 
-            done();
-        }, RESIZE_WAIT_TIMEOUT * 2);
+                    assert.equal(datePickerElement.find('.' + DATEVIEW_ROLLER_CURRENT_CLASS).length, 1, 'active roller [' + type + '] only one');
+                    assert.ok(this.$element().hasClass(DATEVIEW_ROLLER_CURRENT_CLASS), 'this roller [' + type + '] is active');
+                });
+
+                done();
+            }, RESIZE_WAIT_TIMEOUT);
+        }, RESIZE_WAIT_TIMEOUT);
     });
 
     QUnit.test('render rollers', function(assert) {

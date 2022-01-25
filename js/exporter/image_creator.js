@@ -133,7 +133,7 @@ function drawImage(context, options, shared) {
         transformElement(context, options);
         clipElement(context, options, shared);
 
-        context.drawImage(image, options.x, options.y, options.width, options.height);
+        context.drawImage(image, options.x || 0, options.y || 0, options.width, options.height);
 
         context.restore();
         d.resolve();
