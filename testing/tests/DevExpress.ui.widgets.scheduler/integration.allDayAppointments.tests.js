@@ -717,43 +717,6 @@ module('Integration: allDay appointments', config, () => {
                 assert.roughEqual(area.right, $cells.eq(0).offset().left + 3 * halfOfCellWidth, 1.001);
             });
 
-            test('Many grouped allDay dropDown appts should be grouped correctly (T489535)', function(assert) {
-                const scheduler = createInstanceBase({
-                    currentDate: new Date(2015, 4, 25),
-                    views: ['week'],
-                    currentView: 'week',
-                    groups: ['ownerId'],
-                    resources: [
-                        {
-                            field: 'ownerId',
-                            dataSource: [
-                                { id: 1, text: 'one' },
-                                { id: 2, text: 'two' }
-                            ]
-                        }
-                    ]
-                });
-
-                scheduler.instance.option('dataSource', [
-                    { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 1 },
-                    { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 1 },
-                    { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 1 },
-                    { text: '4', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 1 },
-                    { text: '5', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 1 },
-                    { text: '6', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 },
-                    { text: '7', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 },
-                    { text: '8', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 },
-                    { text: '9', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 },
-                    { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 }
-                ]);
-
-                scheduler.appointments.compact.click();
-                assert.equal(scheduler.tooltip.getItemCount(), 3, 'There are 3 drop down appts in 1st group');
-
-                scheduler.appointments.compact.click(1);
-                assert.equal(scheduler.tooltip.getItemCount(), 3, 'There are 3 drop down appts in 2d group');
-            });
-
             test('DropDown appointment should be removed correctly when needed', function(assert) {
                 const scheduler = createInstance({
                     currentDate: new Date(2015, 4, 25),
