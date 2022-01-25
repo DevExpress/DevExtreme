@@ -1581,8 +1581,23 @@ declare module DevExpress.core.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type DxPromise<T = void> = {} extends PromiseType<T>
-    ? Promise<T>
+    ? Promise<T> & DxPromiseLike<T>
     : PromiseType<T>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface DxPromiseLike<T> {
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value?: T, ...args: never[]) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null
+    ): PromiseLike<TResult1 | TResult2>;
+  }
 }
 declare module DevExpress.data {
   /**
