@@ -24,7 +24,12 @@
 
     .dx-pages {
       .dx-navigate-button {
-        padding: $material-pager-light-navbutton-paddings;
+        padding: $material-pager-navbutton-paddings;
+        vertical-align: middle;
+      }
+
+      .dx-light-pages {
+        vertical-align: middle;
       }
     }
   }
