@@ -4185,7 +4185,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/DateBox/Overview/",
             "Widget": "DateBox"
           },
           {
@@ -4239,14 +4238,12 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/NumberBox/Overview/",
             "Widget": "NumberBox"
           },
           {
             "Title": "Formatting",
             "Name": "Formatting",
             "Equivalents": "mask",
-            "DocUrl": "ApiReference/UI_Components/dxNumberBox/Configuration/#format",
             "Widget": "NumberBox"
           }
         ]
@@ -4358,7 +4355,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/TextArea/Overview/",
             "Widget": "TextArea"
           }
         ]
