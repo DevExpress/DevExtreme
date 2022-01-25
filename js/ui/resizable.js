@@ -395,7 +395,10 @@ const Resizable = DOMComponent.inherit({
     },
 
     _isCornerHandler(sides) {
-        return Object.values(sides).reduce((xor, value) => xor ^ value, 0) === 0;
+        return Object
+            .keys(sides)
+            .map(key => sides[key])
+            .reduce((xor, value) => xor ^ value, 0) === 0;
     },
 
     _getOffset: function(e) {
