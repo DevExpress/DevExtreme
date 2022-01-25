@@ -39,6 +39,7 @@ export interface ODataContextOptions {
     /**
      * @docid
      * @type_function_param1 e:Error
+     * @type_function_param1_field1 httpStatus:Number
      * @type_function_param1_field2 errorDetails:object
      * @type_function_param1_field3 requestOptions:object
      * @public
