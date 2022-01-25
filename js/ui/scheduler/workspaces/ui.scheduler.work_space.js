@@ -1861,11 +1861,14 @@ class SchedulerWorkSpace extends WidgetObserver {
     // Methods that render renovated components. Useless in renovation
     // ------------
 
-    renderRWorkSpace() {
-        this.renderRHeaderPanel();
-        this.renderRTimeTable();
-        this.renderRDateTable();
-        this.renderRAllDayPanel();
+    renderRWorkSpace(componentsToRender) {
+        const allComponents = { header: true, timePanel: true, dateTable: true, allDayPanel: true };
+        const components = componentsToRender ?? allComponents;
+
+        components.header && this.renderRHeaderPanel();
+        components.timePanel && this.renderRTimeTable();
+        components.dateTable && this.renderRDateTable();
+        components.allDayPanel && this.renderRAllDayPanel();
     }
 
     renderRDateTable() {
@@ -2531,7 +2534,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     updateCellsSelection() {
         const renderOptions = this.generateRenderOptions();
         this.viewDataProvider.updateViewData(renderOptions);
-        this.renderRWorkSpace();
+        this.renderRWorkSpace({
+            timePanel: true,
+            dateTable: true,
+            allDayPanel: true
+        });
     }
 
     _renderDateTimeIndication() { return noop(); }

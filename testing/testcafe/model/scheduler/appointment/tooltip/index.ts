@@ -7,6 +7,10 @@ const CLASS = {
   tooltip: 'dx-tooltip',
   tooltipWrapper: 'dx-tooltip-wrapper',
   tooltipDeleteButton: 'dx-tooltip-appointment-item-delete-button',
+  listItem: 'dx-list-item',
+};
+
+const SELECTOR = {
   mobileTooltip: '.dx-scheduler-overlay-panel > .dx-overlay-content',
 };
 
@@ -21,7 +25,7 @@ export default class AppointmentTooltip {
 
   constructor(scheduler: Selector) {
     this.element = scheduler.find(`.${CLASS.tooltip}.${CLASS.appointmentTooltipWrapper}`);
-    this.mobileElement = Selector(CLASS.mobileTooltip);
+    this.mobileElement = Selector(SELECTOR.mobileTooltip);
 
     this.deleteButton = Selector(`.${CLASS.tooltipDeleteButton}`);
     this.wrapper = Selector(`.${CLASS.tooltipWrapper}.${CLASS.appointmentTooltipWrapper}`);
@@ -29,6 +33,10 @@ export default class AppointmentTooltip {
 
   getListItem(title?: string, index = 0): ListItem {
     return new ListItem(this.wrapper, title, index);
+  }
+
+  getAppointmentCount(): Promise<number> {
+    return this.wrapper.find(`.${CLASS.listItem}`).count;
   }
 
   isVisible(): Promise<boolean> {
