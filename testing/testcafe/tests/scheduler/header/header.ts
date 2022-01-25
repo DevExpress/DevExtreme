@@ -79,7 +79,7 @@ test('viewSwitcher dropdown button popup should have a specified class', async (
     .eql(1);
 }).before(async () => createWidget('dxScheduler', {
   currentView: 'day',
-  views: ['day'],
+  views: ['day', 'week'],
   height: 580,
 }));
 
