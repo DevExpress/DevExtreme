@@ -5,7 +5,8 @@ const { readFileSync } = require('fs');
 const chalks = require('./chalks');
 
 const exceptions = [
-    '.github/workflows/renovate_autoapprove.yml'
+    '.github/workflows/renovate_autoapprove.yml',
+    '.github/workflows/renovate_force.yml'
 ]
 
 module.exports = (results) => {

@@ -1,0 +1,13 @@
+name: Force renovate workflows
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */1 * * *'
+
+jobs:
+  execute:
+    runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/force-renovate-workflow
