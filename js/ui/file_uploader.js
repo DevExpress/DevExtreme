@@ -447,11 +447,11 @@ class FileUploader extends Editor {
         const accept = this.option('accept');
         const allowedTypes = this._getAllowedFileTypes(accept);
         const fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
-        if(accept.length === 0 && allowedExtensions.length === 0) {
-            return true;
-        }
         if(accept.length !== 0 && !this._isFileTypeAllowed(file.value, allowedTypes)) {
             return false;
+        }
+        if(allowedExtensions.length === 0) {
+            return true;
         }
         for(let i = 0; i < allowedExtensions.length; i++) {
             if(fileExtension === allowedExtensions[i].toLowerCase()) {

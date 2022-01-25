@@ -3577,7 +3577,7 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
         const validFileName = $validFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
         const $validFileStatus = $validFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
-        assert.equal(validFileName, firstFile.name, firstFile.name + ' is invalid file');
+        assert.equal(validFileName, firstFile.name, firstFile.name + ' is valid file');
         assert.strictEqual($validFileStatus.text(), 'Ready to upload', 'file status message is correct');
 
         const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
@@ -3805,6 +3805,48 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
         assert.equal(invalidFileName, firstFile.name, firstFile.name + ' is invalid file');
         assert.strictEqual($fileStatus.text(), 'File type is not allowed', 'file status message is correct');
+    });
+    QUnit.test('file can be marked as invalid based on accept option only (T1061979)', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            useDragOver: true,
+            uploadMode: 'useButtons',
+            accept: 'image/jpeg',
+            multiple: true
+        });
+        const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+
+        const firstFile = $.extend({}, fakeFile, {
+            name: 'firstFile.txt',
+            type: 'text/plain'
+        });
+        const secondFile = $.extend({}, fakeFile1, {
+            name: 'secondFile.jpeg',
+            type: 'image/jpeg'
+        });
+
+        $inputWrapper.trigger($.Event($.Event('drop', {
+            dataTransfer: { files: [firstFile, secondFile] }
+        })));
+
+        assert.equal($fileUploader.dxFileUploader('option', 'value').length, 2, 'files count is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, firstFile.name, 'added file is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[1]').name, secondFile.name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 1, 'One file is valid');
+
+        const validFileName = $validFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $validFileStatus = $validFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(validFileName, secondFile.name, secondFile.name + ' is valid file');
+        assert.strictEqual($validFileStatus.text(), 'Ready to upload', 'file status message is correct');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $invalidFileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, firstFile.name, firstFile.name + ' is invalid file');
+        assert.strictEqual($invalidFileStatus.text(), 'File type is not allowed', 'file status message is correct');
     });
 });
 
