@@ -354,8 +354,8 @@ QUnit.module('label integration', {
         const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
         const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
         const expectedContainerWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
-
         const borderWidth = 2;
+
         assert.strictEqual(this.labelArgs.containerWidth + borderWidth, expectedContainerWidth);
     });
 

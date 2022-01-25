@@ -3,8 +3,8 @@
         "config:base"
     ],
     "baseBranches": [
-        "21_2",
-        "22_1"
+        "22_1",
+        "21_2"
     ],
     "labels": [
         "dependencies"
@@ -36,11 +36,6 @@
         ".github"
     ],
     "constraints": {
-        "npm": "^8.3.0"
-    },
-    "force": {
-        "constraints": {
-            "node": "^16.13.1"
-        }
+        "node": "^16.3.0"
     }
 }

@@ -1237,6 +1237,32 @@ QUnit.test('Image with xlink:href', function(assert) {
     });
 });
 
+QUnit.test('Image drawing. Default x&y coordinates', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/testing/content/exporterTestsContent/test-image.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+
+    assert.expect(3);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 3, 'Canvas elements count');
+            assert.equal(that.drawnElements[2].type, 'image', 'Canvas drawn rect element');
+            assert.deepEqual(that.drawnElements[2].args, {
+                node: 'IMG',
+                src: '/testing/content/exporterTestsContent/test-image.png',
+                x: 0,
+                y: 0,
+                width: 20,
+                height: 25
+            });
+
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test('Image with href', function(assert) {
     const that = this;
     const done = assert.async();
