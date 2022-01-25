@@ -50,7 +50,6 @@ describe('ScrollView', () => {
       forceGeneratePockets: false,
       inertiaEnabled: true,
       needScrollViewContentWrapper: false,
-      needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
       pulledDownText: 'Release to refresh...',
@@ -94,6 +93,7 @@ describe('ScrollView', () => {
           ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled dx-scrollview'
           : 'dx-scrollable dx-scrollable-simulated dx-scrollable-vertical dx-scrollable-disabled dx-scrollview',
         ...restProps,
+        disabled: !!useNative,
       });
     });
   });

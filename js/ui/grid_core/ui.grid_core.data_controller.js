@@ -62,6 +62,7 @@ export const dataControllerModule = {
                 init: function() {
                     const that = this;
                     that._items = [];
+                    that._cachedProcessedItems = null;
                     that._columnsController = that.getController('columns');
 
                     that._currentOperationTypes = null;
@@ -427,6 +428,7 @@ export const dataControllerModule = {
                     that.callBase();
                     dataSource = that._dataSource;
                     that._useSortingGroupingFromColumns = true;
+                    that._cachedProcessedItems = null;
                     if(dataSource) {
                         that._setPagingOptions(dataSource);
                         that.setDataSource(dataSource);
@@ -793,12 +795,14 @@ export const dataControllerModule = {
                         change.isLiveUpdate = true;
                     }
 
-                    this._correctRowIndices(function getRowIndexCorrection(rowIndex) {
-                        const oldItem = oldItems[rowIndex];
+                    this._correctRowIndices((rowIndex) => {
+                        const oldRowIndexOffset = this._rowIndexOffset || 0;
+                        const rowIndexOffset = this.getRowIndexOffset();
+                        const oldItem = oldItems[rowIndex - oldRowIndexOffset];
                         const key = getRowKey(oldItem);
-                        const newRowIndex = newIndexByKey[key];
+                        const newVisibleRowIndex = newIndexByKey[key];
 
-                        return newRowIndex >= 0 ? newRowIndex - rowIndex : 0;
+                        return newVisibleRowIndex >= 0 ? newVisibleRowIndex + rowIndexOffset - rowIndex : 0;
                     });
                 },
                 _correctRowIndices: noop,
@@ -813,9 +817,16 @@ export const dataControllerModule = {
                     change.changeType = changeType;
 
                     if(dataSource) {
-                        items = change.items || dataSource.items();
-                        items = this._beforeProcessItems(items);
-                        items = this._processItems(items, change);
+                        const cachedProcessedItems = this._cachedProcessedItems;
+                        if(change.useProcessedItemsCache && cachedProcessedItems) {
+                            items = cachedProcessedItems;
+                        } else {
+                            items = change.items || dataSource.items();
+                            items = this._beforeProcessItems(items);
+                            items = this._processItems(items, change);
+                            this._cachedProcessedItems = items;
+                        }
+
                         items = this._afterProcessItems(items, change);
 
                         change.items = items;
@@ -835,6 +846,8 @@ export const dataControllerModule = {
                                 item.loadIndex = newItem.loadIndex;
                             }
                         });
+
+                        this._rowIndexOffset = this.getRowIndexOffset();
                     } else {
                         this._items = [];
                     }
@@ -1251,6 +1264,12 @@ export const dataControllerModule = {
 
                 getCachedStoreData: function() {
                     return this._dataSource && this._dataSource.getCachedStoreData();
+                },
+
+                isLastPageLoaded: function() {
+                    const pageIndex = this.pageIndex();
+                    const pageCount = this.pageCount();
+                    return pageIndex === (pageCount - 1);
                 }
             };
 

@@ -124,6 +124,39 @@ stylingMods.forEach((stylingMode) => {
   });
 });
 
+labelMods.forEach((labelMode) => {
+  stylingMods.forEach((stylingMode) => {
+    themes.forEach((theme) => {
+      test(`Label for Lookup labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
+        await setTheme(theme);
+
+        const componentOption = {
+          width: 300,
+          label: 'label text',
+          labelMode,
+          dropDownCentered: false,
+          items: [...Array(10)].map((_, i) => `item${i}`),
+          stylingMode,
+        };
+
+        await createComponent('dxLookup', { ...componentOption }, '#container');
+
+        await createComponent('dxLookup', { ...componentOption }, '#otherContainer');
+
+        await t.click('#otherContainer');
+
+        await t.expect(await compareScreenshot(t, `label-lookup-${theme}-labelMode=${labelMode}-styleMode=${stylingMode}.png`)).ok();
+      }).before(async () => {
+        await ClientFunction(() => {
+          $('#otherContainer').css({
+            'margin-top': '20px',
+          });
+        })();
+      });
+    });
+  });
+});
+
 stylingMods.forEach((stylingMode) => {
   themes.forEach((theme) => {
     test(`Label for dxNumberBox ${theme} stylingMode=${stylingMode}`, async (t) => {

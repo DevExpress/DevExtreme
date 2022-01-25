@@ -972,7 +972,7 @@ declare module DevExpress {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  type ExternalFormat = any;
+  type ExternalFormat = never;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1000,7 +1000,6 @@ declare module DevExpress {
   }
   /**
    * [descr:fx]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export const fx: {
     /**
@@ -1117,6 +1116,27 @@ declare module DevExpress {
    * [descr:hideTopOverlay()]
    */
   export function hideTopOverlay(): boolean;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface PdfExportGanttFont {
+    /**
+     * [descr:PdfExportGanttFont.fontObject]
+     */
+    fontObject: object;
+    /**
+     * [descr:PdfExportGanttFont.name]
+     */
+    name: string;
+    /**
+     * [descr:PdfExportGanttFont.style]
+     */
+    style?: string;
+    /**
+     * [descr:PdfExportGanttFont.weight]
+     */
+    weight?: string | number;
+  }
   /**
    * [descr:PositionConfig]
    */
@@ -1439,9 +1459,11 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type DeepPartial<T> = {
-    [P in keyof T]?: DeepPartial<T[P]>;
-  };
+  export type DeepPartial<T> = T extends object
+    ? {
+        [P in keyof T]?: DeepPartial<T[P]>;
+      }
+    : T;
   export type DefaultOptionsRule<T> = {
     device?: Device | Device[] | ((device: Device) => boolean);
     options: DeepPartial<T>;
@@ -1623,10 +1645,26 @@ declare module DevExpress.data {
     clearRawDataCache(): void;
   }
   module CustomStore {
+    export type GroupItem<TItem = any> = {
+      key: any | string | number;
+      items: Array<TItem> | Array<GroupItem> | null;
+      count?: number;
+      summary?: Array<any>;
+    };
     export type Options<TItem = any, TKey = any> = CustomStoreOptions<
       TItem,
       TKey
     >;
+    export type ResolvedData<TItem = any> =
+      | Object
+      | Array<TItem>
+      | Array<GroupItem>
+      | {
+          data: Array<TItem> | Array<GroupItem>;
+          totalCount?: number;
+          summary?: Array<any>;
+          groupCount?: number;
+        };
   }
   /**
    * @deprecated Use Options instead
@@ -1649,7 +1687,15 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load: (options: LoadOptions<TItem>) => PromiseLike<TItem> | Array<TItem>;
+    load: (
+      options: LoadOptions<TItem>
+    ) =>
+      | DevExpress.core.utils.DxPromise<
+          DevExpress.data.CustomStore.ResolvedData<TItem>
+        >
+      | PromiseLike<DevExpress.data.CustomStore.ResolvedData<TItem>>
+      | Array<DevExpress.data.CustomStore.GroupItem>
+      | Array<TItem>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -3168,7 +3214,7 @@ declare module DevExpress.events {
   /**
    * [descr:EventObject]
    */
-  export class EventObject {
+  export type EventObject = {
     /**
      * [descr:EventObject.currentTarget]
      */
@@ -3212,7 +3258,7 @@ declare module DevExpress.events {
      * [descr:EventObject.stopPropagation()]
      */
     stopPropagation(): void;
-  }
+  };
   /**
    * [descr:handler(event, extraParameters)]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -4169,6 +4215,10 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportGanttProps.dateRange]
      */
     dateRange?: 'all' | 'visible' | object;
+    /**
+     * [descr:PdfExportGanttProps.font]
+     */
+    font?: PdfExportGanttFont;
   }
 }
 declare module DevExpress.ui {
@@ -5697,6 +5747,7 @@ declare module DevExpress.ui {
     extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
     /**
      * [descr:dxContextMenuOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxContextMenuOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -5712,6 +5763,16 @@ declare module DevExpress.ui {
       DevExpress.ui.dxContextMenu.Item,
       TKey
     >;
+    /**
+     * [descr:dxContextMenuOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
     /**
      * [descr:dxContextMenuOptions.items]
      */
@@ -5907,7 +5968,7 @@ declare module DevExpress.ui {
       rowIndex: number
     ): DevExpress.core.UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): DevExpress.ui.dxDataGrid.Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
@@ -8033,6 +8094,16 @@ declare module DevExpress.ui {
       promise?: PromiseLike<void>;
       cancel: boolean;
     }
+    export type Scrollable = DevExpress.core.Skip<
+      dxScrollable,
+      | '_templateManager'
+      | '_cancelOptionChange'
+      | '_getTemplate'
+      | '_invalidate'
+      | '_refresh'
+      | '_notifyOptionChanged'
+      | '_createElement'
+    >;
     export type Scrolling = ScrollingBase & {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
@@ -9373,6 +9444,10 @@ declare module DevExpress.ui {
      * [descr:dxDiagramCustomCommand.items]
      */
     items?: Array<dxDiagramCustomCommand>;
+    /**
+     * [descr:dxDiagramCustomCommand.location]
+     */
+    location?: 'after' | 'before' | 'center';
   }
   /**
    * [descr:dxDiagramDeleteConnectorArgs]
@@ -11562,16 +11637,21 @@ declare module DevExpress.ui {
       cancel: boolean | PromiseLike<void>;
     }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxFileManager>;
-    export type ContextMenuItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxFileManager> & {
-        readonly itemData: any;
-        readonly itemElement: DevExpress.core.DxElement;
-        readonly itemIndex: number;
-        readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
-        readonly viewArea: 'navPane' | 'itemView';
-      };
+    export type ContextMenuItemClickEvent = DevExpress.events.NativeEventInfo<
+      dxFileManager,
+      KeyboardEvent | PointerEvent | MouseEvent
+    > & {
+      readonly itemData: any;
+      readonly itemElement: DevExpress.core.DxElement;
+      readonly itemIndex: number;
+      readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
+      readonly viewArea: 'navPane' | 'itemView';
+    };
     export type ContextMenuShowingEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxFileManager> & {
+      DevExpress.events.NativeEventInfo<
+        dxFileManager,
+        KeyboardEvent | PointerEvent | MouseEvent
+      > & {
         readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
         readonly targetElement?: DevExpress.core.DxElement;
         readonly viewArea: 'navPane' | 'itemView';
@@ -11676,12 +11756,14 @@ declare module DevExpress.ui {
         readonly selectedItems: Array<DevExpress.fileManagement.FileSystemItem>;
         readonly selectedItemKeys: Array<string>;
       };
-    export type ToolbarItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxFileManager> & {
-        readonly itemData: any;
-        readonly itemElement: DevExpress.core.DxElement;
-        readonly itemIndex: number;
-      };
+    export type ToolbarItemClickEvent = DevExpress.events.NativeEventInfo<
+      dxFileManager,
+      PointerEvent | MouseEvent
+    > & {
+      readonly itemData: any;
+      readonly itemElement: DevExpress.core.DxElement;
+      readonly itemIndex: number;
+    };
   }
   /**
    * [descr:dxFileManagerContextMenu]
@@ -12178,14 +12260,18 @@ declare module DevExpress.ui {
       };
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxFileUploader>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxFileUploader>;
-    export type DropZoneEnterEvent =
-      DevExpress.events.NativeEventInfo<dxFileUploader> & {
-        readonly dropZoneElement: DevExpress.core.DxElement;
-      };
-    export type DropZoneLeaveEvent =
-      DevExpress.events.NativeEventInfo<dxFileUploader> & {
-        readonly dropZoneElement: DevExpress.core.DxElement;
-      };
+    export type DropZoneEnterEvent = DevExpress.events.NativeEventInfo<
+      dxFileUploader,
+      PointerEvent | MouseEvent
+    > & {
+      readonly dropZoneElement: DevExpress.core.DxElement;
+    };
+    export type DropZoneLeaveEvent = DevExpress.events.NativeEventInfo<
+      dxFileUploader,
+      PointerEvent | MouseEvent
+    > & {
+      readonly dropZoneElement: DevExpress.core.DxElement;
+    };
     export type FilesUploadedEvent =
       DevExpress.events.EventInfo<dxFileUploader>;
     export type InitializedEvent =
@@ -12447,9 +12533,10 @@ declare module DevExpress.ui {
   module dxFilterBuilder {
     export type ContentReadyEvent =
       DevExpress.events.EventInfo<dxFilterBuilder>;
+    export type CustomOperation = dxFilterBuilderCustomOperation;
     export type CustomOperationEditorTemplate = {
       readonly value?: string | number | Date;
-      readonly field: dxFilterBuilderField;
+      readonly field: Field;
       readonly setValue: Function;
     };
     export type DisposingEvent = DevExpress.events.EventInfo<dxFilterBuilder>;
@@ -12482,10 +12569,11 @@ declare module DevExpress.ui {
         readonly disabled: boolean;
         readonly rtlEnabled: boolean;
       };
+    export type Field = dxFilterBuilderField;
     export type FieldEditorTemplate = {
       readonly value?: string | number | Date;
       readonly filterOperation?: string;
-      readonly field: dxFilterBuilderField;
+      readonly field: Field;
       readonly setValue: Function;
     };
     /**
@@ -12508,7 +12596,7 @@ declare module DevExpress.ui {
       };
   }
   /**
-   * [descr:dxFilterBuilderCustomOperation]
+   * @deprecated Use the CustomOperation type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFilterBuilderCustomOperation {
@@ -12517,7 +12605,7 @@ declare module DevExpress.ui {
      */
     calculateFilterExpression?: (
       filterValue: any,
-      field: dxFilterBuilderField
+      field: DevExpress.ui.dxFilterBuilder.Field
     ) => string | Array<any> | Function;
     /**
      * [descr:dxFilterBuilderCustomOperation.caption]
@@ -12529,7 +12617,7 @@ declare module DevExpress.ui {
     customizeText?: (fieldInfo: {
       value?: string | number | Date;
       valueText?: string;
-      field?: dxFilterBuilderField;
+      field?: DevExpress.ui.dxFilterBuilder.Field;
     }) => string;
     /**
      * [descr:dxFilterBuilderCustomOperation.dataTypes]
@@ -12560,7 +12648,7 @@ declare module DevExpress.ui {
     name?: string;
   }
   /**
-   * [descr:dxFilterBuilderField]
+   * @deprecated Use the Field type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFilterBuilderField {
@@ -12673,11 +12761,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderOptions.customOperations]
      */
-    customOperations?: Array<dxFilterBuilderCustomOperation>;
+    customOperations?: Array<DevExpress.ui.dxFilterBuilder.CustomOperation>;
     /**
      * [descr:dxFilterBuilderOptions.fields]
      */
-    fields?: Array<dxFilterBuilderField>;
+    fields?: Array<DevExpress.ui.dxFilterBuilder.Field>;
     /**
      * [descr:dxFilterBuilderOptions.filterOperationDescriptions]
      */
@@ -16942,6 +17030,7 @@ declare module DevExpress.ui {
     animation?: dxOverlayAnimation;
     /**
      * [descr:dxOverlayOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxOverlayOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -16968,22 +17057,24 @@ declare module DevExpress.ui {
      */
     deferRendering?: boolean;
     /**
-     * [descr:dxOverlayOptions.dragAndResizeArea]
-     */
-    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
-    /**
-     * [descr:dxOverlayOptions.dragEnabled]
-     */
-    dragEnabled?: boolean;
-    /**
-     * [descr:dxOverlayOptions.dragOutsideBoundary]
-     */
-    dragOutsideBoundary?: boolean;
-    /**
      * [descr:dxOverlayOptions.elementAttr]
      * @deprecated [depNote:dxOverlayOptions.elementAttr]
      */
     elementAttr?: any;
+    /**
+     * [descr:dxOverlayOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
+    /**
+     * [descr:dxOverlayOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
     /**
      * [descr:dxOverlayOptions.height]
      */
@@ -17048,10 +17139,6 @@ declare module DevExpress.ui {
      * [descr:dxOverlayOptions.wrapperAttr]
      */
     wrapperAttr?: any;
-    /**
-     * [descr:dxOverlayOptions.hideOnParentScroll]
-     */
-    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPivotGrid]
@@ -17891,6 +17978,7 @@ declare module DevExpress.ui {
     animation?: dxPopoverAnimation;
     /**
      * [descr:dxPopoverOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxPopoverOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -17918,6 +18006,20 @@ declare module DevExpress.ui {
           name?: string;
         }
       | string;
+    /**
+     * [descr:dxPopoverOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
+    /**
+     * [descr:dxPopoverOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
     /**
      * [descr:dxPopoverOptions.position]
      */
@@ -17953,10 +18055,6 @@ declare module DevExpress.ui {
      * [descr:dxPopoverOptions.width]
      */
     width?: number | string | (() => number | string);
-    /**
-     * [descr:dxPopoverOptions.hideOnParentScroll]
-     */
-    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPopup]
@@ -18034,9 +18132,17 @@ declare module DevExpress.ui {
      */
     container?: string | DevExpress.core.UserDefinedElement;
     /**
+     * [descr:dxPopupOptions.dragAndResizeArea]
+     */
+    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
+    /**
      * [descr:dxPopupOptions.dragEnabled]
      */
     dragEnabled?: boolean;
+    /**
+     * [descr:dxPopupOptions.dragOutsideBoundary]
+     */
+    dragOutsideBoundary?: boolean;
     /**
      * [descr:dxPopupOptions.focusStateEnabled]
      */
@@ -18212,7 +18318,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxProgressBarOptions.value]
      */
-    value?: number | boolean;
+    value?: number | false;
   }
   /**
    * [descr:dxRadioGroup]
@@ -21558,6 +21664,7 @@ declare module DevExpress.ui {
     closeOnClick?: boolean;
     /**
      * [descr:dxToastOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxToastOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -21574,6 +21681,16 @@ declare module DevExpress.ui {
      * [descr:dxToastOptions.displayTime]
      */
     displayTime?: number;
+    /**
+     * [descr:dxToastOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
     /**
      * [descr:dxToastOptions.height]
      */
@@ -21952,7 +22069,7 @@ declare module DevExpress.ui {
       rowIndex: number
     ): DevExpress.core.UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): DevExpress.ui.dxTreeList.Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
@@ -22671,6 +22788,16 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.ui.dxDataGrid.SavingInfo<TRowData, TKey>;
+    export type Scrollable = DevExpress.core.Skip<
+      dxScrollable,
+      | '_templateManager'
+      | '_cancelOptionChange'
+      | '_getTemplate'
+      | '_invalidate'
+      | '_refresh'
+      | '_notifyOptionChanged'
+      | '_createElement'
+    >;
     export interface Scrolling extends DevExpress.ui.dxDataGrid.ScrollingBase {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
@@ -23251,6 +23378,8 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewItem.selected]
      */
     selected?: boolean;
+
+    [key: string]: any;
   }
   /**
    * [descr:dxTreeViewNode]
@@ -23825,6 +23954,8 @@ declare module DevExpress.ui {
     | PredefinedFormat
     | string
     | ((value: number | Date) => string)
+    | ((value: Date) => string)
+    | ((value: number) => string)
     | ExternalFormat;
   /**
    * [descr:GridBase]
@@ -23996,7 +24127,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBase.getScrollable()]
      */
-    getScrollable(): dxScrollable;
+    getScrollable(): DevExpress.ui.dxDataGrid.Scrollable;
     /**
      * [descr:GridBase.getVisibleColumnIndex(id)]
      */

@@ -4,6 +4,7 @@ import { inArray, wrapToArray } from '../../../../core/utils/array';
 import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined } from '../../../../core/utils/type';
 import query from '../../../../data/query';
+import { createAppointmentAdapter } from '../../appointmentAdapter';
 
 import {
     isDateAndTimeView as calculateIsDateAndTimeView,
@@ -13,13 +14,12 @@ import { getResourcesDataByGroups } from '../../resources/utils';
 import {
     compareDateWithStartDayHour,
     compareDateWithEndDayHour,
-    getTrimDates,
     getAppointmentTakesSeveralDays,
     _appointmentPartInInterval,
     getRecurrenceException,
     getAppointmentTakesAllDay
 } from './utils';
-import { getPreparedDataItems } from '../../../../renovation/ui/scheduler/utils/data';
+import getDatesWithoutTime from '../../../../renovation/ui/scheduler/utils/filtering/getDatesWithoutTime';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -31,9 +31,7 @@ const FilterStrategies = {
 export class AppointmentFilterBaseStrategy {
     constructor(options) {
         this.options = options;
-        this.dataSource = this.options.dataSource;
         this.dataAccessors = this.options.dataAccessors;
-        this.preparedItems = [];
 
         this._init();
     }
@@ -44,7 +42,6 @@ export class AppointmentFilterBaseStrategy {
 
     get viewStartDayHour() { return this.options.startDayHour; }
     get viewEndDayHour() { return this.options.endDayHour; }
-    get appointmentDuration() { return this.options.appointmentDuration; }
     get timezone() { return this.options.timezone; }
     get firstDayOfWeek() { return this.options.firstDayOfWeek; }
     get showAllDayPanel() { return this.options.showAllDayPanel; }
@@ -66,7 +63,6 @@ export class AppointmentFilterBaseStrategy {
 
     _init() {
         this.setDataAccessors(this.dataAccessors);
-        this.setDataSource(this.dataSource);
     }
 
     filter(preparedItems) {
@@ -92,50 +88,27 @@ export class AppointmentFilterBaseStrategy {
         }, preparedItems);
     }
 
-    hasAllDayAppointments(appointments) {
+    hasAllDayAppointments(filteredItems, preparedItems) {
+        const adapters = filteredItems.map((item) => createAppointmentAdapter(
+            item,
+            this.dataAccessors,
+            this.timeZoneCalculator
+        ));
+
         let result = false;
 
-        if(appointments) {
-            each(appointments, (_, item) => {
-                if(getAppointmentTakesAllDay(item, this.viewStartDayHour, this.viewEndDayHour)) {
-                    result = true;
-                    return false;
-                }
-            });
-        }
+        each(adapters, (_, item) => {
+            if(getAppointmentTakesAllDay(item, this.viewStartDayHour, this.viewEndDayHour)) {
+                result = true;
+                return false;
+            }
+        });
 
         return result;
     }
 
     setDataAccessors(dataAccessors) {
         this.dataAccessors = dataAccessors;
-    }
-
-    setDataSource(dataSource) {
-        this.dataSource = dataSource;
-
-        this._updatePreparedDataItems();
-    }
-
-    _updatePreparedDataItems() {
-        const updateItems = (items) => this.preparedItems = getPreparedDataItems(
-            items,
-            this.dataAccessors,
-            this.appointmentDuration,
-            this.timeZoneCalculator
-        );
-
-        if(this.dataSource) {
-            const store = this.dataSource.store();
-
-            store.on('loaded', (items) => {
-                updateItems(items);
-            });
-
-            if(this.dataSource.isLoaded()) {
-                updateItems(this.dataSource.items());
-            }
-        }
     }
 
     _createAllDayAppointmentFilter(filterOptions) {
@@ -164,7 +137,7 @@ export class AppointmentFilterBaseStrategy {
             supportMultiDayAppointments
         } = filterOptions;
 
-        const [trimMin, trimMax] = getTrimDates(min, max);
+        const [trimMin, trimMax] = getDatesWithoutTime(min, max);
         const useRecurrence = isDefined(this.dataAccessors.getter.recurrenceRule);
 
         return [[appointment => {
@@ -315,7 +288,7 @@ export class AppointmentFilterBaseStrategy {
         const recurrenceProcessor = getRecurrenceProcessor();
 
         if(allDay || _appointmentPartInInterval(appointmentStartDate, appointmentEndDate, startDayHour, endDayHour)) {
-            const [trimMin, trimMax] = getTrimDates(min, max);
+            const [trimMin, trimMax] = getDatesWithoutTime(min, max);
 
             min = trimMin;
             max = new Date(trimMax.getTime() - toMs('minute'));
@@ -347,14 +320,15 @@ export class AppointmentFilterBaseStrategy {
 
     filterPreparedItems(filterOptions, preparedItems) {
         const combinedFilter = this._createAppointmentFilter(filterOptions);
-        return query(preparedItems || this.preparedItems /* Only for QUnit tests */)
+
+        return query(preparedItems)
             .filter(combinedFilter)
             .toArray();
     }
 
-    filterAllDayAppointments(filterOptions) {
+    filterAllDayAppointments(filterOptions, preparedItems) {
         const combinedFilter = this._createAllDayAppointmentFilter(filterOptions);
-        return query(this.preparedItems)
+        return query(preparedItems)
             .filter(combinedFilter)
             .toArray()
             .map(({ rawAppointment }) => rawAppointment);
@@ -391,9 +365,9 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
 
             const resources = this._getPrerenderFilterResources(groupIndex);
 
-            const allDayPanel = this.viewDataProvider.getAllDayPanel(groupIndex);
+            const hasAllDayPanel = this.viewDataProvider.hasGroupAllDayPanel(groupIndex);
 
-            const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && allDayPanel?.length > 0);
+            const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && hasAllDayPanel);
 
             filterOptions.push({
                 isVirtualScrolling: true,
@@ -420,7 +394,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
     filterPreparedItems({ filterOptions, groupCount }, preparedItems) {
         const combinedFilters = [];
 
-        let itemsToFilter = preparedItems || this.preparedItems;
+        let itemsToFilter = preparedItems;
         const needPreFilter = groupCount > 0;
         if(needPreFilter) {
             itemsToFilter = itemsToFilter.filter(({ rawAppointment }) => {
@@ -446,11 +420,11 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
             .toArray();
     }
 
-    hasAllDayAppointments() {
+    hasAllDayAppointments(adapters, preparedItems) {
         return this.filterAllDayAppointments({
             viewStartDayHour: this.viewStartDayHour,
             viewEndDayHour: this.viewEndDayHour,
-        }).length > 0;
+        }, preparedItems).length > 0;
     }
 
     _getPrerenderFilterResources(groupIndex) {

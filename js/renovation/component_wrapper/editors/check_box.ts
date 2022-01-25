@@ -6,6 +6,12 @@ export default class CheckBox extends Editor {
     return false;
   }
 
+  _isFocused(): boolean {
+    const focusTarget: Element = this.$element()[0];
+
+    return focusTarget.classList.contains('dx-state-focused');
+  }
+
   getSupportedKeyNames(): string[] {
     return ['space'];
   }

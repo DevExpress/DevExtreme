@@ -186,6 +186,16 @@ describe('Widget', () => {
           expect(onInactive).toHaveBeenCalledTimes(0);
         });
 
+        it('should make widget not active if widget is disabled', () => {
+          const widget = new Widget({
+            activeStateEnabled: true, disabled: true,
+          });
+          widget.active = true;
+          widget.activeEffect();
+
+          expect(widget.active).toBe(false);
+        });
+
         it('should not subscribe if widget is not focusable', () => {
           const widget = new Widget({
             activeStateEnabled: false, disabled: false, onActive, onInactive,
@@ -348,6 +358,16 @@ describe('Widget', () => {
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(0);
           expect(onFocusIn).toHaveBeenCalledTimes(0);
         });
+
+        it('should make widget not focused if widget is disabled', () => {
+          const widget = new Widget({
+            focusStateEnabled: true, disabled: true,
+          });
+          widget.focused = true;
+          widget.focusEffect();
+
+          expect(widget.focused).toBe(false);
+        });
       });
 
       describe('hoverEffect', () => {
@@ -420,6 +440,16 @@ describe('Widget', () => {
 
           expect(widget.hovered).toBe(false);
           emit(EVENT.hoverStart);
+          expect(widget.hovered).toBe(false);
+        });
+
+        it('should make widget not hovered if widget is disabled', () => {
+          const widget = new Widget({
+            hoverStateEnabled: true, disabled: true,
+          });
+          widget.hovered = true;
+          widget.hoverEffect();
+
           expect(widget.hovered).toBe(false);
         });
       });

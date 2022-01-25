@@ -1123,9 +1123,6 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     this.tooltip._textHtml.empty = sinon.spy();
 
     const textHtmlElement = this.tooltip._textHtml.get(0);
-    if(!this.getComputedStyle) {
-        textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
-    }
 
     const formatObject = { valueText: 'some-text' };
     // act
@@ -1160,11 +1157,7 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     assert.equal(this.tooltip._text.attr.callCount, 1, 'text attrs');
     assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: '' }]);
 
-    if(this.getComputedStyle) {
-        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
-    } else {
-        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
-    }
+    assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
 });
 
 QUnit.test('Show. W/o params. Template', function(assert) {
@@ -1185,11 +1178,6 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     this.tooltip._textGroupHtml.css = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
     this.tooltip._textHtml.empty = sinon.spy();
-
-    const textHtmlElement = this.tooltip._textHtml.get(0);
-    if(!this.getComputedStyle) {
-        textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
-    }
 
     const formatObject = { valueText: 'some-text' };
     const callback = sinon.stub();
@@ -1218,19 +1206,10 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
     assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000, 'pointerEvents': 'none', }]);
 
-    assert.ok(this.tooltip._textHtml.html.calledOnce, 'textHtml html');
-    assert.deepEqual(this.tooltip._textHtml.html(), 'custom html', 'textHtml html');
-
-    assert.ok(this.tooltip._textHtml.empty.calledOnce, 'textHtml empty');
+    assert.deepEqual(this.tooltip._textGroupHtml[0].children[0].innerHTML, 'custom html', 'textHtml html');
 
     assert.equal(this.tooltip._text.css.callCount, 0, 'text styles');
     assert.equal(this.tooltip._text.stub('attr').callCount, 0, 'text attrs');
-
-    if(this.getComputedStyle) {
-        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
-    } else {
-        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
-    }
 
     assert.equal(this.options.contentTemplate.callCount, 1);
     assert.equal(this.options.contentTemplate.lastCall.args[0], formatObject);
@@ -1253,13 +1232,7 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
     this.tooltip._textGroupHtml.css = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
 
-    const textHtmlElement = this.tooltip._textHtml.get(0);
-    if(this.getComputedStyle) {
-        this.getComputedStyle.restore();
-    }
-    if(!this.getComputedStyle) {
-        textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
-    }
+    this.getComputedStyle.restore();
 
     const formatObject = { valueText: 'some-text' };
     const callback = sinon.stub();
@@ -1271,6 +1244,36 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
 
     assert.equal(callback.callCount, 1);
     assert.equal(callback.getCall(0).args[0], false);
+});
+
+// T1015148
+QUnit.test('Tooltip shown twice with template. Async template emulation', function(assert) {
+    const eventData = { tag: 'event-data' };
+    this.tooltip._getCanvas = function() { return CANVAS; };
+
+    const renderTemplate = (container, onRendered, content) => {
+        $(container).append($(`<span>${content}</span>`));
+        onRendered();
+    };
+
+    this.options.contentTemplate = sinon.spy();
+
+    this.tooltip.update(this.options);
+
+    this.resetTooltipMocks();
+
+    const formatObject = { valueText: 'some text' };
+    const callback = sinon.stub();
+    // act
+    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
+    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
+
+    this.options.contentTemplate.getCalls().forEach((c, index) => {
+        renderTemplate(c.args[1], c.args[2], index);
+    });
+
+    assert.equal(this.options.contentTemplate.callCount, 2);
+    assert.strictEqual(this.tooltip._textGroupHtml[0].children[0].innerHTML, '<span>1</span>');
 });
 
 QUnit.test('Do not show tooltip if html is set in contentTemplate as empty div', function(assert) {
@@ -1291,13 +1294,7 @@ QUnit.test('Do not show tooltip if html is set in contentTemplate as empty div',
     this.tooltip._textGroupHtml.css = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
 
-    const textHtmlElement = this.tooltip._textHtml.get(0);
-    if(this.getComputedStyle) {
-        this.getComputedStyle.restore();
-    }
-    if(!this.getComputedStyle) {
-        textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
-    }
+    this.getComputedStyle.restore();
 
     const formatObject = { valueText: 'some-text' };
     const callback = sinon.stub();
@@ -1391,11 +1388,6 @@ QUnit.test('Call template if empty text', function(assert) {
     this.tooltip._textGroupHtml.css = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
 
-    const textHtmlElement = this.tooltip._textHtml.get(0);
-    if(!this.getComputedStyle) {
-        textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
-    }
-
     const formatObject = { valueText: '' };
     const callback = sinon.stub();
     // act
@@ -1480,19 +1472,12 @@ QUnit.test('Show. W/o params. Html. T298249', function(assert) {
     this.tooltip._textHtml.html = sinon.spy();
 
     const textHtmlElement = this.tooltip._textHtml.get(0);
-    if(!this.getComputedStyle) {
-        textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 123.13, left: 20, bottom: 33.45, top: 20, width: 83.13, height: 23.45 }; });
-    }
 
     const formatObject = { valueText: 'some-text' };
     // act
     this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
-    if(this.getComputedStyle) {
-        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
-    } else {
-        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
-    }
+    assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
 });
 
 QUnit.test('Show preparations. Use external customizeText', function(assert) {
@@ -1638,14 +1623,16 @@ QUnit.test('forceEvents. rise tooltipHidden event', function(assert) {
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._wrapper.detach = sinon.spy();
     // act
-    this.tooltip.hide();
+    this.tooltip.hide('pointer-out-value');
 
     // assert
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
     assert.equal(this.tooltip._wrapper.get(0).style.left, '-9999px', 'wrapper is moved to invisible area');
     assert.equal(this.tooltip._wrapper.detach.callCount, 1, 'wrapper detached');
     assert.equal(this.eventTrigger.callCount, 1);
-    assert.deepEqual(this.eventTrigger.firstCall.args, ['tooltipHidden', eventObject]);
+    assert.deepEqual(this.eventTrigger.firstCall.args[0], 'tooltipHidden');
+    assert.strictEqual(this.eventTrigger.firstCall.args[1]['some-event-object'], 'some-event-value');
+    assert.strictEqual(this.eventTrigger.firstCall.args[1].isPointerOut, 'pointer-out-value');
 });
 
 function getCloudPoints() {
@@ -2016,10 +2003,6 @@ QUnit.test('Orientation is changed. Html', function(assert) {
     this.options.customizeTooltip = function() { return { html: 'some-html' }; };
     this.tooltip.update(this.options);
 
-    if(!this.getComputedStyle) {
-        this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, left: 0, bottom: 40, top: 0 }; });
-    }
-
     this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 300 });
     this.resetTooltipMocks();
     this.tooltip._textGroupHtml.css = sinon.spy();
@@ -2037,10 +2020,6 @@ QUnit.test('Orientation is changed. Html', function(assert) {
 QUnit.test('Do not re-render html markup on tooltip move', function(assert) {
     this.options.customizeTooltip = function() { return { html: '<div id=\'my-div\'></div>' }; };
     this.tooltip.update(this.options);
-
-    if(!this.getComputedStyle) {
-        this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, left: 0, bottom: 40, top: 0 }; });
-    }
 
     this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 300 });
     this.resetTooltipMocks();

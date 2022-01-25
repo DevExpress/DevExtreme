@@ -1,15 +1,12 @@
 import {
   JSXComponent,
   Component,
-  ComponentBindings,
-  OneWay,
-  Ref,
-  RefObject,
 } from '@devextreme-generator/declarations';
 
 import { isDefined } from '../../../../core/utils/type';
 import messageLocalization from '../../../../localization/message';
-import { LoadPanel, LoadPanelProps } from '../../overlays/load_panel';
+import { LoadPanel } from '../../overlays/load_panel';
+import { ScrollViewLoadPanelProps } from '../common/scrollview_loadpanel_props';
 
 const SCROLLVIEW_LOADPANEL = 'dx-scrollview-loadpanel';
 
@@ -31,22 +28,12 @@ export const viewFunction = (viewModel: ScrollViewLoadPanel): JSX.Element => {
   );
 };
 
-@ComponentBindings()
-export class ScrollViewLoadPanelProps {
-  @Ref() targetElement?: RefObject<HTMLDivElement>;
-
-  @OneWay() refreshingText?: string;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-export type ScrollViewLoadPanelPropsType = ScrollViewLoadPanelProps & Pick<LoadPanelProps, 'visible'>;
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
 
-export class ScrollViewLoadPanel extends JSXComponent<ScrollViewLoadPanelPropsType>() {
+export class ScrollViewLoadPanel extends JSXComponent<ScrollViewLoadPanelProps>() {
   get refreshingText(): string | undefined {
     const { refreshingText } = this.props;
 

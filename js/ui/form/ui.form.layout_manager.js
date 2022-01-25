@@ -10,7 +10,7 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { normalizeIndexes } from '../../core/utils/array';
 import { compileGetter } from '../../core/utils/data';
-import { removeEvent } from '../../core/remove_event';
+import { removeEvent } from '../../events/remove';
 import messageLocalization from '../../localization/message';
 import { styleProp } from '../../core/utils/style';
 import Widget from '../widget/ui.widget';
@@ -374,6 +374,9 @@ const LayoutManager = Widget.inherit({
                 const $itemElement = $(itemElement);
                 const itemRenderedCountInPreviousRows = e.location.row * colCount;
                 const item = that._items[e.location.col + itemRenderedCountInPreviousRows];
+                if(!item) {
+                    return;
+                }
 
                 const itemCssClassList = [item.cssClass];
 
@@ -574,7 +577,7 @@ const LayoutManager = Widget.inherit({
             name,
             editorValue,
             canAssignUndefinedValueToEditor,
-            parentComponent: this._getComponentOwner(),
+            formOrLayoutManager: this._getFormOrThis(),
             createComponentCallback: this._createComponent.bind(this),
             useFlexLayout: this._hasBrowserFlex(),
             formLabelLocation: this.option('labelLocation'),
@@ -611,15 +614,15 @@ const LayoutManager = Widget.inherit({
         };
     },
 
-    _getComponentOwner: function() {
+    _getFormOrThis: function() {
         return this.option('form') || this;
     },
 
     _bindDataField: function(editorInstance, dataField, editorType, $container) {
-        const componentOwner = this._getComponentOwner();
+        const formOrThis = this._getFormOrThis();
 
         editorInstance.on('enterKey', function(args) {
-            componentOwner._createActionByOption('onEditorEnterKey')(extend(args, { dataField: dataField }));
+            formOrThis._createActionByOption('onEditorEnterKey')(extend(args, { dataField: dataField }));
         });
 
         this._createWatcher(editorInstance, $container, dataField);

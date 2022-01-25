@@ -4,7 +4,6 @@ import {
 } from '../../../view_model/to_test/views/utils/timeline_week';
 import { DateTableLayoutBase } from '../date_table/layout';
 import { HeaderPanelLayout } from '../header_panel/layout';
-import { TimePanelTableLayout } from '../time_panel/layout';
 import { getViewRenderConfigByType } from '../work_space_config';
 import { getDateForHeaderText } from '../utils';
 import { MonthDateTableLayout } from '../../month/date_table/layout';
@@ -17,10 +16,10 @@ describe('Workspace config utils', () => {
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
-          timePanelTemplate: TimePanelTableLayout,
           isAllDayPanelSupported: true,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: true,
+          isMonthDateHeader: false,
           groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
           headerCellTextFormat: formatWeekdayAndDay,
           getDateForHeaderText,
@@ -30,6 +29,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -38,10 +39,10 @@ describe('Workspace config utils', () => {
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
-          timePanelTemplate: TimePanelTableLayout,
           isAllDayPanelSupported: true,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: true,
+          isMonthDateHeader: false,
           groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
           headerCellTextFormat: formatWeekdayAndDay,
           getDateForHeaderText,
@@ -51,6 +52,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -59,10 +62,10 @@ describe('Workspace config utils', () => {
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
-          timePanelTemplate: TimePanelTableLayout,
           isAllDayPanelSupported: true,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: true,
+          isMonthDateHeader: false,
           groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
           headerCellTextFormat: formatWeekdayAndDay,
           getDateForHeaderText,
@@ -72,6 +75,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -80,10 +85,10 @@ describe('Workspace config utils', () => {
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
-          timePanelTemplate: TimePanelTableLayout,
           isAllDayPanelSupported: true,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: true,
+          isMonthDateHeader: false,
           groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
           headerCellTextFormat: formatWeekdayAndDay,
           getDateForHeaderText,
@@ -93,6 +98,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -104,6 +111,7 @@ describe('Workspace config utils', () => {
           isAllDayPanelSupported: false,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: false,
+          isMonthDateHeader: true,
           groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
           headerCellTextFormat: formatWeekday,
           getDateForHeaderText,
@@ -113,6 +121,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: true,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -134,6 +144,7 @@ describe('Workspace config utils', () => {
           isAllDayPanelSupported: false,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: false,
+          isMonthDateHeader: true,
           groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
           headerCellTextFormat: formatWeekday,
           getDateForHeaderText,
@@ -143,6 +154,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: true,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -154,6 +167,7 @@ describe('Workspace config utils', () => {
           isAllDayPanelSupported: false,
           isProvideVirtualCellsWidth: true,
           isRenderTimePanel: false,
+          isMonthDateHeader: false,
           groupPanelClassName: 'dx-scheduler-group-table',
           headerCellTextFormat: 'shorttime',
           getDateForHeaderText: timelineGetDateFrHeaderText,
@@ -163,6 +177,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'vertical',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: true,
         });
     });
 
@@ -174,6 +190,7 @@ describe('Workspace config utils', () => {
           isAllDayPanelSupported: false,
           isProvideVirtualCellsWidth: true,
           isRenderTimePanel: false,
+          isMonthDateHeader: false,
           groupPanelClassName: 'dx-scheduler-group-table',
           headerCellTextFormat: 'shorttime',
           getDateForHeaderText: timelineGetDateFrHeaderText,
@@ -183,6 +200,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'vertical',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: true,
         });
     });
 
@@ -194,6 +213,7 @@ describe('Workspace config utils', () => {
           isAllDayPanelSupported: false,
           isProvideVirtualCellsWidth: true,
           isRenderTimePanel: false,
+          isMonthDateHeader: false,
           groupPanelClassName: 'dx-scheduler-group-table',
           headerCellTextFormat: 'shorttime',
           getDateForHeaderText: timelineGetDateFrHeaderText,
@@ -203,6 +223,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'vertical',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: true,
         });
     });
 
@@ -214,6 +236,7 @@ describe('Workspace config utils', () => {
           isAllDayPanelSupported: false,
           isProvideVirtualCellsWidth: true,
           isRenderTimePanel: false,
+          isMonthDateHeader: false,
           groupPanelClassName: 'dx-scheduler-group-table',
           headerCellTextFormat: 'shorttime',
           getDateForHeaderText: timelineGetDateFrHeaderText,
@@ -223,6 +246,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'vertical',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: true,
         });
     });
 
@@ -234,6 +259,7 @@ describe('Workspace config utils', () => {
           isAllDayPanelSupported: false,
           isProvideVirtualCellsWidth: true,
           isRenderTimePanel: false,
+          isMonthDateHeader: true,
           groupPanelClassName: 'dx-scheduler-group-table',
           headerCellTextFormat: formatWeekdayAndDay,
           getDateForHeaderText,
@@ -243,6 +269,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'vertical',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: true,
         });
     });
 
@@ -251,10 +279,10 @@ describe('Workspace config utils', () => {
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
-          timePanelTemplate: TimePanelTableLayout,
           isAllDayPanelSupported: true,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: true,
+          isMonthDateHeader: false,
           groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
           headerCellTextFormat: formatWeekdayAndDay,
           getDateForHeaderText,
@@ -264,6 +292,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: false,
         });
     });
   });

@@ -1,18 +1,12 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
-import {
-  RefObject,
-} from '@devextreme-generator/declarations';
 
 import {
   Scrollable,
   viewFunction,
 } from '../scrollable';
 
-import {
-  ScrollViewLoadPanel,
-} from '../internal/load_panel';
 import { ScrollableNative } from '../strategy/native';
 import { ScrollableSimulated } from '../strategy/simulated';
 
@@ -23,6 +17,8 @@ import { getWindow, setWindow } from '../../../../core/utils/window';
 import * as ElementLocationModule from '../utils/get_element_location_internal';
 import { DIRECTION_BOTH, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../common/consts';
 import { ScrollableProps } from '../common/scrollable_props';
+import config from '../../../../core/config';
+import { ConfigContextValue } from '../../../common/config_context';
 
 jest.mock('../utils/get_element_location_internal', () => ({
   ...jest.requireActual('../utils/get_element_location_internal'),
@@ -50,7 +46,6 @@ describe('Scrollable', () => {
       forceGeneratePockets: false,
       inertiaEnabled: true,
       needScrollViewContentWrapper: false,
-      needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
       pulledDownText: 'Release to refresh...',
@@ -71,7 +66,7 @@ describe('Scrollable', () => {
 
   each([false, true]).describe('useNative: %o', (useNativeScrolling) => {
     it('should pass all necessary properties to the Widget', () => {
-      const config = {
+      const options = {
         useNative: useNativeScrolling,
         direction: 'vertical' as ScrollableDirection,
         width: '120px',
@@ -86,14 +81,15 @@ describe('Scrollable', () => {
         visible: true,
       };
 
-      const scrollable = mount<Scrollable>(<Scrollable {...config} />);
+      const scrollable = mount<Scrollable>(<Scrollable {...options} />);
 
-      const { direction, useNative, ...restProps } = config;
+      const { direction, useNative, ...restProps } = options;
       expect(scrollable.find(Widget).at(0).props()).toMatchObject({
         classes: useNative
           ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled'
           : 'dx-scrollable dx-scrollable-simulated dx-scrollable-vertical dx-scrollable-disabled',
         ...restProps,
+        disabled: !!useNative,
       });
     });
   });
@@ -384,7 +380,7 @@ describe('Scrollable', () => {
 
             viewModel.scrollTo(scrollToValue);
 
-            expect(viewModel.updateHandler).toBeCalledTimes(!useNative ? 1 : 0);
+            expect(viewModel.updateHandler).toBeCalledTimes(useNative ? 0 : 1);
             expect(viewModel.scrollBy).toBeCalledTimes(1);
             expect(viewModel.scrollBy).toBeCalledWith(expectedScrollByArg);
           });
@@ -421,10 +417,34 @@ describe('Scrollable', () => {
     });
 
     describe('Getters', () => {
-      it('isRenovated', () => {
-        const viewModel = new Scrollable({ });
+      describe('rtlEnabled', () => {
+        each`
+        global       | rtlEnabled   | contextConfig      | expected
+        ${true}      | ${true}      | ${true}            | ${true}
+        ${undefined} | ${undefined} | ${undefined}       | ${false}
+        ${true}      | ${true}      | ${undefined}       | ${true}
+        ${true}      | ${false}     | ${undefined}       | ${false}
+        ${true}      | ${true}      | ${false}           | ${true}
+        ${true}      | ${false}     | ${true}            | ${false}
+        ${true}      | ${undefined} | ${undefined}       | ${true}
+        ${true}      | ${undefined} | ${true}            | ${true}
+        ${true}      | ${undefined} | ${false}           | ${false}
+          `
+          .describe('pass the prepared rtl value to the strategy', ({
+            global, rtlEnabled, contextConfig, expected,
+          }) => {
+            const name = `${JSON.stringify({
+              global, rtlEnabled, contextConfig, expected,
+            })}`;
 
-        expect(viewModel.isRenovated()).toEqual(true);
+            it(name, () => {
+              const viewModel = new Scrollable({ rtlEnabled });
+              config().rtlEnabled = global;
+              viewModel.config = { rtlEnabled: contextConfig } as ConfigContextValue;
+
+              expect(viewModel.rtlEnabled).toEqual(expected);
+            });
+          });
       });
 
       each([false, true]).describe('useNative: %o', (useNative) => {
@@ -439,25 +459,6 @@ describe('Scrollable', () => {
           expect(viewModel.scrollableRef)
             .toEqual(useNative ? 'native' : 'simulated');
         });
-      });
-    });
-  });
-
-  describe('LoadPanel integration', () => {
-    describe('Getters', () => {
-      it('position, targetElement: undefined', () => {
-        const viewModel = new ScrollViewLoadPanel({ });
-
-        expect(viewModel.position).toEqual(undefined);
-      });
-
-      it('position, targetElement is scrollableRef', () => {
-        const scrollableElement = { width: '100' };
-        const scrollableRef = { current: { width: '100' } } as RefObject;
-
-        const viewModel = new ScrollViewLoadPanel({ targetElement: scrollableRef });
-
-        expect(viewModel.position).toEqual({ of: scrollableElement });
       });
     });
   });

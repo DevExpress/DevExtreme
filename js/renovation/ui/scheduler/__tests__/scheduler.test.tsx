@@ -11,10 +11,11 @@ import { WorkSpace } from '../workspaces/base/work_space';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
 import { getPreparedDataItems } from '../utils/data';
-import { getFilterStrategy } from '../utils/filter';
+import { getFilterStrategy } from '../utils/filtering/local';
+import combineRemoteFilter from '../utils/filtering/remote';
 import { getAppointmentsConfig, getAppointmentsModel } from '../model/appointments';
 import { getAppointmentsViewModel } from '../view_model/appointments/appointments';
-import { AppointmentLayout } from '../appointment/layout';
+import { AppointmentsContextProvider } from '../appointments_context_provider';
 
 jest.mock('../model/appointments', () => ({
   ...jest.requireActual('../model/appointments'),
@@ -31,10 +32,18 @@ jest.mock('../utils/data', () => ({
   ...jest.requireActual('../utils/data'),
   getPreparedDataItems: jest.fn((items) => `Prepared_${items}`),
 }));
-jest.mock('../utils/filter', () => ({
-  ...jest.requireActual('../utils/filter'),
+
+jest.mock('../utils/filtering/local', () => ({
+  ...jest.requireActual('../utils/filtering/local'),
   getFilterStrategy: jest.fn(() => ({ filter: (items) => `Filter_${items}` })),
 }));
+
+jest.mock('../utils/filtering/remote', () => ({
+  __esModule: true,
+  ...jest.requireActual('../utils/filtering/remote'),
+  default: jest.fn(() => 'Test_combineRemoteFilter'),
+}));
+
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 
@@ -70,10 +79,13 @@ describe('Scheduler', () => {
       allDayPanelExpanded: false,
       type: 'week',
     };
+    const startViewDate = new Date(2021, 8, 5);
+
     const renderComponent = (viewModel) => shallow(
       <ViewFunction
         currentViewConfig={defaultCurrentViewConfig}
         appointmentsViewModel={defaultAppointmentViewModel}
+        startViewDate={startViewDate}
         {...viewModel}
         props={{
           ...new SchedulerProps(),
@@ -135,11 +147,14 @@ describe('Scheduler', () => {
       const tree = renderComponent({
         onViewRendered: () => {},
         workSpaceKey: 'workSpaceKey',
+        currentViewConfig: {
+          ...defaultCurrentViewConfig,
+          ...templates,
+        },
         props: {
           height: 500,
           width: 600,
         },
-        ...templates,
       });
 
       const workSpace = tree.find(WorkSpace);
@@ -150,14 +165,29 @@ describe('Scheduler', () => {
         .toEqual({
           ...defaultCurrentViewConfig,
           ...templates,
+          startViewDate,
           onViewRendered: expect.any(Function),
-          appointments: expect.anything(),
-          allDayAppointments: expect.anything(),
           schedulerHeight: 500,
           schedulerWidth: 600,
         });
       expect(workSpace.key())
         .toBe('workSpaceKey');
+    });
+
+    it('should render AppointmentsContextProvider', () => {
+      const tree = renderComponent({
+        appointmentsContextValue: 'appointmentsContextValue',
+      });
+
+      const appointmentsContextProvider = tree.find(AppointmentsContextProvider);
+
+      expect(appointmentsContextProvider.exists())
+        .toBe(true);
+      expect(appointmentsContextProvider.props())
+        .toEqual({
+          appointmentsContextValue: 'appointmentsContextValue',
+          children: expect.anything(),
+        });
     });
 
     it('should render toolbar and pass to it correct props', () => {
@@ -181,10 +211,12 @@ describe('Scheduler', () => {
       };
       const setCurrentDate = () => {};
       const setCurrentView = () => {};
-      const startViewDate = new Date(2021, 1, 1);
 
       const tree = renderComponent({
-        props, setCurrentView, setCurrentDate, startViewDate,
+        props,
+        setCurrentView,
+        setCurrentDate,
+        startViewDate: new Date(2021, 1, 1),
       });
       const schedulerToolbar = tree.find(SchedulerToolbar);
 
@@ -205,7 +237,7 @@ describe('Scheduler', () => {
           customizationFunction: props.customizeDateNavigatorText,
           onCurrentViewUpdate: setCurrentView,
           onCurrentDateUpdate: setCurrentDate,
-          startViewDate,
+          startViewDate: new Date(2021, 1, 1),
           viewType: 'week',
         });
     });
@@ -215,63 +247,6 @@ describe('Scheduler', () => {
       const schedulerToolbar = tree.find(SchedulerToolbar);
 
       expect(schedulerToolbar.exists()).toBe(false);
-    });
-
-    describe('Appointments', () => {
-      it('should render appointments as a property of workspace', () => {
-        const templates = {
-          appointmentTemplate: jest.fn(),
-          appointmentCollectorTemplate: jest.fn(),
-        };
-
-        const props = {
-          min: new Date(2021, 9, 7),
-          max: new Date(2021, 9, 8),
-          views: ['day'],
-          currentView: 'day',
-        };
-
-        const appointmentsViewModel = {
-          regular: [{}],
-          regularCompact: [{}, {}],
-          allDay: [{}, {}, {}],
-          allDayCompact: [{}, {}, {}, {}],
-        };
-
-        const scheduler = renderComponent({
-          props,
-          appointmentsViewModel,
-          ...templates,
-        });
-
-        const workspace = scheduler.find(WorkSpace);
-        const appointments = workspace.prop('appointments');
-        const allDayAppointments = workspace.prop('allDayAppointments');
-
-        expect(appointments.type)
-          .toBe(AppointmentLayout);
-
-        expect(appointments.props)
-          .toEqual({
-            isAllDay: false,
-            appointments: appointmentsViewModel.regular,
-            overflowIndicators: appointmentsViewModel.regularCompact,
-            appointmentTemplate: templates.appointmentTemplate,
-            overflowIndicatorTemplate: templates.appointmentCollectorTemplate,
-          });
-
-        expect(allDayAppointments.type)
-          .toBe(AppointmentLayout);
-
-        expect(allDayAppointments.props)
-          .toEqual({
-            isAllDay: true,
-            appointments: appointmentsViewModel.allDay,
-            overflowIndicators: appointmentsViewModel.allDayCompact,
-            appointmentTemplate: templates.appointmentTemplate,
-            overflowIndicatorTemplate: templates.appointmentCollectorTemplate,
-          });
-      });
     });
   });
 
@@ -407,6 +382,8 @@ describe('Scheduler', () => {
             dataSource: data,
           });
 
+          scheduler.workSpaceViewModel = {} as any;
+
           scheduler.loadDataSource();
 
           expect(scheduler.dataItems)
@@ -427,6 +404,8 @@ describe('Scheduler', () => {
               },
             },
           });
+
+          scheduler.workSpaceViewModel = {} as any;
 
           scheduler.loadDataSource();
 
@@ -477,146 +456,124 @@ describe('Scheduler', () => {
           expect(scheduler.dataItems)
             .toHaveLength(0);
         });
+
+        describe('Remote filtering', () => {
+          it('should apply remote filter', () => {
+            const userFilter = ['Some value', '>', 'Other value'];
+            const data = [{
+              startDate: new Date(2021, 9, 6, 15, 15),
+              endDate: new Date(2021, 9, 6, 16, 16),
+              allDay: false,
+            }];
+            const scheduler = new Scheduler({
+              ...new SchedulerProps(),
+              dataSource: data,
+              remoteFiltering: true,
+              dateSerializationFormat: 'Some format',
+            });
+
+            jest.spyOn(scheduler, 'startViewDate', 'get')
+              .mockReturnValue(new Date(2021, 10, 24, 9));
+            scheduler.lastViewDateByEndDayHour = new Date(2021, 10, 24, 18);
+
+            const { internalDataSource } = scheduler;
+            internalDataSource.filter(userFilter);
+            jest.spyOn(scheduler, 'internalDataSource', 'get')
+              .mockReturnValue(internalDataSource);
+
+            scheduler.loadDataSource();
+
+            expect(scheduler.internalDataSource.filter())
+              .toBe('Test_combineRemoteFilter');
+
+            expect(combineRemoteFilter)
+              .toBeCalledWith({
+                dataAccessors: expect.anything(),
+                dataSourceFilter: userFilter,
+                min: new Date(2021, 10, 24, 9),
+                max: new Date(2021, 10, 24, 18),
+                dateSerializationFormat: 'Some format',
+              });
+          });
+        });
       });
     });
 
     describe('Methods', () => {
-      it('dispose should pass call to instance', () => {
-        const scheduler = new Scheduler(new SchedulerProps());
-        const dispose = jest.fn();
+      describe('Public API', () => {
+        it('Non-implemented methods should not throw errors', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
 
-        scheduler.instance = {
-          dispose,
-        } as any;
+          expect(() => scheduler.addAppointment({
+            startDate: new Date(2021, 5, 15, 12),
+            endDate: new Date(2021, 5, 15, 14),
+            text: 'temp',
+          }))
+            .not.toThrow();
+          expect(() => scheduler.deleteAppointment({
+            startDate: new Date(2021, 5, 15, 12),
+            endDate: new Date(2021, 5, 15, 14),
+            text: 'temp',
+          }))
+            .not.toThrow();
+          expect(() => scheduler.updateAppointment({
+            startDate: new Date(2021, 5, 15, 12),
+            endDate: new Date(2021, 5, 15, 14),
+            text: 'temp',
+          }, {
+            startDate: new Date(2021, 5, 15, 12),
+            endDate: new Date(2021, 5, 15, 14),
+            text: 'changed',
+          }))
+            .not.toThrow();
 
-        scheduler.dispose()();
+          expect(() => scheduler.showAppointmentPopup())
+            .not.toThrow();
+          expect(() => scheduler.showAppointmentTooltip({}, ''))
+            .not.toThrow();
+          expect(() => scheduler.hideAppointmentPopup())
+            .not.toThrow();
 
-        expect(dispose).toBeCalledTimes(1);
-      });
-
-      it('getComponentInstance should pass call to instance', () => {
-        const scheduler = new Scheduler(new SchedulerProps());
-        const mockInstance = {};
-
-        scheduler.instance = mockInstance as any;
-        expect(scheduler.getComponentInstance()).toMatchObject(mockInstance);
-      });
-
-      it('*Appointment\'s methods should pass call to instance', () => {
-        const addAppointment = jest.fn();
-        const deleteAppointment = jest.fn();
-        const updateAppointment = jest.fn();
-
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        scheduler.instance = {
-          addAppointment,
-          deleteAppointment,
-          updateAppointment,
-        } as any;
-
-        scheduler.addAppointment({
-          startDate: new Date(2021, 5, 15, 12),
-          endDate: new Date(2021, 5, 15, 14),
-          text: 'temp',
+          expect(() => scheduler.scrollTo(new Date()))
+            .not.toThrow();
+          expect(() => scheduler.scrollToTime(12, 12))
+            .not.toThrow();
         });
-        expect(addAppointment).toHaveBeenCalled();
 
-        scheduler.deleteAppointment({
-          startDate: new Date(2021, 5, 15, 12),
-          endDate: new Date(2021, 5, 15, 14),
-          text: 'temp',
+        it('getDataSource should return an instance of DataSource', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          expect(scheduler.getDataSource())
+            .toEqual(expect.any(DataSource));
         });
-        expect(deleteAppointment).toHaveBeenCalled();
 
-        scheduler.updateAppointment({
-          startDate: new Date(2021, 5, 15, 12),
-          endDate: new Date(2021, 5, 15, 14),
-          text: 'temp',
-        }, {
-          startDate: new Date(2021, 5, 15, 12),
-          endDate: new Date(2021, 5, 15, 14),
-          text: 'changed',
+        it('hideAppointmentTooltip should hide tooltip', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          scheduler.tooltipVisible = true;
+          scheduler.hideAppointmentTooltip();
+
+          expect(scheduler.tooltipVisible)
+            .toBe(false);
         });
-        expect(updateAppointment).toHaveBeenCalled();
-      });
 
-      it('getDataSource should pass call to instance', () => {
-        const getDataSource = jest.fn();
-        const scheduler = new Scheduler(new SchedulerProps());
+        it('getEndViewDate and getStartViewDate should work correctly', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentDate: new Date(2021, 11, 3),
+          });
 
-        scheduler.instance = {
-          getDataSource,
-        } as any;
+          scheduler.workSpaceViewModel = {
+            viewDataProvider: {
+              getLastCellEndDate: () => new Date(2021, 11, 4),
+            },
+          } as any;
 
-        scheduler.getDataSource();
-
-        expect(getDataSource).toHaveBeenCalled();
-      });
-
-      it('*appointmentPopup and *appointmentTooltip should pass call to instance', () => {
-        const hideAppointmentPopup = jest.fn();
-        const hideAppointmentTooltip = jest.fn();
-
-        const showAppointmentPopup = jest.fn();
-        const showAppointmentTooltip = jest.fn();
-
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        scheduler.instance = {
-          hideAppointmentPopup,
-          hideAppointmentTooltip,
-          showAppointmentPopup,
-          showAppointmentTooltip,
-        } as any;
-
-        scheduler.hideAppointmentPopup();
-        expect(hideAppointmentPopup).toHaveBeenCalled();
-
-        scheduler.hideAppointmentTooltip();
-        expect(hideAppointmentTooltip).toHaveBeenCalled();
-
-        scheduler.showAppointmentPopup();
-        expect(showAppointmentPopup).toHaveBeenCalled();
-
-        scheduler.showAppointmentTooltip({}, '');
-        expect(showAppointmentTooltip).toHaveBeenCalled();
-      });
-
-      it('getEndViewDate and getStartViewDate should pass call to instance', () => {
-        const getEndViewDate = jest.fn();
-        const getStartViewDate = jest.fn();
-
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        scheduler.instance = {
-          getEndViewDate,
-          getStartViewDate,
-        } as any;
-
-        scheduler.getEndViewDate();
-        expect(getEndViewDate).toHaveBeenCalled();
-
-        scheduler.getStartViewDate();
-        expect(getStartViewDate).toHaveBeenCalled();
-      });
-
-      it('scroll* methods should pass call to instance', () => {
-        const scrollTo = jest.fn();
-        const scrollToTime = jest.fn();
-
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        scheduler.instance = {
-          scrollTo,
-          scrollToTime,
-        } as any;
-
-        scheduler.scrollTo(new Date());
-        expect(scrollTo).toHaveBeenCalled();
-
-        scheduler.scrollToTime(12, 12);
-        expect(scrollToTime).toHaveBeenCalled();
+          expect(scheduler.getStartViewDate())
+            .toEqual(new Date(2021, 11, 3));
+          expect(scheduler.getEndViewDate())
+            .toEqual(new Date(2021, 11, 4));
+        });
       });
 
       it('dataAccessors should be correctly created', () => {
@@ -648,6 +605,7 @@ describe('Scheduler', () => {
             .toBe(undefined);
 
           const viewDataProvider = new ViewDataProvider('week') as any;
+          viewDataProvider.getLastViewDateByEndDayHour = () => new Date(2021, 11, 6, 15, 15);
           const cellsMetaData = {
             dateTableCellsMeta: [],
             allDayPanelCellsMeta: [],
@@ -664,6 +622,61 @@ describe('Scheduler', () => {
 
           expect(scheduler.workSpaceViewModel)
             .toBe(workSpaceViewModel);
+        });
+
+        it('should save lastViewDateByEndDayHour into the state', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+          const expectedDate = new Date(2021, 11, 6, 15, 15);
+
+          expect(scheduler.workSpaceViewModel)
+            .toBe(undefined);
+
+          const viewDataProvider = new ViewDataProvider('week') as any;
+          viewDataProvider.getLastViewDateByEndDayHour = () => expectedDate;
+          const cellsMetaData = {
+            dateTableCellsMeta: [],
+            allDayPanelCellsMeta: [],
+          };
+          const viewDataProviderValidationOptions: any = {};
+
+          const workSpaceViewModel = {
+            viewDataProvider,
+            cellsMetaData,
+            viewDataProviderValidationOptions,
+          };
+
+          scheduler.onViewRendered(workSpaceViewModel);
+
+          expect(scheduler.lastViewDateByEndDayHour)
+            .toBe(expectedDate);
+        });
+
+        it('should not save lastViewDateByEndDayHour into the state if lastViewDateByEndDayHour has the same value', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+          const testDate = new Date(2021, 11, 6, 15, 15);
+
+          expect(scheduler.workSpaceViewModel)
+            .toBe(undefined);
+
+          const viewDataProvider = new ViewDataProvider('week') as any;
+          viewDataProvider.getLastViewDateByEndDayHour = () => new Date(2021, 11, 6, 15, 15);
+          const cellsMetaData = {
+            dateTableCellsMeta: [],
+            allDayPanelCellsMeta: [],
+          };
+          const viewDataProviderValidationOptions: any = {};
+
+          const workSpaceViewModel = {
+            viewDataProvider,
+            cellsMetaData,
+            viewDataProviderValidationOptions,
+          };
+
+          scheduler.lastViewDateByEndDayHour = testDate;
+          scheduler.onViewRendered(workSpaceViewModel);
+
+          expect(scheduler.lastViewDateByEndDayHour)
+            .toBe(testDate);
         });
       });
 
@@ -706,9 +719,12 @@ describe('Scheduler', () => {
 
           scheduler.showTooltip({ data, target } as any);
 
-          expect(scheduler.tooltipVisible).toBe(true);
-          expect(scheduler.tooltipTarget).toBe(target);
-          expect(scheduler.tooltipData).toBe(data);
+          expect(scheduler.tooltipVisible)
+            .toBe(true);
+          expect(scheduler.tooltipTarget)
+            .toBe(target);
+          expect(scheduler.tooltipData)
+            .toBe(data);
         });
       });
 
@@ -722,7 +738,41 @@ describe('Scheduler', () => {
 
           scheduler.hideTooltip();
 
-          expect(scheduler.tooltipVisible).toBe(false);
+          expect(scheduler.tooltipVisible)
+            .toBe(false);
+        });
+      });
+
+      describe('showReducedIconTooltip', () => {
+        it('should correctly change component state', () => {
+          const data = 'data';
+          const target = 'target';
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+          });
+
+          scheduler.showReducedIconTooltip({ data, target } as any);
+
+          expect(scheduler.reducedIconTooltipVisible)
+            .toBe(true);
+          expect(scheduler.reducedIconTarget)
+            .toBe(target);
+        });
+      });
+
+      describe('hideReducedIconTooltip', () => {
+        it('should change visible to false', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+          });
+
+          scheduler.reducedIconTooltipVisible = true;
+
+          scheduler.hideReducedIconTooltip();
+
+          expect(scheduler.reducedIconTooltipVisible)
+            .toBe(false);
         });
       });
     });
@@ -756,13 +806,39 @@ describe('Scheduler', () => {
             ...new SchedulerProps(),
             views,
             currentView: 'week',
+            currentDate: new Date(2021, 1, 1),
           });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           scheduler.currentViewConfig;
 
           expect(getCurrentViewConfig)
-            .toHaveBeenCalledWith({ type: 'week' }, scheduler.props);
+            .toHaveBeenCalledWith(
+              { type: 'week' },
+              {
+                firstDayOfWeek: 0,
+                startDayHour: 0,
+                endDayHour: 24,
+                cellDuration: 30,
+                groupByDate: false,
+                scrolling: { mode: 'standard' },
+                dataCellTemplate: undefined,
+                timeCellTemplate: undefined,
+                resourceCellTemplate: undefined,
+                dateCellTemplate: undefined,
+                appointmentTemplate: undefined,
+                appointmentCollectorTemplate: undefined,
+                maxAppointmentsPerCell: 'auto',
+                showAllDayPanel: true,
+                showCurrentTimeIndicator: true,
+                indicatorUpdateInterval: 300000,
+                shadeUntilCurrentTime: false,
+                crossScrollingEnabled: false,
+                height: undefined,
+                width: undefined,
+              },
+              new Date(2021, 1, 1),
+            );
         });
       });
 
@@ -1384,76 +1460,96 @@ describe('Scheduler', () => {
             .toBe('day_horizontal_3_0');
         });
       });
+    });
 
-      describe('Cell Templates', () => {
-        it('should return cell templates', () => {
-          const templates = {
-            dateCellTemplate: jest.fn(),
-            dataCellTemplate: jest.fn(),
-            timeCellTemplate: jest.fn(),
-            resourceCellTemplate: jest.fn(),
-          };
-
+    describe('mergedGroups', () => {
+      [
+        { schedulerGroups: ['groups'], viewGroups: undefined, expected: ['groups'] },
+        { schedulerGroups: ['groups'], viewGroups: ['viewGroups'], expected: ['viewGroups'] },
+        { schedulerGroups: undefined, viewGroups: ['viewGroups'], expected: ['viewGroups'] },
+        { schedulerGroups: undefined, viewGroups: undefined, expected: undefined },
+      ].forEach(({ schedulerGroups, viewGroups, expected }) => {
+        it(`should return correct value if schedulerGroups=${schedulerGroups}, viewGroups=${viewGroups}`, () => {
           const scheduler = new Scheduler({
             ...new SchedulerProps(),
-            ...templates,
+            groups: schedulerGroups,
+            views: [{ type: 'day', groups: viewGroups }],
+            currentView: 'day',
           });
 
-          expect(scheduler.dateCellTemplate)
-            .toBe(templates.dateCellTemplate);
-          expect(scheduler.dataCellTemplate)
-            .toBe(templates.dataCellTemplate);
-          expect(scheduler.timeCellTemplate)
-            .toBe(templates.timeCellTemplate);
-          expect(scheduler.resourceCellTemplate)
-            .toBe(templates.resourceCellTemplate);
+          expect(scheduler.mergedGroups)
+            .toEqual(expected);
         });
       });
+    });
 
-      describe('Appointment templates', () => {
-        it('should return templates', () => {
-          const templates = {
-            appointmentTemplate: jest.fn(),
-            appointmentCollectorTemplate: jest.fn(),
-          };
+    describe('appointmentsContextValue', () => {
+      it('should return correct data', () => {
+        const appointmentTemplate = jest.fn();
+        const appointmentCollectorTemplate = jest.fn();
 
-          const scheduler = new Scheduler({
-            ...new SchedulerProps(),
-            ...templates,
-          });
-
-          expect(scheduler.appointmentTemplate)
-            .toBe(templates.appointmentTemplate);
-          expect(scheduler.appointmentCollectorTemplate)
-            .toBe(templates.appointmentCollectorTemplate);
+        const scheduler = new Scheduler({
+          ...new SchedulerProps(),
+          appointmentTemplate,
+          appointmentCollectorTemplate,
         });
 
-        it('should return templates from view', () => {
-          const templates = {
-            appointmentTemplate: jest.fn(),
-            appointmentCollectorTemplate: jest.fn(),
-          };
+        jest.spyOn(scheduler, 'mergedGroups', 'get')
+          .mockReturnValue(['mock-groups']);
 
-          const viewTemplates = {
-            appointmentTemplate: jest.fn(),
-            appointmentCollectorTemplate: jest.fn(),
-          };
+        jest.spyOn(scheduler, 'dataAccessors', 'get')
+          .mockReturnValue('dataAccessors-test' as any);
 
-          const scheduler = new Scheduler({
-            ...new SchedulerProps(),
-            views: [{
-              type: 'day',
-              ...viewTemplates,
-            }],
-            currentView: 'day',
-            ...templates,
+        expect(scheduler.appointmentsContextValue)
+          .toEqual({
+            viewModel: {
+              regular: [],
+              regularCompact: [],
+              allDay: [],
+              allDayCompact: [],
+            },
+            groups: ['mock-groups'],
+            resources: [],
+            resourceLoaderMap: new Map(),
+            loadedResources: undefined,
+            dataAccessors: 'dataAccessors-test',
+            appointmentTemplate,
+            overflowIndicatorTemplate: appointmentCollectorTemplate,
+            onAppointmentClick: expect.any(Function),
+            showReducedIconTooltip: expect.any(Function),
+            hideReducedIconTooltip: expect.any(Function),
           });
 
-          expect(scheduler.appointmentTemplate)
-            .toBe(viewTemplates.appointmentTemplate);
-          expect(scheduler.appointmentCollectorTemplate)
-            .toBe(viewTemplates.appointmentCollectorTemplate);
-        });
+        const data = { startDate: new Date(2021, 11, 27) };
+        scheduler.appointmentsContextValue.onAppointmentClick({
+          data,
+          target: 'target',
+        } as any);
+
+        expect(scheduler.tooltipData)
+          .toBe(data);
+        expect(scheduler.tooltipTarget)
+          .toBe('target');
+        expect(scheduler.tooltipVisible)
+          .toBe(true);
+
+        const endDate = new Date(2021, 11, 27);
+        scheduler.appointmentsContextValue.showReducedIconTooltip({
+          target: 'target',
+          endDate,
+        } as any);
+
+        expect(scheduler.reducedIconEndDate)
+          .toBe(endDate);
+        expect(scheduler.reducedIconTarget)
+          .toBe('target');
+        expect(scheduler.reducedIconTooltipVisible)
+          .toBe(true);
+
+        scheduler.appointmentsContextValue.hideReducedIconTooltip();
+
+        expect(scheduler.reducedIconTooltipVisible)
+          .toBe(false);
       });
     });
   });

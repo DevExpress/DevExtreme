@@ -1,11 +1,31 @@
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 import Store, { Options as StoreOptions } from './abstract_store';
+import { DxPromise } from '../core/utils/deferred';
 
 /** @public */
 export type Options<
     TItem = any,
     TKey = any,
 > = CustomStoreOptions<TItem, TKey>;
+
+/** @public */
+export type GroupItem<
+    TItem = any,
+> = { key: any | string | number; items: Array<TItem> | Array<GroupItem> | null; count?: number; summary?: Array<any> };
+
+/** @public */
+export type ResolvedData<
+    TItem = any,
+> =
+  | Object
+  | Array<TItem>
+  | Array<GroupItem>
+  | {
+      data: Array<TItem> | Array<GroupItem>;
+      totalCount?: number;
+      summary?: Array<any>;
+      groupCount?: number;
+    };
 
 /**
  * @namespace DevExpress.data
@@ -38,10 +58,14 @@ export interface CustomStoreOptions<
     /**
      * @docid
      * @type_function_param1 options:LoadOptions
-     * @type_function_return Promise<any>|Array<any>
+     * @type_function_return Promise<Array<any>|object>|Array<any>
      * @public
      */
-    load: ((options: LoadOptions<TItem>) => PromiseLike<TItem> | Array<TItem>);
+    load: ((options: LoadOptions<TItem>) =>
+      | DxPromise<ResolvedData<TItem>>
+      | PromiseLike<ResolvedData<TItem>>
+      | Array<GroupItem>
+      | Array<TItem>);
     /**
      * @docid
      * @default 'processed'

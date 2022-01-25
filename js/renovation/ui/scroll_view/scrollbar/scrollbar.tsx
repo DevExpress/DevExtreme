@@ -6,7 +6,6 @@ import {
   Ref,
   Effect,
   Method,
-  Mutable,
 } from '@devextreme-generator/declarations';
 
 import { combineClasses } from '../../../utils/combine_classes';
@@ -28,8 +27,6 @@ import {
   subscribeToMouseLeaveEvent,
 } from '../../../utils/subscribe_to_event';
 
-import { BaseWidgetProps } from '../../common/base_props';
-import { DxMouseEvent } from '../common/types';
 import { ScrollbarProps } from '../common/scrollbar_props';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
 
@@ -51,9 +48,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 
 export type ScrollbarPropsType = ScrollbarProps
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-& Pick<BaseWidgetProps, 'rtlEnabled'>
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb' | 'scrollLocationChange'>;
+& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb'>;
 
 @Component({
   defaultOptionRules: null,
@@ -65,17 +60,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
 
-  @Mutable() rightScrollLocation = 0;
-
-  @Mutable() prevScrollLocation = 0;
-
-  @Mutable() prevMaxOffset = 0;
+  @Ref() thumbRef!: RefObject<HTMLDivElement>;
 
   @InternalState() hovered = false;
 
   @InternalState() active = false;
-
-  @Ref() thumbRef!: RefObject<HTMLDivElement>;
 
   @Effect({ run: 'once' })
   pointerDownEffect(): EffectReturn {
@@ -97,7 +86,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Effect()
   mouseEnterEffect(): EffectReturn {
-    if (this.isHoverMode) {
+    if (this.isExpandable) {
       return subscribeToMouseEnterEvent(
         this.scrollbarRef.current, () => {
           this.hovered = true;
@@ -110,7 +99,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Effect()
   mouseLeaveEffect(): EffectReturn {
-    if (this.isHoverMode) {
+    if (this.isExpandable) {
       return subscribeToMouseLeaveEvent(
         this.scrollbarRef.current, () => {
           this.hovered = false;
@@ -135,56 +124,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Method()
   setActiveState(): void {
     this.active = true;
-  }
-
-  @Method()
-  moveToMouseLocation(event: DxMouseEvent, offset: number): void {
-    const mouseLocation = event[`page${this.axis.toUpperCase()}`] - offset;
-    const delta = mouseLocation / this.containerToContentRatio - this.props.containerSize / 2;
-
-    this.moveTo(Math.round(-delta));
-  }
-
-  @Method()
-  moveTo(location: number): void {
-    const scrollDelta = Math.abs(this.prevScrollLocation - location);
-    this.prevScrollLocation = location;
-    this.rightScrollLocation = this.props.maxOffset - location;
-
-    this.props.scrollLocationChange?.({
-      fullScrollProp: this.fullScrollProp,
-      location: -location,
-      needFireScroll: scrollDelta > 0,
-    });
-  }
-
-  @Effect()
-  syncScrollLocation(): void {
-    if (this.props.containerHasSizes) {
-      let newScrollLocation = this.props.scrollLocation;
-
-      const maxOffsetChanged = Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
-      this.prevMaxOffset = this.props.maxOffset;
-      if (maxOffsetChanged && this.isHorizontal && this.props.rtlEnabled) {
-        if (this.props.maxOffset === 0) {
-          this.rightScrollLocation = 0;
-        }
-
-        newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
-      }
-
-      if (this.prevScrollLocation !== newScrollLocation) {
-        this.moveTo(newScrollLocation);
-      }
-    }
-  }
-
-  get axis(): 'x' | 'y' {
-    return this.isHorizontal ? 'x' : 'y';
-  }
-
-  get fullScrollProp(): 'scrollLeft' | 'scrollTop' {
-    return this.isHorizontal ? 'scrollLeft' : 'scrollTop';
   }
 
   get dimension(): 'width' | 'height' {

@@ -441,6 +441,12 @@ describe('option', () => {
     expect($('#component').dxOptionsTestWidget('option').text).toBe('default text');
   });
 
+  it('should patch options without freezing', () => {
+    $('#component').dxOptionsTestWidget({});
+    expect(Object.isFrozen($('#component')
+      .dxOptionsTestWidget('instance')._patchOptionValues({ objectProp: undefined }).objectProp)).toBe(false);
+  });
+
   it('should copy default props of component (not by reference)', () => {
     document.body.innerHTML = `
       <div id="components">
@@ -708,6 +714,17 @@ describe('templates and slots', () => {
     $('#components').empty();
 
     expect(fakeEventSingleton.handlerCount).toBe(0);
+  });
+
+  it('template can be rendered without data passed', () => {
+    const templateMarkup = '<span>Template content</span>';
+    $('#component').dxTemplatedTestWidget({
+      templateWithoutData() {
+        return templateMarkup;
+      },
+    });
+
+    expect($('#component').children()[0].innerHTML).toBe(templateMarkup);
   });
 
   it('pass anonymous template content as children', () => {

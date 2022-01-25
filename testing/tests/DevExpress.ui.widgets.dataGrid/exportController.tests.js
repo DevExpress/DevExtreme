@@ -2253,6 +2253,35 @@ QUnit.module('Export menu', {
         assert.equal($button.first().attr('title'), 'Export', 'hint of button');
     });
 
+    QUnit.test('export.texts options are used', function(assert) {
+        // arrange
+        this.setupModules({
+            'export': {
+                enabled: true,
+                allowExportSelectedData: true,
+                texts: {
+                    exportAll: 'exportAll',
+                    exportSelectedRows: 'exportSelectedRows',
+                    exportTo: 'exportTo',
+                }
+            }
+        }, true);
+
+        const $container = $('#container');
+
+        this.headerPanel.render($container);
+
+        const $button = $container.find('.dx-datagrid-export-button');
+        $button.find('.dx-button').trigger('dxclick');
+        const $exportAllButton = $('.dx-datagrid-export-menu .dx-item:eq(0)');
+        const $exportSelectedRows = $('.dx-datagrid-export-menu .dx-item:eq(1)');
+
+        // assert
+        assert.equal($button.attr('title'), 'exportTo', 'exportTo');
+        assert.equal($exportAllButton.attr('title'), 'exportAll', 'exportAll');
+        assert.equal($exportSelectedRows.attr('title'), 'exportSelectedRows', 'exportSelectedRows');
+    });
+
     QUnit.test('Search panel should be replaced after export button', function(assert) {
         this.setupModules({
             'export': {
@@ -2535,6 +2564,38 @@ QUnit.module('Export menu', {
         const $exportButton = $container.find('.dx-datagrid-export-button');
         assert.equal($exportButton.length, 1, 'export button is contained in a DOM');
         assert.notStrictEqual($exportButton.css('display'), 'none', 'export button is shown');
+    });
+
+    QUnit.test('Export button customization in menu (T1061071)', function(assert) {
+        // arrange
+        this.setupModules({
+            'export': {
+                enabled: true
+            },
+            toolbar: {
+                items: [{
+                    name: 'exportButton',
+                    locateInMenu: 'always',
+                    widget: 'dxButton',
+                    options: {
+                        icon: 'arrowdown',
+                        text: 'Save Excel'
+                    },
+                }],
+            }
+        }, true);
+
+        const $container = $('#container');
+
+        this.headerPanel.render($container);
+        this.headerPanel._$element = $container;
+
+        // act
+        $('.dx-toolbar-menu-container .dx-button').trigger('dxclick');
+
+        // assert
+        const text = $('.dx-list-item-content').text();
+        assert.strictEqual(text, 'Save Excel');
     });
 
     QUnit.test('The export context menu is shown', function(assert) {

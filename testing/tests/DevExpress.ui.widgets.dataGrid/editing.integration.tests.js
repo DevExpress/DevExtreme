@@ -530,6 +530,57 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(rows[0].values, [true, 'Test']);
     });
 
+    QUnit.test('Editing should work for class field that contains circular link (T1053794)', function(assert) {
+        // arrange
+        function Foo() {
+            this.text = 'Hello';
+            this.circular = this;
+        }
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            columns: ['id', 'foo.text'],
+            dataSource: [{ id: 1, foo: new Foo() }],
+            editing: { allowUpdating: true, mode: 'batch' }
+        }).dxDataGrid('instance');
+
+        // act
+        dataGrid.cellValue(0, 1, 'test');
+
+        // assert
+        const rows = dataGrid.getVisibleRows();
+        assert.equal(rows.length, 1);
+        assert.equal(rows[0].data.foo.text, 'test');
+        assert.strictEqual(rows[0].data.foo.circular, rows[0].data.foo);
+        assert.deepEqual(rows[0].values, [1, 'test']);
+    });
+
+    QUnit.test('Editing should work for class field that contains complex circular link (T1053794)', function(assert) {
+        // arrange
+        function Foo() {
+            this.text = 'Hello';
+            this.bar = new Bar(this);
+        }
+        function Bar(foo) {
+            this.foo = foo;
+        }
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            columns: ['id', 'foo.text'],
+            dataSource: [{ id: 1, foo: new Foo() }],
+            editing: { allowUpdating: true, mode: 'batch' }
+        }).dxDataGrid('instance');
+
+        // act
+        dataGrid.cellValue(0, 1, 'test');
+
+        // assert
+        const rows = dataGrid.getVisibleRows();
+        assert.equal(rows.length, 1);
+        assert.equal(rows[0].data.foo.text, 'test');
+        assert.strictEqual(rows[0].data.foo.bar.foo, rows[0].data.foo);
+        assert.deepEqual(rows[0].values, [1, 'test']);
+    });
+
     // T613804
     QUnit.test('calculateCellValue for edited cell fires twice and at the second time contains full data row as an argument', function(assert) {
         // arrange
@@ -936,54 +987,97 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
-    QUnit.test('loading data on scroll after deleting several rows if scrolling mode is infinite, rowRenderingMode is virtual and refreshMode is repaint (T862268)', function(assert) {
-        // arrange
-        const array = [];
+    [false, true].forEach((legacyMode) => {
+        QUnit.test(`loading data on scroll after deleting several rows if scrolling mode is infinite, rowRenderingMode is virtual and refreshMode is repaint (legacyMode=${legacyMode}) (T862268)`, function(assert) {
+            // arrange
+            const array = [];
 
-        for(let i = 1; i <= 150; i++) {
-            array.push({ id: i });
-        }
+            for(let i = 1; i <= 150; i++) {
+                array.push({ id: i });
+            }
 
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 100,
-            dataSource: array,
-            keyExpr: 'id',
-            editing: {
-                allowDeleting: true,
-                texts: {
-                    confirmDeleteMessage: ''
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 100,
+                dataSource: array,
+                keyExpr: 'id',
+                editing: {
+                    allowDeleting: true,
+                    texts: {
+                        confirmDeleteMessage: ''
+                    },
+                    refreshMode: 'repaint'
                 },
-                refreshMode: 'repaint'
-            },
-            paging: {
-                pageSize: 50
-            },
-            scrolling: {
-                mode: 'infinite',
-                rowRenderingMode: 'virtual',
-                useNative: false,
-            },
-            columns: ['id'],
-            loadingTimeout: null
-        }).dxDataGrid('instance');
+                paging: {
+                    pageSize: 50
+                },
+                scrolling: {
+                    mode: 'infinite',
+                    rowRenderingMode: 'virtual',
+                    useNative: false,
+                    legacyMode
+                },
+                columns: ['id'],
+                loadingTimeout: null
+            }).dxDataGrid('instance');
 
-        // act
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
-        dataGrid.getScrollable().scrollTo({ y: 0 });
-        dataGrid.deleteRow(0);
-        dataGrid.deleteRow(0);
-        dataGrid.deleteRow(0);
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
-        this.clock.tick();
-
-        for(let i = 0; i < 25; i++) {
+            // act
             dataGrid.getScrollable().scrollTo({ y: 10000 });
-        }
+            dataGrid.getScrollable().scrollTo({ y: 0 });
+            dataGrid.deleteRow(0);
+            dataGrid.deleteRow(0);
+            dataGrid.deleteRow(0);
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            this.clock.tick();
 
-        // assert
-        const rows = dataGrid.getVisibleRows();
-        assert.equal(dataGrid.totalCount(), 147, 'totalCount');
-        assert.equal(rows[rows.length - 1].key, 150, 'last row key');
+            for(let i = 0; i < 25; i++) {
+                dataGrid.getScrollable().scrollTo({ y: 10000 });
+            }
+
+            // assert
+            const rows = dataGrid.getVisibleRows();
+            assert.equal(dataGrid.totalCount(), 147, 'totalCount');
+            assert.equal(rows[rows.length - 1].key, 150, 'last row key');
+        });
+
+        QUnit.test(`loading data on scroll after deleting throw push API if scrolling mode is infinite (legacyMode=${legacyMode}) (T1053933)`, function(assert) {
+            // arrange
+            const array = [];
+
+            for(let i = 1; i <= 100; i++) {
+                array.push({ id: i });
+            }
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 500,
+                dataSource: array,
+                keyExpr: 'id',
+                scrolling: {
+                    mode: 'infinite',
+                    useNative: false,
+                    legacyMode
+                },
+                columns: ['id'],
+                loadingTimeout: null
+            }).dxDataGrid('instance');
+
+            // act
+            dataGrid.getDataSource().store().push([
+                { type: 'remove', key: 1 },
+                { type: 'remove', key: 2 },
+                { type: 'remove', key: 3 },
+            ]);
+            this.clock.tick();
+
+            for(let i = 0; i < 5; i++) {
+                dataGrid.getScrollable().scrollTo({ y: 10000 });
+                this.clock.tick();
+            }
+
+            // assert
+            const rows = dataGrid.getVisibleRows();
+            assert.equal(dataGrid.totalCount(), 97, 'totalCount');
+            assert.equal(rows[rows.length - 1].key, 100, 'last row key');
+        });
     });
 
     ['repaint', 'reshape'].forEach((refreshMode) => {
@@ -1152,9 +1246,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 useNative: false
             }
         }).dxDataGrid('instance');
+        this.clock.tick(300);
 
         // act
         dataGrid.getScrollable().scrollTo({ y: 1500 });
+        $(dataGrid.getScrollable().content()).trigger('scroll');
 
         dataGrid.editCell(dataGrid.getRowIndexByKey(38), 0);
 
@@ -1288,10 +1384,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             keyExpr: 'id',
             dataSource: [{ id: 1, field1: 1, field2: 2 }],
             columns: [
-                { dataField: 'field1', setCellValue: function(data, value) {
-                    data.field1 = value;
-                    dataGrid.option('editing.form.items[1].visible', false);
-                } },
+                {
+                    dataField: 'field1', setCellValue: function(data, value) {
+                        data.field1 = value;
+                        dataGrid.option('editing.form.items[1].visible', false);
+                    }
+                },
                 { dataField: 'field2' },
             ],
             editing: {
@@ -1606,7 +1704,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     ['Row', 'Cell', 'Batch'].forEach(editMode => {
         QUnit.testInActiveWindow(`${editMode} - cellClick should not be raised when a new row is added (T1027166)`, function(assert) {
             // arrange
-            const cellClickSpy = sinon.spy(function() {});
+            const cellClickSpy = sinon.spy(function() { });
             const dataGrid = createDataGrid({
                 dataSource: [{ id: 1, field: 'test' }],
                 keyExpr: 'id',
@@ -2046,6 +2144,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
         grid.addRow();
         this.clock.tick();
 
+        $(document).trigger('dxpointerdown');
+        $(document).trigger('dxclick');
+
         let $secondCell = $(grid.getCellElement(0, 1));
         $secondCell.trigger(pointerEvents.down).trigger('dxclick');
         this.clock.tick(1000);
@@ -2057,6 +2158,44 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         assert.equal($(grid.element()).find('.dx-datagrid-revert-tooltip .dx-overlay-content').length, 1, 'one revert button is visible');
         assert.equal($(grid.element()).find('.dx-invalid-message .dx-overlay-content').length, 1, 'one error message is visible');
+    });
+
+    QUnit.testInActiveWindow('Cell mode - New row should not be saved after click in another added row cell if startEditAction is dblclick (T1041291)', function(assert) {
+        // arrange
+        const items = [{ id: 1, a: 'a', b: 'b' }];
+        const gridConfig = {
+            dataSource: items,
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowAdding: true,
+                allowUpdating: true,
+                startEditAction: 'dblClick',
+            },
+            columns: [
+                {
+                    dataField: 'a'
+                }, {
+                    dataField: 'b'
+                }
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+
+        grid.addRow();
+        this.clock.tick();
+
+        const $secondCell = $(grid.getCellElement(0, 1));
+        $secondCell.trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick(1000);
+
+        // assert
+        const $firstCellInput = $(grid.getCellElement(0, 0)).find('.dx-texteditor-input');
+        assert.equal($firstCellInput.length, 1, 'editor is not closed');
+        assert.ok($firstCellInput.is(':focus'), 'editor is focused');
+        assert.equal(items.length, 1, 'new item is not saved');
     });
 
     QUnit.testInActiveWindow('Cell mode - Cell validation message should be shown when a user clicks outside the cell (T869854)', function(assert) {
@@ -3104,6 +3243,66 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
 
         assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
+    });
+
+    QUnit.testInActiveWindow('key should not be compared many times on paging (T1047506)', function(assert) {
+        // arrange
+        let idCallCount = 0;
+        const items = Array.from({ length: 50 }).map((_, index) => {
+            return {
+                id: {
+                    get value() {
+                        idCallCount++;
+                        return index;
+                    }
+                }
+            };
+        });
+        const dataGrid = createDataGrid({
+            height: 500,
+            dataSource: items,
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+        });
+
+        this.clock.tick();
+
+        idCallCount = 0;
+
+        // act
+        dataGrid.pageIndex(1);
+
+        // assert
+        assert.equal(idCallCount, 200, 'key call count after paging');
+    });
+
+    QUnit.test('Popup should render editor if columns[].renderAsync option is true)', function(assert) {
+        createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'test11', field2: 'test12' },
+            ],
+            columns: [{
+                dataField: 'field1',
+                renderAsync: true,
+                width: 100,
+            }],
+            editing: {
+                mode: 'popup',
+                allowUpdating: true,
+            },
+        });
+        this.clock.tick();
+
+        // act
+        $('.dx-link-edit').trigger('click');
+        this.clock.tick();
+
+        // assert
+        const $textBox = $('.dx-textbox');
+        assert.equal($textBox.length, 1);
     });
 });
 
@@ -4930,6 +5129,86 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getTotalSummaryValue('id'), 0, 'summary is updated');
     });
 
+    QUnit.test('Cascade lookup dataSource should be updated on editing if repaintChangesOnly and recalculateWhileEditing are true (T1055325)', function(assert) {
+        // arrange
+        const employees = [{
+            ID: 1, StateID: 1, CityID: 1,
+        }];
+
+        const states = [{
+            ID: 1, Name: 'Alabama',
+        }, {
+            ID: 2, Name: 'Alaska',
+        }];
+
+        const cities = [{
+            ID: 1, Name: 'Tuscaloosa', StateID: 1,
+        }, {
+            ID: 5, Name: 'Anchorage', StateID: 2,
+        }];
+
+        const dataGrid = createDataGrid({
+            keyExpr: 'ID',
+            dataSource: employees,
+            repaintChangesOnly: true,
+            editing: {
+                allowUpdating: true,
+                mode: 'row'
+            },
+            summary: {
+                recalculateWhileEditing: true,
+                totalItems: [{
+                    column: 'ID',
+                    summaryType: 'count'
+                }]
+            },
+            columns: ['ID',
+                {
+                    dataField: 'StateID',
+                    caption: 'State',
+                    setCellValue(rowData, value) {
+                        rowData.StateID = value;
+                        rowData.CityID = null;
+                    },
+                    lookup: {
+                        dataSource: states,
+                        valueExpr: 'ID',
+                        displayExpr: 'Name',
+                    },
+                },
+                {
+                    dataField: 'CityID',
+                    caption: 'City',
+                    lookup: {
+                        dataSource(options) {
+                            return {
+                                store: cities,
+                                filter: options.data ? ['StateID', '=', options.data.StateID] : null,
+                            };
+                        },
+                        valueExpr: 'ID',
+                        displayExpr: 'Name',
+                    },
+                },
+            ],
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        $(dataGrid.getCellElement(0, 'StateID')).find('.dx-selectbox').dxSelectBox('instance').option('value', 2);
+        this.clock.tick();
+
+        $(dataGrid.getCellElement(0, 'StateID')).find('.dx-selectbox').dxSelectBox('instance').option('value', 1);
+        this.clock.tick();
+
+        // assert
+        const selectBox = $(dataGrid.getCellElement(0, 'CityID')).find('.dx-selectbox').dxSelectBox('instance');
+        assert.strictEqual(selectBox.option().value, null, 'lookup value is updated');
+        assert.deepEqual(selectBox.option().dataSource.filter, ['StateID', '=', 1], 'lookup dataSource filter is correct');
+    });
 
     QUnit.testInActiveWindow('Validation message should be positioned relative cell in material theme', function(assert) {
         // arrange
@@ -4954,7 +5233,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        overlayTarget = dataGrid.$element().find('.dx-invalid-message').data('dxOverlay').option('target');
+        overlayTarget = dataGrid.$element().find('.dx-invalid-message').data('dxOverlay').option('position.of');
         assert.ok(overlayTarget.hasClass('dx-editor-cell'), 'target in generic theme');
 
         // act
@@ -4967,7 +5246,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        overlayTarget = dataGrid.$element().find('.dx-invalid-message').data('dxOverlay').option('target');
+        overlayTarget = dataGrid.$element().find('.dx-invalid-message').data('dxOverlay').option('position.of');
         assert.ok(overlayTarget.hasClass('dx-editor-cell'), 'target in material theme');
 
         themes.isMaterial = origIsMaterial;
@@ -6048,6 +6327,47 @@ QUnit.module('Editing state', baseModuleConfig, () => {
         assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling call count');
         assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled call count');
     });
+
+    // T1043517
+    QUnit.test('Changing the \'editing.changes\' option  on the onOptionChanged event - The edit row should be updated when editing the boolean column', function(assert) {
+        // arrange
+        const onOptionChangedSpy = sinon.spy(function(e) {
+            const changes = e.component.option('editing.changes');
+
+            if(changes && changes.length && changes[0].data.field1 === false) {
+                e.component.option('editing.changes', []);
+            }
+        });
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{ id: 1, field1: false }, { id: 2, field1: false }],
+            keyExpr: 'id',
+            columns: ['id', { dataField: 'field1', dataType: 'boolean' }],
+            editing: {
+                allowUpdating: true,
+                mode: 'batch'
+            },
+            onOptionChanged: onOptionChangedSpy,
+            loadingTimeout: null
+        }).dxDataGrid('instance');
+
+        // act
+        $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        let $secondCell = $(dataGrid.getCellElement(0, 1));
+        assert.deepEqual(dataGrid.option('editing.changes'), [{ key: 1, data: { field1: true }, type: 'update' }], 'editing.changes');
+        assert.ok($secondCell.hasClass('dx-cell-modified'), 'second cell is rendered as modified');
+
+        // act
+        $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        $secondCell = $(dataGrid.getCellElement(0, 1));
+        assert.deepEqual(dataGrid.option('editing.changes'), [], 'editing.changes');
+        assert.notOk($secondCell.hasClass('dx-cell-modified'), 'second cell is rendered as unmodified');
+    });
 });
 
 QUnit.module('newRowPosition', baseModuleConfig, () => {
@@ -6079,6 +6399,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
 
             // act
             dataGrid.addRow();
+            this.clock.tick(300);
 
             // assert
             const visibleRows = dataGrid.getVisibleRows();
@@ -6159,6 +6480,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
 
         // act
         dataGrid.addRow();
+        this.clock.tick(300);
         const $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
         const visibleRows = dataGrid.getVisibleRows();
         const lastRowIndex = visibleRows.length - 1;
@@ -6170,6 +6492,119 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
         assert.ok(visibleRows[lastRowIndex].isNewRow, 'last new row is rendered');
         assert.ok($lastRowElement.hasClass('dx-row-inserted'), 'last row is a new row');
         assert.ok(dataGridWrapper.rowsView.isRowVisible($lastRowElement.index()), 'new row is in viewport');
+    });
+
+    QUnit.test('Last new rows should be rendered in a viewport when initial scroll position is top', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 102; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 500,
+            showBorders: true,
+            columnAutoWidth: true,
+            editing: {
+                mode: 'batch',
+                allowAdding: true,
+                newRowPosition: 'last'
+            },
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            }
+        });
+
+        this.clock.tick(300);
+
+        for(let i = 0; i < 3; i++) {
+            // act
+            dataGrid.addRow();
+            this.clock.tick(300);
+
+            const $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
+            const $newRowElements = $(dataGrid.element()).find('.dx-row-inserted');
+            const visibleRowCount = dataGrid.getVisibleRows().filter(row => row.isNewRow).length;
+
+            // assert
+            assert.strictEqual($virtualRowElement.length, 1, 'only one virtual row is rendered');
+            assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered outside viewport');
+            assert.strictEqual($newRowElements.length, i + 1, `${i + 1} new rows rendered`);
+            assert.strictEqual(visibleRowCount, i + 1, `${i + 1} new rows in model`);
+            for(let j = 0; j <= i; j++) {
+                assert.ok(dataGridWrapper.rowsView.isRowVisible($($newRowElements.get(j)).index()), `${j + 1} new row is in viewport`);
+            }
+        }
+    });
+
+    QUnit.test('Last new rows should be rendered in a viewport when initial scroll position is bottom', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 102; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 500,
+            showBorders: true,
+            columnAutoWidth: true,
+            editing: {
+                mode: 'batch',
+                allowAdding: true,
+                newRowPosition: 'last'
+            },
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            }
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.getScrollable().scrollTo(3500);
+        this.clock.tick(300);
+
+        const visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.strictEqual(visibleRows[visibleRows.length - 1].key, 102, 'last visible row key');
+
+        for(let i = 0; i < 2; i++) {
+            // act
+            dataGrid.addRow();
+            this.clock.tick(300);
+
+            const $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
+            const $newRowElements = $(dataGrid.element()).find('.dx-row-inserted');
+            const visibleRowCount = dataGrid.getVisibleRows().filter(row => row.isNewRow).length;
+
+            // assert
+            assert.strictEqual($virtualRowElement.length, 1, 'only one virtual row is rendered');
+            assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered outside viewport');
+            assert.strictEqual($newRowElements.length, i + 1, `${i + 1} new rows rendered`);
+            assert.strictEqual(visibleRowCount, i + 1, `${i + 1} new rows in model`);
+            for(let j = 0; j <= i; j++) {
+                assert.ok(dataGridWrapper.rowsView.isRowVisible($($newRowElements.get(j)).index()), `${j + 1} new row is in viewport`);
+            }
+        }
     });
 
     QUnit.test('Virtual row should not be rendered in the viewport when the edit form is inserted in the first position with certain height and row count', function(assert) {
@@ -6268,12 +6703,12 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             }
             const pageIndexToChange = newRowPosition === 'last' ? 0 : 1;
             const firstRowKeyOnManuallySwitchedPage = newRowPosition === 'last' ? 1 : 11;
-            this.clock.tick();
+            this.clock.tick(300);
 
             if(newRowPosition === 'viewportTop') {
                 // act
                 dataGrid.getScrollable().scrollTo({ top: 80 });
-                this.clock.tick();
+                this.clock.tick(300);
 
                 // assert
                 assert.strictEqual(dataGrid.getTopVisibleRowData().id, 2, 'first visible row data after scroll');
@@ -6281,7 +6716,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
 
             // act
             dataGrid.addRow();
-            this.clock.tick();
+            this.clock.tick(300);
 
 
             // assert

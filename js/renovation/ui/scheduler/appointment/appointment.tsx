@@ -1,72 +1,86 @@
 import {
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
+  JSXTemplate,
+  Template,
+  RefObject,
+  Event,
+  ForwardRef,
+  Consumer,
+  InternalState,
+  Effect,
   CSSAttributes,
-  Component, ComponentBindings, JSXComponent, OneWay, JSXTemplate, Template,
-  Ref, RefObject, Event,
 } from '@devextreme-generator/declarations';
-import type { AppointmentTemplateData } from '../../../../ui/scheduler';
 import {
   AppointmentTemplateProps,
   AppointmentViewModel,
   AppointmentClickData,
+  ReducedIconHoverData,
 } from './types';
-import { getAppointmentStyles } from './utils';
-import { AppointmentContent } from './content';
+import { getAppointmentStyles, mergeStylesWithColor } from './utils';
+import { AppointmentContent } from './content/layout';
 import { Widget } from '../../common/widget';
 import { combineClasses } from '../../../utils/combine_classes';
+import type { AppointmentTemplateData } from '../../../../ui/scheduler';
+import { getAppointmentColor } from '../resources/utils';
+import { AppointmentsContext, IAppointmentContext } from '../appointments_context';
 
 export const viewFunction = ({
   text,
-  dateText,
   styles,
-  data,
-  index,
   ref,
   onItemClick,
   classes,
   isReduced,
+  data,
+  dateText,
   props: {
     viewModel: {
       info: {
         isRecurrent,
       },
     },
+    index,
+    showReducedIconTooltip,
+    hideReducedIconTooltip,
     appointmentTemplate,
   },
-}: Appointment): JSX.Element => {
-  const AppointmentTemplate = appointmentTemplate;
-  return (
-    <Widget
-      onClick={onItemClick}
-      rootElementRef={ref}
-      style={styles}
-      classes={classes}
-      hint={text}
-      {...{ role: 'button' }}
-    >
-      {
-        !!AppointmentTemplate && (
-          <AppointmentTemplate data={data} index={index} />
-        )
-      }
-      {
-        !AppointmentTemplate && (
-          <AppointmentContent
-            text={text}
-            dateText={dateText}
-            isRecurrent={isRecurrent}
-            isReduced={isReduced}
-          />
-        )
-      }
-    </Widget>
-  );
-};
+}: Appointment): JSX.Element => (
+  <Widget
+    onClick={onItemClick}
+    rootElementRef={ref}
+    style={styles}
+    classes={classes}
+    hint={text}
+    {...{ role: 'button' }}
+  >
+    <AppointmentContent
+      text={text}
+      isReduced={isReduced}
+      dateText={dateText}
+      isRecurrent={isRecurrent}
+      index={index}
+      data={data}
+      showReducedIconTooltip={showReducedIconTooltip}
+      hideReducedIconTooltip={hideReducedIconTooltip}
+      appointmentTemplate={appointmentTemplate}
+    />
+  </Widget>
+);
 
 @ComponentBindings()
 export class AppointmentProps {
   @OneWay() viewModel!: AppointmentViewModel;
 
   @OneWay() index = 0;
+
+  @OneWay() showReducedIconTooltip!: (data: ReducedIconHoverData) => void;
+
+  @OneWay() hideReducedIconTooltip!: () => void;
+
+  @OneWay() groups!: string[];
 
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
@@ -77,37 +91,31 @@ export class AppointmentProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'onItemClick'>() {
-  @Ref() ref!: RefObject<HTMLDivElement>;
+export class Appointment extends JSXComponent<
+AppointmentProps,
+'viewModel' | 'onItemClick' | 'showReducedIconTooltip' | 'hideReducedIconTooltip' | 'groups'
+>() {
+  @Consumer(AppointmentsContext)
+  appointmentsContextValue!: IAppointmentContext;
 
-  get text(): string { return this.props.viewModel.appointment.text; }
+  @ForwardRef()
+  ref!: RefObject<HTMLDivElement>;
 
-  get dateText(): string { return this.props.viewModel.info.dateText; }
+  @InternalState()
+  color?: string;
 
-  get styles(): CSSAttributes {
+  get appointmentStyles(): CSSAttributes | undefined {
     return getAppointmentStyles(this.props.viewModel);
   }
 
-  get data(): AppointmentTemplateData {
-    return {
-      appointmentData: this.props.viewModel.info.appointment,
-      targetedAppointmentData: this.props.viewModel.appointment,
-    };
+  get styles(): CSSAttributes | undefined {
+    return mergeStylesWithColor(
+      this.color,
+      this.appointmentStyles,
+    );
   }
 
-  get index(): number {
-    return this.props.index;
-  }
-
-  onItemClick(): void {
-    const e = {
-      data: [this.props.viewModel],
-      target: this.ref.current as HTMLDivElement,
-      index: this.props.index,
-    };
-
-    this.props.onItemClick(e);
-  }
+  get text(): string { return this.props.viewModel.appointment.text; }
 
   get isReduced(): boolean {
     const { appointmentReduced } = this.props.viewModel.info;
@@ -134,5 +142,44 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'o
       'dx-scheduler-appointment-body': appointmentReduced === 'body',
       'dx-scheduler-appointment-tail': appointmentReduced === 'tail',
     });
+  }
+
+  get dateText(): string { return this.props.viewModel.info.dateText; }
+
+  get data(): AppointmentTemplateData {
+    return {
+      appointmentData: this.props.viewModel.info.appointment,
+      targetedAppointmentData: this.props.viewModel.appointment,
+    };
+  }
+
+  @Effect()
+  updateStylesEffect(): void {
+    const { viewModel } = this.props;
+    const groupIndex = viewModel.info.groupIndex ?? 0;
+    const { appointment } = viewModel;
+
+    getAppointmentColor({
+      resources: this.appointmentsContextValue.resources,
+      resourceLoaderMap: this.appointmentsContextValue.resourceLoaderMap,
+      resourcesDataAccessors: this.appointmentsContextValue.dataAccessors.resources,
+      loadedResources: this.appointmentsContextValue.loadedResources,
+    }, {
+      itemData: appointment,
+      groupIndex,
+      groups: this.props.groups,
+    })
+      .then((color) => { this.color = color; })
+      .catch(() => '');
+  }
+
+  onItemClick(): void {
+    const e = {
+      data: [this.props.viewModel],
+      target: this.ref.current as HTMLDivElement,
+      index: this.props.index,
+    };
+
+    this.props.onItemClick(e);
   }
 }

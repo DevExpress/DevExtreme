@@ -15,7 +15,6 @@ import { AppointmentsConfigType, AppointmentsModelType } from './types';
 
 import { DataAccessorType, ViewType } from '../types';
 import { calculateIsGroupedAllDayPanel, getCellDuration } from '../view_model/to_test/views/utils/base';
-import { createGetAppointmentColor } from '../resources/utils';
 import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -58,8 +57,28 @@ export const getAppointmentRenderingStrategyName = (viewType: ViewType): string 
 };
 
 export const getAppointmentsConfig = (
-  schedulerConfig: SchedulerProps,
-  viewConfig: CurrentViewConfigType,
+  schedulerConfig: Pick<
+  SchedulerProps,
+  | 'adaptivityEnabled'
+  | 'rtlEnabled'
+  | 'resources'
+  | 'timeZone'
+  | 'groups'
+  >,
+  viewConfig: Pick<
+  CurrentViewConfigType,
+  | 'startDayHour'
+  | 'endDayHour'
+  | 'currentDate'
+  | 'scrolling'
+  | 'intervalCount'
+  | 'hoursInterval'
+  | 'showAllDayPanel'
+  | 'firstDayOfWeek'
+  | 'type'
+  | 'cellDuration'
+  | 'maxAppointmentsPerCell'
+  >,
   loadedResources: Group[],
   viewDataProvider: ViewDataProviderType,
   isAllDayPanelSupported: boolean,
@@ -76,9 +95,8 @@ export const getAppointmentsConfig = (
     adaptivityEnabled: schedulerConfig.adaptivityEnabled,
     rtlEnabled: schedulerConfig.rtlEnabled,
     resources: schedulerConfig.resources,
-    maxAppointmentsPerCell: schedulerConfig.maxAppointmentsPerCell,
     timeZone: schedulerConfig.timeZone,
-    modelGroups: schedulerConfig.groups,
+    groups: schedulerConfig.groups,
     startDayHour: viewConfig.startDayHour,
     viewStartDayHour: viewConfig.startDayHour, // TODO remove
     endDayHour: viewConfig.endDayHour,
@@ -93,6 +111,7 @@ export const getAppointmentsConfig = (
     firstDayOfWeek: viewConfig.firstDayOfWeek,
     viewType: viewConfig.type,
     cellDurationInMinutes: viewConfig.cellDuration,
+    maxAppointmentsPerCell: viewConfig.maxAppointmentsPerCell,
     isVerticalGroupOrientation: viewDataProvider.getViewOptions().isVerticalGrouping,
     groupByDate: viewDataProvider.getViewOptions().isGroupedByDate,
     startViewDate,
@@ -115,7 +134,7 @@ export const getAppointmentsModel = (
   cellsMetaData: CellsMetaData,
 ): AppointmentsModelType => {
   const groupedByDate = isGroupingByDate(
-    appointmentsConfig.modelGroups as unknown as Group[],
+    appointmentsConfig.groups as unknown as Group[],
     appointmentsConfig.groupOrientation,
     appointmentsConfig.groupByDate,
   );
@@ -158,21 +177,15 @@ export const getAppointmentsModel = (
     appointmentsConfig.hoursInterval,
   );
 
-  const { leftVirtualCellCount, topVirtualRowCount } = viewDataProvider.viewData;
+  const {
+    startCellIndex: leftVirtualCellCount, startRowIndex: topVirtualRowCount,
+  } = viewDataProvider.getViewOptions();
   const cellDuration = getCellDuration(
     appointmentsConfig.viewType,
     appointmentsConfig.startDayHour,
     appointmentsConfig.endDayHour,
     appointmentsConfig.hoursInterval,
   );
-
-  const getAppointmentColor = createGetAppointmentColor({
-    resources: appointmentsConfig.resources,
-    // TODO dataAccessors -> resourceDataAccessors
-    dataAccessors: dataAccessors.resources as DataAccessorType,
-    loadedResources: appointmentsConfig.loadedResources,
-    resourceLoaderMap: new Map(), // TODO fill after load resources
-  });
 
   const appointmentRenderingStrategyName = getAppointmentRenderingStrategyName(
     appointmentsConfig.viewType,
@@ -199,7 +212,6 @@ export const getAppointmentsModel = (
     leftVirtualCellCount,
     topVirtualCellCount: topVirtualRowCount,
     cellDuration,
-    getAppointmentColor,
     resizableStep: positionHelper.getResizableStep(),
     DOMMetaData: cellsMetaData,
   };

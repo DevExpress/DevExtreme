@@ -27,14 +27,16 @@
     "inferno-create-element": "^7.4.6",
     "inferno-hydrate": "^7.4.6",
     "react-dom": "^16.13.1",
+    "react": "^16.13.1",
     "rxjs": "^6.5.4",
     "vue": "^2.6.11",
-    "zone.js": "^0.10.3"
+    "zone.js": "^0.10.3",
+    "core-js": "^3.19.1"
   },
   "devDependencies": {
     "html-loader": "^2.1.2",
     "babel-preset-react-app": "^10.0.0",
-    "raw-loader": "1.0.0",
+    "raw-loader": "^4.0.2",
     "ts-loader": "^9.2.4",
     "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.11"

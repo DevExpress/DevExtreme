@@ -1,6 +1,7 @@
 import {
   getAppointmentStyles,
   getAppointmentKey,
+  getReducedIconTooltipText,
 } from '../utils';
 
 describe('Appointment utils', () => {
@@ -39,7 +40,6 @@ describe('Appointment utils', () => {
     it('generate styles for the full model', () => {
       expect(getAppointmentStyles(testViewModel as any))
         .toEqual({
-          backgroundColor: '#1A2BC',
           height: '20px',
           left: '1px',
           top: '2px',
@@ -72,7 +72,6 @@ describe('Appointment utils', () => {
         },
       }))
         .toEqual({
-          backgroundColor: '#1A2BC',
           height: '50px',
           left: '1px',
           top: '2px',
@@ -89,7 +88,6 @@ describe('Appointment utils', () => {
         },
       }))
         .toEqual({
-          backgroundColor: '#1A2BC',
           height: '20px',
           left: '1px',
           top: '2px',
@@ -98,8 +96,28 @@ describe('Appointment utils', () => {
     });
   });
 
-  it('getAppointmentKey', () => {
-    expect(getAppointmentKey(testViewModel.geometry))
-      .toBe('1-2-10-20');
+  describe('getAppointmentKey', () => {
+    it('should generate correct key', () => {
+      expect(getAppointmentKey(testViewModel.geometry))
+        .toBe('1-2-10-20');
+    });
+  });
+
+  describe('getReducedIconTooltipText', () => {
+    [{
+      endDate: new Date(2021, 11, 21, 19, 13),
+      expected: 'End Date: December 21, 2021',
+    }, {
+      endDate: '2021-12-21T03:03:03.000Z',
+      expected: 'End Date: December 21, 2021',
+    }, {
+      endDate: undefined,
+      expected: 'End Date',
+    }].forEach(({ endDate, expected }) => {
+      it(`should generate correct text if date is ${endDate}`, () => {
+        expect(getReducedIconTooltipText(endDate))
+          .toBe(expected);
+      });
+    });
   });
 });

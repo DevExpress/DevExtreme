@@ -242,7 +242,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     const {
       allowNull, twoWay, elements, props,
     } = this._propsInfo;
-    const { defaultProps } = this._viewComponent;
+    const defaultWidgetPropsKeys = Object.keys(this._viewComponent.defaultProps);
+    const defaultOptions = this._getDefaultOptions();
     const { ref, children, onKeyboardHandled } = options;
     const onKeyDown = onKeyboardHandled
       ? (_: never, event_options: unknown[]): void => {
@@ -264,14 +265,14 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       setDefaultOptionValue(widgetProps, () => null),
     );
 
-    Object.keys(defaultProps).forEach(
+    defaultWidgetPropsKeys.forEach(
       setDefaultOptionValue(
         widgetProps,
-        (name: string) => defaultProps[name],
+        (name: string) => defaultOptions[name],
       ),
     );
     twoWay.forEach(([name, defaultName]) => {
-      setDefaultOptionValue(widgetProps, () => defaultProps[defaultName])(name);
+      setDefaultOptionValue(widgetProps, () => defaultOptions[defaultName])(name);
     });
 
     elements.forEach((name: string) => {
@@ -541,9 +542,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 }
 
-/// #DEBUG
 ComponentWrapper.IS_RENOVATED_WIDGET = true;
-/// #ENDDEBUG
 
 /* eslint-enable @typescript-eslint/ban-types */
 /* eslint-enable @typescript-eslint/no-unsafe-member-access */

@@ -33,7 +33,7 @@ export class DateGeneratorBaseStrategy {
     get endViewDate() { return this.options.endViewDate; }
     get viewType() { return this.options.viewType; }
     get isGroupedByDate() { return this.options.isGroupedByDate; }
-    get isVerticalOrientation() { return this.options.isVerticalOrientation; }
+    get isVerticalOrientation() { return this.options.isVerticalGroupOrientation; }
     get dataAccessors() { return this.options.dataAccessors; }
 
     get loadedResources() { return this.options.loadedResources; }
@@ -550,7 +550,7 @@ export class AppointmentSettingsGenerator {
     get dataAccessors() { return this.options.dataAccessors; }
     get timeZoneCalculator() { return this.options.timeZoneCalculator; }
     get isAllDayRowAppointment() { return this.options.appointmentTakesAllDay && this.options.supportAllDayRow; }
-    get modelGroups() { return this.options.modelGroups; }
+    get groups() { return this.options.groups; }
     get dateSettingsStrategy() {
         const options = {
             ...this.options,
@@ -607,8 +607,6 @@ export class AppointmentSettingsGenerator {
                 isRecurrent,
             };
 
-            this._setResourceColor(info, coordinates.groupIndex);
-
             infos.push({
                 ...coordinates,
                 info
@@ -625,15 +623,5 @@ export class AppointmentSettingsGenerator {
             allDay,
             format: APPOINTMENT_DATE_TEXT_FORMAT
         });
-    }
-
-    _setResourceColor(info, groupIndex) {
-        const appointmentConfig = {
-            itemData: this.rawAppointment,
-            groupIndex,
-            groups: this.modelGroups
-        };
-
-        this.options.getAppointmentColor(appointmentConfig).done((color) => info.resourceColor = color);
     }
 }

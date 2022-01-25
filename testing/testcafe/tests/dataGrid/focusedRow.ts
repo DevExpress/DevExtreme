@@ -756,3 +756,124 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
     });
   });
 });
+
+test('Scroll should not change focused row if focus method is called inside onContentReady (T1047794)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.apiOption('focusedRowKey')).eql(1)
+    .expect(dataGrid.getDataRow(0).isFocusedRow).ok();
+
+  // act
+  await dataGrid.scrollTo({ y: 200 });
+  await dataGrid.scrollTo({ y: 0 });
+
+  // assert
+  await t
+    .expect(dataGrid.apiOption('focusedRowKey')).eql(1)
+    .expect(dataGrid.getDataRow(0).isFocusedRow).ok();
+}).before(async () => {
+  const data = ((): Record<string, unknown>[] => {
+    const result: { ID: number; Name: string }[] = [];
+    for (let i = 0; i < 30; i += 1) {
+      result.push({
+        ID: i + 1,
+        Name: `Name ${i + 1}`,
+      });
+    }
+    return result;
+  })();
+  return createWidget('dxDataGrid', {
+    height: 400,
+    dataSource: data,
+    keyExpr: 'ID',
+    focusedRowEnabled: true,
+    onContentReady(e) {
+      e.component.focus();
+    },
+    scrolling: {
+      mode: 'virtual',
+    },
+  });
+});
+
+const clearLocalStorage = ClientFunction(() => {
+  (window as any).localStorage.removeItem('mystate');
+});
+const getItems = (): Record<string, unknown>[] => {
+  const items: Record<string, unknown>[] = [];
+  for (let i = 0; i < 100; i += 1) {
+    items.push({
+      ID: i + 1,
+      Name: `Name ${i + 1}`,
+    });
+  }
+  return items;
+};
+
+const getDataGridConfig = (): any => ({
+  dataSource: getItems(),
+  keyExpr: 'ID',
+  height: 500,
+  stateStoring: {
+    enabled: true,
+    type: 'custom',
+    customSave: (state) => {
+      localStorage.setItem('mystate', JSON.stringify(state));
+    },
+    customLoad: () => {
+      let state = localStorage.getItem('mystate');
+      if (state) {
+        state = JSON.parse(state);
+      }
+      return state;
+    },
+  },
+  scrolling: {
+    mode: 'virtual',
+  },
+  focusedRowEnabled: true,
+  focusedRowKey: 90,
+});
+
+test('Focused row should be shown after reloading the page (T1058983)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .wait(1000);
+  let scrollTopPosition = await dataGrid.getScrollTop();
+
+  // assert
+  await t
+    .expect(dataGrid.isFocusedRowInViewport())
+    .ok();
+
+  // act
+  await dataGrid.scrollTo({ top: 0 });
+  scrollTopPosition = await dataGrid.getScrollTop();
+
+  // assert
+  await t
+    .expect(scrollTopPosition)
+    .eql(0);
+
+  // act
+  await t
+    .eval(() => location.reload());
+  await createWidget('dxDataGrid', getDataGridConfig());
+  await t
+    .wait(1000);
+
+  scrollTopPosition = await dataGrid.getScrollTop();
+
+  // assert
+  await t
+    .expect(dataGrid.isFocusedRowInViewport())
+    .ok();
+}).before(async () => {
+  await clearLocalStorage();
+  return createWidget('dxDataGrid', getDataGridConfig());
+}).after(async () => {
+  await disposeWidgets();
+  await clearLocalStorage();
+});

@@ -19,8 +19,7 @@
   -ms-overflow-style: -ms-autohiding-scrollbar;
   -ms-scroll-snap-type: proximity; // stylelint-disable-line property-no-vendor-prefix
 
-  &.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-scrollbar,
-  > div > .dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-scrollbar {
+  &.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-scrollbar {
     display: none;
   }
 
@@ -36,16 +35,14 @@
   }
 
   &.dx-scrollable-vertical,
-  &.dx-scrollable-vertical > .dx-scrollable-wrapper > .dx-scrollable-container,
-  &.dx-scrollable-vertical > div > .dx-scrollable-wrapper > .dx-scrollable-container {
+  &.dx-scrollable-vertical > .dx-scrollable-wrapper > .dx-scrollable-container {
     touch-action: pan-y;
     overflow-x: hidden;
     overflow-y: auto;
   }
 
   &.dx-scrollable-horizontal,
-  &.dx-scrollable-horizontal > .dx-scrollable-wrapper > .dx-scrollable-container,
-  &.dx-scrollable-horizontal > div > .dx-scrollable-wrapper > .dx-scrollable-container {
+  &.dx-scrollable-horizontal > .dx-scrollable-wrapper > .dx-scrollable-container {
     touch-action: pan-x;
     float: none;
     overflow-x: auto;
@@ -53,8 +50,7 @@
   }
 
   &.dx-scrollable-both,
-  &.dx-scrollable-both > .dx-scrollable-wrapper > .dx-scrollable-container,
-  &.dx-scrollable-both > div > .dx-scrollable-wrapper > .dx-scrollable-container {
+  &.dx-scrollable-both > .dx-scrollable-wrapper > .dx-scrollable-container {
     touch-action: pan-y pan-x;
     float: none;
     overflow-x: auto;
@@ -66,10 +62,8 @@
     touch-action: auto;
   }
 
-  &.dx-scrollable-scrollbars-hidden {
-    ::-webkit-scrollbar {
-      opacity: 0;
-    }
+  &.dx-scrollable-scrollbars-hidden > .dx-scrollable-wrapper > .dx-scrollable-container {
+    overflow: hidden;
   }
 
   &.dx-scrollable-native-ios {
@@ -217,20 +211,6 @@
 
     &.dx-scrollbar-horizontal {
       direction: ltr;
-    }
-  }
-}
-
-.dx-device-ios-6 {
-  .dx-scrollable-content {
-    backface-visibility: hidden;
-  }
-}
-
-.dx-device-android {
-  .dx-scrollable-native.dx-scrollable-scrollbars-hidden {
-    ::-webkit-scrollbar {
-      display: none;
     }
   }
 }

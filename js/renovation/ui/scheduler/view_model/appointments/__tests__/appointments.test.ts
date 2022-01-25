@@ -1,5 +1,5 @@
 import ViewDataProvider from '../../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
-import { SchedulerProps } from '../../../props';
+import { SchedulerProps, ViewProps } from '../../../props';
 import { DataAccessorType, ViewType } from '../../../types';
 import { prepareGenerationOptions } from '../../../workspaces/base/work_space';
 import { getViewRenderConfigByType } from '../../../workspaces/base/work_space_config';
@@ -11,6 +11,7 @@ import { compileGetter, compileSetter } from '../../../../../../core/utils/data'
 import { createTimeZoneCalculator } from '../../../common';
 import { AppointmentsConfigType } from '../../../model/types';
 import { TimeZoneCalculator } from '../../../timeZoneCalculator/utils';
+import { getCurrentViewConfig } from '../../../model/views';
 
 jest.mock('../../../../../../ui/scheduler/workspaces/helpers/positionHelper', () => ({
   ...jest.requireActual('../../../../../../ui/scheduler/workspaces/helpers/positionHelper'),
@@ -53,13 +54,22 @@ const prepareInstances = (
   viewDataProvider: ViewDataProviderType;
   DOMMetaData: CellsMetaData;
 } => {
-  const schedulerProps = new SchedulerProps();
+  const schedulerProps: any = new SchedulerProps();
   schedulerProps.currentDate = currentDate;
-  const workspaceProps = new WorkSpaceProps();
+  let workspaceProps = new WorkSpaceProps();
   workspaceProps.type = viewType;
   workspaceProps.intervalCount = intervalCount;
   workspaceProps.currentDate = currentDate;
   workspaceProps.startDate = currentDate;
+
+  workspaceProps = {
+    ...workspaceProps,
+    ...getCurrentViewConfig(
+      workspaceProps as unknown as Partial<ViewProps>,
+      schedulerProps,
+      currentDate,
+    ),
+  };
 
   // TODO: convert ViewdataProvider to TS
   const viewDataProvider = (new ViewDataProvider('week') as unknown) as ViewDataProviderType;
@@ -93,7 +103,9 @@ const prepareInstances = (
   const DOMMetaData = {
     allDayPanelCellsMeta,
     dateTableCellsMeta: [
-      [],
+      [{
+        left: 0, top: 0, width: 100, height: 200,
+      }],
       [{
         left: 0, top: 0, width: 100, height: 200,
       }],
@@ -482,6 +494,7 @@ describe('Appointments view model', () => {
             info: {
               allDay: true,
               direction: 'horizontal',
+              groupIndex: 0,
               isRecurrent: false,
               appointment: {
                 startDate: new Date(2021, 8, 23),
@@ -519,6 +532,59 @@ describe('Appointments view model', () => {
           false,
           false,
         );
+
+        const appointmentsModel = getAppointmentsModel(
+          instances.appointmentsConfig,
+          instances.viewDataProvider,
+          instances.timeZoneCalculator,
+          defaultDataAccessors,
+          instances.DOMMetaData,
+        );
+
+        const viewModel = getAppointmentsViewModel(
+          appointmentsModel,
+          [appointment],
+        );
+
+        const {
+          regular,
+          allDay,
+          regularCompact,
+          allDayCompact,
+        } = viewModel;
+
+        expect(regular)
+          .toHaveLength(1);
+
+        expect(regularCompact)
+          .toHaveLength(0);
+
+        expect(allDay)
+          .toHaveLength(0);
+
+        expect(allDayCompact)
+          .toHaveLength(0);
+
+        expect(regular[0].appointment)
+          .toMatchObject(appointment);
+      });
+
+      it('should generate all day appointment in date view if vertical grouping', () => {
+        const appointment = {
+          text: 'Test-01',
+          startDate: new Date(2021, 3, 29),
+          endDate: new Date(2021, 3, 29, 1),
+          allDay: true,
+        };
+        const instances = prepareInstances(
+          'week',
+          new Date(2021, 3, 29),
+          1,
+          true,
+          true,
+        );
+
+        instances.appointmentsConfig.isVerticalGroupOrientation = true;
 
         const appointmentsModel = getAppointmentsModel(
           instances.appointmentsConfig,

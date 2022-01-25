@@ -5,6 +5,7 @@ import ValidationEngine from '../../ui/validation_engine';
 import Component from './common/component';
 import type { Button } from '../ui/button';
 import { Option } from './common/types';
+import { getImageSourceType } from '../../core/utils/icon';
 
 export default class ButtonWrapper extends Component {
   _clickAction!: (...args) => unknown;
@@ -30,6 +31,11 @@ export default class ButtonWrapper extends Component {
       this._clickAction({ event, validationGroup: this._validationGroupConfig });
     };
 
+    const iconType = getImageSourceType(props.icon);
+    if (iconType === 'svg') {
+      props.iconTemplate = this._createTemplateComponent(() => props.icon);
+    }
+
     return props;
   }
 
@@ -53,20 +59,20 @@ export default class ButtonWrapper extends Component {
         const validationGroup = this._validationGroupConfig;
 
         if (validationGroup !== undefined && validationGroup !== '') {
-          const { status, complete } = validationGroup.validate();
+          const validationResult = validationGroup.validate();
 
-          validationStatus = status;
+          validationStatus = validationResult.status;
 
-          if (status === 'pending') {
+          if (validationResult.status === 'pending') {
             needValidate = false;
             this.option('disabled', true);
 
-            complete.then(() => {
-              needValidate = true;
+            validationResult.complete.then(({ status }) => {
               this.option('disabled', false);
 
               validationStatus = status;
               validationStatus === 'valid' && submitInput.click();
+              needValidate = true;
             });
           }
         }

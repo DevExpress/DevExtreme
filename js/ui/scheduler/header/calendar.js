@@ -14,18 +14,17 @@ const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 export default class SchedulerCalendar extends Widget {
     show(target) {
         if(!this._isMobileLayout()) {
-            this._popover.option('target', target);
+            this._overlay.option('target', target);
         }
-        this._popover.show();
-        this._calendar.focus();
+        this._overlay.show();
     }
 
     hide() {
-        this._popover.hide();
+        this._overlay.hide();
     }
 
     _keyboardHandler(opts) {
-        this._calendar._keyboardHandler(opts);
+        this._calendar?._keyboardHandler(opts);
     }
 
     _init() {
@@ -35,18 +34,19 @@ export default class SchedulerCalendar extends Widget {
 
     _render() {
         super._render();
-        this._renderPopover();
+        this._renderOverlay();
     }
 
-    _renderPopover() {
+    _renderOverlay() {
         this.$element().addClass(CALENDAR_POPOVER_CLASS);
 
         const isMobileLayout = this._isMobileLayout();
 
         const overlayType = isMobileLayout ? Popup : Popover;
 
-        this._popover = this._createComponent(this.$element(), overlayType, {
-            contentTemplate: () => this._createPopupContent(),
+        this._overlay = this._createComponent(this.$element(), overlayType, {
+            contentTemplate: () => this._createOverlayContent(),
+            onShown: () => this._calendar.focus(),
             defaultOptionsRules: [
                 {
                     device: () => isMobileLayout,
@@ -60,7 +60,7 @@ export default class SchedulerCalendar extends Widget {
         });
     }
 
-    _createPopupContent() {
+    _createOverlayContent() {
         const result = $('<div>').addClass(CALENDAR_CLASS);
         this._calendar = this._createComponent(result, Calendar, this._getCalendarOptions());
 

@@ -1,6 +1,6 @@
 import { CSSAttributes } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../utils/combine_classes';
-import { Group, GroupedViewData, TimePanelData } from './types';
+import { Group } from './types';
 import { GroupOrientation } from '../types';
 import {
   HORIZONTAL_GROUP_ORIENTATION,
@@ -17,9 +17,9 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
 };
 
 export const getKeyByGroup = (
-  groupIndex: number | undefined, groupOrientation: GroupOrientation | undefined,
+  groupIndex: number | undefined, isVerticalGrouping: boolean,
 ): string => {
-  if (groupOrientation === VERTICAL_GROUP_ORIENTATION && !!groupIndex) {
+  if (isVerticalGrouping && !!groupIndex) {
     return groupIndex.toString();
   }
 
@@ -70,15 +70,8 @@ export const getGroupCellClasses = (
 });
 
 export const getIsGroupedAllDayPanel = (
-  viewData: GroupedViewData | TimePanelData, index: number,
-): boolean => {
-  const { groupedData } = viewData;
-  const groupData = groupedData[index];
-  const isAllDayPanel = !!groupData?.allDayPanel;
-  const isGroupedAllDayPanel = !!groupData?.isGroupedAllDayPanel;
-
-  return isAllDayPanel && isGroupedAllDayPanel;
-};
+  hasAllDayRow: boolean, isVerticalGrouping: boolean,
+): boolean => hasAllDayRow && isVerticalGrouping;
 
 export const isVerticalGroupingApplied = (
   groups: Group[],

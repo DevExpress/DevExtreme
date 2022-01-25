@@ -262,6 +262,7 @@ class RecurrenceEditor extends Editor {
                     dataField: 'interval',
                     editorType: 'dxNumberBox',
                     editorOptions: {
+                        format: '#',
                         width: recurrentEditorNumberBoxWidth,
                         min: 1,
                         field: 'interval',
@@ -377,6 +378,7 @@ class RecurrenceEditor extends Editor {
             editorOptions: {
                 min: 1,
                 max: 31,
+                format: '#',
                 width: recurrentEditorNumberBoxWidth,
                 field: 'bymonthday',
                 showSpinButtons: true,
@@ -431,7 +433,7 @@ class RecurrenceEditor extends Editor {
     _renderEditors($container) {
         this._recurrenceForm = this._createComponent($container, Form, {
             items: this._editors,
-            showValidationSummary: true,
+            showValidationSummary: false,
             scrollingEnabled: true,
             showColonAfterLabel: false,
             labelLocation: 'top',
@@ -565,6 +567,7 @@ class RecurrenceEditor extends Editor {
 
         this._repeatCountEditor = this._createComponent(this._$repeatCountEditor, NumberBox, {
             field: 'count',
+            format: '#',
             width: recurrentEditorNumberBoxWidth,
             min: 1,
             showSpinButtons: true,

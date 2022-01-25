@@ -42,6 +42,7 @@ export const EVENT = {
   scrollMove: 'dxscroll',
   pointerDown: 'dxpointerdown',
   pointerUp: 'dxpointerup',
+  pointerMove: 'dxpointermove',
 };
 
 export const defaultEvent = {

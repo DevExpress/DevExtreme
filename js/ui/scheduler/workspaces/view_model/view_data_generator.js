@@ -11,6 +11,7 @@ import {
     getTotalRowCountByCompleteData,
     getDisplayedCellCount,
 } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { getIsGroupedAllDayPanel, getKeyByGroup } from '../../../../renovation/ui/scheduler/workspaces/utils';
 
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
 const DAY_MS = dateUtils.dateToMilliseconds('day');
@@ -265,8 +266,8 @@ export class ViewDataGenerator {
         } = viewDataMap;
 
         const {
-            previousGroupedData: groupedData,
-        } = dateTableMap.reduce(({ previousGroupIndex, previousGroupedData }, cellsRow) => {
+            groupedData,
+        } = dateTableMap.reduce(({ previousGroupIndex, groupedData }, cellsRow) => {
             const cellDataRow = cellsRow.map(({ cellData }) => cellData);
 
             const firstCell = cellDataRow[0];
@@ -274,24 +275,28 @@ export class ViewDataGenerator {
             const currentGroupIndex = firstCell.groupIndex;
 
             if(currentGroupIndex !== previousGroupIndex) {
-                previousGroupedData.push({
+                groupedData.push({
                     dateTable: [],
-                    isGroupedAllDayPanel,
+                    isGroupedAllDayPanel: getIsGroupedAllDayPanel(!!isAllDayRow, isVerticalGrouping),
                     groupIndex: currentGroupIndex,
+                    key: getKeyByGroup(currentGroupIndex, isVerticalGrouping),
                 });
             }
 
             if(isAllDayRow) {
-                previousGroupedData[previousGroupedData.length - 1].allDayPanel = cellDataRow;
+                groupedData[groupedData.length - 1].allDayPanel = cellDataRow;
             } else {
-                previousGroupedData[previousGroupedData.length - 1].dateTable.push(cellDataRow);
+                groupedData[groupedData.length - 1].dateTable.push({
+                    cells: cellDataRow,
+                    key: cellDataRow[0].key - startCellIndex,
+                });
             }
 
             return {
-                previousGroupedData,
+                groupedData,
                 previousGroupIndex: currentGroupIndex,
             };
-        }, { previousGroupIndex: -1, previousGroupedData: [] });
+        }, { previousGroupIndex: -1, groupedData: [] });
 
         if(this._isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible)) {
             groupedData[0].allDayPanel = allDayPanelMap.map(({ cellData }) => cellData);
@@ -642,10 +647,7 @@ export class ViewDataGenerator {
     }
 
     getInterval(hoursInterval) {
-        if(this._interval === undefined) {
-            this._interval = hoursInterval * HOUR_MS;
-        }
-        return this._interval;
+        return hoursInterval * HOUR_MS;
     }
 
     _getIntervalDuration(intervalCount) {

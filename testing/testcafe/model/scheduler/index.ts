@@ -6,6 +6,7 @@ import AppointmentDialog from './appointment/dialog';
 import Appointment from './appointment';
 import Toolbar from './toolbar';
 import Collectors from './collectors';
+import ReducedIconTooltip from './appointment/tooltip/reducedIconTooltip';
 
 export const CLASS = {
   appointment: 'dx-scheduler-appointment',
@@ -22,6 +23,17 @@ export const CLASS = {
   scrollableContainer: 'dx-scrollable-container',
 
   workSpace: 'dx-scheduler-work-space',
+};
+
+const ViewTypeClassesMap = {
+  day: 'dx-scheduler-work-space-day',
+  week: 'dx-scheduler-work-space-week',
+  workWeek: 'dx-scheduler-work-space-work-week',
+  month: 'dx-scheduler-work-space-month',
+  timelineDay: 'dx-scheduler-timeline-day',
+  timelineWeek: 'dx-scheduler-timeline-week',
+  timelineWorkWeek: 'dx-scheduler-timeline-work-week',
+  timelineMonth: 'dx-scheduler-timeline-month',
 };
 
 export default class Scheduler extends Widget {
@@ -55,6 +67,8 @@ export default class Scheduler extends Widget {
 
   readonly collectors: Collectors;
 
+  readonly reducedIconTooltip: ReducedIconTooltip;
+
   constructor(id: string) {
     super(id);
 
@@ -84,6 +98,7 @@ export default class Scheduler extends Widget {
 
     this.appointmentPopup = new AppointmentPopup(this.element);
     this.appointmentTooltip = new AppointmentTooltip(this.element);
+    this.reducedIconTooltip = new ReducedIconTooltip();
   }
 
   static getDialog(): AppointmentDialog {
@@ -140,5 +155,9 @@ export default class Scheduler extends Widget {
     return ClientFunction(hideAppointmentTooltip, {
       dependencies: { element, name },
     })();
+  }
+
+  checkViewType(type: string): Promise<boolean> {
+    return this.workSpace.hasClass(ViewTypeClassesMap[type]);
   }
 }

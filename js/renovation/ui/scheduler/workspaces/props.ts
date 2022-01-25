@@ -19,7 +19,6 @@ import {
 import { BaseWidgetProps } from '../../common/base_props';
 import { HeaderPanelLayoutProps } from './base/header_panel/layout';
 import { DateTableLayoutProps } from './base/date_table/layout';
-import { TimePanelLayoutProps } from './base/time_panel/layout';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 import { ScrollableDirection } from '../../scroll_view/common/types';
 import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from '../appointment/types';
@@ -69,6 +68,8 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() startDate?: Date;
 
+  @OneWay() startViewDate!: Date;
+
   @OneWay() hoursInterval = 0.5;
 
   @OneWay() showAllDayPanel = false;
@@ -99,6 +100,8 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() type: ViewType = 'week';
 
+  @OneWay() maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 
   @Slot() appointments?: JSX.Element;
@@ -114,7 +117,6 @@ WorkSpaceProps,
 | 'endDayHour'
 | 'cellDuration'
 | 'groupByDate'
-| 'groups'
 | 'scrolling'
 | 'currentDate'
 | 'intervalCount'
@@ -130,11 +132,9 @@ WorkSpaceProps,
 | 'tabIndex'
 | 'accessKey'
 | 'focusStateEnabled'
-| 'indicatorTime'
 | 'allowMultipleCellSelection'
 | 'allDayPanelExpanded'
 | 'hoursInterval'
-| 'selectedCellData'
 | 'type'
 | 'dataCellTemplate'
 | 'dateCellTemplate'
@@ -142,12 +142,12 @@ WorkSpaceProps,
 | 'resourceCellTemplate'
 | 'appointmentTemplate'
 | 'appointmentCollectorTemplate'
+| 'maxAppointmentsPerCell'
 >;
 
 export interface ViewRenderConfig {
   headerPanelTemplate: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'>;
   dateTableTemplate: JSXTemplate<DateTableLayoutProps>;
-  timePanelTemplate?: JSXTemplate<TimePanelLayoutProps>;
   className: string;
   isAllDayPanelSupported: boolean;
   isProvideVirtualCellsWidth: boolean;
@@ -160,4 +160,10 @@ export interface ViewRenderConfig {
   scrollingDirection: ScrollableDirection;
   isCreateCrossScrolling: boolean;
   defaultGroupOrientation: GroupOrientation;
+
+  isMonthDateHeader: boolean;
+
+  // This is a WA for this bug: https://github.com/DevExpress/devextreme-renovation/issues/814
+  isUseMonthDateTable: boolean;
+  isUseTimelineHeader: boolean;
 }

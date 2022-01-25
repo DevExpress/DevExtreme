@@ -5632,6 +5632,9 @@ QUnit.module('Virtual scrolling', {
                 totalItemsCount: function() {
                     const virtualItemsCount = dataController.virtualItemsCount();
                     return items.length + virtualItemsCount.begin + virtualItemsCount.end;
+                },
+                itemsCount: function() {
+                    return items.length;
                 }
             };
 
@@ -6657,7 +6660,7 @@ QUnit.module('Virtual scrolling', {
 
         rowsView._hasHeight = true;
         rowsView.render($testElement);
-        rowsView.height(100);
+        $testElement.height(100);
         rowsView.resize();
 
         // assert
@@ -6995,6 +6998,34 @@ QUnit.module('Scrollbar', {
 
         // assert
         assert.strictEqual(getOuterHeight(rowsView.getScrollable().$content()), getOuterHeight($(rowsView.getScrollable().container())), 'No vertical scroll');
+    });
+
+    QUnit.test('getCell outside viewport should not return last visible row if rowRenderingMode is virtual (T1046754)', function(assert) {
+        // arrange
+        const options = {
+            items: [
+                { values: [1] },
+                { values: [2] },
+                { values: [3] }
+            ],
+            virtualItemsCount: {
+                begin: 10,
+                end: 7
+            }
+        };
+        const dataController = new MockDataController(options);
+        const rowsView = this.createRowsView(options.items, dataController);
+        const testElement = $('#container');
+
+        // act
+        this.options.scrolling = {
+            rowRenderingMode: 'virtual'
+        };
+        rowsView.render(testElement);
+
+        // assert
+        assert.equal(rowsView.getCell({ rowIndex: 2, columnIndex: 0 }).text(), '3', 'getCell returns cell for visible cell');
+        assert.equal(rowsView.getCell({ rowIndex: 3, columnIndex: 0 }), undefined, 'getCell returns undefined for invisible cell');
     });
 });
 

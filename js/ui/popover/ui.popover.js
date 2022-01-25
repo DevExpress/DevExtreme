@@ -113,7 +113,7 @@ const Popover = Popup.inherit({
 
             position: extend({}, POPOVER_POSITION_ALIASES.bottom),
 
-            closeOnOutsideClick: true,
+            hideOnOutsideClick: true,
 
             animation: {
                 show: {
@@ -442,9 +442,10 @@ const Popover = Popup.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { shading } = this.option();
+        const { shading, target } = this.option();
 
         return extend({}, this.callBase(), {
+            target,
             shading,
             $arrow: this._$arrow
         });
@@ -500,7 +501,8 @@ const Popover = Popup.inherit({
                 break;
             case 'target':
                 args.previousValue && this._detachEvents(args.previousValue);
-                this.callBase(args);
+                this._positionController.updateTarget(args.value);
+                this._invalidate();
                 break;
             case 'showEvent':
             case 'hideEvent': {

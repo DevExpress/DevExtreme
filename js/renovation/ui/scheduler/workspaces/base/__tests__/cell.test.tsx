@@ -31,50 +31,6 @@ describe('DateTableCellBase', () => {
         .toBe(true);
     });
 
-    it('should render template and should not render children', () => {
-      const contentTemplate = () => null;
-      const cell = render({
-        props: {
-          children: <div className="child-class" />,
-          contentTemplate,
-        },
-      });
-
-      expect(cell.find('.child-class').exists())
-        .toBe(false);
-      expect(cell.find(contentTemplate).exists())
-        .toBe(true);
-    });
-
-    it('should pass correct props to the template', () => {
-      const contentTemplateProps = {
-        index: 1,
-        data: {
-          date: new Date(2020, 7, 25),
-          startDate: new Date(2020, 7, 26),
-          endDate: new Date(2020, 7, 27),
-          text: 'Test text',
-          groups: { id: 1 },
-          groupIndex: 1,
-        },
-      };
-      const contentTemplate = () => null;
-
-      const cell = render({
-        props: {
-          children: <div className="child-class" />,
-          contentTemplate,
-          contentTemplateProps,
-        },
-      });
-
-      const renderedTemplate = cell.find(contentTemplate);
-      expect(renderedTemplate.exists())
-        .toBe(true);
-      expect(renderedTemplate.props())
-        .toEqual(contentTemplateProps);
-    });
-
     it('should pass aria-label to the root', () => {
       const cell = render({
         props: {

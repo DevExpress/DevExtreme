@@ -15,11 +15,18 @@
 
   &.dx-light-mode {
     .dx-page-sizes {
-      min-width: 42px;
+      min-width: $material-pager-light-pagesizes-min-width;
     }
 
     .dx-page-index {
-      min-width: 19px;
+      min-width: $material-pager-light-pageindex-min-width;
+    }
+
+    .dx-pages {
+      .dx-navigate-button,
+      .dx-light-pages {
+        vertical-align: middle;
+      }
     }
   }
 
@@ -66,6 +73,11 @@
   }
 
   .dx-page-sizes .dx-page-size {
+    &:first-child,
+    &.dx-first-child {
+      margin-left: 0;
+    }
+
     padding: $material-pager-page-padding;
     line-height: $material-pager-page-line-height;
   }
@@ -77,9 +89,5 @@
       background-color: $pager-page-selected-bg;
       color: $pager-page-selected-color;
     }
-  }
-
-  .dx-page-sizes .dx-page-size:first-child {
-    margin-left: 0;
   }
 }

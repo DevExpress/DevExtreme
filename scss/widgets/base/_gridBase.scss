@@ -23,7 +23,6 @@
   $grid-command-edit-column-width: 100px;
   $grid-command-edit-column-with-icons-width: 80px;
   $grid-command-expand-column-width: 30px;
-  $grid-masterdetail-padding: 30px;
   $grid-command-adaptive-column-width: 36px;
   $grid-column-header-indicator-width: 14px;
   $grid-text-content-margin: 3px;
@@ -820,8 +819,7 @@
     &.dx-scrollable {
       display: flex;
 
-      > .dx-scrollable-wrapper,
-      > div > .dx-scrollable-wrapper {
+      > .dx-scrollable-wrapper {
         flex: 1;
         height: auto;
         min-width: 0;
@@ -911,9 +909,19 @@
       }
     }
 
-    .dx-row > .dx-master-detail-cell {
-      padding: $grid-masterdetail-padding;
+    .dx-select-checkboxes-hidden > tbody > tr > td > .dx-select-checkbox {
+      display: none;
+    }
 
+    .dx-select-checkboxes-hidden > tbody > tr > td:hover > .dx-select-checkbox {
+      display: inline-block;
+    }
+
+    .dx-select-checkboxes-hidden > tbody > tr.dx-selection > td > .dx-select-checkbox {
+      display: inline-block;
+    }
+
+    .dx-row > .dx-master-detail-cell {
       &:focus {
         outline: 0;
       }

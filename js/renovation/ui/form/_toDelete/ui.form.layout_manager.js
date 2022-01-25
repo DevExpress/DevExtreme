@@ -13,7 +13,7 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { inArray, normalizeIndexes } from '../../core/utils/array';
 import { compileGetter } from '../../core/utils/data';
-import { removeEvent } from '../../core/remove_event';
+import { removeEvent } from '../../events/remove';
 import { name as clickEventName } from '../../events/click';
 import errors from '../widget/ui.errors';
 import messageLocalization from '../../localization/message';

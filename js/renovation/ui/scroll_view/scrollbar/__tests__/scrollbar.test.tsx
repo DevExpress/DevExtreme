@@ -200,118 +200,68 @@ describe('Scrollbar', () => {
       expect(scrollbar.active).toEqual(false);
     });
 
-    it('should subscribe to mouseenter event if showScrollbar mode is onHover', () => {
-      const viewModel = new Scrollbar({
-        direction: 'vertical',
-        showScrollbar: 'onHover',
-      });
-      viewModel.scrollbarRef = { current: {} } as RefObject;
-      viewModel.hovered = false;
-
-      viewModel.mouseEnterEffect();
-      emit('mouseenter');
-
-      expect(viewModel.hovered).toEqual(true);
-    });
-
-    each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
-      it(`should not subscribe to mouseenter event if showScrollbar mode is ${showScrollbar}`, () => {
-        const viewModel = new Scrollbar({
-          direction: 'vertical',
-          showScrollbar,
-        });
-        viewModel.scrollbarRef = { current: {} } as RefObject;
-        viewModel.hovered = false;
-
-        viewModel.mouseEnterEffect();
-        emit('mouseenter');
-
-        expect(viewModel.hovered).toEqual(false);
-      });
-    });
-
-    it('should subscribe to mouseleave event if showScrollbar mode is onHover', () => {
-      const viewModel = new Scrollbar({
-        direction: 'vertical',
-        showScrollbar: 'onHover',
-      });
-      viewModel.scrollbarRef = { current: {} } as RefObject;
-      viewModel.hovered = true;
-
-      viewModel.mouseLeaveEffect();
-      emit('mouseleave');
-
-      expect(viewModel.hovered).toEqual(false);
-    });
-
-    each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
-      it(`should not subscribe to mouseleave event if showScrollbar mode is ${showScrollbar}`, () => {
-        const viewModel = new Scrollbar({
-          direction: 'vertical',
-          showScrollbar,
-        });
-        viewModel.scrollbarRef = { current: {} } as RefObject;
-        viewModel.hovered = true;
-
-        viewModel.mouseLeaveEffect();
-        emit('mouseleave');
-
-        expect(viewModel.hovered).toEqual(true);
-      });
-    });
-  });
-
-  each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL]).describe('direction: %o', (direction) => {
-    each(optionValues.rtlEnabled).describe('rtlEnabled: %o', (rtlEnabled) => {
-      each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
-        each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
-          each([0, -300]).describe('maxOffset: %o', (prevMaxOffset) => {
-            each([0, -300]).describe('maxOffset: %o', (maxOffset) => {
-              it('syncScrollLocation() should call moveTo(location)', () => {
-                const viewModel = new Scrollbar({
-                  showScrollbar: 'always',
-                  direction,
-                  rtlEnabled,
-                  scrollLocation,
-                  containerHasSizes,
-                  maxOffset,
-                });
-
-                [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
-                  viewModel.moveTo = jest.fn();
-
-                  viewModel.rightScrollLocation = rightScrollLocation;
-                  viewModel.prevScrollLocation = -100;
-                  viewModel.prevMaxOffset = prevMaxOffset;
-
-                  viewModel.syncScrollLocation();
-
-                  let expectedRightScrollLocation = rightScrollLocation;
-                  if (containerHasSizes) {
-                    let expectedLocation = scrollLocation;
-
-                    if (Math.abs(maxOffset - prevMaxOffset) > 0 && direction === 'horizontal' && rtlEnabled) {
-                      if (maxOffset === 0) {
-                        expectedRightScrollLocation = 0;
-                      }
-
-                      expectedLocation = maxOffset - expectedRightScrollLocation;
-                    }
-
-                    if (expectedLocation === -100 /* prev location */) {
-                      expect(viewModel.moveTo).not.toBeCalled();
-                    } else {
-                      expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
-                      expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
-                    }
-                  } else {
-                    expect(viewModel.moveTo).not.toBeCalled();
-                  }
-                  expect(viewModel.rightScrollLocation).toEqual(expectedRightScrollLocation);
-                });
-              });
-            });
+    each(optionValues.scrollByThumb).describe('scrollByThumb: %o', (scrollByThumb) => {
+      each([ShowScrollbarMode.HOVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
+        it(`should subscribe to mouseenter event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
           });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = false;
+
+          viewModel.mouseEnterEffect();
+          emit('mouseenter');
+
+          expect(viewModel.hovered).toEqual(scrollByThumb);
+        });
+
+        it(`should subscribe to mouseleave event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
+          });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = true;
+
+          viewModel.mouseLeaveEffect();
+          emit('mouseleave');
+
+          expect(viewModel.hovered).toEqual(!scrollByThumb);
+        });
+      });
+
+      each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER]).describe('ShowScrollbar: %o', (showScrollbar) => {
+        it(`should not subscribe to mouseenter event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
+          });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = false;
+
+          viewModel.mouseEnterEffect();
+          emit('mouseenter');
+
+          expect(viewModel.hovered).toEqual(false);
+        });
+
+        it(`should not subscribe to mouseleave event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
+          });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = true;
+
+          viewModel.mouseLeaveEffect();
+          emit('mouseleave');
+
+          expect(viewModel.hovered).toEqual(true);
         });
       });
     });
@@ -319,18 +269,6 @@ describe('Scrollbar', () => {
 
   describe('Methods', () => {
     each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
-      it('moveTo(), should not raise any errors when scrollLocationChange events not defined', () => {
-        const viewModel = new Scrollbar({
-          showScrollbar: 'always',
-          direction,
-          scrollLocationChange: undefined,
-        });
-
-        viewModel.prevScrollLocation = -99;
-
-        expect(() => { viewModel.moveTo(-100); }).not.toThrow();
-      });
-
       it('setActiveState()', () => {
         const viewModel = new Scrollbar({
           direction,
@@ -341,70 +279,6 @@ describe('Scrollbar', () => {
         viewModel.setActiveState();
 
         expect(viewModel.active).toEqual(true);
-      });
-
-      each([
-        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: 0, expected: 10 },
-        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -150, expected: 10 },
-        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -300, expected: 10 },
-        { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: 0, expected: -52 },
-        { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: -150, expected: -52 },
-        { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: -300, expected: -52 },
-        { eventData: { pageX: 87, pageY: 87 }, scrollLocation: 0, expected: -138 },
-        { eventData: { pageX: 87, pageY: 87 }, scrollLocation: -150, expected: -138 },
-        { eventData: { pageX: 87, pageY: 87 }, scrollLocation: -300, expected: -138 },
-        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: 0, expected: -346 },
-        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -150, expected: -346 },
-        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -300, expected: -346 },
-      ]).describe('testData: %o', (testData) => {
-        it('moveToMouseLocation(event)', () => {
-          const viewModel = new Scrollbar({
-            direction,
-            containerSize: 100,
-            contentSize: 400,
-            maxOffset: -300,
-            scrollLocation: testData.scrollLocation,
-          });
-
-          viewModel.moveTo = jest.fn();
-
-          viewModel.moveToMouseLocation(testData.eventData, 40);
-
-          expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
-          expect(viewModel.moveTo).toHaveBeenCalledWith(testData.expected);
-        });
-      });
-
-      test.each([
-        { prevScrollLocation: -499, scrollLocation: -500.25, expected: { needFireScroll: true } },
-        { prevScrollLocation: -399, scrollLocation: -400, expected: { needFireScroll: true } },
-        { prevScrollLocation: -100, scrollLocation: -100.25, expected: { needFireScroll: true } },
-        { prevScrollLocation: -55, scrollLocation: -55.75, expected: { needFireScroll: true } },
-        { prevScrollLocation: 0, scrollLocation: 0.25, expected: { needFireScroll: true } },
-        { prevScrollLocation: 100, scrollLocation: 100.25, expected: { needFireScroll: true } },
-        { prevScrollLocation: 500.24, scrollLocation: 500.25, expected: { needFireScroll: true } },
-        { prevScrollLocation: 480, scrollLocation: 480, expected: { needFireScroll: false } },
-      ])('moveTo(location), pass correct arguments to scrollLocationChange event: %o', ({ prevScrollLocation, scrollLocation, expected }) => {
-        const scrollLocationChange = jest.fn();
-
-        const viewModel = new Scrollbar({
-          direction,
-          scrollLocationChange,
-          scrollLocation,
-        });
-
-        viewModel.prevScrollLocation = prevScrollLocation;
-
-        viewModel.moveTo(scrollLocation);
-
-        expect(scrollLocationChange).toHaveBeenCalledTimes(1);
-        expect(scrollLocationChange).toHaveBeenCalledWith(
-          {
-            fullScrollProp: viewModel.fullScrollProp,
-            location: -scrollLocation,
-            needFireScroll: expected.needFireScroll,
-          },
-        );
       });
 
       each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
@@ -504,12 +378,6 @@ describe('Scrollbar', () => {
 
   describe('Getters', () => {
     each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
-      it('axis()', () => {
-        const viewModel = new Scrollbar({ direction });
-
-        expect((viewModel as any).axis).toBe(direction === 'horizontal' ? 'x' : 'y');
-      });
-
       it('dimension()', () => {
         const viewModel = new Scrollbar({ direction });
 

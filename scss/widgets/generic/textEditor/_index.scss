@@ -314,6 +314,10 @@ $generic-texteditor-label-transition:
         display: none;
       }
 
+      .dx-lookup-field {
+        font-size: 0;
+      }
+
       .dx-texteditor-label {
         transition: $generic-texteditor-label-transition;
         font-size: $generic-base-font-size;
@@ -339,9 +343,14 @@ $generic-texteditor-label-transition:
     }
 
     &.dx-state-focused,
+    &.dx-dropdowneditor-active,
     &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
+      }
+
+      .dx-lookup-field {
+        font-size: $generic-base-font-size;
       }
 
       .dx-texteditor-label {
@@ -405,6 +414,10 @@ $generic-texteditor-label-transition:
         border-bottom: $border-width $borderStyle $borderColor;
         height: 100%;
       }
+    }
+
+    .dx-lookup-field {
+      font-size: $generic-base-font-size;
     }
 
     &.dx-rtl {
@@ -471,6 +484,10 @@ $generic-texteditor-label-transition:
       }
     }
 
+    .dx-lookup-field {
+      font-size: 0;
+    }
+
     .dx-placeholder {
       display: none;
     }
@@ -532,9 +549,17 @@ $generic-texteditor-label-transition:
       &.dx-state-hover {
         @include dx-state-empty($texteditor-hover-border-color, solid);
 
+        &.dx-dropdowneditor-active {
+          @include dx-state($texteditor-hover-border-color, solid);
+        }
+
         &.dx-invalid {
           @include dx-state-empty($texteditor-invalid-focused-border-color, solid);
         }
+      }
+
+      &.dx-dropdowneditor-active {
+        @include dx-state($texteditor-border-color, solid);
       }
 
       &.dx-state-readonly,
@@ -561,6 +586,7 @@ $generic-texteditor-label-transition:
     border: 0;
     outline: none;
     position: relative;
+    margin-top: $label-offset-y;
 
     &.dx-textarea {
       .dx-texteditor-input-container {
@@ -652,6 +678,8 @@ $generic-texteditor-label-transition:
 
     &.dx-textarea.dx-state-focused,
     &.dx-textarea.dx-state-focused.dx-state-hover,
+    &.dx-dropdowneditor-active.dx-state-focused,
+    &.dx-dropdowneditor-active.dx-state-focused.dx-state-hover,
     &.dx-state-focused,
     &.dx-state-focused.dx-state-hover {
       @include dx-state($texteditor-focused-border-color, solid);
@@ -719,6 +747,10 @@ $generic-texteditor-label-transition:
         display: none;
       }
 
+      .dx-lookup-field {
+        font-size: 0;
+      }
+
       .dx-texteditor-label {
         transition: $generic-texteditor-label-transition;
         transform: translate(0, 0);
@@ -746,9 +778,14 @@ $generic-texteditor-label-transition:
     }
 
     &.dx-state-focused,
+    &.dx-dropdowneditor-active,
     &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
+      }
+
+      .dx-lookup-field {
+        font-size: $generic-base-font-size;
       }
 
       .dx-texteditor-label {

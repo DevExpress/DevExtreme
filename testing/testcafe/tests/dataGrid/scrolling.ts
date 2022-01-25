@@ -525,7 +525,7 @@ test.skip('New virtual mode. Virtual rows should not be in view port', async (t)
     const $rows = $((window as any).widget.element()).find('.dx-data-row');
 
     $rows.each((_, el) => {
-      result += $(el).height();
+      result += $(el).height() ?? 0;
     });
 
     return result;
@@ -603,7 +603,7 @@ test.skip('New virtual mode. Virtual rows should not be in view port', async (t)
     };
 
     (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
-      key: 'id',
+      key: 'ID',
       data: getItems(),
     });
   });
@@ -710,10 +710,10 @@ test('Scroll to the bottom after expand several group', async (t) => {
   await t.expect(dataGrid.isReady()).ok();
 
   // assert
-  const topData = await dataGrid.apiGetTopVisibleRowData();
+  const visibleRows = await dataGrid.apiGetVisibleRows();
   await t
-    .expect(topData.Id)
-    .eql(939302);
+    .expect(visibleRows[0].key)
+    .eql(932043);
 })
   .before(async () => createWidget('dxDataGrid', () => ({
     width: 1000,
@@ -758,3 +758,78 @@ test('Scroll to the bottom after expand several group', async (t) => {
       dataField: 'ProductName',
     }],
   })));
+
+test('New virtual mode. Virtual rows should not be in view port after scrolling large data (T1043156)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const scrollbarVerticalThumbTrack = dataGrid.getScrollBarThumbTrack('vertical');
+
+  // assert
+  await t
+    .expect(scrollbarVerticalThumbTrack.exists)
+    .ok();
+
+  // act
+  await t
+    .hover(scrollbarVerticalThumbTrack)
+    .drag(scrollbarVerticalThumbTrack, 0, 400)
+    .wait(1000);
+
+  // assert
+  await t
+    .expect(dataGrid.isVirtualRowIntersectViewport())
+    .notOk();
+
+  // act
+  await t
+    .hover(scrollbarVerticalThumbTrack)
+    .drag(scrollbarVerticalThumbTrack, 0, -200)
+    .wait(1000);
+
+  // assert
+  await t
+    .expect(dataGrid.isVirtualRowIntersectViewport())
+    .notOk();
+}).before(async () => {
+  const initStore = ClientFunction(() => {
+    const getItems = (): Record<string, unknown>[] => {
+      const items: Record<string, unknown>[] = [];
+      for (let i = 0; i < 1000000; i += 1) {
+        items.push({
+          ID: i + 1,
+          Name: `Name ${i + 1}`,
+        });
+      }
+      return items;
+    };
+
+    (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+      key: 'ID',
+      data: getItems(),
+    });
+  });
+
+  await initStore();
+
+  return createWidget('dxDataGrid', {
+    dataSource: {
+      key: 'ID',
+      load(loadOptions) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            (window as any).myStore.load(loadOptions).done((data) => {
+              resolve(data);
+            });
+          }, 300);
+        });
+      },
+      totalCount(loadOptions) {
+        return (window as any).myStore.totalCount(loadOptions);
+      },
+    },
+    height: 500,
+    remoteOperations: true,
+    scrolling: {
+      mode: 'virtual',
+    },
+  });
+});

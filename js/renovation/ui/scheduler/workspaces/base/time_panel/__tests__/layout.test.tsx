@@ -3,12 +3,8 @@ import { shallow } from 'enzyme';
 import { viewFunction as LayoutView, TimePanelTableLayout } from '../layout';
 import { Row } from '../../row';
 import { TimePanelCell as Cell } from '../cell';
-import * as utilsModule from '../../../utils';
 import { AllDayPanelTitle } from '../../date_table/all_day_panel/title';
 import { Table } from '../../table';
-
-const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel');
-const getKeyByGroup = jest.spyOn(utilsModule, 'getKeyByGroup');
 
 jest.mock('../../table', () => ({
   ...jest.requireActual('../../table'),
@@ -46,6 +42,8 @@ describe('TimePanelLayout', () => {
         isLastGroupCell: false,
       }],
       groupIndex: 2,
+      key: '1',
+      isGroupedAllDayPanel: false,
     }],
   };
 
@@ -60,10 +58,6 @@ describe('TimePanelLayout', () => {
     );
 
     afterEach(jest.resetAllMocks);
-
-    beforeEach(() => {
-      getKeyByGroup.mockImplementation((key) => (key ? key.toString() : '0'));
-    });
 
     it('should spread restAttributes', () => {
       const layout = render(
@@ -160,37 +154,30 @@ describe('TimePanelLayout', () => {
         });
     });
 
-    it('should call getIsGroupedAllDayPanel with correct arguments', () => {
-      render({ });
+    [true, false].forEach((isGroupedAllDayPanel) => {
+      it(`should render AllDayPanelTitle if isGroupedAllDayPanel=${isGroupedAllDayPanel}`, () => {
+        const timePanelData = {
+          ...timePanelDataBase,
+          groupedData: [{
+            ...timePanelDataBase.groupedData[0],
+            isGroupedAllDayPanel,
+          }],
+        };
 
-      expect(getIsGroupedAllDayPanel)
-        .toHaveBeenCalledTimes(1);
-
-      expect(getIsGroupedAllDayPanel)
-        .toHaveBeenCalledWith(
-          timePanelDataBase,
-          0,
-        );
-    });
-
-    [true, false].forEach((mockValue) => {
-      it(`should render AllDayPanelTitle if isGroupedAllDayPanel=${mockValue}`, () => {
-        getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
-
-        const layout = render({ });
+        const layout = render({ props: { timePanelData } });
         const titleCell = layout.find('.dx-scheduler-time-panel-title-cell');
 
         expect(titleCell.find(AllDayPanelTitle).exists())
-          .toBe(mockValue);
+          .toBe(isGroupedAllDayPanel);
       });
 
-      it(`should render AllDayPanelTitle if isGroupedAllDayPanel=${mockValue} and dateTable is empty`, () => {
-        getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
-
+      it(`should render AllDayPanelTitle if isGroupedAllDayPanel=${isGroupedAllDayPanel} and dateTable is empty`, () => {
         const timePanelData = {
           groupedData: [{
             dateTable: [],
             groupIndex: 33,
+            key: '1',
+            isGroupedAllDayPanel,
           }],
           isGroupedAllDayPanel: true,
         };
@@ -198,17 +185,8 @@ describe('TimePanelLayout', () => {
         const titleCell = layout.find('.dx-scheduler-time-panel-title-cell');
 
         expect(titleCell.find(AllDayPanelTitle).exists())
-          .toBe(mockValue);
+          .toBe(isGroupedAllDayPanel);
       });
-    });
-
-    it('should call getKeyByGroup with correct arguments', () => {
-      render({});
-
-      expect(getKeyByGroup)
-        .toHaveBeenCalledTimes(1);
-      expect(getKeyByGroup)
-        .toHaveBeenCalledWith(2, undefined);
     });
   });
 

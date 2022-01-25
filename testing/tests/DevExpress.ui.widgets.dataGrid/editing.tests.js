@@ -15,6 +15,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
 import 'ui/color_box';
+import 'ui/tag_box';
 import 'ui/data_grid';
 import 'ui/drop_down_box';
 import 'ui/drop_down_button';
@@ -2812,6 +2813,9 @@ QUnit.module('Editing with real dataController', {
                 asyncLoadEnabled: false,
                 store: this.array,
                 paginate: true
+            },
+            selection: {
+                mode: 'none'
             },
             masterDetail: {
                 enabled: false,
@@ -7897,6 +7901,42 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual(clickSpy.callCount, 1, 'click is fired once');
     });
 
+    // T1045908
+    QUnit.test('The click event should not be prevented for custom command column', function(assert) {
+        // arrange
+        const event = $.Event('click');
+        const clickHandler = sinon.spy();
+        const $testElement = $('#container');
+
+        this.options.columns.push(
+            {
+                type: 'buttons',
+                cssClass: 'mybuttons',
+                buttons: [
+                    {
+                        template: function($cellElement, options) {
+                            return $('<div/>').addClass('mybutton').text('My button').on('click', clickHandler);
+                        }
+                    }
+                ]
+            }
+        );
+        this.columnsController.reset();
+        this.rowsView.render($testElement);
+
+        const $customCommandCell = $testElement.find('.mybuttons').first();
+        const $customButton = $customCommandCell.find('.mybutton');
+        assert.strictEqual($customCommandCell.length, 1, 'has custom command cell');
+        assert.strictEqual($customButton.length, 1, 'has custom button cssClass');
+
+        // act
+        $customButton.trigger(event);
+
+        // assert
+        assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
+        assert.strictEqual(clickHandler.callCount, 1, 'click is fired once');
+    });
+
     QUnit.test('Changing edit icon in the \'buttons\' command column', function(assert) {
         // arrange
         const that = this;
@@ -11548,7 +11588,7 @@ QUnit.module('Editing with validation', {
         // T335660
         const overlayInstance = $overlayElement.dxOverlay('instance');
         assert.ok(overlayInstance, 'has overlay instance');
-        assert.ok(overlayInstance.option('target').hasClass('dx-editor-cell'), 'target of the overlay');
+        assert.ok(overlayInstance.option('position.of').hasClass('dx-editor-cell'), 'target of the overlay');
 
         // act
         $inputElement = getInputElements($testElement).first();
@@ -16459,7 +16499,7 @@ QUnit.module('Editing with scrolling', {
 
         // assert
         const items = that.dataController.items();
-        assert.equal(items.length, 6, 'count items');
+        assert.equal(items.length, 7, 'count items');
         assert.ok(items[0].isNewRow, 'inserted item');
     });
 
@@ -16693,7 +16733,8 @@ QUnit.module('Editing with scrolling', {
                 scrolling: {
                     mode: rowRenderingMode,
                     rowRenderingMode: rowRenderingMode,
-                    rowPageSize: 5
+                    rowPageSize: 5,
+                    legacyMode: false
                 }
             });
 
@@ -17474,6 +17515,7 @@ QUnit.module('Edit Form', {
                     dataField: 'name'
                 }, {
                     dataField: 'phone',
+                    isRequired: true,
                     editorOptions: {
                         labelMode: 'hidden'
                     }
@@ -17493,9 +17535,11 @@ QUnit.module('Edit Form', {
 
         assert.equal($textEditors.length, 3, 'text editor count');
         assert.equal($textEditors.eq(0).dxTextBox('instance').option('labelMode'), 'floating', 'item 0 labelMode');
-        assert.equal($textEditors.eq(0).dxTextBox('instance').option('label'), 'Name:', 'item 0 label');
+        assert.equal($textEditors.eq(0).dxTextBox('instance').option('label'), 'Name', 'item 0 label');
+        assert.equal($textEditors.eq(0).dxTextBox('instance').option('labelMark'), '\u00A0*', 'item 0 label mark');
         assert.equal($textEditors.eq(1).dxTextBox('instance').option('labelMode'), 'hidden', 'item 1 labelMode');
-        assert.equal($textEditors.eq(1).dxTextBox('instance').option('label'), 'Phone:', 'item 1 label');
+        assert.equal($textEditors.eq(1).dxTextBox('instance').option('label'), 'Phone', 'item 1 label');
+        assert.equal($textEditors.eq(1).dxTextBox('instance').option('labelMark'), '\u00A0*', 'item 1 label mark');
     });
 
     ['static', 'floating'].forEach(labelMode => {
@@ -17537,6 +17581,40 @@ QUnit.module('Edit Form', {
             assert.strictEqual(formLayoutItems[0].label.visible, true, 'item 0 label.visible is assigned');
             assert.strictEqual(formLayoutItems[1].label.visible, undefined, 'item 1 label.visible is not assigned');
         });
+    });
+
+    QUnit.test('value should be correct if editorType is dxTagBox for lookup column (T1054830)', function(assert) {
+        this.array[0].tags = [1, 2];
+        this.columns.push({ dataField: 'tags', lookup: { valueExpr: 'this' } });
+
+        this.setupModules(this);
+
+        const that = this;
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        $.extend(that.options.editing, {
+            mode: 'form',
+            allowUpdating: true,
+            form: {
+                labelMode: 'floating',
+                items: [{
+                    dataField: 'tags',
+                    editorType: 'dxTagBox'
+                }]
+            }
+        });
+
+        rowsView.render(testElement);
+
+        // act
+        that.editRow(0);
+
+        // assert
+        const $textEditors = testElement.find('.dx-form .dx-texteditor');
+
+        assert.equal($textEditors.length, 1, 'text editor count');
+        assert.deepEqual($textEditors.eq(0).dxTagBox('instance').option('value'), [1, 2], 'item 0 value');
     });
 
     QUnit.testInActiveWindow('Focus editor after click on a label', function(assert) {
@@ -17990,7 +18068,6 @@ QUnit.module('Edit Form', {
 
     QUnit.test('Edit form when group form items are specified and simple form items have editor type', function(assert) {
         // arrange
-
         this.options.editing.form = {
             items: [{ itemType: 'group', items: [{ dataField: 'name', editorType: 'dxAutocomplete' }] }]
         };
@@ -18056,9 +18133,9 @@ QUnit.module('Edit Form', {
 
     QUnit.test('Edit form when formItem is specified with editorType in the column and the editorName is overridden on the onEditorPreparing event', function(assert) {
         // arrange
-
         this.options.onEditorPreparing = (e) => {
             if(e.dataField === 'name') {
+                assert.strictEqual(e.editorName, 'dxColorBox', 'editorName arg');
                 e.editorName = 'dxAutocomplete';
             }
         };
@@ -20302,7 +20379,7 @@ QUnit.module('Editing - new row position', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 6 : 11, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 11, 'row count');
                 assert.ok(rows[0].isNewRow, 'new row');
 
                 const $insertRow = $testElement.find('tbody > .dx-data-row').first();
@@ -20327,6 +20404,7 @@ QUnit.module('Editing - new row position', {
                 assert.strictEqual(rows.length, 10, 'row count');
 
                 // act
+                config.name === 'virtual scrolling' && this.dataController._rowsScrollController.viewportSize(rows.length);
                 this.addRow();
                 this.clock.tick();
 
@@ -20367,7 +20445,7 @@ QUnit.module('Editing - new row position', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 9, 'pageIndex');
-                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 6 : 11, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 11, 'row count');
                 assert.ok(rows[rows.length - 1].isNewRow, 'new row');
             });
 
@@ -20504,8 +20582,68 @@ QUnit.module('Editing - new row position', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, isVirtualScrolling ? 9 : 11, 'row count');
+                assert.strictEqual(rows.length, isVirtualScrolling ? 8 : 11, 'row count');
                 assert.ok(rows[isVirtualScrolling ? 0 : 1].isNewRow, 'new row');
+            });
+
+            QUnit.test('newRowPosition = pageBottom when there are no items', function(assert) {
+                // arrange
+                const $testElement = $('#container').height(200);
+
+                this.options.height = 200;
+                this.options.dataSource.store.data = [];
+                this.options.editing.newRowPosition = 'pageBottom';
+                this.setupModules();
+                this.clock.tick();
+                this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 0, 'row count');
+
+                // act
+                this.addRow();
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 1, 'row count');
+                assert.ok(rows[0].isNewRow, 'new row');
+            });
+
+            QUnit.test('newRowPosition = pageTop when there are no items', function(assert) {
+                // arrange
+                const $testElement = $('#container').height(200);
+
+                this.options.height = 200;
+                this.options.dataSource.store.data = [];
+                this.options.editing.newRowPosition = 'pageTop';
+                this.setupModules();
+                this.clock.tick();
+                this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 0, 'row count');
+
+                // act
+                this.addRow();
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 1, 'row count');
+                assert.ok(rows[0].isNewRow, 'new row');
             });
         });
     });
@@ -20870,6 +21008,147 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 const $insertRow = $testElement.find('tbody > .dx-data-row').eq(4);
                 assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
                 assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
+            });
+        });
+    });
+});
+
+QUnit.module('Editing - public arguments of the events/templates', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        this.$element = () => $('#container');
+        this.gridContainer = $('#container > .dx-datagrid');
+
+        this.array = [
+            { name: 'Alex', age: 15, lastName: 'John', phone: '555555', room: 1 },
+            { name: 'Dan', age: 16, lastName: 'Skip', phone: '553355', room: 2 },
+            { name: 'Vadim', age: 17, lastName: 'Dog', phone: '225555', room: 3 },
+            { name: 'Dmitry', age: 18, lastName: 'Cat', phone: '115555', room: 4 },
+            { name: 'Sergey', age: 18, lastName: 'Larry', phone: '550055', room: 5 },
+            { name: 'Kate', age: 20, lastName: 'Glock', phone: '501555', room: 6 },
+            { name: 'Dan', age: 21, lastName: 'Zikerman', phone: '1228844', room: 7 }
+        ];
+        this.columns = ['name', 'age', 'lastName', 'phone', 'room'];
+
+        this.options = {
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: this.columns,
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: this.array,
+                paginate: true
+            }
+        };
+
+        this.$testElement = $('#container');
+
+        this.setupModules = () => {
+            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'masterDetail', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'errorHandling'], {
+                initViews: true
+            });
+
+            this.editingController.component.$element = function() {
+                return this.$testElement;
+            };
+        };
+
+        this.renderRowsView = () => {
+            this.rowsView.render(this.$testElement);
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+}, () => {
+    ['row', 'batch', 'cell', 'form', 'popup'].forEach((editMode) => {
+        // T1054619
+        QUnit.test(`Check arguments of the editCellTemplate in ${editMode} mode`, function(assert) {
+            // arrange
+            const editCellTemplateSpy = sinon.spy();
+
+            this.options.editing.mode = editMode;
+            this.columns[0] = { dataField: 'name', editCellTemplate: editCellTemplateSpy };
+            this.setupModules();
+            this.renderRowsView();
+
+            // act
+            if(editMode === 'batch' || editMode === 'cell') {
+                this.editCell(0, 0);
+            } else {
+                this.editRow(0);
+            }
+            this.clock.tick();
+
+            // assert
+            const args = editCellTemplateSpy.getCall(0).args[1];
+            assert.strictEqual(editCellTemplateSpy.callCount, 1, 'editCellTemplate is called');
+            assert.strictEqual(args.column.dataField, 'name', 'column arg');
+            assert.strictEqual(args.columnIndex, 0, 'columnIndex arg');
+            assert.strictEqual(args.component, this.editingController.component, 'component arg');
+            assert.deepEqual(args.data, this.array[0], 'data arg');
+            assert.strictEqual(args.row, this.getVisibleRows()[0], 'row arg');
+            assert.strictEqual(args.rowIndex, 0, 'rowIndex arg');
+            assert.strictEqual(args.rowType, editMode === 'form' ? 'detail' : 'data', 'rowType arg');
+            assert.strictEqual(typeof args.setValue, 'function', 'setValue arg');
+            assert.strictEqual(args.value, 'Alex', 'value arg');
+
+            if(editMode !== 'form' && editMode !== 'popup') {
+                assert.strictEqual(args.displayValue, 'Alex', 'displayValue arg');
+                assert.strictEqual(args.text, 'Alex', 'text arg');
+            }
+        });
+
+        [true, false].forEach((repaintChangesOnly) => {
+            QUnit.test(`Check the watch argument of the editCellTemplate in ${editMode} mode when repaintChangesOnly = ${repaintChangesOnly}`, function(assert) {
+                // arrange
+                const watchSpy = sinon.spy();
+                const editCellTemplateSpy = sinon.spy((container, cellInfo) => {
+                    cellInfo.watch && cellInfo.watch((data) => {
+                        return data;
+                    }, watchSpy);
+                });
+
+                this.options.editing.mode = editMode;
+                this.options.repaintChangesOnly = repaintChangesOnly;
+                this.columns[0] = { dataField: 'name', editCellTemplate: editCellTemplateSpy };
+                this.columns[1] = { dataField: 'age', setCellValue: (newData, value) => { newData.age = value; } };
+                this.setupModules();
+                this.renderRowsView();
+
+                // act
+                if(editMode === 'batch' || editMode === 'cell') {
+                    this.editCell(0, 0);
+                } else {
+                    this.editRow(0);
+                }
+                this.clock.tick();
+
+                // assert
+                const args = editCellTemplateSpy.getCall(0).args[1];
+                assert.strictEqual(editCellTemplateSpy.callCount, 1, 'editCellTemplate is called');
+
+                if(repaintChangesOnly) {
+                    assert.strictEqual(typeof args.watch, 'function', 'watch arg');
+
+                    if(editMode !== 'batch' && editMode !== 'cell') {
+                        // act
+                        $(this.getCellElement(0, 1)).find('.dx-numberbox').dxNumberBox('instance').option('value', 123);
+                        this.clock.tick();
+
+                        // assert
+                        assert.strictEqual(watchSpy.callCount, 1, 'watch update is called');
+                    }
+                } else {
+                    assert.strictEqual(args.watch, undefined, 'watch arg');
+                }
             });
         });
     });

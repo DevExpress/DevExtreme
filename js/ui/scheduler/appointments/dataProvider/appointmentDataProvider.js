@@ -1,8 +1,7 @@
 import config from '../../../../core/config';
 import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
-import { createAppointmentAdapter } from '../../appointmentAdapter';
-import combinedRemoteFilter from './remoteFilter';
+import combineRemoteFilter from '../../../../renovation/ui/scheduler/utils/filtering/remote';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -39,11 +38,9 @@ export class AppointmentDataProvider {
     initFilterStrategy() {
         const filterOptions = {
             resources: this.options.resources,
-            dataSource: this.dataSource,
             dataAccessors: this.dataAccessors,
             startDayHour: this.options.startDayHour,
             endDayHour: this.options.endDayHour,
-            appointmentDuration: this.options.appointmentDuration,
             showAllDayPanel: this.options.showAllDayPanel,
             timeZoneCalculator: this.options.timeZoneCalculator,
             //
@@ -73,8 +70,8 @@ export class AppointmentDataProvider {
     }
 
     // Filter mapping
-    filter() {
-        return this.getFilterStrategy().filter();
+    filter(preparedItems) {
+        return this.getFilterStrategy().filter(preparedItems);
     }
 
     // TODO rename to the setRemoteFilter
@@ -84,22 +81,21 @@ export class AppointmentDataProvider {
         }
 
         const dataSourceFilter = this.dataSource.filter();
-        const filter = combinedRemoteFilter(
+        const filter = combineRemoteFilter({
             dataSourceFilter,
-            this.dataAccessors,
+            dataAccessors: this.dataAccessors,
             min,
             max,
             dateSerializationFormat,
-            config().forceIsoDateParsing
-        );
+            forceIsoDateParsing: config().forceIsoDateParsing
+        });
 
         this.dataSource.filter(filter);
     }
 
 
-    hasAllDayAppointments(rawAppointments) {
-        const adapters = rawAppointments.map((item) => createAppointmentAdapter(item, this.dataAccessors, this.timeZoneCalculator));
-        return this.getFilterStrategy().hasAllDayAppointments(adapters);
+    hasAllDayAppointments(filteredItems, preparedItems) {
+        return this.getFilterStrategy().hasAllDayAppointments(filteredItems, preparedItems);
     }
 
     filterLoadedAppointments(filterOption, preparedItems) {

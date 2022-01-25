@@ -7,16 +7,16 @@ import type { PlatformType } from './platform-type';
 
 const platformsSiteRootPath = resolve('./testing/renovation/platforms');
 export class MultiPlatformTest {
-  beforeFn!: (t: TestController, { platform }) => Promise<any>;
+  beforeFn!: (t: TestController, { platform: PlatformType }) => Promise<void>;
 
-  afterFn!: (t: TestController, { platform }) => Promise<any>;
+  afterFn!: (t: TestController, { platform: PlatformType }) => Promise<void>;
 
-  before(fn: (t: TestController, { platform }) => Promise<any>): this {
+  before(fn: (t: TestController, { platform: PlatformType }) => Promise<void>): this {
     this.beforeFn = fn;
     return this;
   }
 
-  after(fn: (t: TestController, { platform }) => Promise<any>): this {
+  after(fn: (t: TestController, { platform: PlatformType }) => Promise<void>): this {
     this.afterFn = fn;
     return this;
   }
@@ -34,6 +34,14 @@ function getPageFilePath(platform: PlatformType, page: string): string {
   return `${platformsSiteRootPath}/${platform}/dist/${page}.html`;
 }
 
+function getTestingPlatforms(platforms: PlatformType[]): PlatformType[] {
+  const { platform: testingPlatform } = process.env;
+
+  return testingPlatform
+    ? platforms.filter((t) => t === testingPlatform)
+    : platforms;
+}
+
 export const multiPlatformTest = ({
   page, platforms = ['jquery', 'react', 'angular'],
 }:
@@ -44,14 +52,14 @@ export const multiPlatformTest = ({
   testBody: (
     t: TestController,
     { platform, screenshotComparerOptions }:
-    { platform: string; screenshotComparerOptions: Partial<IComparerOptions> }
+    { platform: PlatformType; screenshotComparerOptions: Partial<IComparerOptions> }
   ) => Promise<any>,
 ): MultiPlatformTest => {
   const wrappedTest = new MultiPlatformTest();
-  platforms.forEach((platform) => {
+  getTestingPlatforms(platforms).forEach((platform) => {
     const pageUrl = getPageFilePath(platform, page);
     const testOptions: {
-      platform: string; screenshotComparerOptions: Partial<IComparerOptions>;
+      platform: PlatformType; screenshotComparerOptions: Partial<IComparerOptions>;
     } = {
       platform,
       screenshotComparerOptions: {

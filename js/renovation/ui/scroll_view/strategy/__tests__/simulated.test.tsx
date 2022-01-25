@@ -48,6 +48,7 @@ import { isElementVisible } from '../../utils/is_element_visible';
 import { subscribeToResize } from '../../utils/subscribe_to_resize';
 import * as allowedDirectionModule from '../../utils/get_allowed_direction';
 import * as permissibleWheelDirectionModule from '../../utils/get_permissible_wheel_direction';
+import { DisposeEffectReturn } from '../../../../utils/effect_return';
 
 jest.mock('../../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../../core/devices').default;
@@ -95,7 +96,6 @@ describe('Simulated > View', () => {
       forceGeneratePockets: false,
       inertiaEnabled: true,
       needScrollViewContentWrapper: false,
-      needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
       pulledDownText: 'Release to refresh...',
@@ -115,56 +115,72 @@ describe('Simulated > View', () => {
 
 describe('Simulated > Render', () => {
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
-    each([
-      { location: -500.25, expected: -100.25 },
-      { location: -400, expected: 0 },
-      { location: -100.25, expected: -0.25 },
-      { location: -55.75, expected: -0.75 },
-      { location: 0.25, expected: 0.25 },
-      { location: 100.25, expected: 100.25 },
-      { location: 500.25, expected: 500.25 },
-    ]).describe('Location: %o', ({ location, expected }) => {
-      each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
-        each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
-          it('contentTranslateY()', () => {
-            const topPocketSize = 85;
+    each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
+      each([0, -400]).describe('maxOffset: %o', (maxOffset) => {
+        each([
+          { location: -500.25, expected: (isTranslate) => (isTranslate ? -100.25 : 0) },
+          { location: -401.35, expected: (isTranslate) => (isTranslate ? -1.3500000000000227 : 0) },
+          { location: -400, expected: () => 0 },
+          { location: -100.25, expected: () => 0 },
+          { location: -55.75, expected: () => 0 },
+          { location: -0.13, expected: () => 0 },
+          { location: 0.25, expected: (isTranslate) => (isTranslate ? 0.25 : 0) },
+          { location: 100.66, expected: (isTranslate) => (isTranslate ? 100.66 : 0) },
+          { location: 500.357, expected: (isTranslate) => (isTranslate ? 500.357 : 0) },
+        ]).describe('Location: %o', ({ location, expected }) => {
+          each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+            each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
+              it('contentTranslateY()', () => {
+                const topPocketSize = 85;
 
-            const viewModel = new Scrollable({
-              direction,
-              forceGeneratePockets,
-              pullDownEnabled,
+                const viewModel = new Scrollable({
+                  direction,
+                  bounceEnabled,
+                  forceGeneratePockets,
+                  pullDownEnabled,
+                });
+
+                viewModel.containerClientHeight = 100;
+                viewModel.contentClientHeight = 500;
+                viewModel.topPocketHeight = topPocketSize;
+                viewModel.vScrollLocation = location;
+
+                Object.defineProperties(viewModel, {
+                  vScrollOffsetMax: { get() { return maxOffset; } },
+                });
+
+                if (maxOffset >= 0) {
+                  expect(viewModel.contentTranslateY)
+                    .toEqual(0);
+                } else if (!bounceEnabled) {
+                  expect(viewModel.contentTranslateY)
+                    .toEqual(-topPocketSize);
+                } else {
+                  expect(viewModel.contentTranslateY)
+                    .toEqual(expected(maxOffset < 0) - topPocketSize);
+                }
+              });
+
+              it('contentTranslateX()', () => {
+                const viewModel = new Scrollable({
+                  direction,
+                  bounceEnabled,
+                  forceGeneratePockets,
+                  pullDownEnabled,
+                });
+
+                viewModel.containerClientWidth = 100;
+                viewModel.contentClientWidth = 500;
+                viewModel.hScrollLocation = location;
+
+                Object.defineProperties(viewModel, {
+                  hScrollOffsetMax: { get() { return maxOffset; } },
+                });
+
+                expect(viewModel.contentTranslateX)
+                  .toEqual(expected(bounceEnabled && maxOffset < 0));
+              });
             });
-
-            viewModel.containerClientHeight = 100;
-            viewModel.contentClientHeight = 500;
-            viewModel.topPocketHeight = topPocketSize;
-            viewModel.vScrollLocation = location;
-            const maxOffset = -400;
-
-            Object.defineProperties(viewModel, {
-              vScrollOffsetMax: { get() { return maxOffset; } },
-            });
-
-            expect(viewModel.contentTranslateY).toEqual(expected - topPocketSize);
-          });
-
-          it('contentTranslateX()', () => {
-            const viewModel = new Scrollable({
-              direction,
-              forceGeneratePockets,
-              pullDownEnabled,
-            });
-
-            viewModel.containerClientWidth = 100;
-            viewModel.contentClientWidth = 500;
-            viewModel.hScrollLocation = location;
-            const maxOffset = -400;
-
-            Object.defineProperties(viewModel, {
-              hScrollOffsetMax: { get() { return maxOffset; } },
-            });
-
-            expect(viewModel.contentTranslateX).toEqual(expected);
           });
         });
       });
@@ -252,7 +268,6 @@ describe('Simulated > Render', () => {
           direction,
           showScrollbar,
           scrollByThumb: true,
-          rtlEnabled: true,
           forceGeneratePockets: true,
           bounceEnabled: true,
         });
@@ -273,7 +288,7 @@ describe('Simulated > Render', () => {
         if (helper.isBoth) {
           expect(scrollbars.length).toEqual(2);
           expect(animatedScrollbars.at(0).props())
-            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL });
           expect(animatedScrollbars.at(1).props())
             .toMatchObject({
               ...commonOptions,
@@ -281,7 +296,7 @@ describe('Simulated > Render', () => {
               forceGeneratePockets: true,
             });
           expect(scrollbars.at(0).props())
-            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL });
           expect(scrollbars.at(1).props())
             .toMatchObject({
               ...commonOptions,
@@ -309,11 +324,11 @@ describe('Simulated > Render', () => {
         } else if (helper.isHorizontal) {
           expect(animatedScrollbars.length).toEqual(1);
           expect(animatedScrollbars.at(0).props())
-            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL });
           expect(scrollbars.at(0).getDOMNode().className).toBe(hScrollbarClasses);
           expect(scrollbars.length).toEqual(1);
           expect(scrollbars.at(0).props())
-            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL });
           expect(scrollbars.at(0).getDOMNode().className).toBe(hScrollbarClasses);
         }
       });
@@ -382,17 +397,76 @@ describe('Simulated > Behavior', () => {
       });
     });
 
+    each([true, false]).describe('needScrollViewContentWrapper: %o', (needScrollViewContentWrapper) => {
+      it('should subscribe contentElement to resize dimensions', () => {
+        const subscribeToResizeHandler = jest.fn();
+        (subscribeToResize as jest.Mock).mockImplementation(subscribeToResizeHandler);
+
+        const viewModel = new Scrollable({ needScrollViewContentWrapper });
+        viewModel.contentRef = { current: { clientHeight: 10 } as HTMLElement } as RefObject;
+        viewModel.scrollViewContentRef = {
+          current: { clientHeight: 6 } as HTMLElement,
+        } as RefObject;
+        viewModel.setContentHeight = jest.fn();
+        viewModel.setContentWidth = jest.fn();
+
+        const disposeResizeEffect = viewModel.subscribeToResizeContent() as DisposeEffectReturn;
+
+        if (needScrollViewContentWrapper) {
+          expect(subscribeToResizeHandler).toBeCalledTimes(2);
+
+          expect(subscribeToResizeHandler.mock.calls[0][0]).toEqual({ clientHeight: 6 });
+          expect(subscribeToResizeHandler.mock.calls[1][0]).toEqual({ clientHeight: 10 });
+
+          subscribeToResizeHandler
+            .mock.calls[0][1](viewModel.scrollViewContentRef);
+          subscribeToResizeHandler
+            .mock.calls[1][1](viewModel.contentRef);
+        } else {
+          expect(subscribeToResizeHandler).toBeCalledTimes(1);
+          expect(subscribeToResizeHandler.mock.calls[0][0]).toEqual({ clientHeight: 10 });
+
+          subscribeToResizeHandler
+            .mock.calls[0][1](viewModel.contentRef);
+        }
+
+        expect(viewModel.setContentWidth).toBeCalledTimes(1);
+        expect(viewModel.setContentWidth).toBeCalledWith(viewModel.contentRef);
+
+        const expectedContentElement = needScrollViewContentWrapper
+          ? viewModel.scrollViewContentRef
+          : viewModel.contentRef;
+
+        expect(viewModel.setContentHeight).toBeCalledTimes(1);
+        expect(viewModel.setContentHeight).toBeCalledWith(expectedContentElement);
+
+        // TODO: check unsubscribe from resize
+
+        if (needScrollViewContentWrapper) {
+          expect(disposeResizeEffect()).toEqual(undefined);
+        }
+      });
+    });
+
     each([true, false]).describe('Disabled: %o', (disabled) => {
       it('effectDisabledState()', () => {
         const viewModel = new Scrollable({ disabled });
 
         viewModel.effectDisabledState();
 
-        if (disabled) {
-          expect(viewModel.locked).toEqual(true);
-        } else {
-          expect(viewModel.locked).toEqual(false);
-        }
+        expect(viewModel.locked).toEqual(disabled);
+      });
+    });
+
+    each([true, false]).describe('pendingScrollEvent: %o', (pendingScrollEvent) => {
+      it('triggerScrollEvent()', () => {
+        const helper = new ScrollableTestHelper({});
+        helper.viewModel.pendingScrollEvent = pendingScrollEvent;
+
+        helper.viewModel.triggerScrollEvent();
+
+        expect(helper.viewModel.pendingScrollEvent).toEqual(false);
+        // TODO: check call trigger handler here
       });
     });
 
@@ -664,29 +738,56 @@ describe('Simulated > Behavior', () => {
     });
 
     each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
-      it('effectResetInactiveState()', () => {
-        const scrollTop = 20;
-        const scrollLeft = 30;
+      each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH, 'initial']).describe('prevDirection: %o', (prevDirection) => {
+        each([{
+          contentSize: 300,
+          containerSize: 300,
+        }, {
+          contentSize: 200,
+          containerSize: 100,
+        }]).describe('rtlEnabled: %o', (dimensions) => {
+          each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
+            it('resetInactiveOffsetToInitial()', () => {
+              const scrollTop = 20;
+              const scrollLeft = 30;
 
-        const helper = new ScrollableTestHelper({ direction });
-        helper.initContainerPosition({ top: scrollTop, left: scrollLeft });
+              const helper = new ScrollableTestHelper({ direction, rtlEnabled, ...dimensions });
+              helper.initScrollbarSettings();
+              helper.initContainerPosition({ top: scrollTop, left: scrollLeft });
 
-        helper.viewModel.effectResetInactiveState();
+              helper.viewModel.prevDirection = prevDirection;
 
-        const expectedScrollTop = !helper.isVertical ? 0 : 20;
-        const expectedScrollLeft = !helper.isHorizontal ? 0 : 30;
+              helper.viewModel.resetInactiveOffsetToInitial();
 
-        const containerElement = helper.viewModel.containerRef.current!;
+              const isOverflowX = dimensions.contentSize > dimensions.containerSize;
+              expect(helper.viewModel.prevDirection).toEqual(
+                isOverflowX || direction === DIRECTION_BOTH
+                  ? direction
+                  : prevDirection,
+              );
 
-        expect(containerElement.scrollTop).toEqual(expectedScrollTop);
-        expect(containerElement.scrollLeft).toEqual(expectedScrollLeft);
+              const needResetScrollOffset = isOverflowX && prevDirection !== direction;
+              const expectedScrollTop = !helper.isVertical && needResetScrollOffset
+                ? 0
+                : 20;
+              // eslint-disable-next-line no-nested-ternary
+              const expectedScrollLeft = !helper.isHorizontal && needResetScrollOffset
+                ? rtlEnabled ? 100 : 0
+                : 30;
 
-        helper.viewModel.scrolling = false;
-        helper.viewModel.scrollEffect();
-        emit('scroll', {} as any);
+              const containerElement = helper.viewModel.containerRef.current!;
+              expect(containerElement.scrollTop).toEqual(expectedScrollTop);
+              expect(containerElement.scrollLeft).toEqual(expectedScrollLeft);
 
-        expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollLeft);
-        expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollTop);
+              helper.viewModel.scrolling = false;
+              helper.viewModel.scrollEffect();
+              emit('scroll', {} as any);
+
+              expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollLeft);
+              expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollTop);
+            });
+          });
+        });
       });
 
       // eslint-disable-next-line jest/expect-expect
@@ -886,43 +987,48 @@ describe('Simulated > Behavior', () => {
         helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_HORIZONTAL, ['end'], [[event.velocity.x, true]]);
       });
 
-      test.each([true, false])('emit "dxscroll" event, locked: %o', (locked) => {
-        const event = {
-          ...defaultEvent,
-          delta: { x: 10.5633, y: 25.5986 },
-          preventDefault: jest.fn(),
-          cancel: false,
-        };
+      each(optionValues.isDxWheelEvent).describe('isDxWheelEvent: %o', (isDxWheelEvent) => {
+        test.each([true, false])('emit "dxscroll" event, locked: %o', (locked) => {
+          const event = {
+            ...defaultEvent,
+            delta: { x: 10.5633, y: 25.5986 },
+            preventDefault: jest.fn(),
+            originalEvent: {
+              type: isDxWheelEvent ? 'dxmousewheel' : undefined,
+            },
+            cancel: false,
+          };
 
-        const helper = new ScrollableTestHelper({ direction });
+          const helper = new ScrollableTestHelper({ direction });
 
-        helper.initScrollbarSettings();
-        helper.initScrollbarHandlerMocks();
+          helper.initScrollbarSettings();
+          helper.initScrollbarHandlerMocks();
 
-        helper.viewModel.adjustDistance = jest.fn();
-        helper.viewModel.locked = locked;
+          helper.viewModel.adjustDistance = jest.fn();
+          helper.viewModel.locked = locked;
 
-        helper.viewModel.moveEffect();
-        emit('dxscroll', event);
+          helper.viewModel.moveEffect();
+          emit('dxscroll', event);
 
-        if (locked) {
-          expect(event.cancel).toEqual(true);
-          expect(event.preventDefault).not.toBeCalled();
-          expect(helper.viewModel.adjustDistance).toHaveBeenCalledTimes(0);
-          expect(helper.viewModel.eventForUserAction).toEqual(undefined);
-          helper.checkActionHandlerCalls(expect, [], [[]]);
-          helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_VERTICAL, [], [[]]);
-          helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_HORIZONTAL, [], [[]]);
-        } else {
-          expect(event.cancel).toEqual(false);
-          expect(event.preventDefault).toBeCalled();
-          expect(helper.viewModel.adjustDistance).toHaveBeenCalledTimes(1);
-          expect(helper.viewModel.adjustDistance).toHaveBeenCalledWith(event, 'delta');
-          expect(helper.viewModel.eventForUserAction).toEqual(event);
-          helper.checkActionHandlerCalls(expect, [], [[]]);
-          helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_VERTICAL, ['move'], [[event.delta.y]]);
-          helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_HORIZONTAL, ['move'], [[event.delta.x]]);
-        }
+          if (locked) {
+            expect(event.cancel).toEqual(true);
+            expect(event.preventDefault).not.toBeCalled();
+            expect(helper.viewModel.adjustDistance).toHaveBeenCalledTimes(0);
+            expect(helper.viewModel.eventForUserAction).toEqual(undefined);
+            helper.checkActionHandlerCalls(expect, [], [[]]);
+            helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_VERTICAL, [], [[]]);
+            helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_HORIZONTAL, [], [[]]);
+          } else {
+            expect(event.cancel).toEqual(false);
+            expect(event.preventDefault).toBeCalled();
+            expect(helper.viewModel.adjustDistance).toHaveBeenCalledTimes(1);
+            expect(helper.viewModel.adjustDistance).toHaveBeenCalledWith(event, 'delta');
+            expect(helper.viewModel.eventForUserAction).toEqual(event);
+            helper.checkActionHandlerCalls(expect, [], [[]]);
+            helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_VERTICAL, ['move'], [[event.delta.y, isDxWheelEvent]]);
+            helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_HORIZONTAL, ['move'], [[event.delta.x, isDxWheelEvent]]);
+          }
+        });
       });
 
       test.each([jest.fn(), undefined])('emit "dxscroll" event, e.preventDefault: %o, locked: false', (preventDefault) => {
@@ -1114,7 +1220,7 @@ describe('Simulated > Behavior', () => {
           viewModel.updateHandler = jest.fn();
 
           expect(viewModel.validate(event)).toEqual(true);
-          expect(viewModel.updateHandler).toHaveBeenCalledTimes(1);
+          expect(viewModel.updateHandler).toHaveBeenCalledTimes(0);
         });
 
         each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
@@ -1312,40 +1418,38 @@ describe('Simulated > Behavior', () => {
 
         each([{ scrollTop: 0, scrollLeft: 0 }, { scrollTop: 20, scrollLeft: 30 }]).describe('initialSavedScrollOffset: %o', (initialSavedScrollOffset) => {
           test.each([true, false])('onVisibilityChangeHandler(%o)', (visible) => {
-            const viewModel = new Scrollable({
+            const helper = new ScrollableTestHelper({
               direction,
               onVisibilityChange: actionHandler,
             });
+            helper.initScrollbarSettings();
+            helper.initContainerPosition({ top: 10, left: 20 });
 
-            viewModel.savedScrollOffset = initialSavedScrollOffset;
-            viewModel.updateHandler = jest.fn();
-            viewModel.scrollLocationChange = jest.fn();
+            helper.viewModel.savedScrollOffset = initialSavedScrollOffset;
+            helper.viewModel.updateHandler = jest.fn();
 
-            viewModel.scrollableRef = {
-              current: { offsetWidth: 100, offsetHeight: 100 },
-            } as RefObject;
-            viewModel.containerRef = {
-              current: {
-                scrollTop: 10,
-                scrollLeft: 20,
-              },
-            } as RefObject<HTMLDivElement>;
-
-            viewModel.onVisibilityChangeHandler(visible);
+            helper.viewModel.onVisibilityChangeHandler(visible);
 
             if (actionHandler) {
               expect(actionHandler).toHaveBeenCalledTimes(1);
               expect(actionHandler).toHaveBeenLastCalledWith(visible);
             }
 
-            const expectedContainerScrollTop = 10;
-            const expectedContainerScrollLeft = 20;
-            const containerEl = viewModel.containerRef.current!;
+            let expectedContainerScrollTop = 10;
+            let expectedContainerScrollLeft = 20;
+            const containerEl = helper.viewModel.containerRef.current!;
             if (visible) {
-              expect(viewModel.updateHandler).toBeCalledTimes(1);
-              expect(viewModel.savedScrollOffset).toEqual(initialSavedScrollOffset);
+              expect(helper.viewModel.updateHandler).toBeCalledTimes(0);
+              expect(helper.viewModel.savedScrollOffset).toEqual(initialSavedScrollOffset);
+
+              expectedContainerScrollTop = direction !== DIRECTION_HORIZONTAL
+                ? initialSavedScrollOffset.scrollTop
+                : 10;
+              expectedContainerScrollLeft = direction !== DIRECTION_VERTICAL
+                ? initialSavedScrollOffset.scrollLeft
+                : 20;
             } else {
-              expect(viewModel.updateHandler).toBeCalledTimes(0);
+              expect(helper.viewModel.updateHandler).toBeCalledTimes(0);
             }
 
             expect(containerEl.scrollTop).toEqual(expectedContainerScrollTop);
@@ -1429,7 +1533,8 @@ describe('Simulated > Behavior', () => {
 
     each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
       test.each([true, false])('handleScroll(), syncScrollbarsWithContent, should synchronize scrollbars with content offset after trigger scroll, scrolling: %o', (scrolling) => {
-        const helper = new ScrollableTestHelper({ rtlEnabled });
+        const helper = new ScrollableTestHelper({ direction: 'both', rtlEnabled } as any);
+        helper.initScrollbarSettings();
 
         helper.viewModel.containerRef.current!.scrollTop = 50;
         helper.viewModel.containerRef.current!.scrollLeft = 30;
@@ -1473,7 +1578,7 @@ describe('Simulated > Behavior', () => {
         expect(helper.viewModel.locked).toEqual(true);
       });
 
-      it('Update() should call onUpdated action', () => {
+      it('UpdateHandler() should call onUpdated action', () => {
         const helper = new ScrollableTestHelper({
           onUpdated: actionHandler,
         });
@@ -1603,18 +1708,14 @@ describe('Simulated > Behavior', () => {
           onUpdated: actionHandler,
         });
 
-        helper.viewModel.updateElementDimensions = jest.fn();
+        helper.viewModel.updateHandler = jest.fn();
         helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
         helper.viewModel.topPocketState = TopPocketState.STATE_READY;
 
         helper.viewModel.onRelease();
 
-        if (actionHandler) {
-          helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ scrollOffset: { top: 5, left: 10 } }]]);
-        } else {
-          helper.checkActionHandlerCalls(expect, [], []);
-        }
-        expect(helper.viewModel.updateElementDimensions).toBeCalledTimes(1);
+        helper.checkActionHandlerCalls(expect, [], []);
+        expect(helper.viewModel.updateHandler).toBeCalledTimes(0);
         expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_RELEASED);
         expect(helper.viewModel.loadingIndicatorEnabled).toEqual(true);
         expect(helper.viewModel.isLoadPanelVisible).toEqual(false);
@@ -1632,6 +1733,23 @@ describe('Simulated > Behavior', () => {
         viewModel.unlock();
 
         expect(viewModel.locked).toEqual(!!disabled);
+      });
+    });
+
+    describe('ScrollOffset', () => {
+      it('scrollOffset() without overflow', () => {
+        const helper = new ScrollableTestHelper({
+          contentSize: 300,
+          containerSize: 300,
+        });
+
+        const scrollLocation = { left: 130, top: 560 };
+        helper.initContainerPosition(scrollLocation);
+
+        expect(helper.viewModel.scrollOffset()).toEqual({
+          left: 0,
+          top: 0,
+        });
       });
     });
 

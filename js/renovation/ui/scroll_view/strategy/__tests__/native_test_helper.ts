@@ -1,7 +1,6 @@
 import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
-import { titleize } from '../../../../../core/utils/inflector';
 
 import {
   ScrollDirection,
@@ -24,8 +23,9 @@ import {
 import { Scrollbar, ScrollbarPropsType } from '../../scrollbar/scrollbar';
 import { ScrollableNativeProps } from '../../common/native_strategy_props';
 
-jest.mock('../../../load_indicator', () => ({ LoadIndicator: React.forwardRef(() => null) }));
-jest.mock('../../internal/load_panel', () => ({ ScrollViewLoadPanel: React.forwardRef(() => null) }));
+// jest.mock('../../../load_indicator', () => ({ LoadIndicator: React.forwardRef(() => null) }));
+// jest.mock('../../internal/load_panel',
+// () => ({ ScrollViewLoadPanel: React.forwardRef(() => null) }));
 
 const BOTTOM_POCKET_HEIGHT = 55;
 
@@ -147,10 +147,6 @@ class ScrollableTestHelper {
 
     ['width', 'height'].forEach((prop) => {
       el.style[prop] = `${size[prop]}px`;
-    });
-
-    ['outerWidth', 'outerHeight'].forEach((prop) => {
-      el.style[prop] = `${size[`outer${titleize(prop)}`]}px`;
     });
 
     if (overflow) {

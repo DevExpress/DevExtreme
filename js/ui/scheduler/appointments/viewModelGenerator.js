@@ -5,7 +5,6 @@ import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/stra
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/strategy_horizontal_month';
 import AgendaAppointmentsStrategy from './rendering_strategies/strategy_agenda';
 import { getAppointmentKey } from '../../../renovation/ui/scheduler/appointment/utils';
-import { getOverflowIndicatorColor } from '../../../renovation/ui/scheduler/appointment/overflow_indicator/utils';
 
 const RENDERING_STRATEGIES = {
     'horizontal': HorizontalAppointmentsStrategy,
@@ -38,7 +37,11 @@ export class AppointmentViewModelGenerator {
 
         if(isRenovatedAppointments) {
             // TODO this structure should be by default after remove old render
-            return this.makeRenovatedViewModels(viewModel);
+            return this.makeRenovatedViewModels(
+                viewModel,
+                options.supportAllDayRow,
+                options.isVerticalGroupOrientation,
+            );
         }
 
         return {
@@ -76,11 +79,12 @@ export class AppointmentViewModelGenerator {
             return item;
         });
     }
-    makeRenovatedViewModels(viewModel) {
+    makeRenovatedViewModels(viewModel, supportAllDayRow, isVerticalGrouping) {
         const strategy = this.getRenderingStrategy();
         const regularViewModels = [];
         const allDayViewModels = [];
         const compactOptions = [];
+        const isAllDayPanel = supportAllDayRow && !isVerticalGrouping;
 
         viewModel.forEach(({ itemData, settings }) => {
             settings.forEach((options) => {
@@ -90,7 +94,7 @@ export class AppointmentViewModelGenerator {
                         compactViewModel: options.virtual,
                         appointmentViewModel: item
                     });
-                } else if(options.allDay) {
+                } else if(options.allDay && isAllDayPanel) {
                     allDayViewModels.push(item);
                 } else {
                     regularViewModels.push(item);
@@ -98,7 +102,7 @@ export class AppointmentViewModelGenerator {
             });
         });
 
-        const compactViewModels = this.prepareCompactViewModels(compactOptions);
+        const compactViewModels = this.prepareCompactViewModels(compactOptions, supportAllDayRow);
 
         const result = {
             allDay: allDayViewModels,
@@ -126,6 +130,7 @@ export class AppointmentViewModelGenerator {
                 allDay: options.allDay,
                 direction: options.direction,
                 appointmentReduced: options.appointmentReduced,
+                groupIndex: options.groupIndex,
             },
         };
 
@@ -136,6 +141,7 @@ export class AppointmentViewModelGenerator {
         return {
             isAllDay: !!compactViewModel.isAllDay,
             isCompact: compactViewModel.isCompact,
+            groupIndex: compactViewModel.groupIndex,
             geometry: {
                 left: compactViewModel.left,
                 top: compactViewModel.top,
@@ -149,7 +155,7 @@ export class AppointmentViewModelGenerator {
             },
         };
     }
-    prepareCompactViewModels(compactOptions) {
+    prepareCompactViewModels(compactOptions, supportAllDayRow) {
         const regularCompact = {};
         const allDayCompact = {};
 
@@ -158,7 +164,7 @@ export class AppointmentViewModelGenerator {
                 index,
                 isAllDay,
             } = compactViewModel;
-            const viewModel = isAllDay
+            const viewModel = isAllDay && supportAllDayRow
                 ? allDayCompact
                 : regularCompact;
 
@@ -183,14 +189,6 @@ export class AppointmentViewModelGenerator {
 
         const allDayViewModels = toArray(allDayCompact);
         const regularViewModels = toArray(regularCompact);
-
-        [
-            ...allDayViewModels,
-            ...regularViewModels
-        ].forEach((viewModel) => {
-            const { colors } = viewModel.items;
-            viewModel.color = getOverflowIndicatorColor(colors[0], colors);
-        });
 
         return {
             allDayCompact: allDayViewModels,

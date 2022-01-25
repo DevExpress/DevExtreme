@@ -1,9 +1,28 @@
+/* eslint-disable max-classes-per-file */
 import {
-  Component, JSXComponent, ComponentBindings, OneWay,
+  Component, JSXComponent, ComponentBindings,
+  OneWay, Effect, InternalState, Provider, Slot,
 } from '@devextreme-generator/declarations';
 
+import {
+  createValue, createGetter, Plugins, PluginsContext,
+} from '../../../utils/plugin/context';
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
+
+import type {
+  Column, ColumnUserConfig, KeyExpr, RowData,
+} from './types';
+
+import { TableContent } from './views/table_content';
+import { TableHeader } from './views/table_header';
+import { Footer } from './views/footer';
+
+export const VisibleItems = createGetter<RowData[]>([]);
+export const VisibleColumns = createGetter<Column[]>([]);
+export const DataSource = createValue<RowData[]>();
+export const KeyExprPlugin = createValue<KeyExpr>();
+export const TotalCount = createValue<number>();
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -22,59 +41,10 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
     {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
     <div className="dx-datagrid dx-gridbase-container" role="grid" aria-label="Data grid">
-      <div className="dx-datagrid-headers dx-datagrid-nowrap" role="presentation">
-        <div className="dx-datagrid-content dx-datagrid-scroll-container" role="presentation">
-          <table className="dx-datagrid-table dx-datagrid-table-fixed" role="presentation">
-            <tbody role="presentation">
-              <tr className="dx-row dx-column-lines dx-header-row" role="row">
-                {viewModel.props.columns.map((dataField, index) => (
-                  <td
-                    aria-selected="false"
-                    role="columnheader" // eslint-disable-line jsx-a11y/no-noninteractive-element-to-interactive-role
-                    aria-colindex={index + 1}
-                    id={`dx-col-${index + 1}`}
-                    aria-label={`Column ${dataField}`}
-                    className="dx-datagrid-action dx-cell-focus-disabled"
-                    aria-sort="none"
-                    tabIndex={0}
-                  >
-                    <div className="dx-datagrid-text-content dx-text-content-alignment-left" role="presentation">
-                      {dataField}
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div className="dx-datagrid-rowsview dx-datagrid-nowrap" role="presentation">
-        <div className="dx-datagrid-content">
-          <table className="dx-datagrid-table dx-datagrid-table-fixed" role="presentation">
-            <tbody role="presentation">
-              {viewModel.props.dataSource.map((item, rowIndex) => (
-                <tr
-                  className="dx-row dx-data-row dx-column-lines"
-                  role="row"
-                  aria-selected="false"
-                  aria-rowindex={rowIndex + 1}
-                >
-                  {viewModel.props.columns.map((dataField, index) => (
-                    <td
-                      aria-describedby={`dx-col-${index + 1}`}
-                      aria-selected="false"
-                      role="gridcell"
-                      aria-colindex={index + 1}
-                    >
-                      {String(item[dataField])}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <TableHeader columns={viewModel.visibleColumns} />
+      <TableContent columns={viewModel.visibleColumns} dataSource={viewModel.visibleItems} />
+      <Footer />
+      { viewModel.props.children }
     </div>
   </Widget>
 );
@@ -82,10 +52,16 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
 @ComponentBindings()
 export class DataGridLightProps extends BaseWidgetProps {
   @OneWay()
-  dataSource: Record<string, unknown>[] = [];
+  dataSource: RowData[] = [];
 
   @OneWay()
-  columns: string[] = [];
+  keyExpr?: KeyExpr;
+
+  @OneWay()
+  columns: ColumnUserConfig[] = [];
+
+  @Slot()
+  children?: JSX.Element | JSX.Element[];
 }
 
 const aria = {
@@ -94,12 +70,72 @@ const aria = {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: false },
+  jQuery: { register: true },
   view: viewFunction,
 })
 export class DataGridLight extends JSXComponent(DataGridLightProps) {
   // eslint-disable-next-line class-methods-use-this
   get aria(): Record<string, string> {
     return aria;
+  }
+
+  @Provider(PluginsContext)
+  plugins = new Plugins();
+
+  @InternalState()
+  visibleItems: RowData[] = [];
+
+  @InternalState()
+  visibleColumns: Column[] = [];
+
+  @Effect()
+  updateTotalCount(): void {
+    this.plugins.set(TotalCount, this.props.dataSource.length);
+  }
+
+  @Effect()
+  updateVisibleItems(): () => void {
+    return this.plugins.watch(VisibleItems, (items) => {
+      this.visibleItems = items;
+    });
+  }
+
+  @Effect()
+  setDataSourceToVisibleItems(): () => void {
+    return this.plugins.extend(
+      VisibleItems, -1, () => this.props.dataSource,
+    );
+  }
+
+  @Effect()
+  updateVisibleColumns(): () => void {
+    return this.plugins.watch(VisibleColumns, (columns) => {
+      this.visibleColumns = columns;
+    });
+  }
+
+  @Effect()
+  setInitialColumnsToVisibleColumns(): () => void {
+    return this.plugins.extend(
+      VisibleColumns, -1, () => this.columns,
+    );
+  }
+
+  @Effect()
+  updateKeyExpr(): void {
+    this.plugins.set(KeyExprPlugin, this.props.keyExpr);
+  }
+
+  @Effect()
+  updateDataSource(): void {
+    this.plugins.set(DataSource, this.props.dataSource);
+  }
+
+  get columns(): Column[] {
+    const userColumns = this.props.columns;
+
+    return userColumns.map((userColumn) => ({
+      dataField: userColumn,
+    }));
   }
 }

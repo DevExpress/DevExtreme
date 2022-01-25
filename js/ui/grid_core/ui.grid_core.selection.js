@@ -143,8 +143,8 @@ const SelectionController = gridCore.Controller.inherit((function() {
                 load: function(options) {
                     return dataController.dataSource()?.load(options) || new Deferred().resolve([]);
                 },
-                plainItems: function(allItems) {
-                    return dataController.items(allItems);
+                plainItems: function() {
+                    return dataController.items(true);
                 },
                 isItemSelected: function(item) {
                     return item.selected;
@@ -192,15 +192,15 @@ const SelectionController = gridCore.Controller.inherit((function() {
         },
 
         _fireSelectionChanged: function(options) {
-            if(options) {
-                this.executeAction('onSelectionChanged', options);
-            }
-
             const argument = this.option('selection.deferred') ?
                 { selectionFilter: this.option('selectionFilter') } :
                 { selectedRowKeys: this.option('selectedRowKeys') };
 
             this.selectionChanged.fire(argument);
+
+            if(options) {
+                this.executeAction('onSelectionChanged', options);
+            }
         },
 
         _updateCheckboxesState: function(options) {
@@ -415,12 +415,13 @@ const SelectionController = gridCore.Controller.inherit((function() {
             return this._selection.getSelectedItems();
         },
 
-        changeItemSelection: function(itemIndex, keys) {
+        changeItemSelection: function(visibleItemIndex, keys) {
             keys = keys || {};
             if(this.isSelectionWithCheckboxes()) {
                 keys.control = true;
             }
-            return this._selection.changeItemSelection(itemIndex, keys);
+            const loadedItemIndex = visibleItemIndex + this._dataController.getRowIndexOffset() - this._dataController.getRowIndexOffset(true);
+            return this._selection.changeItemSelection(loadedItemIndex, keys);
         },
 
         focusedItemIndex: function(itemIndex) {

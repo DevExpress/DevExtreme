@@ -7,6 +7,7 @@ import {
 } from '../cell';
 import { CellBase, CellBaseProps } from '../../cell';
 import * as combineClassesModule from '../../../../../../utils/combine_classes';
+import { DATE_TABLE_CELL_CLASS } from '../../../const';
 
 const combineClasses = jest.spyOn(combineClassesModule, 'combineClasses');
 
@@ -41,12 +42,11 @@ describe('DateTableCellBase', () => {
           ...new CellBaseProps(),
           isFirstGroupCell: true,
           isLastGroupCell: false,
-          contentTemplate: dataCellTemplate,
-          contentTemplateProps: dataCellTemplateProps,
           ariaLabel: 'Custom label',
           className: 'test-class',
           startDate: expect.any(Date),
           endDate: expect.any(Date),
+          children: expect.anything(),
         });
     });
 
@@ -55,6 +55,27 @@ describe('DateTableCellBase', () => {
 
       expect(cell.find('.child').exists())
         .toBe(true);
+    });
+
+    it('should render dataCellTemplate', () => {
+      const dataCellTemplate = jest.fn();
+      const dataCellTemplateProps = {
+        index: 1,
+        data: {},
+      };
+
+      const cell = render({
+        props: {
+          children: <div className="child" />,
+          dataCellTemplate,
+        },
+        dataCellTemplateProps,
+      });
+
+      expect(cell.find('.child').exists())
+        .toBe(false);
+      expect(cell.find(dataCellTemplate).props())
+        .toEqual(dataCellTemplateProps);
     });
   });
 
@@ -73,7 +94,7 @@ describe('DateTableCellBase', () => {
             .toHaveBeenCalledWith({
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-cell-sizes-vertical': true,
-              'dx-scheduler-date-table-cell': true,
+              [DATE_TABLE_CELL_CLASS]: true,
               'dx-state-focused': true,
               'dx-scheduler-focused-cell': true,
               '': true,
@@ -90,7 +111,7 @@ describe('DateTableCellBase', () => {
             .toHaveBeenCalledWith({
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-cell-sizes-vertical': false,
-              'dx-scheduler-date-table-cell': false,
+              [DATE_TABLE_CELL_CLASS]: false,
               '': true,
             });
         });
@@ -105,7 +126,7 @@ describe('DateTableCellBase', () => {
             .toHaveBeenCalledWith({
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-cell-sizes-vertical': true,
-              'dx-scheduler-date-table-cell': true,
+              [DATE_TABLE_CELL_CLASS]: true,
               'test-class': true,
             });
         });
