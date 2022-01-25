@@ -3684,6 +3684,37 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         assert.strictEqual($inputLabel.text(), defaultLabelText, 'label has default text');
         assert.strictEqual(fileUploader.option('labelText'), defaultLabelText, 'labelText option has default text');
     });
+
+    QUnit.test('invalid files should be added with error on dnd (T1061979)', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            useDragOver: true,
+            uploadMode: 'instantly',
+            accept: 'image/jpeg'
+        });
+        const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+
+        const firstFile = $.extend({}, fakeFile, {
+            name: 'firstFile.txt',
+            type: 'text/plain'
+        });
+
+        $inputWrapper.trigger($.Event($.Event('drop', {
+            dataTransfer: { files: [firstFile] }
+        })));
+
+        assert.equal($fileUploader.dxFileUploader('option', 'value').length, 1, 'files count is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, firstFile.name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`).length, 0, 'No valid files');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, firstFile.name, firstFile.name + 'is invalid file');
+        assert.strictEqual($fileStatus.text(), 'File type is not allowed', 'file status message is correct');
+    });
 });
 
 QUnit.module('files selection', moduleConfig, () => {
