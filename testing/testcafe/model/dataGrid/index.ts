@@ -26,6 +26,8 @@ const CLASS = {
   fixedGridView: 'content-fixed',
   rowsView: 'rowsview',
   revertButton: 'dx-revert-button',
+  fieldItemContent: 'dx-field-item-content',
+  textEditorInput: 'dx-texteditor-input',
 };
 
 const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
@@ -86,6 +88,14 @@ export default class DataGrid extends Widget {
 
   getDataRow(index: number): DataRow {
     return new DataRow(this.element.find(`.${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.name);
+  }
+
+  getFormItemElement(index: number): Selector {
+    return this.element.find(`.${CLASS.fieldItemContent}`).nth(index);
+  }
+
+  getFormItemEditor(index: number): Selector {
+    return this.getFormItemElement(index).find(`.${CLASS.textEditorInput}`);
   }
 
   getFixedDataRow(index: number): DataRow {
