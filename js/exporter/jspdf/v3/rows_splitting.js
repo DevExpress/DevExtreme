@@ -1,10 +1,10 @@
 import { isDefined } from '../../../core/utils/type';
 import { roundToThreeDecimals } from './draw_utils';
-import { getPageWidth } from './pdf_utils_v3';
+import { getPageWidth, getPageHeight } from './pdf_utils_v3';
 
-function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally) {
-    const rects = [].concat.apply([],
-        rowsInfo.map(rowInfo => {
+function convertToCellsArray(rows) {
+    return [].concat.apply([],
+        rows.map(rowInfo => {
             return rowInfo.cells
                 .filter(cell => !isDefined(cell.pdfCell.isMerged))
                 .map(cellInfo => {
@@ -12,15 +12,39 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally) {
                 });
         })
     );
+}
 
-    if(!isDefined(rects) || rects.length === 0) { // Empty Table
+function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically) {
+    if(rowsInfo.length === 0) { // Empty Table
         return [[]];
     }
 
-    const maxBottomRight = { x: getPageWidth(doc) - options.margin.right };
-    const rectsByPage = splitRectsHorizontalByPages(rects, options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);
+    const headerRows = rowsInfo.filter(r => r.rowType === 'header');
+    const contentRows = rowsInfo.filter(r => r.rowType !== 'header');
+    const contentRects = convertToCellsArray(contentRows);
 
-    // TODO: splitRectsVerticalByPages
+    const headerInfo = {
+        displayHeaderOnEachPage: options.displayHeaderOnEachPage,
+        rects: convertToCellsArray(headerRows),
+        height: headerRows.reduce((accumulator, row) => { return accumulator + row.height; }, 0),
+    };
+
+    const maxBottomRight = {
+        x: getPageWidth(doc) - options.margin.right,
+        y: getPageHeight(doc) - options.margin.bottom
+    };
+    const rectsByPage = splitRectsVerticallyByPages(contentRects, options.margin, options.topLeft, maxBottomRight, onSeparateRectVertically, headerInfo);
+
+    let pageIndex = 0;
+    while(pageIndex < rectsByPage.length) {
+        const splitPages = splitRectsHorizontalByPages(rectsByPage[pageIndex], options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);
+        if(splitPages.length > 1) {
+            rectsByPage.splice(pageIndex, 1, ...splitPages);
+            pageIndex += splitPages.length;
+        } else {
+            pageIndex += 1;
+        }
+    }
 
     return rectsByPage.map(rects => {
         return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
@@ -89,11 +113,99 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
         });
 
         rectsToSplit.forEach(rect => {
-            rect.x = (currentPageMaxRectRight !== undefined) ? (rect.x - currentPageMaxRectRight + margin.left + topLeft.x) : rect.x;
+            rect.x = isDefined(currentPageMaxRectRight) ? (rect.x - currentPageMaxRectRight + margin.left + topLeft.x) : rect.x;
         });
 
         if(currentPageRects.length > 0) {
             pages.push(currentPageRects);
+        } else {
+            pages.push(rectsToSplit);
+            break;
+        }
+    }
+
+    return pages;
+}
+
+function splitRectsVerticallyByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectVertically, headersInfo) {
+    const pages = [];
+
+    const getHeadersRects = () => {
+        return [...headersInfo.rects
+            .map(rect => Object.assign({}, rect))
+        ];
+    };
+
+    let rectsToSplit = [...getHeadersRects(), ...rects];
+    while(rectsToSplit.length > 0) {
+        const needDisplayHeaderOnNextPage = headersInfo.displayHeaderOnEachPage === true;
+        const nextPageHeaderHeight = needDisplayHeaderOnNextPage ? headersInfo.height : 0;
+
+        let currentPageMaxRectBottom = 0;
+        const currentPageRects = rectsToSplit.filter(rect => {
+            const currentRectBottom = roundToThreeDecimals(rect.y + rect.h);
+            if(currentRectBottom <= maxBottomRight.y) {
+                if(currentPageMaxRectBottom <= currentRectBottom) {
+                    currentPageMaxRectBottom = currentRectBottom;
+                }
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        const rectsToSeparate = rectsToSplit.filter(rect => {
+            // Check cells that have 'rect.y' less than 'currentPageMaxRectBottom'
+            const currentRectTop = roundToThreeDecimals(rect.y);
+            const currentRectBottom = roundToThreeDecimals(rect.y + rect.h);
+            if(currentRectTop < currentPageMaxRectBottom && currentPageMaxRectBottom < currentRectBottom) {
+                return true;
+            }
+        });
+
+        rectsToSeparate.forEach(rect => {
+            const args = {
+                sourceRect: rect,
+                topRect: {
+                    x: rect.x,
+                    y: rect.y,
+                    w: rect.w,
+                    h: currentPageMaxRectBottom - rect.y
+                },
+                bottomRect: {
+                    x: rect.x,
+                    y: currentPageMaxRectBottom + nextPageHeaderHeight,
+                    w: rect.w,
+                    h: rect.h - (currentPageMaxRectBottom - rect.y)
+                }
+            };
+            onSeparateRectVertically(args);
+
+            currentPageRects.push(args.topRect);
+            rectsToSplit.push(args.bottomRect);
+
+            const index = rectsToSplit.indexOf(rect);
+            if(index !== -1) {
+                rectsToSplit.splice(index, 1);
+            }
+        });
+
+        currentPageRects.forEach(rect => {
+            const index = rectsToSplit.indexOf(rect);
+            if(index !== -1) {
+                rectsToSplit.splice(index, 1);
+            }
+        });
+
+        rectsToSplit.forEach(rect => {
+            rect.y = isDefined(currentPageMaxRectBottom) ? (rect.y - currentPageMaxRectBottom + nextPageHeaderHeight + margin.top) : rect.y + nextPageHeaderHeight;
+        });
+
+        if(currentPageRects.length > 0) {
+            pages.push(currentPageRects);
+            if(headersInfo.displayHeaderOnEachPage && rectsToSplit.length) {
+                rectsToSplit = [...getHeadersRects(), ...rectsToSplit];
+            }
         } else {
             pages.push(rectsToSplit);
             break;
