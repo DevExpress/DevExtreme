@@ -37,5 +37,10 @@
 
 .dx-multiview-item-hidden {
   top: -9999px;
+  left: -9999px;
   visibility: hidden;
+
+  .dx-accordion-item-opened .dx-accordion-item-body {
+    visibility: hidden;
+  }
 }
