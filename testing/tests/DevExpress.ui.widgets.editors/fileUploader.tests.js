@@ -3412,7 +3412,19 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
 
         $inputWrapper.trigger(event);
-        assert.deepEqual(fileUploader.option('value'), [], 'value is empty');
+        assert.equal(fileUploader.option('value').length, 1, 'files count is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, fakeFile.name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 0, 'No valid files');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, fakeFile.name, fakeFile.name + ' is invalid file');
+        assert.strictEqual($fileStatus.text(), 'File type is not allowed', 'file status message is correct');
     });
 
     QUnit.test('the \'accept\' option is case insensitive (T570224)', function(assert) {
@@ -3456,7 +3468,19 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
 
         $inputWrapper.trigger(event);
-        assert.deepEqual(fileUploader.option('value'), [], 'value is empty');
+        assert.equal(fileUploader.option('value').length, 1, 'files count is correct');
+        assert.equal(fileUploader.option('value[0]').name, files[0].name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 0, 'No valid files');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, files[0].name, files[0].name + ' is invalid file');
+        assert.strictEqual($fileStatus.text(), 'File type is not allowed', 'file status message is correct');
     });
 
     QUnit.test('the \'accept\' option with multiple types should work correctly on drag&drop', function(assert) {
@@ -3490,7 +3514,19 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
         files = [fakeFile1];
         triggerDrop(files);
-        assert.deepEqual(fileUploader.option('value'), [], 'file of other type is not chosen');
+        assert.equal($fileUploader.dxFileUploader('option', 'value').length, 1, 'files count is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, fakeFile1.name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 0, 'No valid files');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, fakeFile1.name, fakeFile1.name + ' is invalid file');
+        assert.strictEqual($fileStatus.text(), 'File type is not allowed', 'file status message is correct');
     });
 
     QUnit.test('error should not be thrown for the \'*\' accept (T386887)', function(assert) {
@@ -3529,8 +3565,25 @@ QUnit.module('Drag and drop', moduleConfig, () => {
             dataTransfer: { files: [firstFile, secondFile] }
         })));
 
-        assert.equal($fileUploader.dxFileUploader('option', 'value').length, 1, 'files count is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value').length, 2, 'files count is correct');
         assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, firstFile.name, 'added file is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[1]').name, secondFile.name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 1, 'One file is valid');
+
+        const validFileName = $validFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $validFileStatus = $validFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(validFileName, firstFile.name, firstFile.name + ' is invalid file');
+        assert.strictEqual($validFileStatus.text(), 'Ready to upload', 'file status message is correct');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $invalidFileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, secondFile.name, secondFile.name + ' is invalid file');
+        assert.strictEqual($invalidFileStatus.text(), 'File type is not allowed', 'file status message is correct');
     });
 
     QUnit.test('dropZoneEnter and dropZoneLeave events should fire once on correspondent interactions in a custom drop zone', function(assert) {
@@ -3708,8 +3761,9 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
         const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
         const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
         assert.equal($invalidFiles.length, 1, 'One file is invalid');
-        assert.equal($filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`).length, 0, 'No valid files');
+        assert.equal($validFiles.length, 0, 'No valid files');
 
         const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
         const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
@@ -3743,8 +3797,9 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
         const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
         const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
         assert.equal($invalidFiles.length, 1, 'One file is invalid');
-        assert.equal($filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`).length, 0, 'No valid files');
+        assert.equal($validFiles.length, 0, 'No valid files');
 
         const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
         const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
