@@ -137,9 +137,10 @@ function splitRectsVerticallyByPages(rects, margin, topLeft, maxBottomRight, onS
     const rectsToSplit = [...cloneHeadersRects(), ...rects];
     while(rectsToSplit.length > 0) {
         let currentPageMaxRectBottom = 0;
+        const headerHeight = (pages.length > 0 && headersInfo.displayHeaderOnEachPage === true) ? headersInfo.height : 0;
         const currentPageRects = rectsToSplit.filter(rect => {
             const currentRectBottom = roundToThreeDecimals(rect.y + rect.h);
-            if(currentRectBottom <= maxBottomRight.y) {
+            if(currentRectBottom + headerHeight <= maxBottomRight.y) {
                 if(currentPageMaxRectBottom <= currentRectBottom) {
                     currentPageMaxRectBottom = currentRectBottom;
                 }
