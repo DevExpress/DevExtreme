@@ -50,6 +50,10 @@ export const getViewSwitcher = (header, item) => {
 export const getDropDownViewSwitcher = (header, item) => {
     const { selectedView, views } = getViewsAndSelectedView(header);
 
+    const isOneView =
+        views.length === 1
+        && views[0].name === selectedView;
+
     return {
         widget: 'dxDropDownButton',
         locateInMenu: 'never',
@@ -60,6 +64,7 @@ export const getDropDownViewSwitcher = (header, item) => {
             keyExpr: 'name',
             selectedItemKey: selectedView,
             displayExpr: 'text',
+            showArrowIcon: isOneView ? false : true,
             elementAttr: {
                 class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS,
             },
@@ -76,6 +81,11 @@ export const getDropDownViewSwitcher = (header, item) => {
                 });
             },
             dropDownOptions: {
+                onShowing: (e) => {
+                    if(isOneView) {
+                        e.cancel = true;
+                    }
+                },
                 width: 'max-content',
                 wrapperAttr: { class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS }
             }
