@@ -41,7 +41,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                 },
                 'appointment2': {
                     top: 190,
-                    left: 400
+                    left: 430
                 }
             }, {
                 'appointment1': {
