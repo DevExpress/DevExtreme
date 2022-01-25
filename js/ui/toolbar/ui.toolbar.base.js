@@ -80,13 +80,16 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
                 $container.text(String(data));
             }
 
-            const isDeepExtend = true;
             const model = { ...rawModel };
-            model.options = extend(isDeepExtend, {}, rawModel.options);
 
-            // in dom_component we prevent syncronization disabled in nested component if property exists in model
-            if(this.option('disabled') && rawModel.options.disabled === false) {
-                delete model.options.disabled;
+            if(rawModel.options) {
+                const isDeepExtend = true;
+                model.options = extend(isDeepExtend, {}, rawModel.options);
+
+                // in dom_component we prevent syncronization disabled in nested component if property exists in model
+                if(this.option('disabled') && model.options.disabled === false) {
+                    delete model.options.disabled;
+                }
             }
 
             this._getTemplate('dx-polymorph-widget').render({
