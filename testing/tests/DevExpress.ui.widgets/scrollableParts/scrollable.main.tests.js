@@ -875,8 +875,8 @@ QUnit.test('scroll should save position on dxhiding when scroll is hidden', func
 
             assert.deepEqual(scrollable.scrollOffset(), { left: 0, top: 20 }, 'scroll position restored after dxshown');
             done();
-        }, RESIZE_WAIT_TIMEOUT);
-    }, RESIZE_WAIT_TIMEOUT);
+        }, RESIZE_WAIT_TIMEOUT * 2);
+    }, RESIZE_WAIT_TIMEOUT * 2);
 });
 
 
