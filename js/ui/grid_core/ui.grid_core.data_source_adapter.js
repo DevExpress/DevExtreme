@@ -396,7 +396,7 @@ export default gridCore.Controller.inherit((function() {
             if(cachedExtra) {
                 options.extra = cachedExtra;
             }
-            if(!(options.data?.data?.length === 0)) {
+            if(!(options.data?.length === 0)) {
                 options.data = getPageDataFromCache(options) || options.cachedStoreData;
             }
         },
