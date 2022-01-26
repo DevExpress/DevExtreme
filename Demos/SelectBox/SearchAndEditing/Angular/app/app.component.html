@@ -14,6 +14,7 @@
             [searchTimeout]="searchTimeoutOption"
             [minSearchLength]="minSearchLengthOption"
             [searchEnabled]="true"
+            [showDataBeforeSearch]="showDataBeforeSearchOption"
           ></dx-select-box>
         </div>
       </div>
@@ -55,7 +56,7 @@
       <div>Search Mode</div>
       <dx-select-box
         [items]="['contains', 'startswith']"
-        [value]="searchModeOption"
+        [(value)]="searchModeOption"
       ></dx-select-box>
     </div>
     <div class="option">
@@ -64,7 +65,7 @@
         [items]="searchExprOptionItems"
         displayExpr="name"
         valueExpr="value"
-        [value]="searchExprOption"
+        [(value)]="searchExprOption"
       ></dx-select-box>
     </div>
     <div class="option">
@@ -72,7 +73,7 @@
       <dx-number-box
         [min]="0"
         [max]="5000"
-        [value]="searchTimeoutOption"
+        [(value)]="searchTimeoutOption"
         [showSpinButtons]="true"
         [step]="100"
       ></dx-number-box>
@@ -82,13 +83,13 @@
       <dx-number-box
         [min]="0"
         [max]="5"
-        [value]="minSearchLengthOption"
+        [(value)]="minSearchLengthOption"
         [showSpinButtons]="true"
       ></dx-number-box>
     </div>
     <div class="option">
       <dx-check-box
-        [value]="showDataBeforeSearchOption"
+        [(value)]="showDataBeforeSearchOption"
         text="Show Data Before Search"
       ></dx-check-box>
     </div>
