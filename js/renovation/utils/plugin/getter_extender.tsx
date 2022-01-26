@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  JSXComponent, Component, ComponentBindings, OneWay, Consumer, Effect, Fragment,
+  JSXComponent, Component, ComponentBindings, OneWay, Consumer, Effect,
 } from '@devextreme-generator/declarations';
 
 import {
   PluginsContext, Plugins, PluginGetter,
 } from './context';
 
-export const viewFunction = (): JSX.Element => <Fragment />;
+export const viewFunction = (): JSX.Element => <div />;
 
 @ComponentBindings()
 export class GetterExtenderProps {

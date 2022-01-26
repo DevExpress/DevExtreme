@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  JSXComponent, Component, ComponentBindings, OneWay, Consumer, Effect, Template, Fragment,
+  JSXComponent, Component, ComponentBindings, OneWay, Effect, Template, Consumer,
 } from '@devextreme-generator/declarations';
 
 import {
-  PluginsContext, Plugins, PluginEntity,
+  Plugins, PluginEntity, PluginsContext,
 } from './context';
 
 @ComponentBindings()
@@ -19,9 +19,9 @@ export class PlaceholderExtenderProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const viewFunction = (): JSX.Element => <Fragment />;
+export const viewFunction = (): JSX.Element => <div />;
 
-@Component({ defaultOptionRules: null, view: viewFunction })
+@Component({ defaultOptionRules: null, jQuery: { register: true }, view: viewFunction })
 export class PlaceholderExtender extends JSXComponent<PlaceholderExtenderProps, 'type' | 'order' | 'template'>(PlaceholderExtenderProps) {
   @Consumer(PluginsContext)
   plugins!: Plugins;
