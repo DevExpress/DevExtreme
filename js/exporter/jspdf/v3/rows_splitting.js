@@ -22,64 +22,63 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
         y: getPageHeight(doc) - options.margin.bottom
     };
 
-    const rectsByPage = splitRects(rects, options.margin.left, options.topLeft.x, maxBottomRight, 'x', 'w',
+    const verticallyPages = splitRects(rects, options.margin.top, /* options.topLeft.y */ 0, maxBottomRight, 'y', 'h',
         (rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit) => {
             const args = {
                 sourceRect: rect,
-                leftRect: {
+                topRect: {
                     x: rect.x,
                     y: rect.y,
-                    w: currentPageMaxRectCoordinate - rect.x,
-                    h: rect.h
+                    w: rect.w,
+                    h: currentPageMaxRectCoordinate - rect.y
                 },
-                rightRect: {
-                    x: currentPageMaxRectCoordinate,
-                    y: rect.y,
-                    w: rect.w - (currentPageMaxRectCoordinate - rect.x),
-                    h: rect.h
+                bottomRect: {
+                    x: rect.x,
+                    y: currentPageMaxRectCoordinate,
+                    w: rect.w,
+                    h: rect.h - (currentPageMaxRectCoordinate - rect.y)
                 }
             };
-            onSeparateRectHorizontally(args);
+            onSeparateRectVertically(args);
 
-            currentPageRects.push(args.leftRect);
-            rectsToSplit.push(args.rightRect);
+            currentPageRects.push(args.topRect);
+            rectsToSplit.push(args.bottomRect);
         });
 
     let pageIndex = 0;
-    while(pageIndex < rectsByPage.length) {
-
-        const splitPages = splitRects(rectsByPage[pageIndex], options.margin.top, /* options.topLeft.y */ 0, maxBottomRight, 'y', 'h',
+    while(pageIndex < verticallyPages.length) {
+        const horizontallyPages = splitRects(verticallyPages[pageIndex], options.margin.left, options.topLeft.x, maxBottomRight, 'x', 'w',
             (rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit) => {
                 const args = {
                     sourceRect: rect,
-                    topRect: {
+                    leftRect: {
                         x: rect.x,
                         y: rect.y,
-                        w: rect.w,
-                        h: currentPageMaxRectCoordinate - rect.y
+                        w: currentPageMaxRectCoordinate - rect.x,
+                        h: rect.h
                     },
-                    bottomRect: {
-                        x: rect.x,
-                        y: currentPageMaxRectCoordinate,
-                        w: rect.w,
-                        h: rect.h - (currentPageMaxRectCoordinate - rect.y)
+                    rightRect: {
+                        x: currentPageMaxRectCoordinate,
+                        y: rect.y,
+                        w: rect.w - (currentPageMaxRectCoordinate - rect.x),
+                        h: rect.h
                     }
                 };
-                onSeparateRectVertically(args);
+                onSeparateRectHorizontally(args);
 
-                currentPageRects.push(args.topRect);
-                rectsToSplit.push(args.bottomRect);
+                currentPageRects.push(args.leftRect);
+                rectsToSplit.push(args.rightRect);
             });
 
-        if(splitPages.length > 1) {
-            rectsByPage.splice(pageIndex, 1, ...splitPages);
-            pageIndex += splitPages.length;
+        if(horizontallyPages.length > 1) {
+            verticallyPages.splice(pageIndex, 1, ...horizontallyPages);
+            pageIndex += horizontallyPages.length;
         } else {
             pageIndex += 1;
         }
     }
 
-    return rectsByPage.map(rects => {
+    return verticallyPages.map(rects => {
         return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
     });
 }
