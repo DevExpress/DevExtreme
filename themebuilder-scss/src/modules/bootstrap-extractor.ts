@@ -58,7 +58,7 @@ export default class BootstrapExtractor {
   }
 
   async readSassFile(fileName: string): Promise<string> {
-    const path = require.resolve(`bootstrap${this.version}/scss/${fileName}`);
+    const path = require.resolve(`bootstrap-v${this.version}/scss/${fileName}`);
     return fs.readFile(path, 'utf8');
   }
 
