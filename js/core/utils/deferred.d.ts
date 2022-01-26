@@ -25,16 +25,20 @@ export function Deferred<T>(): DeferredObj<T>;
 // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
 export interface PromiseType<T> { }
 /**
- * @namespace DevExpress.core.utils
- */
-export interface DxPromiseLike<T> {
-    // eslint-disable-next-line spellcheck/spell-checker
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value?: T, ...args: never[]) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>;
-}
-/**
  * @docid
  * @type Promise<void>
  * @namespace DevExpress.core.utils
  */
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> & DxPromiseLike<T> : PromiseType<T>;
+export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
+
+/** @namespace DevExpress.core.utils */
+export interface PromiseExtension<T> {
+    then<TResult1 = T, TResult2 = never>(
+        onFulfilled?: ((value: T, extraParameters?: any) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): PromiseLike<TResult1 | TResult2>;
+}
+
+/** @namespace DevExpress.core.utils */
+export type DxPromiseLike<T> = DxPromise<T> & PromiseExtension<T>;

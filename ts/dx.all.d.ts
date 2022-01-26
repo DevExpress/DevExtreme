@@ -1581,18 +1581,25 @@ declare module DevExpress.core.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type DxPromise<T = void> = {} extends PromiseType<T>
-    ? Promise<T> & DxPromiseLike<T>
+    ? Promise<T>
     : PromiseType<T>;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface DxPromiseLike<T> {
+  export type DxPromiseLike<T> = DxPromise<T> & PromiseExtension<T>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(
-      onfulfilled?:
-        | ((value?: T, ...args: never[]) => TResult1 | PromiseLike<TResult1>)
+      onFulfilled?:
+        | ((
+            value: T,
+            extraParameters?: any
+          ) => TResult1 | PromiseLike<TResult1>)
         | undefined
         | null,
-      onrejected?:
+      onRejected?:
         | ((reason: any) => TResult2 | PromiseLike<TResult2>)
         | undefined
         | null
@@ -1796,7 +1803,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.load()]
      */
-    load(): DevExpress.core.utils.DxPromise<any>;
+    load(): DevExpress.core.utils.DxPromiseLike<any>;
     /**
      * [descr:DataSource.loadOptions()]
      */
@@ -1852,7 +1859,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.reload()]
      */
-    reload(): DevExpress.core.utils.DxPromise<any>;
+    reload(): DevExpress.core.utils.DxPromiseLike<any>;
     /**
      * [descr:DataSource.requireTotalCount()]
      */
@@ -2363,34 +2370,13 @@ declare module DevExpress.data {
     /**
      * [descr:ODataStore.insert(values)]
      */
-    insert(
-      values: TItem
-    ): DevExpress.core.utils.DxPromise<TItem> &
-      DevExpress.data.ODataStore.PromiseExtension<TItem>;
+    insert(values: TItem): DevExpress.core.utils.DxPromiseLike<TItem>;
   }
   module ODataStore {
     export type Options<TItem = any, TKey = any> = ODataStoreOptions<
       TItem,
       TKey
     >;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    interface PromiseExtension<T> {
-      then<TResult1 = T, TResult2 = never>(
-        onFulfilled?:
-          | ((
-              value: T,
-              extraParameters?: T
-            ) => TResult1 | PromiseLike<TResult1>)
-          | undefined
-          | null,
-        onRejected?:
-          | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-          | undefined
-          | null
-      ): Promise<TResult1 | TResult2>;
-    }
   }
   /**
    * @deprecated Use Options instead
@@ -2985,7 +2971,7 @@ declare module DevExpress.data {
     /**
      * [descr:Store.insert(values)]
      */
-    insert(values: TItem): DevExpress.core.utils.DxPromise<TItem>;
+    insert(values: TItem): DevExpress.core.utils.DxPromiseLike<TItem>;
     /**
      * [descr:Store.key()]
      */
@@ -2997,13 +2983,13 @@ declare module DevExpress.data {
     /**
      * [descr:Store.load()]
      */
-    load(): DevExpress.core.utils.DxPromise<Array<TItem>>;
+    load(): DevExpress.core.utils.DxPromiseLike<Array<TItem>>;
     /**
      * [descr:Store.load(options)]
      */
     load(
       options: LoadOptions<TItem>
-    ): DevExpress.core.utils.DxPromise<Array<TItem>>;
+    ): DevExpress.core.utils.DxPromiseLike<Array<TItem>>;
     /**
      * [descr:Store.off(eventName)]
      */
@@ -3054,7 +3040,7 @@ declare module DevExpress.data {
     update(
       key: TKey,
       values: DevExpress.core.DeepPartial<TItem>
-    ): DevExpress.core.utils.DxPromise<TItem>;
+    ): DevExpress.core.utils.DxPromiseLike<TItem>;
   }
   module Store {
     /**

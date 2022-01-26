@@ -1,6 +1,7 @@
 /* eslint-disable no-new */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unused-vars-experimental */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -50,13 +51,20 @@ export function loadAcceptsPromiseOfObject() {
 }
 
 export function promiseResolveAcceptsMultipleArguments() {
+  const value = {
+    id: 1,
+    text: 'a',
+  };
   const store = new CustomStore({
     load: () => new Promise((resolve) => {
-      resolve((v1, v2: { totalCount: number; groupCount: number }) => [v1, v2]);
+      resolve((v1, v2: { totalCount: number; groupCount: number }) => {});
     }),
   });
+  store.insert(value).then((data, key: number) => ({ data, key }));
+  store.update(1, value).then((data, key: number) => ({ data, key }));
 
   const dataSource = new DataSource(store);
-  // eslint-disable-next-line max-len
-  const promise = dataSource.load().then((v1, v2: { totalCount: number; groupCount: number }) => [v1, v2]);
+  dataSource.load().then(
+    (data, extra: { totalCount: number; groupCount: number }) => ({ data, extra }),
+  );
 }

@@ -1,15 +1,8 @@
-import { DxPromise } from '../../core/utils/deferred';
+import { DxPromise, DxPromiseLike } from '../../core/utils/deferred';
 import Store, { Options as StoreOptions } from '../abstract_store';
 import { LoadOptions } from '../index';
 import { Query } from '../query';
 import { ODataRequestOptions } from './context';
-
-interface PromiseExtension<T> {
-    then<TResult1 = T, TResult2 = never>(
-        onFulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
-    ): Promise<TResult1 | TResult2>;
-}
 
 /** @public */
 export type Options<
@@ -130,5 +123,5 @@ export default class ODataStore<
      * @return Promise<any>
      * @public
      */
-    insert(values: TItem): DxPromise<TItem> & PromiseExtension<TItem>;
+    insert(values: TItem): DxPromiseLike<TItem>;
 }
