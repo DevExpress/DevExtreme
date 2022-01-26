@@ -77,6 +77,9 @@ export class GanttView extends Widget {
     setWidth(value) {
         this._ganttViewCore.setWidth(value);
     }
+    _onDimensionChanged() {
+        this._ganttViewCore.onBrowserWindowResize();
+    }
 
     _selectTask(id) {
         this._ganttViewCore.selectTaskById(id);
