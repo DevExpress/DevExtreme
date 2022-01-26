@@ -1,5 +1,6 @@
 import { ItemView } from './types';
 import { ToolbarItem } from '../../toolbar/toolbar_props';
+import { isOneView } from '../../../../ui/scheduler/header/utils';
 
 const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
 const VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS = 'dx-scheduler-view-switcher-dropdown-button';
@@ -33,7 +34,7 @@ export const getDropDownViewSwitcher = (
   views: ItemView[],
   setCurrentView: (view: ItemView) => void,
 ): ToolbarItem => {
-  const isOneView = views.length === 1 && views[0].name === selectedView;
+  const oneView = isOneView(views, selectedView);
 
   return {
     widget: 'dxDropDownButton',
@@ -45,7 +46,7 @@ export const getDropDownViewSwitcher = (
       keyExpr: 'name',
       selectedItemKey: selectedView,
       displayExpr: 'text',
-      showArrowIcon: !isOneView,
+      showArrowIcon: !oneView,
       elementAttr: {
         class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS,
       },
@@ -55,7 +56,7 @@ export const getDropDownViewSwitcher = (
       },
       dropDownOptions: {
         onShowing: (e) => {
-          if (isOneView) {
+          if (oneView) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             e.cancel = true;
           }

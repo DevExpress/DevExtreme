@@ -1,6 +1,7 @@
 import {
     formatViews,
     getViewName,
+    isOneView,
 } from './utils';
 
 const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
@@ -50,9 +51,7 @@ export const getViewSwitcher = (header, item) => {
 export const getDropDownViewSwitcher = (header, item) => {
     const { selectedView, views } = getViewsAndSelectedView(header);
 
-    const isOneView =
-        views.length === 1
-        && views[0].name === selectedView;
+    const oneView = isOneView(views, selectedView);
 
     return {
         widget: 'dxDropDownButton',
@@ -64,7 +63,7 @@ export const getDropDownViewSwitcher = (header, item) => {
             keyExpr: 'name',
             selectedItemKey: selectedView,
             displayExpr: 'text',
-            showArrowIcon: isOneView ? false : true,
+            showArrowIcon: !oneView,
             elementAttr: {
                 class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS,
             },
@@ -79,11 +78,7 @@ export const getDropDownViewSwitcher = (header, item) => {
                 header._addEvent('currentView', (view) => {
                     const views = formatViews(header.views);
 
-                    const isOneView =
-                        header.views.length === 1
-                        && views[0].name === view;
-
-                    if(isOneView) {
+                    if(isOneView(views, view)) {
                         header.repaint();
                     }
 
@@ -92,7 +87,7 @@ export const getDropDownViewSwitcher = (header, item) => {
             },
             dropDownOptions: {
                 onShowing: (e) => {
-                    if(isOneView) {
+                    if(oneView) {
                         e.cancel = true;
                     }
                 },
