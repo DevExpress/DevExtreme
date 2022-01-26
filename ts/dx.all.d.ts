@@ -13708,6 +13708,7 @@ declare module DevExpress.ui {
     showTaskDetailsDialog(taskKey: any): void;
   }
   module dxGantt {
+    export type Column = dxGanttColumn;
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;
     export type ContextMenuPreparingEvent = DevExpress.events.Cancelable & {
       readonly component?: dxGantt;
@@ -13745,153 +13746,6 @@ declare module DevExpress.ui {
         readonly values: any;
       };
     export type DisposingEvent = DevExpress.events.EventInfo<dxGantt>;
-    export type dxGanttColumn<
-      TRowData = any,
-      TKey = any
-    > = DevExpress.core.Skip<
-      dxGanttColumnBlank<TRowData, TKey>,
-      | 'allowEditing'
-      | 'allowFixing'
-      | 'allowHiding'
-      | 'allowReordering'
-      | 'allowResizing'
-      | 'allowSearch'
-      | 'buttons'
-      | 'columns'
-      | 'editCellComponent'
-      | 'editCellRender'
-      | 'editCellTemplate'
-      | 'editorOptions'
-      | 'fixed'
-      | 'fixedPosition'
-      | 'formItem'
-      | 'hidingPriority'
-      | 'isBand'
-      | 'lookup'
-      | 'name'
-      | 'ownerBand'
-      | 'renderAsync'
-      | 'setCellValue'
-      | 'showEditorAlways'
-      | 'showInColumnChooser'
-      | 'type'
-      | 'validationRules'
-      | 'visible'
-    >;
-    /**
-     * [descr:dxGanttColumn]
-     */
-    interface dxGanttColumnBlank<TRowData = any, TKey = any>
-      extends DevExpress.ui.dxTreeList.Column<TRowData, TKey> {
-      /**
-       * [descr:dxGanttColumn.allowEditing]
-       */
-      allowEditing: any;
-      /**
-       * [descr:dxGanttColumn.allowFixing]
-       */
-      allowFixing: any;
-      /**
-       * [descr:dxGanttColumn.allowHiding]
-       */
-      allowHiding: any;
-      /**
-       * [descr:dxGanttColumn.allowReordering]
-       */
-      allowReordering: any;
-      /**
-       * [descr:dxGanttColumn.allowResizing]
-       */
-      allowResizing: any;
-      /**
-       * [descr:dxGanttColumn.allowSearch]
-       */
-      allowSearch: any;
-      /**
-       * [descr:dxGanttColumn.buttons]
-       */
-      buttons: any;
-      /**
-       * [descr:dxGanttColumn.columns]
-       */
-      columns: any;
-      /**
-       * [descr:dxGanttColumn.editorOptions]
-       */
-      editorOptions: any;
-      /**
-       * [descr:dxGanttColumn.editCellComponent]
-       */
-      editCellComponent: any;
-      /**
-       * [descr:dxGanttColumn.editCellRender]
-       */
-      editCellRender: any;
-      /**
-       * [descr:dxGanttColumn.editCellTemplate]
-       */
-      editCellTemplate: any;
-      /**
-       * [descr:dxGanttColumn.fixed]
-       */
-      fixed: any;
-      /**
-       * [descr:dxGanttColumn.fixedPosition]
-       */
-      fixedPosition: any;
-      /**
-       * [descr:dxGanttColumn.formItem]
-       */
-      formItem: any;
-      /**
-       * [descr:dxGanttColumn.hidingPriority]
-       */
-      hidingPriority: any;
-      /**
-       * [descr:dxGanttColumn.isBand]
-       */
-      isBand: any;
-      /**
-       * [descr:dxGanttColumn.lookup]
-       */
-      lookup: any;
-      /**
-       * [descr:dxGanttColumn.name]
-       */
-      name: any;
-      /**
-       * [descr:dxGanttColumn.ownerBand]
-       */
-      ownerBand: any;
-      /**
-       * [descr:dxGanttColumn.renderAsync]
-       */
-      renderAsync: any;
-      /**
-       * [descr:dxGanttColumn.setCellValue]
-       */
-      setCellValue: any;
-      /**
-       * [descr:dxGanttColumn.showEditorAlways]
-       */
-      showEditorAlways: any;
-      /**
-       * [descr:dxGanttColumn.showInColumnChooser]
-       */
-      showInColumnChooser: any;
-      /**
-       * [descr:dxGanttColumn.validationRules]
-       */
-      validationRules: any;
-      /**
-       * [descr:dxGanttColumn.visible]
-       */
-      visible: any;
-      /**
-       * [descr:dxGanttColumn.type]
-       */
-      type: any;
-    }
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxGantt>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxGantt> &
@@ -14008,6 +13862,154 @@ declare module DevExpress.ui {
       readonly start: Date;
       readonly end: Date;
     };
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type dxGanttColumn<TRowData = any, TKey = any> = DevExpress.core.Skip<
+    dxGanttColumnBlank<TRowData, TKey>,
+    | 'allowEditing'
+    | 'allowFixing'
+    | 'allowHiding'
+    | 'allowReordering'
+    | 'allowResizing'
+    | 'allowSearch'
+    | 'buttons'
+    | 'columns'
+    | 'editCellComponent'
+    | 'editCellRender'
+    | 'editCellTemplate'
+    | 'editorOptions'
+    | 'fixed'
+    | 'fixedPosition'
+    | 'formItem'
+    | 'hidingPriority'
+    | 'isBand'
+    | 'lookup'
+    | 'name'
+    | 'ownerBand'
+    | 'renderAsync'
+    | 'setCellValue'
+    | 'showEditorAlways'
+    | 'showInColumnChooser'
+    | 'type'
+    | 'validationRules'
+    | 'visible'
+  >;
+  /**
+   * [descr:dxGanttColumn]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  interface dxGanttColumnBlank<TRowData = any, TKey = any>
+    extends DevExpress.ui.dxTreeList.Column<TRowData, TKey> {
+    /**
+     * [descr:dxGanttColumn.allowEditing]
+     */
+    allowEditing: any;
+    /**
+     * [descr:dxGanttColumn.allowFixing]
+     */
+    allowFixing: any;
+    /**
+     * [descr:dxGanttColumn.allowHiding]
+     */
+    allowHiding: any;
+    /**
+     * [descr:dxGanttColumn.allowReordering]
+     */
+    allowReordering: any;
+    /**
+     * [descr:dxGanttColumn.allowResizing]
+     */
+    allowResizing: any;
+    /**
+     * [descr:dxGanttColumn.allowSearch]
+     */
+    allowSearch: any;
+    /**
+     * [descr:dxGanttColumn.buttons]
+     */
+    buttons: any;
+    /**
+     * [descr:dxGanttColumn.columns]
+     */
+    columns: any;
+    /**
+     * [descr:dxGanttColumn.editorOptions]
+     */
+    editorOptions: any;
+    /**
+     * [descr:dxGanttColumn.editCellComponent]
+     */
+    editCellComponent: any;
+    /**
+     * [descr:dxGanttColumn.editCellRender]
+     */
+    editCellRender: any;
+    /**
+     * [descr:dxGanttColumn.editCellTemplate]
+     */
+    editCellTemplate: any;
+    /**
+     * [descr:dxGanttColumn.fixed]
+     */
+    fixed: any;
+    /**
+     * [descr:dxGanttColumn.fixedPosition]
+     */
+    fixedPosition: any;
+    /**
+     * [descr:dxGanttColumn.formItem]
+     */
+    formItem: any;
+    /**
+     * [descr:dxGanttColumn.hidingPriority]
+     */
+    hidingPriority: any;
+    /**
+     * [descr:dxGanttColumn.isBand]
+     */
+    isBand: any;
+    /**
+     * [descr:dxGanttColumn.lookup]
+     */
+    lookup: any;
+    /**
+     * [descr:dxGanttColumn.name]
+     */
+    name: any;
+    /**
+     * [descr:dxGanttColumn.ownerBand]
+     */
+    ownerBand: any;
+    /**
+     * [descr:dxGanttColumn.renderAsync]
+     */
+    renderAsync: any;
+    /**
+     * [descr:dxGanttColumn.setCellValue]
+     */
+    setCellValue: any;
+    /**
+     * [descr:dxGanttColumn.showEditorAlways]
+     */
+    showEditorAlways: any;
+    /**
+     * [descr:dxGanttColumn.showInColumnChooser]
+     */
+    showInColumnChooser: any;
+    /**
+     * [descr:dxGanttColumn.validationRules]
+     */
+    validationRules: any;
+    /**
+     * [descr:dxGanttColumn.visible]
+     */
+    visible: any;
+    /**
+     * [descr:dxGanttColumn.type]
+     */
+    type: any;
   }
   /**
    * [descr:dxGanttContextMenu]
@@ -14203,7 +14205,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.columns]
      */
-    columns?: Array<DevExpress.ui.dxGantt.dxGanttColumn | string>;
+    columns?: Array<dxGanttColumn | string>;
     /**
      * [descr:dxGanttOptions.dependencies]
      */
