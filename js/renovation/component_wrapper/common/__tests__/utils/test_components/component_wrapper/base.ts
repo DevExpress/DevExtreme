@@ -13,8 +13,9 @@ export default class BaseTestComponent extends Component {
     return ['space'];
   }
 
-  _init(): void {
-    super._init();
+  _initializeComponent(): void {
+    super._initializeComponent();
+
     this.defaultKeyHandlers.enter = () => 'default enter handler';
     this.defaultKeyHandlers.arrowUp = () => 'default arrow up handler';
   }
