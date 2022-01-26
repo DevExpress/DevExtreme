@@ -40,13 +40,13 @@ describe('BootstrapExtractor', () => {
     .rejects
     .toBe('Unrecognised input. Possibly missing something'));
 
-  test('sassProcessor (bootstrap4)', async () => {
+  test('sassProcessor (bootstrap-v4)', async () => {
     const testSassString = 'test string';
     const setterServiceCode = 'setter';
     const collectorServiceCode = 'collector';
     const extractor = new BootstrapExtractor(testSassString, 4);
-    const functionsPath = require.resolve('bootstrap4/scss/_functions.scss');
-    const variablesPath = require.resolve('bootstrap4/scss/_variables.scss');
+    const functionsPath = require.resolve('bootstrap-v4/scss/_functions.scss');
+    const variablesPath = require.resolve('bootstrap-v4/scss/_variables.scss');
     const functions = readFileSync(functionsPath);
     const variables = readFileSync(variablesPath);
     extractor.getSetterServiceCode = (): string => setterServiceCode;
@@ -60,13 +60,13 @@ describe('BootstrapExtractor', () => {
       + collectorServiceCode);
   });
 
-  test('sassProcessor (bootstrap5)', async () => {
+  test('sassProcessor (bootstrap-v5)', async () => {
     const testSassString = 'test string';
     const setterServiceCode = 'setter';
     const collectorServiceCode = 'collector';
     const extractor = new BootstrapExtractor(testSassString, 5);
-    const functionsPath = require.resolve('bootstrap5/scss/_functions.scss');
-    const variablesPath = require.resolve('bootstrap5/scss/_variables.scss');
+    const functionsPath = require.resolve('bootstrap-v5/scss/_functions.scss');
+    const variablesPath = require.resolve('bootstrap-v5/scss/_variables.scss');
     const functions = readFileSync(functionsPath);
     const variables = readFileSync(variablesPath);
     extractor.getSetterServiceCode = (): string => setterServiceCode;
