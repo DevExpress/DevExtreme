@@ -18,7 +18,7 @@ const LoadPanelTests = {
         };
 
         const componentLoadPanel = `component.loadPanel: ${('loadPanel' in componentOptions) ? JSON.stringify(componentOptions.loadPanel) : 'not declared'}`;
-        QUnit.module('LoadPanel', moduleConfig, () => {
+        QUnit.module(`LoadPanel: ${componentLoadPanel}`, moduleConfig, () => {
             [
                 undefined,
                 { enabled: true },
@@ -34,7 +34,7 @@ const LoadPanelTests = {
                     showPane: false,
                 }
             ].forEach((loadPanelOptions) => {
-                QUnit.test(`${componentLoadPanel}, loadPanel: ${JSON.stringify(loadPanelOptions)}`, function(assert) {
+                QUnit.test(`loadPanel: ${JSON.stringify(loadPanelOptions)}`, function(assert) {
                     assert.expect(14);
                     const done = assert.async();
                     const component = getComponent(componentOptions);
@@ -91,7 +91,7 @@ const LoadPanelTests = {
                 });
             });
 
-            QUnit.test(`${componentLoadPanel}, loadPanel: { enabled: true }, $targetElement.height() > $window.height()`, function(assert) {
+            QUnit.test('loadPanel: { enabled: true }, $targetElement.height() > $window.height()', function(assert) {
                 assert.expect(10);
                 const done = assert.async();
                 const component = getComponent(componentOptions);
@@ -143,7 +143,7 @@ const LoadPanelTests = {
                 });
             });
 
-            QUnit.test(`${componentLoadPanel}, loadPanel: { enabled: true }, $targetElement.height() < $window.height()`, function(assert) {
+            QUnit.test('loadPanel: { enabled: true }, $targetElement.height() < $window.height()', function(assert) {
                 assert.expect(8);
                 const done = assert.async();
                 const component = getComponent(componentOptions);
@@ -188,7 +188,7 @@ const LoadPanelTests = {
                 });
             });
 
-            QUnit.test(`${componentLoadPanel}, loadPanel: { enabled: false }`, function(assert) {
+            QUnit.test('loadPanel: { enabled: false }', function(assert) {
                 assert.expect(5);
                 const done = assert.async();
                 const component = getComponent(componentOptions);
@@ -218,7 +218,7 @@ const LoadPanelTests = {
                 });
             });
 
-            QUnit.test(`${componentLoadPanel}, loadPanel: { enabled: true }, hasWindow(): false`, function(assert) {
+            QUnit.test('loadPanel: { enabled: true }, hasWindow(): false', function(assert) {
                 assert.expect(5);
                 const done = assert.async();
                 setWindow(undefined, false);
@@ -251,7 +251,7 @@ const LoadPanelTests = {
             });
 
             [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
-                QUnit.test(`${componentLoadPanel}, ${localizationText.type} localization text, locale('ja')`, function(assert) {
+                QUnit.test(`${localizationText.type} localization text, locale('ja')`, function(assert) {
                     assert.expect(7);
                     const done = assert.async();
                     const locale = localization.locale();
@@ -306,7 +306,7 @@ const LoadPanelTests = {
                 });
             });
 
-            QUnit.test(`${componentLoadPanel}, loadPanel: { enabled: true }, use unical instance of exportLoadPanel for each exportDataGrid's function call`, function(assert) {
+            QUnit.test('loadPanel: { enabled: true }, use unical instance of exportLoadPanel for each exportDataGrid\'s function call', function(assert) {
                 const clock = sinon.useFakeTimers();
 
                 const $secondGrid = $('<div>');
