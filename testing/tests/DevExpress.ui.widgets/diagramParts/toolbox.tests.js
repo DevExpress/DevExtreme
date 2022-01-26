@@ -61,6 +61,20 @@ QUnit.module('Toolbox', {
         const accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR).dxAccordion('instance');
         assert.equal(accordion.option('dataSource').length, 1);
     });
+    test('should expanded first group be default', function(assert) {
+        const accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR).dxAccordion('instance');
+        assert.equal(accordion.option('selectedItems').length, 1);
+        assert.equal(accordion.option('selectedItems')[0], accordion.option('dataSource')[0]);
+
+        this.instance.option('toolbox.groups', ['general', { category: 'containers', title: 'Containers', expanded: true }]);
+        assert.equal(accordion.option('selectedItems').length, 2);
+        assert.equal(accordion.option('selectedItems')[0], accordion.option('dataSource')[0]);
+        assert.equal(accordion.option('selectedItems')[1], accordion.option('dataSource')[1]);
+
+        this.instance.option('toolbox.groups', ['containers', 'orgChart']);
+        assert.equal(accordion.option('selectedItems').length, 1);
+        assert.equal(accordion.option('selectedItems')[0], accordion.option('dataSource')[0]);
+    });
     test('should hide toolbox search input', function(assert) {
         let $input = $('body').find(Consts.TOOLBOX_INPUT_CONTAINER_SELECTOR);
         assert.equal($input.length, 1);
