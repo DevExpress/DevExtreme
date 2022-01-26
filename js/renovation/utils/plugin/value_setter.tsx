@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  JSXComponent, Component, ComponentBindings, OneWay, Consumer, Effect, Fragment,
+  JSXComponent, Component, ComponentBindings, OneWay, Effect, Consumer,
 } from '@devextreme-generator/declarations';
 
 import {
-  PluginsContext, Plugins, PluginEntity,
+  Plugins, PluginEntity, PluginsContext,
 } from './context';
 
-export const viewFunction = (): JSX.Element => <Fragment />;
+export const viewFunction = (): JSX.Element => <div />;
 
 @ComponentBindings()
 export class ValueSetterProps {

@@ -2,11 +2,12 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings, OneWay,
-  TwoWay, Fragment,
+  TwoWay, Fragment, Consumer, Effect, InternalState,
 } from '@devextreme-generator/declarations';
 
+import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
-import { GetterExtender } from '../../../../utils/plugin/getter_extender';
+// import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
 import { VisibleItems } from '../data_grid_light';
 import { RowData } from '../types';
@@ -19,9 +20,9 @@ export const viewFunction = (viewModel: Paging): JSX.Element => (
   <Fragment>
     <ValueSetter type={PageIndex} value={viewModel.props.pageIndex} />
     <ValueSetter type={PageSize} value={viewModel.pageSize} />
-    <ValueSetter type={SetPageIndex} value={viewModel.setPageIndex} />
-    <ValueSetter type={SetPageSize} value={viewModel.setPageSize} />
-    <GetterExtender type={VisibleItems} order={1} func={viewModel.calculateVisibleItems} />
+    {/* <ValueSetter type={SetPageIndex} value={viewModel.setPageIndex} /> */}
+    {/* <ValueSetter type={SetPageSize} value={viewModel.setPageSize} /> */}
+    {/* <GetterExtender type={VisibleItems} order={1} func={viewModel.calculateVisibleItems} /> */}
   </Fragment>
 );
 
@@ -39,9 +40,40 @@ export class PagingProps {
 
 @Component({
   defaultOptionRules: null,
+  jQuery: { register: true },
   view: viewFunction,
 })
 export class Paging extends JSXComponent(PagingProps) {
+  @Consumer(PluginsContext)
+  plugins!: Plugins;
+
+  @InternalState() forceCounter = 1;
+
+  @Effect()
+  updateVisibleItems(): () => void {
+    return this.plugins.extend(
+      VisibleItems,
+      1,
+      this.calculateVisibleItems.bind(this),
+    );
+  }
+
+  @Effect()
+  updatePageIndexSetter(): void {
+    this.plugins.set(
+      SetPageIndex,
+      this.setPageIndex.bind(this),
+    );
+  }
+
+  @Effect()
+  updatePageSizeSetter(): void {
+    this.plugins.set(
+      SetPageSize,
+      this.setPageSize.bind(this),
+    );
+  }
+
   get pageSize(): number | 'all' {
     if (this.props.pageSize === 0) {
       return 'all';
@@ -51,20 +83,24 @@ export class Paging extends JSXComponent(PagingProps) {
 
   setPageIndex(pageIndex: number): void {
     this.props.pageIndex = pageIndex;
+    this.forceCounter += 1;
   }
 
   setPageSize(pageSize: number | 'all'): void {
     this.props.pageSize = pageSize;
+    this.forceCounter += 1;
   }
 
   calculateVisibleItems(dataSource: RowData[]): RowData[] {
+    let counter = this.forceCounter;
+    /* istanbul ignore next */
+    if (!counter) { counter = 0; }
     if (!this.props.enabled || this.pageSize === 'all') {
       return dataSource;
     }
 
-    const pageSize = this.pageSize as number;
-    const start = (this.props.pageIndex as number) * pageSize;
-    const end = start + pageSize;
+    const start = (this.props.pageIndex as number) * (this.pageSize as number);
+    const end = start + (this.pageSize as number);
 
     return dataSource.slice(start, end);
   }
