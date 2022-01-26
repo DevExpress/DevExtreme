@@ -91,6 +91,18 @@ class Gantt extends Widget {
         this._isGanttRendered = false;
         super._refresh();
     }
+    _dimensionChanged() {
+        this._ganttView?._onDimensionChanged();
+    }
+    _visibilityChanged(visible) {
+        if(visible) {
+            this._refreshGantt();
+        }
+    }
+    _refreshGantt() {
+        this._refreshDataSources();
+        this._refresh();
+    }
     _refreshDataSources() {
         this._refreshDataSource(GANTT_TASKS);
         this._refreshDataSource(GANTT_DEPENDENCIES);
@@ -600,8 +612,7 @@ class Gantt extends Widget {
     refresh() {
         return new Promise((resolve, reject) => {
             try {
-                this._refreshDataSources();
-                this._refresh();
+                this._refreshGantt();
                 resolve();
             } catch(e) {
                 reject(e.message);
