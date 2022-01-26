@@ -1537,6 +1537,7 @@ export type Properties = dxGanttOptions;
 export type Options = dxGanttOptions;
 
 /** @public */
+/** @namespace DevExpress.ui*/
 export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<TRowData, TKey>, 'allowEditing' | 'allowFixing' | 'allowHiding' | 'allowReordering' | 'allowResizing' | 'allowSearch' | 'buttons' | 'columns' | 'editCellComponent' | 'editCellRender' | 'editCellTemplate' | 'editorOptions' | 'fixed' | 'fixedPosition' | 'formItem' | 'hidingPriority' | 'isBand' | 'lookup' | 'name' | 'ownerBand' | 'renderAsync' | 'setCellValue' | 'showEditorAlways' | 'showInColumnChooser' | 'type' | 'validationRules' | 'visible' >;
 
 /**
@@ -1544,6 +1545,7 @@ export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<
  * @docid dxGanttColumn
  * @export dxGanttColumn
  * @inherits dxTreeListColumn
+ * @namespace DevExpress.ui
  */
  interface dxGanttColumnBlank<TRowData = any, TKey = any> extends Column<TRowData, TKey> {
     /**
