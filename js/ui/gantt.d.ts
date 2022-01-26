@@ -1543,6 +1543,7 @@ export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<
  * @public
  * @docid dxGanttColumn
  * @export dxGanttColumn
+ * @inherits dxTreeListColumn
  */
  interface dxGanttColumnBlank<TRowData = any, TKey = any> extends Column<TRowData, TKey> {
     /**
