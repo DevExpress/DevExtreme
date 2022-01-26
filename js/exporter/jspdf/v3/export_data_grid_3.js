@@ -91,16 +91,16 @@ function exportDataGrid(doc, dataGrid, options) {
             const onSeparateRectHorizontally = ({ sourceRect, leftRect, rightRect }) => {
                 let leftRectTextOptions = {};
                 let rightRectTextOptions = {};
-                const isTextNotEmpty = isDefined(sourceRect.sourceCellInfo.text) && sourceRect.sourceCellInfo.text.length > 0;
+                const isTextNotEmpty = sourceRect.sourceCellInfo.text?.length > 0;
                 if(isTextNotEmpty) {
                     const isTextWidthGreaterThanRect = doc.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
                     const isTextLeftAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'left';
                     if(isTextWidthGreaterThanRect || !isTextLeftAlignment) {
-                        const leftTextTopOffset = sourceRect.sourceCellInfo._textTopOffset ?? 0;
-                        const rightTextTopOffset = leftTextTopOffset - leftRect.w;
+                        const leftTextLeftOffset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
+                        const rightTextLeftOffset = leftTextLeftOffset - leftRect.w;
 
-                        leftRectTextOptions = Object.assign({}, { _textTopOffset: leftTextTopOffset });
-                        rightRectTextOptions = Object.assign({}, { _textTopOffset: rightTextTopOffset });
+                        leftRectTextOptions = Object.assign({}, { _textLeftOffset: leftTextLeftOffset });
+                        rightRectTextOptions = Object.assign({}, { _textLeftOffset: rightTextLeftOffset });
                     } else {
                         rightRectTextOptions = Object.assign({}, { text: '' });
                     }
@@ -110,7 +110,39 @@ function exportDataGrid(doc, dataGrid, options) {
                 rightRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, rightRectTextOptions);
             };
 
-            const rectsByPages = splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally);
+            const onSeparateRectVertically = ({ sourceRect, topRect, bottomRect }) => {
+                let topRectTextOptions = {};
+                let bottomRectTextOptions = {};
+                const isTextNotEmpty = sourceRect.sourceCellInfo.text?.length > 0;
+                if(isTextNotEmpty) {
+                    const isTextHeightGreaterThanRect = doc.getTextDimensions(sourceRect.sourceCellInfo.text).h > topRect.h;
+                    const isTextTopAlignment = sourceRect.sourceCellInfo?.verticalAlign === 'top';
+                    if(isTextHeightGreaterThanRect || !isTextTopAlignment) {
+                        let topTextTopOffset;
+                        let bottomTextTopOffset;
+                        if(sourceRect.sourceCellInfo?.verticalAlign === 'top') {
+                            topTextTopOffset = sourceRect.sourceCellInfo._textTopOffset ?? 0;
+                            bottomTextTopOffset = topTextTopOffset - topRect.h;
+                        } else if(sourceRect.sourceCellInfo?.verticalAlign === 'middle') {
+                            topTextTopOffset = (sourceRect.y + sourceRect.h / 2) - (topRect.y + topRect.h / 2);
+                            bottomTextTopOffset = (sourceRect.y + sourceRect.h / 2) - (bottomRect.y + bottomRect.h / 2);
+                        } else if(sourceRect.sourceCellInfo?.verticalAlign === 'bottom') {
+                            topTextTopOffset = (sourceRect.y + sourceRect.h) - (topRect.y + topRect.h);
+                            bottomTextTopOffset = (sourceRect.y + sourceRect.h) - (bottomRect.y + bottomRect.h);
+                        }
+
+                        topRectTextOptions = Object.assign({}, { _textTopOffset: topTextTopOffset });
+                        bottomRectTextOptions = Object.assign({}, { _textTopOffset: bottomTextTopOffset });
+                    } else {
+                        bottomRectTextOptions = Object.assign({}, { text: '' });
+                    }
+                }
+
+                topRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, topRectTextOptions);
+                bottomRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, bottomRectTextOptions);
+            };
+
+            const rectsByPages = splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically);
             rectsByPages.forEach((pdfCellsInfo, index) => {
                 if(index > 0) {
                     doc.addPage();

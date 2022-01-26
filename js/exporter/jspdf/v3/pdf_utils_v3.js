@@ -4,6 +4,10 @@ function getPageWidth(doc) {
     return doc.internal.pageSize.getWidth();
 }
 
+function getPageHeight(doc) {
+    return doc.internal.pageSize.getHeight();
+}
+
 function getTextLines(doc, text, font, { wordWrapEnabled, targetRectWidth }) {
     if(wordWrapEnabled) {
         // it also splits text by '\n' automatically
@@ -54,4 +58,4 @@ function calculateRowHeight(doc, cells, columnWidths) {
     return rowHeight;
 }
 
-export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth };
+export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth, getPageHeight };
