@@ -83,8 +83,8 @@ export default class ButtonWrapper extends Component {
     });
   }
 
-  _init(): void {
-    super._init();
+  _initializeComponent(): void {
+    super._initializeComponent();
     this._addAction('onSubmit', this._getSubmitAction());
     this._clickAction = this._createClickAction();
   }
