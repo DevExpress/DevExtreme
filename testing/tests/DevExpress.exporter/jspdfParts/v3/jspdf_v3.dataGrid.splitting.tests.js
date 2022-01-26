@@ -5205,6 +5205,117 @@ const JSPdfSplittingTests = {
                 });
             });
 
+            QUnit.test('2 cols - [band1-[f1], f2], rowHeight = 30, availablePageHeight = 90, repeatHeaders: false', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageHeight: 90 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                'f1'
+                            ]
+                        },
+                        'f2'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2' }, { f1: 'v2_1', f2: 'v2_2' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band1,0,15,{baseline:middle}',
+                    'text,F2,297.64,30,{baseline:middle}',
+                    'text,F1,0,45,{baseline:middle}',
+                    'text,v1_1,0,75,{baseline:middle}',
+                    'text,v1_2,297.64,75,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,297.64,30',
+                    'setLineWidth,1',
+                    'rect,297.64,0,297.64,60',
+                    'setLineWidth,1',
+                    'rect,0,30,297.64,30',
+                    'setLineWidth,1',
+                    'rect,0,60,297.64,30',
+                    'setLineWidth,1',
+                    'rect,297.64,60,297.64,30',
+                    'addPage,',
+                    'text,v2_1,0,15,{baseline:middle}',
+                    'text,v2_2,297.64,15,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,297.64,30',
+                    'setLineWidth,1',
+                    'rect,297.64,0,297.64,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 cols - [band1-[f1], f2], rowHeight = 30, availablePageHeight = 90, repeatHeaders: true', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageHeight: 90 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                'f1'
+                            ]
+                        },
+                        'f2'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2' }, { f1: 'v2_1', f2: 'v2_2' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band1,0,15,{baseline:middle}',
+                    'text,F2,297.64,30,{baseline:middle}',
+                    'text,F1,0,45,{baseline:middle}',
+                    'text,v1_1,0,75,{baseline:middle}',
+                    'text,v1_2,297.64,75,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,297.64,30',
+                    'setLineWidth,1',
+                    'rect,297.64,0,297.64,60',
+                    'setLineWidth,1',
+                    'rect,0,30,297.64,30',
+                    'setLineWidth,1',
+                    'rect,0,60,297.64,30',
+                    'setLineWidth,1',
+                    'rect,297.64,60,297.64,30',
+                    'addPage,',
+                    'text,Band1,0,15,{baseline:middle}',
+                    'text,F2,297.64,30,{baseline:middle}',
+                    'text,F1,0,45,{baseline:middle}',
+                    'text,v2_1,0,75,{baseline:middle}',
+                    'text,v2_2,297.64,75,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,297.64,30',
+                    'setLineWidth,1',
+                    'rect,297.64,0,297.64,60',
+                    'setLineWidth,1',
+                    'rect,0,30,297.64,30',
+                    'setLineWidth,1',
+                    'rect,0,60,297.64,30',
+                    'setLineWidth,1',
+                    'rect,297.64,60,297.64,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('2 cols - [band1-[f1], f2], vertical align: bottom, rowHeight = 30, availablePageHeight = 50, paddings', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -5478,6 +5589,157 @@ const JSPdfSplittingTests = {
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 2 rows [band1-[band2-[f1], f2], f3], rowHeight = 30, availablePageHeight = 120, repeatHeaders = false', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageHeight: 120 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                {
+                                    caption: 'Band2', columns: [
+                                        'f1'
+                                    ]
+                                },
+                                'f2'
+                            ]
+                        },
+                        'f3'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v1_3' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band1,0,15,{baseline:middle}',
+                    'text,F3,396.847,45,{baseline:middle}',
+                    'text,Band2,0,45,{baseline:middle}',
+                    'text,F2,198.424,60,{baseline:middle}',
+                    'text,F1,0,75,{baseline:middle}',
+                    'text,v1_1,0,105,{baseline:middle}',
+                    'text,v1_2,198.424,105,{baseline:middle}',
+                    'text,v1_3,396.847,105,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,396.847,30',
+                    'setLineWidth,1',
+                    'rect,396.847,0,198.433,90',
+                    'setLineWidth,1',
+                    'rect,0,30,198.424,30',
+                    'setLineWidth,1',
+                    'rect,198.424,30,198.424,60',
+                    'setLineWidth,1',
+                    'rect,0,60,198.424,30',
+                    'setLineWidth,1',
+                    'rect,0,90,198.424,30',
+                    'setLineWidth,1',
+                    'rect,198.424,90,198.424,30',
+                    'setLineWidth,1',
+                    'rect,396.847,90,198.433,30',
+                    'addPage,',
+                    'text,v2_1,0,15,{baseline:middle}',
+                    'text,v2_2,198.424,15,{baseline:middle}',
+                    'text,v1_3,396.847,15,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,198.424,30',
+                    'setLineWidth,1',
+                    'rect,198.424,0,198.424,30',
+                    'setLineWidth,1',
+                    'rect,396.847,0,198.433,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 2 rows [band1-[band2-[f1], f2], f3], rowHeight = 30, availablePageHeight = 120, repeatHeaders = true', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageHeight: 120 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                {
+                                    caption: 'Band2', columns: [
+                                        'f1'
+                                    ]
+                                },
+                                'f2'
+                            ]
+                        },
+                        'f3'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v1_3' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band1,0,15,{baseline:middle}',
+                    'text,F3,396.847,45,{baseline:middle}',
+                    'text,Band2,0,45,{baseline:middle}',
+                    'text,F2,198.424,60,{baseline:middle}',
+                    'text,F1,0,75,{baseline:middle}',
+                    'text,v1_1,0,105,{baseline:middle}',
+                    'text,v1_2,198.424,105,{baseline:middle}',
+                    'text,v1_3,396.847,105,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,396.847,30',
+                    'setLineWidth,1',
+                    'rect,396.847,0,198.433,90',
+                    'setLineWidth,1',
+                    'rect,0,30,198.424,30',
+                    'setLineWidth,1',
+                    'rect,198.424,30,198.424,60',
+                    'setLineWidth,1',
+                    'rect,0,60,198.424,30',
+                    'setLineWidth,1',
+                    'rect,0,90,198.424,30',
+                    'setLineWidth,1',
+                    'rect,198.424,90,198.424,30',
+                    'setLineWidth,1',
+                    'rect,396.847,90,198.433,30',
+                    'addPage,',
+                    'text,Band1,0,15,{baseline:middle}',
+                    'text,F3,396.847,45,{baseline:middle}',
+                    'text,Band2,0,45,{baseline:middle}',
+                    'text,F2,198.424,60,{baseline:middle}',
+                    'text,F1,0,75,{baseline:middle}',
+                    'text,v2_1,0,105,{baseline:middle}',
+                    'text,v2_2,198.424,105,{baseline:middle}',
+                    'text,v1_3,396.847,105,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,396.847,30',
+                    'setLineWidth,1',
+                    'rect,396.847,0,198.433,90',
+                    'setLineWidth,1',
+                    'rect,0,30,198.424,30',
+                    'setLineWidth,1',
+                    'rect,198.424,30,198.424,60',
+                    'setLineWidth,1',
+                    'rect,0,60,198.424,30',
+                    'setLineWidth,1',
+                    'rect,0,90,198.424,30',
+                    'setLineWidth,1',
+                    'rect,198.424,90,198.424,30',
+                    'setLineWidth,1',
+                    'rect,396.847,90,198.433,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6123,6 +6385,344 @@ const JSPdfSplittingTests = {
                     done();
                 });
             });
+
+            QUnit.test('3 cols - 3 rows [band1-[band2-[f1], f2], f3], rowHeight = 30, availablePageHeight = 150, topLeft.x = 10, topLeft.y = 20, repeatHeaders = false', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageHeight: 150 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                {
+                                    caption: 'Band2', columns: [
+                                        'f1'
+                                    ]
+                                },
+                                'f2'
+                            ]
+                        },
+                        'f3'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v2_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v3_3' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band1,10,35,{baseline:middle}',
+                    'text,F3,400.181,65,{baseline:middle}',
+                    'text,Band2,10,65,{baseline:middle}',
+                    'text,F2,205.09,80,{baseline:middle}',
+                    'text,F1,10,95,{baseline:middle}',
+                    'text,v1_1,10,125,{baseline:middle}',
+                    'text,v1_2,205.09,125,{baseline:middle}',
+                    'text,v1_3,400.181,125,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,20,390.181,30',
+                    'setLineWidth,1',
+                    'rect,400.181,20,195.099,90',
+                    'setLineWidth,1',
+                    'rect,10,50,195.09,30',
+                    'setLineWidth,1',
+                    'rect,205.09,50,195.09,60',
+                    'setLineWidth,1',
+                    'rect,10,80,195.09,30',
+                    'setLineWidth,1',
+                    'rect,10,110,195.09,30',
+                    'setLineWidth,1',
+                    'rect,205.09,110,195.09,30',
+                    'setLineWidth,1',
+                    'rect,400.181,110,195.099,30',
+                    'addPage,',
+                    'text,v2_1,10,15,{baseline:middle}',
+                    'text,v2_2,205.09,15,{baseline:middle}',
+                    'text,v2_3,400.181,15,{baseline:middle}',
+                    'text,v2_1,10,45,{baseline:middle}',
+                    'text,v2_2,205.09,45,{baseline:middle}',
+                    'text,v3_3,400.181,45,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,0,195.09,30',
+                    'setLineWidth,1',
+                    'rect,205.09,0,195.09,30',
+                    'setLineWidth,1',
+                    'rect,400.181,0,195.099,30',
+                    'setLineWidth,1',
+                    'rect,10,30,195.09,30',
+                    'setLineWidth,1',
+                    'rect,205.09,30,195.09,30',
+                    'setLineWidth,1',
+                    'rect,400.181,30,195.099,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, repeatHeaders: false, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 3 rows [band1-[band2-[f1], f2], f3], rowHeight = 30, availablePageHeight = 150, topLeft.x = 10, topLeft.y = 20, repeatHeaders = true', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageHeight: 150 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                {
+                                    caption: 'Band2', columns: [
+                                        'f1'
+                                    ]
+                                },
+                                'f2'
+                            ]
+                        },
+                        'f3'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v2_3' }, { f1: 'v3_1', f2: 'v3_2', f3: 'v3_3' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band1,10,35,{baseline:middle}',
+                    'text,F3,400.181,65,{baseline:middle}',
+                    'text,Band2,10,65,{baseline:middle}',
+                    'text,F2,205.09,80,{baseline:middle}',
+                    'text,F1,10,95,{baseline:middle}',
+                    'text,v1_1,10,125,{baseline:middle}',
+                    'text,v1_2,205.09,125,{baseline:middle}',
+                    'text,v1_3,400.181,125,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,20,390.181,30',
+                    'setLineWidth,1',
+                    'rect,400.181,20,195.099,90',
+                    'setLineWidth,1',
+                    'rect,10,50,195.09,30',
+                    'setLineWidth,1',
+                    'rect,205.09,50,195.09,60',
+                    'setLineWidth,1',
+                    'rect,10,80,195.09,30',
+                    'setLineWidth,1',
+                    'rect,10,110,195.09,30',
+                    'setLineWidth,1',
+                    'rect,205.09,110,195.09,30',
+                    'setLineWidth,1',
+                    'rect,400.181,110,195.099,30',
+                    'addPage,',
+                    'text,Band1,10,15,{baseline:middle}',
+                    'text,F3,400.181,45,{baseline:middle}',
+                    'text,Band2,10,45,{baseline:middle}',
+                    'text,F2,205.09,60,{baseline:middle}',
+                    'text,F1,10,75,{baseline:middle}',
+                    'text,v2_1,10,105,{baseline:middle}',
+                    'text,v2_2,205.09,105,{baseline:middle}',
+                    'text,v2_3,400.181,105,{baseline:middle}',
+                    'text,v3_1,10,135,{baseline:middle}',
+                    'text,v3_2,205.09,135,{baseline:middle}',
+                    'text,v3_3,400.181,135,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,0,390.181,30',
+                    'setLineWidth,1',
+                    'rect,400.181,0,195.099,90',
+                    'setLineWidth,1',
+                    'rect,10,30,195.09,30',
+                    'setLineWidth,1',
+                    'rect,205.09,30,195.09,60',
+                    'setLineWidth,1',
+                    'rect,10,60,195.09,30',
+                    'setLineWidth,1',
+                    'rect,10,90,195.09,30',
+                    'setLineWidth,1',
+                    'rect,205.09,90,195.09,30',
+                    'setLineWidth,1',
+                    'rect,400.181,90,195.099,30',
+                    'setLineWidth,1',
+                    'rect,10,120,195.09,30',
+                    'setLineWidth,1',
+                    'rect,205.09,120,195.09,30',
+                    'setLineWidth,1',
+                    'rect,400.181,120,195.099,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, repeatHeaders: true, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 3 rows [band1-[band2-[f1], f2], f3], rowHeight = 30, columnWidth = [100, 100, 100], availablePageHeight = 150, topLeft.x = 10, topLeft.y = 20, repeatHeaders = false', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageHeight: 150 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                {
+                                    caption: 'Band2', columns: [
+                                        'f1'
+                                    ]
+                                },
+                                'f2'
+                            ]
+                        },
+                        'f3'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v2_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v3_3' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band1,10,35,{baseline:middle}',
+                    'text,F3,210,65,{baseline:middle}',
+                    'text,Band2,10,65,{baseline:middle}',
+                    'text,F2,110,80,{baseline:middle}',
+                    'text,F1,10,95,{baseline:middle}',
+                    'text,v1_1,10,125,{baseline:middle}',
+                    'text,v1_2,110,125,{baseline:middle}',
+                    'text,v1_3,210,125,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,20,200,30',
+                    'setLineWidth,1',
+                    'rect,210,20,100,90',
+                    'setLineWidth,1',
+                    'rect,10,50,100,30',
+                    'setLineWidth,1',
+                    'rect,110,50,100,60',
+                    'setLineWidth,1',
+                    'rect,10,80,100,30',
+                    'setLineWidth,1',
+                    'rect,10,110,100,30',
+                    'setLineWidth,1',
+                    'rect,110,110,100,30',
+                    'setLineWidth,1',
+                    'rect,210,110,100,30',
+                    'addPage,',
+                    'text,v2_1,10,15,{baseline:middle}',
+                    'text,v2_2,110,15,{baseline:middle}',
+                    'text,v2_3,210,15,{baseline:middle}',
+                    'text,v2_1,10,45,{baseline:middle}',
+                    'text,v2_2,110,45,{baseline:middle}',
+                    'text,v3_3,210,45,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,0,100,30',
+                    'setLineWidth,1',
+                    'rect,110,0,100,30',
+                    'setLineWidth,1',
+                    'rect,210,0,100,30',
+                    'setLineWidth,1',
+                    'rect,10,30,100,30',
+                    'setLineWidth,1',
+                    'rect,110,30,100,30',
+                    'setLineWidth,1',
+                    'rect,210,30,100,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [100, 100, 100], repeatHeaders: false, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 3 rows [band1-[band2-[f1], f2], f3], rowHeight = 30, columnWidth = [100, 100, 100], availablePageHeight = 150, topLeft.x = 10, topLeft.y = 20, repeatHeaders = true', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageHeight: 150 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                {
+                                    caption: 'Band2', columns: [
+                                        'f1'
+                                    ]
+                                },
+                                'f2'
+                            ]
+                        },
+                        'f3'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v2_3' }, { f1: 'v3_1', f2: 'v3_2', f3: 'v3_3' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band1,10,35,{baseline:middle}',
+                    'text,F3,210,65,{baseline:middle}',
+                    'text,Band2,10,65,{baseline:middle}',
+                    'text,F2,110,80,{baseline:middle}',
+                    'text,F1,10,95,{baseline:middle}',
+                    'text,v1_1,10,125,{baseline:middle}',
+                    'text,v1_2,110,125,{baseline:middle}',
+                    'text,v1_3,210,125,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,20,200,30',
+                    'setLineWidth,1',
+                    'rect,210,20,100,90',
+                    'setLineWidth,1',
+                    'rect,10,50,100,30',
+                    'setLineWidth,1',
+                    'rect,110,50,100,60',
+                    'setLineWidth,1',
+                    'rect,10,80,100,30',
+                    'setLineWidth,1',
+                    'rect,10,110,100,30',
+                    'setLineWidth,1',
+                    'rect,110,110,100,30',
+                    'setLineWidth,1',
+                    'rect,210,110,100,30',
+                    'addPage,',
+                    'text,Band1,10,15,{baseline:middle}',
+                    'text,F3,210,45,{baseline:middle}',
+                    'text,Band2,10,45,{baseline:middle}',
+                    'text,F2,110,60,{baseline:middle}',
+                    'text,F1,10,75,{baseline:middle}',
+                    'text,v2_1,10,105,{baseline:middle}',
+                    'text,v2_2,110,105,{baseline:middle}',
+                    'text,v2_3,210,105,{baseline:middle}',
+                    'text,v3_1,10,135,{baseline:middle}',
+                    'text,v3_2,110,135,{baseline:middle}',
+                    'text,v3_3,210,135,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,0,200,30',
+                    'setLineWidth,1',
+                    'rect,210,0,100,90',
+                    'setLineWidth,1',
+                    'rect,10,30,100,30',
+                    'setLineWidth,1',
+                    'rect,110,30,100,60',
+                    'setLineWidth,1',
+                    'rect,10,60,100,30',
+                    'setLineWidth,1',
+                    'rect,10,90,100,30',
+                    'setLineWidth,1',
+                    'rect,110,90,100,30',
+                    'setLineWidth,1',
+                    'rect,210,90,100,30',
+                    'setLineWidth,1',
+                    'rect,10,120,100,30',
+                    'setLineWidth,1',
+                    'rect,110,120,100,30',
+                    'setLineWidth,1',
+                    'rect,210,120,100,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [100, 100, 100], repeatHeaders: true, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
         });
 
         QUnit.module('Splitting - Horizontally and vertically splitting for simple cells', moduleConfig, () => {
@@ -6589,6 +7189,471 @@ const JSPdfSplittingTests = {
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100, 100], repeatHeaders: true, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+        });
+
+        QUnit.module('Splitting - Horizontally and vertically splitting for merged cells', moduleConfig, () => {
+            QUnit.test('2 cols - [band1-[f1], f2], rowHeight = 30, availablePageWidth = 100, availablePageHeight = 90, repeatHeaders: false', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageWidth: 100, pageHeight: 90 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                'f1'
+                            ]
+                        },
+                        'f2'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2' }, { f1: 'v2_1', f2: 'v2_2' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band1,0,15,{baseline:middle}',
+                    'text,F1,0,45,{baseline:middle}',
+                    'text,v1_1,0,75,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,30',
+                    'setLineWidth,1',
+                    'rect,0,30,100,30',
+                    'setLineWidth,1',
+                    'rect,0,60,100,30',
+                    'addPage,',
+                    'text,F2,0,30,{baseline:middle}',
+                    'text,v1_2,0,75,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,60',
+                    'setLineWidth,1',
+                    'rect,0,60,100,30',
+                    'addPage,',
+                    'text,v2_1,0,15,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,30',
+                    'addPage,',
+                    'text,v2_2,0,15,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: false, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 cols - [band1-[f1], f2], rowHeight = 30, availablePageWidth = 100, availablePageHeight = 90, repeatHeaders: true', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageWidth: 100, pageHeight: 90 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                'f1'
+                            ]
+                        },
+                        'f2'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2' }, { f1: 'v2_1', f2: 'v2_2' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band1,0,15,{baseline:middle}',
+                    'text,F1,0,45,{baseline:middle}',
+                    'text,v1_1,0,75,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,30',
+                    'setLineWidth,1',
+                    'rect,0,30,100,30',
+                    'setLineWidth,1',
+                    'rect,0,60,100,30',
+                    'addPage,',
+                    'text,F2,0,30,{baseline:middle}',
+                    'text,v1_2,0,75,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,60',
+                    'setLineWidth,1',
+                    'rect,0,60,100,30',
+                    'addPage,',
+                    'text,Band1,0,15,{baseline:middle}',
+                    'text,F1,0,45,{baseline:middle}',
+                    'text,v2_1,0,75,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,30',
+                    'setLineWidth,1',
+                    'rect,0,30,100,30',
+                    'setLineWidth,1',
+                    'rect,0,60,100,30',
+                    'addPage,',
+                    'text,F2,0,30,{baseline:middle}',
+                    'text,v2_2,0,75,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,60',
+                    'setLineWidth,1',
+                    'rect,0,60,100,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: true, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 2 rows [band1-[band2-[f1], f2], f3], rowHeight = 30, availablePageWidth = 100, availablePageHeight = 120, repeatHeaders = false', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageWidth: 100, pageHeight: 120 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                {
+                                    caption: 'Band2', columns: [
+                                        'f1'
+                                    ]
+                                },
+                                'f2'
+                            ]
+                        },
+                        'f3'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v1_3' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band2,0,45,{baseline:middle}',
+                    'text,F1,0,75,{baseline:middle}',
+                    'text,v1_1,0,105,{baseline:middle}',
+                    'text,Band1,0,15,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,30,100,30',
+                    'setLineWidth,1',
+                    'rect,0,60,100,30',
+                    'setLineWidth,1',
+                    'rect,0,90,100,30',
+                    'setLineWidth,1',
+                    'rect,0,0,100,30',
+                    'addPage,',
+                    'text,F2,0,60,{baseline:middle}',
+                    'text,v1_2,0,105,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,30,100,60',
+                    'setLineWidth,1',
+                    'rect,0,90,100,30',
+                    'setLineWidth,1',
+                    'rect,0,0,100,30',
+                    'addPage,',
+                    'text,F3,0,45,{baseline:middle}',
+                    'text,v1_3,0,105,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,90',
+                    'setLineWidth,1',
+                    'rect,0,90,100,30',
+                    'addPage,',
+                    'text,v2_1,0,15,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,30',
+                    'addPage,',
+                    'text,v2_2,0,15,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,30',
+                    'addPage,',
+                    'text,v1_3,0,15,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,100,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100, 100], repeatHeaders: false, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 2 rows [band1-[band2-[f1], f2], f3], rowHeight = 30, availablePageWidth = 100, availablePageHeight = 120, repeatHeaders = true', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageWidth: 100, pageHeight: 120 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                {
+                                    caption: 'Band2', columns: [
+                                        'f1'
+                                    ]
+                                },
+                                'f2'
+                            ]
+                        },
+                        'f3'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v1_3' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band2,0,45,{baseline:middle}',
+                    'text,F1,0,75,{baseline:middle}',
+                    'text,v1_1,0,105,{baseline:middle}',
+                    'text,Band1,0,15,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,30,80,30',
+                    'setLineWidth,1',
+                    'rect,0,60,80,30',
+                    'setLineWidth,1',
+                    'rect,0,90,80,30',
+                    'setLineWidth,1',
+                    'rect,0,0,80,30',
+                    'addPage,',
+                    'text,F2,0,60,{baseline:middle}',
+                    'text,v1_2,0,105,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,30,80,60',
+                    'setLineWidth,1',
+                    'rect,0,90,80,30',
+                    'setLineWidth,1',
+                    'rect,0,0,80,30',
+                    'addPage,',
+                    'text,F3,0,45,{baseline:middle}',
+                    'text,v1_3,0,105,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,80,90',
+                    'setLineWidth,1',
+                    'rect,0,90,80,30',
+                    'addPage,',
+                    'text,Band2,0,45,{baseline:middle}',
+                    'text,F1,0,75,{baseline:middle}',
+                    'text,v2_1,0,105,{baseline:middle}',
+                    'text,Band1,0,15,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,30,80,30',
+                    'setLineWidth,1',
+                    'rect,0,60,80,30',
+                    'setLineWidth,1',
+                    'rect,0,90,80,30',
+                    'setLineWidth,1',
+                    'rect,0,0,80,30',
+                    'addPage,',
+                    'text,F2,0,60,{baseline:middle}',
+                    'text,v2_2,0,105,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,30,80,60',
+                    'setLineWidth,1',
+                    'rect,0,90,80,30',
+                    'setLineWidth,1',
+                    'rect,0,0,80,30',
+                    'addPage,',
+                    'text,F3,0,45,{baseline:middle}',
+                    'text,v1_3,0,105,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,80,90',
+                    'setLineWidth,1',
+                    'rect,0,90,80,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [80, 80, 80], repeatHeaders: true, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 3 rows [band1-[band2-[f1], f2], f3], rowHeight = 30, columnWidths: [80, 80, 80], availablePageWidth = 100, availablePageHeight = 150, topLeft.x = 10, topLeft.y = 20, repeatHeaders = false', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageWidth: 100, pageHeight: 150 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                {
+                                    caption: 'Band2', columns: [
+                                        'f1'
+                                    ]
+                                },
+                                'f2'
+                            ]
+                        },
+                        'f3'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v2_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v3_3' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band2,10,65,{baseline:middle}',
+                    'text,F1,10,95,{baseline:middle}',
+                    'text,v1_1,10,125,{baseline:middle}',
+                    'text,Band1,10,35,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,50,80,30',
+                    'setLineWidth,1',
+                    'rect,10,80,80,30',
+                    'setLineWidth,1',
+                    'rect,10,110,80,30',
+                    'setLineWidth,1',
+                    'rect,10,20,80,30',
+                    'addPage,',
+                    'text,F2,10,80,{baseline:middle}',
+                    'text,v1_2,10,125,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,50,80,60',
+                    'setLineWidth,1',
+                    'rect,10,110,80,30',
+                    'setLineWidth,1',
+                    'rect,10,20,80,30',
+                    'addPage,',
+                    'text,F3,10,65,{baseline:middle}',
+                    'text,v1_3,10,125,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,20,80,90',
+                    'setLineWidth,1',
+                    'rect,10,110,80,30',
+                    'addPage,',
+                    'text,v2_1,10,15,{baseline:middle}',
+                    'text,v2_1,10,45,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,0,80,30',
+                    'setLineWidth,1',
+                    'rect,10,30,80,30',
+                    'addPage,',
+                    'text,v2_2,10,15,{baseline:middle}',
+                    'text,v2_2,10,45,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,0,80,30',
+                    'setLineWidth,1',
+                    'rect,10,30,80,30',
+                    'addPage,',
+                    'text,v2_3,10,15,{baseline:middle}',
+                    'text,v3_3,10,45,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,0,80,30',
+                    'setLineWidth,1',
+                    'rect,10,30,80,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: false, onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 3 rows [band1-[band2-[f1], f2], f3], rowHeight = 30, columnWidths: [80, 80, 80], availablePageWidth = 100, availablePageHeight = 150, topLeft.x = 10, topLeft.y = 20, repeatHeaders = true', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageWidth: 100, pageHeight: 150 });
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1', columns: [
+                                {
+                                    caption: 'Band2', columns: [
+                                        'f1'
+                                    ]
+                                },
+                                'f2'
+                            ]
+                        },
+                        'f3'
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v2_3' }, { f1: 'v3_1', f2: 'v3_2', f3: 'v3_3' }],
+                });
+
+                const onRowExporting = (e) => { e.rowHeight = 30; };
+
+                const expectedLog = [
+                    'text,Band2,10,65,{baseline:middle}',
+                    'text,F1,10,95,{baseline:middle}',
+                    'text,v1_1,10,125,{baseline:middle}',
+                    'text,Band1,10,35,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,50,80,30',
+                    'setLineWidth,1',
+                    'rect,10,80,80,30',
+                    'setLineWidth,1',
+                    'rect,10,110,80,30',
+                    'setLineWidth,1',
+                    'rect,10,20,80,30',
+                    'addPage,',
+                    'text,F2,10,80,{baseline:middle}',
+                    'text,v1_2,10,125,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,50,80,60',
+                    'setLineWidth,1',
+                    'rect,10,110,80,30',
+                    'setLineWidth,1',
+                    'rect,10,20,80,30',
+                    'addPage,',
+                    'text,F3,10,65,{baseline:middle}',
+                    'text,v1_3,10,125,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,20,80,90',
+                    'setLineWidth,1',
+                    'rect,10,110,80,30',
+                    'addPage,',
+                    'text,Band2,10,45,{baseline:middle}',
+                    'text,F1,10,75,{baseline:middle}',
+                    'text,v2_1,10,105,{baseline:middle}',
+                    'text,v3_1,10,135,{baseline:middle}',
+                    'text,Band1,10,15,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,30,80,30',
+                    'setLineWidth,1',
+                    'rect,10,60,80,30',
+                    'setLineWidth,1',
+                    'rect,10,90,80,30',
+                    'setLineWidth,1',
+                    'rect,10,120,80,30',
+                    'setLineWidth,1',
+                    'rect,10,0,80,30',
+                    'addPage,',
+                    'text,F2,10,60,{baseline:middle}',
+                    'text,v2_2,10,105,{baseline:middle}',
+                    'text,v3_2,10,135,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,30,80,60',
+                    'setLineWidth,1',
+                    'rect,10,90,80,30',
+                    'setLineWidth,1',
+                    'rect,10,120,80,30',
+                    'setLineWidth,1',
+                    'rect,10,0,80,30',
+                    'addPage,',
+                    'text,F3,10,45,{baseline:middle}',
+                    'text,v2_3,10,105,{baseline:middle}',
+                    'text,v3_3,10,135,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,0,80,90',
+                    'setLineWidth,1',
+                    'rect,10,90,80,30',
+                    'setLineWidth,1',
+                    'rect,10,120,80,30'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

@@ -61,6 +61,10 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
             verticallyPages[i].forEach(rect => rect.y += headerHeight);
             // create deep copy of headers for each page
             const headerCells = convertToCellsArray(headerRows);
+            headerCells.forEach(cell => {
+                cell.y -= options.topLeft.y;
+                // cell.x -= options.topLeft.x; don't forget to uncomment this line after fixing topleft.x issue
+            });
             verticallyPages[i] = [...headerCells, ...verticallyPages[i]];
         }
     }
