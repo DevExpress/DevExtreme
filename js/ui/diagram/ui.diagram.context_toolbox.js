@@ -55,9 +55,9 @@ class DiagramContextToolbox extends Widget {
         }
         this._popoverInstance = this._createComponent($popoverElement, Popover, {
             closeOnOutsideClick: false,
-            container: this.$element(),
-            elementAttr: { class: popoverClass }
+            container: this.$element()
         });
+        this._popoverInstance.$element().addClass(popoverClass);
     }
     _isTouchMode() {
         const { Browser } = getDiagram();
