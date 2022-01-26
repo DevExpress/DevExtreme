@@ -14,7 +14,7 @@ import {
 } from '../events/index';
 
 import {
-    Column,
+    Column as TreeListColumn,
 } from './tree_list';
 
 import Widget, {
@@ -1537,17 +1537,18 @@ export type Properties = dxGanttOptions;
 export type Options = dxGanttOptions;
 
 /** @public */
+export type Column = dxGanttColumn;
+
 /** @namespace DevExpress.ui*/
 export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<TRowData, TKey>, 'allowEditing' | 'allowFixing' | 'allowHiding' | 'allowReordering' | 'allowResizing' | 'allowSearch' | 'buttons' | 'columns' | 'editCellComponent' | 'editCellRender' | 'editCellTemplate' | 'editorOptions' | 'fixed' | 'fixedPosition' | 'formItem' | 'hidingPriority' | 'isBand' | 'lookup' | 'name' | 'ownerBand' | 'renderAsync' | 'setCellValue' | 'showEditorAlways' | 'showInColumnChooser' | 'type' | 'validationRules' | 'visible' >;
 
 /**
- * @public
  * @docid dxGanttColumn
  * @export dxGanttColumn
  * @inherits dxTreeListColumn
  * @namespace DevExpress.ui
  */
- interface dxGanttColumnBlank<TRowData = any, TKey = any> extends Column<TRowData, TKey> {
+ interface dxGanttColumnBlank<TRowData = any, TKey = any> extends TreeListColumn<TRowData, TKey> {
     /**
      * @hidden
      * @docid dxGanttColumn.allowEditing
