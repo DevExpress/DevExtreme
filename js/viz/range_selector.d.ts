@@ -755,7 +755,6 @@ export default class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> 
     /**
      * @docid
      * @publicName setValue(value)
-     * @param1 value:Array<number,string,Date> | VizRange
      * @public
      */
     setValue(value: Array<number | string | Date> | VizRange): void;

@@ -421,7 +421,6 @@ export interface chartAxisObject {
     /**
      * @docid
      * @publicName visualRange(visualRange)
-     * @param1 visualRange:Array<number,string,Date> | VizRange
      * @public
      */
     visualRange(visualRange: Array<number | string | Date> | VizRange): void;

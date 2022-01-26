@@ -481,7 +481,6 @@ export default class PivotGridDataSource {
     /**
      * @docid
      * @publicName collapseHeaderItem(area, path)
-     * @param2 path:Array<string, number, Date>
      * @public
      */
     collapseHeaderItem(area: string, path: Array<string | number | Date>): void;
