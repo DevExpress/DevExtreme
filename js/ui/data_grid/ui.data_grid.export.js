@@ -724,14 +724,13 @@ dataGridCore.registerModule('export', {
                         const widgetOptions = {
                             ...items[0],
                             hint: items[0].text,
-                            text: undefined,
                             elementAttr: {
                                 class: DATAGRID_EXPORT_BUTTON_CLASS
                             }
                         };
 
-
                         toolbarButtonOptions.widget = 'dxButton';
+                        toolbarButtonOptions.showText = 'inMenu';
                         toolbarButtonOptions.options = widgetOptions;
                     } else {
                         const widgetOptions = {
@@ -750,11 +749,11 @@ dataGridCore.registerModule('export', {
 
                         toolbarButtonOptions.options = widgetOptions;
                         toolbarButtonOptions.widget = 'dxDropDownButton';
-                    }
 
-                    toolbarButtonOptions.menuItemTemplate = (_data, _index, container) => {
-                        this._createComponent($(container), List, { items });
-                    };
+                        toolbarButtonOptions.menuItemTemplate = (_data, _index, container) => {
+                            this._createComponent($(container), List, { items });
+                        };
+                    }
 
                     return toolbarButtonOptions;
                 },

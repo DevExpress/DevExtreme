@@ -2,9 +2,9 @@ import { isDefined } from '../../../core/utils/type';
 import { roundToThreeDecimals } from './draw_utils';
 import { getPageWidth, getPageHeight } from './pdf_utils_v3';
 
-function convertToCellsArray(rows) {
-    return [].concat.apply([],
-        rows.map(rowInfo => {
+function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically) {
+    const rects = [].concat.apply([],
+        rowsInfo.map(rowInfo => {
             return rowInfo.cells
                 .filter(cell => !isDefined(cell.pdfCell.isMerged))
                 .map(cellInfo => {
@@ -12,32 +12,20 @@ function convertToCellsArray(rows) {
                 });
         })
     );
-}
 
-function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically) {
-    if(rowsInfo.length === 0) { // Empty Table
+    if(!isDefined(rects) || rects.length === 0) { // Empty Table
         return [[]];
     }
-
-    const headerRows = rowsInfo.filter(r => r.rowType === 'header');
-    const contentRows = rowsInfo.filter(r => r.rowType !== 'header');
-    const contentRects = convertToCellsArray(contentRows);
-
-    const headerInfo = {
-        displayHeaderOnEachPage: options.displayHeaderOnEachPage,
-        rects: convertToCellsArray(headerRows),
-        height: headerRows.reduce((accumulator, row) => { return accumulator + row.height; }, 0),
-    };
 
     const maxBottomRight = {
         x: getPageWidth(doc) - options.margin.right,
         y: getPageHeight(doc) - options.margin.bottom
     };
-    const rectsByPage = splitRectsVerticallyByPages(contentRects, options.margin, options.topLeft, maxBottomRight, onSeparateRectVertically, headerInfo);
+    const rectsByPage = splitRectsHorizontalByPages(rects, options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);
 
     let pageIndex = 0;
     while(pageIndex < rectsByPage.length) {
-        const splitPages = splitRectsHorizontalByPages(rectsByPage[pageIndex], options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);
+        const splitPages = splitRectsVerticallyByPages(rectsByPage[pageIndex], options.margin, options.topLeft, maxBottomRight, onSeparateRectVertically);
         if(splitPages.length > 1) {
             rectsByPage.splice(pageIndex, 1, ...splitPages);
             pageIndex += splitPages.length;
@@ -127,20 +115,15 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
     return pages;
 }
 
-function splitRectsVerticallyByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectVertically, headersInfo) {
+function splitRectsVerticallyByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectVertically) {
     const pages = [];
+    const rectsToSplit = [...rects];
 
-    const cloneHeadersRects = () => {
-        return headersInfo.rects.map(rect => Object.assign({}, rect));
-    };
-
-    const rectsToSplit = [...cloneHeadersRects(), ...rects];
     while(rectsToSplit.length > 0) {
         let currentPageMaxRectBottom = 0;
-        const headerHeight = (pages.length > 0 && headersInfo.displayHeaderOnEachPage === true) ? headersInfo.height : 0;
         const currentPageRects = rectsToSplit.filter(rect => {
             const currentRectBottom = roundToThreeDecimals(rect.y + rect.h);
-            if(currentRectBottom + headerHeight <= maxBottomRight.y) {
+            if(currentRectBottom <= maxBottomRight.y) {
                 if(currentPageMaxRectBottom <= currentRectBottom) {
                     currentPageMaxRectBottom = currentRectBottom;
                 }
@@ -194,9 +177,7 @@ function splitRectsVerticallyByPages(rects, margin, topLeft, maxBottomRight, onS
         });
 
         rectsToSplit.forEach(rect => {
-            rect.y = isDefined(currentPageMaxRectBottom)
-                ? (rect.y - currentPageMaxRectBottom + margin.top)
-                : rect.y;
+            rect.y = isDefined(currentPageMaxRectBottom) ? (rect.y - currentPageMaxRectBottom + margin.top) : rect.y;
         });
 
         if(currentPageRects.length > 0) {
@@ -204,13 +185,6 @@ function splitRectsVerticallyByPages(rects, margin, topLeft, maxBottomRight, onS
         } else {
             pages.push(rectsToSplit);
             break;
-        }
-    }
-
-    if(headersInfo.displayHeaderOnEachPage) {
-        for(let i = 1; i < pages.length; i++) {
-            pages[i].forEach(rect => rect.y += headersInfo.height);
-            pages[i] = [...cloneHeadersRects(), ...pages[i]];
         }
     }
 
