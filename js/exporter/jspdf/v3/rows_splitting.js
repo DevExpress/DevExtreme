@@ -2,9 +2,9 @@ import { isDefined } from '../../../core/utils/type';
 import { roundToThreeDecimals } from './draw_utils';
 import { getPageWidth, getPageHeight } from './pdf_utils_v3';
 
-function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically) {
-    const rects = [].concat.apply([],
-        rowsInfo.map(rowInfo => {
+function convertToCellsArray(rows) {
+    return [].concat.apply([],
+        rows.map(rowInfo => {
             return rowInfo.cells
                 .filter(cell => !isDefined(cell.pdfCell.isMerged))
                 .map(cellInfo => {
@@ -12,8 +12,10 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
                 });
         })
     );
+}
 
-    if(!isDefined(rects) || rects.length === 0) { // Empty Table
+function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically) {
+    if(rowsInfo.length === 0) { // Empty Table
         return [[]];
     }
 
@@ -22,7 +24,16 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
         y: getPageHeight(doc) - options.margin.bottom
     };
 
-    const verticallyPages = splitRects(rects, options.margin.top, /* options.topLeft.y */ 0, maxBottomRight, 'y', 'h',
+    const headerRows = rowsInfo.filter(r => r.rowType === 'header');
+    const headerHeight = headerRows.reduce((accumulator, row) => { return accumulator + row.height; }, 0);
+
+    const verticallyPages = splitRects(convertToCellsArray(rowsInfo), options.margin.top, /* options.topLeft.y */ 0, 'y', 'h',
+        (pagesLength, currentCoordinate) => {
+            const additionalHeight = (pagesLength > 0 && options.repeatHeaders)
+                ? headerHeight
+                : 0;
+            return currentCoordinate + additionalHeight <= maxBottomRight.y;
+        },
         (rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit) => {
             const args = {
                 sourceRect: rect,
@@ -45,9 +56,19 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
             rectsToSplit.push(args.bottomRect);
         });
 
+    if(options.repeatHeaders) {
+        for(let i = 1; i < verticallyPages.length; i++) {
+            verticallyPages[i].forEach(rect => rect.y += headerHeight);
+            // create deep copy of headers for each page
+            const headerCells = convertToCellsArray(headerRows);
+            verticallyPages[i] = [...headerCells, ...verticallyPages[i]];
+        }
+    }
+
     let pageIndex = 0;
     while(pageIndex < verticallyPages.length) {
-        const horizontallyPages = splitRects(verticallyPages[pageIndex], options.margin.left, options.topLeft.x, maxBottomRight, 'x', 'w',
+        const horizontallyPages = splitRects(verticallyPages[pageIndex], options.margin.left, options.topLeft.x, 'x', 'w',
+            (pagesLength, currentCoordinate) => currentCoordinate <= maxBottomRight.x,
             (rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit) => {
                 const args = {
                     sourceRect: rect,
@@ -84,7 +105,7 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 }
 
 
-function splitRects(rects, marginValue, topLeftValue, maxBottomRight, coordinate, dimension, onSeparateCallback) {
+function splitRects(rects, marginValue, topLeftValue, coordinate, dimension, checkPredicate, onSeparateCallback) {
     const pages = [];
     const rectsToSplit = [...rects];
 
@@ -92,7 +113,7 @@ function splitRects(rects, marginValue, topLeftValue, maxBottomRight, coordinate
         let currentPageMaxRectCoordinate = 0;
         const currentPageRects = rectsToSplit.filter(rect => {
             const currentRectCoordinate = roundToThreeDecimals(rect[coordinate] + rect[dimension]);
-            if(currentRectCoordinate <= maxBottomRight[coordinate]) {
+            if(checkPredicate(pages.length, currentRectCoordinate)) {
                 if(currentPageMaxRectCoordinate <= currentRectCoordinate) {
                     currentPageMaxRectCoordinate = currentRectCoordinate;
                 }
