@@ -21,11 +21,56 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
         x: getPageWidth(doc) - options.margin.right,
         y: getPageHeight(doc) - options.margin.bottom
     };
-    const rectsByPage = splitRectsHorizontalByPages(rects, options.margin, options.topLeft, maxBottomRight, onSeparateRectHorizontally);
+
+    const rectsByPage = splitRects(rects, options.margin.left, options.topLeft.x, maxBottomRight, 'x', 'w',
+        (rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit) => {
+            const args = {
+                sourceRect: rect,
+                leftRect: {
+                    x: rect.x,
+                    y: rect.y,
+                    w: currentPageMaxRectCoordinate - rect.x,
+                    h: rect.h
+                },
+                rightRect: {
+                    x: currentPageMaxRectCoordinate,
+                    y: rect.y,
+                    w: rect.w - (currentPageMaxRectCoordinate - rect.x),
+                    h: rect.h
+                }
+            };
+            onSeparateRectHorizontally(args);
+
+            currentPageRects.push(args.leftRect);
+            rectsToSplit.push(args.rightRect);
+        });
 
     let pageIndex = 0;
     while(pageIndex < rectsByPage.length) {
-        const splitPages = splitRectsVerticallyByPages(rectsByPage[pageIndex], options.margin, options.topLeft, maxBottomRight, onSeparateRectVertically);
+
+        const splitPages = splitRects(rectsByPage[pageIndex], options.margin.top, /* options.topLeft.y */ 0, maxBottomRight, 'y', 'h',
+            (rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit) => {
+                const args = {
+                    sourceRect: rect,
+                    topRect: {
+                        x: rect.x,
+                        y: rect.y,
+                        w: rect.w,
+                        h: currentPageMaxRectCoordinate - rect.y
+                    },
+                    bottomRect: {
+                        x: rect.x,
+                        y: currentPageMaxRectCoordinate,
+                        w: rect.w,
+                        h: rect.h - (currentPageMaxRectCoordinate - rect.y)
+                    }
+                };
+                onSeparateRectVertically(args);
+
+                currentPageRects.push(args.topRect);
+                rectsToSplit.push(args.bottomRect);
+            });
+
         if(splitPages.length > 1) {
             rectsByPage.splice(pageIndex, 1, ...splitPages);
             pageIndex += splitPages.length;
@@ -39,17 +84,18 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
     });
 }
 
-function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectHorizontally) {
+
+function splitRects(rects, marginValue, topLeftValue, maxBottomRight, coordinate, dimension, onSeparateCallback) {
     const pages = [];
     const rectsToSplit = [...rects];
 
     while(rectsToSplit.length > 0) {
-        let currentPageMaxRectRight = 0;
+        let currentPageMaxRectCoordinate = 0;
         const currentPageRects = rectsToSplit.filter(rect => {
-            const currentRectRight = roundToThreeDecimals(rect.x + rect.w);
-            if(currentRectRight <= maxBottomRight.x) {
-                if(currentPageMaxRectRight <= currentRectRight) {
-                    currentPageMaxRectRight = currentRectRight;
+            const currentRectCoordinate = roundToThreeDecimals(rect[coordinate] + rect[dimension]);
+            if(currentRectCoordinate <= maxBottomRight[coordinate]) {
+                if(currentPageMaxRectCoordinate <= currentRectCoordinate) {
+                    currentPageMaxRectCoordinate = currentRectCoordinate;
                 }
                 return true;
             } else {
@@ -58,35 +104,16 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
         });
 
         const rectsToSeparate = rectsToSplit.filter(rect => {
-            // Check cells that have 'rect.x' less than 'currentPageMaxRectRight'
-            const currentRectLeft = roundToThreeDecimals(rect.x);
-            const currentRectRight = roundToThreeDecimals(rect.x + rect.w);
-            if(currentRectLeft < currentPageMaxRectRight && currentPageMaxRectRight < currentRectRight) {
+            // Check cells that have 'coordinate' less than 'currentPageMaxRectCoordinate'
+            const currentRectLeft = roundToThreeDecimals(rect[coordinate]);
+            const currentRectRight = roundToThreeDecimals(rect[coordinate] + rect[dimension]);
+            if(currentRectLeft < currentPageMaxRectCoordinate && currentPageMaxRectCoordinate < currentRectRight) {
                 return true;
             }
         });
 
         rectsToSeparate.forEach(rect => {
-            const args = {
-                sourceRect: rect,
-                leftRect: {
-                    x: rect.x,
-                    y: rect.y,
-                    w: currentPageMaxRectRight - rect.x,
-                    h: rect.h
-                },
-                rightRect: {
-                    x: currentPageMaxRectRight,
-                    y: rect.y,
-                    w: rect.w - (currentPageMaxRectRight - rect.x),
-                    h: rect.h
-                }
-            };
-            onSeparateRectHorizontally(args);
-
-            currentPageRects.push(args.leftRect);
-            rectsToSplit.push(args.rightRect);
-
+            onSeparateCallback(rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit);
             const index = rectsToSplit.indexOf(rect);
             if(index !== -1) {
                 rectsToSplit.splice(index, 1);
@@ -101,83 +128,9 @@ function splitRectsHorizontalByPages(rects, margin, topLeft, maxBottomRight, onS
         });
 
         rectsToSplit.forEach(rect => {
-            rect.x = isDefined(currentPageMaxRectRight) ? (rect.x - currentPageMaxRectRight + margin.left + topLeft.x) : rect.x;
-        });
-
-        if(currentPageRects.length > 0) {
-            pages.push(currentPageRects);
-        } else {
-            pages.push(rectsToSplit);
-            break;
-        }
-    }
-
-    return pages;
-}
-
-function splitRectsVerticallyByPages(rects, margin, topLeft, maxBottomRight, onSeparateRectVertically) {
-    const pages = [];
-    const rectsToSplit = [...rects];
-
-    while(rectsToSplit.length > 0) {
-        let currentPageMaxRectBottom = 0;
-        const currentPageRects = rectsToSplit.filter(rect => {
-            const currentRectBottom = roundToThreeDecimals(rect.y + rect.h);
-            if(currentRectBottom <= maxBottomRight.y) {
-                if(currentPageMaxRectBottom <= currentRectBottom) {
-                    currentPageMaxRectBottom = currentRectBottom;
-                }
-                return true;
-            } else {
-                return false;
-            }
-        });
-
-        const rectsToSeparate = rectsToSplit.filter(rect => {
-            // Check cells that have 'rect.y' less than 'currentPageMaxRectBottom'
-            const currentRectTop = roundToThreeDecimals(rect.y);
-            const currentRectBottom = roundToThreeDecimals(rect.y + rect.h);
-            if(currentRectTop < currentPageMaxRectBottom && currentPageMaxRectBottom < currentRectBottom) {
-                return true;
-            }
-        });
-
-        rectsToSeparate.forEach(rect => {
-            const args = {
-                sourceRect: rect,
-                topRect: {
-                    x: rect.x,
-                    y: rect.y,
-                    w: rect.w,
-                    h: currentPageMaxRectBottom - rect.y
-                },
-                bottomRect: {
-                    x: rect.x,
-                    y: currentPageMaxRectBottom,
-                    w: rect.w,
-                    h: rect.h - (currentPageMaxRectBottom - rect.y)
-                }
-            };
-            onSeparateRectVertically(args);
-
-            currentPageRects.push(args.topRect);
-            rectsToSplit.push(args.bottomRect);
-
-            const index = rectsToSplit.indexOf(rect);
-            if(index !== -1) {
-                rectsToSplit.splice(index, 1);
-            }
-        });
-
-        currentPageRects.forEach(rect => {
-            const index = rectsToSplit.indexOf(rect);
-            if(index !== -1) {
-                rectsToSplit.splice(index, 1);
-            }
-        });
-
-        rectsToSplit.forEach(rect => {
-            rect.y = isDefined(currentPageMaxRectBottom) ? (rect.y - currentPageMaxRectBottom + margin.top) : rect.y;
+            rect[coordinate] = isDefined(currentPageMaxRectCoordinate)
+                ? (rect[coordinate] - currentPageMaxRectCoordinate + marginValue + topLeftValue)
+                : rect[coordinate];
         });
 
         if(currentPageRects.length > 0) {
