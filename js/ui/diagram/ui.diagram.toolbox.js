@@ -296,7 +296,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
                     }
                 }
                 // expand first group
-                if(items.length && items.every(item => item.expanded === undefined)) {
+                if(items.length && items[0].expanded === undefined) {
                     e.component.expandItem(0);
                 }
 
