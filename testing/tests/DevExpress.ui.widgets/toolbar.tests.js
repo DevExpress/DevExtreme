@@ -745,8 +745,8 @@ QUnit.module('disabled state', () => {
         QUnit.assert.strictEqual(toolbar.option('items')[0].options.disabled, expectedItemOptionDisabled, 'item.disabled');
 
         const widgetClass = focusableElementSelector.split(' ')[0];
-        QUnit.assert.strictEqual($(widgetClass).hasClass('dx-state-disabled'), !!expectedWidgetDisabled, `${widgetName} disabled class`); //  input
-        QUnit.assert.strictEqual($(focusableElementSelector).get(0).tabIndex, expectedFocusableElementTabIndex, `${widgetName}.tabIndex`); //  input
+        QUnit.assert.strictEqual($(widgetClass).hasClass('dx-state-disabled'), !!expectedWidgetDisabled, `${widgetName} disabled class`);
+        QUnit.assert.strictEqual($(focusableElementSelector).get(0).tabIndex, devices.real().deviceType === 'desktop' ? expectedFocusableElementTabIndex : -1, `${widgetName}.tabIndex`);
     };
 
     [true, false, undefined, 'not declared'].forEach((isToolbarDisabled) => {
