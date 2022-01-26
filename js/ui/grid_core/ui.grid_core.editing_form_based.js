@@ -24,6 +24,7 @@ import {
 const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
 const EDIT_POPUP_CLASS = 'edit-popup';
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const EDIT_POPUP_FORM_CLASS = 'edit-popup-form';
 const BUTTON_CLASS = 'dx-button';
 
 const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
@@ -188,8 +189,11 @@ export const editingFormBasedModule = {
                     const templateOptions = {
                         row: row,
                         rowType: row.rowType,
-                        key: row.key
+                        key: row.key,
+                        rowIndex
                     };
+
+                    this._rowsView._addWatchMethod(templateOptions, row);
 
                     return (container) => {
                         const formTemplate = this.getEditFormTemplate();
@@ -197,7 +201,8 @@ export const editingFormBasedModule = {
 
                         this._$popupContent = scrollable.$content();
 
-                        formTemplate(this._$popupContent, templateOptions, { renderFormOnly: true });
+                        formTemplate(this._$popupContent, templateOptions, { isPopupForm: true });
+                        this._rowsView.renderDelayedTemplates();
                     };
                 },
 
@@ -265,6 +270,8 @@ export const editingFormBasedModule = {
                     const editorType = getEditorType(item);
                     const rowData = detailCellOptions?.row.data;
                     const form = formTemplateOptions.component;
+                    const { label, labelMark, labelMode } = formTemplateOptions.editorOptions || {};
+
                     const cellOptions = extend({}, detailCellOptions, {
                         data: rowData,
                         cellElement: null,
@@ -273,7 +280,9 @@ export const editingFormBasedModule = {
                         id: form.getItemID(item.name || item.dataField),
                         column: extend({}, column, {
                             editorType: editorType,
-                            editorOptions: extend({}, formTemplateOptions.editorOptions, column.editorOptions, item.editorOptions)
+                            editorOptions: extend({
+                                label, labelMark, labelMode
+                            }, column.editorOptions, item.editorOptions)
                         }),
                         columnIndex: column.index,
                         setValue: !isReadOnly && column.allowEditing && function(value) {
@@ -395,12 +404,17 @@ export const editingFormBasedModule = {
                     return ($container, detailOptions, options) => {
                         const editFormOptions = this.option(EDITING_FORM_OPTION_NAME);
                         const baseEditFormOptions = this.getEditFormOptions(detailOptions);
+                        const $formContainer = $('<div>').appendTo($container);
+                        const isPopupForm = options?.isPopupForm;
 
                         this._firstFormItem = undefined;
 
-                        this._editForm = this._createComponent($('<div>').appendTo($container), Form, extend({}, editFormOptions, baseEditFormOptions));
+                        if(isPopupForm) {
+                            $formContainer.addClass(this.addWidgetPrefix(EDIT_POPUP_FORM_CLASS));
+                        }
+                        this._editForm = this._createComponent($formContainer, Form, extend({}, editFormOptions, baseEditFormOptions));
 
-                        if(!options?.renderFormOnly) {
+                        if(!isPopupForm) {
                             const $buttonsContainer = $('<div>').addClass(this.addWidgetPrefix(FORM_BUTTONS_CONTAINER_CLASS)).appendTo($container);
                             this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getSaveButtonConfig());
                             this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getCancelButtonConfig());

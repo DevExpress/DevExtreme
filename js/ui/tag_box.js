@@ -19,7 +19,6 @@ import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/u
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
-import getScrollRtlBehavior from '../core/utils/scroll_rtl_behavior';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -255,11 +254,9 @@ const TagBox = SelectBox.inherit({
         const rtlEnabled = this.option('rtlEnabled');
         const isScrollLeft = (direction === 'end') ^ rtlEnabled;
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = rtlEnabled && (scrollBehavior.decreasing ^ scrollBehavior.positive);
-        const scrollSign = !rtlEnabled || scrollBehavior.positive ? 1 : -1;
+        const scrollSign = rtlEnabled ? -1 : 1;
 
-        return (isScrollLeft ^ !isScrollInverted)
+        return (isScrollLeft ^ !rtlEnabled)
             ? 0
             : scrollSign * (this._$tagsContainer.get(0).scrollWidth - getOuterWidth(this._$tagsContainer));
     },
@@ -275,9 +272,7 @@ const TagBox = SelectBox.inherit({
         }
 
         if(isScrollLeft ^ (scrollOffset < 0)) {
-            const scrollBehavior = getScrollRtlBehavior();
-            const scrollCorrection = rtlEnabled && !scrollBehavior.decreasing && scrollBehavior.positive ? -1 : 1;
-            scrollLeft += scrollOffset * scrollCorrection;
+            scrollLeft += scrollOffset;
         }
 
         return scrollLeft;
@@ -578,7 +573,18 @@ const TagBox = SelectBox.inherit({
 
     _renderInput: function() {
         this.callBase();
-        this._renderPreventBlur(this._inputWrapper());
+        this._renderPreventBlurOnInputClick();
+    },
+
+    _renderPreventBlurOnInputClick: function() {
+        const eventName = addNamespace('mousedown', 'dxTagBox');
+
+        eventsEngine.off(this._inputWrapper(), eventName);
+        eventsEngine.on(this._inputWrapper(), eventName, (e) => {
+            if(e.target !== this._input()[0]) {
+                e.preventDefault();
+            }
+        });
     },
 
     _renderInputValueImpl: function() {

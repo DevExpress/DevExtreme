@@ -1067,6 +1067,36 @@ module('View Data Provider', {
                 assert.ok(viewDataProvider.groupedDataMap, 'GroupedDataMap was created');
             });
         });
+
+        module('getViewPortGroupCount', () => {
+            test('it should return correct value if vertical grouping', function(assert) {
+                const viewDataProvider = new ViewDataProvider('day');
+
+                viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+
+                viewDataProvider.viewDataMap = viewDataProvider.viewDataGenerator
+                    .generateViewDataMap(testViewDataMap.verticalGrouping, verticalGroupingRenderOptions);
+                viewDataProvider.setViewOptions(verticalGroupingRenderOptions);
+
+                viewDataProvider.createGroupedDataMapProvider();
+
+                assert.equal(viewDataProvider.getViewPortGroupCount(), 4, 'Viewport group cout is correct');
+            });
+
+            test('it should return correct value if horizontal grouping', function(assert) {
+                const viewDataProvider = new ViewDataProvider('day');
+
+                viewDataProvider.completeViewDataMap = testViewDataMap.horizontalGrouping;
+
+                viewDataProvider.viewDataMap = viewDataProvider.viewDataGenerator
+                    .generateViewDataMap(testViewDataMap.horizontalGrouping, horizontalGroupingRenderOptions);
+                viewDataProvider.setViewOptions(horizontalGroupingRenderOptions);
+
+                viewDataProvider.createGroupedDataMapProvider();
+
+                assert.equal(viewDataProvider.getViewPortGroupCount(), 4, 'Viewport group cout is correct');
+            });
+        });
     });
 
     function createCellInfo(groupIndex, startDate, isAllDay, index) {

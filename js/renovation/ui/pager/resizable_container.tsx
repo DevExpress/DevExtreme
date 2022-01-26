@@ -94,14 +94,15 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   @Mutable() actualAdaptivityProps!: { infoTextVisible: boolean; isLargeDisplayMode: boolean };
 
   @Effect() subscribeToResize(): DisposeEffectReturn {
-    const callback = (): void => { this.updateAdaptivityProps(); };
+    const callback = (): void => {
+      this.parentWidth > 0 && this.updateAdaptivityProps();
+    };
     resizeCallbacks.add(callback);
     return (): void => { resizeCallbacks.remove(callback); };
   }
 
   @Effect({ run: 'always' }) effectUpdateChildProps(): void {
-    const parentWidth = this.parentRef.current ? getElementWidth(this.parentRef.current) : 0;
-    if (parentWidth > 0) {
+    if (this.parentWidth > 0) {
       this.updateAdaptivityProps();
     }
   }
@@ -160,6 +161,10 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
       totalCount,
       onKeyDown,
     };
+  }
+
+  get parentWidth(): number {
+    return this.parentRef.current ? getElementWidth(this.parentRef.current) : 0;
   }
 
   updateAdaptivityProps(): void {

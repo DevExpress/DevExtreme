@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "21.2.4",
+  "version": "21.2.5",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -29,10 +29,10 @@
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "@babel/runtime": "^7.12.1",
-    "@devextreme/runtime": "2.3.13",
-    "devexpress-diagram": "2.1.40",
-    "devexpress-gantt": "4.0.0",
-    "devextreme-quill": "~1.5.7",
+    "@devextreme/runtime": "~2.3.14",
+    "devexpress-diagram": "2.1.47",
+    "devexpress-gantt": "4.0.5",
+    "devextreme-quill": "~1.5.12",
     "devextreme-showdown": "^1.0.1",
     "inferno": "^7.4.9",
     "inferno-compat": "^7.4.9",
@@ -228,7 +228,8 @@
     "test-jest": "jest --coverage --maxWorkers=8",
     "test-jest:watch": "jest --watch",
     "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false",
-    "qunit-in-docker": "gulp qunit-in-docker --constel"
+    "qunit-in-docker": "gulp qunit-in-docker --constel",
+    "test-typescript": "gulp test-ts"
   },
   "browserslist": [
     "last 2 versions",

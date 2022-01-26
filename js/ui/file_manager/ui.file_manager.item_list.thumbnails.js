@@ -167,6 +167,9 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         if(options && Object.prototype.hasOwnProperty.call(options, 'focusedItemKey')) {
             actualOptions.focusedItemKey = options.focusedItemKey;
         }
+        if(options && Object.prototype.hasOwnProperty.call(options, 'selectedItemKeys')) {
+            actualOptions.selectedItemKeys = options.selectedItemKeys;
+        }
 
         this._itemList.option(actualOptions);
 

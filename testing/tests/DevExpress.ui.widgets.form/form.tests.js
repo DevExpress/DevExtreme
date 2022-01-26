@@ -28,7 +28,8 @@ import {
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_ITEM_LABEL_CLASS,
     FORM_GROUP_CAPTION_CLASS,
-    FORM_UNDERLINED_CLASS
+    FORM_UNDERLINED_CLASS,
+    FORM_VALIDATION_SUMMARY
 } from 'ui/form/constants';
 
 import {
@@ -588,6 +589,22 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
     });
 });
 
+
+QUnit.test('Check aria-labelledby attribute for editors label', function(assert) {
+    const form = $('#form').dxForm({
+        items: [ { dataField: 'name', editorType: 'dxTextBox' } ],
+        labelMode: 'floating'
+    }).dxForm('instance');
+
+    const $fieldItem = $('#form').find('.' + FIELD_ITEM_CLASS);
+    const itemInputAttr = $fieldItem.find('input').attr('aria-labelledby');
+    const editorLabelID = $fieldItem.find('.' + EDITOR_LABEL_CLASS).attr('id');
+
+    assert.equal(itemInputAttr, editorLabelID, 'input attr value equal editor label id');
+
+    form.dispose();
+});
+
 QUnit.test('field1.required -> form.validate() -> form.option("onFieldDataChanged", "newHandler") -> check form is not re-rendered (T1014577)', function(assert) {
     const checkEditorIsInvalid = (form) => form.$element().find('.dx-textbox').hasClass(INVALID_CLASS);
     const form = $('#form').dxForm({
@@ -775,6 +792,24 @@ QUnit.test('Change options -> check _itemsOptionChangedHandler/_formDataOptionCh
     testConfig('xxx_formData_xxx.', 'formData; ');
     testConfig('xxx_items_xxx', 'default; ');
     testConfig('xxx_items_xxx.', 'items; default; ');
+});
+
+QUnit.test('Keep validation summary in an item with Form in its template', function(assert) {
+    const $testContainer = $('#form');
+
+    $testContainer.dxForm({
+        showValidationSummary: true,
+        items: [{
+            template: () => {
+                return $('<div></div>').dxForm({
+                    showValidationSummary: true,
+                    items: []
+                });
+            }
+        }]
+    });
+
+    assert.strictEqual($testContainer.find('.' + FORM_VALIDATION_SUMMARY).length, 2, 'FORM_VALIDATION_SUMMARY');
 });
 
 QUnit.module('Tabs', {
@@ -3524,7 +3559,16 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
     });
 });
 
-QUnit.module('Adaptivity');
+QUnit.module('Adaptivity', {
+    beforeEach: function() {
+        const that = this;
+        that.clock = sinon.useFakeTimers();
+    },
+
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
 
 QUnit.test('One column screen should be customizable with screenByWidth option on init', function(assert) {
     const $form = $('#form');
@@ -3898,6 +3942,7 @@ QUnit.test('Form refreshes only one time on dimension changed with group layout'
 
     $form.width(100);
     resizeCallbacks.fire();
+    this.clock.tick();
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout one time');
 });
 
@@ -3923,6 +3968,7 @@ QUnit.test('Form redraw layout when colCount is \'auto\' and an calculated colCo
 
     $form.width(100);
     resizeCallbacks.fire();
+    this.clock.tick();
 
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout');
 });
