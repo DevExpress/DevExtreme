@@ -588,7 +588,7 @@ QUnit.module('label integration', {
             assert.strictEqual(updateModeCall.args[0], newLabelMode);
         });
 
-        QUnit.test('buttons', function(assert) {
+        QUnit.test('before buttons', function(assert) {
             this.textEditor.option('buttons', [{
                 name: 'button',
                 location: 'before',
@@ -603,6 +603,18 @@ QUnit.module('label integration', {
             assert.strictEqual(updateMaxWidthCall.args[0], newLabelMaxWidth);
             assert.strictEqual(updateBeforeWidthCall.args[0], newLabelBeforeWidth);
             assert.strictEqual(updateContainsButtonsBeforeCall.args[0], true);
+        });
+
+        QUnit.test('after buttons', function(assert) {
+            this.textEditor.option('buttons', [{
+                name: 'button',
+                location: 'after',
+            }]);
+            const updateBeforeWidthCall = this.labelMock.updateBeforeWidth.getCall(0);
+            const updateContainsButtonsBeforeCall = this.labelMock.updateContainsButtonsBefore.getCall(0);
+
+            assert.strictEqual(updateBeforeWidthCall.args[0], 0);
+            assert.strictEqual(updateContainsButtonsBeforeCall.args[0], false);
         });
 
         QUnit.test('stylingMode', function(assert) {
