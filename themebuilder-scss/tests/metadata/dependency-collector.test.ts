@@ -1,6 +1,8 @@
 import fs from 'fs';
 import cabinet from 'filing-cabinet';
+import { dependencies as idealDependencies } from '../data/dependencies';
 import DependencyCollector, { filePathMap } from '../../src/metadata/dependency-collector';
+import { dependencies as builtDependencies } from '../../src/data/metadata/dx-theme-builder-metadata';
 
 const simpleDependencies: ScriptsDependencyTree = {
   dependencies: {
@@ -231,5 +233,11 @@ describe('validation', () => {
   test('validate - index file has less widgets than in dependencies', () => {
     dependencyCollector.themes = ['lesstheme'];
     expect(() => dependencyCollector.validate()).toThrow('Some public widgets (lesstheme) has no // STYLE comment in source code or private widget has one');
+  });
+});
+
+describe('Integration test', () => {
+  test('Check if dependensies is good', () => {
+    expect(builtDependencies).toEqual(idealDependencies);
   });
 });
