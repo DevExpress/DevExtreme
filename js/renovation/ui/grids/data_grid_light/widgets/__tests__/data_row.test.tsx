@@ -1,13 +1,18 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import {
-  DataRow, DataRowClassesGetter, DataRowPropertiesGetter, viewFunction as DataRowView,
+  DataRow, viewFunction as DataRowView,
 } from '../data_row';
+import { RowClassesGetter } from '../row_base';
 
 describe('DataRow', () => {
   describe('View', () => {
     it('default render with template', () => {
       const dataRow = new DataRow({
+        row: {
+          data: {},
+          rowType: 'data',
+        },
         columns: [{ cellTemplate: () => <span>Some value</span> }],
       });
 
@@ -17,38 +22,20 @@ describe('DataRow', () => {
   });
 
   describe('Effects', () => {
-    describe('watchAdditionalParams', () => {
-      it('should update additionalParams', () => {
-        const dataRow = new DataRow({});
-        dataRow.plugins.extend(DataRowPropertiesGetter, -1, () => () => ({
-          'some-attr': 'some-value',
-        }));
+    it('should add dx-data-row class', () => {
+      const row = {
+        data: {},
+        rowType: 'data',
+      };
+      const dataRow = new DataRow({
+        row,
+      });
+      dataRow.extendDataRowClasses();
 
-        dataRow.watchAdditionalParams();
-
-        expect(dataRow.additionalParams).toEqual({
-          'some-attr': 'some-value',
-        });
+      const classesGetter = dataRow.plugins.getValue(RowClassesGetter)!;
+      expect(classesGetter(row)).toEqual({
+        'dx-data-row': true,
       });
     });
-
-    describe('watchAdditionalClasses', () => {
-      it('should update additionalClasses', () => {
-        const dataRow = new DataRow({});
-        dataRow.plugins.extend(DataRowClassesGetter, -1, () => () => ({
-          'some-class': true,
-        }));
-
-        dataRow.watchAdditionalClasses();
-
-        expect(dataRow.additionalClasses).toEqual({
-          'some-class': true,
-        });
-      });
-    });
-  });
-
-  describe('Plugins', () => {
-
   });
 });

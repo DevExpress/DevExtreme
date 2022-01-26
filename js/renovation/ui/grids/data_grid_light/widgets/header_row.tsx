@@ -17,7 +17,7 @@ export const viewFunction = (viewModel: HeaderRow): JSX.Element => (
         // aria-colindex={index + 1}
           id={`dx-col-${index + 1}`}
           aria-label={`Column ${column.dataField}`}
-          className="dx-datagrid-action dx-cell-focus-disabled"
+          className={`dx-datagrid-action dx-cell-focus-disabled ${column.headerCssClass}`}
           aria-sort="none"
           tabIndex={0}
         >

@@ -42,7 +42,7 @@ describe('TableContent', () => {
     describe('onRowClick', () => {
       it('should call RowClick', () => {
         const tableContent = new TableContent({});
-        tableContent.props.dataSource = [{}, {}, {}];
+        tableContent.props.dataSource = [{ data: {}, rowType: 'data' }, { data: {}, rowType: 'data' }, { data: {}, rowType: 'data' }];
 
         const rowClick = jest.fn();
         tableContent.plugins.set(RowClick, rowClick);

@@ -7,9 +7,9 @@ import {
   Selection, SelectionProps, viewFunction as SelectionView,
 } from '../selection';
 import {
-  DataSource, KeyExprPlugin, VisibleColumns, VisibleItems,
+  Items, KeyExprPlugin, VisibleColumns, VisibleItems,
 } from '../../data_grid_light';
-import { DataRowClassesGetter, DataRowPropertiesGetter } from '../../widgets/data_row';
+import { RowClassesGetter, RowPropertiesGetter } from '../../widgets/row_base';
 import { RowClick } from '../../views/table_content';
 
 describe('Selection', () => {
@@ -77,11 +77,11 @@ describe('Selection', () => {
         selection.keyExpr = 'someId';
         selection.extendDataRowAttributes();
 
-        const attrGetter = selection.plugins.getValue(DataRowPropertiesGetter)!;
-        expect(attrGetter({ someId: 1 })).toEqual({
+        const attrGetter = selection.plugins.getValue(RowPropertiesGetter)!;
+        expect(attrGetter({ data: { someId: 1 }, rowType: 'data' })).toEqual({
           'aria-selected': true,
         });
-        expect(attrGetter({ someId: 2 })).toEqual({});
+        expect(attrGetter({ data: { someId: 2 }, rowType: 'data' })).toEqual({});
       });
     });
 
@@ -93,11 +93,11 @@ describe('Selection', () => {
         selection.keyExpr = 'someId';
         selection.extendDataRowClasses();
 
-        const classesGetter = selection.plugins.getValue(DataRowClassesGetter)!;
-        expect(classesGetter({ someId: 1 })).toEqual({
+        const classesGetter = selection.plugins.getValue(RowClassesGetter)!;
+        expect(classesGetter({ data: { someId: 1 }, rowType: 'data' })).toEqual({
           'dx-selection': true,
         });
-        expect(classesGetter({ someId: 2 })).toEqual({});
+        expect(classesGetter({ data: { someId: 2 }, rowType: 'data' })).toEqual({});
       });
     });
 
@@ -110,9 +110,9 @@ describe('Selection', () => {
         const invert = selection.plugins.getValue(RowClick)!;
 
         expect(selection.props.selectedRowKeys).toEqual([]);
-        invert({ someId: 1 });
+        invert({ data: { someId: 1 }, rowType: 'data' });
         expect(selection.props.selectedRowKeys).toEqual([1]);
-        invert({ someId: 1 });
+        invert({ data: { someId: 1 }, rowType: 'data' });
         expect(selection.props.selectedRowKeys).toEqual([]);
       });
     });
@@ -153,12 +153,17 @@ describe('Selection', () => {
     });
 
     describe('selectAll', () => {
-      const dataSource = [{ someId: 1 }, { someId: 2 }, { someId: 3 }, { someId: 4 }];
-      const visibleItems = dataSource.slice(1, 3);
+      const items = [
+        { someId: 1 },
+        { someId: 2 },
+        { someId: 3 },
+        { someId: 4 },
+      ];
+      const visibleItems = items.slice(1, 3);
 
       const selection = new Selection({});
       selection.keyExpr = 'someId';
-      selection.plugins.set(DataSource, dataSource);
+      selection.plugins.set(Items, items);
       selection.plugins.extend(VisibleItems, -1, () => visibleItems);
 
       it('should work in "allPages" mode', () => {
@@ -223,12 +228,17 @@ describe('Selection', () => {
     });
 
     describe('selectableCount', () => {
-      const dataSource = [{ someId: 1 }, { someId: 2 }, { someId: 3 }, { someId: 4 }];
-      const visibleItems = dataSource.slice(1, 3);
+      const items = [
+        { key: 1, data: { someId: 1 }, rowType: 'data' },
+        { key: 2, data: { someId: 2 }, rowType: 'data' },
+        { key: 3, data: { someId: 3 }, rowType: 'data' },
+        { key: 4, data: { someId: 4 }, rowType: 'data' },
+      ];
+      const visibleItems = items.slice(1, 3);
 
       const selection = new Selection({});
       selection.keyExpr = 'someId';
-      selection.plugins.set(DataSource, dataSource);
+      selection.plugins.set(Items, items);
       selection.plugins.extend(VisibleItems, -1, () => visibleItems);
 
       it('should work in "allPages" mode', () => {
