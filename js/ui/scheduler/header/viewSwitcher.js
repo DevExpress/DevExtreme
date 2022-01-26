@@ -77,6 +77,16 @@ export const getDropDownViewSwitcher = (header, item) => {
                 const viewSwitcher = e.component;
 
                 header._addEvent('currentView', (view) => {
+                    const views = formatViews(header.views);
+
+                    const isOneView =
+                        header.views.length === 1
+                        && views[0].name === view;
+
+                    if(isOneView) {
+                        header.repaint();
+                    }
+
                     viewSwitcher.option('selectedItemKey', getViewName(view));
                 });
             },
