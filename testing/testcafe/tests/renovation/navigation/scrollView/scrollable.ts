@@ -59,3 +59,43 @@ config.forEach((props) => {
       ...props,
     }));
 });
+
+fixture('Renovated scrollable - visibility integration');
+
+config.forEach((props) => {
+  test(`Scroll should save position on visibility change, ${JSON.stringify(props)}`,
+    async (t, { screenshotComparerOptions }) => {
+      const scrollable = new Scrollable(SCROLLABLE_SELECTOR, props);
+      const { direction, useNative, rtlEnabled } = props;
+
+      await scrollable.apiScrollTo({ top: 20, left: 10 });
+
+      await t
+        .expect(await compareScreenshot(
+          t,
+          `Scroll position before hide_dir=${direction}_useNative=${useNative}_rtl=${rtlEnabled}.png`,
+          scrollable.element,
+          screenshotComparerOptions,
+        ))
+        .ok();
+
+      await scrollable.hide();
+
+      await scrollable.apiScrollTo({ left: 0, top: 0 });
+      await scrollable.show();
+
+      await t.expect(await scrollable.apiScrollOffset()).eql({ left: 10, top: 20 });
+      await t
+        .expect(await compareScreenshot(
+          t,
+          `Scroll position after show_dir=${direction}_useNative=${useNative}_rtl=${rtlEnabled}.png`,
+          scrollable.element,
+          screenshotComparerOptions,
+        ))
+        .ok();
+    })
+    .before(async (_, { platform }) => updateComponentOptions(platform, {
+      ...defaultProps,
+      ...props,
+    }));
+});
