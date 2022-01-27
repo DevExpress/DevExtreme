@@ -5,18 +5,18 @@ import { getRealSeparatorIndex, getNthOccurrence, splitByIndex } from './utils';
 
 export const getCaretBoundaries = function(text, format) {
     if(typeof format === 'string') {
-        const signParts = format.split(';');
-        const sign = number.getSign(text, format);
-
-        signParts[1] = signParts[1] || '-' + signParts[0];
-        format = signParts[sign < 0 ? 1 : 0];
-
         const mockEscapedStubs = (str) => str.replace(/'([^']*)'/g, str => str.split('').map(() => ' ').join('').substr(2));
 
         format = mockEscapedStubs(format);
 
         const prefixStubLength = /^[^#0.,]*/.exec(format)[0].length;
         const postfixStubLength = /[^#0.,]*$/.exec(format)[0].length;
+
+        const signParts = format.split(';');
+        const sign = number.getSign(text.substr(prefixStubLength), format);
+
+        signParts[1] = signParts[1] || '-' + signParts[0];
+        format = signParts[sign < 0 ? 1 : 0];
 
         return {
             start: prefixStubLength,
