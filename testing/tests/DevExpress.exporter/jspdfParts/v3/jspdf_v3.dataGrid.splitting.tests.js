@@ -7530,6 +7530,7 @@ const JSPdfSplittingTests = {
                 const margin = initMargin(doc, { pageHeight: 120 });
 
                 const dataGrid = createDataGrid({
+                    width: 600,
                     columns: [
                         {
                             caption: 'Band1', columns: [
@@ -7550,39 +7551,39 @@ const JSPdfSplittingTests = {
 
                 const expectedLog = [
                     'text,Band1,0,15,{baseline:middle}',
-                    'text,F3,396.847,45,{baseline:middle}',
+                    'text,F3,396.853,45,{baseline:middle}',
                     'text,Band2,0,45,{baseline:middle}',
-                    'text,F2,198.424,60,{baseline:middle}',
+                    'text,F2,198.427,60,{baseline:middle}',
                     'text,F1,0,75,{baseline:middle}',
                     'text,v1_1,0,105,{baseline:middle}',
-                    'text,v1_2,198.424,105,{baseline:middle}',
-                    'text,v1_3,396.847,105,{baseline:middle}',
+                    'text,v1_2,198.427,105,{baseline:middle}',
+                    'text,v1_3,396.853,105,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,0,0,396.847,30',
+                    'rect,0,0,396.853,30',
                     'setLineWidth,1',
-                    'rect,396.847,0,198.433,90',
+                    'rect,396.853,0,198.427,90',
                     'setLineWidth,1',
-                    'rect,0,30,198.424,30',
+                    'rect,0,30,198.427,30',
                     'setLineWidth,1',
-                    'rect,198.424,30,198.424,60',
+                    'rect,198.427,30,198.427,60',
                     'setLineWidth,1',
-                    'rect,0,60,198.424,30',
+                    'rect,0,60,198.427,30',
                     'setLineWidth,1',
-                    'rect,0,90,198.424,30',
+                    'rect,0,90,198.427,30',
                     'setLineWidth,1',
-                    'rect,198.424,90,198.424,30',
+                    'rect,198.427,90,198.427,30',
                     'setLineWidth,1',
-                    'rect,396.847,90,198.433,30',
+                    'rect,396.853,90,198.427,30',
                     'addPage,',
                     'text,v2_1,0,15,{baseline:middle}',
-                    'text,v2_2,198.424,15,{baseline:middle}',
-                    'text,v1_3,396.847,15,{baseline:middle}',
+                    'text,v2_2,198.427,15,{baseline:middle}',
+                    'text,v1_3,396.853,15,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,0,0,198.424,30',
+                    'rect,0,0,198.427,30',
                     'setLineWidth,1',
-                    'rect,198.424,0,198.424,30',
+                    'rect,198.427,0,198.427,30',
                     'setLineWidth,1',
-                    'rect,396.847,0,198.433,30'
+                    'rect,396.853,0,198.427,30'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
@@ -7598,6 +7599,7 @@ const JSPdfSplittingTests = {
                 const margin = initMargin(doc, { pageHeight: 120 });
 
                 const dataGrid = createDataGrid({
+                    width: 600,
                     columns: [
                         {
                             caption: 'Band1', columns: [
@@ -7618,54 +7620,54 @@ const JSPdfSplittingTests = {
 
                 const expectedLog = [
                     'text,Band1,0,15,{baseline:middle}',
-                    'text,F3,396.847,45,{baseline:middle}',
+                    'text,F3,396.853,45,{baseline:middle}',
                     'text,Band2,0,45,{baseline:middle}',
-                    'text,F2,198.424,60,{baseline:middle}',
+                    'text,F2,198.427,60,{baseline:middle}',
                     'text,F1,0,75,{baseline:middle}',
                     'text,v1_1,0,105,{baseline:middle}',
-                    'text,v1_2,198.424,105,{baseline:middle}',
-                    'text,v1_3,396.847,105,{baseline:middle}',
+                    'text,v1_2,198.427,105,{baseline:middle}',
+                    'text,v1_3,396.853,105,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,0,0,396.847,30',
+                    'rect,0,0,396.853,30',
                     'setLineWidth,1',
-                    'rect,396.847,0,198.433,90',
+                    'rect,396.853,0,198.427,90',
                     'setLineWidth,1',
-                    'rect,0,30,198.424,30',
+                    'rect,0,30,198.427,30',
                     'setLineWidth,1',
-                    'rect,198.424,30,198.424,60',
+                    'rect,198.427,30,198.427,60',
                     'setLineWidth,1',
-                    'rect,0,60,198.424,30',
+                    'rect,0,60,198.427,30',
                     'setLineWidth,1',
-                    'rect,0,90,198.424,30',
+                    'rect,0,90,198.427,30',
                     'setLineWidth,1',
-                    'rect,198.424,90,198.424,30',
+                    'rect,198.427,90,198.427,30',
                     'setLineWidth,1',
-                    'rect,396.847,90,198.433,30',
+                    'rect,396.853,90,198.427,30',
                     'addPage,',
                     'text,Band1,0,15,{baseline:middle}',
-                    'text,F3,396.847,45,{baseline:middle}',
+                    'text,F3,396.853,45,{baseline:middle}',
                     'text,Band2,0,45,{baseline:middle}',
-                    'text,F2,198.424,60,{baseline:middle}',
+                    'text,F2,198.427,60,{baseline:middle}',
                     'text,F1,0,75,{baseline:middle}',
                     'text,v2_1,0,105,{baseline:middle}',
-                    'text,v2_2,198.424,105,{baseline:middle}',
-                    'text,v1_3,396.847,105,{baseline:middle}',
+                    'text,v2_2,198.427,105,{baseline:middle}',
+                    'text,v1_3,396.853,105,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,0,0,396.847,30',
+                    'rect,0,0,396.853,30',
                     'setLineWidth,1',
-                    'rect,396.847,0,198.433,90',
+                    'rect,396.853,0,198.427,90',
                     'setLineWidth,1',
-                    'rect,0,30,198.424,30',
+                    'rect,0,30,198.427,30',
                     'setLineWidth,1',
-                    'rect,198.424,30,198.424,60',
+                    'rect,198.427,30,198.427,60',
                     'setLineWidth,1',
-                    'rect,0,60,198.424,30',
+                    'rect,0,60,198.427,30',
                     'setLineWidth,1',
-                    'rect,0,90,198.424,30',
+                    'rect,0,90,198.427,30',
                     'setLineWidth,1',
-                    'rect,198.424,90,198.424,30',
+                    'rect,198.427,90,198.427,30',
                     'setLineWidth,1',
-                    'rect,396.847,90,198.433,30'
+                    'rect,396.853,90,198.427,30'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
@@ -7681,6 +7683,7 @@ const JSPdfSplittingTests = {
                 const margin = initMargin(doc, { pageHeight: 80, customMargin: 10 });
 
                 const dataGrid = createDataGrid({
+                    width: 600,
                     columns: [
                         {
                             caption: 'Band1', columns: [
@@ -7769,6 +7772,7 @@ const JSPdfSplittingTests = {
                 const margin = initMargin(doc, { pageHeight: 80, customMargin: 10 });
 
                 const dataGrid = createDataGrid({
+                    width: 600,
                     columns: [
                         {
                             caption: 'Band1', columns: [
@@ -8421,6 +8425,7 @@ const JSPdfSplittingTests = {
                 const margin = initMargin(doc, { pageHeight: 150 });
 
                 const dataGrid = createDataGrid({
+                    width: 600,
                     columns: [
                         {
                             caption: 'Band1', columns: [
@@ -8441,48 +8446,48 @@ const JSPdfSplittingTests = {
 
                 const expectedLog = [
                     'text,Band1,10,35,{baseline:middle}',
-                    'text,F3,400.181,65,{baseline:middle}',
+                    'text,F3,400.187,65,{baseline:middle}',
                     'text,Band2,10,65,{baseline:middle}',
-                    'text,F2,205.09,80,{baseline:middle}',
+                    'text,F2,205.093,80,{baseline:middle}',
                     'text,F1,10,95,{baseline:middle}',
                     'text,v1_1,10,125,{baseline:middle}',
-                    'text,v1_2,205.09,125,{baseline:middle}',
-                    'text,v1_3,400.181,125,{baseline:middle}',
+                    'text,v1_2,205.093,125,{baseline:middle}',
+                    'text,v1_3,400.187,125,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,10,20,390.181,30',
+                    'rect,10,20,390.187,30',
                     'setLineWidth,1',
-                    'rect,400.181,20,195.099,90',
+                    'rect,400.187,20,195.093,90',
                     'setLineWidth,1',
-                    'rect,10,50,195.09,30',
+                    'rect,10,50,195.093,30',
                     'setLineWidth,1',
-                    'rect,205.09,50,195.09,60',
+                    'rect,205.093,50,195.093,60',
                     'setLineWidth,1',
-                    'rect,10,80,195.09,30',
+                    'rect,10,80,195.093,30',
                     'setLineWidth,1',
-                    'rect,10,110,195.09,30',
+                    'rect,10,110,195.093,30',
                     'setLineWidth,1',
-                    'rect,205.09,110,195.09,30',
+                    'rect,205.093,110,195.093,30',
                     'setLineWidth,1',
-                    'rect,400.181,110,195.099,30',
+                    'rect,400.187,110,195.093,30',
                     'addPage,',
                     'text,v2_1,10,15,{baseline:middle}',
-                    'text,v2_2,205.09,15,{baseline:middle}',
-                    'text,v2_3,400.181,15,{baseline:middle}',
+                    'text,v2_2,205.093,15,{baseline:middle}',
+                    'text,v2_3,400.187,15,{baseline:middle}',
                     'text,v2_1,10,45,{baseline:middle}',
-                    'text,v2_2,205.09,45,{baseline:middle}',
-                    'text,v3_3,400.181,45,{baseline:middle}',
+                    'text,v2_2,205.093,45,{baseline:middle}',
+                    'text,v3_3,400.187,45,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,10,0,195.09,30',
+                    'rect,10,0,195.093,30',
                     'setLineWidth,1',
-                    'rect,205.09,0,195.09,30',
+                    'rect,205.093,0,195.093,30',
                     'setLineWidth,1',
-                    'rect,400.181,0,195.099,30',
+                    'rect,400.187,0,195.093,30',
                     'setLineWidth,1',
-                    'rect,10,30,195.09,30',
+                    'rect,10,30,195.093,30',
                     'setLineWidth,1',
-                    'rect,205.09,30,195.09,30',
+                    'rect,205.093,30,195.093,30',
                     'setLineWidth,1',
-                    'rect,400.181,30,195.099,30'
+                    'rect,400.187,30,195.093,30'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, repeatHeaders: false, onRowExporting }).then(() => {
@@ -8498,6 +8503,7 @@ const JSPdfSplittingTests = {
                 const margin = initMargin(doc, { pageHeight: 150 });
 
                 const dataGrid = createDataGrid({
+                    width: 600,
                     columns: [
                         {
                             caption: 'Band1', columns: [
@@ -8518,63 +8524,63 @@ const JSPdfSplittingTests = {
 
                 const expectedLog = [
                     'text,Band1,10,35,{baseline:middle}',
-                    'text,F3,400.181,65,{baseline:middle}',
+                    'text,F3,400.187,65,{baseline:middle}',
                     'text,Band2,10,65,{baseline:middle}',
-                    'text,F2,205.09,80,{baseline:middle}',
+                    'text,F2,205.093,80,{baseline:middle}',
                     'text,F1,10,95,{baseline:middle}',
                     'text,v1_1,10,125,{baseline:middle}',
-                    'text,v1_2,205.09,125,{baseline:middle}',
-                    'text,v1_3,400.181,125,{baseline:middle}',
+                    'text,v1_2,205.093,125,{baseline:middle}',
+                    'text,v1_3,400.187,125,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,10,20,390.181,30',
+                    'rect,10,20,390.187,30',
                     'setLineWidth,1',
-                    'rect,400.181,20,195.099,90',
+                    'rect,400.187,20,195.093,90',
                     'setLineWidth,1',
-                    'rect,10,50,195.09,30',
+                    'rect,10,50,195.093,30',
                     'setLineWidth,1',
-                    'rect,205.09,50,195.09,60',
+                    'rect,205.093,50,195.093,60',
                     'setLineWidth,1',
-                    'rect,10,80,195.09,30',
+                    'rect,10,80,195.093,30',
                     'setLineWidth,1',
-                    'rect,10,110,195.09,30',
+                    'rect,10,110,195.093,30',
                     'setLineWidth,1',
-                    'rect,205.09,110,195.09,30',
+                    'rect,205.093,110,195.093,30',
                     'setLineWidth,1',
-                    'rect,400.181,110,195.099,30',
+                    'rect,400.187,110,195.093,30',
                     'addPage,',
                     'text,Band1,10,15,{baseline:middle}',
-                    'text,F3,400.181,45,{baseline:middle}',
+                    'text,F3,400.187,45,{baseline:middle}',
                     'text,Band2,10,45,{baseline:middle}',
-                    'text,F2,205.09,60,{baseline:middle}',
+                    'text,F2,205.093,60,{baseline:middle}',
                     'text,F1,10,75,{baseline:middle}',
                     'text,v2_1,10,105,{baseline:middle}',
-                    'text,v2_2,205.09,105,{baseline:middle}',
-                    'text,v2_3,400.181,105,{baseline:middle}',
+                    'text,v2_2,205.093,105,{baseline:middle}',
+                    'text,v2_3,400.187,105,{baseline:middle}',
                     'text,v3_1,10,135,{baseline:middle}',
-                    'text,v3_2,205.09,135,{baseline:middle}',
-                    'text,v3_3,400.181,135,{baseline:middle}',
+                    'text,v3_2,205.093,135,{baseline:middle}',
+                    'text,v3_3,400.187,135,{baseline:middle}',
                     'setLineWidth,1',
-                    'rect,10,0,390.181,30',
+                    'rect,10,0,390.187,30',
                     'setLineWidth,1',
-                    'rect,400.181,0,195.099,90',
+                    'rect,400.187,0,195.093,90',
                     'setLineWidth,1',
-                    'rect,10,30,195.09,30',
+                    'rect,10,30,195.093,30',
                     'setLineWidth,1',
-                    'rect,205.09,30,195.09,60',
+                    'rect,205.093,30,195.093,60',
                     'setLineWidth,1',
-                    'rect,10,60,195.09,30',
+                    'rect,10,60,195.093,30',
                     'setLineWidth,1',
-                    'rect,10,90,195.09,30',
+                    'rect,10,90,195.093,30',
                     'setLineWidth,1',
-                    'rect,205.09,90,195.09,30',
+                    'rect,205.093,90,195.093,30',
                     'setLineWidth,1',
-                    'rect,400.181,90,195.099,30',
+                    'rect,400.187,90,195.093,30',
                     'setLineWidth,1',
-                    'rect,10,120,195.09,30',
+                    'rect,10,120,195.093,30',
                     'setLineWidth,1',
-                    'rect,205.09,120,195.09,30',
+                    'rect,205.093,120,195.093,30',
                     'setLineWidth,1',
-                    'rect,400.181,120,195.099,30'
+                    'rect,400.187,120,195.093,30'
                 ];
 
                 exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, repeatHeaders: true, onRowExporting }).then(() => {
