@@ -782,58 +782,6 @@ QUnit.module('visibility events integration', {
     }
 });
 
-[true, false].forEach((useNative) => {
-    QUnit.test(`scroll should save position on visibility change useNative: ${useNative}`, function(assert) {
-        const done = assert.async();
-        const $scrollable = $('#scrollable');
-
-        const scrollable = $scrollable.dxScrollable({
-            useNative: useNative,
-            direction: 'both'
-        }).dxScrollable('instance');
-
-        scrollable.scrollTo({ left: 10, top: 20 });
-        $scrollable.hide();
-
-        setTimeout(() => {
-            scrollable.scrollTo({ left: 0, top: 0 });
-            $scrollable.show();
-
-            setTimeout(() => {
-                assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after shown');
-                done();
-            }, RESIZE_WAIT_TIMEOUT * 2);
-        }, RESIZE_WAIT_TIMEOUT * 2);
-    });
-});
-
-
-QUnit.test('scroll should save position on dxhiding and restore on dxshown', function(assert) {
-    const done = assert.async();
-    const $scrollable = $('#scrollable');
-
-    const scrollable = $scrollable.dxScrollable({
-        useNative: false,
-        direction: 'both'
-    }).dxScrollable('instance');
-
-    scrollable.scrollTo({ left: 10, top: 20 });
-    triggerHidingEvent($scrollable);
-    $scrollable.hide();
-
-    setTimeout(() => {
-        scrollable.scrollTo({ left: 0, top: 0 });
-
-        $scrollable.show();
-        setTimeout(() => {
-            triggerShownEvent($scrollable);
-
-            assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after dxshown');
-            done();
-        }, RESIZE_WAIT_TIMEOUT);
-    }, RESIZE_WAIT_TIMEOUT);
-});
-
 QUnit.test('scroll should restore on second dxshown', function(assert) {
     const $scrollable = $('#scrollable');
 
@@ -878,7 +826,6 @@ QUnit.test('scroll should save position on dxhiding when scroll is hidden', func
         }, RESIZE_WAIT_TIMEOUT * 2);
     }, RESIZE_WAIT_TIMEOUT * 2);
 });
-
 
 if(styleUtils.styleProp('touchAction')) {
     QUnit.module('nested scrolling in IE/Edge');

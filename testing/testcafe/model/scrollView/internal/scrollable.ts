@@ -5,6 +5,7 @@ import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/reno
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
 import type { PlatformType } from '../../../helpers/multi-platform-test/platform-type';
+import { triggerHidingEvent, triggerShownEvent } from '../../../../../js/events/visibility_change';
 
 const CLASS = {
   scrollable: 'dx-scrollable',
@@ -30,7 +31,6 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
 
     const direction = options.direction ?? 'vertical';
 
-    this.element = Selector(`.${CLASS.scrollable}`);
     this.scrollbar = new Scrollbar(options.direction ?? 'vertical');
 
     if (!options.useNative && !options.useSimulatedScrollbar) {
@@ -42,12 +42,15 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
       }
     }
 
-    const scrollable = this.element;
-
     this.name = name;
     this.platform = platform || 'jquery';
 
-    this.getInstance = getComponentInstance(this.platform as PlatformType, scrollable);
+    this.getInstance = getComponentInstance(this.platform as PlatformType, this.getElement());
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getElement(): Selector {
+    return Selector(`.${CLASS.scrollable}`);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -145,6 +148,50 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
         (getInstance() as any)._dimensionChanged();
       },
       { dependencies: { getInstance, value } },
+    )();
+  }
+
+  hide(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        (getInstance() as any).element().css({ display: 'none' });
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  apiTriggerHidingEvent(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        triggerHidingEvent((getInstance() as any).element());
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  show(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        (getInstance() as any).element().css({ display: 'block' });
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  apiTriggerShownEvent(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        triggerShownEvent((getInstance() as any).element());
+      },
+      { dependencies: { getInstance } },
     )();
   }
 };
