@@ -647,6 +647,20 @@ describe('option', () => {
       originalEvent: defaultEvent, keyName: KEY.space, which: KEY.space,
     });
   });
+
+  it('updates props if it is called on onInitialized handler (T1057680)', () => {
+    const $component = $('#component');
+    const options = {
+      text: 'new text',
+    };
+    $component.dxTestWidget({
+      onInitialized: (e) => {
+        e.component.option(options);
+      },
+    });
+
+    expect($component.dxTestWidget('getLastPassedProps')).toMatchObject(options);
+  });
 });
 
 describe('templates and slots', () => {
