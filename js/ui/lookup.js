@@ -827,7 +827,7 @@ const Lookup = DropDownList.inherit({
                 .appendTo($searchWrapper);
 
             const currentDevice = devices.current();
-            const searchMode = currentDevice.android && currentDevice.version[0] >= 5 ? 'text' : 'search';
+            const searchMode = currentDevice.android ? 'text' : 'search';
 
             let isKeyboardListeningEnabled = false;
 
