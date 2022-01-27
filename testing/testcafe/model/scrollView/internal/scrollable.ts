@@ -169,7 +169,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
       () => {
         triggerHidingEvent((getInstance() as any).element());
       },
-      { dependencies: { getInstance } },
+      { dependencies: { triggerHidingEvent, getInstance } },
     )();
   }
 
@@ -191,7 +191,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
       () => {
         triggerShownEvent((getInstance() as any).element());
       },
-      { dependencies: { getInstance } },
+      { dependencies: { triggerShownEvent, getInstance } },
     )();
   }
 };
