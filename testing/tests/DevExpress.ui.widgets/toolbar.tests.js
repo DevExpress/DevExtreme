@@ -739,14 +739,16 @@ QUnit.module('disabled state', () => {
         QUnit.assert.strictEqual($(toolbar.element()).hasClass('dx-state-disabled'), !!expectedToolbarDisabled, 'toolbar disabled class');
 
         const expectedWidgetDisabled = getExpectedWidgetDisabledState(widgetDisabled, toolbarDisabled);
-        const expectedFocusableElementTabIndex = expectedWidgetDisabled ? -1 : 0;
+        const expectedFocusableElementTabIndex = expectedWidgetDisabled || (['dxButton', 'dxCheckBox', 'dxMenu', 'dxTabs'].indexOf(widgetName) !== -1 && devices.real().deviceType !== 'desktop')
+            ? -1
+            : 0;
         const expectedItemOptionDisabled = widgetDisabled === 'not declared' ? undefined : widgetDisabled;
 
         QUnit.assert.strictEqual(toolbar.option('items')[0].options.disabled, expectedItemOptionDisabled, 'item.disabled');
 
         const widgetClass = focusableElementSelector.split(' ')[0];
         QUnit.assert.strictEqual($(widgetClass).hasClass('dx-state-disabled'), !!expectedWidgetDisabled, `${widgetName} disabled class`);
-        QUnit.assert.strictEqual($(focusableElementSelector).get(0).tabIndex, devices.real().deviceType === 'desktop' ? expectedFocusableElementTabIndex : -1, `${widgetName}.tabIndex`);
+        QUnit.assert.strictEqual($(focusableElementSelector).get(0).tabIndex, expectedFocusableElementTabIndex, `${widgetName}.tabIndex`);
     };
 
     [true, false, undefined, 'not declared'].forEach((isToolbarDisabled) => {
