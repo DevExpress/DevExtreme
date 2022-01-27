@@ -7,7 +7,7 @@ describe('PlaceholderExtender', () => {
   describe('View', () => {
     it('should be empty', () => {
       const tree = mount(<PlaceholderExtenderView />);
-      expect(tree.html()).toEqual(null);
+      expect(tree.html()).toEqual('<div></div>');
     });
   });
 

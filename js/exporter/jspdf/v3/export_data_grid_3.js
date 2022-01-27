@@ -100,8 +100,19 @@ function exportDataGrid(doc, dataGrid, options) {
                     const isTextWidthGreaterThanRect = doc.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
                     const isTextLeftAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'left';
                     if(isTextWidthGreaterThanRect || !isTextLeftAlignment) {
-                        const leftTextLeftOffset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
-                        const rightTextLeftOffset = leftTextLeftOffset - leftRect.w;
+                        let leftTextLeftOffset;
+                        let rightTextLeftOffset;
+                        if(sourceRect.sourceCellInfo?.horizontalAlign === 'left') {
+                            leftTextLeftOffset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
+                            rightTextLeftOffset = leftTextLeftOffset - leftRect.w;
+                        } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'center') {
+                            const offset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
+                            leftTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (leftRect.x + leftRect.w / 2);
+                            rightTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (rightRect.x + rightRect.w / 2);
+                        } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'right') {
+                            leftTextLeftOffset = (sourceRect.x + sourceRect.w) - (leftRect.x + leftRect.w);
+                            rightTextLeftOffset = (sourceRect.x + sourceRect.w) - (rightRect.x + rightRect.w);
+                        }
 
                         leftRectTextOptions = Object.assign({}, { _textLeftOffset: leftTextLeftOffset });
                         rightRectTextOptions = Object.assign({}, { _textLeftOffset: rightTextLeftOffset });
@@ -128,8 +139,9 @@ function exportDataGrid(doc, dataGrid, options) {
                             topTextTopOffset = sourceRect.sourceCellInfo._textTopOffset ?? 0;
                             bottomTextTopOffset = topTextTopOffset - topRect.h;
                         } else if(sourceRect.sourceCellInfo?.verticalAlign === 'middle') {
-                            topTextTopOffset = (sourceRect.y + sourceRect.h / 2) - (topRect.y + topRect.h / 2);
-                            bottomTextTopOffset = (sourceRect.y + sourceRect.h / 2) - (bottomRect.y + bottomRect.h / 2);
+                            const offset = sourceRect.sourceCellInfo._textTopOffset ?? 0;
+                            topTextTopOffset = offset + (sourceRect.y + sourceRect.h / 2) - (topRect.y + topRect.h / 2);
+                            bottomTextTopOffset = offset + (sourceRect.y + sourceRect.h / 2) - (bottomRect.y + bottomRect.h / 2);
                         } else if(sourceRect.sourceCellInfo?.verticalAlign === 'bottom') {
                             topTextTopOffset = (sourceRect.y + sourceRect.h) - (topRect.y + topRect.h);
                             bottomTextTopOffset = (sourceRect.y + sourceRect.h) - (bottomRect.y + bottomRect.h);

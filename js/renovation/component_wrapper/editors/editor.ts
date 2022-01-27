@@ -63,8 +63,8 @@ export default class Editor extends Component {
     (this.option('_onMarkupRendered') as () => void)?.();
   }
 
-  _init(): void {
-    super._init();
+  _initializeComponent(): void {
+    super._initializeComponent();
 
     this._valueChangeAction = this._createActionByOption('onValueChanged', {
       excludeValidators: ['disabled', 'readOnly'],

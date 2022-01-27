@@ -32,7 +32,7 @@ describe('Pager', () => {
 
         const placeholderTree = mount(<GridPagerView {...viewProps as any} /> as any);
         const { template } = placeholderTree.find(PlaceholderExtender).props();
-        const PagerTemplate = template([pageIndex, pageSize, totalCount, pageCount]);
+        const PagerTemplate = template({ deps: [pageIndex, pageSize, totalCount, pageCount] });
 
         const tree = mount(PagerTemplate);
         expect(tree.find(PagerContent).props()).toMatchObject({

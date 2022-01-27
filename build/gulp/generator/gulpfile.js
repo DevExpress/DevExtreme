@@ -41,7 +41,6 @@ const IGNORE_PATHS_BY_FRAMEWORKS = {
     react: [],
     angular: [
         '!js/renovation/ui/pager/pager.tsx',
-        '!js/renovation/ui/grids/data_grid_light/**/*',
     ]
 };
 
@@ -280,7 +279,7 @@ function addGenerationTaskWithSuffix(
                 )
                 .pipe(gulp.dest(frameworkDest));
         },
-        function declarationBuild() {
+        function watchDeclarationBuild() {
             gulp.watch(SRC, gulp.series(`generate-${frameworkName}${suffix}-declaration-only`));
         }
     ];
