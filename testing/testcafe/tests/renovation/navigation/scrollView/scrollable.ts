@@ -19,7 +19,7 @@ const defaultProps: Partial<ScrollableProps> = {
 
 const config: Partial<ScrollableProps>[] = [];
 
-[true, false].forEach((useNative) => {
+[false, true].forEach((useNative) => {
   [false, true].forEach((rtlEnabled) => {
     ([
       DIRECTION_VERTICAL,
@@ -64,8 +64,8 @@ fixture('Renovated scrollable - visibility integration');
 
 config.forEach((props) => {
   test(`Scroll should save position on visibility change, ${JSON.stringify(props)}`,
-    async (t, { screenshotComparerOptions }) => {
-      const scrollable = new Scrollable(SCROLLABLE_SELECTOR, props);
+    async (t, { platform, screenshotComparerOptions }) => {
+      const scrollable = new Scrollable[platform](SCROLLABLE_SELECTOR, props);
       const { direction, useNative, rtlEnabled } = props;
 
       await scrollable.apiScrollTo({ top: 20, left: 10 });
