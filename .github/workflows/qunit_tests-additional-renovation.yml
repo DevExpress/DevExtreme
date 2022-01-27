@@ -171,6 +171,14 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: echo "::set-output name=last_run_status::success" > last_run_status
 
+    - name: Copy RawLog.txt
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: RawLog-${{ matrix.envs.name }}
+        path: ${{ github.workspace }}/testing/RawLog.txt
+        if-no-files-found: ignore
+
   notify:
     runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
     name: Send notifications
