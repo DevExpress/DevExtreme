@@ -8905,6 +8905,38 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
         assert.strictEqual(this.columnsController.getRowCount(), 1, 'header row count');
     });
 
+    QUnit.test('Delete several band columns via API inside beginUpdate/endUpdate (T1049616)', function(assert) {
+        // arrange
+
+        this.applyOptions({
+            columns: [{
+                dataField: 'Area',
+            }, {
+                caption: 'Population',
+                columns: [{
+                    dataField: 'Population_Total',
+                }],
+            }, {
+                caption: 'Nominal GDP',
+                columns: [{
+                    dataField: 'GDP_Total',
+                }],
+            }],
+        });
+
+        // act
+        this.beginUpdate();
+        this.columnsController.deleteColumn('Population');
+        this.columnsController.deleteColumn('Nominal GDP');
+        this.endUpdate();
+
+        // assert
+        const visibleColumns = this.columnsController.getVisibleColumns(0);
+        assert.strictEqual(visibleColumns.length, 1, 'column count');
+        assert.strictEqual(visibleColumns[0].dataField, 'Area', 'dataField of the last column');
+        assert.strictEqual(this.columnsController.getRowCount(), 1, 'header row count');
+    });
+
     // T715902
     QUnit.test('No exceptions on an attempt to manipulate columns at runtime', function(assert) {
         // arrange
@@ -9618,6 +9650,33 @@ QUnit.module('Customization of the command columns', {
 
         // assert
         assert.deepEqual(this.columnOption('TestField3', 'lookup.dataSource'), [1, 2, 3], 'lookup datasource');
+    });
+
+    // T1046609
+    QUnit.test('Update dataSource of the column lookup when command column is specified', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { type: 'buttons', buttons: ['button1', 'button2'] },
+                {
+                    caption: 'Band Column 1', columns: [
+                        { dataField: 'TestField1', caption: 'Column 1', lookup: { dataSource: [] } },
+                        { dataField: 'TestField2', caption: 'Column 2' },
+                    ]
+                }
+            ]
+        });
+
+        try {
+            // act
+            this.columnOption('TestField1', 'lookup.dataSource', [1, 2, 3]);
+
+            // assert
+            assert.deepEqual(this.columnOption('TestField1', 'lookup.dataSource'), [1, 2, 3], 'lookup datasource');
+        } catch(e) {
+            // assert
+            assert.ok(false, 'exception');
+        }
     });
 
     // T652910

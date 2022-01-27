@@ -20,6 +20,7 @@ import { JSPdfHorizontalAlignTests } from './jspdf_v3.dataGrid.horizontalAlign.t
 import { JSPdfPageMarginsTests } from './jspdf_v3.dataGrid.pageMargin.tests.js';
 import { JSPdfColumnWidthsTests } from './jspdf_v3.dataGrid.columnAutoWidth.tests.js';
 import { JSPdfCustomDrawCellTests } from './jspdf_v3.dataGrid.customDrawCell.tests.js';
+import { JSPdfSplittingTests } from './jspdf_v3.dataGrid.splitting.tests.js';
 
 import 'generic_light.css!';
 
@@ -128,6 +129,42 @@ function createMockPdfDoc(options) {
         }
         this.__log.push('text,' + argumentsToString.apply(null, arguments));
         this.__text.apply(this, arguments);
+    };
+
+    result.__moveTo = result.moveTo;
+    result.moveTo = function() {
+        this.__log.push('moveTo,' + argumentsToString.apply(null, arguments));
+        this.__moveTo.apply(this, arguments);
+    };
+
+    result.__lineTo = result.lineTo;
+    result.lineTo = function() {
+        this.__log.push('lineTo,' + argumentsToString.apply(null, arguments));
+        this.__lineTo.apply(this, arguments);
+    };
+
+    result.__clip = result.clip;
+    result.clip = function() {
+        this.__log.push('clip,' + argumentsToString.apply(null, arguments));
+        this.__clip.apply(this, arguments);
+    };
+
+    result.__discardPath = result.discardPath;
+    result.discardPath = function() {
+        this.__log.push('discardPath,' + argumentsToString.apply(null, arguments));
+        this.__discardPath.apply(this, arguments);
+    };
+
+    result.__saveGraphicsState = result.saveGraphicsState;
+    result.saveGraphicsState = function() {
+        this.__log.push('saveGraphicsState,' + argumentsToString.apply(null, arguments));
+        this.__saveGraphicsState.apply(this, arguments);
+    };
+
+    result.__restoreGraphicsState = result.restoreGraphicsState;
+    result.restoreGraphicsState = function() {
+        this.__log.push('restoreGraphicsState,' + argumentsToString.apply(null, arguments));
+        this.__restoreGraphicsState.apply(this, arguments);
     };
 
     result.__addPage = result.addPage;
@@ -1271,3 +1308,4 @@ JSPdfHorizontalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGri
 JSPdfColumnWidthsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfPageMarginsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfCustomDrawCellTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfSplittingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

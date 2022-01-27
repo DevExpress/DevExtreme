@@ -39,6 +39,18 @@ if(Quill) {
 
     const USER_ACTION = 'user';
 
+    const FORMAT_HOTKEYS = {
+        66: 'bold',
+        73: 'italic',
+        85: 'underline'
+    };
+
+    const KEY_CODES = {
+        b: 66,
+        i: 73,
+        u: 85
+    };
+
     const localize = (name) => {
         return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
     };
@@ -115,6 +127,8 @@ if(Quill) {
                 e.preventDefault();
             });
 
+            this._subscribeFormatHotKeys();
+
             this.toolbarInstance = this.editorInstance._createComponent(this._$toolbar, Toolbar, this.toolbarConfig);
 
             this.editorInstance.on('optionChanged', ({ name }) => {
@@ -178,6 +192,41 @@ if(Quill) {
                         errors.log('W1016', optionName.oldName, optionName.newName);
                     }
                 });
+            }
+        }
+
+        _subscribeFormatHotKeys() {
+            this.quill.keyboard.addBinding({
+                which: KEY_CODES.b,
+                shortKey: true,
+            }, this._handleFormatHotKey.bind(this));
+
+            this.quill.keyboard.addBinding({
+                which: KEY_CODES.i,
+                shortKey: true,
+            }, this._handleFormatHotKey.bind(this));
+
+            this.quill.keyboard.addBinding({
+                which: KEY_CODES.u,
+                shortKey: true,
+            }, this._handleFormatHotKey.bind(this));
+        }
+
+        _handleFormatHotKey(range, context, { which }) {
+            const formatName = FORMAT_HOTKEYS[which];
+
+            this._updateButtonState(formatName);
+        }
+
+        _updateButtonState(formatName) {
+            const formatWidget = this._toolbarWidgets.getByName(formatName);
+            const currentFormat = this.quill.getFormat();
+            const formatValue = currentFormat[formatName];
+
+            if(formatValue) {
+                this._markActiveFormatWidget(formatName, formatWidget, currentFormat);
+            } else {
+                this._resetFormatWidget(formatName, formatWidget);
             }
         }
 

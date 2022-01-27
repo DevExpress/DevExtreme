@@ -9,6 +9,7 @@ import { Deferred } from '../../core/utils/deferred';
 import Callbacks from '../../core/utils/callbacks';
 import { VirtualDataLoader } from './ui.grid.core.virtual_data_loader';
 import { isDefined } from '../../core/utils/type';
+import gridCoreUtils from './ui.grid_core.utils';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
@@ -16,22 +17,6 @@ const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
 const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 const isAppendMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
-
-export let getPixelRatio = (window) => window.devicePixelRatio || 1;
-
-///#DEBUG
-export function _setPixelRatioFn(value) {
-    getPixelRatio = value;
-}
-///#ENDDEBUG
-
-export function getContentHeightLimit(browser) {
-    if(browser.mozilla) {
-        return 8000000;
-    }
-
-    return 15000000 / getPixelRatio(getWindow());
-}
 
 export function subscribeToExternalScrollers($element, scrollChangedHandler, $targetElement) {
     let $scrollElement;
@@ -127,6 +112,7 @@ export const VirtualScrollController = Class.inherit((function() {
             this._viewportItemSize = 20;
             this._viewportItemIndex = 0;
             this._position = 0;
+            this._isScrollingBack = false;
             this._contentSize = 0;
             this._itemSizes = {};
             this._sizeRatio = 1;
@@ -232,12 +218,16 @@ export const VirtualScrollController = Class.inherit((function() {
         },
 
         isScrollingBack: function() {
-            return this._position < this._prevPosition;
+            return this._isScrollingBack;
         },
 
         _setViewportPositionCore: function(position) {
-            this._prevPosition = this._position || 0;
+            const prevPosition = this._position || 0;
             this._position = position;
+
+            if(prevPosition !== this._position) {
+                this._isScrollingBack = this._position < prevPosition;
+            }
 
             const itemIndex = this.getItemIndexByPosition();
             const result = this.setViewportItemIndex(itemIndex);
@@ -256,7 +246,7 @@ export const VirtualScrollController = Class.inherit((function() {
                 });
 
                 const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + this.itemsCount()) * this._viewportItemSize;
-                const contentHeightLimit = getContentHeightLimit(browser);
+                const contentHeightLimit = gridCoreUtils.getContentHeightLimit(browser);
                 if(virtualContentSize > contentHeightLimit) {
                     this._sizeRatio = contentHeightLimit / virtualContentSize;
                 } else {
@@ -327,6 +317,10 @@ export const VirtualScrollController = Class.inherit((function() {
             const end = this.getItemIndexByPosition(this._position + height);
 
             this.viewportSize(Math.ceil(end - begin));
+
+            if(this._viewportItemIndex !== begin) {
+                this._setViewportPositionCore(this._position);
+            }
         },
         reset: function(isRefresh) {
             this._dataLoader.reset();
@@ -365,9 +359,7 @@ export const VirtualScrollController = Class.inherit((function() {
         getViewportParams: function() {
             const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
             const totalItemsCount = this._dataOptions.totalItemsCount();
-            const topIndex = virtualMode
-                ? Math.min(this._viewportItemIndex, Math.max(0, totalItemsCount - this._viewportSize))
-                : this._viewportItemIndex;
+            const topIndex = this._viewportItemIndex;
             const bottomIndex = this._viewportSize + topIndex;
             const maxGap = this.option('scrolling.prerenderedRowChunkSize') || 1;
             const isScrollingBack = this.isScrollingBack();

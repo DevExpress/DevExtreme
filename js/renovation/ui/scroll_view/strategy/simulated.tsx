@@ -23,7 +23,6 @@ import {
   subscribeToDXPointerDownEvent,
   subscribeToDXPointerUpEvent,
 } from '../../../utils/subscribe_to_event';
-import { ScrollViewLoadPanel } from '../internal/load_panel';
 
 import { AnimatedScrollbar } from '../scrollbar/animated_scrollbar';
 import { Widget } from '../../common/widget';
@@ -85,10 +84,10 @@ import { BottomPocket } from '../internal/pocket/bottom';
 
 import { getDevicePixelRatio } from '../utils/get_device_pixel_ratio';
 import { isElementVisible } from '../utils/is_element_visible';
-import { clampIntoRange } from '../utils/clamp_into_range';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { subscribeToResize } from '../utils/subscribe_to_resize';
 import domAdapter from '../../../../core/dom_adapter';
+import { getScrollLeftMax } from '../utils/get_scroll_left_max';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -97,7 +96,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     topPocketRef, bottomPocketRef, bottomPocketHeight,
     hovered, pulledDown, scrollLocationChange,
     containerHasSizes, contentWidth, containerClientWidth, contentHeight, containerClientHeight,
-    scrollableRef, contentStyles, containerStyles, onBounce,
+    scrollableRef, contentStyles, containerStyles, onBounce, onScroll,
     onReachBottom, onPullDown, onEnd, direction, topPocketState,
     isLoadPanelVisible, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom, active,
@@ -106,10 +105,11 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     props: {
       aria, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
-      needRenderScrollbars, needScrollViewLoadPanel,
+      needRenderScrollbars,
       showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
       reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled,
       pullDownEnabled, reachBottomEnabled, refreshStrategy,
+      loadPanelTemplate: LoadPanelTemplate,
     },
     restAttributes,
   } = viewModel;
@@ -180,8 +180,14 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
+              onScroll={onScroll}
               onEnd={onEnd}
               containerHasSizes={containerHasSizes}
+
+              rtlEnabled={rtlEnabled}
+
+              onLock={lock}
+              onUnlock={unlock}
             />
           )}
           {needRenderScrollbars && direction.isVertical && (
@@ -200,6 +206,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
+              onScroll={onScroll}
               onEnd={onEnd}
               containerHasSizes={containerHasSizes}
 
@@ -209,7 +216,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               pulledDown={pulledDown}
               onPullDown={onPullDown}
               onReachBottom={onReachBottom}
-              pullDownEnabled={pullDownEnabled}
               reachBottomEnabled={reachBottomEnabled}
 
               onLock={lock}
@@ -218,12 +224,12 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           )}
         </div>
       </div>
-      { needScrollViewLoadPanel && (
-        <ScrollViewLoadPanel
-          targetElement={scrollableRef}
-          refreshingText={refreshingText}
-          visible={isLoadPanelVisible}
-        />
+      { LoadPanelTemplate && (
+      <LoadPanelTemplate
+        targetElement={scrollableRef}
+        refreshingText={refreshingText}
+        visible={isLoadPanelVisible}
+      />
       )}
     </Widget>
   );
@@ -284,6 +290,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   @InternalState() vScrollLocation = 0;
 
   @InternalState() hScrollLocation = 0;
+
+  @InternalState() pendingScrollEvent = false;
+
+  @Mutable() prevDirection = 'initial';
 
   @Mutable() validateWheelTimer?: unknown;
 
@@ -492,7 +502,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       return false;
     }
 
-    this.updateHandler();
+    // this.updateHandler();
 
     return this.moveIsAllowed(event);
   }
@@ -522,20 +532,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     } else {
       this.unlock();
     }
-  }
-
-  @Effect() effectResetInactiveState(): void {
-    if (this.direction.isBoth) {
-      return;
-    }
-
-    const inactiveScrollProp = !this.direction.isVertical ? 'scrollTop' : 'scrollLeft';
-
-    this.scrollLocationChange({
-      fullScrollProp: inactiveScrollProp,
-      location: 0,
-      needFireScroll: false,
-    });
   }
 
   @Effect()
@@ -579,10 +575,31 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   @Effect({ run: 'once' })
-  subscribeContentToResize(): EffectReturn {
+  subscribeToResizeContent(): EffectReturn {
+    if (this.props.needScrollViewContentWrapper) {
+      const unsubscribeHeightResize = subscribeToResize(
+        this.content(),
+        (element: HTMLDivElement) => { this.setContentHeight(element); },
+      );
+
+      const unsubscribeWidthResize = subscribeToResize(
+        this.contentRef.current,
+        (element: HTMLDivElement) => { this.setContentWidth(element); },
+      );
+
+      /* istanbul ignore next */
+      return (): void => {
+        unsubscribeHeightResize?.();
+        unsubscribeWidthResize?.();
+      };
+    }
+
     return subscribeToResize(
-      this.content(),
-      (element: HTMLDivElement) => { this.setContentDimensions(element); },
+      this.contentRef.current,
+      (element: HTMLDivElement) => {
+        this.setContentHeight(element);
+        this.setContentWidth(element);
+      },
     );
   }
 
@@ -590,6 +607,40 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   // it needs for support qunit tests
   @Effect({ run: 'once' }) updateDimensions(): void {
     this.updateElementDimensions();
+  }
+
+  @Effect() triggerScrollEvent(): void {
+    if (this.pendingScrollEvent) {
+      this.pendingScrollEvent = false;
+      eventsEngine.triggerHandler(this.containerRef.current, { type: 'scroll' });
+    }
+  }
+
+  @Effect() resetInactiveOffsetToInitial(): void {
+    if (this.direction.isBoth) {
+      this.prevDirection = this.props.direction;
+      return;
+    }
+
+    const maxScrollOffset = getScrollLeftMax(this.containerRef.current!);
+    const needResetInactiveOffset = this.prevDirection !== this.props.direction && maxScrollOffset;
+
+    if (!needResetInactiveOffset) {
+      return;
+    }
+
+    this.prevDirection = this.props.direction;
+
+    const inactiveScrollProp = !this.direction.isVertical ? 'scrollTop' : 'scrollLeft';
+    const location = this.props.rtlEnabled && inactiveScrollProp === 'scrollLeft'
+      ? maxScrollOffset
+      : 0;
+
+    this.scrollLocationChange({
+      fullScrollProp: inactiveScrollProp,
+      // set default content position
+      location,
+    });
   }
 
   @Method()
@@ -603,8 +654,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const { scrollLeft, scrollTop } = this.containerRef.current!;
     const { top, left } = location;
 
-    this.hScrollbarRef.current?.scrollTo(scrollLeft + left);
-    this.vScrollbarRef.current?.scrollTo(scrollTop + top);
+    this.hScrollbarRef.current?.scrollTo(scrollLeft + left, true);
+    this.vScrollbarRef.current?.scrollTo(scrollTop + top, true);
 
     this.scrolling = false;
   }
@@ -618,16 +669,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   syncScrollbarsWithContent(): void {
-    const { scrollLeft, scrollTop } = this.containerRef.current!; // this.scrollOffset();
-    this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: -clampIntoRange(-scrollTop, 0, this.vScrollOffsetMax), needFireScroll: false });
+    const { scrollLeft, scrollTop } = this.containerRef.current!;
 
-    if (!this.props.rtlEnabled) { // TODO: support native rtl mode
-      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: -clampIntoRange(-scrollLeft, 0, this.hScrollOffsetMax), needFireScroll: false });
+    this.vScrollbarRef.current?.scrollTo(scrollTop, false);
+    if (!this.props.rtlEnabled) { // TODO: support native rtl mode // require for Qunit test
+      this.hScrollbarRef.current?.scrollTo(scrollLeft, false);
     }
   }
 
   startLoading(): void {
-    if (this.loadingIndicatorEnabled && isElementVisible(this.scrollableRef.current)) {
+    if (this.loadingIndicatorEnabled && isElementVisible(this.containerRef.current)) {
       this.isLoadPanelVisible = true;
     }
     this.lock();
@@ -717,7 +768,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     this.loadingIndicatorEnabled = true;
     this.finishLoading();
-    this.updateHandler();
+    // this.updateHandler();
+
+    // the resizeObserver handler calls too late
+    // in case when List visibility was changed
+    this.updateElementDimensions();
   }
 
   onReachBottom(): void {
@@ -727,11 +782,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   scrollLocationChange(eventData: ScrollLocationChangeArgs): void {
-    if (!isElementVisible(this.scrollableRef.current)) {
+    if (!isElementVisible(this.containerRef.current)) {
       return;
     }
 
-    const { fullScrollProp, location, needFireScroll } = eventData;
+    const { fullScrollProp, location } = eventData;
 
     this.containerRef.current![fullScrollProp] = location;
 
@@ -741,12 +796,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       this.vScrollLocation = -location;
     }
 
-    const scrollDelta = Math.abs(this.savedScrollOffset[fullScrollProp] - location);
     this.savedScrollOffset[fullScrollProp] = location;
-
-    if (needFireScroll && scrollDelta >= 1) {
-      this.onScroll();
-    }
   }
 
   get hScrollOffsetMax(): number {
@@ -764,7 +814,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   onScroll(): void {
-    eventsEngine.triggerHandler(this.containerRef.current, { type: 'scroll' });
+    this.pendingScrollEvent = true;
   }
 
   handleInit(event: DxMouseEvent): void {
@@ -1063,12 +1113,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   // onVisibilityChangeHandler uses for date_view_roller purposes only
   onVisibilityChangeHandler(visible: boolean): void {
     if (visible) {
-      this.updateHandler();
+      // this.updateHandler();
 
       const { scrollTop, scrollLeft } = this.savedScrollOffset;
       // restore scrollLocation on second and next opening of popup with data_view rollers
-      this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: scrollTop, needFireScroll: false });
-      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: scrollLeft, needFireScroll: false });
+      this.vScrollbarRef.current?.scrollTo(scrollTop, false);
+      this.hScrollbarRef.current?.scrollTo(scrollLeft, false);
     }
 
     this.props.onVisibilityChange?.(visible);
@@ -1080,7 +1130,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       this.setBottomPocketDimensions(this.bottomPocketRef.current!);
     }
 
-    this.setContentDimensions(this.content());
+    this.setContentWidth(this.contentRef.current!);
+    this.setContentHeight(this.content());
     this.setContainerDimensions(this.containerRef.current!);
   }
 
@@ -1096,14 +1147,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       : 0;
   }
 
-  setContentDimensions(contentEl: HTMLDivElement): void {
+  setContentHeight(contentEl: HTMLDivElement): void {
     this.contentClientHeight = contentEl.clientHeight;
     this.contentScrollHeight = contentEl.scrollHeight;
 
+    this.contentPaddingBottom = getElementPadding(this.contentRef.current, 'bottom');
+  }
+
+  setContentWidth(contentEl: HTMLDivElement): void {
     this.contentClientWidth = contentEl.clientWidth;
     this.contentScrollWidth = contentEl.scrollWidth;
-
-    this.contentPaddingBottom = getElementPadding(this.contentRef.current, 'bottom');
   }
 
   setContainerDimensions(containerEl: HTMLDivElement): void {

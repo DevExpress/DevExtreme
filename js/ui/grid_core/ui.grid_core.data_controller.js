@@ -62,6 +62,7 @@ export const dataControllerModule = {
                 init: function() {
                     const that = this;
                     that._items = [];
+                    that._cachedProcessedItems = null;
                     that._columnsController = that.getController('columns');
 
                     that._currentOperationTypes = null;
@@ -427,6 +428,7 @@ export const dataControllerModule = {
                     that.callBase();
                     dataSource = that._dataSource;
                     that._useSortingGroupingFromColumns = true;
+                    that._cachedProcessedItems = null;
                     if(dataSource) {
                         that._setPagingOptions(dataSource);
                         that.setDataSource(dataSource);
@@ -1262,6 +1264,12 @@ export const dataControllerModule = {
 
                 getCachedStoreData: function() {
                     return this._dataSource && this._dataSource.getCachedStoreData();
+                },
+
+                isLastPageLoaded: function() {
+                    const pageIndex = this.pageIndex();
+                    const pageCount = this.pageCount();
+                    return pageIndex === (pageCount - 1);
                 }
             };
 

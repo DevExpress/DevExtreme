@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-type-alias */
 /* eslint-disable max-classes-per-file */
 import {
   ComponentBindings,
@@ -6,6 +7,7 @@ import {
   TwoWay,
   Nested,
   Template,
+  JSXTemplate,
 } from '@devextreme-generator/declarations';
 
 import { SchedulerToolbarItem } from './header/props';
@@ -14,14 +16,12 @@ import DataSource from '../../../data/data_source';
 import type { DataSourceOptions } from '../../../data/data_source';
 
 import type {
-  AppointmentCollectorTemplateData,
   AppointmentDraggingAddEvent,
   AppointmentDraggingEndEvent,
   AppointmentDraggingMoveEvent,
   AppointmentDraggingStartEvent,
   AppointmentDraggingRemoveEvent,
   DateNavigatorTextInfo,
-  AppointmentTemplateData,
   Appointment,
   AppointmentAddingEvent,
   AppointmentClickEvent,
@@ -42,6 +42,8 @@ import type { UserDefinedElement, DxElement } from '../../../core/element'; // e
 import messageLocalization from '../../../localization/message';
 import { ViewType } from './types';
 import { BaseWidgetProps } from '../common/base_props';
+import { DataCellTemplateProps, DateTimeCellTemplateProps, ResourceCellTemplateProps } from './workspaces/types';
+import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from './appointment/types';
 
 @ComponentBindings()
 export class ResourceProps {
@@ -119,39 +121,25 @@ export class ViewProps {
   /* Templates */
 
   @Template()
-  dataCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+  dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 
   @Template()
-  dateCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+  dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
   @Template()
-  timeCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+  timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
   @Template()
-  resourceCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+  resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 
   @Template()
-  appointmentCollectorTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
+  appointmentCollectorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
 
   @Template()
-  appointmentTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+  appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
   @Template()
-  appointmentTooltipTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+  appointmentTooltipTemplate?: JSXTemplate<AppointmentTemplateProps>;
 }
 
 @ComponentBindings()
@@ -400,34 +388,22 @@ export class SchedulerProps extends BaseWidgetProps {
   /* Templates */
 
   @Template()
-  dataCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+  dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 
   @Template()
-  dateCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+  dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
   @Template()
-  timeCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+  timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
   @Template()
-  resourceCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+  resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 
   @Template()
-  appointmentCollectorTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
+  appointmentCollectorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
 
   @Template()
-  appointmentTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+  appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
   @Template()
   appointmentTooltipTemplate?:
@@ -444,8 +420,48 @@ export class SchedulerProps extends BaseWidgetProps {
       defaultElement: 'viewSwitcher',
       location: 'after',
     },
-  ] as SchedulerToolbarItem[];
+  ];
 }
+
+export type DataAccessorsProps = Pick<
+SchedulerProps,
+'startDateExpr'
+| 'endDateExpr'
+| 'startDateTimeZoneExpr'
+| 'endDateTimeZoneExpr'
+| 'allDayExpr'
+| 'textExpr'
+| 'descriptionExpr'
+| 'recurrenceRuleExpr'
+| 'recurrenceExceptionExpr'
+| 'resources'
+| 'dateSerializationFormat'
+>;
+
+export type CurrentViewConfigProps = Pick<
+SchedulerProps,
+'firstDayOfWeek'
+| 'startDayHour'
+| 'endDayHour'
+| 'cellDuration'
+| 'groupByDate'
+| 'scrolling'
+| 'dataCellTemplate'
+| 'timeCellTemplate'
+| 'resourceCellTemplate'
+| 'dateCellTemplate'
+| 'appointmentTemplate'
+| 'appointmentCollectorTemplate'
+| 'appointmentTooltipTemplate'
+| 'maxAppointmentsPerCell'
+| 'showAllDayPanel'
+| 'showCurrentTimeIndicator'
+| 'indicatorUpdateInterval'
+| 'shadeUntilCurrentTime'
+| 'crossScrollingEnabled'
+| 'height'
+| 'width'
+>;
 
 // TODO: https://github.com/DevExpress/devextreme-renovation/issues/751
 // export type SchedulerPropsType = SchedulerProps & Pick<

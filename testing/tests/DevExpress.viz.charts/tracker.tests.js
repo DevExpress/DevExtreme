@@ -2618,7 +2618,7 @@ QUnit.test('show Tooltip event when there is tooltip on another point. TooltipHi
     this.environment.options.seriesGroup.trigger(getEvent('showpointtooltip'), this.environment.point1);
 
     assert.ok(this.tooltip.stub('hide').calledOnce);
-    assert.deepEqual(this.tooltip.stub('hide').lastCall.args, []);
+    assert.deepEqual(this.tooltip.stub('hide').lastCall.args, [false]);
 
     const showTooltip = this.tooltip.stub('show');
     assert.equal(showTooltip.callCount, 1, 'tooltip showing was calling once');
@@ -2660,7 +2660,7 @@ QUnit.test('hide Tooltip event. TooltipHidden fired', function(assert) {
     $(this.environment.options.seriesGroup.element).trigger(getEvent('hidepointtooltip'), this.environment.point1);
 
     assert.ok(this.tooltip.stub('hide').calledOnce);
-    assert.deepEqual(this.tooltip.stub('hide').lastCall.args, []);
+    assert.deepEqual(this.tooltip.stub('hide').lastCall.args, [true]);
 });
 
 QUnit.test('tooltipShown call', function(assert) {
@@ -2684,7 +2684,7 @@ QUnit.test('tooltipHidden from chart', function(assert) {
     $(this.environment.options.seriesGroup.element).trigger(getEvent('hidepointtooltip'));
 
     assert.equal(this.tooltip.hide.callCount, 1);
-    assert.deepEqual(this.tooltip.hide.lastCall.args, []);
+    assert.deepEqual(this.tooltip.hide.lastCall.args, [true]);
 });
 
 QUnit.test('repairTooltip. Point got invisible, tooltipHidden not fired', function(assert) {
@@ -2697,7 +2697,7 @@ QUnit.test('repairTooltip. Point got invisible, tooltipHidden not fired', functi
     this.tracker.repairTooltip();
 
     assert.equal(this.tooltip.hide.callCount, 1);
-    assert.deepEqual(this.tooltip.hide.lastCall.args, []);
+    assert.deepEqual(this.tooltip.hide.lastCall.args, [false]);
     assert.equal(this.tooltip.stub('show').callCount, 0);
 });
 
@@ -2728,7 +2728,7 @@ QUnit.test('show tooltip on point. Point with tooltip is invisible', function(as
     $(this.environment.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.environment.point2);
 
     assert.equal(this.tooltip.hide.callCount, 1);
-    assert.deepEqual(this.tooltip.hide.lastCall.args, []);
+    assert.deepEqual(this.tooltip.hide.lastCall.args, [false]);
 
     assert.equal(this.tooltip.show.callCount, 1);
     strictEqualForAllFields(assert, this.tooltip.show.lastCall.args[2], { target: this.environment.point2 });
@@ -2783,14 +2783,6 @@ function createCompleteTracker(options) {
     that.options = $.extend(true, that.options, options);
 
     that.tracker = createTracker('dxChart', that.options);
-
-    if(options._eventHandlerMock) {
-        const eventHandler = that.tracker._eventHandler;
-        that.tracker._eventHandler = function() {
-            options._eventHandlerMock.apply(that, arguments);
-            eventHandler.apply(that.tracker, arguments);
-        };
-    }
 
     that.eventsConsts = eventsConsts;
     that.tracker.__legend = legend;

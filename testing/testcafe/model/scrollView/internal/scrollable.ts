@@ -1,26 +1,30 @@
 import { ClientFunction, Selector } from 'testcafe';
+import { getComponentInstance } from '../../../helpers/multi-platform-test';
 import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/renovation/ui/scroll_view/common/consts';
 
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
+import type { PlatformType } from '../../../helpers/multi-platform-test/platform-type';
 
 const CLASS = {
   scrollable: 'dx-scrollable',
   scrollableContainer: 'dx-scrollable-container',
   scrollableContent: 'dx-scrollable-content',
 };
-export default class Scrollable extends Widget {
+
+const getScrollable = (platform: PlatformType) => class Scrollable extends Widget {
   scrollbar: Scrollbar;
 
   vScrollbar?: Scrollbar;
 
   hScrollbar?: Scrollbar;
 
-  getInstance: ClientFunction;
+  getInstance: () => Promise<unknown>;
 
   name: string;
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  platform: string;
+
   constructor(id: string | Selector, options?: any, name = 'dxScrollable') {
     super(id);
 
@@ -41,10 +45,9 @@ export default class Scrollable extends Widget {
     const scrollable = this.element;
 
     this.name = name;
-    this.getInstance = ClientFunction(
-      () => $(scrollable())[`${name}`]('instance'),
-      { dependencies: { scrollable, name } },
-    );
+    this.platform = platform || 'jquery';
+
+    this.getInstance = getComponentInstance(this.platform as PlatformType, scrollable);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -144,4 +147,12 @@ export default class Scrollable extends Widget {
       { dependencies: { getInstance, value } },
     )();
   }
-}
+};
+
+export const ScrollableFactory = {
+  jquery: getScrollable('jquery'),
+  angular: getScrollable('angular'),
+  react: getScrollable('react'),
+};
+
+export default ScrollableFactory.jquery;

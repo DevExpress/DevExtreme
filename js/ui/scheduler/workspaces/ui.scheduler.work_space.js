@@ -53,7 +53,7 @@ import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './ui.sched
 import ViewDataProvider from './view_model/view_data_provider';
 
 import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/layout.j';
-import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/layout.j';
+import dxrAllDayPanelTable from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/table.j';
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
@@ -73,7 +73,7 @@ import {
     getCellDuration
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
-import { Semaphore } from '../../../renovation/ui/scheduler/semaphore';
+import { ScrollSemaphore } from '../../../renovation/ui/scheduler/utils/semaphore/scrollSemaphore';
 import {
     getCellWidth,
     getCellHeight,
@@ -449,7 +449,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     createRAllDayPanelElements() {
-        this._$allDayPanel = $('<div>');
+        this._$allDayPanel = $('<div>').addClass(ALL_DAY_PANEL_CLASS);
         this._$allDayTitle = $('<div>').appendTo(this._$headerPanelEmptyCell);
     }
 
@@ -492,15 +492,19 @@ class SchedulerWorkSpace extends WidgetObserver {
         config.onScroll = e => {
             currentOnScroll();
 
-            this._dataTableSemaphore.take();
+            this._dataTableSemaphore.take(e.scrollOffset);
 
-            this._sideBarSemaphore.isFree() && this._sidebarScrollable && this._sidebarScrollable.scrollTo({
-                top: e.scrollOffset.top
-            });
+            if(this._sideBarSemaphore.isFree(e.scrollOffset)) {
+                this._sidebarScrollable?.scrollTo({
+                    top: e.scrollOffset.top
+                });
+            }
 
-            this._headerSemaphore.isFree() && this._headerScrollable && this._headerScrollable.scrollTo({
-                left: e.scrollOffset.left
-            });
+            if(this._headerSemaphore.isFree(e.scrollOffset)) {
+                this._headerScrollable?.scrollTo({
+                    left: e.scrollOffset.left
+                });
+            }
 
             this._dataTableSemaphore.release();
         };
@@ -521,8 +525,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             updateManually: true,
             bounceEnabled: false,
             onScroll: e => {
-                this._headerSemaphore.take();
-                this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ left: e.scrollOffset.left });
+                this._headerSemaphore.take(e.scrollOffset);
+                this._dataTableSemaphore.isFree(e.scrollOffset) && this._dateTableScrollable.scrollTo({ left: e.scrollOffset.left });
                 this._headerSemaphore.release();
             }
         };
@@ -889,8 +893,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     _updateScrollable() {
         this._dateTableScrollable.update();
 
-        this._headerScrollable && this._headerScrollable.update();
-        this._sidebarScrollable && this._sidebarScrollable.update();
+        this._headerScrollable?.update();
+        this._sidebarScrollable?.update();
     }
 
     _getTimePanelRowCount() {
@@ -1913,12 +1917,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 ...(this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {}),
             };
 
-            utils.renovation.renderComponent(this, this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
+            utils.renovation.renderComponent(this, this._$allDayTable, dxrAllDayPanelTable, 'renovatedAllDayPanel', options);
             utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', {});
-
-            this._$allDayTable = this.renovatedAllDayPanel.$element().find(`.${ALL_DAY_TABLE_CLASS}`);
-
-            this._$allDayPanel.prepend(this._$allDayContainer);
         }
         this._toggleAllDayVisibility(true);
     }
@@ -2204,9 +2204,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _init() {
-        this._headerSemaphore = new Semaphore();
-        this._sideBarSemaphore = new Semaphore();
-        this._dataTableSemaphore = new Semaphore();
+        this._headerSemaphore = new ScrollSemaphore();
+        this._sideBarSemaphore = new ScrollSemaphore();
+        this._dataTableSemaphore = new ScrollSemaphore();
         this._viewDataProvider = null;
         this._cellsSelectionState = null;
         this._activeStateUnit = CELL_SELECTOR;
@@ -2308,6 +2308,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._$headerPanel = $('<table>');
         this._$thead = $('<thead>').appendTo(this._$headerPanel);
         this._$headerPanelEmptyCell = $('<div>').addClass('dx-scheduler-header-panel-empty-cell');
+        this._$allDayTable = $('<table>');
 
         this._$fixedContainer = $('<div>').addClass(FIXED_CONTAINER_CLASS);
         this._$allDayContainer = $('<div>').addClass(ALL_DAY_CONTAINER_CLASS);
@@ -2370,7 +2371,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             );
             this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
 
-            this._$headerTablesContainer.append(this._$allDayContainer, this._$headerPanel, this._$allDayPanel);
+            this._$headerTablesContainer.append(this._$headerPanel, this._$allDayPanel);
+            this._$allDayPanel?.append(this._$allDayContainer, this._$allDayTable);
         }
 
         this._appendHeaderPanelEmptyCellIfNecessary();
@@ -2409,7 +2411,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._$dateTableContainer.append(this._$allDayContainer);
             this._$sidebarScrollableContent.append(this._$groupTable, this._$timePanel);
         } else {
-            this._headerScrollable.$content().append(this._$allDayContainer, this._$allDayPanel);
+            this._headerScrollable.$content().append(this._$allDayPanel);
+            this._$allDayPanel?.append(this._$allDayContainer, this._$allDayTable);
             this._$sidebarScrollableContent.append(this._$timePanel);
         }
 
@@ -2441,8 +2444,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             updateManually: true,
             bounceEnabled: false,
             onScroll: e => {
-                this._sideBarSemaphore.take();
-                this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ top: e.scrollOffset.top });
+                this._sideBarSemaphore.take(e.scrollOffset);
+                if(this._dataTableSemaphore.isFree(e.scrollOffset)) {
+                    this._dateTableScrollable.scrollTo({ top: e.scrollOffset.top });
+                }
                 this._sideBarSemaphore.release();
             }
         });
@@ -2458,7 +2463,9 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this._addTableClass(this._allDayTables[i], ALL_DAY_TABLE_CLASS);
             }
         } else {
-            this._addTableClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
+            if(!this.isRenovatedRender()) {
+                this._addTableClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
+            }
         }
     }
 

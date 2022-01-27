@@ -8,21 +8,24 @@ function performPackageReplacements(context, additionalReplacements) {
     const frameworkName = context.name;
     return through.obj((file, enc, callback) => {
         const basePackageObject = JSON.parse(file.contents.toString());
-        
+
         const packageObject = {
             name: `@devextreme/${frameworkName}`
         };
-        
+
         const knownFields = ['version', 'description', 'keywords', 'homepage', 'bugs', 'author', 'repository', 'license', 'browserslist'];
         knownFields.forEach(x => packageObject[x] = basePackageObject[x]);
 
-        const depsList = new Array(...context.rawPackageSet).map(x => {
+        const depsList = new Array(...context.rawPackageSet)
+        .map(x => {
             const splitted = x.split('/');
             if (splitted.length != 1 && splitted[0].startsWith('@')) {
                 return `${splitted[0]}/${splitted[1]}`;
             }
             return splitted[0];
-        });
+        })
+        .filter(x => !x.includes('@devextreme-generator'));
+
         const depsListDistinct = new Array(...new Set(depsList));
 
         packageObject.dependencies = {};
@@ -33,7 +36,8 @@ function performPackageReplacements(context, additionalReplacements) {
             }
             packageObject[field] = {};
             depsListDistinct.forEach(x => {
-                packageObject[field][x] = basePackageObject[field][x];
+                const packageVersion = basePackageObject[field][x];
+                packageObject[field][x] = packageVersion?.replace(/file:\.\.\//, 'file:../../../');
             });
         });
 
@@ -43,7 +47,7 @@ function performPackageReplacements(context, additionalReplacements) {
             minor: version.minor,
             suffix: 'next'
         });
-        
+
         if (context.production) {
             packageObject.dependencies.devextreme = dxversion;
         } else {
@@ -64,7 +68,7 @@ function performPackageReplacements(context, additionalReplacements) {
         if (context.production) {
             delete packageObject.peerDependencies.devextreme;
             packageObject.dependencies = {
-                devextreme: ctx.version
+                devextreme: dxversion
             };
         }
 

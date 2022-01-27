@@ -28,7 +28,8 @@ import {
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_ITEM_LABEL_CLASS,
     FORM_GROUP_CAPTION_CLASS,
-    FORM_UNDERLINED_CLASS
+    FORM_UNDERLINED_CLASS,
+    FORM_VALIDATION_SUMMARY
 } from 'ui/form/constants';
 
 import {
@@ -777,6 +778,24 @@ QUnit.test('Change options -> check _itemsOptionChangedHandler/_formDataOptionCh
     testConfig('xxx_items_xxx.', 'items; default; ');
 });
 
+QUnit.test('Keep validation summary in an item with Form in its template', function(assert) {
+    const $testContainer = $('#form');
+
+    $testContainer.dxForm({
+        showValidationSummary: true,
+        items: [{
+            template: () => {
+                return $('<div></div>').dxForm({
+                    showValidationSummary: true,
+                    items: []
+                });
+            }
+        }]
+    });
+
+    assert.strictEqual($testContainer.find('.' + FORM_VALIDATION_SUMMARY).length, 2, 'FORM_VALIDATION_SUMMARY');
+});
+
 QUnit.module('Tabs', {
     beforeEach: function() {
         const that = this;
@@ -1170,6 +1189,51 @@ QUnit.test('Update editorOptions of an editor inside the tab', function(assert) 
     assert.equal(form.getEditor('firstName').option('disabled'), false, '\'disabled\' option was successfully changed');
 });
 
+QUnit.test('Update layout inside a tab (T1040296)', function(assert) {
+    const testContainer = $('#form');
+
+    const form = testContainer.dxForm({
+        deferRendering: false,
+        items: [
+            {
+                itemType: 'tabbed',
+                tabPanelOptions: { 'deferRendering': false },
+                tabs: [
+                    {
+                        title: 'General',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [
+                                    { dataField: 'id', visible: false },
+                                    { itemType: 'group', items: [{ dataField: 'minWidth' }] }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm('instance');
+
+    form.option('items[0].tabs[0].items[0].items[0].visible', true);
+    form.option('items[0].tabs', [
+        {
+            title: 'General',
+            items: [
+                {
+                    itemType: 'group',
+                    items: [
+                        { dataField: 'id', visible: true }, { itemType: 'group', items: [{ dataField: 'minWidth' }] }
+                    ]
+                }
+            ]
+        },
+        { title: 'Window' }
+    ]);
+
+    assert.deepEqual([...document.querySelectorAll('.dx-tab-text')].map(e => e.textContent), ['General', 'Window'], 'dx-tab-text elements');
+});
 
 QUnit.module('Align labels', {
     beforeEach: function() {
@@ -3479,7 +3543,16 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
     });
 });
 
-QUnit.module('Adaptivity');
+QUnit.module('Adaptivity', {
+    beforeEach: function() {
+        const that = this;
+        that.clock = sinon.useFakeTimers();
+    },
+
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
 
 QUnit.test('One column screen should be customizable with screenByWidth option on init', function(assert) {
     const $form = $('#form');
@@ -3853,6 +3926,7 @@ QUnit.test('Form refreshes only one time on dimension changed with group layout'
 
     $form.width(100);
     resizeCallbacks.fire();
+    this.clock.tick();
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout one time');
 });
 
@@ -3878,6 +3952,7 @@ QUnit.test('Form redraw layout when colCount is \'auto\' and an calculated colCo
 
     $form.width(100);
     resizeCallbacks.fire();
+    this.clock.tick();
 
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout');
 });

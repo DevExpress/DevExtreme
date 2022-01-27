@@ -15,7 +15,6 @@ import { AppointmentsConfigType, AppointmentsModelType } from './types';
 
 import { DataAccessorType, ViewType } from '../types';
 import { calculateIsGroupedAllDayPanel, getCellDuration } from '../view_model/to_test/views/utils/base';
-import { createGetAppointmentColor } from '../resources/utils';
 import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -178,21 +177,15 @@ export const getAppointmentsModel = (
     appointmentsConfig.hoursInterval,
   );
 
-  const { leftVirtualCellCount, topVirtualRowCount } = viewDataProvider.viewData;
+  const {
+    startCellIndex: leftVirtualCellCount, startRowIndex: topVirtualRowCount,
+  } = viewDataProvider.getViewOptions();
   const cellDuration = getCellDuration(
     appointmentsConfig.viewType,
     appointmentsConfig.startDayHour,
     appointmentsConfig.endDayHour,
     appointmentsConfig.hoursInterval,
   );
-
-  const getAppointmentColor = createGetAppointmentColor({
-    resources: appointmentsConfig.resources,
-    // TODO dataAccessors -> resourceDataAccessors
-    dataAccessors: dataAccessors.resources as DataAccessorType,
-    loadedResources: appointmentsConfig.loadedResources,
-    resourceLoaderMap: new Map(), // TODO fill after load resources
-  });
 
   const appointmentRenderingStrategyName = getAppointmentRenderingStrategyName(
     appointmentsConfig.viewType,
@@ -219,7 +212,6 @@ export const getAppointmentsModel = (
     leftVirtualCellCount,
     topVirtualCellCount: topVirtualRowCount,
     cellDuration,
-    getAppointmentColor,
     resizableStep: positionHelper.getResizableStep(),
     DOMMetaData: cellsMetaData,
   };

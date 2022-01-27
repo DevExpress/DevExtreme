@@ -1,5 +1,9 @@
 import { isDefined } from '../../../core/utils/type';
 
+function getPageWidth(doc) {
+    return doc.internal.pageSize.getWidth();
+}
+
 function getTextLines(doc, text, font, { wordWrapEnabled, targetRectWidth }) {
     if(wordWrapEnabled) {
         // it also splits text by '\n' automatically
@@ -50,4 +54,4 @@ function calculateRowHeight(doc, cells, columnWidths) {
     return rowHeight;
 }
 
-export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines };
+export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth };

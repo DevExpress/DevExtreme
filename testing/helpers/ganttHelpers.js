@@ -25,6 +25,7 @@ export const Consts = {
     CONTEXT_MENU_SELECTOR: '.dx-context-menu',
     CONTEXT_MENU_ITEM_SELECTOR: '.dx-menu-item-text',
     INPUT_TEXT_EDITOR_SELECTOR: '.dx-texteditor-input',
+    RADIO_BUTTON_SELECTOR: '.dx-radiobutton',
     TOOLBAR_ITEM_SELECTOR: '.dx-toolbar-item',
     PARENT_TASK_SELECTOR: '.dx-gantt-parent',
     TOOLBAR_SEPARATOR_SELECTOR: '.dx-gantt-toolbar-separator',

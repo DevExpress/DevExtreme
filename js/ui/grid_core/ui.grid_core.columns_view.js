@@ -673,15 +673,19 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         source = source || options;
 
-        source.watch = source.watch || function(getter, updateFunc) {
+        source.watch = source.watch || function(getter, updateValueFunc, updateRowFunc) {
             let oldValue = getter(source.data);
 
             const watcher = function(row) {
+                if(row && updateRowFunc) {
+                    updateRowFunc(row);
+                }
+
                 const newValue = getter(source.data);
 
                 if(JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
                     if(row) {
-                        updateFunc(newValue, row);
+                        updateValueFunc(newValue);
                     }
                     oldValue = newValue;
                 }
@@ -946,10 +950,19 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
                         width = getWidthStyle(width);
                         minWidth = getWidthStyle(columns[i].minWidth || width);
-                        const $rows = $rows || $tableElement.children().children('.dx-row').not('.' + GROUP_ROW_CLASS).not('.' + DETAIL_ROW_CLASS);
+                        const $rows = $rows || $tableElement.children().children('.dx-row').not('.' + DETAIL_ROW_CLASS);
                         for(let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
+                            const row = $rows[rowIndex];
+
+                            let cell;
                             const visibleIndex = this.getVisibleColumnIndex(i, rowIndex);
-                            const cell = $rows[rowIndex].cells[visibleIndex];
+                            if(row.classList.contains(GROUP_ROW_CLASS)) {
+                                if(visibleIndex !== 1) {
+                                    cell = row.querySelector(`td[aria-colindex='${visibleIndex + 1}']`);
+                                }
+                            } else {
+                                cell = row.cells[visibleIndex];
+                            }
                             if(cell) {
                                 setCellWidth(cell, columns[i], width);
                                 cell.style.minWidth = minWidth;

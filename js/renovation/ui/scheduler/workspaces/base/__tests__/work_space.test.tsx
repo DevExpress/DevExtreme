@@ -1,5 +1,8 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import React, { createRef } from 'react';
+import { mount, shallow } from 'enzyme';
+import {
+  clear, emit, EVENT,
+} from '../../../../../test_utils/events_mock';
 import { ViewDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/view_data_generator';
 import { DateHeaderDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
 import { TimePanelDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
@@ -22,7 +25,7 @@ import { getDateTableWidth } from '../utils';
 
 import { getWindow, setWindow } from '../../../../../../core/utils/window';
 import * as subscribeUtils from '../../../../../utils/subscribe_to_event';
-import domAdapter from '../../../../../../core/dom_adapter';
+import { DATE_TABLE_CELL_CLASS, DATE_TABLE_ROW_CLASS } from '../../const';
 
 jest.mock('../../../../../utils/combine_classes', () => ({
   combineClasses: jest.fn(),
@@ -33,14 +36,19 @@ jest.mock('../utils', () => ({
 }));
 const isVerticalGroupingApplied = jest.spyOn(Utils, 'isVerticalGroupingApplied');
 const isHorizontalGroupingApplied = jest.spyOn(Utils, 'isHorizontalGroupingApplied');
-const subscribeToScrollEvent = jest.spyOn(subscribeUtils, 'subscribeToScrollEvent');
+const subscribeToDXPointerDownEvent = jest.spyOn(subscribeUtils, 'subscribeToDXPointerDownEvent');
+const subscribeToDXPointerMoveEvent = jest.spyOn(subscribeUtils, 'subscribeToDXPointerMoveEvent');
 
 const mockSetViewOptions = jest.fn();
 const mockCreateGroupedDataMapProvider = jest.fn();
+const mockGetCellData = jest.fn();
+const mockGetCellsByGroupIndexAndAllDay = jest.fn();
 const mockViewDataProvider = {
   getCellCount: () => 7,
   setViewOptions: mockSetViewOptions,
   createGroupedDataMapProvider: mockCreateGroupedDataMapProvider,
+  getCellData: mockGetCellData,
+  getCellsByGroupIndexAndAllDay: mockGetCellsByGroupIndexAndAllDay,
 };
 jest.mock('../../../../../../ui/scheduler/workspaces/view_model/view_data_provider', () => jest.fn().mockImplementation(() => mockViewDataProvider));
 
@@ -283,6 +291,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             type: 'week',
             currentDate: new Date(2021, 10, 9),
+            startViewDate: new Date(2021, 10, 7),
             scrolling: { mode: 'virtual' },
             intervalCount: 25,
             schedulerHeight: 500,
@@ -330,6 +339,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             type: 'week',
             currentDate: new Date(2021, 10, 9),
+            startViewDate: new Date(2021, 10, 7),
             scrolling: { mode: 'virtual' },
             intervalCount: 25,
           } as any);
@@ -371,6 +381,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             type: 'week',
             currentDate: new Date(2021, 10, 9),
+            startViewDate: new Date(2021, 10, 7),
             scrolling: { mode: 'standard' },
             intervalCount: 25,
           } as any);
@@ -401,6 +412,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 25,
               schedulerHeight: 500,
@@ -461,6 +473,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 25,
             } as any);
@@ -500,6 +513,460 @@ describe('WorkSpace', () => {
           } finally {
             setWindow(originalWindow, true);
           }
+        });
+      });
+
+      describe('onPointerDown', () => {
+        it('should be ignored if cell is not defined', () => {
+          const ref: any = createRef();
+          mount(<div ref={ref} />);
+          const eventMock: any = {
+            type: 'mouse',
+            target: ref.current,
+            button: 0,
+          };
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
+          });
+
+          workSpace.onPointerDown(eventMock);
+
+          expect(workSpace.cellsSelectionState)
+            .toBe(null);
+        });
+
+        it('should be ignored if it is not a mouse event', () => {
+          const ref: any = createRef();
+          mount(<div ref={ref} className={DATE_TABLE_CELL_CLASS} />);
+          const eventMock: any = {
+            type: 'touch',
+            target: ref.current,
+            button: 0,
+          };
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
+          });
+
+          workSpace.onPointerDown(eventMock);
+
+          expect(workSpace.cellsSelectionState)
+            .toBe(null);
+        });
+
+        it('should be ignored if it is not a left mouse click', () => {
+          const ref: any = createRef();
+          mount(<div ref={ref} className={DATE_TABLE_CELL_CLASS} />);
+          const eventMock: any = {
+            type: 'mouse',
+            target: ref.current,
+            button: 2,
+          };
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
+          });
+
+          workSpace.onPointerDown(eventMock);
+
+          expect(workSpace.cellsSelectionState)
+            .toBe(null);
+        });
+
+        it('should work correctly', () => {
+          const ref: any = createRef();
+          mount(
+            <div>
+              <div className={DATE_TABLE_ROW_CLASS}>
+                <div ref={ref} className={DATE_TABLE_CELL_CLASS} />
+              </div>
+            </div>,
+          );
+          const eventMock: any = {
+            type: 'mouse',
+            target: ref.current,
+            button: 0,
+          };
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
+          });
+
+          mockGetCellData.mockImplementationOnce(() => ({
+            startDate: new Date(2021, 10, 20),
+            index: 0,
+            groupIndex: 0,
+          }));
+          workSpace.onPointerDown(eventMock);
+
+          expect(workSpace.cellsSelectionState)
+            .toEqual({
+              selectedCells: [{
+                startDate: new Date(2021, 10, 20),
+                index: 0,
+                groupIndex: 0,
+              }],
+              focusedCell: {
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 0,
+                },
+                cellData: {
+                  startDate: new Date(2021, 10, 20),
+                  index: 0,
+                  groupIndex: 0,
+                },
+              },
+              firstSelectedCell: {
+                startDate: new Date(2021, 10, 20),
+                index: 0,
+                groupIndex: 0,
+              },
+            });
+        });
+      });
+
+      describe('omPointerMove', () => {
+        it('should be ignored if cell is not defined', () => {
+          const ref: any = createRef();
+          mount(<div ref={ref} />);
+          const eventMock: any = {
+            type: 'mouse',
+            target: ref.current,
+            button: 0,
+          };
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
+          });
+
+          workSpace.onPointerMove(eventMock);
+
+          expect(workSpace.cellsSelectionState)
+            .toBe(null);
+        });
+
+        it('should be ignored if isPointerDonw is false', () => {
+          const ref: any = createRef();
+          mount(<div ref={ref} className={DATE_TABLE_CELL_CLASS} />);
+          const eventMock: any = {
+            type: 'mouse',
+            target: ref.current,
+            button: 0,
+          };
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
+          });
+
+          workSpace.isPointerDown = false;
+          workSpace.onPointerMove(eventMock);
+
+          expect(workSpace.cellsSelectionState)
+            .toBe(null);
+        });
+
+        it('should work correctly', () => {
+          const ref: any = createRef();
+          mount(
+            <div>
+              <div className={DATE_TABLE_ROW_CLASS}>
+                <div ref={ref} className={DATE_TABLE_CELL_CLASS} />
+              </div>
+            </div>,
+          );
+          const eventMock: any = {
+            type: 'mouse',
+            target: ref.current,
+            button: 0,
+            preventDefault: jest.fn(),
+            stopPropagation: jest.fn(),
+          };
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
+          });
+
+          workSpace.isPointerDown = true;
+          workSpace.cellsSelectionState = {
+            selectedCells: [{
+              startDate: new Date(2021, 10, 21),
+              index: 1,
+              groupIndex: 0,
+            }],
+            focusedCell: {
+              position: {
+                columnIndex: 1,
+                rowIndex: 0,
+              },
+              cellData: {
+                startDate: new Date(2021, 10, 21),
+                index: 1,
+                groupIndex: 0,
+              },
+            },
+            firstSelectedCell: {
+              startDate: new Date(2021, 10, 21),
+              index: 1,
+              groupIndex: 0,
+            },
+          } as any;
+
+          const cells = [[{
+            startDate: new Date(2021, 10, 20),
+            index: 0,
+            groupIndex: 0,
+          }, {
+            startDate: new Date(2021, 10, 21),
+            index: 1,
+            groupIndex: 0,
+          }]];
+
+          mockGetCellData.mockImplementationOnce(() => cells[0][0]);
+          mockGetCellsByGroupIndexAndAllDay.mockImplementationOnce(() => cells);
+
+          workSpace.onPointerMove(eventMock);
+
+          expect(eventMock.preventDefault)
+            .toBeCalled();
+          expect(eventMock.stopPropagation)
+            .toBeCalled();
+
+          expect(workSpace.cellsSelectionState)
+            .toEqual({
+              selectedCells: [{
+                startDate: new Date(2021, 10, 20),
+                index: 0,
+                groupIndex: 0,
+              }, {
+                startDate: new Date(2021, 10, 21),
+                index: 1,
+                groupIndex: 0,
+              }],
+              focusedCell: {
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 0,
+                },
+                cellData: {
+                  startDate: new Date(2021, 10, 20),
+                  index: 0,
+                  groupIndex: 0,
+                },
+              },
+              firstSelectedCell: {
+                startDate: new Date(2021, 10, 21),
+                index: 1,
+                groupIndex: 0,
+              },
+            });
+        });
+
+        it('should not save state if new cell is invalid', () => {
+          const ref: any = createRef();
+          mount(
+            <div>
+              <div className={DATE_TABLE_ROW_CLASS}>
+                <div ref={ref} className={DATE_TABLE_CELL_CLASS} />
+              </div>
+            </div>,
+          );
+          const eventMock: any = {
+            type: 'mouse',
+            target: ref.current,
+            button: 0,
+            preventDefault: jest.fn(),
+            stopPropagation: jest.fn(),
+          };
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
+          });
+
+          const defaultSelectionState = {
+            selectedCells: [{
+              startDate: new Date(2021, 10, 21),
+              index: 1,
+              groupIndex: 0,
+            }],
+            focusedCell: {
+              position: {
+                columnIndex: 1,
+                rowIndex: 0,
+              },
+              cellData: {
+                startDate: new Date(2021, 10, 21),
+                index: 1,
+                groupIndex: 0,
+              },
+            },
+            firstSelectedCell: {
+              startDate: new Date(2021, 10, 21),
+              index: 1,
+              groupIndex: 0,
+            },
+          } as any;
+
+          workSpace.isPointerDown = true;
+          workSpace.cellsSelectionState = defaultSelectionState;
+
+          const cells = [[{
+            startDate: new Date(2021, 10, 20),
+            index: 0,
+            groupIndex: 0,
+          }, {
+            startDate: new Date(2021, 10, 21),
+            index: 1,
+            groupIndex: 0,
+          }, {
+            startDate: new Date(2021, 10, 20),
+            index: 0,
+            groupIndex: 1,
+          }, {
+            startDate: new Date(2021, 10, 21),
+            index: 1,
+            groupIndex: 1,
+          }]];
+
+          mockGetCellData.mockImplementationOnce(() => cells[0][2]);
+          mockGetCellsByGroupIndexAndAllDay.mockImplementationOnce(() => [cells[0].slice(0, 2)]);
+
+          workSpace.onPointerMove(eventMock);
+
+          expect(workSpace.cellsSelectionState)
+            .toBe(defaultSelectionState);
+        });
+
+        it('should not save state if new focused cell is equal to the old one', () => {
+          const ref: any = createRef();
+          mount(
+            <div>
+              <div className={DATE_TABLE_ROW_CLASS}>
+                <div ref={ref} className={DATE_TABLE_CELL_CLASS} />
+              </div>
+            </div>,
+          );
+          const eventMock: any = {
+            type: 'mouse',
+            target: ref.current,
+            button: 0,
+            preventDefault: jest.fn(),
+            stopPropagation: jest.fn(),
+          };
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
+          });
+
+          const defaultSelectionState = {
+            selectedCells: [{
+              startDate: new Date(2021, 10, 21),
+              index: 1,
+              groupIndex: 0,
+            }],
+            focusedCell: {
+              position: {
+                columnIndex: 1,
+                rowIndex: 0,
+              },
+              cellData: {
+                startDate: new Date(2021, 10, 21),
+                index: 1,
+                groupIndex: 0,
+              },
+            },
+            firstSelectedCell: {
+              startDate: new Date(2021, 10, 21),
+              index: 1,
+              groupIndex: 0,
+            },
+          } as any;
+
+          workSpace.isPointerDown = true;
+          workSpace.cellsSelectionState = defaultSelectionState;
+
+          const cells = [[{
+            startDate: new Date(2021, 10, 20),
+            index: 0,
+            groupIndex: 0,
+          }, {
+            startDate: new Date(2021, 10, 21),
+            index: 1,
+            groupIndex: 0,
+          }, {
+            startDate: new Date(2021, 10, 20),
+            index: 0,
+            groupIndex: 1,
+          }, {
+            startDate: new Date(2021, 10, 21),
+            index: 1,
+            groupIndex: 1,
+          }]];
+
+          mockGetCellData.mockImplementationOnce(() => cells[0][1]);
+          mockGetCellsByGroupIndexAndAllDay.mockImplementationOnce(() => [cells[0].slice(0, 2)]);
+
+          workSpace.onPointerMove(eventMock);
+
+          expect(workSpace.cellsSelectionState)
+            .toBe(defaultSelectionState);
+        });
+      });
+
+      describe('onPointerUp', () => {
+        it('should set isPointerDown to false', () => {
+          const workSpace = new WorkSpace({} as any);
+
+          workSpace.isPointerDown = true;
+
+          workSpace.onPointerUp({
+            type: 'mouse',
+            button: 0,
+          } as any);
+
+          expect(workSpace.isPointerDown)
+            .toBe(false);
+        });
+
+        it('should ignore event if event is incorrect', () => {
+          const workSpace = new WorkSpace({} as any);
+
+          workSpace.isPointerDown = true;
+
+          workSpace.onPointerUp({
+            type: 'touch',
+            button: 0,
+          } as any);
+
+          expect(workSpace.isPointerDown)
+            .toBe(true);
+
+          workSpace.onPointerUp({
+            type: 'mouse',
+            button: 2,
+          } as any);
+
+          expect(workSpace.isPointerDown)
+            .toBe(true);
         });
       });
     });
@@ -610,7 +1077,7 @@ describe('WorkSpace', () => {
 
         it('should call onViewRendered with correct parameters when all-day panel is not visible', () => {
           const onViewRendered = jest.fn();
-          const currentDate = new Date();
+          const currentDate = new Date(2021, 11, 26);
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
@@ -619,6 +1086,7 @@ describe('WorkSpace', () => {
             endDayHour: 1,
             showAllDayPanel: false,
             currentDate,
+            startViewDate: currentDate,
           });
 
           workSpace.dateTableRef = dateTableRefMock;
@@ -691,12 +1159,13 @@ describe('WorkSpace', () => {
 
         it('should call onViewRendered with correct parameters when all-day panel is visible', () => {
           const onViewRendered = jest.fn();
-          const currentDate = new Date();
+          const currentDate = new Date(2021, 11, 26);
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
             currentDate,
+            startViewDate: currentDate,
             startDayHour: 0,
             endDayHour: 1,
             showAllDayPanel: true,
@@ -790,7 +1259,8 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
-            currentDate: new Date(),
+            currentDate: new Date(2021, 11, 26),
+            startViewDate: new Date(2021, 11, 26),
             startDayHour: 0,
             endDayHour: 1,
             showAllDayPanel: false,
@@ -819,7 +1289,8 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
-            currentDate: new Date(),
+            currentDate: new Date(2021, 11, 26),
+            startViewDate: new Date(2021, 11, 26),
             startDayHour: 0,
             endDayHour: 1,
             showAllDayPanel: false,
@@ -848,6 +1319,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             scrolling: { mode: 'virtual' },
+            startViewDate: new Date(2021, 11, 26),
           });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -858,11 +1330,11 @@ describe('WorkSpace', () => {
 
           expect(workSpace.onWindowScrollEffect())
             .toStrictEqual(expect.any(Function));
-          expect(subscribeToScrollEvent)
-            .toBeCalledWith(
-              domAdapter.getDocument(),
-              onWindowScroll,
-            );
+
+          emit(EVENT.scroll);
+
+          expect(onWindowScroll)
+            .toBeCalled();
         });
 
         it('shoud not subscribe to window onScroll if height is defined and virtual scrolling is used', () => {
@@ -870,6 +1342,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             scrolling: { mode: 'virtual' },
             schedulerHeight: 500,
+            startViewDate: new Date(2021, 11, 26),
           });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -886,6 +1359,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             scrolling: { mode: 'standard' },
+            startViewDate: new Date(2021, 11, 26),
           });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -999,12 +1473,13 @@ describe('WorkSpace', () => {
 
       describe('tablesWidthEffect', () => {
         it('should save tablesWidth into the state', () => {
-          const currentDate = new Date();
+          const currentDate = new Date(2021, 11, 26);
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             crossScrollingEnabled: true,
             type: 'week',
             currentDate,
+            startViewDate: currentDate,
             groups,
           } as any);
 
@@ -1110,6 +1585,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 2,
               schedulerHeight: 1000,
@@ -1164,6 +1640,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 2,
               schedulerHeight: 1000,
@@ -1222,6 +1699,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 2,
               schedulerHeight: 1000,
@@ -1303,6 +1781,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 2,
               schedulerHeight: 1000,
@@ -1384,6 +1863,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 2,
               schedulerHeight: 1000,
@@ -1452,6 +1932,96 @@ describe('WorkSpace', () => {
           } finally {
             setWindow(originalWindow, true);
           }
+        });
+      });
+
+      describe('pointerEventsEffect', () => {
+        it('should register pointer down and pointer move events', () => {
+          const widgetRef: any = createRef();
+          mount(<div ref={widgetRef} />);
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 30),
+            startViewDate: new Date(2021, 10, 30),
+          });
+
+          workSpace.widgetElementRef = widgetRef;
+
+          workSpace.onPointerDown = jest.fn();
+          workSpace.onPointerMove = jest.fn();
+
+          const dispose = workSpace.pointerEventsEffect();
+
+          emit(EVENT.pointerDown);
+          emit(EVENT.pointerMove);
+
+          expect(workSpace.onPointerDown)
+            .toBeCalledTimes(1);
+          expect(workSpace.onPointerMove)
+            .toBeCalledTimes(1);
+
+          dispose!();
+
+          emit(EVENT.pointerDown);
+          emit(EVENT.pointerMove);
+
+          expect(workSpace.onPointerDown)
+            .toBeCalledTimes(1);
+          expect(workSpace.onPointerMove)
+            .toBeCalledTimes(1);
+
+          expect(subscribeToDXPointerMoveEvent)
+            .toHaveBeenCalledTimes(1);
+          expect(subscribeToDXPointerDownEvent)
+            .toHaveBeenCalledTimes(1);
+        });
+      });
+
+      describe('pointerUpEffect', () => {
+        beforeEach(clear);
+
+        it('should work correctly', () => {
+          const ref: any = createRef();
+          mount(
+            <div>
+              <div className={DATE_TABLE_ROW_CLASS}>
+                <div ref={ref} className={DATE_TABLE_CELL_CLASS} />
+              </div>
+            </div>,
+          );
+          const eventMock: any = {
+            type: 'mouse',
+            target: ref.current,
+            button: 0,
+          };
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
+          });
+
+          mockGetCellData.mockImplementationOnce(() => ({
+            startDate: new Date(2021, 10, 20),
+            index: 0,
+            groupIndex: 0,
+          }));
+          workSpace.onPointerUp = jest.fn();
+          workSpace.onPointerDown(eventMock);
+
+          const disposePointerUp = workSpace.pointerUpEffect();
+
+          emit(EVENT.pointerUp);
+
+          expect(workSpace.onPointerUp)
+            .toBeCalledTimes(1);
+
+          disposePointerUp!();
+
+          emit(EVENT.pointerUp);
+          expect(workSpace.onPointerUp)
+            .toBeCalledTimes(1);
         });
       });
     });
@@ -1555,6 +2125,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 26),
+            startViewDate: new Date(2021, 9, 26),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -1599,6 +2170,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 26),
+            startViewDate: new Date(2021, 9, 26),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -1659,11 +2231,224 @@ describe('WorkSpace', () => {
         });
       });
 
+      describe('viewDataMapWithSelection', () => {
+        it('should return viewDataMap if cell selection state is undefined', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 26),
+            startViewDate: new Date(2021, 9, 26),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
+            showAllDayPanel: true,
+          });
+
+          expect(workSpace.viewDataMapWithSelection)
+            .toEqual({
+              allDayPanelMap: [{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 0,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: true,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                },
+              }],
+              dateTableMap: [[{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 0,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26, 0, 30),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                },
+              }], [{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 1,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26, 0, 30),
+                  endDate: new Date(2021, 9, 26, 1),
+                  groupIndex: 0,
+                  index: 1,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 1,
+                },
+              }]],
+            });
+        });
+
+        it('should work correctly when cells selection state is defined', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 26),
+            startViewDate: new Date(2021, 9, 26),
+            startDayHour: 0,
+            endDayHour: 2,
+            onViewRendered: () => {},
+            type: 'day',
+            showAllDayPanel: true,
+          });
+
+          workSpace.cellsSelectionState = {
+            focusedCell: {
+              position: {
+                columnIndex: 0,
+                rowIndex: 1,
+              },
+              cellData: {
+                startDate: new Date(2021, 9, 26, 0, 30),
+                endDate: new Date(2021, 9, 26, 1),
+                groupIndex: 0,
+                index: 1,
+                allDay: false,
+                isFirstGroupCell: true,
+                isLastGroupCell: true,
+                key: 1,
+              },
+            },
+            selectedCells: [{
+              startDate: new Date(2021, 9, 26),
+              endDate: new Date(2021, 9, 26, 0, 30),
+              groupIndex: 0,
+              index: 0,
+              allDay: false,
+              isFirstGroupCell: true,
+              isLastGroupCell: true,
+              key: 0,
+            }, {
+              startDate: new Date(2021, 9, 26, 0, 30),
+              endDate: new Date(2021, 9, 26, 1),
+              groupIndex: 0,
+              index: 1,
+              allDay: false,
+              isFirstGroupCell: true,
+              isLastGroupCell: true,
+              key: 1,
+            }],
+            firstSelectedCell: {
+              startDate: new Date(2021, 9, 26),
+              endDate: new Date(2021, 9, 26, 0, 30),
+              groupIndex: 0,
+              index: 0,
+              allDay: false,
+              isFirstGroupCell: true,
+              isLastGroupCell: true,
+              key: 0,
+            },
+          };
+
+          expect(workSpace.viewDataMapWithSelection)
+            .toEqual({
+              allDayPanelMap: [{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 0,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: true,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                },
+              }],
+              dateTableMap: [[{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 0,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26, 0, 30),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                  isFocused: false,
+                  isSelected: true,
+                },
+              }], [{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 1,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26, 0, 30),
+                  endDate: new Date(2021, 9, 26, 1),
+                  groupIndex: 0,
+                  index: 1,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 1,
+                  isFocused: true,
+                  isSelected: true,
+                },
+              }], [{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 2,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26, 1, 0),
+                  endDate: new Date(2021, 9, 26, 1, 30),
+                  groupIndex: 0,
+                  index: 2,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 2,
+                },
+              }], [{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 3,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26, 1, 30),
+                  endDate: new Date(2021, 9, 26, 2),
+                  groupIndex: 0,
+                  index: 3,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 3,
+                },
+              }]],
+            });
+        });
+      });
+
       describe('viewData', () => {
         it('should create viewData', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 26),
+            startViewDate: new Date(2021, 9, 26),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -1727,6 +2512,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 25),
+            startViewDate: new Date(2021, 9, 25),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -1752,6 +2538,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 24),
+            startViewDate: new Date(2021, 9, 24),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -1835,6 +2622,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 25),
+            startViewDate: new Date(2021, 9, 25),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -1863,6 +2651,7 @@ describe('WorkSpace', () => {
               weekDayLeftVirtualCellWidth: undefined,
               weekDayRightVirtualCellCount: undefined,
               weekDayRightVirtualCellWidth: undefined,
+              isMonthDateHeader: false,
             });
         });
 
@@ -1870,6 +2659,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 24),
+            startViewDate: new Date(2021, 9, 24),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -1954,6 +2744,7 @@ describe('WorkSpace', () => {
               weekDayLeftVirtualCellWidth: 0,
               weekDayRightVirtualCellCount: 0,
               weekDayRightVirtualCellWidth: 0,
+              isMonthDateHeader: false,
             });
         });
       });
@@ -1963,6 +2754,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 25),
+            startViewDate: new Date(2021, 9, 25),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2013,6 +2805,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 25),
+            startViewDate: new Date(2021, 9, 25),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2090,6 +2883,7 @@ describe('WorkSpace', () => {
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
+            startViewDate: new Date(2021, 8, 11),
             ...props,
             type: 'week',
           });
@@ -2268,6 +3062,7 @@ describe('WorkSpace', () => {
               isAllDayPanelSupported: true,
               isProvideVirtualCellsWidth: false,
               isRenderTimePanel: true,
+              isMonthDateHeader: false,
               groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
               headerCellTextFormat: formatWeekdayAndDay,
               getDateForHeaderText: expect.any(Function),
@@ -2488,6 +3283,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             type: 'day',
             currentDate: new Date(2021, 10, 9),
+            startViewDate: new Date(2021, 10, 9),
             scrolling: { mode: 'virtual' },
             schedulerHeight: 300,
             schedulerWidth: 300,
@@ -2513,6 +3309,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             type: 'day',
             currentDate: new Date(2021, 10, 9),
+            startViewDate: new Date(2021, 10, 9),
             scrolling: { mode: 'virtual' },
             schedulerHeight: 300,
             schedulerWidth: 300,
@@ -2552,33 +3349,12 @@ describe('WorkSpace', () => {
       });
     });
 
-    describe('startViewDate', () => {
-      it('should return correct startViewDate if view is day', () => {
-        const workSpace = new WorkSpace({
-          ...new WorkSpaceProps(),
-          currentDate: new Date(2021, 1, 1),
-          type: 'day',
-        } as any);
-
-        expect(workSpace.startViewDate.getTime())
-          .toBe(new Date(2021, 1, 1).getTime());
-      });
-
-      it('should return correct startViewDate if view is week', () => {
-        const workSpace = new WorkSpace({
-          ...new WorkSpaceProps(),
-          currentDate: new Date(2021, 7, 19),
-          type: 'week',
-        } as any);
-
-        expect(workSpace.startViewDate.getTime())
-          .toBe(new Date(2021, 7, 15).getTime());
-      });
-    });
-
     describe('classes', () => {
+      afterEach(jest.clearAllMocks);
+
       it('should call combineClasses with correct parameters', () => {
         const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
           intervalCount: 35,
           type: 'day',
           hoursInterval: 0.5,
@@ -2606,11 +3382,14 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-virtual': false,
+            'dx-scheduler-work-space-both-scrollbar': false,
           });
       });
 
       it('should call combineClasses with correct parameters when all-day panel is not collapsed', () => {
         const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
           intervalCount: 35,
           type: 'day',
           groupByDate: true,
@@ -2638,11 +3417,14 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-virtual': false,
+            'dx-scheduler-work-space-both-scrollbar': false,
           });
       });
 
       it('should call combineClasses with correct parameters when all-day panel is not visible', () => {
         const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
           type: 'day',
           intervalCount: 35,
           showAllDayPanel: false,
@@ -2669,11 +3451,14 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-virtual': false,
+            'dx-scheduler-work-space-both-scrollbar': false,
           });
       });
 
       it('should call combineClasses with correct parameters when groups are empty', () => {
         const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
           type: 'day',
           intervalCount: 35,
           showAllDayPanel: true,
@@ -2700,11 +3485,14 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-virtual': false,
+            'dx-scheduler-work-space-both-scrollbar': false,
           });
       });
 
       it('should call combineClasses with correct parameters when groups are empty but groupOrientation is vertical', () => {
         const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
           type: 'day',
           intervalCount: 35,
           showAllDayPanel: true,
@@ -2731,6 +3519,8 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-virtual': false,
+            'dx-scheduler-work-space-both-scrollbar': false,
           });
       });
 
@@ -2799,6 +3589,7 @@ describe('WorkSpace', () => {
               'dx-scheduler-group-column-count-three': false,
               'dx-scheduler-work-space': true,
               'dx-scheduler-work-space-both-scrollbar': false,
+              'dx-scheduler-work-space-virtual': false,
               [className]: true,
             });
         });
@@ -2830,6 +3621,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
             'dx-scheduler-work-space-both-scrollbar': true,
+            'dx-scheduler-work-space-virtual': false,
           });
       });
 
@@ -2861,6 +3653,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
             'dx-scheduler-work-space-both-scrollbar': true,
+            'dx-scheduler-work-space-virtual': false,
           });
       });
 
@@ -2892,6 +3685,40 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
             'dx-scheduler-work-space-both-scrollbar': true,
+            'dx-scheduler-work-space-virtual': false,
+          });
+      });
+
+      it('should assign virtual scrolling class when scrolling is virtual', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'timelineDay',
+          crossScrollingEnabled: true,
+          groups,
+          groupOrientation: 'horizontal',
+          scrolling: { mode: 'virtual' },
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        workSpace.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-timeline-day dx-scheduler-timeline': true,
+            'dx-scheduler-work-space-count': false,
+            'dx-scheduler-work-space-odd-cells': false,
+            'dx-scheduler-work-space-all-day-collapsed': false,
+            'dx-scheduler-work-space-all-day': false,
+            'dx-scheduler-work-space-group-by-date': false,
+            'dx-scheduler-work-space-grouped': true,
+            'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': true,
+            'dx-scheduler-group-column-count-one': false,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-both-scrollbar': true,
+            'dx-scheduler-work-space-virtual': true,
           });
       });
     });

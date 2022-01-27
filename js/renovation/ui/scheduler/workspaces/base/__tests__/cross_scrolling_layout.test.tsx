@@ -1,4 +1,4 @@
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import React from 'react';
 import { Scrollable } from '../../../../scroll_view/scrollable';
 import { Widget } from '../../../../common/widget';
@@ -10,12 +10,13 @@ import { GroupPanel } from '../group_panel/group_panel';
 import { AllDayPanelLayout, AllDayPanelLayoutProps } from '../date_table/all_day_panel/layout';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { HeaderPanelEmptyCell } from '../header_panel_empty_cell';
-import { Semaphore } from '../../../semaphore';
+import { ScrollSemaphore } from '../../../utils/semaphore/scrollSemaphore';
 import { HeaderPanelLayout } from '../header_panel/layout';
 import { TimelineHeaderPanelLayout } from '../../timeline/header_panel/layout';
 import { DateTableLayoutBase, DateTableLayoutProps } from '../date_table/layout';
 import { MonthDateTableLayout } from '../../month/date_table/layout';
 import { TimePanelTableLayout } from '../time_panel/layout';
+import { AppointmentLayout } from '../../../appointment/layout';
 
 describe('OrdinaryLayout', () => {
   const viewData = {
@@ -109,16 +110,19 @@ describe('OrdinaryLayout', () => {
         ...viewModel.props,
       },
     }) as any);
-    const mountComponent = (viewModel) => mount(LayoutView({
-      ...viewModel,
-      props: {
-        ...commonProps,
-        ...viewModel.props,
-      },
-    }) as any);
+    const renderWithJSX = (viewModel) => shallow(
+      <LayoutView
+        {...viewModel}
+        props={{
+          ...commonProps,
+          className: 'custom-classes',
+          widgetElementRef: 'widgetElementRef',
+        } as any}
+      />,
+    );
 
     it('should render widget as root component', () => {
-      const layout = mountComponent({
+      const layout = renderWithJSX({
         props: {
           className: 'custom-classes',
           widgetElementRef: 'widgetElementRef',
@@ -478,13 +482,9 @@ describe('OrdinaryLayout', () => {
     });
 
     it('should render appointments', () => {
-      const layout = render({
-        props: {
-          appointments: <div className="appointments" />,
-        },
-      });
+      const layout = render({});
 
-      expect(layout.find('.appointments').exists())
+      expect(layout.find(AppointmentLayout).exists())
         .toBe(true);
     });
 
@@ -614,11 +614,11 @@ describe('OrdinaryLayout', () => {
         it('should initialize semaphores correctly', () => {
           const layout = new CrossScrollingLayout({} as any);
 
-          expect(layout.dateTableSemaphore instanceof Semaphore)
+          expect(layout.dateTableSemaphore instanceof ScrollSemaphore)
             .toBe(true);
-          expect(layout.sideBarSemaphore instanceof Semaphore)
+          expect(layout.sideBarSemaphore instanceof ScrollSemaphore)
             .toBe(true);
-          expect(layout.headerSemaphore instanceof Semaphore)
+          expect(layout.headerSemaphore instanceof ScrollSemaphore)
             .toBe(true);
         });
       });

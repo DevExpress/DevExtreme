@@ -335,17 +335,25 @@ class ConfirmDialogInfo extends DialogInfoBase {
 
 class ConstraintViolationDialogInfo extends DialogInfoBase {
     _getFormItems() {
+        const hasCriticalErrors = this._parameters.hasCriticalErrors;
+        const severalErrors = this._parameters.errorsCount > 1;
         const items = [];
+        const deleteMessage = severalErrors ? 'dxGantt-dialogDeleteDependenciesMessage' : 'dxGantt-dialogDeleteDependencyMessage';
+        const moveMessage = severalErrors ? 'dxGantt-dialogMoveTaskAndKeepDependenciesMessage' : 'dxGantt-dialogMoveTaskAndKeepDependencyMessage';
+        let titleMessage;
+        if(hasCriticalErrors) {
+            titleMessage = severalErrors ? 'dxGantt-dialogConstraintCriticalViolationSeveralTasksMessage' : 'dxGantt-dialogConstraintCriticalViolationMessage';
+        } else {
+            titleMessage = severalErrors ? 'dxGantt-dialogConstraintViolationSeveralTasksMessage' : 'dxGantt-dialogConstraintViolationMessage';
+        }
         items.push({ text: messageLocalization.format('dxGantt-dialogCancelOperationMessage'), value: 0 });
-        items.push({ text: messageLocalization.format('dxGantt-dialogDeleteDependencyMessage'), value: 1 });
-        if(!this._parameters.validationError.critical) {
-            items.push({ text: messageLocalization.format('dxGantt-dialogMoveTaskAndKeepDependencyMessage'), value: 2 });
+        items.push({ text: messageLocalization.format(deleteMessage), value: 1 });
+        if(!hasCriticalErrors) {
+            items.push({ text: messageLocalization.format(moveMessage), value: 2 });
         }
 
         return [{
-            template: this._parameters.validationError.critical ?
-                messageLocalization.format('dxGantt-dialogConstraintCriticalViolationMessage') :
-                messageLocalization.format('dxGantt-dialogConstraintViolationMessage')
+            template: messageLocalization.format(titleMessage)
         }, {
             cssClass: 'dx-cv-dialog-row',
             dataField: 'option',

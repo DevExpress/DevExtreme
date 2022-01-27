@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, OneWay, Event, Slot,
+  ComponentBindings, OneWay, Event, Slot, Template, JSXTemplate,
 } from '@devextreme-generator/declarations';
 import { EventCallback } from '../../common/event_callback';
 import { ScrollableDirection, ScrollEventArgs, RefreshStrategy } from './types';
@@ -7,9 +7,12 @@ import { touch } from '../../../../core/utils/support';
 import { getDefaultBounceEnabled, isDesktop } from '../utils/get_default_option_value';
 import { current, isMaterial } from '../../../../ui/themes';
 import messageLocalization from '../../../../localization/message';
+import { ScrollViewLoadPanelProps } from './scrollview_loadpanel_props';
 
 @ComponentBindings()
 export class BaseScrollableProps {
+  @Template() loadPanelTemplate?: JSXTemplate<ScrollViewLoadPanelProps>;
+
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 
   @OneWay() aria?: Record<string, string> = {};
@@ -41,8 +44,6 @@ export class BaseScrollableProps {
   @OneWay() forceGeneratePockets = false;
 
   @OneWay() needScrollViewContentWrapper = false;
-
-  @OneWay() needScrollViewLoadPanel = false;
 
   @OneWay() needRenderScrollbars = true;
 

@@ -57,7 +57,7 @@ export default Class.inherit({
 
     getSelectableItems: function(items) {
         return items.filter(function(item) {
-            return !item.disabled;
+            return !item?.disabled;
         });
     },
 
@@ -69,8 +69,20 @@ export default Class.inherit({
         return this.selectedItemKeys(keys, preserve, isDeselect, isSelectAll);
     },
 
+    _removeTemplateProperty: function(remoteFilter) {
+        if(Array.isArray(remoteFilter)) {
+            return remoteFilter.map((f) => this._removeTemplateProperty(f));
+        }
+
+        if(isObject(remoteFilter)) {
+            delete remoteFilter.template;
+        }
+
+        return remoteFilter;
+    },
+
     _loadFilteredData: function(remoteFilter, localFilter, select, isSelectAll) {
-        const filterLength = encodeURI(JSON.stringify(remoteFilter)).length;
+        const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
         const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
         const deferred = new Deferred();
         const loadOptions = {
@@ -125,19 +137,20 @@ export default Class.inherit({
     _getFullSelectAllState: function() {
         const items = this.options.plainItems();
         const dataFilter = this.options.filter();
-        let selectedItems = this.options.selectedItems;
+        let selectedItems = this.options.ignoreDisabledItems ? this.options.selectedItems : this.options.selectedItems.filter(item => !item?.disabled);
 
         if(dataFilter) {
             selectedItems = dataQuery(selectedItems).filter(dataFilter).toArray();
         }
 
         const selectedItemsLength = selectedItems.length;
+        const disabledItemsLength = items.length - this.getSelectableItems(items).length;
 
         if(!selectedItemsLength) {
             return this._isAnyItemSelected(items);
         }
 
-        if(selectedItemsLength >= this.options.totalCount() - this.options.disabledItemKeys.length) {
+        if(selectedItemsLength >= this.options.totalCount() - disabledItemsLength) {
             return true;
         }
         return undefined;
