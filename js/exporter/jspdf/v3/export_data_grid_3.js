@@ -9,6 +9,7 @@ import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, set
 
 // TODO: check names with techwritters
 // IPDFExportOptions: {
+//    repeatHeaders: false,
 //    topLeft: {x: number, y: number},
 //    indent: number,
 //    margin: { top:number, left:number, right:number, bottom:number } | number
@@ -22,6 +23,9 @@ function _getFullOptions(options) {
     }
     if(!isDefined(fullOptions.indent)) {
         fullOptions.indent = 10;
+    }
+    if(!isDefined(fullOptions.repeatHeaders)) {
+        fullOptions.repeatHeaders = false;
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
     return fullOptions;
