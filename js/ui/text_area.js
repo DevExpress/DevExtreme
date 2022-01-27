@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import { noop, ensureDefined } from '../core/utils/common';
-import { getWindow } from '../core/utils/window';
+import { getWindow, hasWindow } from '../core/utils/window';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import { isDefined } from '../core/utils/type';
@@ -177,6 +177,10 @@ const TextArea = TextBox.inherit({
     },
 
     _updateInputHeight: function() {
+        if(!hasWindow()) {
+            return;
+        }
+
         const $input = this._input();
         const autoHeightResizing = this.option('height') === undefined && this.option('autoResizeEnabled');
 
