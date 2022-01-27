@@ -782,6 +782,32 @@ QUnit.module('visibility events integration', {
     }
 });
 
+QUnit.test('scroll should save position on dxhiding and restore on dxshown', function(assert) {
+    const done = assert.async();
+    const $scrollable = $('#scrollable');
+
+    const scrollable = $scrollable.dxScrollable({
+        useNative: false,
+        direction: 'both'
+    }).dxScrollable('instance');
+
+    scrollable.scrollTo({ left: 10, top: 20 });
+    triggerHidingEvent($scrollable);
+    $scrollable.hide();
+
+    setTimeout(() => {
+        scrollable.scrollTo({ left: 0, top: 0 });
+
+        $scrollable.show();
+        setTimeout(() => {
+            triggerShownEvent($scrollable);
+
+            assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after dxshown');
+            done();
+        }, RESIZE_WAIT_TIMEOUT);
+    }, RESIZE_WAIT_TIMEOUT);
+});
+
 QUnit.test('scroll should restore on second dxshown', function(assert) {
     const $scrollable = $('#scrollable');
 
@@ -799,32 +825,6 @@ QUnit.test('scroll should restore on second dxshown', function(assert) {
     triggerShownEvent($scrollable);
 
     assert.deepEqual(scrollable.scrollOffset(), { left: 1, top: 1 }, 'scroll position was not changed');
-});
-
-QUnit.test('scroll should save position on dxhiding when scroll is hidden', function(assert) {
-    const done = assert.async();
-    const $scrollable = $('#scrollable');
-
-    const scrollable = $scrollable.dxScrollable({
-        useNative: false,
-    }).dxScrollable('instance');
-
-    scrollable.scrollTo({ left: 0, top: 20 });
-    triggerHidingEvent($scrollable);
-    $scrollable.hide();
-
-    setTimeout(() => {
-        scrollable.scrollTo({ left: 0, top: 0 });
-
-        $scrollable.show();
-
-        setTimeout(() => {
-            triggerShownEvent($scrollable);
-
-            assert.deepEqual(scrollable.scrollOffset(), { left: 0, top: 20 }, 'scroll position restored after dxshown');
-            done();
-        }, RESIZE_WAIT_TIMEOUT * 2);
-    }, RESIZE_WAIT_TIMEOUT * 2);
 });
 
 if(styleUtils.styleProp('touchAction')) {

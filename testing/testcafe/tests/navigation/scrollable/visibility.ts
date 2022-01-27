@@ -71,7 +71,7 @@ fixture`Scrollable_visibility_integration`
 
           await t.expect(await scrollable.apiScrollOffset()).eql({ left: 10, top: 20 });
           await t
-            .expect(await takeScreenshot(`Scroll position restored after show, useNative=${useNative},rtl: ${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
