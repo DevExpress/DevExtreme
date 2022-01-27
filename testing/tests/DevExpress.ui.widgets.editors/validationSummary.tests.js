@@ -5,7 +5,6 @@ import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
 
 import 'ui/validation_summary';
-import 'ui/button';
 import 'ui/text_box';
 
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
@@ -136,14 +135,7 @@ QUnit.module('refreshValidationGroup method', {
         this.fixture = new Fixture();
         this.validationGroup = 'groupName';
         this.$container = $('<div>').attr({ id: 'container' });
-        this.$button = $('<div>').dxButton({
-            onClick: (e) => {
-                e.validationGroup.validate();
-            },
-            validationGroup: this.validationGroup
-        });
 
-        this.$container.append(this.$button);
         $('#qunit-fixture').append(this.$container);
 
         this.renderValidationGroup = () => {
@@ -174,7 +166,7 @@ QUnit.module('refreshValidationGroup method', {
         this.renderValidationGroup();
         summary.refreshValidationGroup();
 
-        this.$button.click();
+        ValidationEngine.validateGroup(this.validationGroup);
 
         assert.strictEqual(summary.option('items').length, 1, 'summary was resubscribed on recreated group');
         assert.strictEqual(summary.option('items')[0].text, 'required', 'text is correct');
