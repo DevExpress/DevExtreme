@@ -165,6 +165,7 @@ export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>
   /**
    * @docid
    * @type Enums.GanttPdfExportMode
+   * @default 'all'
    * @public
    */
   exportMode?: 'all' | 'treeList' | 'chart';
@@ -196,7 +197,7 @@ export interface PdfExportGanttFont {
   name: string;
   /**
   * @docid
-  * @default undefined
+  * @default 'normal'
   * @public
   */
   style?: string;
