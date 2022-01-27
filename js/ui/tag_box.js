@@ -505,7 +505,7 @@ const TagBox = SelectBox.inherit({
         this._tagTemplate = this._getTemplateByOption('tagTemplate');
     },
 
-    _renderField: function() {
+    _renderField: function(items) {
         const isDefaultFieldTemplate = !isDefined(this.option('fieldTemplate'));
 
         this.$element()
@@ -1021,17 +1021,29 @@ const TagBox = SelectBox.inherit({
     },
 
     _integrateInput: function() {
+        this._isInputReady.resolve();
         this.callBase();
         this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
         this._renderTagRemoveAction();
     },
 
     _renderTagsCore: function(items) {
-        this._renderField();
+        this._isInputReady = new Deferred();
+        this._renderField(items);
 
         this.option('selectedItems', this._selectedItems.slice());
         this._cleanTags();
 
+        if(this._input().length > 0) {
+            this._isInputReady.resolve();
+        }
+
+        when(this._isInputReady).always(() => {
+            this._renderTagsElements(items);
+        });
+    },
+
+    _renderTagsElements(items) {
         const $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input());
         const showMultiTagOnly = this.option('showMultiTagOnly');
         const maxDisplayedTags = this.option('maxDisplayedTags');
