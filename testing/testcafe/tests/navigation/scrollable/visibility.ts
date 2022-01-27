@@ -19,7 +19,7 @@ fixture`Scrollable_visibility_integration`
           const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
           await scrollable.apiScrollTo({ left: 10, top: 20 });
           await t
-            .expect(await takeScreenshot(`Scroll position before hide, useNative:${useNative},rtl:${rtlEnabled},useSimScrollbar:${useSimulatedScrollbar}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
@@ -31,18 +31,18 @@ fixture`Scrollable_visibility_integration`
 
           await t.expect(await scrollable.apiScrollOffset()).eql({ left: 10, top: 20 });
           await t
-            .expect(await takeScreenshot(`Scroll position after show, useNative:${useNative},rtl:${rtlEnabled},useSimScrollbar:${useSimulatedScrollbar}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
         }).before(async () => {
           await appendElementTo('#container', 'div', 'content', {
-            width: '100px', height: '100px', backgroundColor: 'skyblue',
+            width: '200px', height: '200px', backgroundColor: 'skyblue',
           });
 
           return createWidget('dxScrollable', {
-            width: 50,
-            height: 50,
+            width: 100,
+            height: 100,
             useNative,
             rtlEnabled,
             useSimulatedScrollbar,
@@ -57,7 +57,7 @@ fixture`Scrollable_visibility_integration`
           const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
           await scrollable.apiScrollTo({ left: 10, top: 20 });
           await t
-            .expect(await takeScreenshot(`Scroll position before hide, useNative:${useNative},rtl:${rtlEnabled},useSimScrollbar:${useSimulatedScrollbar}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
@@ -71,18 +71,18 @@ fixture`Scrollable_visibility_integration`
 
           await t.expect(await scrollable.apiScrollOffset()).eql({ left: 10, top: 20 });
           await t
-            .expect(await takeScreenshot(`Scroll position restored after show, useNative:${useNative},rtl: ${rtlEnabled},useSimScrollbar:${useSimulatedScrollbar}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`Scroll position restored after show, useNative=${useNative},rtl: ${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
         }).before(async () => {
           await appendElementTo('#container', 'div', 'content', {
-            width: '100px', height: '100px', backgroundColor: 'skyblue',
+            width: '200px', height: '200px', backgroundColor: 'skyblue',
           });
 
           return createWidget('dxScrollable', {
-            width: 50,
-            height: 50,
+            width: 100,
+            height: 100,
             useNative,
             rtlEnabled,
             useSimulatedScrollbar,
