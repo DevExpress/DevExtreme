@@ -135,6 +135,7 @@ QUnit.module('refreshValidationGroup method', {
         this.fixture = new Fixture();
         this.validationGroup = 'groupName';
         this.$container = $('<div>').attr({ id: 'container' });
+        this.failMessage = 'required';
 
         $('#qunit-fixture').append(this.$container);
 
@@ -142,7 +143,7 @@ QUnit.module('refreshValidationGroup method', {
             this.$editor = $('<div>')
                 .dxTextBox({})
                 .dxValidator({
-                    validationRules: [{ type: 'required', message: 'required' }],
+                    validationRules: [{ type: 'required', message: this.failMessage }],
                     validationGroup: this.validationGroup
                 });
             this.$editor.appendTo(this.$container);
@@ -168,8 +169,9 @@ QUnit.module('refreshValidationGroup method', {
 
         ValidationEngine.validateGroup(this.validationGroup);
 
-        assert.strictEqual(summary.option('items').length, 1, 'summary was resubscribed on recreated group');
-        assert.strictEqual(summary.option('items')[0].text, 'required', 'text is correct');
+        const summaryItems = summary.option('items');
+        assert.strictEqual(summaryItems.length, 1, 'summary was resubscribed on recreated group');
+        assert.strictEqual(summaryItems[0].text, this.failMessage, 'text is correct');
     });
 });
 
