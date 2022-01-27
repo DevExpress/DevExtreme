@@ -133,6 +133,8 @@ export const parseHeight = function(value, container) {
         value = parseInt(value.replace('%', '')) * getContainerHeight(container) / 100;
     } else if(!isNaN(value)) {
         value = parseInt(value);
+    } else if(value.indexOf('vh') > 0) {
+        value = window.innerHeight / 100 * parseInt(value.replace('vh', ''));
     }
 
     return value;
