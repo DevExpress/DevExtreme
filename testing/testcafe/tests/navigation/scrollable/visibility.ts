@@ -13,44 +13,6 @@ fixture`Scrollable_visibility_integration`
   [false, true].forEach((useNative) => {
     [false, true].forEach((rtlEnabled) => {
       [false, true].forEach((useSimulatedScrollbar) => {
-        test(`Scroll should save position on visibility change, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtlEnabled: ${rtlEnabled}`, async (t) => {
-          const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-          const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
-          await scrollable.apiScrollTo({ left: 10, top: 20 });
-          await t
-            .expect(await takeScreenshot(`Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))
-            .ok()
-            .expect(compareResults.isValid())
-            .ok(compareResults.errorMessages());
-
-          await scrollable.hide();
-
-          await scrollable.apiScrollTo({ left: 0, top: 0 });
-          await scrollable.show();
-
-          await t.expect(await scrollable.apiScrollOffset()).eql({ left: 10, top: 20 });
-          await t
-            .expect(await takeScreenshot(`Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))
-            .ok()
-            .expect(compareResults.isValid())
-            .ok(compareResults.errorMessages());
-        }).before(async () => {
-          await appendElementTo('#container', 'div', 'content', {
-            width: '200px', height: '200px', backgroundColor: 'skyblue',
-          });
-
-          return createWidget('dxScrollable', {
-            width: 100,
-            height: 100,
-            useNative,
-            rtlEnabled,
-            useSimulatedScrollbar,
-            direction,
-            showScrollbar: 'always',
-          });
-        });
-
         test(`Scroll should save position on dxhiding when scroll is hidden, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtlEnabled: ${rtlEnabled}`, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -69,6 +31,7 @@ fixture`Scrollable_visibility_integration`
           await scrollable.show();
           await scrollable.apiTriggerShownEvent();
 
+          await t.debug();
           await t.expect(await scrollable.apiScrollOffset()).eql({ left: 10, top: 20 });
           await t
             .expect(await takeScreenshot(`Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))
