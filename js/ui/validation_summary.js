@@ -285,6 +285,10 @@ const ValidationSummary = CollectionWidget.inherit({
     _dispose() {
         this.callBase();
         this._unsubscribeGroup();
+    },
+
+    refreshValidationGroup() {
+        this._initGroupRegistration();
     }
 
     /**

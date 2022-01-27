@@ -792,7 +792,7 @@ const Form = Widget.inherit({
         if(ITEM_OPTIONS_FOR_VALIDATION_UPDATING.indexOf(optionName) > -1) {
             ValidationEngine.addGroup(this._getValidationGroup());
             if(this.option('showValidationSummary')) {
-                this._validationSummary && this._validationSummary._initGroupRegistration();
+                this._validationSummary?.refreshValidationGroup();
             }
         }
     },

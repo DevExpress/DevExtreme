@@ -63,7 +63,7 @@ QUnit.module('General', {
 
         summary._groupValidationHandler = sinon.spy();
 
-        summary._initGroupRegistration();
+        summary.refreshValidationGroup();
 
         // act
         ValidationEngine.validateGroup(group);
@@ -183,7 +183,7 @@ QUnit.module('Regression', {
         });
 
         summary._groupValidationHandler = sinon.spy();
-        summary._initGroupRegistration();
+        summary.refreshValidationGroup();
 
         ValidationEngine.registerValidatorInGroup(group, validator);
 

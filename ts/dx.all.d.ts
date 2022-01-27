@@ -23816,7 +23816,12 @@ declare module DevExpress.ui {
     dxValidationSummaryOptions<TItem, TKey>,
     TItem,
     TKey
-  > {}
+  > {
+    /**
+     * [descr:dxValidationSummary.refreshValidationGroup()]
+     */
+    refreshValidationGroup(): void;
+  }
   module dxValidationSummary {
     export type ContentReadyEvent<
       TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,

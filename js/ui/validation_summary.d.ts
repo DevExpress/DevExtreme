@@ -66,7 +66,14 @@ export interface dxValidationSummaryOptions<
 export default class dxValidationSummary<
     TItem extends ItemLike = any,
     TKey = any,
-> extends CollectionWidget<dxValidationSummaryOptions<TItem, TKey>, TItem, TKey> { }
+> extends CollectionWidget<dxValidationSummaryOptions<TItem, TKey>, TItem, TKey> {
+    /**
+     * @docid
+     * @publicName refreshValidationGroup()
+     * @public
+     */
+    refreshValidationGroup(): void;
+}
 
 /** @public */
 export type ExplicitTypes<
