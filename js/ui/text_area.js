@@ -186,7 +186,7 @@ const TextArea = TextBox.inherit({
         const heightDifference = this._getHeightDifference($input);
 
         if(!autoHeightResizing) {
-            inputHeight = getOuterHeight(this._$element) - heightDifference;
+            const inputHeight = getOuterHeight(this._$element) - heightDifference;
             $input.css('height', inputHeight);
             return;
         }
