@@ -271,7 +271,6 @@ class DiagramToolbox extends DiagramFloatingPanel {
         return window.navigator && window.navigator.maxTouchPoints > 0;
     }
     _renderAccordion($container) {
-        const data = this._getAccordionDataSource();
         this._accordion = this._createComponent($container, Accordion, {
             multiple: true,
             animationDuration: 0,
@@ -280,7 +279,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
             hoverStateEnabled: false,
             collapsible: true,
             displayExpr: 'title',
-            dataSource: data,
+            dataSource: this._getAccordionDataSource(),
             disabled: this.option('disabled'),
             itemTemplate: (data, index, $element) => {
                 data.onTemplate(this, $element, data);
@@ -289,13 +288,20 @@ class DiagramToolbox extends DiagramFloatingPanel {
                 this._updateScrollAnimateSubscription(e.component);
             },
             onContentReady: (e) => {
-                for(let i = 0; i < data.length; i++) {
-                    if(data[i].expanded === false) {
+                e.component.option('selectedItems', []);
+                const items = e.component.option('dataSource');
+                for(let i = 0; i < items.length; i++) {
+                    if(items[i].expanded === false) {
                         e.component.collapseItem(i);
-                    } else if(data[i].expanded === true) {
+                    } else if(items[i].expanded === true) {
                         e.component.expandItem(i);
                     }
                 }
+                // expand first group
+                if(items.length && items[0].expanded === undefined) {
+                    e.component.expandItem(0);
+                }
+
                 this._updateScrollAnimateSubscription(e.component);
             }
         });
