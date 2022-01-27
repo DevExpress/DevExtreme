@@ -307,15 +307,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         }
 
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
-        const endDate = dateUtils.trimTime(position.info.appointment.endDate);
         const { normalizedEndDate } = position.info.appointment;
 
         const cellWidth = this.cellWidth || this.getAppointmentMinSize();
         const durationInHours = (normalizedEndDate.getTime() - startDate.getTime()) / toMs('hour');
 
         const skippedHours = getSkippedHoursInRange(
-            startDate,
-            endDate,
+            position.info.appointment.startDate,
+            position.info.appointment.endDate,
             this.viewDataProvider
         );
 
