@@ -13,7 +13,7 @@ fixture`Scrollable_visibility_integration`
   [false, true].forEach((useNative) => {
     [false, true].forEach((rtlEnabled) => {
       [false, true].forEach((useSimulatedScrollbar) => {
-        test(`Scroll should save position on visibility change, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtlEnabled: ${rtlEnabled},`, async (t) => {
+        test(`Scroll should save position on visibility change, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtlEnabled: ${rtlEnabled}`, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
           const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
@@ -51,7 +51,7 @@ fixture`Scrollable_visibility_integration`
           });
         });
 
-        test(`Scroll should save position on dxhiding when scroll is hidden, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtlEnabled: ${rtlEnabled},`, async (t) => {
+        test(`Scroll should save position on dxhiding when scroll is hidden, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtlEnabled: ${rtlEnabled}`, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
           const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
