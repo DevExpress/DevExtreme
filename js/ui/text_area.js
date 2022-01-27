@@ -179,19 +179,17 @@ const TextArea = TextBox.inherit({
     _updateInputHeight: function() {
         const $input = this._input();
         const autoHeightResizing = this.option('height') === undefined && this.option('autoResizeEnabled');
-
-        if(!autoHeightResizing) {
-            $input.css('height', '');
-            return;
-        } else {
-            this._resetDimensions();
-            this._$element.css('height', getOuterHeight(this._$element));
-        }
-
-        $input.css('height', 0);
-
         const heightDifference = this._getHeightDifference($input);
 
+        if(!autoHeightResizing) {
+            inputHeight = getOuterHeight(this._$element) - heightDifference;
+            $input.css('height', inputHeight);
+            return;
+        }
+
+        this._resetDimensions();
+        this._$element.css('height', getOuterHeight(this._$element));
+        $input.css('height', 0);
         this._renderDimensions();
 
         const minHeight = this._getBoundaryHeight('minHeight');
@@ -211,17 +209,15 @@ const TextArea = TextBox.inherit({
         }
 
         $input.css('height', inputHeight);
+        this._$element.css('height', 'auto');
 
-        if(autoHeightResizing) {
-            this._$element.css('height', 'auto');
-        }
     },
 
     _getBoundaryHeight: function(optionName) {
         const boundaryValue = this.option(optionName);
 
         if(isDefined(boundaryValue)) {
-            return typeof boundaryValue === 'number' ? boundaryValue : parseHeight(boundaryValue, this._$textEditorContainer.get(0));
+            return typeof boundaryValue === 'number' ? boundaryValue : parseHeight(boundaryValue, this.$element().get(0).parentElement);
         }
     },
 
