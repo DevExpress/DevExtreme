@@ -4171,7 +4171,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/ColorBox/Overview/",
             "Widget": "ColorBox",
             "DemoType": "Web"
           }
