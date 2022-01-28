@@ -1,15 +1,12 @@
 /* eslint-disable no-new */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // eslint-disable-next-line import/no-extraneous-dependencies
 import $ from 'jquery';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import CustomStore from '../../../js/data/custom_store';
-import DataSource from '../../../js/data/data_source';
+import Store from '../../../js/data/abstract_store';
+
+const ANY = undefined as any;
 
 export async function infersTItemFromComplexLoadResult() {
   const store = new CustomStore({
@@ -50,21 +47,12 @@ export function loadAcceptsPromiseOfObject() {
   });
 }
 
-export function promiseResolveAcceptsMultipleArguments() {
-  const value = {
-    id: 1,
-    text: 'a',
-  };
-  const store = new CustomStore({
-    load: () => new Promise((resolve) => {
-      resolve((v1, v2: { totalCount: number; groupCount: number }) => {});
-    }),
-  });
-  store.insert(value).then((data, key: number) => ({ data, key }));
-  store.update(1, value).then((data, key: number) => ({ data, key }));
+export function promiseThenAcceptsMultipleArgumentsForCustomStoreMethods() {
+  const callback: (a: any, b: any) => void = ANY;
 
-  const dataSource = new DataSource(store);
-  dataSource.load().then(
-    (data, extra: { totalCount: number; groupCount: number }) => ({ data, extra }),
-  );
+  const store: Store = ANY;
+  store.load().then(callback);
+  store.load(ANY).then(callback);
+  store.insert(ANY).then(callback);
+  store.update(ANY, ANY).then(callback);
 }

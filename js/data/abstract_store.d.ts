@@ -1,4 +1,4 @@
-import { DxPromise, DxPromiseLike } from '../core/utils/deferred';
+import { DxPromise, DxExtendedPromise } from '../core/utils/deferred';
 import { DeepPartial } from '../core/index';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 
@@ -132,7 +132,7 @@ export default class Store<
      * @return Promise<any>
      * @public
      */
-    insert(values: TItem): DxPromiseLike<TItem>;
+    insert(values: TItem): DxExtendedPromise<TItem>;
     /**
      * @docid
      * @publicName key()
@@ -153,7 +153,7 @@ export default class Store<
      * @return Promise<any>
      * @public
      */
-    load(): DxPromiseLike<Array<TItem>>;
+    load(): DxExtendedPromise<Array<TItem>>;
     /**
      * @docid
      * @publicName load(options)
@@ -161,7 +161,7 @@ export default class Store<
      * @return Promise<any>
      * @public
      */
-    load(options: LoadOptions<TItem>): DxPromiseLike<Array<TItem>>;
+    load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -226,5 +226,5 @@ export default class Store<
      * @return Promise<any>
      * @public
      */
-    update(key: TKey, values: DeepPartial<TItem>): DxPromiseLike<TItem>;
+    update(key: TKey, values: DeepPartial<TItem>): DxExtendedPromise<TItem>;
 }

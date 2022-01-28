@@ -33,12 +33,9 @@ export interface PromiseType<T> { }
 export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
 
 /** @namespace DevExpress.core.utils */
-export interface PromiseExtension<T> {
+export type DxExtendedPromise<T> = DxPromise<T> & {
     then<TResult1 = T, TResult2 = never>(
         onFulfilled?: ((value: T, extraParameters?: any) => TResult1 | PromiseLike<TResult1>) | undefined | null,
         onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
     ): PromiseLike<TResult1 | TResult2>;
-}
-
-/** @namespace DevExpress.core.utils */
-export type DxPromiseLike<T> = DxPromise<T> & PromiseExtension<T>;
+};

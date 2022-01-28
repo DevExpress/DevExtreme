@@ -1,7 +1,7 @@
 import {
  FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor, LoadOptions, SearchOperation,
 } from './index';
-import { DxPromiseLike } from '../core/utils/deferred';
+import { DxExtendedPromise } from '../core/utils/deferred';
 import Store from './abstract_store';
 import { Options as CustomStoreOptions } from './custom_store';
 import { Options as ArrayStoreOptions } from './array_store';
@@ -242,7 +242,7 @@ export default class DataSource<
      * @return Promise<any>
      * @public
      */
-    load(): DxPromiseLike<any>;
+    load(): DxExtendedPromise<any>;
     /**
      * @docid
      * @publicName loadOptions()
@@ -330,7 +330,7 @@ export default class DataSource<
      * @return Promise<any>
      * @public
      */
-    reload(): DxPromiseLike<any>;
+    reload(): DxExtendedPromise<any>;
     /**
      * @docid
      * @publicName requireTotalCount()

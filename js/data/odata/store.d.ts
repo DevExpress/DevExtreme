@@ -1,4 +1,4 @@
-import { DxPromise, DxPromiseLike } from '../../core/utils/deferred';
+import { DxPromise } from '../../core/utils/deferred';
 import Store, { Options as StoreOptions } from '../abstract_store';
 import { LoadOptions } from '../index';
 import { Query } from '../query';
@@ -115,13 +115,4 @@ export default class ODataStore<
      * @public
      */
     createQuery(loadOptions?: { expand?: string | Array<string>; requireTotalCount?: boolean; customQueryParams?: any }): Query;
-
-    /**
-     * @docid
-     * @publicName insert(values)
-     * @param1 values:object
-     * @return Promise<any>
-     * @public
-     */
-    insert(values: TItem): DxPromiseLike<TItem>;
 }
