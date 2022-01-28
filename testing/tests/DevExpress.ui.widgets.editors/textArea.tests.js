@@ -4,6 +4,7 @@ import nativePointerMock from '../../helpers/nativePointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from 'core/devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import { parseHeight } from 'core/utils/size.js';
 
 import 'generic_light.css!';
 import 'ui/text_area';
@@ -232,19 +233,20 @@ QUnit.module('widget sizing render', () => {
         assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
     });
 
-    QUnit.test('widget renders correctly when minHeight and maxHeight is specified in pixels', function(assert) {
-        const minHeight = 100;
-        const $element = $('#widget').dxTextArea({
-            minHeight: minHeight + 'px',
-            autoResizeEnabled: true
+    [true, false].forEach(autoResizeEnabled => {
+        [100, '100px', '50%', '20vh'].forEach(minHeight => {
+            QUnit.test(`input should have correct size when autoResizeEnabled is ${autoResizeEnabled} and minHeight equals ${minHeight}`, function(assert) {
+                const $element = $('#widget').dxTextArea({ minHeight, autoResizeEnabled });
+                const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                const inputHeight = $input.outerHeight();
+                const borderHeight = parseInt($element.css('borderTopWidth'));
+                const parsedMinHeight = typeof minHeight === 'number' ? minHeight : parseHeight(minHeight, $element.get(0).parentNode);
+
+                assert.strictEqual(inputHeight + 2 * borderHeight, parsedMinHeight, 'height is ok');
+            });
         });
-
-        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const inputHeight = $input.outerHeight();
-        const borderHeight = parseInt($element.css('borderTopWidth'));
-
-        assert.strictEqual(inputHeight + 2 * borderHeight, minHeight, 'height is ok');
     });
+
 });
 
 QUnit.module('the \'autoResizeEnabled\' option', () => {
