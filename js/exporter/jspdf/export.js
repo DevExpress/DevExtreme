@@ -75,9 +75,13 @@ export const Export = {
         } = options;
 
         const internalComponent = component._getInternalInstance?.() || component;
-        const initialLoadPanelEnabledOption = internalComponent.option('loadPanel').enabled;
+        const initialLoadPanelEnabledOption = internalComponent.option('loadPanel') && internalComponent.option('loadPanel').enabled;
 
-        component.option('loadPanel.enabled', false);
+
+        if(initialLoadPanelEnabledOption) {
+            component.option('loadPanel.enabled', false);
+        }
+
         let exportLoadPanel;
         if(loadPanel.enabled && hasWindow()) {
             const rowsView = component.getView('rowsView');
@@ -159,7 +163,9 @@ export const Export = {
 
                 resolve();
             }).always(() => {
-                component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
+                if(initialLoadPanelEnabledOption) {
+                    component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
+                }
 
                 if(loadPanel.enabled && hasWindow()) {
                     exportLoadPanel.dispose();
