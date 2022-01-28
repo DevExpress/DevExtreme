@@ -5,8 +5,7 @@ import $ from 'jquery';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import CustomStore from '../../../js/data/custom_store';
 import Store from '../../../js/data/abstract_store';
-
-const ANY = undefined as any;
+import { ANY } from '../consts';
 
 export async function infersTItemFromComplexLoadResult() {
   const store = new CustomStore({
@@ -47,7 +46,7 @@ export function loadAcceptsPromiseOfObject() {
   });
 }
 
-export function promiseThenAcceptsMultipleArgumentsForCustomStoreMethods() {
+export function promiseThenAcceptsMultipleArguments() {
   const callback: (a: any, b: any) => void = ANY;
 
   const store: Store = ANY;
