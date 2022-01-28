@@ -26,7 +26,6 @@ fixture`Scrollable_visibility_integration`
 
           await scrollable.apiTriggerHidingEvent();
           await scrollable.hide();
-
           await scrollable.apiScrollTo({ left: 0, top: 0 });
           await scrollable.show();
           await scrollable.apiTriggerShownEvent();

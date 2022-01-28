@@ -151,13 +151,13 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
   }
 
   hide(): Promise<unknown> {
-    const { getInstance } = this;
+    const { element } = this;
 
     return ClientFunction(
       () => {
-        (getInstance() as any).element().css({ display: 'none' });
+        $(element).css({ display: 'none' });
       },
-      { dependencies: { getInstance } },
+      { dependencies: { element } },
     )();
   }
 
@@ -174,13 +174,13 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
   }
 
   show(): Promise<unknown> {
-    const { getInstance } = this;
+    const { element } = this;
 
     return ClientFunction(
       () => {
-        (getInstance() as any).element().css({ display: 'block' });
+        $(element).css({ display: 'block' });
       },
-      { dependencies: { getInstance } },
+      { dependencies: { element } },
     )();
   }
 
