@@ -1028,7 +1028,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _renderTagsCore: function(items) {
-        this._isInputReady && this._isInputReady.reject();
+        this._isInputReady?.reject();
         this._isInputReady = new Deferred();
         this._renderField();
 
