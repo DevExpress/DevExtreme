@@ -20,9 +20,11 @@ const cssArtifactsPath = join(process.cwd(), 'artifacts', 'css');
 
 const DEFAULT_DEV_BUNDLE_NAMES = [
     'light',
+    'light.compact',
     'dark',
     'contrast',
     'material.blue.light',
+    'material.blue.light.compact',
 ];
 
 const getBundleSourcePath = name => `scss/bundles/dx.${name}.scss`;
@@ -70,14 +72,14 @@ function generateScssBundles(bundlesFolder, getBundleContent) {
     const materialColors = ['blue', 'lime', 'orange', 'purple', 'teal'];
     const materialModes = ['light', 'dark'];
     const genericColors = ['carmine', 'contrast', 'dark', 'darkmoon', 'darkviolet', 'greenmist', 'light', 'softblue'];
-    
+
     const saveBundle = (theme, size, color, mode) => {
         const bundleName = generateScssBundleName(theme, size, color, mode);
         const content = getBundleContent(theme, size, color, mode);
 
         saveBundleFile(bundlesFolder, bundleName, content);
     };
-    
+
     sizes.forEach(size => {
         materialModes.forEach(mode => {
             materialColors.forEach(color => saveBundle('material', size, color, mode));

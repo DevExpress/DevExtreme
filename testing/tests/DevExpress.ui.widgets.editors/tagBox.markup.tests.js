@@ -93,13 +93,6 @@ QUnit.module('base markup', moduleSetup, () => {
         assert.ok($tagBox.hasClass(EMPTY_INPUT_CLASS), 'element has an empty class');
     });
 
-    QUnit.test('tag container should have native click class', function(assert) {
-        const $tagContainer = $('#tagBox').dxTagBox()
-            .find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-
-        assert.ok($tagContainer.hasClass('dx-native-click'));
-    });
-
     QUnit.test('tagBox should render tags with the custom displayExpr for simple items', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             items: [1, 2, 3],

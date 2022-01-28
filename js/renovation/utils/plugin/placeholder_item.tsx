@@ -3,36 +3,35 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {
   JSXComponent, Component, ComponentBindings,
-  OneWay, Fragment, Slot, Consumer, InternalState, Effect,
+  OneWay, Fragment, Slot, InternalState, Effect, Consumer,
 } from '@devextreme-generator/declarations';
 import { PluginEntity, Plugins, PluginsContext } from './context';
+
+import { PlaceholderItemRenderer } from './placeholder_item_renderer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   // eslint-disable-next-line react/prop-types
-  currentComponent, args, props: {
-    componentTypes, column, index, children,
+  currentTemplate, args, props: {
+    componentTypes, componentDeps, column, index, children,
   },
 }: PlaceholderItem): JSX.Element => (
   <Fragment>
-    {
-  currentComponent ? currentComponent(
-    args,
-    column,
-    <PlaceholderItem componentTypes={componentTypes} column={column} index={index + 1}>
-      {children}
-    </PlaceholderItem>,
-  ) : <Fragment>{children}</Fragment>
-  /* CurrentComponent && (
-    <CurrentComponent
-      column={column}
-      childrenTemplate={(
-        <PlaceholderItem componentTypes={componentTypes} column={column} index={index + 1} />
-      )}
-    />
-
-  ) */
-}
+    {currentTemplate ? (
+      <PlaceholderItemRenderer
+        deps={args}
+        column={column}
+        currentTemplate={currentTemplate}
+        baseTemplate={(): JSX.Element => (
+          <PlaceholderItem
+            componentTypes={componentTypes}
+            componentDeps={componentDeps}
+            column={column}
+            index={index + 1}
+          />
+        )}
+      />
+    ) : <Fragment>{children}</Fragment>}
   </Fragment>
 );
 
@@ -46,11 +45,11 @@ export class PlaceholderItemProps {
 
   @OneWay() index = 0;
 
-  @Slot() children: any;
+  @Slot() children?: any;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PlaceholderItem extends JSXComponent(PlaceholderItemProps) {
+export class PlaceholderItem extends JSXComponent<PlaceholderItemProps>(PlaceholderItemProps) {
   @Consumer(PluginsContext)
   plugins!: Plugins;
 
@@ -75,7 +74,7 @@ export class PlaceholderItem extends JSXComponent(PlaceholderItemProps) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  get currentComponent(): any {
+  get currentTemplate(): any {
     if (this.componentDeps.every((entity) => this.plugins.hasValue(entity))) {
       return this.props.componentTypes[this.props.index];
     }

@@ -6803,46 +6803,6 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual(items[0].data.isYoung, false, 'field value');
     });
 
-    if(device.ios || device.android) {
-        // T322738
-        QUnit.testInActiveWindow('Native click is used when allowUpdating is true', function(assert) {
-            // arrange
-            const that = this;
-            const rowsView = this.rowsView;
-            const testElement = $('#container');
-
-            that.option('columns', ['name', 'age']);
-            $.extend(that.options.editing, {
-                allowUpdating: true,
-                mode: 'batch'
-            });
-
-            rowsView.render(testElement);
-
-            // assert
-            assert.ok(testElement.find('table').hasClass('dx-native-click'), 'native click is used');
-        });
-
-        // T322738
-        QUnit.testInActiveWindow('Native click is not used when allowUpdating is false', function(assert) {
-            // arrange
-            const that = this;
-            const rowsView = this.rowsView;
-            const testElement = $('#container');
-
-            $.extend(that.options.editing, {
-                allowUpdating: false,
-                mode: 'batch'
-            });
-            // act
-            rowsView.render(testElement);
-
-            // assert
-            assert.ok(!testElement.find('table').hasClass('dx-native-click'), 'native click is not used');
-        });
-    }
-
-
     // T105941
     QUnit.testInActiveWindow('Focused cell when editing cell in batch mode', function(assert) {
         // arrange

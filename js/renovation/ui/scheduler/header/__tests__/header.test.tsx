@@ -216,6 +216,38 @@ describe('Scheduler Toolbar', () => {
           expect(mockCallback).toBeCalledTimes(1);
           expect(mockCallback).toHaveBeenCalledWith(view.name);
         });
+
+        it('should cancel showing drop down if one view is set', () => {
+          const toolbar = createToolbar({
+            currentView: 'day',
+            views: ['day'],
+            useDropDownViewSwitcher: true,
+          });
+
+          const e = { cancel: false } as any;
+
+          const viewSwitcher = toolbar.items[1];
+          const options = viewSwitcher.options as any;
+          options.dropDownOptions.onShowing!(e);
+
+          expect(e.cancel).toBe(true);
+        });
+
+        it('should not cancel drop down if several views is set', () => {
+          const toolbar = createToolbar({
+            currentView: 'day',
+            views: ['day', 'week'],
+            useDropDownViewSwitcher: true,
+          });
+
+          const e = { cancel: false } as any;
+
+          const viewSwitcher = toolbar.items[1];
+          const options = viewSwitcher.options as any;
+          options.dropDownOptions.onShowing!(e);
+
+          expect(e.cancel).toBe(false);
+        });
       });
 
       describe('Date Navigator', () => {

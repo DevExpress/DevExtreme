@@ -41,7 +41,6 @@ const TAGBOX_POPUP_WRAPPER_CLASS = 'dx-tagbox-popup-wrapper';
 const TAGBOX_TAG_CONTENT_CLASS = 'dx-tag-content';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
-const NATIVE_CLICK_CLASS = 'dx-native-click';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
@@ -169,9 +168,7 @@ const TagBox = SelectBox.inherit({
 
     _updateTagsContainer: function($element) {
         this._$tagsContainer = $element
-            .addClass(TAGBOX_TAG_CONTAINER_CLASS)
-            .addClass(NATIVE_CLICK_CLASS);
-        this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
+            .addClass(TAGBOX_TAG_CONTAINER_CLASS);
     },
 
     _allowSelectItemByTab: function() {
@@ -1021,17 +1018,30 @@ const TagBox = SelectBox.inherit({
     },
 
     _integrateInput: function() {
+        this._isInputReady.resolve();
         this.callBase();
         this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
         this._renderTagRemoveAction();
     },
 
     _renderTagsCore: function(items) {
+        this._isInputReady?.reject();
+        this._isInputReady = new Deferred();
         this._renderField();
 
         this.option('selectedItems', this._selectedItems.slice());
         this._cleanTags();
 
+        if(this._input().length > 0) {
+            this._isInputReady.resolve();
+        }
+
+        when(this._isInputReady).done(() => {
+            this._renderTagsElements(items);
+        });
+    },
+
+    _renderTagsElements(items) {
         const $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input());
         const showMultiTagOnly = this.option('showMultiTagOnly');
         const maxDisplayedTags = this.option('maxDisplayedTags');

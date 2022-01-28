@@ -12,7 +12,12 @@ import {
 export const viewFunction = ({
   componentTypes, componentDeps, props: { column, children },
 }: Placeholder): JSX.Element => (
-  <PlaceholderItem componentTypes={componentTypes} componentDeps={componentDeps} column={column}>
+  <PlaceholderItem
+    componentTypes={componentTypes}
+    componentDeps={componentDeps}
+    column={column}
+    index={0}
+  >
     { children }
   </PlaceholderItem>
 );

@@ -16,7 +16,7 @@ describe('Selection', () => {
   describe('View', () => {
     it('should be empty', () => {
       const tree = mount(<SelectionView />);
-      expect(tree.html()).toEqual(null);
+      expect(tree.html()).toEqual('<div></div>');
     });
   });
 

@@ -14,7 +14,7 @@ describe('ValueSetter', () => {
       });
 
       const tree = mount(<ValueSetterView {...valueSetter as any} />);
-      expect(tree.html()).toEqual(null);
+      expect(tree.html()).toEqual('<div></div>');
     });
   });
 

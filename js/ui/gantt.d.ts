@@ -14,7 +14,7 @@ import {
 } from '../events/index';
 
 import {
-    Column,
+    Column as TreeListColumn,
 } from './tree_list';
 
 import Widget, {
@@ -36,6 +36,7 @@ import {
 import {
     DxPromise,
 } from '../core/utils/deferred';
+import { Skip } from '../core/index';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxGantt>;
@@ -244,7 +245,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     allowSelection?: boolean;
     /**
      * @docid
-     * @type Array<dxTreeListColumn|string>
+     * @type Array<dxGanttColumn|string>
      * @default undefined
      * @public
      */
@@ -1534,3 +1535,156 @@ export type Properties = dxGanttOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxGanttOptions;
+
+/** @public */
+export type Column<TRowData = any, TKey = any> = dxGanttColumn<TRowData, TKey>;
+
+/**
+ * @namespace DevExpress.ui
+ * @deprecated Use the Column type instead
+ */
+export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<TRowData, TKey>, 'allowEditing' | 'allowFixing' | 'allowHiding' | 'allowReordering' | 'allowResizing' | 'allowSearch' | 'buttons' | 'columns' | 'editCellComponent' | 'editCellRender' | 'editCellTemplate' | 'editorOptions' | 'fixed' | 'fixedPosition' | 'formItem' | 'hidingPriority' | 'isBand' | 'lookup' | 'name' | 'ownerBand' | 'renderAsync' | 'setCellValue' | 'showEditorAlways' | 'showInColumnChooser' | 'type' | 'validationRules' | 'visible' >;
+
+/**
+ * @docid dxGanttColumn
+ * @export dxGanttColumn
+ * @inherits dxTreeListColumn
+ * @namespace DevExpress.ui
+ */
+ interface dxGanttColumnBlank<TRowData = any, TKey = any> extends TreeListColumn<TRowData, TKey> {
+    /**
+     * @hidden
+     * @docid dxGanttColumn.allowEditing
+     */
+     allowEditing: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.allowFixing
+     */
+     allowFixing: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.allowHiding
+     */
+     allowHiding: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.allowReordering
+     */
+     allowReordering: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.allowResizing
+     */
+     allowResizing: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.allowSearch
+     */
+     allowSearch: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.buttons
+     */
+    buttons: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.columns
+     */
+    columns: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.editorOptions
+     */
+    editorOptions: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.editCellComponent
+     */
+    editCellComponent: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.editCellRender
+     */
+    editCellRender: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.editCellTemplate
+     */
+    editCellTemplate: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.fixed
+     */
+    fixed: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.fixedPosition
+     */
+    fixedPosition: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.formItem
+     */
+     formItem: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.hidingPriority
+     */
+     hidingPriority: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.isBand
+     */
+     isBand: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.lookup
+     */
+     lookup: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.name
+     */
+     name: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.ownerBand
+     */
+     ownerBand: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.renderAsync
+     */
+     renderAsync: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.setCellValue
+     */
+     setCellValue: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.showEditorAlways
+     */
+     showEditorAlways: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.showInColumnChooser
+     */
+     showInColumnChooser: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.validationRules
+     */
+     validationRules: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.visible
+     */
+     visible: any;
+    /**
+     * @hidden
+     * @docid dxGanttColumn.type
+     */
+    type: any;
+ }

@@ -5,6 +5,7 @@ import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
 
 import 'ui/validation_summary';
+import 'ui/text_box';
 
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
 
@@ -126,6 +127,51 @@ QUnit.module('events', {
 
         ValidationEngine.validateGroup(group);
         assert.strictEqual(contentReadyHandler.callCount, 2, 'contentReady has been handled');
+    });
+});
+
+QUnit.module('refreshValidationGroup method', {
+    beforeEach: function() {
+        this.fixture = new Fixture();
+        this.validationGroup = 'groupName';
+        this.$container = $('<div>').attr({ id: 'container' });
+        this.failMessage = 'required';
+
+        $('#qunit-fixture').append(this.$container);
+
+        this.renderValidationGroup = () => {
+            this.$editor = $('<div>')
+                .dxTextBox({})
+                .dxValidator({
+                    validationRules: [{ type: 'required', message: this.failMessage }],
+                    validationGroup: this.validationGroup
+                });
+            this.$editor.appendTo(this.$container);
+        };
+        this.removeValidationGroup = () => {
+            this.$editor.remove();
+        };
+
+    },
+    afterEach: function() {
+        this.$container.remove();
+    }
+}, () => {
+    QUnit.test('should resubsribe validation summary to a group with name specified in "validationGroup" property', function(assert) {
+        this.renderValidationGroup();
+        const summary = this.fixture.createSummary('#dxSummary', {
+            validationGroup: this.validationGroup
+        });
+
+        this.removeValidationGroup();
+        this.renderValidationGroup();
+        summary.refreshValidationGroup();
+
+        ValidationEngine.validateGroup(this.validationGroup);
+
+        const summaryItems = summary.option('items');
+        assert.strictEqual(summaryItems.length, 1, 'summary was resubscribed on recreated group');
+        assert.strictEqual(summaryItems[0].text, this.failMessage, 'text is correct');
     });
 });
 

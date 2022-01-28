@@ -31,7 +31,6 @@ const PROVIDERS = {
 const MAP_CLASS = 'dx-map';
 const MAP_CONTAINER_CLASS = 'dx-map-container';
 const MAP_SHIELD_CLASS = 'dx-map-shield';
-const NATIVE_CLICK_CLASS = 'dx-native-click';
 
 const Map = Widget.inherit({
 
@@ -159,8 +158,7 @@ const Map = Widget.inherit({
         this.callBase();
 
         this.$element()
-            .addClass(MAP_CLASS)
-            .addClass(NATIVE_CLICK_CLASS);
+            .addClass(MAP_CLASS);
 
         this._lastAsyncAction = Promise.resolve();
 
