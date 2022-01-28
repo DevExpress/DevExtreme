@@ -13,10 +13,10 @@ export const getCaretBoundaries = function(text, format) {
 
         const mockEscapedStubs = (str) => str.replace(/'([^']*)'/g, str => str.split('').map(() => ' ').join('').substr(2));
 
-        const formatWithMockedStubs = mockEscapedStubs(format);
+        format = mockEscapedStubs(format);
 
-        const prefixStubLength = /^[^#0.,]*/.exec(formatWithMockedStubs)[0].length;
-        const postfixStubLength = /[^#0.,]*$/.exec(formatWithMockedStubs)[0].length;
+        const prefixStubLength = /^[^#0.,]*/.exec(format)[0].length;
+        const postfixStubLength = /[^#0.,]*$/.exec(format)[0].length;
 
 
         return {
