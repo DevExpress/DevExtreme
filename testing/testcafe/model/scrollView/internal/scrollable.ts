@@ -150,14 +150,15 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     )();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   hide(): Promise<unknown> {
-    const { element } = this;
-
     return ClientFunction(
       () => {
-        $(element).css({ display: 'none' });
+        const targetElement = document.querySelector(`.${CLASS.scrollable}`) as HTMLElement;
+
+        targetElement.style.display = 'none';
       },
-      { dependencies: { element } },
+      { dependencies: { CLASS } },
     )();
   }
 
@@ -173,14 +174,15 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     )();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   show(): Promise<unknown> {
-    const { element } = this;
-
     return ClientFunction(
       () => {
-        $(element).css({ display: 'block' });
+        const targetElement = document.querySelector(`.${CLASS.scrollable}`) as HTMLElement;
+
+        targetElement.style.display = 'block';
       },
-      { dependencies: { element } },
+      { dependencies: { CLASS } },
     )();
   }
 
