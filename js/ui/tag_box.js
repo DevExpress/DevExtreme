@@ -505,7 +505,7 @@ const TagBox = SelectBox.inherit({
         this._tagTemplate = this._getTemplateByOption('tagTemplate');
     },
 
-    _renderField: function(items) {
+    _renderField: function() {
         const isDefaultFieldTemplate = !isDefined(this.option('fieldTemplate'));
 
         this.$element()
@@ -1028,6 +1028,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _renderTagsCore: function(items) {
+        this._isInputReady && this._isInputReady.reject();
         this._isInputReady = new Deferred();
         this._renderField(items);
 
@@ -1038,7 +1039,7 @@ const TagBox = SelectBox.inherit({
             this._isInputReady.resolve();
         }
 
-        when(this._isInputReady).always(() => {
+        when(this._isInputReady).done(() => {
             this._renderTagsElements(items);
         });
     },
