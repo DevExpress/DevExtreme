@@ -1,5 +1,4 @@
 import { ClientFunction, Selector } from 'testcafe';
-import { triggerHidingEvent, triggerShownEvent } from '../../../../../js/events/visibility_change';
 import { getComponentInstance } from '../../../helpers/multi-platform-test';
 import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/renovation/ui/scroll_view/common/consts';
 
@@ -164,13 +163,13 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
 
   apiTriggerHidingEvent(): Promise<unknown> {
     const { getInstance } = this;
-    const triggerDxHiding = triggerHidingEvent;
 
     return ClientFunction(
       () => {
-        triggerDxHiding((getInstance() as any).element());
+        // eslint-disable-next-line no-underscore-dangle
+        (getInstance() as any)._visibilityChanged(false);
       },
-      { dependencies: { triggerDxHiding, getInstance } },
+      { dependencies: { getInstance } },
     )();
   }
 
@@ -187,13 +186,13 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
 
   apiTriggerShownEvent(): Promise<unknown> {
     const { getInstance } = this;
-    const triggerDxShown = triggerShownEvent;
 
     return ClientFunction(
       () => {
-        triggerDxShown((getInstance() as any).element());
+        // eslint-disable-next-line no-underscore-dangle
+        (getInstance() as any)._visibilityChanged(true);
       },
-      { dependencies: { triggerDxShown, getInstance } },
+      { dependencies: { getInstance } },
     )();
   }
 };
