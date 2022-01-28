@@ -18,7 +18,6 @@ export const getCaretBoundaries = function(text, format) {
         const prefixStubLength = /^[^#0.,]*/.exec(format)[0].length;
         const postfixStubLength = /[^#0.,]*$/.exec(format)[0].length;
 
-
         return {
             start: prefixStubLength,
             end: text.length - postfixStubLength
