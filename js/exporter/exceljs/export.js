@@ -112,9 +112,11 @@ export const Export = {
             mergeColumnFieldValues,
         } = options;
 
-        const initialLoadPanelEnabledOption = component.option('loadPanel').enabled;
+        const initialLoadPanelEnabledOption = component.option('loadPanel') && component.option('loadPanel').enabled;
 
-        component.option('loadPanel.enabled', false);
+        if(initialLoadPanelEnabledOption) {
+            component.option('loadPanel.enabled', false);
+        }
 
         let exportLoadPanel;
         if(loadPanel.enabled && hasWindow()) {
@@ -185,7 +187,9 @@ export const Export = {
 
                 resolve(cellRange);
             }).always(() => {
-                component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
+                if(initialLoadPanelEnabledOption) {
+                    component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
+                }
 
                 if(loadPanel.enabled && hasWindow()) {
                     exportLoadPanel.dispose();
