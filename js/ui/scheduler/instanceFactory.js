@@ -48,8 +48,9 @@ const getInstance = (name, key) => {
 };
 
 const removeInstance = (name, key) => {
-    if(getInstance(name, key)) {
-        factoryInstances[name] = null;
+    let instance = getInstance(name, key);
+    if(instance) {
+        instance = null;
     }
 };
 
