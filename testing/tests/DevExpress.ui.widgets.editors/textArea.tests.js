@@ -232,27 +232,20 @@ QUnit.module('widget sizing render', () => {
         assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
     });
 
-    QUnit.test('input should have the same height as root element except borders (T1060052)', function(assert) {
-        const minHeight = 300;
-        const $element = $('#widget').dxTextArea({ minHeight });
-        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const inputHeight = $input.outerHeight();
-        const borderHeight = parseInt($element.css('borderTopWidth'));
+    [true, false].forEach(autoResizeEnabled => {
+        [100, '100px', '50%', '20vh'].forEach(minHeight => {
+            QUnit.test(`input should have correct size when autoResizeEnabled is ${autoResizeEnabled} and minHeight equals ${minHeight}`, function(assert) {
+                const $element = $('#widget').dxTextArea({ minHeight, autoResizeEnabled });
+                const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                const inputHeight = $input.outerHeight();
+                const borderHeight = parseInt($element.css('borderTopWidth'));
+                const parsedMinHeight = typeof minHeight === 'number' ? minHeight : parseHeight(minHeight, $element.get(0).parentNode);
 
-        assert.strictEqual(inputHeight + 2 * borderHeight, minHeight, 'height is ok');
-    });
-
-    [100, '100px', '50%', '20vh'].forEach(minHeight => {
-        QUnit.test(`input should have correct size when autoResizeEnabled and minHeight equals ${minHeight}`, function(assert) {
-            const $element = $('#widget').dxTextArea({ minHeight, autoResizeEnabled: true });
-            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            const inputHeight = $input.outerHeight();
-            const borderHeight = parseInt($element.css('borderTopWidth'));
-            const parsedMinHeight = typeof minHeight === 'number' ? minHeight : parseHeight(minHeight, $element.get(0).parentNode);
-
-            assert.strictEqual(inputHeight + 2 * borderHeight, parsedMinHeight, 'height is ok');
+                assert.strictEqual(inputHeight + 2 * borderHeight, parsedMinHeight, 'height is ok');
+            });
         });
     });
+
 });
 
 QUnit.module('the \'autoResizeEnabled\' option', () => {
