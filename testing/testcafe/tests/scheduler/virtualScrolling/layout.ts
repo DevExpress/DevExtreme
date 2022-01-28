@@ -33,6 +33,7 @@ const createScheduler = async (
 };
 
 test('Virtual scrolling layout in scheduler views', async (t) => {
+  await t.resizeWindow(1200, 800);
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
