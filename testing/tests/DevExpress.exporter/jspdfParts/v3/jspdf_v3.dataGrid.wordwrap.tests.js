@@ -2220,6 +2220,211 @@ const JSPdfWordWrapTests = {
                     done();
                 });
             });
+
+            QUnit.test('1 col - 3 text lines, line1.fontStyle=bold,line2.fontStyle=italic,line3.fontStyle=normal', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    width: 600,
+                    wordWrapEnabled: true,
+                    columns: [ { caption: 'caption: very long line very long line very long line', dataField: 'f1' } ],
+                    dataSource: [{ f1: 'line1: sf sgfgsf gsdf sdf sfdg sdfgsfdg s' }, { f1: 'line2: sdfgnsf gfkjghgsf sdd jbfgjsfb sjf dsrg fgsfg sfg sfdgfs gfd sd' }]
+                });
+
+                const expectedLog = [
+                    'setFont,helvetica,bold,',
+                    'setFontSize,20',
+                    'text,capti\n' +
+                  'on:\n' +
+                  'very\n' +
+                  'long\n' +
+                  'line\n' +
+                  'very\n' +
+                  'long\n' +
+                  'line\n' +
+                  'very\n' +
+                  'long\n' +
+                  'line,0,11.5,{baseline:middle}',
+                    'setFont,helvetica,italic,',
+                    'setFontSize,10',
+                    'text,line1: sf\n' +
+                  'sgfgsf gsdf\n' +
+                  'sdf sfdg\n' +
+                  'sdfgsfdg s,0,258.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,15',
+                    'text,line2:\n' +
+                  'sdfgnsf \n' +
+                  'gfkjghg\n' +
+                  'sf sdd\n' +
+                  'jbfgjsfb\n' +
+                  'sjf dsrg\n' +
+                  'fgsfg\n' +
+                  'sfg\n' +
+                  'sfdgfs\n' +
+                  'gfd sd,0,307.625,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,50,253',
+                    'setLineWidth,1',
+                    'rect,0,253,50,46',
+                    'setLineWidth,1',
+                    'rect,0,299,50,172.5',
+                    'setFontSize,16'
+                ];
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text.indexOf('caption') >= 0) {
+                        pdfCell.font = { size: 20, style: 'bold' };
+                    } else if(pdfCell.text.indexOf('line1') >= 0) {
+                        pdfCell.font = { size: 10, style: 'italic' };
+                    } else {
+                        pdfCell.font = { size: 15, style: 'normal' };
+                    }
+                };
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 col - 3 text lines, line1.fontStyle=italic,line2.fontStyle=bold,line3.fontStyle=normal', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    width: 600,
+                    wordWrapEnabled: true,
+                    columns: [ { caption: 'caption: very long line very long line very long line', dataField: 'f1' } ],
+                    dataSource: [{ f1: 'line1: sf sgfgsf gsdf sdf sfdg sdfgsfdg s' }, { f1: 'line2: sdfgnsf gfkjghgsf sdd jbfgjsfb sjf dsrg fgsfg sfg sfdgfs gfd sd' }]
+                });
+
+                const expectedLog = [
+                    'setFont,helvetica,italic,',
+                    'setFontSize,20',
+                    'text,capti\n' +
+                   'on:\n' +
+                   'very\n' +
+                   'long\n' +
+                   'line\n' +
+                   'very\n' +
+                   'long\n' +
+                   'line\n' +
+                   'very\n' +
+                   'long\n' +
+                   'line,0,11.5,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'setFontSize,10',
+                    'text,line1: sf\n' +
+                  'sgfgsf\n' +
+                  'gsdf sdf\n' +
+                  'sfdg\n' +
+                  'sdfgsfdg\n' +
+                  's,0,258.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,15',
+                    'text,line2:\n' +
+                  'sdfgnsf \n' +
+                  'gfkjghg\n' +
+                  'sf sdd\n' +
+                  'jbfgjsfb\n' +
+                  'sjf dsrg\n' +
+                  'fgsfg\n' +
+                  'sfg\n' +
+                  'sfdgfs\n' +
+                  'gfd sd,0,330.625,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,50,253',
+                    'setLineWidth,1',
+                    'rect,0,253,50,69',
+                    'setLineWidth,1',
+                    'rect,0,322,50,172.5',
+                    'setFontSize,16'
+                ];
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text.indexOf('caption') >= 0) {
+                        pdfCell.font = { size: 20, style: 'italic' };
+                    } else if(pdfCell.text.indexOf('line1') >= 0) {
+                        pdfCell.font = { size: 10, style: 'bold' };
+                    } else {
+                        pdfCell.font = { size: 15, style: 'normal' };
+                    }
+                };
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 col - 3 text lines, line1.fontStyle=normal,line2.fontStyle=bold,line3.fontStyle=italic', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    width: 600,
+                    wordWrapEnabled: true,
+                    columns: [ { caption: 'caption: very long line very long line very long line', dataField: 'f1' } ],
+                    dataSource: [{ f1: 'line1: sf sgfgsf gsdf sdf sfdg sdfgsfdg s' }, { f1: 'line2: sdfgnsf gfkjghgsf sdd jbfgjsfb sjf dsrg fgsfg sfg sfdgfs gfd sd' }]
+                });
+
+                const expectedLog = [
+                    'setFontSize,20',
+                    'text,capti\n' +
+                  'on:\n' +
+                  'very\n' +
+                  'long\n' +
+                  'line\n' +
+                  'very\n' +
+                  'long\n' +
+                  'line\n' +
+                  'very\n' +
+                  'long\n' +
+                  'line,0,11.5,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'setFontSize,10',
+                    'text,line1: sf\n' +
+                  'sgfgsf\n' +
+                  'gsdf sdf\n' +
+                  'sfdg\n' +
+                  'sdfgsfdg\n' +
+                  's,0,258.75,{baseline:middle}',
+                    'setFont,helvetica,italic,',
+                    'setFontSize,15',
+                    'text,line2:\n' +
+                  'sdfgnsf \n' +
+                  'gfkjghg\n' +
+                  'sf sdd\n' +
+                  'jbfgjsfb\n' +
+                  'sjf dsrg\n' +
+                  'fgsfg\n' +
+                  'sfg\n' +
+                  'sfdgfs\n' +
+                  'gfd sd,0,330.625,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,0,50,253',
+                    'setLineWidth,1',
+                    'rect,0,253,50,69',
+                    'setLineWidth,1',
+                    'rect,0,322,50,172.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16'
+                ];
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.text.indexOf('caption') >= 0) {
+                        pdfCell.font = { size: 20, style: 'normal' };
+                    } else if(pdfCell.text.indexOf('line1') >= 0) {
+                        pdfCell.font = { size: 10, style: 'bold' };
+                    } else {
+                        pdfCell.font = { size: 15, style: 'italic' };
+                    }
+                };
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
         });
 
         QUnit.module('WordWrap with Bands', moduleConfig, () => {
