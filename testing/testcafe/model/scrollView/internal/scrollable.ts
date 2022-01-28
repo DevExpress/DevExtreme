@@ -1,11 +1,11 @@
 import { ClientFunction, Selector } from 'testcafe';
+import { triggerHidingEvent, triggerShownEvent } from '../../../../../js/events/visibility_change';
 import { getComponentInstance } from '../../../helpers/multi-platform-test';
 import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/renovation/ui/scroll_view/common/consts';
 
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
 import type { PlatformType } from '../../../helpers/multi-platform-test/platform-type';
-import { triggerHidingEvent, triggerShownEvent } from '../../../../../js/events/visibility_change';
 
 const CLASS = {
   scrollable: 'dx-scrollable',
@@ -164,12 +164,13 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
 
   apiTriggerHidingEvent(): Promise<unknown> {
     const { getInstance } = this;
+    const triggerDxHiding = triggerHidingEvent;
 
     return ClientFunction(
       () => {
-        triggerHidingEvent((getInstance() as any).element());
+        triggerDxHiding((getInstance() as any).element());
       },
-      { dependencies: { triggerHidingEvent, getInstance } },
+      { dependencies: { triggerDxHiding, getInstance } },
     )();
   }
 
@@ -186,12 +187,13 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
 
   apiTriggerShownEvent(): Promise<unknown> {
     const { getInstance } = this;
+    const triggerDxShown = triggerShownEvent;
 
     return ClientFunction(
       () => {
-        triggerShownEvent((getInstance() as any).element());
+        triggerDxShown((getInstance() as any).element());
       },
-      { dependencies: { triggerShownEvent, getInstance } },
+      { dependencies: { triggerDxShown, getInstance } },
     )();
   }
 };
