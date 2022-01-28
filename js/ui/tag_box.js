@@ -1018,17 +1018,30 @@ const TagBox = SelectBox.inherit({
     },
 
     _integrateInput: function() {
+        this._isInputReady.resolve();
         this.callBase();
         this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
         this._renderTagRemoveAction();
     },
 
     _renderTagsCore: function(items) {
+        this._isInputReady?.reject();
+        this._isInputReady = new Deferred();
         this._renderField();
 
         this.option('selectedItems', this._selectedItems.slice());
         this._cleanTags();
 
+        if(this._input().length > 0) {
+            this._isInputReady.resolve();
+        }
+
+        when(this._isInputReady).done(() => {
+            this._renderTagsElements(items);
+        });
+    },
+
+    _renderTagsElements(items) {
         const $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input());
         const showMultiTagOnly = this.option('showMultiTagOnly');
         const maxDisplayedTags = this.option('maxDisplayedTags');
