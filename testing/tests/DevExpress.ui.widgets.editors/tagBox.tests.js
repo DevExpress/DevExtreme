@@ -736,7 +736,6 @@ QUnit.module('tags', moduleSetup, () => {
                                 data.onRendered();
                             }
 
-
                             return text;
                         }
                     }
