@@ -4,7 +4,7 @@
 import $ from 'jquery';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import CustomStore from '../../../js/data/custom_store';
-import Store from '../../../js/data/abstract_store';
+import { Store } from '../../../js/data';
 import { ANY } from '../consts';
 
 export async function infersTItemFromComplexLoadResult() {
