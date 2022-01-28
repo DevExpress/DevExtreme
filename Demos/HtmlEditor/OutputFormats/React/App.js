@@ -30,7 +30,7 @@ class App extends React.Component {
       <div className="widget-container">
         <HtmlEditor
           height={300}
-          value={valueContent}
+          defaultValue={valueContent}
           valueType={editorValueType}
           onValueChanged={this.valueChanged}
         >
