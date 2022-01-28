@@ -249,7 +249,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default undefined
      * @public
      */
-    columns?: Array<dxGanttColumn | string>;
+    columns?: Array<Column | string>;
     /**
      * @docid
      * @default null
@@ -1537,9 +1537,12 @@ export type Properties = dxGanttOptions;
 export type Options = dxGanttOptions;
 
 /** @public */
-export type Column = dxGanttColumn;
+export type Column<TRowData = any, TKey = any> = dxGanttColumn<TRowData, TKey>;
 
-/** @namespace DevExpress.ui*/
+/**
+ * @namespace DevExpress.ui
+ * @deprecated Use the Column type instead
+ */
 export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<TRowData, TKey>, 'allowEditing' | 'allowFixing' | 'allowHiding' | 'allowReordering' | 'allowResizing' | 'allowSearch' | 'buttons' | 'columns' | 'editCellComponent' | 'editCellRender' | 'editCellTemplate' | 'editorOptions' | 'fixed' | 'fixedPosition' | 'formItem' | 'hidingPriority' | 'isBand' | 'lookup' | 'name' | 'ownerBand' | 'renderAsync' | 'setCellValue' | 'showEditorAlways' | 'showInColumnChooser' | 'type' | 'validationRules' | 'visible' >;
 
 /**

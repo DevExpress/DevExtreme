@@ -13708,7 +13708,10 @@ declare module DevExpress.ui {
     showTaskDetailsDialog(taskKey: any): void;
   }
   module dxGantt {
-    export type Column = dxGanttColumn;
+    export type Column<TRowData = any, TKey = any> = dxGanttColumn<
+      TRowData,
+      TKey
+    >;
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;
     export type ContextMenuPreparingEvent = DevExpress.events.Cancelable & {
       readonly component?: dxGantt;
@@ -13864,6 +13867,7 @@ declare module DevExpress.ui {
     };
   }
   /**
+   * @deprecated Use the Column type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type dxGanttColumn<TRowData = any, TKey = any> = DevExpress.core.Skip<
@@ -14205,7 +14209,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.columns]
      */
-    columns?: Array<dxGanttColumn | string>;
+    columns?: Array<DevExpress.ui.dxGantt.Column | string>;
     /**
      * [descr:dxGanttOptions.dependencies]
      */
