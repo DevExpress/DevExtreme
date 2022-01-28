@@ -724,7 +724,7 @@ QUnit.module('tags', moduleSetup, () => {
                             if(!rendered) {
                                 setTimeout(() => {
                                     text.dxTextBox({});
-                                    data.container.append(text.get(0));
+                                    $(data.container).append(text.get(0));
                                     data.onRendered();
                                     rendered = true;
                                 }, TIME_TO_WAIT / 2);
