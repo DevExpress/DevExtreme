@@ -1030,7 +1030,7 @@ const TagBox = SelectBox.inherit({
     _renderTagsCore: function(items) {
         this._isInputReady && this._isInputReady.reject();
         this._isInputReady = new Deferred();
-        this._renderField(items);
+        this._renderField();
 
         this.option('selectedItems', this._selectedItems.slice());
         this._cleanTags();

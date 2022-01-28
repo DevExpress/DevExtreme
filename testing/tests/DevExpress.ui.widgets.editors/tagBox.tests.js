@@ -745,7 +745,7 @@ QUnit.module('tags', moduleSetup, () => {
         });
 
         setTimeout(() => {
-            const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
             assert.equal($tag.length, 1, 'tag was rendered');
             done();
         }, TIME_TO_WAIT);
@@ -7408,8 +7408,4 @@ QUnit.module('label integration', () => {
             TagBox.restoreTextEditorLabel();
         }
     });
-});
-
-QUnit.module('label integration', () => {
-
 });
