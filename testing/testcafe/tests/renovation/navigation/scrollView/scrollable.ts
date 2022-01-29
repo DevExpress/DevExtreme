@@ -71,13 +71,12 @@ config.forEach((props) => {
       await scrollable.apiScrollTo({ top: 20, left: 10 });
       const expectedScrollOffsetValue = {
         // eslint-disable-next-line no-nested-ternary
-        left: direction !== DIRECTION_VERTICAL
-          ? 10
-          // eslint-disable-next-line no-nested-ternary
-          : rtlEnabled
-            // eslint-disable-next-line no-nested-ternary
-            ? direction as ScrollableDirection === DIRECTION_HORIZONTAL ? 200 : useNative ? 217 : 208
-            : 0,
+        left: direction !== DIRECTION_VERTICAL ? 10 : rtlEnabled
+        // eslint-disable-next-line no-nested-ternary
+          ? direction as ScrollableDirection === DIRECTION_HORIZONTAL ? 200 : useNative
+            ? direction === DIRECTION_VERTICAL ? 215 : 217
+            : 208
+          : 0,
         top: direction !== DIRECTION_HORIZONTAL ? 20 : 0,
       };
       await t.expect(await scrollable.apiScrollOffset()).eql(expectedScrollOffsetValue);
