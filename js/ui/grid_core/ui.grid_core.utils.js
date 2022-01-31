@@ -234,7 +234,16 @@ export default {
         operation = operation || 'and';
 
         for(let i = 0; i < filters.length; i++) {
-            if(!filters[i]) continue;
+            if(!filters[i]) {
+                continue;
+            }
+            if(filters[i]?.length === 1 && filters[i][0] === '!') {
+                if(operation === 'and') {
+                    return ['!'];
+                } else if(operation === 'or') {
+                    continue;
+                }
+            }
             if(resultFilter.length) {
                 resultFilter.push(operation);
             }
