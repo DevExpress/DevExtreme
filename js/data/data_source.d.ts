@@ -8,7 +8,7 @@ import {
  Store,
  StoreOptions,
 } from './index';
-import { DxPromise } from '../core/utils/deferred';
+import { DxExtendedPromise } from '../core/utils/deferred';
 import { Options as CustomStoreOptions } from './custom_store';
 
 /** @public */
@@ -240,7 +240,7 @@ export default class DataSource<
      * @return Promise<any>
      * @public
      */
-    load(): DxPromise<any>;
+    load(): DxExtendedPromise<any>;
     /**
      * @docid
      * @publicName loadOptions()
@@ -328,7 +328,7 @@ export default class DataSource<
      * @return Promise<any>
      * @public
      */
-    reload(): DxPromise<any>;
+    reload(): DxExtendedPromise<any>;
     /**
      * @docid
      * @publicName requireTotalCount()

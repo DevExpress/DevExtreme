@@ -4,13 +4,6 @@ import { LoadOptions } from '../index';
 import { Query } from '../query';
 import { ODataRequestOptions } from './context';
 
-interface PromiseExtension<T> {
-    then<TResult1 = T, TResult2 = never>(
-        onFulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
-    ): Promise<TResult1 | TResult2>;
-}
-
 /** @public */
 export type Options<
     TItem = any,
@@ -122,13 +115,4 @@ export default class ODataStore<
      * @public
      */
     createQuery(loadOptions?: { expand?: string | Array<string>; requireTotalCount?: boolean; customQueryParams?: any }): Query;
-
-    /**
-     * @docid
-     * @publicName insert(values)
-     * @param1 values:object
-     * @return Promise<any>
-     * @public
-     */
-    insert(values: TItem): DxPromise<TItem> & PromiseExtension<TItem>;
 }
