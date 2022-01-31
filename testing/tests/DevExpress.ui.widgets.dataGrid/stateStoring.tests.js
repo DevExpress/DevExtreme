@@ -750,7 +750,7 @@ QUnit.module('State Storing with real controllers', {
 
         // assert
         assert.strictEqual(this.dataController.pageSize(), 2);
-        assert.strictEqual(this.dataController.items().length, 2);
+        assert.strictEqual(this.dataController.items().length, 5);
     });
 
     QUnit.test('Load pageSize from state when scrolling mode is infinite and pager.visible, pager.showPageSizeSelector is set', function(assert) {
@@ -778,7 +778,7 @@ QUnit.module('State Storing with real controllers', {
 
         // assert
         assert.strictEqual(this.dataController.pageSize(), 2);
-        assert.strictEqual(this.dataController.items().length, 2);
+        assert.strictEqual(this.dataController.items().length, 3);
     });
 
     QUnit.test('Not Load pageSize from state when scrolling mode is virtual and pager.visible is not set, pager.showPageSizeSelector is set', function(assert) {
@@ -1326,7 +1326,7 @@ QUnit.module('State Storing with real controllers', {
         const $dataRows = this.gridView.element().find('tr.dx-data-row');
         assert.strictEqual(this.dataController.pageIndex(), 3);
         assert.strictEqual($dataRows.eq(0).text(), '6');
-        assert.strictEqual($dataRows.length, 2);
+        assert.strictEqual($dataRows.length, 4);
     });
 
     QUnit.test('Show NoData message when dataSource is empty and state is loaded', function(assert) {
@@ -1611,6 +1611,7 @@ QUnit.module('State Storing with real controllers', {
             'filterPanel': {},
             'filterValue': null,
             'searchText': '',
+            'selectedRowKeys': [],
             'pageIndex': 0,
             'pageSize': 20
         };
@@ -1732,6 +1733,37 @@ QUnit.module('State Storing with real controllers', {
 
             // assert
             assert.equal(this.option('searchPanel.text'), '');
+        });
+
+        QUnit.test(`focusedRowKey should be cleared after calling state(${emptyState})`, function(assert) {
+            // arrange
+            this.setupDataGridModules({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                keyExpr: 'id',
+                focusedRowEnabled: true,
+                focusedRowKey: 1
+            });
+
+            // act
+            this.state(emptyState);
+
+            // assert
+            assert.strictEqual(this.option('focusedRowKey'), null);
+        });
+
+        QUnit.test(`selectedRowKeys should be cleared after calling state(${emptyState})`, function(assert) {
+            // arrange
+            this.setupDataGridModules({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                keyExpr: 'id',
+                selectedRowKeys: [1, 2],
+            });
+
+            // act
+            this.state(emptyState);
+
+            // assert
+            assert.deepEqual(this.option('selectedRowKeys'), []);
         });
     });
 });

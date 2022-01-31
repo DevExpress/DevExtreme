@@ -1,32 +1,35 @@
 import { ClientFunction, Selector } from 'testcafe';
+import { getComponentInstance } from '../../../helpers/multi-platform-test';
 import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/renovation/ui/scroll_view/common/consts';
 
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
+import type { PlatformType } from '../../../helpers/multi-platform-test/platform-type';
 
 const CLASS = {
   scrollable: 'dx-scrollable',
   scrollableContainer: 'dx-scrollable-container',
   scrollableContent: 'dx-scrollable-content',
 };
-export default class Scrollable extends Widget {
+
+const getScrollable = (platform: PlatformType) => class Scrollable extends Widget {
   scrollbar: Scrollbar;
 
   vScrollbar?: Scrollbar;
 
   hScrollbar?: Scrollbar;
 
-  getInstance: ClientFunction;
+  getInstance: () => Promise<unknown>;
 
   name: string;
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  platform: string;
+
   constructor(id: string | Selector, options?: any, name = 'dxScrollable') {
     super(id);
 
     const direction = options.direction ?? 'vertical';
 
-    this.element = Selector(`.${CLASS.scrollable}`);
     this.scrollbar = new Scrollbar(options.direction ?? 'vertical');
 
     if (!options.useNative && !options.useSimulatedScrollbar) {
@@ -38,13 +41,15 @@ export default class Scrollable extends Widget {
       }
     }
 
-    const scrollable = this.element;
-
     this.name = name;
-    this.getInstance = ClientFunction(
-      () => $(scrollable())[`${name}`]('instance'),
-      { dependencies: { scrollable, name } },
-    );
+    this.platform = platform || 'jquery';
+
+    this.getInstance = getComponentInstance(this.platform as PlatformType, this.getElement());
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getElement(): Selector {
+    return Selector(`.${CLASS.scrollable}`);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -144,4 +149,60 @@ export default class Scrollable extends Widget {
       { dependencies: { getInstance, value } },
     )();
   }
-}
+
+  // eslint-disable-next-line class-methods-use-this
+  hide(): Promise<unknown> {
+    return ClientFunction(
+      () => {
+        const targetElement = document.querySelector(`.${CLASS.scrollable}`) as HTMLElement;
+
+        targetElement.style.display = 'none';
+      },
+      { dependencies: { CLASS } },
+    )();
+  }
+
+  apiTriggerHidingEvent(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        // eslint-disable-next-line no-underscore-dangle
+        (getInstance() as any)._visibilityChanged(false);
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  show(): Promise<unknown> {
+    return ClientFunction(
+      () => {
+        const targetElement = document.querySelector(`.${CLASS.scrollable}`) as HTMLElement;
+
+        targetElement.style.display = 'block';
+      },
+      { dependencies: { CLASS } },
+    )();
+  }
+
+  apiTriggerShownEvent(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        // eslint-disable-next-line no-underscore-dangle
+        (getInstance() as any)._visibilityChanged(true);
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+};
+
+export const ScrollableFactory = {
+  jquery: getScrollable('jquery'),
+  angular: getScrollable('angular'),
+  react: getScrollable('react'),
+};
+
+export default ScrollableFactory.jquery;

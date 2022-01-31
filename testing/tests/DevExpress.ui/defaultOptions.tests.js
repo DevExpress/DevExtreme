@@ -165,19 +165,6 @@ testComponentDefaults(DateBox,
 );
 
 testComponentDefaults(DateBox,
-    { platform: 'android' },
-    { pickerType: 'rollers' },
-    function() {
-        this._origDevice = devices.real();
-        const deviceConfig = { platform: 'android', android: true, version: [4, 3] };
-        devices.real(deviceConfig);
-    },
-    function() {
-        devices.real(this._origDevice);
-    }
-);
-
-testComponentDefaults(DateBox,
     [
         { platform: 'generic', deviceType: 'desktop' },
     ],
@@ -574,23 +561,6 @@ testComponentDefaults(Widget,
         devices.real({
             platform: 'ios',
             version: '13.3'
-        });
-    },
-    function() {
-        devices.real(this.originalRealDevice);
-    }
-);
-
-testComponentDefaults(Widget,
-    {},
-    {
-        useResizeObserver: false
-    },
-    function() {
-        this.originalRealDevice = devices.real();
-        devices.real({
-            platform: 'android',
-            version: '4.4.4'
         });
     },
     function() {

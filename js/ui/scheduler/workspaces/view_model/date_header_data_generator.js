@@ -147,7 +147,8 @@ export class DateHeaderDataGenerator {
             isProvideVirtualCellsWidth,
             startDayHour,
             endDayHour,
-            hoursInterval
+            hoursInterval,
+            isMonthDateHeader,
         } = options;
 
         const dataMap = [];
@@ -190,6 +191,7 @@ export class DateHeaderDataGenerator {
             weekDayRightVirtualCellWidth: weekDayRowConfig.rightVirtualCellWidth,
             weekDayLeftVirtualCellCount: weekDayRowConfig.leftVirtualCellCount,
             weekDayRightVirtualCellCount: weekDayRowConfig.rightVirtualCellCount,
+            isMonthDateHeader,
         };
     }
 

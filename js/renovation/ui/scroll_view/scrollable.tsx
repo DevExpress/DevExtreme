@@ -29,27 +29,25 @@ import { ScrollableProps } from './common/scrollable_props';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 
-let isServerSide = !hasWindow();
-
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     scrollableNativeRef,
     scrollableSimulatedRef,
     rtlEnabled,
+    isServerSide,
     props: {
       useNative, children, classes,
       aria, disabled, width, height, visible,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, pullDownEnabled,
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
-      needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
+      useSimulatedScrollbar, inertiaEnabled,
       pulledDownText, pullingDownText, refreshingText, reachBottomText, refreshStrategy,
       onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onVisibilityChange,
+      loadPanelTemplate,
     },
     restAttributes,
   } = viewModel;
-
-  isServerSide = !hasWindow();
 
   return useNative
     ? (
@@ -68,7 +66,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         reachBottomEnabled={reachBottomEnabled}
         forceGeneratePockets={forceGeneratePockets && !isServerSide}
         needScrollViewContentWrapper={needScrollViewContentWrapper}
-        needScrollViewLoadPanel={needScrollViewLoadPanel && !isServerSide}
+        loadPanelTemplate={!isServerSide ? loadPanelTemplate : undefined}
         needRenderScrollbars={!isServerSide}
         onScroll={onScroll}
         onUpdated={onUpdated}
@@ -104,7 +102,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         reachBottomEnabled={reachBottomEnabled}
         forceGeneratePockets={forceGeneratePockets && !isServerSide}
         needScrollViewContentWrapper={needScrollViewContentWrapper}
-        needScrollViewLoadPanel={needScrollViewLoadPanel && !isServerSide}
+        loadPanelTemplate={!isServerSide ? loadPanelTemplate : undefined}
         needRenderScrollbars={!isServerSide}
         onScroll={onScroll}
         onUpdated={onUpdated}
@@ -125,6 +123,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         onStart={onStart}
         onEnd={onEnd}
         onBounce={onBounce}
+
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
       >
@@ -162,7 +161,11 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
-    !this.props.useNative && this.updateHandler();
+    if (!this.props.useNative) {
+      // the resizeObserver handler calls too late
+      // in case when DataGrid call dxresize when data was loaded
+      this.updateHandler();
+    }
 
     const currentScrollOffset = this.props.useNative
       ? this.scrollOffset()
@@ -205,14 +208,14 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
 
   @Method()
   release(): void {
-    if (!isServerSide) {
+    if (!this.isServerSide) {
       this.scrollableRef.release() as undefined;
     }
   }
 
   @Method()
   refresh(): void {
-    if (!isServerSide) {
+    if (!this.isServerSide) {
       this.scrollableRef.refresh();
     }
   }
@@ -296,7 +299,7 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
 
   @Method()
   finishLoading(): void {
-    if (!isServerSide) {
+    if (!this.isServerSide) {
       this.scrollableRef.finishLoading();
     }
   }
@@ -316,5 +319,10 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
   get rtlEnabled(): boolean {
     const { rtlEnabled } = this.props;
     return !!resolveRtlEnabled(rtlEnabled, this.config);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get isServerSide(): boolean {
+    return !hasWindow();
   }
 }

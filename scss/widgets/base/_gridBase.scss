@@ -427,7 +427,8 @@
       & > tr > td {
         vertical-align: top;
 
-        &:first-child {
+        &:first-child,
+        &.dx-first-child {
           border-left: 0;
         }
 
@@ -819,8 +820,7 @@
     &.dx-scrollable {
       display: flex;
 
-      > .dx-scrollable-wrapper,
-      > div > .dx-scrollable-wrapper {
+      > .dx-scrollable-wrapper {
         flex: 1;
         height: auto;
         min-width: 0;

@@ -16,7 +16,6 @@ import Scrollable from '../scroll_view/ui.scrollable';
 import { removeEvent } from '../../events/remove';
 import messageLocalization from '../../localization/message';
 import browser from '../../core/utils/browser';
-import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -271,7 +270,7 @@ export const rowsModule = {
                         this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
 
                         if(isNativeScrolling) {
-                            scrollLeft = getScrollRtlBehavior().positive ? this._scrollRight : -this._scrollRight;
+                            scrollLeft = -this._scrollRight;
                         }
 
                         if(!this.isScrollbarVisible(true)) {
@@ -648,7 +647,7 @@ export const rowsModule = {
                 _createTable: function() {
                     const $table = this.callBase.apply(this, arguments);
 
-                    if(this.option().rowTemplate && !this.option('dataRowTemplate')) {
+                    if(this.option().rowTemplate || this.option().dataRowTemplate) {
                         $table.appendTo(this.component.$element());
                     }
 

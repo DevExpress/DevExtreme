@@ -13,6 +13,7 @@ import {
 import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 import {
   ALL_DAY_PANEL_CELL_CLASS,
+  ALL_DAY_ROW_CLASS,
   DATE_TABLE_CELL_CLASS,
   DATE_TABLE_ROW_CLASS,
 } from '../const';
@@ -157,14 +158,15 @@ export const getCellIndices = (cell: HTMLElement): {
   columnIndex: number;
   rowIndex: number;
 } => {
-  const row = cell.parentNode as HTMLElement;
-  const table = row.parentNode as HTMLElement;
+  const row = cell.closest(`.${DATE_TABLE_ROW_CLASS}, .${ALL_DAY_ROW_CLASS}`) as HTMLElement;
+  const rowParent = row.parentNode as HTMLElement;
+  const cellParent = cell.parentNode as HTMLElement;
 
-  const columnIndex = [...Array.from(row.children)]
+  const columnIndex = [...Array.from(cellParent.children)]
     .filter((child) => child.className.includes(DATE_TABLE_CELL_CLASS)
       || child.className.includes(ALL_DAY_PANEL_CELL_CLASS))
     .indexOf(cell);
-  const rowIndex = [...Array.from(table.children)]
+  const rowIndex = [...Array.from(rowParent.children)]
     .filter((child) => child.className.includes(DATE_TABLE_ROW_CLASS))
     .indexOf(row);
 

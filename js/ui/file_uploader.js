@@ -444,7 +444,12 @@ class FileUploader extends Editor {
 
     _validateFileExtension(file) {
         const allowedExtensions = this.option('allowedFileExtensions');
+        const accept = this.option('accept');
+        const allowedTypes = this._getAllowedFileTypes(accept);
         const fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
+        if(accept.length !== 0 && !this._isFileTypeAllowed(file.value, allowedTypes)) {
+            return false;
+        }
         if(allowedExtensions.length === 0) {
             return true;
         }
@@ -999,7 +1004,7 @@ class FileUploader extends Editor {
             return;
         }
 
-        this._changeValue(this._filterFiles(files));
+        this._changeValue(files);
 
         if(this.option('uploadMode') === 'instantly') {
             this._uploadFiles();
@@ -1011,29 +1016,6 @@ class FileUploader extends Editor {
         if(areAllFilesLoaded) {
             this._filesUploadedAction();
         }
-    }
-
-    _filterFiles(files) {
-        if(!files.length) {
-            return files;
-        }
-
-        const accept = this.option('accept');
-
-        if(!accept.length) {
-            return files;
-        }
-
-        const result = [];
-        const allowedTypes = this._getAllowedFileTypes(accept);
-
-        for(let i = 0, n = files.length; i < n; i++) {
-            if(this._isFileTypeAllowed(files[i], allowedTypes)) {
-                result.push(files[i]);
-            }
-        }
-
-        return result;
     }
 
     _getAllowedFileTypes(acceptSting) {
@@ -1554,6 +1536,18 @@ class FileUploadStrategyBase {
         return callback && isFunction(callback);
     }
 
+    _handleProgress(file, e) {
+        if(file._isError) {
+            return;
+        }
+
+        file._isProgressStarted = true;
+        this._handleProgressCore(file, e);
+    }
+
+    _handleProgressCore(file, e) {
+    }
+
     _handleFileError(file, error) {
         file._isError = true;
         file.onError.fire(error);
@@ -1575,6 +1569,10 @@ class FileUploadStrategyBase {
         file.onAbort.add(this._onAbortHandler.bind(this, file));
         file.onProgress.add(this._onProgressHandler.bind(this, file));
         file.isInitialized = true;
+    }
+
+    _shouldHandleError(file, e) {
+        return (this._isStatusError(e.status) || !file._isProgressStarted) && !file.isAborted;
     }
 
     _isStatusError(status) {
@@ -1707,7 +1705,7 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
                     setTimeout(() => this._sendChunk(file, chunksData));
                 })
                 .fail(error => {
-                    if(this._shouldHandleError(error)) {
+                    if(this._shouldHandleError(file, error)) {
                         this._handleFileError(file, error);
                     }
                 });
@@ -1715,9 +1713,6 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     }
 
     _sendChunkCore(file, chunksData, chunk) {
-    }
-
-    _shouldHandleError(error) {
     }
 
     _tryRaiseStartLoad(file) {
@@ -1756,6 +1751,7 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
             headers: this.fileUploader.option('uploadHeaders'),
             beforeSend: xhr => this._beforeSend(xhr, file),
             upload: {
+                'onprogress': e => this._handleProgress(file, e),
                 'onloadstart': () => this._tryRaiseStartLoad(file),
                 'onabort': () => file.onAbort.fire()
             },
@@ -1770,10 +1766,6 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
                 size: chunksData.fileSize
             })
         });
-    }
-
-    _shouldHandleError(e) {
-        return this._isStatusError(e.status);
     }
 
     _createFormData(options) {
@@ -1808,7 +1800,7 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
         }
     }
 
-    _shouldHandleError(e) {
+    _shouldHandleError(file, error) {
         return true;
     }
 }
@@ -1833,15 +1825,7 @@ class WholeFileUploadStrategyBase extends FileUploadStrategyBase {
     _uploadFile(file) {
     }
 
-    _shouldHandleError(file, e) {
-    }
-
-    _handleProgress(file, e) {
-        if(file._isError) {
-            return;
-        }
-
-        file._isProgressStarted = true;
+    _handleProgressCore(file, e) {
         file.onProgress.fire(e);
     }
 
@@ -1867,10 +1851,6 @@ class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
             },
             data: this._createFormData(this.fileUploader.option('name'), file.value)
         });
-    }
-
-    _shouldHandleError(file, e) {
-        return (this._isStatusError(e.status) || !file._isProgressStarted) && !file.isAborted;
     }
 
     _createFormData(fieldName, fieldValue) {

@@ -441,6 +441,12 @@ describe('option', () => {
     expect($('#component').dxOptionsTestWidget('option').text).toBe('default text');
   });
 
+  it('should patch options without freezing', () => {
+    $('#component').dxOptionsTestWidget({});
+    expect(Object.isFrozen($('#component')
+      .dxOptionsTestWidget('instance')._patchOptionValues({ objectProp: undefined }).objectProp)).toBe(false);
+  });
+
   it('should copy default props of component (not by reference)', () => {
     document.body.innerHTML = `
       <div id="components">
@@ -640,6 +646,20 @@ describe('option', () => {
     expect(mockFunction).toHaveBeenCalledWith({
       originalEvent: defaultEvent, keyName: KEY.space, which: KEY.space,
     });
+  });
+
+  it('updates props if it is called on onInitialized handler (T1057680)', () => {
+    const $component = $('#component');
+    const options = {
+      text: 'new text',
+    };
+    $component.dxTestWidget({
+      onInitialized: (e) => {
+        e.component.option(options);
+      },
+    });
+
+    expect($component.dxTestWidget('getLastPassedProps')).toMatchObject(options);
   });
 });
 

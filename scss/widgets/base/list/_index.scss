@@ -189,10 +189,6 @@ $list-searchbox-margin-bottom: 5px;
 .dx-list-switchable-menu-shield-positioning {
   position: relative;
   transform: translateZ(0);
-
-  .dx-device-android-4 & {
-    transform: none;
-  }
 }
 
 .dx-list-switchable-delete-top-shield,

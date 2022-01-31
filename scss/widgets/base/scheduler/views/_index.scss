@@ -236,6 +236,7 @@ $scheduler-month-date-text-padding: 6px;
 
 .dx-scheduler-header-tables-container {
   overflow: hidden;
+  width: 100%;
 }
 
 .dx-scheduler-date-table-container {
@@ -247,6 +248,7 @@ $scheduler-month-date-text-padding: 6px;
 }
 
 .dx-scheduler-date-table-scrollable {
+  width: 100%;
   overflow: hidden;
 
   .dx-scrollable-content {

@@ -798,7 +798,10 @@ export const focusModule = {
                 },
 
                 updateFocusElementTabIndex: function($cellElements, preventScroll) {
-                    if(this.option('focusedRowEnabled')) {
+                    const rowIndex = this.getController('keyboardNavigation').getVisibleRowIndex();
+                    const row = this._dataController.getVisibleRows()[rowIndex];
+
+                    if(this.option('focusedRowEnabled') && !row?.isNewRow) {
                         this._setFocusedRowElementTabIndex(preventScroll);
                     } else {
                         this.callBase($cellElements);
@@ -857,7 +860,7 @@ export const focusModule = {
                 scrollToElementVertically: function($row) {
                     const scrollable = this.getScrollable();
 
-                    if(scrollable) {
+                    if(scrollable && $row.length) {
                         const position = scrollable.getScrollElementPosition($row, 'vertical');
 
                         return this._scrollTopPosition(position);

@@ -2352,9 +2352,6 @@ export const editingModule = {
 
                     return template || this.callBase(options);
                 },
-                _isNativeClick: function() {
-                    return (devices.real().ios || devices.real().android) && this.option('editing.allowUpdating');
-                },
                 _createRow: function(row) {
                     const $row = this.callBase.apply(this, arguments);
 
@@ -2407,7 +2404,9 @@ export const editingModule = {
                     }
 
                     if(eventName === 'click' && startEditAction === 'dblClick' && !isEditedCell) {
-                        editingController.closeEditCell();
+                        const isError = false;
+                        const withoutSaveEditData = row?.isNewRow;
+                        editingController.closeEditCell(isError, withoutSaveEditData);
                     }
 
                     if(allowEditing && eventName === startEditAction) {

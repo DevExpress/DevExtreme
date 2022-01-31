@@ -54,7 +54,7 @@ const prepareInstances = (
   viewDataProvider: ViewDataProviderType;
   DOMMetaData: CellsMetaData;
 } => {
-  const schedulerProps = new SchedulerProps();
+  const schedulerProps: any = new SchedulerProps();
   schedulerProps.currentDate = currentDate;
   let workspaceProps = new WorkSpaceProps();
   workspaceProps.type = viewType;
@@ -67,6 +67,7 @@ const prepareInstances = (
     ...getCurrentViewConfig(
       workspaceProps as unknown as Partial<ViewProps>,
       schedulerProps,
+      currentDate,
     ),
   };
 
@@ -493,6 +494,7 @@ describe('Appointments view model', () => {
             info: {
               allDay: true,
               direction: 'horizontal',
+              groupIndex: 0,
               isRecurrent: false,
               appointment: {
                 startDate: new Date(2021, 8, 23),

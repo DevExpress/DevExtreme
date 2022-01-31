@@ -649,7 +649,8 @@ $grid-masterdetail-padding: 20px;
 
   .dx-#{$widget-name}-rowsview {
     .dx-#{$widget-name}-borders &,
-    .dx-#{$widget-name}-headers + & {
+    .dx-#{$widget-name}-headers + &,
+    &.dx-#{$widget-name}-after-headers {
       border-top: $datagrid-border;
     }
 

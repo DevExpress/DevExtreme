@@ -25,7 +25,6 @@ import { getDateTableWidth } from '../utils';
 
 import { getWindow, setWindow } from '../../../../../../core/utils/window';
 import * as subscribeUtils from '../../../../../utils/subscribe_to_event';
-import domAdapter from '../../../../../../core/dom_adapter';
 import { DATE_TABLE_CELL_CLASS, DATE_TABLE_ROW_CLASS } from '../../const';
 
 jest.mock('../../../../../utils/combine_classes', () => ({
@@ -37,7 +36,6 @@ jest.mock('../utils', () => ({
 }));
 const isVerticalGroupingApplied = jest.spyOn(Utils, 'isVerticalGroupingApplied');
 const isHorizontalGroupingApplied = jest.spyOn(Utils, 'isHorizontalGroupingApplied');
-const subscribeToScrollEvent = jest.spyOn(subscribeUtils, 'subscribeToScrollEvent');
 const subscribeToDXPointerDownEvent = jest.spyOn(subscribeUtils, 'subscribeToDXPointerDownEvent');
 const subscribeToDXPointerMoveEvent = jest.spyOn(subscribeUtils, 'subscribeToDXPointerMoveEvent');
 
@@ -293,6 +291,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             type: 'week',
             currentDate: new Date(2021, 10, 9),
+            startViewDate: new Date(2021, 10, 7),
             scrolling: { mode: 'virtual' },
             intervalCount: 25,
             schedulerHeight: 500,
@@ -340,6 +339,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             type: 'week',
             currentDate: new Date(2021, 10, 9),
+            startViewDate: new Date(2021, 10, 7),
             scrolling: { mode: 'virtual' },
             intervalCount: 25,
           } as any);
@@ -381,6 +381,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             type: 'week',
             currentDate: new Date(2021, 10, 9),
+            startViewDate: new Date(2021, 10, 7),
             scrolling: { mode: 'standard' },
             intervalCount: 25,
           } as any);
@@ -411,6 +412,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 25,
               schedulerHeight: 500,
@@ -471,6 +473,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 25,
             } as any);
@@ -526,6 +529,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
           });
 
           workSpace.onPointerDown(eventMock);
@@ -546,6 +550,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
           });
 
           workSpace.onPointerDown(eventMock);
@@ -566,6 +571,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
           });
 
           workSpace.onPointerDown(eventMock);
@@ -592,6 +598,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
           });
 
           mockGetCellData.mockImplementationOnce(() => ({
@@ -641,6 +648,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
           });
 
           workSpace.onPointerMove(eventMock);
@@ -661,6 +669,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
           });
 
           workSpace.isPointerDown = false;
@@ -690,6 +699,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
           });
 
           workSpace.isPointerDown = true;
@@ -787,6 +797,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
           });
 
           const defaultSelectionState = {
@@ -863,6 +874,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
           });
 
           const defaultSelectionState = {
@@ -1065,7 +1077,7 @@ describe('WorkSpace', () => {
 
         it('should call onViewRendered with correct parameters when all-day panel is not visible', () => {
           const onViewRendered = jest.fn();
-          const currentDate = new Date();
+          const currentDate = new Date(2021, 11, 26);
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
@@ -1074,6 +1086,7 @@ describe('WorkSpace', () => {
             endDayHour: 1,
             showAllDayPanel: false,
             currentDate,
+            startViewDate: currentDate,
           });
 
           workSpace.dateTableRef = dateTableRefMock;
@@ -1146,12 +1159,13 @@ describe('WorkSpace', () => {
 
         it('should call onViewRendered with correct parameters when all-day panel is visible', () => {
           const onViewRendered = jest.fn();
-          const currentDate = new Date();
+          const currentDate = new Date(2021, 11, 26);
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
             currentDate,
+            startViewDate: currentDate,
             startDayHour: 0,
             endDayHour: 1,
             showAllDayPanel: true,
@@ -1245,7 +1259,8 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
-            currentDate: new Date(),
+            currentDate: new Date(2021, 11, 26),
+            startViewDate: new Date(2021, 11, 26),
             startDayHour: 0,
             endDayHour: 1,
             showAllDayPanel: false,
@@ -1274,7 +1289,8 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
-            currentDate: new Date(),
+            currentDate: new Date(2021, 11, 26),
+            startViewDate: new Date(2021, 11, 26),
             startDayHour: 0,
             endDayHour: 1,
             showAllDayPanel: false,
@@ -1303,6 +1319,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             scrolling: { mode: 'virtual' },
+            startViewDate: new Date(2021, 11, 26),
           });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -1313,11 +1330,11 @@ describe('WorkSpace', () => {
 
           expect(workSpace.onWindowScrollEffect())
             .toStrictEqual(expect.any(Function));
-          expect(subscribeToScrollEvent)
-            .toBeCalledWith(
-              domAdapter.getDocument(),
-              onWindowScroll,
-            );
+
+          emit(EVENT.scroll);
+
+          expect(onWindowScroll)
+            .toBeCalled();
         });
 
         it('shoud not subscribe to window onScroll if height is defined and virtual scrolling is used', () => {
@@ -1325,6 +1342,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             scrolling: { mode: 'virtual' },
             schedulerHeight: 500,
+            startViewDate: new Date(2021, 11, 26),
           });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -1341,6 +1359,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             scrolling: { mode: 'standard' },
+            startViewDate: new Date(2021, 11, 26),
           });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -1454,12 +1473,13 @@ describe('WorkSpace', () => {
 
       describe('tablesWidthEffect', () => {
         it('should save tablesWidth into the state', () => {
-          const currentDate = new Date();
+          const currentDate = new Date(2021, 11, 26);
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             crossScrollingEnabled: true,
             type: 'week',
             currentDate,
+            startViewDate: currentDate,
             groups,
           } as any);
 
@@ -1565,6 +1585,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 2,
               schedulerHeight: 1000,
@@ -1619,6 +1640,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 2,
               schedulerHeight: 1000,
@@ -1677,6 +1699,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 2,
               schedulerHeight: 1000,
@@ -1758,6 +1781,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 2,
               schedulerHeight: 1000,
@@ -1839,6 +1863,7 @@ describe('WorkSpace', () => {
               ...new WorkSpaceProps(),
               type: 'week',
               currentDate: new Date(2021, 10, 9),
+              startViewDate: new Date(2021, 10, 7),
               scrolling: { mode: 'virtual' },
               intervalCount: 2,
               schedulerHeight: 1000,
@@ -1918,6 +1943,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 10, 30),
+            startViewDate: new Date(2021, 10, 30),
           });
 
           workSpace.widgetElementRef = widgetRef;
@@ -1952,10 +1978,10 @@ describe('WorkSpace', () => {
         });
       });
 
-      describe('disposeEffect', () => {
+      describe('pointerUpEffect', () => {
         beforeEach(clear);
 
-        it('should remove subscription from document', () => {
+        it('should work correctly', () => {
           const ref: any = createRef();
           mount(
             <div>
@@ -1973,6 +1999,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 10, 20),
+            startViewDate: new Date(2021, 10, 20),
           });
 
           mockGetCellData.mockImplementationOnce(() => ({
@@ -1983,12 +2010,14 @@ describe('WorkSpace', () => {
           workSpace.onPointerUp = jest.fn();
           workSpace.onPointerDown(eventMock);
 
+          const disposePointerUp = workSpace.pointerUpEffect();
+
           emit(EVENT.pointerUp);
 
           expect(workSpace.onPointerUp)
             .toBeCalledTimes(1);
 
-          workSpace.disposeEffect();
+          disposePointerUp!();
 
           emit(EVENT.pointerUp);
           expect(workSpace.onPointerUp)
@@ -2096,6 +2125,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 26),
+            startViewDate: new Date(2021, 9, 26),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2140,6 +2170,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 26),
+            startViewDate: new Date(2021, 9, 26),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2205,6 +2236,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 26),
+            startViewDate: new Date(2021, 9, 26),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2268,6 +2300,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 26),
+            startViewDate: new Date(2021, 9, 26),
             startDayHour: 0,
             endDayHour: 2,
             onViewRendered: () => {},
@@ -2415,6 +2448,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 26),
+            startViewDate: new Date(2021, 9, 26),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2478,6 +2512,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 25),
+            startViewDate: new Date(2021, 9, 25),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2503,6 +2538,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 24),
+            startViewDate: new Date(2021, 9, 24),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2586,6 +2622,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 25),
+            startViewDate: new Date(2021, 9, 25),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2614,6 +2651,7 @@ describe('WorkSpace', () => {
               weekDayLeftVirtualCellWidth: undefined,
               weekDayRightVirtualCellCount: undefined,
               weekDayRightVirtualCellWidth: undefined,
+              isMonthDateHeader: false,
             });
         });
 
@@ -2621,6 +2659,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 24),
+            startViewDate: new Date(2021, 9, 24),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2705,6 +2744,7 @@ describe('WorkSpace', () => {
               weekDayLeftVirtualCellWidth: 0,
               weekDayRightVirtualCellCount: 0,
               weekDayRightVirtualCellWidth: 0,
+              isMonthDateHeader: false,
             });
         });
       });
@@ -2714,6 +2754,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 25),
+            startViewDate: new Date(2021, 9, 25),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2764,6 +2805,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             currentDate: new Date(2021, 9, 25),
+            startViewDate: new Date(2021, 9, 25),
             startDayHour: 0,
             endDayHour: 1,
             onViewRendered: () => {},
@@ -2841,6 +2883,7 @@ describe('WorkSpace', () => {
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
+            startViewDate: new Date(2021, 8, 11),
             ...props,
             type: 'week',
           });
@@ -3019,6 +3062,7 @@ describe('WorkSpace', () => {
               isAllDayPanelSupported: true,
               isProvideVirtualCellsWidth: false,
               isRenderTimePanel: true,
+              isMonthDateHeader: false,
               groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
               headerCellTextFormat: formatWeekdayAndDay,
               getDateForHeaderText: expect.any(Function),
@@ -3239,6 +3283,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             type: 'day',
             currentDate: new Date(2021, 10, 9),
+            startViewDate: new Date(2021, 10, 9),
             scrolling: { mode: 'virtual' },
             schedulerHeight: 300,
             schedulerWidth: 300,
@@ -3264,6 +3309,7 @@ describe('WorkSpace', () => {
             ...new WorkSpaceProps(),
             type: 'day',
             currentDate: new Date(2021, 10, 9),
+            startViewDate: new Date(2021, 10, 9),
             scrolling: { mode: 'virtual' },
             schedulerHeight: 300,
             schedulerWidth: 300,
@@ -3300,30 +3346,6 @@ describe('WorkSpace', () => {
           .toBe(true);
         expect(workSpace.timePanelDataGenerator instanceof TimePanelDataGenerator)
           .toBe(true);
-      });
-    });
-
-    describe('startViewDate', () => {
-      it('should return correct startViewDate if view is day', () => {
-        const workSpace = new WorkSpace({
-          ...new WorkSpaceProps(),
-          currentDate: new Date(2021, 1, 1),
-          type: 'day',
-        } as any);
-
-        expect(workSpace.startViewDate.getTime())
-          .toBe(new Date(2021, 1, 1).getTime());
-      });
-
-      it('should return correct startViewDate if view is week', () => {
-        const workSpace = new WorkSpace({
-          ...new WorkSpaceProps(),
-          currentDate: new Date(2021, 7, 19),
-          type: 'week',
-        } as any);
-
-        expect(workSpace.startViewDate.getTime())
-          .toBe(new Date(2021, 7, 15).getTime());
       });
     });
 

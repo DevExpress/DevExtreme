@@ -163,16 +163,49 @@ export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>
    * @public
    */
   margins?: object;
-   /**
+  /**
    * @docid
+   * @default 'all'
    * @public
    */
   exportMode?: GanttPdfExportMode;
-   /**
+  /**
    * @docid
    * @public
    */
   dateRange?: GanttPdfExportDateRange | object;
+  /**
+  * @docid
+  * @public
+  */
+  font?: PdfExportGanttFont;
+}
+
+export interface PdfExportGanttFont {
+  /**
+  * @docid
+  * @default undefined
+  * @public
+  */
+  fontObject: object;
+  /**
+  * @docid
+  * @default undefined
+  * @public
+  */
+  name: string;
+  /**
+  * @docid
+  * @default 'normal'
+  * @public
+  */
+  style?: string;
+  /**
+  * @docid
+  * @default undefined
+  * @public
+  */
+  weight?: string | number;
 }
 
 /**

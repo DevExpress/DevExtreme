@@ -9,7 +9,6 @@ import {
   Fragment,
   Method,
 } from '@devextreme-generator/declarations';
-import { createDefaultOptionRules } from '../../../../core/options/utils';
 import devices from '../../../../core/devices';
 import { Editor, EditorProps } from '../internal/editor';
 import BaseComponent from '../../../component_wrapper/editors/check_box';
@@ -104,6 +103,8 @@ export class CheckBoxProps extends EditorProps {
 
   @OneWay() hoverStateEnabled = true;
 
+  @OneWay() focusStateEnabled = devices.real().deviceType === 'desktop' && !devices.isSimulator();
+
   @TwoWay() value: boolean | null = false;
 
   // private
@@ -114,13 +115,7 @@ export type CheckBoxPropsType = CheckBoxProps
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<WidgetProps, 'aria'>;
 
-export const defaultOptionRules = createDefaultOptionRules<CheckBoxPropsType>([{
-  device: (): boolean => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
-  options: { focusStateEnabled: true },
-}]);
-
 @Component({
-  defaultOptionRules,
   jQuery: {
     component: BaseComponent,
     register: true,

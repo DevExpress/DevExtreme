@@ -3,12 +3,14 @@ import { ClientFunction } from 'testcafe';
 export type WidgetName =
 'dxGallery' |
 'dxButtonGroup' |
+'dxCheckBox' |
 'dxTabPanel' |
 'dxForm' |
 'dxTabPanel' |
 'dxScrollable' |
 'dxScrollView' |
 'dxDataGrid' |
+'dxDataGridLight' |
 'dxTreeList' |
 'dxPager' |
 'dxScheduler' |

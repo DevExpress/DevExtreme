@@ -6,7 +6,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
-import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
+import browser from 'core/utils/browser';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
@@ -20,12 +20,14 @@ import {
     SCROLLBAR_VERTICAL_CLASS,
     SCROLLABLE_SCROLLBARS_HIDDEN,
     SCROLLABLE_DISABLED_CLASS,
-    calculateInertiaDistance
+    calculateInertiaDistance,
+    RESIZE_WAIT_TIMEOUT
 } from './scrollable.constants.js';
 
 import {
     DIRECTION_HORIZONTAL,
     DIRECTION_VERTICAL,
+    DIRECTION_BOTH,
     SCROLLABLE_WRAPPER_CLASS
 } from 'renovation/ui/scroll_view/common/consts.js';
 
@@ -76,6 +78,7 @@ QUnit.test('update', function(assert) {
     const done = assert.async();
     const moveDistance = -10;
     const moveDuration = 10;
+    const onUpdatedHandler = sinon.spy();
     const inertiaDistance = calculateInertiaDistance(moveDistance, moveDuration);
     const distance = moveDistance + inertiaDistance;
     const $scrollable = $('#scrollable');
@@ -85,6 +88,7 @@ QUnit.test('update', function(assert) {
 
     $scrollable.dxScrollable({
         useNative: false,
+        onUpdated: onUpdatedHandler,
         onEnd: function() {
             const location = getScrollOffset($scrollable);
 
@@ -96,7 +100,10 @@ QUnit.test('update', function(assert) {
     const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
 
     $scrollableChild.height(-1 * distance + 1);
+    onUpdatedHandler.reset();
     $scrollable.dxScrollable('instance').update();
+
+    assert.strictEqual(onUpdatedHandler.callCount, 1, 'onUpdatedHandler.callCount');
 
     mouse
         .down()
@@ -262,6 +269,8 @@ QUnit.test('scrollBy to location', function(assert) {
 });
 
 QUnit.test('scrollBy to location with dynamic content', function(assert) {
+    this.clock.restore();
+
     const distance = 10;
     let wasFirstMove = false;
 
@@ -278,7 +287,6 @@ QUnit.test('scrollBy to location with dynamic content', function(assert) {
 
     const scrollable = $scrollable.dxScrollable('instance');
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
-
 
     $content.append($('<div>').height(100));
     scrollable.scrollBy(distance);
@@ -348,6 +356,7 @@ QUnit.test('scrollTo to location with dynamic content', function(assert) {
 
     scrollable.scrollTo(100);
     $content.empty().append($('<div>').height(101));
+
     scrollable.scrollTo(50);
 });
 
@@ -809,6 +818,71 @@ QUnit.test('scrollTo should not reset unused position', function(assert) {
     assert.equal(scrollable.scrollTop(), 40, 'top position set');
 });
 
+[true, false].forEach((useNative) => {
+    [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BOTH].forEach((direction) => {
+        let scrollToValue = 40;
+
+        if(direction === DIRECTION_HORIZONTAL) {
+            scrollToValue = { left: 40 };
+        }
+
+        if(direction === DIRECTION_VERTICAL) {
+            scrollToValue = { top: 40 };
+        }
+
+        QUnit.test(`scrollTo(${JSON.stringify(scrollToValue)}), update scrollOffset value after resize, useNative: ${useNative}, dir: ${direction}`, function(assert) {
+            this.clock.restore();
+            const done = assert.async();
+            const contentSize = 1000;
+            const containerSize = 100;
+            const $scrollable = $('#scrollable').width(containerSize).height(containerSize);
+            $scrollable.wrapInner('<div>').children().width(contentSize).height(contentSize);
+
+            const scrollable = $scrollable.dxScrollable({
+                useNative,
+                direction,
+            }).dxScrollable('instance');
+
+            // for IOS with min-height: 101% style
+            $(scrollable.content()).css({ minHeight: '100%' });
+
+            scrollable.scrollTo(scrollToValue);
+
+            const expectedTopOffsetValue = direction !== DIRECTION_HORIZONTAL ? 40 : 0;
+            const expectedLeftOffsetValue = direction !== DIRECTION_VERTICAL ? 40 : 0;
+            assert.deepEqual(scrollable.scrollOffset(), {
+                top: expectedTopOffsetValue,
+                left: expectedLeftOffsetValue,
+            }, 'scrollOffset()');
+            assert.strictEqual(scrollable.scrollTop(), expectedTopOffsetValue, 'scrollTop()');
+            assert.strictEqual(scrollable.scrollLeft(), expectedLeftOffsetValue, 'scrollLeft()');
+
+            $('#scrollable').width(500).height(500);
+            resizeCallbacks.fire();
+
+            assert.deepEqual(scrollable.scrollOffset(), {
+                top: expectedTopOffsetValue,
+                left: expectedLeftOffsetValue,
+            }, 'scrollOffset()');
+            assert.strictEqual(scrollable.scrollTop(), expectedTopOffsetValue, 'scrollTop()');
+            assert.strictEqual(scrollable.scrollLeft(), expectedLeftOffsetValue, 'scrollLeft()');
+
+            $('#scrollable').width(1000).height(1000);
+            resizeCallbacks.fire();
+
+            setTimeout(() => {
+                assert.deepEqual(scrollable.scrollOffset(), {
+                    top: 0,
+                    left: 0,
+                }, 'scrollOffset()');
+                assert.strictEqual(scrollable.scrollTop(), 0, 'scrollTop()');
+                assert.strictEqual(scrollable.scrollLeft(), 0, 'scrollLeft()');
+
+                done();
+            }, RESIZE_WAIT_TIMEOUT);
+        });
+    });
+});
 
 class ScrollableTestHelper {
     constructor(options) {
@@ -891,16 +965,14 @@ class ScrollableTestHelper {
     checkScrollOffset({ left, top, maxScrollOffset, epsilon = 0.001 }, message) {
         const scrollOffset = getScrollOffset(this.$scrollable);
 
-        const { decreasing, positive } = getScrollRtlBehavior();
-
         QUnit.assert.roughEqual(this.getMaxScrollOffset().horizontal, maxScrollOffset, epsilon, 'horizontal maxScrollOffset');
 
         let expectedScrollOffsetLeft = left;
 
-        if(this._useNative && this._rtlEnabled && (decreasing ^ positive)) {
+        if(this._useNative && this._rtlEnabled) {
             expectedScrollOffsetLeft = left - this.getMaxScrollOffset().horizontal;
 
-            if(positive) {
+            if(browser.msie && browser.version < 12) {
                 expectedScrollOffsetLeft = Math.abs(expectedScrollOffsetLeft);
             }
         }

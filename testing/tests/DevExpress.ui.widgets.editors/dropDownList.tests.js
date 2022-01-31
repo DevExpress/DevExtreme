@@ -711,6 +711,10 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         });
 
         QUnit.test('should not search if composition is in progress (T1003899)', function(assert) {
+            if(devices.real().platform === 'android') {
+                assert.expect(0);
+                return;
+            }
             this.$input.trigger($.Event('compositionstart'));
             this.keyboard.type('ㅇ');
             this.clock.tick(TIME_TO_WAIT);
@@ -730,6 +734,10 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         });
 
         QUnit.test('should not get composite characters as search value when compositionend is raised because of next composition start', function(assert) {
+            if(devices.real().platform === 'android') {
+                assert.expect(0);
+                return;
+            }
             this.$input.trigger($.Event('compositionstart'));
             this.keyboard.type('ㅏ');
             this.$input.trigger($.Event('compositionend'));

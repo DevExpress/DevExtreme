@@ -12,7 +12,8 @@ const { removeUnusedModules, cleanEmptyFolders } = require('./remove-unused-modu
 const babel = require('gulp-babel');
 const transpileConfig = require('../transpile-config');
 const { run } = require('./utils');
-const argv = require('yargs').argv;
+const messages = require('./data/messages');
+const through2 = require('through2');
 
 function copyMiscFiles(context, additionalReplacements) {
     return () => merge(
@@ -23,6 +24,16 @@ function copyMiscFiles(context, additionalReplacements) {
             .pipe(gulp.dest(context.destination)),
         gulp
             .src('README.md')
+            .pipe(through2.obj((chunk, enc, callback) => {
+                if (chunk.isNull())
+                    return callback(null, chunk);
+                
+                const fileContents = chunk.contents.toString();
+                const patchedContents = messages.getReadmeNote(context.name) + fileContents;
+
+                chunk.contents = Buffer.from(patchedContents, enc);
+                callback(null, chunk);
+            }))
             .pipe(gulp.dest(context.destination)),
     );
 }
@@ -45,7 +56,7 @@ function transpileJSModules(context) {
                     .pipe(gulp.dest(context.destination));
 }
 function installPackages(context) {
-    return run('npm i', { cwd: context.destination });
+    return run('npm i --no-audit --no-fund', { cwd: context.destination });
 }
 function generateRenovation(context, generator) {
     return generator;
@@ -80,10 +91,10 @@ function buildSeries(steps, context) {
 
 function addCompilationTask(frameworkData) {
     const context = {
-        source: `artifacts/${frameworkData.name}/renovation`,
+        source: `artifacts/${frameworkData.artifactsFolder || frameworkData.name}/renovation`,
         destination: `artifacts/npm-${frameworkData.name}`,
         extensions: ['.js', '.ts', '.d.ts', '.tsx'],
-        production: argv.production,
+        production: (process.env['NPM_PRODUCTION'] || '').toLowerCase() === 'true',
         ...frameworkData,
     }
     const steps = [
@@ -128,7 +139,8 @@ function addCompilationTask(frameworkData) {
     ];
 
     const builtSteps = buildSeries(steps, context)
-    gulp.task(`renovation-npm-${context.name}`, gulp.series(...buildSeries(steps, context)));
+    const result = builtSteps.length>1 ? gulp.series(...buildSeries(steps, context)) : builtSteps[0]
+    gulp.task(`renovation-npm-${context.name}`, result);
 }
 
 addCompilationTask({
@@ -149,6 +161,7 @@ addCompilationTask({
 });
 addCompilationTask({
     name: 'angular',
+    artifactsFolder: 'angular-typescript',
     generator: 'generate-angular-typescript',
 
     switches: {
@@ -156,10 +169,20 @@ addCompilationTask({
     },
     components: 'Button',
     steps: {
+        installPackages: {
+            before: {
+                condition: (ctx) => !ctx.production,
+                actions: [require('./steps-angular').beforeNpmInstall]
+            },
+            after: {
+                condition: (ctx) => !ctx.production,
+                actions: [require('./steps-angular').afterNpmInstall]
+            }
+        },
         copyMiscFiles: {
             arg: (ctx) => require('./steps-angular').preparePackageForPackagr,
             after: {
-                actions: [require('./steps-angular').createNgEntryPoint]
+                actions: [require('./steps-angular').createNgEntryPoint, require('./steps-angular').createTSConfig]
             }
         },
         teardown: {

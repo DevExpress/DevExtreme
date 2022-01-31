@@ -91,6 +91,18 @@ class Gantt extends Widget {
         this._isGanttRendered = false;
         super._refresh();
     }
+    _dimensionChanged() {
+        this._ganttView?._onDimensionChanged();
+    }
+    _visibilityChanged(visible) {
+        if(visible) {
+            this._refreshGantt();
+        }
+    }
+    _refreshGantt() {
+        this._refreshDataSources();
+        this._refresh();
+    }
     _refreshDataSources() {
         this._refreshDataSource(GANTT_TASKS);
         this._refreshDataSource(GANTT_DEPENDENCIES);
@@ -170,6 +182,7 @@ class Gantt extends Widget {
             onScroll: (e) => { this._ganttTreeList.scrollBy(e.scrollTop); },
             onDialogShowing: this._showDialog.bind(this),
             onPopupMenuShowing: this._showPopupMenu.bind(this),
+            onPopupMenuHiding: this._hidePopupMenu.bind(this),
             onExpandAll: this._expandAll.bind(this),
             onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: ModelChangesListener.create(this),
@@ -389,6 +402,9 @@ class Gantt extends Widget {
             }
         }
     }
+    _hidePopupMenu() {
+        this._contextMenuBar.hide();
+    }
 
     _getLoadPanel() {
         if(!this._loadPanel) {
@@ -596,8 +612,7 @@ class Gantt extends Widget {
     refresh() {
         return new Promise((resolve, reject) => {
             try {
-                this._refreshDataSources();
-                this._refresh();
+                this._refreshGantt();
                 resolve();
             } catch(e) {
                 reject(e.message);

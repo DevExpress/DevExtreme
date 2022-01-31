@@ -10,6 +10,7 @@
 @use "../common/mixins" as *;
 @use "../common/sizes" as *;
 @use "../popup/colors" as *;
+@use "../popup/sizes" as *;
 @use "../menu/colors" as *;
 @use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
@@ -241,6 +242,11 @@ $grid-masterdetail-padding: 16px;
       }
     }
 
+    .dx-#{$widget-name}-table .dx-header-row  > td {
+      padding-top: $material-grid-base-header-cell-vertical-padding;
+      padding-bottom: $material-grid-base-header-cell-vertical-padding;
+    }
+
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
       > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all),
       > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending),
@@ -311,14 +317,17 @@ $grid-masterdetail-padding: 16px;
   }
 
   .dx-#{$widget-name}-edit-popup {
-    .dx-scrollable-container {
-      margin-left: -10px;
-      padding-left: 10px;
+    .dx-popup-content {
+      padding: 0;
     }
 
     .dx-error-message {
       padding: $material-grid-base-cell-padding;
     }
+  }
+
+  .dx-#{$widget-name}-edit-popup-form {
+    padding: $material-popup-content-padding;
   }
 
   .dx-#{$widget-name}-headers,
@@ -622,8 +631,6 @@ $grid-masterdetail-padding: 16px;
       .dx-row {
         > td {
           border-bottom: $datagrid-border;
-          padding-top: $material-grid-base-header-cell-vertical-padding;
-          padding-bottom: $material-grid-base-header-cell-vertical-padding;
           line-height: $material-grid-base-header-line-height;
           font-weight: $datagrid-columnchooser-font-weight;
           font-size: $material-grid-base-header-cell-font-size;
@@ -664,6 +671,11 @@ $grid-masterdetail-padding: 16px;
                 padding-bottom: 12px;
                 vertical-align: bottom;
                 border-right: 1px solid $material-grid-base-border-color;
+                border-left: 1px solid $material-grid-base-border-color;
+
+                &:first-child {
+                  border-left: none;
+                }
 
                 &:last-child {
                   border-right: none;
@@ -848,7 +860,8 @@ $grid-masterdetail-padding: 16px;
   .dx-#{$widget-name}-rowsview {
     border-top: 1px solid $material-grid-base-border-color;
 
-    .dx-#{$widget-name}-headers + & {
+    .dx-#{$widget-name}-headers + &,
+    &.dx-#{$widget-name}-after-headers {
       border-top: none;
     }
 

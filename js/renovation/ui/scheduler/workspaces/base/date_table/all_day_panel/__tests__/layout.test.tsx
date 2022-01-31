@@ -1,9 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { viewFunction as LayoutView, AllDayPanelLayout } from '../layout';
-import { AllDayPanelTableBody } from '../table_body';
-import { DefaultSizes } from '../../../../const';
-import { TableProps } from '../../../table';
+import { AppointmentLayout } from '../../../../../appointment/layout';
+import { viewFunction as LayoutView } from '../layout';
+import { AllDayTable, AllDayTableProps } from '../table';
 
 describe('AllDayPanelLayout', () => {
   const viewData: any = {
@@ -51,86 +50,34 @@ describe('AllDayPanelLayout', () => {
         props: {
           dataCellTemplate,
           width: 321,
+          tableRef: 'tableRef',
         },
       });
 
-      const allDayTable = layout.find('.dx-scheduler-all-day-table');
+      const allDayTable = layout.find(AllDayTable);
 
       expect(allDayTable.props())
         .toEqual({
-          ...new TableProps(),
-          height: 123,
-          width: 321,
-          className: 'dx-scheduler-all-day-table',
-          children: expect.anything(),
-        });
-
-      expect(allDayTable.exists())
-        .toBe(true);
-
-      const tableBody = allDayTable.find(AllDayPanelTableBody);
-
-      expect(tableBody.exists())
-        .toBe(true);
-
-      expect(tableBody)
-        .toHaveLength(1);
-
-      expect(tableBody.props())
-        .toMatchObject({
-          viewData: allDayPanelData,
+          ...new AllDayTableProps(),
           dataCellTemplate,
-          leftVirtualCellWidth: 100,
-          rightVirtualCellWidth: 200,
-          leftVirtualCellCount: 34,
-          rightVirtualCellCount: 44,
+          width: 321,
+          tableRef: 'tableRef',
+          viewData,
         });
+
+      expect(layout.hasClass('dx-scheduler-all-day-panel'))
+        .toBe(true);
     });
 
     it('should render all-day appointments', () => {
-      const layout = render({
-        props: {
-          allDayAppointments: (
-            <div className="all-day-appointments" />
-          ),
-        },
-      });
+      const layout = render({});
 
-      expect(layout.find('.all-day-appointments').exists())
+      expect(layout.find(AppointmentLayout).exists())
         .toBe(true);
-    });
-  });
-
-  describe('Logic', () => {
-    describe('Getters', () => {
-      it('allDayPanelData', () => {
-        const layout = new AllDayPanelLayout({ viewData });
-
-        expect(layout.allDayPanelData)
-          .toStrictEqual(viewData.groupedData[0].allDayPanel);
-      });
-
-      it('emptyTableHeight should not return height if allDayPanel data is present', () => {
-        const layout = new AllDayPanelLayout({ viewData });
-
-        expect(layout.emptyTableHeight)
-          .toEqual(undefined);
-      });
-
-      it('emptyTableHeight should return default height if allDayPanel data is empty', () => {
-        const layout = new AllDayPanelLayout({
-          viewData: {
-            groupedData: [{
-              dateTable: [[]],
-              allDayPanel: undefined,
-              groupIndex: 1,
-            }],
-          } as any,
+      expect(layout.find(AppointmentLayout).props())
+        .toEqual({
+          isAllDay: true,
         });
-
-        expect(layout.emptyTableHeight)
-          .toEqual(DefaultSizes.allDayPanelHeight);
-      });
     });
   });
 });

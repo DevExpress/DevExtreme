@@ -586,6 +586,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       items?: Array<number>;
       /**
        * @docid
+       * @fires dxDiagramOptions.onOptionChanged
        */
       value?: number;
     };
@@ -795,6 +796,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     pageSize?: {
       /**
        * @docid
+       * @fires dxDiagramOptions.onOptionChanged
        */
       height?: number;
       /**
@@ -816,6 +818,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       }>;
       /**
        * @docid
+       * @fires dxDiagramOptions.onOptionChanged
        */
       width?: number;
     };
@@ -1024,6 +1027,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        * @default undefined
+       * @fires dxDiagramOptions.onOptionChanged
        */
       value?: number;
     };

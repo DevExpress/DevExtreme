@@ -19,7 +19,6 @@ import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/u
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
-import getScrollRtlBehavior from '../core/utils/scroll_rtl_behavior';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -42,7 +41,6 @@ const TAGBOX_POPUP_WRAPPER_CLASS = 'dx-tagbox-popup-wrapper';
 const TAGBOX_TAG_CONTENT_CLASS = 'dx-tag-content';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
-const NATIVE_CLICK_CLASS = 'dx-native-click';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
@@ -170,9 +168,7 @@ const TagBox = SelectBox.inherit({
 
     _updateTagsContainer: function($element) {
         this._$tagsContainer = $element
-            .addClass(TAGBOX_TAG_CONTAINER_CLASS)
-            .addClass(NATIVE_CLICK_CLASS);
-        this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
+            .addClass(TAGBOX_TAG_CONTAINER_CLASS);
     },
 
     _allowSelectItemByTab: function() {
@@ -255,11 +251,9 @@ const TagBox = SelectBox.inherit({
         const rtlEnabled = this.option('rtlEnabled');
         const isScrollLeft = (direction === 'end') ^ rtlEnabled;
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = rtlEnabled && (scrollBehavior.decreasing ^ scrollBehavior.positive);
-        const scrollSign = !rtlEnabled || scrollBehavior.positive ? 1 : -1;
+        const scrollSign = rtlEnabled ? -1 : 1;
 
-        return (isScrollLeft ^ !isScrollInverted)
+        return (isScrollLeft ^ !rtlEnabled)
             ? 0
             : scrollSign * (this._$tagsContainer.get(0).scrollWidth - getOuterWidth(this._$tagsContainer));
     },
@@ -275,9 +269,7 @@ const TagBox = SelectBox.inherit({
         }
 
         if(isScrollLeft ^ (scrollOffset < 0)) {
-            const scrollBehavior = getScrollRtlBehavior();
-            const scrollCorrection = rtlEnabled && !scrollBehavior.decreasing && scrollBehavior.positive ? -1 : 1;
-            scrollLeft += scrollOffset * scrollCorrection;
+            scrollLeft += scrollOffset;
         }
 
         return scrollLeft;
@@ -578,7 +570,18 @@ const TagBox = SelectBox.inherit({
 
     _renderInput: function() {
         this.callBase();
-        this._renderPreventBlur(this._inputWrapper());
+        this._renderPreventBlurOnInputClick();
+    },
+
+    _renderPreventBlurOnInputClick: function() {
+        const eventName = addNamespace('mousedown', 'dxTagBox');
+
+        eventsEngine.off(this._inputWrapper(), eventName);
+        eventsEngine.on(this._inputWrapper(), eventName, (e) => {
+            if(e.target !== this._input()[0]) {
+                e.preventDefault();
+            }
+        });
     },
 
     _renderInputValueImpl: function() {
@@ -1015,17 +1018,30 @@ const TagBox = SelectBox.inherit({
     },
 
     _integrateInput: function() {
+        this._isInputReady.resolve();
         this.callBase();
         this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
         this._renderTagRemoveAction();
     },
 
     _renderTagsCore: function(items) {
+        this._isInputReady?.reject();
+        this._isInputReady = new Deferred();
         this._renderField();
 
         this.option('selectedItems', this._selectedItems.slice());
         this._cleanTags();
 
+        if(this._input().length > 0) {
+            this._isInputReady.resolve();
+        }
+
+        when(this._isInputReady).done(() => {
+            this._renderTagsElements(items);
+        });
+    },
+
+    _renderTagsElements(items) {
         const $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input());
         const showMultiTagOnly = this.option('showMultiTagOnly');
         const maxDisplayedTags = this.option('maxDisplayedTags');

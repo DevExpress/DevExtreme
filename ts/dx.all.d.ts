@@ -964,7 +964,7 @@ declare module DevExpress {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  type ExternalFormat = any;
+  type ExternalFormat = never;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1097,6 +1097,27 @@ declare module DevExpress {
    * [descr:hideTopOverlay()]
    */
   export function hideTopOverlay(): boolean;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface PdfExportGanttFont {
+    /**
+     * [descr:PdfExportGanttFont.fontObject]
+     */
+    fontObject: object;
+    /**
+     * [descr:PdfExportGanttFont.name]
+     */
+    name: string;
+    /**
+     * [descr:PdfExportGanttFont.style]
+     */
+    style?: string;
+    /**
+     * [descr:PdfExportGanttFont.weight]
+     */
+    weight?: string | number;
+  }
   /**
    * [descr:PositionConfig]
    */
@@ -1554,6 +1575,16 @@ declare module DevExpress.data {
       TItem,
       TKey
     >;
+    export type ResolvedData<TItem = any> =
+      | Object
+      | Array<TItem>
+      | Array<GroupItem>
+      | {
+          data: Array<TItem> | Array<GroupItem>;
+          totalCount?: number;
+          summary?: Array<any>;
+          groupCount?: number;
+        };
   }
   /**
    * @deprecated Use Options instead
@@ -1576,17 +1607,13 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load: (options: LoadOptions<TItem>) =>
+    load: (
+      options: LoadOptions<TItem>
+    ) =>
       | DevExpress.core.utils.DxPromise<
-          | Array<TItem>
-          | Array<DevExpress.data.CustomStore.GroupItem>
-          | {
-              data: Array<TItem> | Array<DevExpress.data.CustomStore.GroupItem>;
-              totalCount?: number;
-              summary?: Array<any>;
-              groupCount?: number;
-            }
+          DevExpress.data.CustomStore.ResolvedData<TItem>
         >
+      | PromiseLike<DevExpress.data.CustomStore.ResolvedData<TItem>>
       | Array<DevExpress.data.CustomStore.GroupItem>
       | Array<TItem>;
     /**
@@ -1623,7 +1650,7 @@ declare module DevExpress.data {
         | DevExpress.data.CustomStore.Options<TItem, TKey>
         | DevExpress.data.DataSource.Options<any, any, TItem, TKey>
     );
-    constructor(store: Store<TItem, TKey>);
+    constructor(store: DevExpress.data.utils.Store<TItem, TKey>);
     constructor(url: string);
     /**
      * [descr:DataSource.cancel(operationId)]
@@ -1782,7 +1809,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.store()]
      */
-    store(): Store<TItem, TKey>;
+    store(): DevExpress.data.utils.Store<TItem, TKey>;
     /**
      * [descr:DataSource.totalCount()]
      */
@@ -1796,7 +1823,7 @@ declare module DevExpress.data {
     export type DataSourceLike<TItem, TKey = any> =
       | string
       | Array<TItem>
-      | Store<TItem, TKey>
+      | DevExpress.data.utils.Store<TItem, TKey>
       | DataSourceOptionsStub<any, any, TItem>
       | DataSource<TItem, TKey>;
     /**
@@ -1828,17 +1855,8 @@ declare module DevExpress.data {
       sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
       store?:
         | Array<TStoreItem>
-        | Store<TStoreItem, any>
-        | (DevExpress.data.ArrayStore.Options<TStoreItem, any> & {
-            type: 'array';
-          })
-        | (DevExpress.data.LocalStore.Options<TStoreItem, any> & {
-            type: 'local';
-          })
-        | (DevExpress.data.ODataStore.Options<TStoreItem, any> & {
-            type: 'odata';
-          })
-        | DevExpress.data.CustomStore.Options<TStoreItem, any>;
+        | DevExpress.data.utils.Store<TStoreItem, any>
+        | DevExpress.data.utils.StoreOptions<TStoreItem, any>;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1942,17 +1960,8 @@ declare module DevExpress.data {
      */
     store?:
       | Array<TStoreItem>
-      | Store<TStoreItem, TKey>
-      | (DevExpress.data.ArrayStore.Options<TStoreItem, TKey> & {
-          type: 'array';
-        })
-      | (DevExpress.data.LocalStore.Options<TStoreItem, TKey> & {
-          type: 'local';
-        })
-      | (DevExpress.data.ODataStore.Options<TStoreItem, TKey> & {
-          type: 'odata';
-        })
-      | DevExpress.data.CustomStore.Options<TStoreItem, TKey>;
+      | DevExpress.data.utils.Store<TStoreItem, TKey>
+      | DevExpress.data.utils.StoreOptions<TStoreItem, TKey>;
   }
   /**
    * [descr:EdmLiteral]
@@ -2688,10 +2697,10 @@ declare module DevExpress.data {
      * [descr:PivotGridDataSourceOptions.store]
      */
     store?:
-      | Store
-      | DevExpress.data.Store.Options
+      | DevExpress.data.utils.Store
+      | DevExpress.data.utils.StoreOptions
       | XmlaStore
-      | XmlaStoreOptions
+      | (XmlaStoreOptions & { type: 'xmla' })
       | Array<{
           /**
            * [descr:PivotGridDataSourceOptions.store.type]
@@ -3061,6 +3070,16 @@ declare module DevExpress.data.utils {
    * [descr:Utils.compileSetter(expr)]
    */
   export function compileSetter(expr: string | Array<string>): Function;
+  export type Store<TItem = any, TKey = any> =
+    | CustomStore<TItem, TKey>
+    | ArrayStore<TItem, TKey>
+    | LocalStore<TItem, TKey>
+    | ODataStore<TItem, TKey>;
+  export type StoreOptions<TItem = any, TKey = any> =
+    | DevExpress.data.CustomStore.Options<TItem, TKey>
+    | (DevExpress.data.ArrayStore.Options<TItem, TKey> & { type: 'array' })
+    | (DevExpress.data.LocalStore.Options<TItem, TKey> & { type: 'local' })
+    | (DevExpress.data.ODataStore.Options<TItem, TKey> & { type: 'odata' });
 }
 declare module DevExpress.data.utils.odata {
   /**
@@ -4096,6 +4115,10 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportGanttProps.dateRange]
      */
     dateRange?: DevExpress.types.GanttPdfExportDateRange | object;
+    /**
+     * [descr:PdfExportGanttProps.font]
+     */
+    font?: PdfExportGanttFont;
   }
 }
 declare module DevExpress.types {
@@ -14499,6 +14522,10 @@ declare module DevExpress.ui {
     showTaskDetailsDialog(taskKey: any): void;
   }
   module dxGantt {
+    export type Column<TRowData = any, TKey = any> = dxGanttColumn<
+      TRowData,
+      TKey
+    >;
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;
     export type ContextMenuPreparingEvent = DevExpress.events.Cancelable & {
       readonly component?: dxGantt;
@@ -14652,6 +14679,155 @@ declare module DevExpress.ui {
       readonly start: Date;
       readonly end: Date;
     };
+  }
+  /**
+   * @deprecated Use the Column type instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type dxGanttColumn<TRowData = any, TKey = any> = DevExpress.core.Skip<
+    dxGanttColumnBlank<TRowData, TKey>,
+    | 'allowEditing'
+    | 'allowFixing'
+    | 'allowHiding'
+    | 'allowReordering'
+    | 'allowResizing'
+    | 'allowSearch'
+    | 'buttons'
+    | 'columns'
+    | 'editCellComponent'
+    | 'editCellRender'
+    | 'editCellTemplate'
+    | 'editorOptions'
+    | 'fixed'
+    | 'fixedPosition'
+    | 'formItem'
+    | 'hidingPriority'
+    | 'isBand'
+    | 'lookup'
+    | 'name'
+    | 'ownerBand'
+    | 'renderAsync'
+    | 'setCellValue'
+    | 'showEditorAlways'
+    | 'showInColumnChooser'
+    | 'type'
+    | 'validationRules'
+    | 'visible'
+  >;
+  /**
+   * [descr:dxGanttColumn]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  interface dxGanttColumnBlank<TRowData = any, TKey = any>
+    extends DevExpress.ui.dxTreeList.Column<TRowData, TKey> {
+    /**
+     * [descr:dxGanttColumn.allowEditing]
+     */
+    allowEditing: any;
+    /**
+     * [descr:dxGanttColumn.allowFixing]
+     */
+    allowFixing: any;
+    /**
+     * [descr:dxGanttColumn.allowHiding]
+     */
+    allowHiding: any;
+    /**
+     * [descr:dxGanttColumn.allowReordering]
+     */
+    allowReordering: any;
+    /**
+     * [descr:dxGanttColumn.allowResizing]
+     */
+    allowResizing: any;
+    /**
+     * [descr:dxGanttColumn.allowSearch]
+     */
+    allowSearch: any;
+    /**
+     * [descr:dxGanttColumn.buttons]
+     */
+    buttons: any;
+    /**
+     * [descr:dxGanttColumn.columns]
+     */
+    columns: any;
+    /**
+     * [descr:dxGanttColumn.editorOptions]
+     */
+    editorOptions: any;
+    /**
+     * [descr:dxGanttColumn.editCellComponent]
+     */
+    editCellComponent: any;
+    /**
+     * [descr:dxGanttColumn.editCellRender]
+     */
+    editCellRender: any;
+    /**
+     * [descr:dxGanttColumn.editCellTemplate]
+     */
+    editCellTemplate: any;
+    /**
+     * [descr:dxGanttColumn.fixed]
+     */
+    fixed: any;
+    /**
+     * [descr:dxGanttColumn.fixedPosition]
+     */
+    fixedPosition: any;
+    /**
+     * [descr:dxGanttColumn.formItem]
+     */
+    formItem: any;
+    /**
+     * [descr:dxGanttColumn.hidingPriority]
+     */
+    hidingPriority: any;
+    /**
+     * [descr:dxGanttColumn.isBand]
+     */
+    isBand: any;
+    /**
+     * [descr:dxGanttColumn.lookup]
+     */
+    lookup: any;
+    /**
+     * [descr:dxGanttColumn.name]
+     */
+    name: any;
+    /**
+     * [descr:dxGanttColumn.ownerBand]
+     */
+    ownerBand: any;
+    /**
+     * [descr:dxGanttColumn.renderAsync]
+     */
+    renderAsync: any;
+    /**
+     * [descr:dxGanttColumn.setCellValue]
+     */
+    setCellValue: any;
+    /**
+     * [descr:dxGanttColumn.showEditorAlways]
+     */
+    showEditorAlways: any;
+    /**
+     * [descr:dxGanttColumn.showInColumnChooser]
+     */
+    showInColumnChooser: any;
+    /**
+     * [descr:dxGanttColumn.validationRules]
+     */
+    validationRules: any;
+    /**
+     * [descr:dxGanttColumn.visible]
+     */
+    visible: any;
+    /**
+     * [descr:dxGanttColumn.type]
+     */
+    type: any;
   }
   /**
    * [descr:dxGanttContextMenu]
@@ -14826,7 +15002,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.columns]
      */
-    columns?: Array<DevExpress.ui.dxTreeList.Column | string>;
+    columns?: Array<DevExpress.ui.dxGantt.Column | string>;
     /**
      * [descr:dxGanttOptions.dependencies]
      */
@@ -18722,7 +18898,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxProgressBarOptions.value]
      */
-    value?: number | boolean;
+    value?: number | false;
   }
   /**
    * [descr:dxRadioGroup]
@@ -23743,6 +23919,8 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewItem.selected]
      */
     selected?: boolean;
+
+    [key: string]: any;
   }
   /**
    * [descr:dxTreeViewNode]
@@ -24030,7 +24208,12 @@ declare module DevExpress.ui {
     dxValidationSummaryOptions<TItem, TKey>,
     TItem,
     TKey
-  > {}
+  > {
+    /**
+     * [descr:dxValidationSummary.refreshValidationGroup()]
+     */
+    refreshValidationGroup(): void;
+  }
   module dxValidationSummary {
     export type ContentReadyEvent<
       TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
@@ -24317,6 +24500,8 @@ declare module DevExpress.ui {
     | DevExpress.types.Format
     | string
     | ((value: number | Date) => string)
+    | ((value: Date) => string)
+    | ((value: number) => string)
     | ExternalFormat;
   /**
    * [descr:GridBase]

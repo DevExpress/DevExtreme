@@ -1,5 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
-import { calculateRowHeight } from './pdf_utils_v3';
+import { calculateRowHeight, getPageWidth } from './pdf_utils_v3';
 import { normalizeBoundaryValue } from './normalizeOptions';
 
 
@@ -15,7 +15,7 @@ function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
     const normalizedMargin = normalizeBoundaryValue(margin);
 
     // TODO: check measure units there
-    const availablePageWidth = doc.internal.pageSize.getWidth() - (topLeft?.x ?? 0)
+    const availablePageWidth = getPageWidth(doc) - (topLeft?.x ?? 0)
         - normalizedMargin.left - normalizedMargin.right;
 
     const ratio = availablePageWidth >= summaryGridWidth

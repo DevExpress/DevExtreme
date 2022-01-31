@@ -38,6 +38,19 @@ if(Quill) {
     const SELECTION_CHANGE_EVENT = 'selection-change';
 
     const USER_ACTION = 'user';
+    const SILENT_ACTION = 'silent';
+
+    const FORMAT_HOTKEYS = {
+        66: 'bold',
+        73: 'italic',
+        85: 'underline'
+    };
+
+    const KEY_CODES = {
+        b: 66,
+        i: 73,
+        u: 85
+    };
 
     const localize = (name) => {
         return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
@@ -58,17 +71,20 @@ if(Quill) {
 
             this._toolbarWidgets = new WidgetCollector();
             this._formatHandlers = getFormatHandlers(this);
-            // this._formatHandlers = new FormatHelper(this);
             this._tableFormats = getTableFormats(quill);
 
             if(isDefined(options.items)) {
                 this._addCallbacks();
                 this._renderToolbar();
 
-                this.quill.on('editor-change', (eventName) => {
-                    const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
+                this.quill.on('editor-change', (eventName, newValue, oldValue, eventSource) => {
+                    const isSilentMode = eventSource === SILENT_ACTION && isEmptyObject(this.quill.getFormat());
 
-                    this._updateToolbar(isSelectionChanged);
+                    if(!isSilentMode) {
+                        const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
+
+                        this._updateToolbar(isSelectionChanged);
+                    }
                 });
             }
         }
@@ -114,6 +130,8 @@ if(Quill) {
             eventsEngine.on(this._$toolbarContainer, addNamespace('mousedown', this.editorInstance.NAME), (e) => {
                 e.preventDefault();
             });
+
+            this._subscribeFormatHotKeys();
 
             this.toolbarInstance = this.editorInstance._createComponent(this._$toolbar, Toolbar, this.toolbarConfig);
 
@@ -178,6 +196,41 @@ if(Quill) {
                         errors.log('W1016', optionName.oldName, optionName.newName);
                     }
                 });
+            }
+        }
+
+        _subscribeFormatHotKeys() {
+            this.quill.keyboard.addBinding({
+                which: KEY_CODES.b,
+                shortKey: true,
+            }, this._handleFormatHotKey.bind(this));
+
+            this.quill.keyboard.addBinding({
+                which: KEY_CODES.i,
+                shortKey: true,
+            }, this._handleFormatHotKey.bind(this));
+
+            this.quill.keyboard.addBinding({
+                which: KEY_CODES.u,
+                shortKey: true,
+            }, this._handleFormatHotKey.bind(this));
+        }
+
+        _handleFormatHotKey(range, context, { which }) {
+            const formatName = FORMAT_HOTKEYS[which];
+
+            this._updateButtonState(formatName);
+        }
+
+        _updateButtonState(formatName) {
+            const formatWidget = this._toolbarWidgets.getByName(formatName);
+            const currentFormat = this.quill.getFormat();
+            const formatValue = currentFormat[formatName];
+
+            if(formatValue) {
+                this._markActiveFormatWidget(formatName, formatWidget, currentFormat);
+            } else {
+                this._resetFormatWidget(formatName, formatWidget);
             }
         }
 

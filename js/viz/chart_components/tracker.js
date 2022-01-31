@@ -144,12 +144,12 @@ const baseTrackerPrototype = {
         this._hoveredPoint = point;
     },
 
-    _releaseHoveredPoint: function() {
+    _releaseHoveredPoint: function(isPointerOut) {
         if(this._hoveredPoint && this._hoveredPoint.getOptions()) {
             this._hoveredPoint.clearHover();
             this._hoveredPoint = null;
             if(this._tooltip.isEnabled()) {
-                this._hideTooltip(this._hoveredPoint);
+                this._hideTooltip(this._hoveredPoint, false, isPointerOut);
             }
         }
     },
@@ -183,13 +183,13 @@ const baseTrackerPrototype = {
         that._hideTooltip(that.pointAtShownTooltip);
     },
 
-    clearHover: function() {
+    clearHover: function(isPointerOut) {
         this._resetHoveredArgument();
         this._releaseHoveredSeries();
-        this._releaseHoveredPoint();
+        this._releaseHoveredPoint(isPointerOut);
     },
 
-    _hideTooltip: function(point, silent) {
+    _hideTooltip: function(point, silent, isPointerOut) {
         const that = this;
         if(!that._tooltip || (point && that.pointAtShownTooltip !== point)) {
             return;
@@ -197,7 +197,7 @@ const baseTrackerPrototype = {
         if(!silent && that.pointAtShownTooltip) {
             that.pointAtShownTooltip = null;
         }
-        that._tooltip.hide();
+        that._tooltip.hide(!!isPointerOut);
     },
 
     _showTooltip: function(point) {
@@ -233,7 +233,7 @@ const baseTrackerPrototype = {
     },
 
     _hidePointTooltip: function(event, point) {
-        event.data.tracker._hideTooltip(point);
+        event.data.tracker._hideTooltip(point, false, true);
     },
 
     _enableOutHandler: function() {
@@ -269,8 +269,8 @@ const baseTrackerPrototype = {
     },
 
     _pointerOut: function(force) {
-        this.clearHover();
-        (force || this._tooltip.isEnabled()) && this._hideTooltip(this.pointAtShownTooltip);
+        this.clearHover(true);
+        (force || this._tooltip.isEnabled()) && this._hideTooltip(this.pointAtShownTooltip, false, true);
     },
 
     _triggerLegendClick: function(eventArgs, elementClick) {

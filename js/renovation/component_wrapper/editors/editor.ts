@@ -59,8 +59,12 @@ export default class Editor extends Component {
     data(this.$element()[0], VALIDATION_TARGET, this);
   }
 
-  _init(): void {
-    super._init();
+  _render(): void {
+    (this.option('_onMarkupRendered') as () => void)?.();
+  }
+
+  _initializeComponent(): void {
+    super._initializeComponent();
 
     this._valueChangeAction = this._createActionByOption('onValueChanged', {
       excludeValidators: ['disabled', 'readOnly'],

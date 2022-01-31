@@ -27,7 +27,7 @@ const prepareInstances = (
   viewDataProvider: ViewDataProviderType;
   DOMMetaData: CellsMetaData;
 } => {
-  const schedulerProps = new SchedulerProps();
+  const schedulerProps: any = new SchedulerProps();
   schedulerProps.currentDate = currentDate;
   let workspaceProps = new WorkSpaceProps();
   workspaceProps.type = viewType;
@@ -40,7 +40,9 @@ const prepareInstances = (
     ...getCurrentViewConfig(
       workspaceProps as unknown as Partial<ViewProps>,
       schedulerProps,
+      currentDate,
     ),
+    showAllDayPanel: supportAllDayRow,
   };
 
   // TODO: convert ViewdataProvider to TS
@@ -130,7 +132,7 @@ describe('Appointments model', () => {
               isVirtualScrolling: false,
               intervalCount: 7,
               hoursInterval: 0.5,
-              showAllDayPanel: true,
+              showAllDayPanel: supportAllDayRow,
               groups: [],
               appointmentCountPerCell: 2, // TODO default
               appointmentOffset: 26, // TODO default

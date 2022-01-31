@@ -16,9 +16,10 @@ import {
     getVerticalOffsets,
     getOuterWidth,
     getWidth,
+    getHeight
 } from '../../core/utils/size';
 import { getBoundingRect } from '../../core/utils/position';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isObject } from '../../core/utils/type';
 import { compare as compareVersions } from '../../core/utils/version';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import { triggerResizeEvent } from '../../events/visibility_change';
@@ -29,6 +30,7 @@ import Button from '../button';
 import Overlay from '../overlay/ui.overlay';
 import { isMaterial, current as currentTheme } from '../themes';
 import '../toolbar/ui.toolbar.base';
+import resizeObserverSingleton from '../../core/resize_observer';
 import { PopupPositionController } from './popup_position_controller';
 
 const window = getWindow();
@@ -42,6 +44,7 @@ const POPUP_FULL_SCREEN_WIDTH_CLASS = 'dx-popup-fullscreen-width';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
 const POPUP_TITLE_CLASS = 'dx-popup-title';
@@ -86,7 +89,7 @@ const getButtonPlace = name => {
                 location = 'after';
                 break;
         }
-    } else if(platform === 'android' && device.version && parseInt(device.version[0]) > 4) {
+    } else if(platform === 'android') {
         switch(name) {
             case 'cancel':
                 location = 'after';
@@ -256,6 +259,7 @@ const Popup = Overlay.inherit({
 
     _init: function() {
         this.callBase();
+        this._updateResizeCallbackSkipCondition();
 
         this.$element().addClass(POPUP_CLASS);
         this.$wrapper().addClass(POPUP_WRAPPER_CLASS);
@@ -287,6 +291,43 @@ const Popup = Overlay.inherit({
 
     _getActionsList: function() {
         return this.callBase().concat(['onResizeStart', 'onResize', 'onResizeEnd']);
+    },
+
+    _contentResizeHandler: function(entry) {
+        if(!this._shouldSkipContentResize(entry)) {
+            this._renderGeometry({ shouldOnlyReposition: true });
+        }
+    },
+
+    _doesShowAnimationChangeDimensions: function() {
+        const animation = this.option('animation');
+
+        return ['to', 'from'].some(prop => {
+            const config = animation?.show?.[prop];
+            return isObject(config) && ('width' in config || 'height' in config);
+        });
+    },
+
+    _updateResizeCallbackSkipCondition() {
+        const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
+
+        this._shouldSkipContentResize = (entry) => {
+            return doesShowAnimationChangeDimensions && this._showAnimationProcessing
+                || this._areContentDimensionsRendered(entry);
+        };
+    },
+
+    _observeContentResize: function(shouldObserve) {
+        if(!this.option('useResizeObserver')) {
+            return;
+        }
+
+        const contentElement = this._$content.get(0);
+        if(shouldObserve) {
+            resizeObserverSingleton.observe(contentElement, (entry) => { this._contentResizeHandler(entry); });
+        } else {
+            resizeObserverSingleton.unobserve(contentElement);
+        }
     },
 
     _renderContentImpl: function() {
@@ -321,6 +362,7 @@ const Popup = Overlay.inherit({
     },
 
     _renderTemplateByType: function(optionName, data, $container, additionalToolbarOptions) {
+        const { rtlEnabled, useDefaultToolbarButtons, useFlatToolbarButtons, disabled } = this.option();
         const template = this._getTemplateByOption(optionName);
         const toolbarTemplate = template instanceof EmptyTemplate;
 
@@ -328,9 +370,10 @@ const Popup = Overlay.inherit({
             const integrationOptions = extend({}, this.option('integrationOptions'), { skipTemplates: ['content', 'title'] });
             const toolbarOptions = extend(additionalToolbarOptions, {
                 items: data,
-                rtlEnabled: this.option('rtlEnabled'),
-                useDefaultButtons: this.option('useDefaultToolbarButtons'),
-                useFlatButtons: this.option('useFlatToolbarButtons'),
+                rtlEnabled,
+                useDefaultButtons: useDefaultToolbarButtons,
+                useFlatButtons: useFlatToolbarButtons,
+                disabled,
                 integrationOptions
             });
 
@@ -352,6 +395,12 @@ const Popup = Overlay.inherit({
             }
             return $container;
         }
+    },
+
+    _renderVisibilityAnimate: function(visible) {
+        this._observeContentResize(visible);
+
+        return this.callBase(visible);
     },
 
     _executeTitleRenderAction: function($titleElement) {
@@ -493,6 +542,12 @@ const Popup = Overlay.inherit({
         }
     },
 
+    _toggleDisabledState: function(value) {
+        this.callBase(...arguments);
+
+        this.$content().toggleClass(DISABLED_STATE_CLASS, Boolean(value));
+    },
+
     _toggleClasses: function() {
         const aliases = ALLOWED_TOOLBAR_ITEM_ALIASES;
 
@@ -537,10 +592,44 @@ const Popup = Overlay.inherit({
         return this.topToolbar();
     },
 
+    _renderGeometry: function(options) {
+        const { visible, useResizeObserver } = this.option();
+
+        if(visible && hasWindow()) {
+            const isAnimated = this._showAnimationProcessing;
+            const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && useResizeObserver;
+            this._isAnimationPaused = shouldRepeatAnimation || undefined;
+
+            this._stopAnimation();
+            if(options?.shouldOnlyReposition) {
+                this._positionController.positionContent();
+            } else {
+                this._renderGeometryImpl();
+            }
+
+            if(shouldRepeatAnimation) {
+                this._animateShowing();
+                this._isAnimationPaused = undefined;
+            }
+        }
+    },
+
+    _cacheDimensions: function() {
+        if(!this.option('useResizeObserver')) {
+            return;
+        }
+
+        this._renderedDimensions = {
+            width: parseInt(getWidth(this._$content), 10),
+            height: parseInt(getHeight(this._$content), 10)
+        };
+    },
+
     _renderGeometryImpl: function() {
         // NOTE: for correct new position calculation
         this._resetContentHeight();
         this.callBase();
+        this._cacheDimensions();
         this._setContentHeight();
     },
 
@@ -732,6 +821,11 @@ const Popup = Overlay.inherit({
         }
     },
 
+    _clean: function() {
+        this.callBase();
+        this._observeContentResize(false);
+    },
+
     _renderFullscreenWidthClass: function() {
         this.$overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, getOuterWidth(this.$overlayContent()) === getWidth(window));
     },
@@ -744,6 +838,14 @@ const Popup = Overlay.inherit({
         const value = args.value;
 
         switch(args.name) {
+            case 'disabled':
+                this.callBase(args);
+                this._renderTitle();
+                this._renderBottom();
+                break;
+            case 'animation':
+                this._updateResizeCallbackSkipCondition();
+                break;
             case 'showTitle':
             case 'title':
             case 'titleTemplate':

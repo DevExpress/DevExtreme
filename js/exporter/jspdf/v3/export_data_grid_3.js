@@ -1,18 +1,20 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { normalizeRowsInfo } from './normalizeOptions';
+import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
+import { splitByPages } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
 
 // TODO: check names with techwritters
 // IPDFExportOptions: {
+//    repeatHeaders: false,
 //    topLeft: {x: number, y: number},
 //    indent: number,
 //    margin: { top:number, left:number, right:number, bottom:number } | number
-//    customizeCell: (IPdfRowInfo): void
-//    customDrawCell: (rect, pdfCell, gridCell, cancel): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
+//    customizeCell: ({ gridCell, pdfCell }): void
+//    customDrawCell: ({ rect, pdfCell, gridCell, cancel }): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
 // }
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -22,7 +24,10 @@ function _getFullOptions(options) {
     if(!isDefined(fullOptions.indent)) {
         fullOptions.indent = 10;
     }
-
+    if(!isDefined(fullOptions.repeatHeaders)) {
+        fullOptions.repeatHeaders = false;
+    }
+    fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
     return fullOptions;
 }
 
@@ -48,7 +53,7 @@ function exportDataGrid(doc, dataGrid, options) {
                     //
                     // And, you can read values of these properties ('readonly'):
                     // - e.gridCell (TODO: list of properties)
-                    // - e.pdfRowInfo (TODO: list of properties)
+                    // - e.pdfCell (TODO: list of properties)
                     options.customizeCell(cellInfo)
                 ));
             }
@@ -85,26 +90,91 @@ function exportDataGrid(doc, dataGrid, options) {
             // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
             // TODO: applySplitting()
 
-            const pdfCellsInfo = [].concat.apply([],
-                rowsInfo.map(rowInfo => {
-                    return rowInfo.cells
-                        .filter(cell => !isDefined(cell.pdfCell.isMerged))
-                        .map(cellInfo => {
-                            return { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell, pdfRowInfo: cellInfo.pdfRowInfo };
-                        });
-                })
-            );
-
             const docStyles = getDocumentStyles(doc);
-            drawCellsContent(doc, options.customDrawCell, pdfCellsInfo, docStyles);
-            drawCellsLines(doc, pdfCellsInfo, docStyles);
 
-            const isDrawTableBorderSpecified = options.drawTableBorder === true;
-            const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
-            if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
-                const tableRect = calculateTableSize(doc, rowsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
-                drawGridLines(doc, tableRect, docStyles);
-            }
+            const onSeparateRectHorizontally = ({ sourceRect, leftRect, rightRect }) => {
+                let leftRectTextOptions = {};
+                let rightRectTextOptions = {};
+                const isTextNotEmpty = sourceRect.sourceCellInfo.text?.length > 0;
+                if(isTextNotEmpty) {
+                    const isTextWidthGreaterThanRect = doc.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
+                    const isTextLeftAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'left';
+                    if(isTextWidthGreaterThanRect || !isTextLeftAlignment) {
+                        let leftTextLeftOffset;
+                        let rightTextLeftOffset;
+                        if(sourceRect.sourceCellInfo?.horizontalAlign === 'left') {
+                            leftTextLeftOffset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
+                            rightTextLeftOffset = leftTextLeftOffset - leftRect.w;
+                        } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'center') {
+                            const offset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
+                            leftTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (leftRect.x + leftRect.w / 2);
+                            rightTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (rightRect.x + rightRect.w / 2);
+                        } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'right') {
+                            leftTextLeftOffset = (sourceRect.x + sourceRect.w) - (leftRect.x + leftRect.w);
+                            rightTextLeftOffset = (sourceRect.x + sourceRect.w) - (rightRect.x + rightRect.w);
+                        }
+
+                        leftRectTextOptions = Object.assign({}, { _textLeftOffset: leftTextLeftOffset });
+                        rightRectTextOptions = Object.assign({}, { _textLeftOffset: rightTextLeftOffset });
+                    } else {
+                        rightRectTextOptions = Object.assign({}, { text: '' });
+                    }
+                }
+
+                leftRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, leftRectTextOptions);
+                rightRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, rightRectTextOptions);
+            };
+
+            const onSeparateRectVertically = ({ sourceRect, topRect, bottomRect }) => {
+                let topRectTextOptions = {};
+                let bottomRectTextOptions = {};
+                const isTextNotEmpty = sourceRect.sourceCellInfo.text?.length > 0;
+                if(isTextNotEmpty) {
+                    const isTextHeightGreaterThanRect = doc.getTextDimensions(sourceRect.sourceCellInfo.text).h > topRect.h;
+                    const isTextTopAlignment = sourceRect.sourceCellInfo?.verticalAlign === 'top';
+                    if(isTextHeightGreaterThanRect || !isTextTopAlignment) {
+                        let topTextTopOffset;
+                        let bottomTextTopOffset;
+                        if(sourceRect.sourceCellInfo?.verticalAlign === 'top') {
+                            topTextTopOffset = sourceRect.sourceCellInfo._textTopOffset ?? 0;
+                            bottomTextTopOffset = topTextTopOffset - topRect.h;
+                        } else if(sourceRect.sourceCellInfo?.verticalAlign === 'middle') {
+                            const offset = sourceRect.sourceCellInfo._textTopOffset ?? 0;
+                            topTextTopOffset = offset + (sourceRect.y + sourceRect.h / 2) - (topRect.y + topRect.h / 2);
+                            bottomTextTopOffset = offset + (sourceRect.y + sourceRect.h / 2) - (bottomRect.y + bottomRect.h / 2);
+                        } else if(sourceRect.sourceCellInfo?.verticalAlign === 'bottom') {
+                            topTextTopOffset = (sourceRect.y + sourceRect.h) - (topRect.y + topRect.h);
+                            bottomTextTopOffset = (sourceRect.y + sourceRect.h) - (bottomRect.y + bottomRect.h);
+                        }
+
+                        topRectTextOptions = Object.assign({}, { _textTopOffset: topTextTopOffset });
+                        bottomRectTextOptions = Object.assign({}, { _textTopOffset: bottomTextTopOffset });
+                    } else {
+                        bottomRectTextOptions = Object.assign({}, { text: '' });
+                    }
+                }
+
+                topRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, topRectTextOptions);
+                bottomRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, bottomRectTextOptions);
+            };
+
+            const rectsByPages = splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically);
+            rectsByPages.forEach((pdfCellsInfo, index) => {
+                if(index > 0) {
+                    doc.addPage();
+                }
+
+                drawCellsContent(doc, options.customDrawCell, pdfCellsInfo, docStyles);
+                drawCellsLines(doc, pdfCellsInfo, docStyles);
+
+                const isDrawTableBorderSpecified = options.drawTableBorder === true;
+                const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
+                if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
+                    const tableRect = calculateTableSize(doc, pdfCellsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
+                    drawGridLines(doc, tableRect, docStyles);
+                }
+            });
+
             setDocumentStyles(doc, docStyles);
 
             resolve();
