@@ -16,7 +16,7 @@ export class TemplateBase {
 
         let $result;
         if(options.transclude && this._element) {
-            $result = $('div').append(this._element).contents();
+            $result = $('<div>').append(this._element).contents();
         } else {
             $result = this._renderCore(options);
         }
