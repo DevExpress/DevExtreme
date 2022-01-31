@@ -22,7 +22,7 @@ declare class DeferredObj<T> {
 
 export function Deferred<T>(): DeferredObj<T>;
 
- // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
 export interface PromiseType<T> { }
 /**
  * @docid
@@ -31,3 +31,11 @@ export interface PromiseType<T> { }
  */
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
+
+/** @namespace DevExpress.core.utils */
+export type DxExtendedPromise<T> = DxPromise<T> & {
+    then<TResult1 = T, TResult2 = never>(
+        onFulfilled?: ((value: T, extraParameters?: any) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): PromiseLike<TResult1 | TResult2>;
+};
