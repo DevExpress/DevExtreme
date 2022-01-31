@@ -54,12 +54,6 @@ export const viewFunction = ({
       selectedRowKeysChange={setSelectedRowKeys}
     />
     )}
-
-    <span>
-      pager visible:
-      {' '}
-      {pager.visible}
-    </span>
   </DataGridLight>
 );
 @ComponentBindings()
