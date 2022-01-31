@@ -7,8 +7,13 @@ const MAXIMUM_NUMBER_LENGTH = 15;
 
 function getGroupSizes(formatString) {
     return formatString.split(',').slice(1).map(function(str) {
-        return str.split('').filter(function(char) {
-            return char === '#' || char === '0';
+        let singleQuotesLeft = 0;
+        return str.split('').filter(function(char, index) {
+            singleQuotesLeft += char === '\'';
+
+            const isDigit = char === '#' || char === '0';
+            const isInStub = singleQuotesLeft % 2;
+            return isDigit && !isInStub;
         }).length;
     });
 }
