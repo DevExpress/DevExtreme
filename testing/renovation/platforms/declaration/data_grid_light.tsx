@@ -3,18 +3,30 @@ import {
   Component, ComponentBindings, JSXComponent, InternalState, Effect,
 } from '@devextreme-generator/declarations';
 import React from 'react';
+import { DeepPartial } from '../../../../js/core';
 import { DataGridLight, DataGridLightProps } from '../../../../js/renovation/ui/grids/data_grid_light/data_grid_light';
 import { Pager, PagerProps } from '../../../../js/renovation/ui/grids/data_grid_light/pager/pager';
 import { Paging, PagingProps } from '../../../../js/renovation/ui/grids/data_grid_light/paging/paging';
+import { Selection, SelectionProps } from '../../../../js/renovation/ui/grids/data_grid_light/selection/selection';
+
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+export type OptionsType = DeepPartial<
+DataGridLightProps
+& { pager: PagerProps }
+& { selection: SelectionProps }
+& { paging: PagingProps }
+>;
 
 export const viewFunction = ({
-  options, pager, paging, setPageIndex, setPageSize,
+  options, pager, paging, selection, setPageIndex, setPageSize, setSelectedRowKeys,
 }: App): JSX.Element => (
   <DataGridLight
     id="container"
     dataSource={options.dataSource}
     columns={options.columns}
+    keyExpr={options.keyExpr}
   >
+    {paging.enabled && (
     <Paging
       enabled={paging.enabled}
       pageIndex={paging.pageIndex}
@@ -22,12 +34,26 @@ export const viewFunction = ({
       pageSize={paging.pageSize}
       pageSizeChange={setPageSize}
     />
+    )}
+
+    {pager.visible && (
     <Pager
       visible={pager.visible}
       allowedPageSizes={pager.allowedPageSizes}
       showPageSizeSelector={pager.showPageSizeSelector}
       displayMode={pager.displayMode}
     />
+    )}
+
+    {selection.mode !== 'none' && (
+    <Selection
+      allowSelectAll={selection.allowSelectAll}
+      mode={selection.mode}
+      selectAllMode={selection.selectAllMode}
+      selectedRowKeys={selection.selectedRowKeys}
+      selectedRowKeysChange={setSelectedRowKeys}
+    />
+    )}
   </DataGridLight>
 );
 @ComponentBindings()
@@ -39,31 +65,16 @@ class AppProps { }
   jQuery: { register: true },
 })
 export class App extends JSXComponent<AppProps>() {
-  @InternalState() options: Partial<DataGridLightProps> = {
-    columns: ['id', 'text'],
-    dataSource: [
-      { id: 1, text: 'text 1' },
-      { id: 2, text: 'text 2' },
-      { id: 3, text: 'text 3' },
-      { id: 4, text: 'text 4' },
-      { id: 5, text: 'text 5' },
-    ],
-  };
+  @InternalState() options: OptionsType = {};
 
   @InternalState()
-  paging: Partial<PagingProps> = {
-    pageSize: 2,
-    pageIndex: 0,
-    enabled: true,
-  };
+  paging: Partial<PagingProps> = { enabled: false };
 
   @InternalState()
-  pager: Partial<PagerProps> = {
-    visible: true,
-    allowedPageSizes: [2, 4, 'all'],
-    showPageSizeSelector: true,
-    displayMode: 'full',
-  };
+  pager: Partial<PagerProps> = { visible: false };
+
+  @InternalState()
+  selection: Partial<SelectionProps> = { mode: 'none' };
 
   setPageIndex(pageIndex: number): void {
     this.paging = {
@@ -79,11 +90,20 @@ export class App extends JSXComponent<AppProps>() {
     };
   }
 
+  setSelectedRowKeys(selectedRowKeys: unknown[]): void {
+    this.selection = {
+      ...this.selection,
+      selectedRowKeys,
+    };
+  }
+
   @Effect({ run: 'once' })
   optionsUpdated(): void {
-    (window as unknown as { onOptionsUpdated: (unknown) => void })
+    (window as unknown as { onOptionsUpdated: (options: OptionsType) => void })
       .onOptionsUpdated = (newOptions) => {
-        const { paging, pager, ...rest } = newOptions;
+        const {
+          paging, pager, selection, ...rest
+        } = newOptions;
 
         this.options = {
           ...this.options,
@@ -98,6 +118,11 @@ export class App extends JSXComponent<AppProps>() {
         this.paging = {
           ...this.paging,
           ...paging,
+        };
+
+        this.selection = {
+          ...this.selection,
+          ...selection,
         };
       };
   }
