@@ -758,7 +758,9 @@ QUnit.module('disabled state', () => {
 
         QUnit.assert.strictEqual(toolbar.option('disabled'), expectedDisabled.toolbar, 'toolbar.disabled');
         QUnit.assert.strictEqual($(toolbar.element()).hasClass('dx-state-disabled'), !!expectedDisabled.toolbar, 'toolbar disabled class');
-        QUnit.assert.strictEqual(toolbar.option('items')[0].options.disabled, expectedDisabled.widgetItemOption, 'item.options.disabled');
+
+        const itemDisabledOption = toolbar.option('items')[0].options && toolbar.option('items')[0].options.disabled;
+        QUnit.assert.strictEqual(itemDisabledOption, expectedDisabled.widgetItemOption, 'item.options.disabled');
 
         const widgetElementSelector = focusableElementSelector.split(' ')[0];
         QUnit.assert.strictEqual($(widgetElementSelector).hasClass('dx-state-disabled'), !!expectedDisabled.widget, `${widgetName} disabled class`);
