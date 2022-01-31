@@ -36,14 +36,14 @@ export const viewFunction = ({
     />
     )}
 
-    {pager.visible && (
+    {/* {pager.visible && ( */}
     <Pager
       visible={pager.visible}
       allowedPageSizes={pager.allowedPageSizes}
       showPageSizeSelector={pager.showPageSizeSelector}
       displayMode={pager.displayMode}
     />
-    )}
+    {/* )} */}
 
     {selection.mode !== 'none' && (
     <Selection
@@ -54,6 +54,12 @@ export const viewFunction = ({
       selectedRowKeysChange={setSelectedRowKeys}
     />
     )}
+
+    <span>
+      pager visible:
+      {' '}
+      {pager.visible}
+    </span>
   </DataGridLight>
 );
 @ComponentBindings()
