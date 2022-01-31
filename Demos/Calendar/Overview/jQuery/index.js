@@ -102,15 +102,18 @@ $(() => {
 
   function getCellTemplate(data) {
     let cssClass = '';
-    if (isWeekend(data.date)) { cssClass = 'weekend'; }
 
-    $.each(holydays, (_, item) => {
-      if (data.date.getDate() === item[0] && data.date.getMonth() === item[1]) {
-        cssClass = 'holyday';
-        return false;
-      }
-      return true;
-    });
+    if (data.view === 'month') {
+      if (isWeekend(data.date)) { cssClass = 'weekend'; }
+
+      $.each(holydays, (_, item) => {
+        if (data.date.getDate() === item[0] && data.date.getMonth() === item[1]) {
+          cssClass = 'holyday';
+          return false;
+        }
+        return true;
+      });
+    }
 
     return `<span class='${cssClass}'>${data.text}</span>`;
   }

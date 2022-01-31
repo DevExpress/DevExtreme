@@ -13,7 +13,7 @@
         :cell-template="cellTemplate"
       >
         <template #custom="{ data: cell }">
-          <span :class="getCellCssClass(cell.date)">
+          <span :class="getCellCssClass(cell)">
             {{ cell.text }}
           </span>
         </template>
@@ -147,17 +147,19 @@ export default {
         this.cellTemplate = 'cell';
       }
     },
-    getCellCssClass(date) {
+    getCellCssClass({ date, view }) {
       let cssClass = '';
       const holydays = [[1, 0], [4, 6], [25, 11]];
 
-      if (this.isWeekend(date)) { cssClass = 'weekend'; }
+      if (view === 'month') {
+        if (this.isWeekend(date)) { cssClass = 'weekend'; }
 
-      holydays.forEach((item) => {
-        if (date.getDate() === item[0] && date.getMonth() === item[1]) {
-          cssClass = 'holyday';
-        }
-      });
+        holydays.forEach((item) => {
+          if (date.getDate() === item[0] && date.getMonth() === item[1]) {
+            cssClass = 'holyday';
+          }
+        });
+      }
 
       return cssClass;
     },

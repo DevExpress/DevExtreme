@@ -89,17 +89,19 @@ export class AppComponent {
     }
   }
 
-  getCellCssClass(date) {
+  getCellCssClass({ date, view }) {
     let cssClass = '';
 
-    if (this.isWeekend(date)) { cssClass = 'weekend'; }
+    if (view === 'month') {
+      if (this.isWeekend(date)) { cssClass = 'weekend'; }
 
-    this.holydays.forEach((item) => {
-      if (date.getDate() === item[0] && date.getMonth() === item[1]) {
-        cssClass = 'holyday';
-        return false;
-      }
-    });
+      this.holydays.forEach((item) => {
+        if (date.getDate() === item[0] && date.getMonth() === item[1]) {
+          cssClass = 'holyday';
+          return false;
+        }
+      });
+    }
 
     return cssClass;
   }

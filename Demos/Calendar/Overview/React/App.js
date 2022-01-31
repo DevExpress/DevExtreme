@@ -175,23 +175,25 @@ class App extends React.Component {
 
 function CustomCell(cell) {
   return (
-    <span className={getCellCssClass(cell.date)}>
+    <span className={getCellCssClass(cell)}>
       { cell.text }
     </span>
   );
 }
 
-function getCellCssClass(date) {
+function getCellCssClass({ date, view }) {
   let cssClass = '';
   const holydays = [[1, 0], [4, 6], [25, 11]];
 
-  if (isWeekend(date)) { cssClass = 'weekend'; }
+  if (view === 'month') {
+    if (isWeekend(date)) { cssClass = 'weekend'; }
 
-  holydays.forEach((item) => {
-    if (date.getDate() === item[0] && date.getMonth() === item[1]) {
-      cssClass = 'holyday';
-    }
-  });
+    holydays.forEach((item) => {
+      if (date.getDate() === item[0] && date.getMonth() === item[1]) {
+        cssClass = 'holyday';
+      }
+    });
+  }
 
   return cssClass;
 }
