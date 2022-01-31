@@ -18,13 +18,12 @@ export class Template extends TemplateBase {
     }
 
     _renderCore(options) {
-        const transclude = options.transclude;
-        if(!transclude && !this._compiledTemplate) {
+        if(!this._compiledTemplate) {
             this._compiledTemplate = getCurrentTemplateEngine().compile(this._element);
         }
 
         return $('<div>').append(
-            transclude ? this._element : getCurrentTemplateEngine().render(this._compiledTemplate, options.model, options.index)
+            getCurrentTemplateEngine().render(this._compiledTemplate, options.model, options.index)
         ).contents();
     }
 
