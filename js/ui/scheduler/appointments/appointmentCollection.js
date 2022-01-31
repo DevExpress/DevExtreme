@@ -389,7 +389,7 @@ class SchedulerAppointments extends CollectionWidget {
         const formatText = this.invoke(
             'getTextAndFormatDate',
             model.appointmentData,
-            this._currentAppointmentSettings.agendaSettings || model.targetedAppointmentData,
+            model.targetedAppointmentData,
             'TIME'
         );
 
