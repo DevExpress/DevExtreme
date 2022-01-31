@@ -663,7 +663,6 @@ module.exports = function() {
         QUnit.test('parse different positive and negative parts', function(assert) {
             assert.equal(localization.parseNumber('(10)', '#0;(#0)'), -10);
             assert.equal(localization.parseNumber('-10'), -10);
-            assert.equal(localization.parseNumber('-10', '#0;(#0)'), -10);
         });
 
         QUnit.test('parse different positive and negative parts with groups', function(assert) {
