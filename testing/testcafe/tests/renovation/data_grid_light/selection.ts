@@ -2,11 +2,11 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../helpers/multi-platform-test';
 
-import { OptionsType } from '../../../../renovation/platforms/declaration/data_grid_light';
+// import { OptionsType } from '../../../../renovation/platforms/declaration/data_grid_light';
 
 const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['react'] });
 
-const defaultOptions: OptionsType = {
+const defaultOptions = {
   columns: ['id', 'text'],
   dataSource: [
     { id: 1, text: 'text 1' },
@@ -24,7 +24,7 @@ const defaultOptions: OptionsType = {
   },
 };
 
-const prepareDataGrid = (options: OptionsType = {}) => async (t, { platform }) => {
+const prepareDataGrid = (options = {}) => async (t, { platform }) => {
   await t.resizeWindow(800, 600);
   await createWidget(platform, 'dxDataGridLight', defaultOptions);
   await updateComponentOptions(platform, options);
