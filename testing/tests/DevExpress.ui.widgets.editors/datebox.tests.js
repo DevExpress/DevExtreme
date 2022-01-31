@@ -2974,7 +2974,7 @@ QUnit.module('datebox with time component', {
             assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
 
             done();
-        }, RESIZE_WAIT_TIMEOUT);
+        }, RESIZE_WAIT_TIMEOUT * 2);
     });
 
     QUnit.test('dateview selectedIndex should not be changed after dateBox reopen (T934663)', function(assert) {
