@@ -1,5 +1,5 @@
 import { ComponentPublicInstance, defineComponent } from "vue";
-import { getNodeOptions, getNodeTypeOfComponent, saveComponentInstance } from "./vue-helper";
+import { getNodeOptions, getNodeTypeOfComponent } from "./vue-helper";
 
 import Configuration, { bindOptionWatchers, ExpectedChild, setEmitOptionChangedFunc } from "./configuration";
 
@@ -16,7 +16,6 @@ interface IConfigurationComponent extends IConfigurationOwner, ComponentPublicIn
 interface IConfigurable extends IConfigurationOwner {
     $_config: Configuration;
     $_innerChanges: any;
-    $_componentInstance: any;
 }
 
 interface IComponentInfo {
@@ -71,9 +70,6 @@ function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration,
 
 function initDxConfiguration() {
     return defineComponent({
-        updated() {
-            saveComponentInstance(this);
-        },
         beforeMount() {
             const thisComponent = this as any as IConfigurationComponent;
             const config = getConfig(thisComponent) as Configuration;

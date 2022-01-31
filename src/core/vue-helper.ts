@@ -37,10 +37,6 @@ export function getComponentInfo(component): IConfigurationComponent {
     return getConfigurationOptions(component);
 }
 
-export function getComponentInstance(component) {
-    return component.type && component.type.$_componentInstance;
-}
-
 export function getNormalizedProps(props: VNodeProps): VNodeProps {
         const result = {};
         for (const propName in props) {
@@ -97,14 +93,6 @@ export function getComponentProps(component: ComponentPublicInstance): VNodeProp
 
 export function usedConfigurationProps(node: VNode): VNodeProps | null {
     return node.props;
-}
-
-export function saveComponentInstance(component: ComponentPublicInstance) {
-    const nodeOptions = getNodeTypeOfComponent(component);
-
-    if (nodeOptions) {
-        nodeOptions.$_componentInstance = component;
-    }
 }
 
 export function getNodeOptions(component: Pick<ComponentPublicInstance, "$">) {

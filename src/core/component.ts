@@ -3,7 +3,7 @@ import { ComponentPublicInstance, defineComponent, h, VNode } from "vue";
 import CreateCallback from "devextreme/core/utils/callbacks";
 import { triggerHandler } from "devextreme/events";
 
-import { defaultSlots, getChildren, getComponentInstance, getComponentProps, getVModelValue, VMODEL_NAME } from "./vue-helper";
+import { defaultSlots, getChildren, getComponentProps, getVModelValue, VMODEL_NAME } from "./vue-helper";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
@@ -94,7 +94,7 @@ function initBaseComponent() {
                 initOptionChangedFunc(
                     child.$_config,
                     (child.type as any).props || {},
-                    getComponentInstance(child), child.$_innerChanges);
+                    child?.component?.proxy, child.$_innerChanges);
             });
             thisComponent.$_templatesManager.discover();
 
