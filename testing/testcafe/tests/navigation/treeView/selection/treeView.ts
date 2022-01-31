@@ -17,7 +17,7 @@ fixture`TreeView_selectAll`
         await changeTheme(theme);
 
         await t
-          .expect(await takeScreenshot(`TreeView-selectAll,theme=${theme},checkBoxesMode=${showCheckBoxesMode},selectionMode='multiple',rtl=${rtlEnabled}.png`, Selector('#container')))
+          .expect(await takeScreenshot(`selectAll,theme=${theme},cbm=${showCheckBoxesMode},selMode='multiple',rtl=${rtlEnabled}.png`, Selector('#container')))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
