@@ -242,19 +242,19 @@ const numberLocalization = dependencyInjector({
 
         let negativeEtalon = this.format(-1, format).replace(digitalRegExp, '1');
         specialCharacters.forEach(char => {
-            negativeEtalon = negativeEtalon.replace(char, `\\${char}`);
+            negativeEtalon = negativeEtalon.replaceAll(char, `\\${char}`);
         });
-        negativeEtalon = negativeEtalon.replace(' ', '\\s');
-        negativeEtalon = negativeEtalon.replace('1', '.+');
+        negativeEtalon = negativeEtalon.replaceAll(' ', '\\s');
+        negativeEtalon = negativeEtalon.replaceAll('1', '.+');
 
         return new RegExp(negativeEtalon, 'g');
     },
 
     getSign: function(text, format) {
-        if(text.replace(/[^0-9-]/g, '').charAt(0) === '-') {
-            return -1;
-        }
         if(!format) {
+            if(text.replace(/[^0-9-]/g, '').charAt(0) === '-') {
+                return -1;
+            }
             return 1;
         }
 
