@@ -6,13 +6,6 @@ import Scheduler, { Resource, View } from 'devextreme-react/scheduler';
 import { data, priorityData } from './data.js';
 
 const currentDate = new Date(2021, 3, 21);
-const views = [{
-  type: 'week',
-  name: 'Week',
-}, {
-  type: 'month',
-  name: 'Month',
-}];
 
 const groups = ['priorityId'];
 
@@ -38,7 +31,6 @@ class App extends React.Component {
         <Scheduler
           timeZone="America/Los_Angeles"
           dataSource={data}
-          views={views}
           groups={groups}
           groupByDate={this.state.groupByDate}
           defaultCurrentView="week"
@@ -60,12 +52,6 @@ class App extends React.Component {
           <View
             type="month"
             name="Month"
-          />
-          <View
-            type="timelineWeek"
-            name="Timeline Week"
-            groupOrientation="horizontal"
-            cellDuration={60}
           />
         </Scheduler>
         <div className="options">
