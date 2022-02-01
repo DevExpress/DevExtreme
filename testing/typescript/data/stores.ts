@@ -1,12 +1,11 @@
 /* eslint-disable no-new */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 // eslint-disable-next-line import/no-extraneous-dependencies
 import $ from 'jquery';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import CustomStore from '../../../js/data/custom_store';
+import { Store } from '../../../js/data';
+import { ANY } from '../consts';
 
 export async function infersTItemFromComplexLoadResult() {
   const store = new CustomStore({
@@ -27,7 +26,7 @@ export async function infersTItemFromComplexLoadResult() {
 
 export function loadAcceptsAjaxResult() {
   new CustomStore({
-    load: (): JQueryXHR => $.ajax({
+    load: () => $.ajax({
       url: 'url', cache: false, dataType: 'json', data: 'data',
     }),
   });
@@ -45,4 +44,14 @@ export function loadAcceptsPromiseOfObject() {
     // eslint-disable-next-line @typescript-eslint/ban-types
     load: () => new Promise<object>(undefined),
   });
+}
+
+export function promiseThenAcceptsMultipleArguments() {
+  const callback: (a: any, b: any) => void = ANY;
+
+  const store: Store = ANY;
+  store.load().then(callback);
+  store.load(ANY).then(callback);
+  store.insert(ANY).then(callback);
+  store.update(ANY, ANY).then(callback);
 }
