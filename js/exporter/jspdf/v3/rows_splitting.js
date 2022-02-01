@@ -27,7 +27,7 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
     const headerRows = rowsInfo.filter(r => r.rowType === 'header');
     const headerHeight = headerRows.reduce((accumulator, row) => { return accumulator + row.height; }, 0);
 
-    const verticallyPages = splitRectsByPages(convertToCellsArray(rowsInfo), options.margin.top, /* options.topLeft.y */ 0, 'y', 'h',
+    const verticallyPages = splitRectsByPages(convertToCellsArray(rowsInfo), options.margin.top, 'y', 'h',
         (pagesLength, currentCoordinate) => {
             const additionalHeight = (pagesLength > 0 && options.repeatHeaders)
                 ? headerHeight
@@ -71,7 +71,7 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 
     let pageIndex = 0;
     while(pageIndex < verticallyPages.length) {
-        const horizontallyPages = splitRectsByPages(verticallyPages[pageIndex], options.margin.left, options.topLeft.x, 'x', 'w',
+        const horizontallyPages = splitRectsByPages(verticallyPages[pageIndex], options.margin.left, 'x', 'w',
             (pagesLength, currentCoordinate) => currentCoordinate <= maxBottomRight.x,
             (rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit) => {
                 const args = {
@@ -109,7 +109,7 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
 }
 
 
-function splitRectsByPages(rects, marginValue, topLeftValue, coordinate, dimension, checkPredicate, onSeparateCallback) {
+function splitRectsByPages(rects, marginValue, coordinate, dimension, checkPredicate, onSeparateCallback) {
     const pages = [];
     const rectsToSplit = [...rects];
 
@@ -153,7 +153,7 @@ function splitRectsByPages(rects, marginValue, topLeftValue, coordinate, dimensi
 
         rectsToSplit.forEach(rect => {
             rect[coordinate] = isDefined(currentPageMaxRectCoordinate)
-                ? (rect[coordinate] - currentPageMaxRectCoordinate + marginValue + topLeftValue)
+                ? (rect[coordinate] - currentPageMaxRectCoordinate + marginValue)
                 : rect[coordinate];
         });
 
