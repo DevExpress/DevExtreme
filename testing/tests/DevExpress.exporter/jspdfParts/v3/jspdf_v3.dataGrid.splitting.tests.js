@@ -9694,6 +9694,528 @@ const JSPdfSplittingTests = {
                     done();
                 });
             });
+
+            QUnit.test('3 cols - 3 rows [band1-[band2-[f1, f2, f3]]], columnWidths: [80, 80, 80], availablePageWidth = 100, availablePageHeight = 150, topLeft.x = 10, topLeft.y = 20, repeatHeaders = true, wordWrapEnabled: true', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageWidth: 100, pageHeight: 150 });
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [
+                        {
+                            caption: 'Band1 very long line very long line very long line very long line very long line very long line 1', columns: [
+                                {
+                                    caption: 'Band2 very long line line 2', columns: [
+                                        'f1', 'f2', 'f3'
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v2_3' }, { f1: 'v3_1', f2: 'v3_2', f3: 'v3_3' }],
+                });
+
+                const expectedLog = [
+                    'text,F1,10,102.8,{baseline:middle}',
+                    'text,v1_1,10,121.2,{baseline:middle}',
+                    'text,v2_1,10,139.6,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,20',
+                    'lineTo,90,20',
+                    'lineTo,90,75.2',
+                    'lineTo,10,75.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,10,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,75.2',
+                    'lineTo,90,75.2',
+                    'lineTo,90,93.6',
+                    'lineTo,10,93.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line line 2,10,84.4,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,93.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,112,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,130.4,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,20,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,75.2,80,18.4',
+                    'addPage,',
+                    'text,F2,10,102.8,{baseline:middle}',
+                    'text,v1_2,10,121.2,{baseline:middle}',
+                    'text,v2_2,10,139.6,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,20',
+                    'lineTo,90,20',
+                    'lineTo,90,75.2',
+                    'lineTo,10,75.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,-70,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,75.2',
+                    'lineTo,90,75.2',
+                    'lineTo,90,93.6',
+                    'lineTo,10,93.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line line 2,-70,84.4,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,93.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,112,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,130.4,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,20,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,75.2,80,18.4',
+                    'addPage,',
+                    'text,F3,10,102.8,{baseline:middle}',
+                    'text,v1_3,10,121.2,{baseline:middle}',
+                    'text,v2_3,10,139.6,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,20',
+                    'lineTo,90,20',
+                    'lineTo,90,75.2',
+                    'lineTo,10,75.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,-150,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,75.2',
+                    'lineTo,90,75.2',
+                    'lineTo,90,93.6',
+                    'lineTo,10,93.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line line 2,-150,84.4,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,93.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,112,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,130.4,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,20,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,75.2,80,18.4',
+                    'addPage,',
+                    'text,F1,10,82.8,{baseline:middle}',
+                    'text,v3_1,10,101.2,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,0',
+                    'lineTo,90,0',
+                    'lineTo,90,55.2',
+                    'lineTo,10,55.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,10,9.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,55.2',
+                    'lineTo,90,55.2',
+                    'lineTo,90,73.6',
+                    'lineTo,10,73.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line line 2,10,64.4,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,73.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,92,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,0,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,55.2,80,18.4',
+                    'addPage,',
+                    'text,F2,10,82.8,{baseline:middle}',
+                    'text,v3_2,10,101.2,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,0',
+                    'lineTo,90,0',
+                    'lineTo,90,55.2',
+                    'lineTo,10,55.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,-70,9.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,55.2',
+                    'lineTo,90,55.2',
+                    'lineTo,90,73.6',
+                    'lineTo,10,73.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line line 2,-70,64.4,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,73.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,92,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,0,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,55.2,80,18.4',
+                    'addPage,',
+                    'text,F3,10,82.8,{baseline:middle}',
+                    'text,v3_3,10,101.2,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,0',
+                    'lineTo,90,0',
+                    'lineTo,90,55.2',
+                    'lineTo,10,55.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,-150,9.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,55.2',
+                    'lineTo,90,55.2',
+                    'lineTo,90,73.6',
+                    'lineTo,10,73.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line line 2,-150,64.4,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,73.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,92,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,0,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,55.2,80,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: true }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 3 rows [band1-[band2-[f1, f2, f3]]], columnWidths: [80, 80, 80], band2.horizontalAlign=center, availablePageWidth = 100, availablePageHeight = 150, topLeft.x = 10, topLeft.y = 20, repeatHeaders = true, wordWrapEnabled: true', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageWidth: 100, pageHeight: 150 });
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [
+                        {
+                            caption: 'Band1 very long line very long line very long line very long line very long line very long line 1', columns: [
+                                {
+                                    caption: 'Band2 very long line2', columns: [
+                                        'f1', 'f2', 'f3'
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v2_1', f2: 'v2_2', f3: 'v2_3' }, { f1: 'v3_1', f2: 'v3_2', f3: 'v3_3' }],
+                });
+
+                const customizeCell = (e) => {
+                    if(e.pdfCell.text.indexOf('Band2') >= 0) {
+                        e.pdfCell.horizontalAlign = 'center';
+                    }
+                };
+
+                const expectedLog = [
+                    'text,F1,10,102.8,{baseline:middle}',
+                    'text,v1_1,10,121.2,{baseline:middle}',
+                    'text,v2_1,10,139.6,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,20',
+                    'lineTo,90,20',
+                    'lineTo,90,75.2',
+                    'lineTo,10,75.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,10,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,75.2',
+                    'lineTo,90,75.2',
+                    'lineTo,90,93.6',
+                    'lineTo,10,93.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line2,130,84.4,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,93.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,112,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,130.4,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,20,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,75.2,80,18.4',
+                    'addPage,',
+                    'text,F2,10,102.8,{baseline:middle}',
+                    'text,v1_2,10,121.2,{baseline:middle}',
+                    'text,v2_2,10,139.6,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,20',
+                    'lineTo,90,20',
+                    'lineTo,90,75.2',
+                    'lineTo,10,75.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,-70,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,75.2',
+                    'lineTo,90,75.2',
+                    'lineTo,90,93.6',
+                    'lineTo,10,93.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line2,50,84.4,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,93.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,112,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,130.4,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,20,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,75.2,80,18.4',
+                    'addPage,',
+                    'text,F3,10,102.8,{baseline:middle}',
+                    'text,v1_3,10,121.2,{baseline:middle}',
+                    'text,v2_3,10,139.6,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,20',
+                    'lineTo,90,20',
+                    'lineTo,90,75.2',
+                    'lineTo,10,75.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,-150,29.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,75.2',
+                    'lineTo,90,75.2',
+                    'lineTo,90,93.6',
+                    'lineTo,10,93.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line2,-30,84.4,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,93.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,112,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,130.4,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,20,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,75.2,80,18.4',
+                    'addPage,',
+                    'text,F1,10,82.8,{baseline:middle}',
+                    'text,v3_1,10,101.2,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,0',
+                    'lineTo,90,0',
+                    'lineTo,90,55.2',
+                    'lineTo,10,55.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,10,9.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,55.2',
+                    'lineTo,90,55.2',
+                    'lineTo,90,73.6',
+                    'lineTo,10,73.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line2,130,64.4,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,73.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,92,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,0,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,55.2,80,18.4',
+                    'addPage,',
+                    'text,F2,10,82.8,{baseline:middle}',
+                    'text,v3_2,10,101.2,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,0',
+                    'lineTo,90,0',
+                    'lineTo,90,55.2',
+                    'lineTo,10,55.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,-70,9.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,55.2',
+                    'lineTo,90,55.2',
+                    'lineTo,90,73.6',
+                    'lineTo,10,73.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line2,50,64.4,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,73.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,92,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,0,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,55.2,80,18.4',
+                    'addPage,',
+                    'text,F3,10,82.8,{baseline:middle}',
+                    'text,v3_3,10,101.2,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,0',
+                    'lineTo,90,0',
+                    'lineTo,90,55.2',
+                    'lineTo,10,55.2',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band1 very long line very long\n' +
+                  'line very long line very long line\n' +
+                  'very long line very long line 1,-150,9.2,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,10,55.2',
+                    'lineTo,90,55.2',
+                    'lineTo,90,73.6',
+                    'lineTo,10,73.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,Band2 very long line2,-30,64.4,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,73.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,92,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,0,80,55.2',
+                    'setLineWidth,1',
+                    'rect,10,55.2,80,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: true, customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 cols - 2 rows with group, columnWidths: [80, 80] availablePageWidth = 100, availablePageHeight = 150, topLeft.x = 10, topLeft.y = 20, repeatHeaders = true, wordWrapEnabled: true', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const margin = initMargin(doc, { pageWidth: 100, pageHeight: 150 });
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [ { dataField: 'f1', groupIndex: 0, }, 'f2', 'f3' ],
+                    dataSource: [{ f1: 'v1_1 very long line, very very long line', f2: 'v1_2', f3: 'v1_3' }, { f1: 'v1_1 very long line, very very long line', f2: 'v2_2', f3: 'v2_3' }],
+                });
+
+                const expectedLog = [
+                    'text,F2,10,29.2,{baseline:middle}',
+                    'text,v1_2,20,102.8,{baseline:middle}',
+                    'text,v2_2,20,121.2,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,38.4',
+                    'lineTo,90,38.4',
+                    'lineTo,90,93.6',
+                    'lineTo,10,93.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: v1_1 very long\n' +
+                  'line, very very long\n' +
+                  'line,10,47.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,20,80,18.4',
+                    'setLineWidth,1',
+                    'rect,20,93.6,70,18.4',
+                    'setLineWidth,1',
+                    'rect,20,112,70,18.4',
+                    'setLineWidth,1',
+                    'rect,10,38.4,80,55.2',
+                    'addPage,',
+                    'text,F3,10,29.2,{baseline:middle}',
+                    'text,v1_3,10,102.8,{baseline:middle}',
+                    'text,v2_3,10,121.2,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,10,38.4',
+                    'lineTo,90,38.4',
+                    'lineTo,90,93.6',
+                    'lineTo,10,93.6',
+                    'clip,',
+                    'discardPath,',
+                    'text,F1: v1_1 very long\n' +
+                  'line, very very long\n' +
+                  'line,-70,47.6,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,1',
+                    'rect,10,20,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,93.6,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,112,80,18.4',
+                    'setLineWidth,1',
+                    'rect,10,38.4,80,55.2'
+                ];
+
+                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80], repeatHeaders: true }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
         });
     }
 };
