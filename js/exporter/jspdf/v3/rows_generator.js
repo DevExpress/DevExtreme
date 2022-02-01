@@ -1,4 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
+import { convertToUsedPDFUnit } from './pdf_utils_v3';
 
 // Returns IPdfRowInfo[]
 // [
@@ -28,7 +29,13 @@ import { isDefined } from '../../../core/utils/type';
 //    }
 // ]
 
-function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
+const defaultStyles = {
+    header: { textColor: 128, font: { size: 10 } },
+    group: { font: { size: 10, style: 'bold' } },
+    data: { font: { size: 10 } }
+};
+
+function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
     const result = [];
 
     const rowsCount = dataProvider.getRowsCount();
@@ -47,6 +54,7 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
             rowType: rowType,
             indentLevel,
             cells: generateRowCells({
+                doc,
                 dataProvider,
                 rowIndex,
                 wordWrapEnabled,
@@ -61,21 +69,31 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
     return result;
 }
 
-function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor }) {
+function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor }) {
     const result = [];
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
+        const style = defaultStyles[rowType];
+
+        const pdfCell = {
+            text: cellData.value?.toString(),
+            verticalAlign: 'middle',
+            horizontalAlign: columns[cellIndex].alignment ?? 'left',
+            wordWrapEnabled,
+            backgroundColor,
+            borderColor: 128,
+            padding: {
+                top: convertToUsedPDFUnit(doc, 4),
+                right: convertToUsedPDFUnit(doc, 5),
+                bottom: convertToUsedPDFUnit(doc, 4),
+                left: convertToUsedPDFUnit(doc, 5),
+            },
+            _rect: {}
+        };
+
         const cellInfo = {
             gridCell: cellData.cellSourceData,
-            pdfCell: {
-                text: cellData.value?.toString(),
-                verticalAlign: 'middle',
-                horizontalAlign: columns[cellIndex].alignment ?? 'left',
-                wordWrapEnabled,
-                backgroundColor,
-                padding: 0,
-                _rect: {}
-            }
+            pdfCell: Object.assign({}, pdfCell, style)
         };
 
         if(rowType === 'header') {

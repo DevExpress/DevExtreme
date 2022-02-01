@@ -1,5 +1,10 @@
 import { isDefined } from '../../../core/utils/type';
 
+function convertToUsedPDFUnit(doc, value) {
+    const coefficient = doc.internal.scaleFactor * 3 / 4;
+    return value / coefficient;
+}
+
 function getPageWidth(doc) {
     return doc.internal.pageSize.getWidth();
 }
@@ -79,4 +84,4 @@ function applyWordWrap(doc, rowsInfo, options) {
     });
 }
 
-export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth, getPageHeight, applyWordWrap };
+export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth, getPageHeight, applyWordWrap, convertToUsedPDFUnit };
