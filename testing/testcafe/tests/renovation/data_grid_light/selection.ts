@@ -2,8 +2,6 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../helpers/multi-platform-test';
 
-// import { OptionsType } from '../../../../renovation/platforms/declaration/data_grid_light';
-
 const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['react'] });
 
 const defaultOptions = {
