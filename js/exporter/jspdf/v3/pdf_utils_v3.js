@@ -1,8 +1,9 @@
 import { isDefined } from '../../../core/utils/type';
 
 function convertToUsedPDFUnit(doc, value) {
-    const coefficient = doc.internal.scaleFactor * 3 / 4;
-    return value / coefficient;
+    const magic_pixel_size = 4 / 3; // https://github.com/parallax/jsPDF/blob/master/src/jspdf.js#L3227
+    const coefficient = doc.internal.scaleFactor * magic_pixel_size;
+    return value * coefficient;
 }
 
 function getPageWidth(doc) {
