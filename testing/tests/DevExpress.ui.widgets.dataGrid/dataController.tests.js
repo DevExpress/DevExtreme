@@ -6219,6 +6219,76 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         assert.equal(changedSpy.callCount, 0, 'changed is not called');
         assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 'finally rendered item IDs');
     });
+
+    QUnit.test('New mode. Loaded items are collected (T1059242)', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        this.applyOptions({
+            scrolling: {
+                legacyMode: false,
+                rowPageSize: 5,
+                prerenderedRowCount: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            key: 'id',
+            data: getData(100),
+            pageSize: 10
+        });
+
+        // act
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(50);
+        this.clock.tick();
+        let loadedItems = this.dataController.items(true);
+
+        // assert
+        assert.equal(loadedItems.length, 40, 'loaded items count after the first scroll');
+        assert.equal(loadedItems[0].data.id, 1, 'first loaded item id after the first scroll');
+        assert.equal(loadedItems[loadedItems.length - 1].data.id, 40, 'last loaded item id after the first scroll');
+
+        // act
+        this.dataController.setViewportPosition(500);
+        this.clock.tick();
+        loadedItems = this.dataController.items(true);
+
+        // assert
+        assert.equal(loadedItems.length, 60, 'loaded items count after the second scroll');
+        assert.equal(loadedItems[0].data.id, 1, 'first loaded item id after the second scroll');
+        assert.equal(loadedItems[loadedItems.length - 1].data.id, 60, 'last loaded item id after the second scroll');
+
+        // act
+        this.dataController.setViewportPosition(1000);
+        this.clock.tick();
+        loadedItems = this.dataController.items(true);
+
+        // assert
+        assert.equal(loadedItems.length, 90, 'loaded items count after the third scroll');
+        assert.equal(loadedItems[0].data.id, 1, 'first loaded item id after the third scroll');
+        assert.equal(loadedItems[loadedItems.length - 1].data.id, 90, 'last loaded item id after the third scroll');
+
+        // act
+        this.dataController.setViewportPosition(1200);
+        this.clock.tick();
+        loadedItems = this.dataController.items(true);
+
+        // assert
+        assert.equal(loadedItems.length, 100, 'loaded items count after the fourth scroll');
+        assert.equal(loadedItems[0].data.id, 1, 'first loaded item id after the fourth scroll');
+        assert.equal(loadedItems[loadedItems.length - 1].data.id, 100, 'last loaded item id after the fourth scroll');
+    });
 });
 
 QUnit.module('Filtering', {
