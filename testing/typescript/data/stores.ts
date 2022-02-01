@@ -4,46 +4,40 @@
 import $ from 'jquery';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import CustomStore from '../../../js/data/custom_store';
-import { Store } from '../../../js/data';
-import { ANY } from '../consts';
+import { Store, StoreOptions } from '../../../js/data';
+import { ANY, notAny } from '../consts';
 
 export async function infersTItemFromComplexLoadResult() {
   const store = new CustomStore({
     // eslint-disable-next-line @typescript-eslint/require-await
     load: async () => ({
-      data: [{ a: 1 }, { a: 2 }, { a: 3 }],
-      totalCount: 10,
-      summary: [10],
-      groupCount: 3,
+      data: [{ a: 1 }],
     }),
   });
 
-  // If TItem inferred incorrectly, the assignment below will result to compilation error.
-  // However, if TItem inferred as any, it still will be broken,
-  // so we may try adding some logic to avoid it
-  const value: { a: number } = await store.byKey('stub');
+  const result = await store.byKey(ANY);
+  notAny(result);
+  const value: { a: number } = result;
 }
 
 export function loadAcceptsAjaxResult() {
-  new CustomStore({
-    load: () => $.ajax({
-      url: 'url', cache: false, dataType: 'json', data: 'data',
-    }),
-  });
+  const options: StoreOptions = {
+    load: () => $.ajax(ANY),
+  };
 }
 
 export function loadAcceptsAngularHttpClient() {
-  const http: HttpClient = new HttpClient({} as HttpHandler);
-  new CustomStore({
-    load: () => http.get('url').toPromise(),
-  });
+  const http: HttpClient = ANY;
+  const options: StoreOptions = {
+    load: () => http.get(ANY).toPromise(),
+  };
 }
 
 export function loadAcceptsPromiseOfObject() {
-  new CustomStore({
+  const options: StoreOptions = {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    load: () => new Promise<object>(undefined),
-  });
+    load: () => new Promise<object>(ANY),
+  };
 }
 
 export function promiseThenAcceptsMultipleArguments() {
