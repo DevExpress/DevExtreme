@@ -43,10 +43,10 @@ import {
 } from '../../common/types';
 import { AnimatedScrollbar } from '../../scrollbar/animated_scrollbar';
 import { getElementOffset } from '../../../../utils/get_element_offset';
-import { isElementVisible } from '../../utils/is_element_visible';
 
 import { subscribeToResize } from '../../utils/subscribe_to_resize';
 import * as allowedDirectionModule from '../../utils/get_allowed_direction';
+import * as isElementVisibleModule from '../../utils/is_element_visible';
 import * as permissibleWheelDirectionModule from '../../utils/get_permissible_wheel_direction';
 import { DisposeEffectReturn } from '../../../../utils/effect_return';
 
@@ -59,11 +59,6 @@ jest.mock('../../../../../core/devices', () => {
 jest.mock('../../utils/get_element_style', () => ({
   ...jest.requireActual('../../utils/get_element_style'),
   getElementPadding: jest.fn(() => 8),
-}));
-
-jest.mock('../../utils/is_element_visible', () => ({
-  ...jest.requireActual('../../utils/is_element_visible'),
-  isElementVisible: jest.fn(() => true),
 }));
 
 jest.mock('../../../../utils/get_element_offset', () => ({
@@ -638,101 +633,110 @@ describe('Simulated > Behavior', () => {
     });
 
     each([true, false]).describe('forceGeneratePockets: %o,', (forceGeneratePockets) => {
-      it('Should assign swipeDown, pullDown strategy', () => {
-        (getElementPadding as jest.Mock).mockReturnValue(8);
+      each([true, false]).describe('elementVisible: %o,', (elementVisibility) => {
+        it('Should assign swipeDown, pullDown strategy', () => {
+          (getElementPadding as jest.Mock).mockReturnValue(8);
 
-        [-50, 0, 50].forEach((vScrollLocation) => {
-          [true, false].forEach((pullDownEnabled) => {
-            [true, false].forEach((reachBottomEnabled) => {
-              const viewModel = new Scrollable({
-                forceGeneratePockets,
-                pullDownEnabled,
-                reachBottomEnabled,
+          jest.spyOn(isElementVisibleModule, 'isElementVisible')
+            .mockImplementation(jest.fn(() => elementVisibility));
+
+          try {
+            [-50, 0, 50].forEach((vScrollLocation) => {
+              [true, false].forEach((pullDownEnabled) => {
+                [true, false].forEach((reachBottomEnabled) => {
+                  const viewModel = new Scrollable({
+                    forceGeneratePockets,
+                    pullDownEnabled,
+                    reachBottomEnabled,
+                  });
+
+                  viewModel.scrollableRef = {
+                    current: {},
+                  } as RefObject;
+
+                  viewModel.containerClientWidth = 1;
+                  viewModel.containerClientHeight = 2;
+
+                  viewModel.contentClientWidth = 5;
+                  viewModel.contentClientHeight = 6;
+                  viewModel.contentScrollWidth = 7;
+                  viewModel.contentScrollHeight = 8;
+
+                  viewModel.contentPaddingBottom = 13;
+
+                  viewModel.vScrollLocation = vScrollLocation;
+
+                  viewModel.containerRef = {
+                    current: {
+                      clientWidth: 10,
+                      clientHeight: 20,
+                      scrollLeft: 150,
+                      scrollTop: 200,
+                      getBoundingClientRect: () => ({
+                        width: 10,
+                        height: 20,
+                      }),
+                    },
+                  } as RefObject;
+
+                  viewModel.contentRef = {
+                    current: {
+                      clientWidth: 50,
+                      clientHeight: 60,
+                      scrollWidth: 70,
+                      scrollHeight: 80,
+                      getBoundingClientRect: () => ({
+                        width: 10,
+                        height: 20,
+                      }),
+                    },
+                  } as RefObject;
+
+                  if (forceGeneratePockets) {
+                    viewModel.topPocketRef = {
+                      current: {
+                        clientHeight: pullDownEnabled ? 80 : 0,
+                      },
+                    } as RefObject;
+
+                    viewModel.bottomPocketRef = {
+                      current: {
+                        clientHeight: reachBottomEnabled ? 55 : 0,
+                      },
+                    } as RefObject;
+                  }
+
+                  viewModel.updateDimensions();
+
+                  let expectedTopPocketSize = 0;
+                  let expectedBottomPocketSize = 0;
+
+                  expect(viewModel.containerClientWidth).toEqual(elementVisibility ? 10 : 1);
+                  expect(viewModel.containerClientHeight).toEqual(elementVisibility ? 20 : 2);
+
+                  expect(viewModel.contentClientWidth).toEqual(elementVisibility ? 50 : 5);
+                  expect(viewModel.contentClientHeight).toEqual(elementVisibility ? 60 : 6);
+                  expect(viewModel.contentScrollWidth).toEqual(elementVisibility ? 70 : 7);
+                  expect(viewModel.contentScrollHeight).toEqual(elementVisibility ? 80 : 8);
+
+                  if (forceGeneratePockets && pullDownEnabled) {
+                    expectedTopPocketSize = 80;
+                  }
+
+                  if (forceGeneratePockets && reachBottomEnabled) {
+                    expectedBottomPocketSize = 55;
+                  }
+
+                  expect(viewModel.contentPaddingBottom).toEqual(elementVisibility ? 8 : 13);
+
+                  expect(viewModel.topPocketHeight).toEqual(expectedTopPocketSize);
+                  expect(viewModel.bottomPocketHeight).toEqual(expectedBottomPocketSize);
+                });
               });
-
-              viewModel.scrollableRef = {
-                current: {},
-              } as RefObject;
-
-              viewModel.containerClientWidth = 1;
-              viewModel.containerClientHeight = 2;
-
-              viewModel.contentClientWidth = 5;
-              viewModel.contentClientHeight = 6;
-              viewModel.contentScrollWidth = 7;
-              viewModel.contentScrollHeight = 8;
-
-              viewModel.contentPaddingBottom = 13;
-
-              viewModel.vScrollLocation = vScrollLocation;
-
-              viewModel.containerRef = {
-                current: {
-                  clientWidth: 10,
-                  clientHeight: 20,
-                  scrollLeft: 150,
-                  scrollTop: 200,
-                  getBoundingClientRect: () => ({
-                    width: 10,
-                    height: 20,
-                  }),
-                },
-              } as RefObject;
-
-              viewModel.contentRef = {
-                current: {
-                  clientWidth: 50,
-                  clientHeight: 60,
-                  scrollWidth: 70,
-                  scrollHeight: 80,
-                  getBoundingClientRect: () => ({
-                    width: 10,
-                    height: 20,
-                  }),
-                },
-              } as RefObject;
-
-              if (forceGeneratePockets) {
-                viewModel.topPocketRef = {
-                  current: {
-                    clientHeight: pullDownEnabled ? 80 : 0,
-                  },
-                } as RefObject;
-
-                viewModel.bottomPocketRef = {
-                  current: {
-                    clientHeight: reachBottomEnabled ? 55 : 0,
-                  },
-                } as RefObject;
-              }
-
-              viewModel.updateDimensions();
-
-              let expectedTopPocketSize = 0;
-              let expectedBottomPocketSize = 0;
-
-              expect(viewModel.containerClientWidth).toEqual(10);
-              expect(viewModel.containerClientHeight).toEqual(20);
-
-              expect(viewModel.contentClientWidth).toEqual(50);
-              expect(viewModel.contentClientHeight).toEqual(60);
-              expect(viewModel.contentScrollWidth).toEqual(70);
-              expect(viewModel.contentScrollHeight).toEqual(80);
-
-              if (forceGeneratePockets && pullDownEnabled) {
-                expectedTopPocketSize = 80;
-              }
-
-              if (forceGeneratePockets && reachBottomEnabled) {
-                expectedBottomPocketSize = 55;
-              }
-
-              expect(viewModel.contentPaddingBottom).toEqual(8);
-
-              expect(viewModel.topPocketHeight).toEqual(expectedTopPocketSize);
-              expect(viewModel.bottomPocketHeight).toEqual(expectedBottomPocketSize);
             });
-          });
+          } finally {
+            jest.restoreAllMocks();
+          }
         });
       });
     });
@@ -1823,34 +1827,38 @@ describe('Simulated > Behavior', () => {
           });
 
           it('scrollBy({ top: 20, left: 20 }), scrollable is hidden', () => {
-            (isElementVisible as jest.Mock).mockImplementation(() => false);
-            const initialScrollOffset = { top: 50, left: 50 };
-            const expectedScrollOffset = { top: 50, left: 50 };
-            const helper = new ScrollableTestHelper({
-              direction,
-              rtlEnabled,
-              contentSize: 200,
-              containerSize: 100,
-            });
+            try {
+              const initialScrollOffset = { top: 50, left: 50 };
+              const expectedScrollOffset = { top: 50, left: 50 };
+              const helper = new ScrollableTestHelper({
+                direction,
+                rtlEnabled,
+                contentSize: 200,
+                containerSize: 100,
+              });
 
-            helper.initScrollbarSettings({
-              props: {
-                vScrollLocation: -initialScrollOffset.top,
-                hScrollLocation: -initialScrollOffset.top,
-              },
-            });
-            helper.initScrollbarHandlerMocks();
-            helper.changeScrollbarMethod('stopScrolling', jest.fn());
-            helper.initContainerPosition(initialScrollOffset);
+              helper.initScrollbarSettings({
+                props: {
+                  vScrollLocation: -initialScrollOffset.top,
+                  hScrollLocation: -initialScrollOffset.top,
+                },
+              });
+              helper.initScrollbarHandlerMocks();
+              helper.changeScrollbarMethod('stopScrolling', jest.fn());
+              helper.initContainerPosition(initialScrollOffset);
 
-            helper.viewModel.scrollByLocation({ top: 20, left: 15 });
+              jest.spyOn(isElementVisibleModule, 'isElementVisible')
+                .mockImplementation(jest.fn(() => false));
 
-            expect(helper.viewModel.scrollOffset()).toEqual(expectedScrollOffset);
-            expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollOffset.top);
-            expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollOffset.left);
-            helper.checkContainerPosition(expect, expectedScrollOffset);
+              helper.viewModel.scrollByLocation({ top: 20, left: 15 });
 
-            (isElementVisible as jest.Mock).mockImplementation(() => true);
+              expect(helper.viewModel.scrollOffset()).toEqual(expectedScrollOffset);
+              expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollOffset.top);
+              expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollOffset.left);
+              helper.checkContainerPosition(expect, expectedScrollOffset);
+            } finally {
+              jest.restoreAllMocks();
+            }
           });
 
           each([

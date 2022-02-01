@@ -2,7 +2,7 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings,
-  TwoWay, Fragment, Consumer, Effect, OneWay, Method, InternalState,
+  TwoWay, Consumer, Effect, OneWay, Method, InternalState,
 } from '@devextreme-generator/declarations';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
@@ -21,7 +21,7 @@ import {
   ClearSelection, IsSelected, SelectableCount, SelectAll, SelectedCount, SetSelected,
 } from './plugins';
 
-export const viewFunction = (): JSX.Element => <Fragment />;
+export const viewFunction = (): JSX.Element => <div />;
 
 @ComponentBindings()
 export class SelectionProps {

@@ -1,3 +1,8 @@
+import CustomStore, { Options as CustomStoreOptions } from './custom_store';
+import ArrayStore, { Options as ArrayStoreOptions } from './array_store';
+import LocalStore, { Options as LocalStoreOptions } from './local_store';
+import ODataStore, { Options as ODataStoreOptions } from './odata/store';
+
 /**
  * @docid
  * @public
@@ -147,3 +152,23 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
      */
     userData?: any;
 }
+
+/**
+ * @public
+ * @namespace DevExpress.data.utils
+ */
+export type Store<TItem = any, TKey = any> =
+    CustomStore<TItem, TKey> |
+    ArrayStore<TItem, TKey> |
+    LocalStore<TItem, TKey> |
+    ODataStore<TItem, TKey>;
+
+/**
+ * @public
+ * @namespace DevExpress.data.utils
+ */
+export type StoreOptions<TItem = any, TKey = any> =
+    CustomStoreOptions<TItem, TKey> |
+    ArrayStoreOptions<TItem, TKey> & { type: 'array' } |
+    LocalStoreOptions<TItem, TKey> & { type: 'local' } |
+    ODataStoreOptions<TItem, TKey> & { type: 'odata' };

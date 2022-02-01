@@ -31,7 +31,7 @@
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "~3.0.2",
     "devexpress-diagram": "2.1.47",
-    "devexpress-gantt": "4.1.7",
+    "devexpress-gantt": "4.1.8",
     "devextreme-quill": "~1.5.12",
     "devextreme-showdown": "^1.0.1",
     "inferno": "^7.4.9",
@@ -245,7 +245,7 @@
   },
   "browserslist": [
     "last 2 versions",
-    "ios > 8",
+    "ios > 9",
     "> 1%"
   ],
   "jest": {

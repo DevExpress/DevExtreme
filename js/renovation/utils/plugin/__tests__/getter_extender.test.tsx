@@ -15,7 +15,7 @@ describe('GetterExtender', () => {
       });
 
       const tree = mount(<GetterExtenderView {...getterExtender as any} />);
-      expect(tree.html()).toEqual(null);
+      expect(tree.html()).toEqual('<div></div>');
     });
   });
 

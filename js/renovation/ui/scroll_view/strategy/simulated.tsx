@@ -570,7 +570,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   subscribeContainerToResize(): EffectReturn {
     return subscribeToResize(
       this.containerRef.current,
-      (element: HTMLDivElement) => { this.setContainerDimensions(element); },
+      (element: HTMLDivElement) => {
+        this.setContainerDimensions(element);
+      },
     );
   }
 
@@ -1148,20 +1150,26 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   setContentHeight(contentEl: HTMLDivElement): void {
-    this.contentClientHeight = contentEl.clientHeight;
-    this.contentScrollHeight = contentEl.scrollHeight;
+    if (isElementVisible(contentEl)) {
+      this.contentClientHeight = contentEl.clientHeight;
+      this.contentScrollHeight = contentEl.scrollHeight;
 
-    this.contentPaddingBottom = getElementPadding(this.contentRef.current, 'bottom');
+      this.contentPaddingBottom = getElementPadding(this.contentRef.current, 'bottom');
+    }
   }
 
   setContentWidth(contentEl: HTMLDivElement): void {
-    this.contentClientWidth = contentEl.clientWidth;
-    this.contentScrollWidth = contentEl.scrollWidth;
+    if (isElementVisible(contentEl)) {
+      this.contentClientWidth = contentEl.clientWidth;
+      this.contentScrollWidth = contentEl.scrollWidth;
+    }
   }
 
   setContainerDimensions(containerEl: HTMLDivElement): void {
-    this.containerClientHeight = containerEl.clientHeight;
-    this.containerClientWidth = containerEl.clientWidth;
+    if (isElementVisible(containerEl)) {
+      this.containerClientHeight = containerEl.clientHeight;
+      this.containerClientWidth = containerEl.clientWidth;
+    }
   }
 
   get contentHeight(): number {

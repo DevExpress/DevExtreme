@@ -157,6 +157,21 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     ) as Record<string, unknown>;
   }
 
+  _initializeComponent(): void {
+    super._initializeComponent();
+
+    this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
+    this._props = this._optionsWithDefaultTemplates(this.option());
+    this._propsInfo.templates.forEach((template) => {
+      this._componentTemplates[template] = this._createTemplateComponent(this._props[template]);
+    });
+
+    Object.keys(this._getActionConfigsFull()).forEach((name) => this._addAction(name));
+
+    this._viewRef = createRef();
+    this.defaultKeyHandlers = this._createDefaultKeyHandlers();
+  }
+
   _initMarkup(): void {
     const props = this.getProps();
     this._renderWrapper(props);
@@ -372,20 +387,9 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     super._init();
 
     this.customKeyHandlers = {};
-    this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
-    this._props = this._optionsWithDefaultTemplates(this.option());
     this._actionsMap = {};
     this._aria = {};
-
     this._componentTemplates = {};
-    this._propsInfo.templates.forEach((template) => {
-      this._componentTemplates[template] = this._createTemplateComponent(this._props[template]);
-    });
-
-    Object.keys(this._getActionConfigsFull()).forEach((name) => this._addAction(name));
-
-    this._viewRef = createRef();
-    this.defaultKeyHandlers = this._createDefaultKeyHandlers();
   }
 
   _createDefaultKeyHandlers(): Record<string, Function> {

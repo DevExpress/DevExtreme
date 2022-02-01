@@ -30,7 +30,6 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
 
     const direction = options.direction ?? 'vertical';
 
-    this.element = Selector(`.${CLASS.scrollable}`);
     this.scrollbar = new Scrollbar(options.direction ?? 'vertical');
 
     if (!options.useNative && !options.useSimulatedScrollbar) {
@@ -42,12 +41,15 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
       }
     }
 
-    const scrollable = this.element;
-
     this.name = name;
     this.platform = platform || 'jquery';
 
-    this.getInstance = getComponentInstance(this.platform as PlatformType, scrollable);
+    this.getInstance = getComponentInstance(this.platform as PlatformType, this.getElement());
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getElement(): Selector {
+    return Selector(`.${CLASS.scrollable}`);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -145,6 +147,54 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
         (getInstance() as any)._dimensionChanged();
       },
       { dependencies: { getInstance, value } },
+    )();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  hide(): Promise<unknown> {
+    return ClientFunction(
+      () => {
+        const targetElement = document.querySelector(`.${CLASS.scrollable}`) as HTMLElement;
+
+        targetElement.style.display = 'none';
+      },
+      { dependencies: { CLASS } },
+    )();
+  }
+
+  apiTriggerHidingEvent(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        // eslint-disable-next-line no-underscore-dangle
+        (getInstance() as any)._visibilityChanged(false);
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  show(): Promise<unknown> {
+    return ClientFunction(
+      () => {
+        const targetElement = document.querySelector(`.${CLASS.scrollable}`) as HTMLElement;
+
+        targetElement.style.display = 'block';
+      },
+      { dependencies: { CLASS } },
+    )();
+  }
+
+  apiTriggerShownEvent(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        // eslint-disable-next-line no-underscore-dangle
+        (getInstance() as any)._visibilityChanged(true);
+      },
+      { dependencies: { getInstance } },
     )();
   }
 };

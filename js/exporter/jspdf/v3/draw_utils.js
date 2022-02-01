@@ -1,6 +1,6 @@
 import { isDefined, isObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { calculateTextHeight, getTextLines } from './pdf_utils_v3';
+import { calculateTextHeight } from './pdf_utils_v3';
 
 const defaultBorderLineWidth = 1;
 
@@ -41,8 +41,8 @@ function getLineHeightShift(doc) {
     return (doc.getLineHeightFactor() - DEFAULT_LINE_HEIGHT) * doc.getFontSize();
 }
 
-function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWrapEnabled) {
-    const textArray = getTextLines(doc, text, doc.getFont(), { wordWrapEnabled, targetRectWidth: rect.w });
+function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign) {
+    const textArray = text.split('\n');
     const linesCount = textArray.length;
 
     const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont(), { wordWrapEnabled: false });
@@ -82,13 +82,14 @@ function drawCellText(doc, cell, docStyles) {
             w: _rect.w - (padding.left + padding.right),
             h: _rect.h - (padding.top + padding.bottom)
         };
-        if(isDefined(cell._textTopOffset)) {
-            textRect.x = textRect.x + cell._textTopOffset;
+        if(isDefined(cell._textLeftOffset) || isDefined(cell._textTopOffset)) {
+            textRect.x = textRect.x + (cell._textLeftOffset ?? 0);
+            textRect.y = textRect.y + (cell._textTopOffset ?? 0);
             doc.saveGraphicsState(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#saveGraphicsState
             clipOutsideRectContent(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h);
         }
-        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign, cell.wordWrapEnabled);
-        if(isDefined(cell._textTopOffset)) {
+        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign);
+        if(isDefined(cell._textLeftOffset) || isDefined(cell._textTopOffset)) {
             doc.restoreGraphicsState(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#restoreGraphicsState
         }
     }

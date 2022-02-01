@@ -10,7 +10,6 @@ const ROUTES = testing.ROUTES;
 const MAP_CLASS = 'dx-map';
 const MAP_CONTAINER_CLASS = 'dx-map-container';
 const MAP_SHIELD_CLASS = 'dx-map-shield';
-const NATIVE_CLICK_CLASS = 'dx-native-click';
 
 
 QUnit.module('rendering', {
@@ -35,14 +34,6 @@ QUnit.test('widget should be rendered', function(assert) {
     });
 
     assert.ok($map.hasClass(MAP_CLASS), 'widget class added');
-});
-
-QUnit.test('clicks inside map should be native (T349301)', function(assert) {
-    const $map = $('#map').dxMap({
-        provider: 'googleStatic'
-    });
-
-    assert.ok($map.hasClass(NATIVE_CLICK_CLASS), 'native click class added');
 });
 
 QUnit.test('widget should be rendered with correct dimensions', function(assert) {
