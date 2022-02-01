@@ -15,12 +15,19 @@ const JSPdfMeasureUnitsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,24.2,{baseline:middle}',
-                    'text,v1_1,10,42.6,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,200,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,50,55.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,v1_1,50,107.25,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,30,30,200,51.5',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,30,81.5,200,51.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => {
@@ -41,7 +48,10 @@ const JSPdfMeasureUnitsTests = {
                     }).then(() => {
                         // doc.save(assert.test.testName + '.pdf');
                         assert.deepEqual(doc.__log, expectedLog);
-                        done();
+
+                        if(unit === 'in') {
+                            done();
+                        }
                     });
                 });
             });

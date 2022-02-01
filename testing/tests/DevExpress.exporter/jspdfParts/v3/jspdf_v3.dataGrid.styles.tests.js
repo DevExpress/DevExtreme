@@ -34,13 +34,18 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
@@ -67,13 +72,18 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,128',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 const _rowOptions = {
@@ -104,13 +114,18 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128,128,128',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,128,128,128',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 const _rowOptions = {
@@ -141,13 +156,18 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,0,0,1,0',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,0,0,1,0',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 const _rowOptions = {
@@ -185,13 +205,18 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#ffff00',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
@@ -225,13 +250,18 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
@@ -265,13 +295,18 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128,128,128',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
@@ -305,13 +340,18 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,0,0,1,0',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
@@ -345,15 +385,20 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
                     'setFillColor,#ffff00',
-                    'rect,10,33.4,90,18.4,F',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,50,77.167,90,22.167,F',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
@@ -387,15 +432,20 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
                     'setFillColor,128',
-                    'rect,10,33.4,90,18.4,F',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,50,77.167,90,22.167,F',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
@@ -429,15 +479,20 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
                     'setFillColor,255,255,0',
-                    'rect,10,33.4,90,18.4,F',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,50,77.167,90,22.167,F',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
@@ -471,15 +526,20 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,22.167,F',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
+                    'rect,140,55,80,22.167,F',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
                     'setFillColor,0,0,1,0',
-                    'rect,10,33.4,90,18.4,F',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,50,77.167,90,22.167,F',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
@@ -517,11 +577,14 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,#0000ff',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
                     'setTextColor,#000000',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
@@ -555,11 +618,14 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,128',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
                     'setTextColor,#000000',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
@@ -593,11 +659,14 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,0,0,255',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
                     'setTextColor,#000000',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
@@ -631,11 +700,14 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,0,0,1,0',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
                     'setTextColor,#000000',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
@@ -668,11 +740,16 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
                     'setTextColor,#0000ff',
-                    'text,f1_2,100,42.6,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
@@ -706,11 +783,16 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
                     'setTextColor,128',
-                    'text,f1_2,100,42.6,',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
+                    'setTextColor,128',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
@@ -744,11 +826,16 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
                     'setTextColor,0,0,255',
-                    'text,f1_2,100,42.6,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
@@ -782,11 +869,16 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,',
                     'setTextColor,0,0,1,0',
-                    'text,f1_2,100,42.6,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
@@ -824,12 +916,15 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,128',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
+                    'setTextColor,128',
+                    'text,F2,146.667,66.083,',
                     'setTextColor,#000000',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
+                    'text,f1_1,56.667,88.25,',
                     'setTextColor,0,0,255',
-                    'text,f1_2,100,42.6,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
@@ -864,12 +959,14 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,128',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setTextColor,0,0,255',
-                    'text,F2,100,24.2,',
+                    'text,F2,146.667,66.083,',
                     'setTextColor,#000000',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
@@ -908,12 +1005,14 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,#ff0000',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setTextColor,#0000ff',
-                    'text,F2,100,24.2,',
+                    'text,F2,146.667,66.083,',
                     'setTextColor,#000000',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,56.667,88.25,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
@@ -949,13 +1048,15 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,128',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,',
                     'setTextColor,0,0,255',
-                    'text,F2,100,24.2,',
+                    'text,F2,146.667,66.083,',
                     'setTextColor,128',
-                    'text,f1_1,10,42.6,',
+                    'text,f1_1,56.667,88.25,',
                     'setTextColor,0,0,255',
-                    'text,f1_2,100,42.6,',
+                    'text,f1_2,146.667,88.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
@@ -980,11 +1081,15 @@ const JSPdfStylesTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
+                    'text,line,56.667,71.833,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,33.667',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -1005,11 +1110,15 @@ const JSPdfStylesTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
+                    'text,line,56.667,71.833,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,33.667',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
@@ -1030,11 +1139,15 @@ const JSPdfStylesTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
+                    'text,line,56.667,71.833,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,33.667',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 10 }; };

@@ -196,7 +196,8 @@ QUnit.module('Table', moduleConfig, () => {
         const dataGrid = createDataGrid({});
 
         const expectedLog = [
-            'setLineWidth,1', 'rect,10,15,0,0',
+            'setLineWidth,0.6666666666666666',
+            'rect,10,15,0,0'
         ];
 
         const customizeCell = () => {
@@ -226,7 +227,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,56.667,65,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,20',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
@@ -253,7 +262,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,15,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,55,65,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,20',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
@@ -280,7 +297,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,15,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,55,65,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,20',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
@@ -307,7 +332,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,27.5,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,50,67.5,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,20',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
@@ -334,7 +367,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,50,65,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,20',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
@@ -361,7 +402,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,22.5,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,50,62.5,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,20',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
@@ -380,7 +429,15 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,56.667,66.083,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,22.167',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
@@ -403,7 +460,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,15,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,28.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,55,65.75,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,21.5',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -426,7 +491,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,15,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,55,60.75,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,11.5',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -449,7 +522,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,23.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,50,65.75,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,16.5',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -472,7 +553,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,50,60.75,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,11.5',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -495,7 +584,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,23.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,50,60.75,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,16.5',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -524,7 +621,11 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,25,{baseline:middle}'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,56.667,65,{baseline:middle}',
+            'setFontSize,16',
+            'setTextColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell, onRowExporting, drawTableBorder: false }).then(() => {
@@ -551,10 +652,19 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,25,{baseline:middle}',
-            'text,v1,10,47,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,100,20',
-            'setLineWidth,1', 'rect,10,35,100,24',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,65,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1,56.667,87,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,75,100,24',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
@@ -573,10 +683,19 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,F1,10,24.2,{baseline:middle}',
-            'text,v1,10,42.6,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,100,18.4',
-            'setLineWidth,1', 'rect,10,33.4,100,18.4',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,66.083,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1,56.667,88.25,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,77.167,100,22.167',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
@@ -599,10 +718,19 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,15,29.2,{baseline:middle}',
-            'text,v1,15,57.6,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,100,28.4',
-            'setLineWidth,1', 'rect,10,43.4,100,28.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,55,65.75,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1,55,87.25,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,21.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,76.5,100,21.5',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -631,12 +759,23 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,100,16',
-            'setLineWidth,1', 'rect,10,31,100,20',
-            'setLineWidth,1', 'rect,10,51,100,24',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,63,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,56.667,81,{baseline:middle}',
+            'text,v1_2,56.667,103,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,71,100,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,91,100,24',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
@@ -655,12 +794,23 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,F1,10,24.2,{baseline:middle}',
-            'text,v1_1,10,42.6,{baseline:middle}',
-            'text,v1_2,10,61,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,100,18.4',
-            'setLineWidth,1', 'rect,10,33.4,100,18.4',
-            'setLineWidth,1', 'rect,10,51.8,100,18.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,66.083,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,56.667,88.25,{baseline:middle}',
+            'text,v1_2,56.667,110.417,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,77.167,100,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,99.333,100,22.167',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
@@ -683,12 +833,23 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,15,29.2,{baseline:middle}',
-            'text,v1_1,15,57.6,{baseline:middle}',
-            'text,v1_2,15,86,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,100,28.4',
-            'setLineWidth,1', 'rect,10,43.4,100,28.4',
-            'setLineWidth,1', 'rect,10,71.8,100,28.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,55,65.75,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,55,87.25,{baseline:middle}',
+            'text,v1_2,55,108.75,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,21.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,76.5,100,21.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,98,100,21.5',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -711,10 +872,20 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,23,{baseline:middle}',
-            'text,f2,50,23,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,16',
-            'setLineWidth,1', 'rect,50,15,60,16',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,56.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,f2,96.667,63,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,60,16',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
             // doc.save();
@@ -732,10 +903,20 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,f1,10,24.2,{baseline:middle}',
-            'text,f2,50,24.2,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,18.4',
-            'setLineWidth,1', 'rect,50,15,60,18.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,56.667,66.083,{baseline:middle}',
+            'setTextColor,128',
+            'text,f2,96.667,66.083,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,60,22.167',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
             // doc.save();
@@ -758,10 +939,20 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,15,34.2,{baseline:middle}',
-            'text,f2,60,34.2,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,38.4',
-            'setLineWidth,1', 'rect,50,15,60,38.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,f1,55,70.75,{baseline:middle}',
+            'setTextColor,128',
+            'text,f2,100,70.75,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,31.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,60,31.5',
+            'setFontSize,16',
+            'setDrawColor,#000000',
+            'setTextColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], customizeCell }).then(() => {
             // doc.save();
@@ -787,14 +978,28 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,v1,10,41,{baseline:middle}',
-            'text,v2,50,41,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,16',
-            'setLineWidth,1', 'rect,50,15,60,16',
-            'setLineWidth,1', 'rect,10,31,40,20',
-            'setLineWidth,1', 'rect,50,31,60,20',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,96.667,63,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1,56.667,81,{baseline:middle}',
+            'text,v2,96.667,81,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,60,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,71,40,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,71,60,20',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
             // doc.save();
@@ -812,14 +1017,28 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,F1,10,24.2,{baseline:middle}',
-            'text,F2,50,24.2,{baseline:middle}',
-            'text,v1,10,42.6,{baseline:middle}',
-            'text,v2,50,42.6,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,18.4',
-            'setLineWidth,1', 'rect,50,15,60,18.4',
-            'setLineWidth,1', 'rect,10,33.4,40,18.4',
-            'setLineWidth,1', 'rect,50,33.4,60,18.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,66.083,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,96.667,66.083,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1,56.667,88.25,{baseline:middle}',
+            'text,v2,96.667,88.25,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,60,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,77.167,40,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,77.167,60,22.167',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
             // doc.save();
@@ -842,14 +1061,28 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,15,34.2,{baseline:middle}',
-            'text,F2,60,34.2,{baseline:middle}',
-            'text,v1,15,72.6,{baseline:middle}',
-            'text,v2,60,72.6,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,38.4',
-            'setLineWidth,1', 'rect,50,15,60,38.4',
-            'setLineWidth,1', 'rect,10,53.4,40,38.4',
-            'setLineWidth,1', 'rect,50,53.4,60,38.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,55,70.75,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,100,70.75,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1,55,102.25,{baseline:middle}',
+            'text,v2,100,102.25,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,31.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,60,31.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,86.5,40,31.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,86.5,60,31.5',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], customizeCell }).then(() => {
             // doc.save();
@@ -877,18 +1110,36 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,16',
-            'setLineWidth,1', 'rect,50,15,60,16',
-            'setLineWidth,1', 'rect,10,31,40,20',
-            'setLineWidth,1', 'rect,50,31,60,20',
-            'setLineWidth,1', 'rect,10,51,40,24',
-            'setLineWidth,1', 'rect,50,51,60,24',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,96.667,63,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,56.667,81,{baseline:middle}',
+            'text,v2_1,96.667,81,{baseline:middle}',
+            'text,v1_2,56.667,103,{baseline:middle}',
+            'text,v2_2,96.667,103,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,60,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,71,40,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,71,60,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,91,40,24',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,91,60,24',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
             // doc.save();
@@ -906,18 +1157,36 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,F1,10,24.2,{baseline:middle}',
-            'text,F2,50,24.2,{baseline:middle}',
-            'text,v1_1,10,42.6,{baseline:middle}',
-            'text,v2_1,50,42.6,{baseline:middle}',
-            'text,v1_2,10,61,{baseline:middle}',
-            'text,v2_2,50,61,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,18.4',
-            'setLineWidth,1', 'rect,50,15,60,18.4',
-            'setLineWidth,1', 'rect,10,33.4,40,18.4',
-            'setLineWidth,1', 'rect,50,33.4,60,18.4',
-            'setLineWidth,1', 'rect,10,51.8,40,18.4',
-            'setLineWidth,1', 'rect,50,51.8,60,18.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,66.083,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,96.667,66.083,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,56.667,88.25,{baseline:middle}',
+            'text,v2_1,96.667,88.25,{baseline:middle}',
+            'text,v1_2,56.667,110.417,{baseline:middle}',
+            'text,v2_2,96.667,110.417,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,60,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,77.167,40,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,77.167,60,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,99.333,40,22.167',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,99.333,60,22.167',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
             // doc.save();
@@ -940,18 +1209,36 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,15,34.2,{baseline:middle}',
-            'text,F2,60,34.2,{baseline:middle}',
-            'text,v1_1,15,72.6,{baseline:middle}',
-            'text,v2_1,60,72.6,{baseline:middle}',
-            'text,v1_2,15,111,{baseline:middle}',
-            'text,v2_2,60,111,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,38.4',
-            'setLineWidth,1', 'rect,50,15,60,38.4',
-            'setLineWidth,1', 'rect,10,53.4,40,38.4',
-            'setLineWidth,1', 'rect,50,53.4,60,38.4',
-            'setLineWidth,1', 'rect,10,91.8,40,38.4',
-            'setLineWidth,1', 'rect,50,91.8,60,38.4'
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,55,70.75,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,100,70.75,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,55,102.25,{baseline:middle}',
+            'text,v2_1,100,102.25,{baseline:middle}',
+            'text,v1_2,55,133.75,{baseline:middle}',
+            'text,v2_2,100,133.75,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,31.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,60,31.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,86.5,40,31.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,86.5,60,31.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,118,40,31.5',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,118,60,31.5',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], customizeCell }).then(() => {
             // doc.save();
@@ -979,18 +1266,36 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,10,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,10,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,10,63,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,0,16',
-            'setLineWidth,1', 'rect,10,15,100,16',
-            'setLineWidth,1', 'rect,10,31,0,20',
-            'setLineWidth,1', 'rect,10,31,100,20',
-            'setLineWidth,1', 'rect,10,51,0,24',
-            'setLineWidth,1', 'rect,10,51,100,24',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,56.667,63,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,56.667,81,{baseline:middle}',
+            'text,v2_1,56.667,81,{baseline:middle}',
+            'text,v1_2,56.667,103,{baseline:middle}',
+            'text,v2_2,56.667,103,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,0,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,100,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,71,0,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,71,100,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,91,0,24',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,91,100,24',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 0, 100 ], onRowExporting }).then(() => {
             // doc.save();
@@ -1024,24 +1329,53 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,16',
-            'setLineWidth,1', 'rect,50,15,50,16',
-            'setLineWidth,1', 'rect,100,15,60,16',
-            'setLineWidth,1', 'line,10,31,50,31', 'line,10,31,10,51', 'line,10,51,50,51',
-            'setLineWidth,1', 'line,50,31,100,31', 'line,100,31,100,51', 'line,50,51,100,51',
-            'setLineWidth,1', 'rect,100,31,60,20',
-            'setLineWidth,1', 'rect,10,51,40,24',
-            'setLineWidth,1', 'rect,50,51,50,24',
-            'setLineWidth,1', 'rect,100,51,60,24',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,96.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F3,146.667,63,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,56.667,81,{baseline:middle}',
+            'text,v2_1,96.667,81,{baseline:middle}',
+            'text,v3_1,146.667,81,{baseline:middle}',
+            'text,v1_2,56.667,103,{baseline:middle}',
+            'text,v2_2,96.667,103,{baseline:middle}',
+            'text,v3_2,146.667,103,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,50,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,55,60,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,50,71,90,71',
+            'line,50,71,50,91',
+            'line,50,91,90,91',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,90,71,140,71',
+            'line,140,71,140,91',
+            'line,90,91,140,91',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,71,60,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,91,40,24',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,91,50,24',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,91,60,24',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
             // doc.save();
@@ -1075,24 +1409,53 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,16',
-            'setLineWidth,1', 'rect,50,15,50,16',
-            'setLineWidth,1', 'rect,100,15,60,16',
-            'setLineWidth,1', 'rect,10,31,40,20',
-            'setLineWidth,1', 'line,50,31,100,31', 'line,50,31,50,51', 'line,50,51,100,51',
-            'setLineWidth,1', 'line,100,31,160,31', 'line,160,31,160,51', 'line,100,51,160,51',
-            'setLineWidth,1', 'rect,10,51,40,24',
-            'setLineWidth,1', 'rect,50,51,50,24',
-            'setLineWidth,1', 'rect,100,51,60,24',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,96.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F3,146.667,63,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,56.667,81,{baseline:middle}',
+            'text,v2_1,96.667,81,{baseline:middle}',
+            'text,v3_1,146.667,81,{baseline:middle}',
+            'text,v1_2,56.667,103,{baseline:middle}',
+            'text,v2_2,96.667,103,{baseline:middle}',
+            'text,v3_2,146.667,103,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,50,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,55,60,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,71,40,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,90,71,140,71',
+            'line,90,71,90,91',
+            'line,90,91,140,91',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,140,71,200,71',
+            'line,200,71,200,91',
+            'line,140,91,200,91',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,91,40,24',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,91,50,24',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,91,60,24',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
             // doc.save();
@@ -1125,24 +1488,53 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,16',
-            'setLineWidth,1', 'line,50,15,100,15', 'line,50,15,50,31', 'line,100,15,100,31',
-            'setLineWidth,1', 'rect,100,15,60,16',
-            'setLineWidth,1', 'rect,10,31,40,20',
-            'setLineWidth,1', 'line,50,31,50,51', 'line,100,31,100,51', 'line,50,51,100,51',
-            'setLineWidth,1', 'rect,100,31,60,20',
-            'setLineWidth,1', 'rect,10,51,40,24',
-            'setLineWidth,1', 'rect,50,51,50,24',
-            'setLineWidth,1', 'rect,100,51,60,24',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,96.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F3,146.667,63,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,56.667,81,{baseline:middle}',
+            'text,v2_1,96.667,81,{baseline:middle}',
+            'text,v3_1,146.667,81,{baseline:middle}',
+            'text,v1_2,56.667,103,{baseline:middle}',
+            'text,v2_2,96.667,103,{baseline:middle}',
+            'text,v3_2,146.667,103,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,90,55,140,55',
+            'line,90,55,90,71',
+            'line,140,55,140,71',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,55,60,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,71,40,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,90,71,90,91',
+            'line,140,71,140,91',
+            'line,90,91,140,91',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,71,60,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,91,40,24',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,91,50,24',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,91,60,24',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
             // doc.save();
@@ -1175,24 +1567,53 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,16',
-            'setLineWidth,1', 'rect,50,15,50,16',
-            'setLineWidth,1', 'rect,100,15,60,16',
-            'setLineWidth,1', 'rect,10,31,40,20',
-            'setLineWidth,1', 'line,50,31,100,31', 'line,50,31,50,51', 'line,100,31,100,51',
-            'setLineWidth,1', 'rect,100,31,60,20',
-            'setLineWidth,1', 'rect,10,51,40,24',
-            'setLineWidth,1', 'line,50,51,50,75', 'line,100,51,100,75', 'line,50,75,100,75',
-            'setLineWidth,1', 'rect,100,51,60,24',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,96.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F3,146.667,63,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,56.667,81,{baseline:middle}',
+            'text,v2_1,96.667,81,{baseline:middle}',
+            'text,v3_1,146.667,81,{baseline:middle}',
+            'text,v1_2,56.667,103,{baseline:middle}',
+            'text,v2_2,96.667,103,{baseline:middle}',
+            'text,v3_2,146.667,103,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,90,55,50,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,55,60,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,71,40,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,90,71,140,71',
+            'line,90,71,90,91',
+            'line,140,71,140,91',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,71,60,20',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,91,40,24',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,90,91,90,115',
+            'line,140,91,140,115',
+            'line,90,115,140,115',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,91,60,24',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
             // doc.save();
@@ -1228,23 +1649,54 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
-            'setLineWidth,1', 'rect,10,15,40,16',
-            'setLineWidth,1', 'line,50,15,100,15', 'line,50,15,50,31', 'line,100,15,100,31',
-            'setLineWidth,1', 'rect,100,15,60,16',
-            'setLineWidth,1', 'line,10,31,50,31', 'line,10,31,10,51', 'line,10,51,50,51',
-            'setLineWidth,1', 'line,100,31,160,31', 'line,160,31,160,51', 'line,100,51,160,51',
-            'setLineWidth,1', 'rect,10,51,40,24',
-            'setLineWidth,1', 'line,50,51,50,75', 'line,100,51,100,75', 'line,50,75,100,75',
-            'setLineWidth,1', 'rect,100,51,60,24',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,96.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F3,146.667,63,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,56.667,81,{baseline:middle}',
+            'text,v2_1,96.667,81,{baseline:middle}',
+            'text,v3_1,146.667,81,{baseline:middle}',
+            'text,v1_2,56.667,103,{baseline:middle}',
+            'text,v2_2,96.667,103,{baseline:middle}',
+            'text,v3_2,146.667,103,{baseline:middle}',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,55,40,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,90,55,140,55',
+            'line,90,55,90,71',
+            'line,140,55,140,71',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,55,60,16',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,50,71,90,71',
+            'line,50,71,50,91',
+            'line,50,91,90,91',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,140,71,200,71',
+            'line,200,71,200,91',
+            'line,140,91,200,91',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,50,91,40,24',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'line,90,91,90,115',
+            'line,140,91,140,115',
+            'line,90,115,140,115',
+            'setLineWidth,0.6666666666666666',
+            'setDrawColor,128',
+            'rect,140,91,60,24',
+            'setFontSize,16',
+            'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
             // doc.save();
@@ -1278,15 +1730,21 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
+            'setTextColor,128',
+            'setFontSize,10',
+            'text,F1,56.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F2,96.667,63,{baseline:middle}',
+            'setTextColor,128',
+            'text,F3,146.667,63,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,56.667,81,{baseline:middle}',
+            'text,v2_1,96.667,81,{baseline:middle}',
+            'text,v3_1,146.667,81,{baseline:middle}',
+            'text,v1_2,56.667,103,{baseline:middle}',
+            'text,v2_2,96.667,103,{baseline:middle}',
+            'text,v3_2,146.667,103,{baseline:middle}',
+            'setFontSize,16'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
             // doc.save();

@@ -14,9 +14,15 @@ const JSPdfHorizontalAlignTests = {
                 });
 
                 const expectedLog = [
-                    'text,line 1,10,24.2,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line 1,56.667,66.083,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
@@ -39,9 +45,15 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
 
                 const expectedLog = [
-                    'text,line 1,10,24.2,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line 1,56.667,66.083,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -64,9 +76,15 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'center'; };
 
                 const expectedLog = [
-                    'text,line 1,110,24.2,{baseline:middle,align:center}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line 1,150,66.083,{baseline:middle,align:center}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -89,9 +107,15 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'right'; };
 
                 const expectedLog = [
-                    'text,line 1,210,24.2,{baseline:middle,align:right}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line 1,243.333,66.083,{baseline:middle,align:right}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -117,11 +141,15 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,10',
-                    'text,line 1,10,20.75,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,11.5',
-                    'setFontSize,16'
+                    'text,line 1,56.667,66.083,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -147,11 +175,15 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,10',
-                    'text,line 1,110,20.75,{baseline:middle,align:center}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,11.5',
-                    'setFontSize,16'
+                    'text,line 1,150,66.083,{baseline:middle,align:center}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -177,11 +209,15 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,10',
-                    'text,line 1,210,20.75,{baseline:middle,align:right}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,11.5',
-                    'setFontSize,16'
+                    'text,line 1,243.333,66.083,{baseline:middle,align:right}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -207,11 +243,15 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line 1,10,26.5,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,23',
-                    'setFontSize,16'
+                    'text,line 1,56.667,71.833,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,33.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -237,11 +277,15 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line 1,110,26.5,{baseline:middle,align:center}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,23',
-                    'setFontSize,16'
+                    'text,line 1,150,71.833,{baseline:middle,align:center}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,33.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -267,11 +311,15 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line 1,210,26.5,{baseline:middle,align:right}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,23',
-                    'setFontSize,16'
+                    'text,line 1,243.333,71.833,{baseline:middle,align:right}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,33.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -294,9 +342,16 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
 
                 const expectedLog = [
-                    'text,line 1\nlong line 2,10,24.2,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,36.8'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line 1\n' +
+'long line 2,56.667,66.083,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,33.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -319,9 +374,16 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'center'; };
 
                 const expectedLog = [
-                    'text,line 1\nlong line 2,110,24.2,{baseline:middle,align:center}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,36.8'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line 1\n' +
+'long line 2,150,66.083,{baseline:middle,align:center}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,33.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -344,9 +406,16 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'right'; };
 
                 const expectedLog = [
-                    'text,line 1\nlong line 2,210,24.2,{baseline:middle,align:right}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,36.8'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line 1\n' +
+'long line 2,243.333,66.083,{baseline:middle,align:right}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,33.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -372,11 +441,16 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,10',
-                    'text,line 1\nlong line 2,10,20.75,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,23',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2,56.667,66.083,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,33.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -402,11 +476,16 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,10',
-                    'text,line 1\nlong line 2,110,20.75,{baseline:middle,align:center}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,23',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2,150,66.083,{baseline:middle,align:center}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,33.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -432,11 +511,16 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,10',
-                    'text,line 1\nlong line 2,210,20.75,{baseline:middle,align:right}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,23',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2,243.333,66.083,{baseline:middle,align:right}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,33.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -462,11 +546,16 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line 1\nlong line 2,10,26.5,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,46',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2,56.667,71.833,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,56.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -492,11 +581,16 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line 1\nlong line 2,110,26.5,{baseline:middle,align:center}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,46',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2,150,71.833,{baseline:middle,align:center}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,56.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -522,11 +616,16 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line 1\nlong line 2,210,26.5,{baseline:middle,align:right}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,46',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2,243.333,71.833,{baseline:middle,align:right}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,56.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -549,9 +648,17 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
 
                 const expectedLog = [
-                    'text,line 1\nlong line 2\nvery long line 3,10,24.2,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,55.2'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line 1\n' +
+'long line 2\n' +
+'very long line 3,56.667,66.083,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,45.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -574,9 +681,17 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'center'; };
 
                 const expectedLog = [
-                    'text,line 1\nlong line 2\nvery long line 3,110,24.2,{baseline:middle,align:center}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,55.2'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line 1\n' +
+'long line 2\n' +
+'very long line 3,150,66.083,{baseline:middle,align:center}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,45.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -599,9 +714,17 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'right'; };
 
                 const expectedLog = [
-                    'text,line 1\nlong line 2\nvery long line 3,210,24.2,{baseline:middle,align:right}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,55.2'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line 1\n' +
+'long line 2\n' +
+'very long line 3,243.333,66.083,{baseline:middle,align:right}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,45.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -627,11 +750,17 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,10',
-                    'text,line 1\nlong line 2\nvery long line 3,10,20.75,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,34.5',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2\n' +
+'very long line 3,56.667,66.083,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,45.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -657,11 +786,17 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,10',
-                    'text,line 1\nlong line 2\nvery long line 3,110,20.75,{baseline:middle,align:center}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,34.5',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2\n' +
+'very long line 3,150,66.083,{baseline:middle,align:center}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,45.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -687,11 +822,17 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,10',
-                    'text,line 1\nlong line 2\nvery long line 3,210,20.75,{baseline:middle,align:right}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,34.5',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2\n' +
+'very long line 3,243.333,66.083,{baseline:middle,align:right}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,45.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -717,11 +858,17 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line 1\nlong line 2\nvery long line 3,10,26.5,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,69',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2\n' +
+'very long line 3,56.667,71.833,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,79.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -747,11 +894,17 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line 1\nlong line 2\nvery long line 3,110,26.5,{baseline:middle,align:center}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,69',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2\n' +
+'very long line 3,150,71.833,{baseline:middle,align:center}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,79.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -777,11 +930,17 @@ const JSPdfHorizontalAlignTests = {
                 };
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line 1\nlong line 2\nvery long line 3,210,26.5,{baseline:middle,align:right}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,69',
-                    'setFontSize,16'
+                    'text,line 1\n' +
+'long line 2\n' +
+'very long line 3,243.333,71.833,{baseline:middle,align:right}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,79.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -806,12 +965,19 @@ const JSPdfHorizontalAlignTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,210,24.2,{baseline:middle,align:right}',
-                    'text,1,210,42.6,{baseline:middle,align:right}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,200,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,243.333,66.083,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,1,243.333,88.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,77.167,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
@@ -832,12 +998,19 @@ const JSPdfHorizontalAlignTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,110,24.2,{baseline:middle,align:center}',
-                    'text,1,110,42.6,{baseline:middle,align:center}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,200,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,150,66.083,{baseline:middle,align:center}',
+                    'setTextColor,#000000',
+                    'text,1,150,88.25,{baseline:middle,align:center}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,77.167,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
@@ -860,12 +1033,19 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,{baseline:middle,align:left}',
-                    'text,1,10,42.6,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,200,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,{baseline:middle,align:left}',
+                    'setTextColor,#000000',
+                    'text,1,56.667,88.25,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,77.167,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
@@ -886,12 +1066,19 @@ const JSPdfHorizontalAlignTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,24.2,{baseline:middle,align:left}',
-                    'text,f1_1,10,42.6,{baseline:middle,align:left}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,200,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,56.667,66.083,{baseline:middle,align:left}',
+                    'setTextColor,#000000',
+                    'text,f1_1,56.667,88.25,{baseline:middle,align:left}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,77.167,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
@@ -912,12 +1099,19 @@ const JSPdfHorizontalAlignTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,110,24.2,{baseline:middle,align:center}',
-                    'text,f1_1,110,42.6,{baseline:middle,align:center}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,200,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,150,66.083,{baseline:middle,align:center}',
+                    'setTextColor,#000000',
+                    'text,f1_1,150,88.25,{baseline:middle,align:center}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,77.167,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
@@ -940,12 +1134,19 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'right'; };
 
                 const expectedLog = [
-                    'text,F1,210,24.2,{baseline:middle,align:right}',
-                    'text,f1_1,210,42.6,{baseline:middle,align:right}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,200,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,F1,243.333,66.083,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,f1_1,243.333,88.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,200,22.167',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,77.167,200,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {

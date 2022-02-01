@@ -12,9 +12,15 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1,10,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1,56.667,85,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,60',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -34,9 +40,15 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,18.4'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1,56.667,66.083,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,22.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -55,11 +67,15 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1,10,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
+                    'text,line1,56.667,85,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -80,11 +96,15 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
+                    'text,line1,56.667,71.833,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,33.667',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -104,11 +124,15 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1,15,31.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,33',
-                    'setFontSize,16'
+                    'text,line1,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => {
@@ -131,9 +155,16 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2,10,35.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2,56.667,79.25,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,60',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -153,9 +184,16 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,36.8'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2,56.667,66.083,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,33.667',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -174,11 +212,16 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2,10,33.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
+                    'text,line1\n' +
+'line2,56.667,73.5,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -199,11 +242,16 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,46',
+                    'text,line1\n' +
+'line2,56.667,71.833,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,56.667',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -223,11 +271,16 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2,15,31.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,56',
-                    'setFontSize,16'
+                    'text,line1\n' +
+'line2,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,56',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => {
@@ -251,9 +304,17 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3,10,36.6,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,80'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3,56.667,83.5,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,80',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -273,9 +334,17 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,55.2'
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3,56.667,66.083,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,45.167',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -294,11 +363,17 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,10,32,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,80',
+                    'text,line1\n' +
+'line2\n' +
+'line3,56.667,72,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,80',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -319,11 +394,17 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,69',
+                    'text,line1\n' +
+'line2\n' +
+'line3,56.667,71.833,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,79.667',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -343,11 +424,17 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,15,31.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,79',
-                    'setFontSize,16'
+                    'text,line1\n' +
+'line2\n' +
+'line3,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,79',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => {
@@ -374,14 +461,21 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1,10,45,{baseline:middle}',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1,56.667,85,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1,110,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,line1,156.667,85,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -409,14 +503,21 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1,10,26.5,{baseline:middle}',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1,56.667,71.833,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1,110,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
-                    'setLineWidth,1',
-                    'rect,110,15,100,23',
+                    'text,line1,156.667,71.833,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,33.667',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,33.667',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -443,15 +544,21 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1,10,45,{baseline:middle}',
+                    'text,line1,56.667,85,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,30',
-                    'text,line1,110,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,line1,156.667,85,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -481,15 +588,21 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1,10,32.25,{baseline:middle}',
+                    'text,line1,56.667,77.583,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,30',
-                    'text,line1,110,32.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,34.5',
-                    'setLineWidth,1',
-                    'rect,110,15,100,34.5',
+                    'text,line1,156.667,77.583,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,45.167',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,45.167',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -518,15 +631,21 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1,15,37.25,{baseline:middle}',
+                    'text,line1,55,77.25,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,30',
-                    'text,line1,115,37.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,44.5',
-                    'setLineWidth,1',
-                    'rect,110,15,100,44.5',
-                    'setFontSize,16'
+                    'text,line1,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,44.5',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,44.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -556,14 +675,23 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2,10,35.8,{baseline:middle}',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2,56.667,79.25,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2,110,33.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,line1\n' +
+'line2,156.667,73.5,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -591,14 +719,23 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2,10,28.8,{baseline:middle}',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2,56.667,77.583,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2,110,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,46',
-                    'setLineWidth,1',
-                    'rect,110,15,100,46',
+                    'text,line1\n' +
+'line2,156.667,71.833,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,56.667',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,56.667',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -625,15 +762,23 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2,10,33.5,{baseline:middle}',
+                    'text,line1\n' +
+'line2,56.667,73.5,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,30',
-                    'text,line1\nline2,110,27.75,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,line1\n' +
+'line2,156.667,67.75,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -663,15 +808,23 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2,10,38,{baseline:middle}',
+                    'text,line1\n' +
+'line2,56.667,83.333,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,30',
-                    'text,line1\nline2,110,32.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,69',
-                    'setLineWidth,1',
-                    'rect,110,15,100,69',
+                    'text,line1\n' +
+'line2,156.667,77.583,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,79.667',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,79.667',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -700,15 +853,23 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2,15,43,{baseline:middle}',
+                    'text,line1\n' +
+'line2,55,83,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,30',
-                    'text,line1\nline2,115,37.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,79',
-                    'setLineWidth,1',
-                    'rect,110,15,100,79',
-                    'setFontSize,16'
+                    'text,line1\n' +
+'line2,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,79',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,79',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -738,14 +899,25 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3,10,36.6,{baseline:middle}',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3,56.667,83.5,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,110,32,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,80',
-                    'setLineWidth,1',
-                    'rect,110,15,100,80',
+                    'text,line1\n' +
+'line2\n' +
+'line3,156.667,72,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,80',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,80',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -773,14 +945,25 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3,10,31.1,{baseline:middle}',
+                    'setTextColor,128',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3,56.667,83.333,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,110,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,69',
-                    'setLineWidth,1',
-                    'rect,110,15,100,69',
+                    'text,line1\n' +
+'line2\n' +
+'line3,156.667,71.833,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,79.667',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,79.667',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -807,15 +990,25 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,10,37,{baseline:middle}',
+                    'text,line1\n' +
+'line2\n' +
+'line3,56.667,77,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,30',
-                    'text,line1\nline2\nline3,110,25.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,90',
-                    'setLineWidth,1',
-                    'rect,110,15,100,90',
+                    'text,line1\n' +
+'line2\n' +
+'line3,156.667,65.5,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,90',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,90',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 90; };
@@ -845,15 +1038,25 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,10,43.75,{baseline:middle}',
+                    'text,line1\n' +
+'line2\n' +
+'line3,56.667,89.083,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,30',
-                    'text,line1\nline2\nline3,110,32.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,103.5',
-                    'setLineWidth,1',
-                    'rect,110,15,100,103.5',
+                    'text,line1\n' +
+'line2\n' +
+'line3,156.667,77.583,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,114.167',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,114.167',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -882,15 +1085,25 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,128',
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,15,48.75,{baseline:middle}',
+                    'text,line1\n' +
+'line2\n' +
+'line3,55,88.75,{baseline:middle}',
+                    'setTextColor,128',
                     'setFontSize,30',
-                    'text,line1\nline2\nline3,115,37.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,113.5',
-                    'setLineWidth,1',
-                    'rect,110,15,100,113.5',
-                    'setFontSize,16'
+                    'text,line1\n' +
+'line2\n' +
+'line3,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,50,55,100,113.5',
+                    'setLineWidth,0.6666666666666666',
+                    'setDrawColor,128',
+                    'rect,150,55,100,113.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
