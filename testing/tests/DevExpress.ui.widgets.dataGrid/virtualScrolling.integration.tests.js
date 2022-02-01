@@ -9,6 +9,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable.js';
 import $ from 'jquery';
+import pointerMock from '../../helpers/pointerMock.js';
 
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
@@ -4998,7 +4999,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     QUnit.test('Inserted row should not hide existing rows (T1052464)', function(assert) {
         // arrange
         createDataGrid({
-            dataSource: [ { value: 'value 1' }, { value: 'value 2' }],
+            dataSource: [{ value: 'value 1' }, { value: 'value 2' }],
             editing: {
                 allowAdding: true,
             },
@@ -5662,7 +5663,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal($newRow.length, 1, 'the second new row is rendered');
-        assert.strictEqual($($newRow.get(0)).attr('aria-rowindex'), '51', 'the second new row index');
+        assert.strictEqual($($newRow.get(0)).attr('aria-rowindex'), '52', 'the second new row index');
 
         // act
         scrollTo([1960, 2600, 3300, 3400, 3500]);
@@ -5670,7 +5671,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal($newRow.length, 1, 'the third new row is rendered');
-        assert.strictEqual($newRow.attr('aria-rowindex'), '101', 'the third new row index');
+        assert.strictEqual($newRow.attr('aria-rowindex'), '102', 'the third new row index');
     });
 
     QUnit.test('New mode. Detail rows should be rendered', function(assert) {
@@ -6182,5 +6183,149 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.equal(spyLoad.callCount, 7, 'load count is not changed after scrolling up');
         assert.equal(spyLoad.args[spyLoad.callCount - 1][0].skip, 120, 'skip is not changed after scrolling up');
         assert.equal(spyLoad.args[spyLoad.callCount - 1][0].take, 20, 'take is not changed after scrolling up');
+    });
+
+    QUnit.test('Scroll position is reset after sorting (T1059242)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 50; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`,
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            remoteOperations: true,
+            scrolling: {
+                mode: 'infinite',
+                useNative: false
+            },
+            height: 500
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 500 });
+        this.clock.tick(300);
+        dataGrid.getScrollable().scrollTo({ top: 1500 });
+        this.clock.tick(300);
+        dataGrid.getScrollable().scrollTo({ top: 2000 });
+        this.clock.tick(300);
+        const visibleRows = dataGrid.getVisibleRows();
+        const prevScrollPosition = dataGrid.getScrollable().scrollTop();
+
+        // assert
+        assert.equal(visibleRows[visibleRows.length - 1].key, 50, 'last visible row key');
+
+        // act
+        dataGrid.columnOption(1, { sortIndex: 0, sortOrder: 'asc' });
+        this.clock.tick(300);
+
+
+        // assert
+        assert.ok(dataGrid.getScrollable().scrollTop() < prevScrollPosition, 'top scroll position after sorting');
+    });
+
+    QUnit.test('Scroll position is reset after grouping (T1059242)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 50; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`,
+                    category: `Category ${Math.floor(i / 5)}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            remoteOperations: true,
+            scrolling: {
+                mode: 'infinite',
+                useNative: false
+            },
+            height: 500
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 500 });
+        this.clock.tick(300);
+        dataGrid.getScrollable().scrollTo({ top: 1500 });
+        this.clock.tick(300);
+        dataGrid.getScrollable().scrollTo({ top: 2000 });
+        this.clock.tick(300);
+        const visibleRows = dataGrid.getVisibleRows();
+        const prevScrollPosition = dataGrid.getScrollable().scrollTop();
+
+        // assert
+        assert.equal(visibleRows[visibleRows.length - 1].key, 50, 'last visible row key');
+
+        // act
+        dataGrid.columnOption(2, { groupIndex: 0 });
+        this.clock.tick(300);
+
+
+        // assert
+        assert.ok(dataGrid.getScrollable().scrollTop() < prevScrollPosition, 'top scroll position after sorting');
+    });
+
+    QUnit.test('Rows should be selected correctly (T1059242)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 50; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            remoteOperations: true,
+            scrolling: {
+                mode: 'infinite',
+                useNative: false
+            },
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'always'
+            },
+            height: 500
+        });
+
+        this.clock.tick(300);
+
+        // act
+        $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(3)').trigger('dxclick');
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [4], 'selected key');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 500 });
+        this.clock.tick(300);
+        const pointer = pointerMock($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(3)'));
+        pointer.start({ shiftKey: true }).down().up();
+        const selectedKeys = devices.real().ios ? [4, 11, 10, 9, 8, 7, 6, 5] : [4, 12, 11, 10, 9, 8, 7, 6, 5];
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), selectedKeys, 'selected keys after scroll');
     });
 });
