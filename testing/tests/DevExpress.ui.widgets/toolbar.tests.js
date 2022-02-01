@@ -773,84 +773,96 @@ QUnit.module('disabled state', () => {
 
     [true, false, undefined, 'not declared'].forEach((isToolbarDisabled) => {
         [true, false, undefined, 'not declared'].forEach((isWidgetDisabled) => {
-            [true, false, undefined].forEach((isToolbarDisabledNew) => {
-                [true, false, undefined].forEach((isWidgetDisabledNew) => {
-                    ['never', 'always'].forEach((locateInMenu) => {
-                        [
-                            { widget: 'dxAutocomplete', focusableElementSelector: '.dx-autocomplete .dx-texteditor-input' },
-                            { widget: 'dxButton', focusableElementSelector: '.dx-button:not(.dx-dropdownmenu-button)' },
-                            { widget: 'dxCheckBox', focusableElementSelector: '.dx-checkbox' },
-                            { widget: 'dxDateBox', focusableElementSelector: '.dx-datebox .dx-texteditor-input' },
-                            { widget: 'dxMenu', focusableElementSelector: '.dx-menu' },
-                            { widget: 'dxSelectBox', focusableElementSelector: '.dx-selectbox .dx-texteditor-input' },
-                            { widget: 'dxTabs', focusableElementSelector: '.dx-tabs' },
-                            { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },
-                            { widget: 'dxButtonGroup', focusableElementSelector: '.dx-buttongroup' },
-                            { widget: 'dxDropDownButton', focusableElementSelector: '.dx-dropdownbutton .dx-buttongroup' }
-                        ].forEach(({ widget, focusableElementSelector }) => {
-                            QUnit.test(`Disabled state for nested widgets, locateInMenu: ${locateInMenu}, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].options.disabled=${isWidgetDisabled} -> items[${widget}].options.disabled=${isWidgetDisabledNew} -> toolbar.disabled=${isToolbarDisabledNew}`, function() {
-                                const toolbarOptions = {
-                                    items: [{
-                                        location: 'after',
-                                        locateInMenu,
-                                        widget,
-                                    }]
-                                };
+            ['never', 'always'].forEach((locateInMenu) => {
+                [
+                    { widget: 'dxAutocomplete', focusableElementSelector: '.dx-autocomplete .dx-texteditor-input' },
+                    { widget: 'dxButton', focusableElementSelector: '.dx-button:not(.dx-dropdownmenu-button)' },
+                    { widget: 'dxCheckBox', focusableElementSelector: '.dx-checkbox' },
+                    { widget: 'dxDateBox', focusableElementSelector: '.dx-datebox .dx-texteditor-input' },
+                    { widget: 'dxMenu', focusableElementSelector: '.dx-menu' },
+                    { widget: 'dxSelectBox', focusableElementSelector: '.dx-selectbox .dx-texteditor-input' },
+                    { widget: 'dxTabs', focusableElementSelector: '.dx-tabs' },
+                    { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },
+                    { widget: 'dxButtonGroup', focusableElementSelector: '.dx-buttongroup' },
+                    { widget: 'dxDropDownButton', focusableElementSelector: '.dx-dropdownbutton .dx-buttongroup' }
+                ].forEach(({ widget, focusableElementSelector }) => {
+                    QUnit.test(`Disabled state for nested widgets, locateInMenu: ${locateInMenu}, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].options.disabled=${isWidgetDisabled} -> change items[${widget}].options.disabled -> change toolbar.disabled`, function() {
+                        const toolbarOptions = {
+                            items: [{
+                                location: 'after',
+                                locateInMenu,
+                                widget,
+                            }]
+                        };
 
-                                if(isToolbarDisabled !== 'not declared') {
-                                    toolbarOptions.disabled = isToolbarDisabled;
-                                }
-                                if(isWidgetDisabled !== 'not declared') {
-                                    toolbarOptions.items[0].options = { disabled: isWidgetDisabled };
-                                }
+                        if(isToolbarDisabled !== 'not declared') {
+                            toolbarOptions.disabled = isToolbarDisabled;
+                        }
+                        if(isWidgetDisabled !== 'not declared') {
+                            toolbarOptions.items[0].options = { disabled: isWidgetDisabled };
+                        }
 
-                                const toolbar = $('#toolbar').dxToolbar(toolbarOptions).dxToolbar('instance');
+                        const toolbar = $('#toolbar').dxToolbar(toolbarOptions).dxToolbar('instance');
 
+                        openDropDownMenuIfExist(toolbar);
+                        checkDisabledState(toolbar, widget, isToolbarDisabled, isWidgetDisabled, focusableElementSelector);
+
+                        let currentToolbarDisabledState = isToolbarDisabled;
+                        [true, false, undefined].forEach((newWidgetDisabledValue) => {
+                            [true, false, undefined].forEach((newToolbarDisabledValue) => {
+
+                                toolbar.option('items[0].options.disabled', newWidgetDisabledValue);
+                                checkDisabledState(toolbar, widget, currentToolbarDisabledState, newWidgetDisabledValue, focusableElementSelector);
+
+                                currentToolbarDisabledState = newToolbarDisabledValue;
+
+                                toolbar.option('disabled', newToolbarDisabledValue);
                                 openDropDownMenuIfExist(toolbar);
-                                checkDisabledState(toolbar, widget, isToolbarDisabled, isWidgetDisabled, focusableElementSelector);
-
-                                toolbar.option('items[0].options.disabled', isWidgetDisabledNew);
-
-                                checkDisabledState(toolbar, widget, isToolbarDisabled, isWidgetDisabledNew, focusableElementSelector);
-
-                                toolbar.option('disabled', isToolbarDisabledNew);
-
-                                openDropDownMenuIfExist(toolbar);
-                                checkDisabledState(toolbar, widget, isToolbarDisabledNew, isWidgetDisabledNew, focusableElementSelector);
-                            });
-
-
-                            QUnit.test(`Disabled state for nested widgets, locateInMenu: ${locateInMenu}, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].options.disabled=${isWidgetDisabled} -> toolbar.disabled=${isToolbarDisabledNew} -> items[${widget}].options.disabled=${isWidgetDisabledNew}`, function() {
-                                const toolbarOptions = {
-                                    items: [{
-                                        location: 'after',
-                                        locateInMenu,
-                                        widget,
-                                    }]
-                                };
-
-                                if(isToolbarDisabled !== 'not declared') {
-                                    toolbarOptions.disabled = isToolbarDisabled;
-                                }
-                                if(isWidgetDisabled !== 'not declared') {
-                                    toolbarOptions.items[0].options = { disabled: isWidgetDisabled };
-                                }
-
-                                const toolbar = $('#toolbar').dxToolbar(toolbarOptions).dxToolbar('instance');
-
-                                openDropDownMenuIfExist(toolbar);
-                                checkDisabledState(toolbar, widget, isToolbarDisabled, isWidgetDisabled, focusableElementSelector);
-
-                                toolbar.option('disabled', isToolbarDisabledNew);
-
-                                openDropDownMenuIfExist(toolbar);
-                                checkDisabledState(toolbar, widget, isToolbarDisabledNew, isWidgetDisabled, focusableElementSelector);
-
-                                toolbar.option('items[0].options.disabled', isWidgetDisabledNew);
-
-                                checkDisabledState(toolbar, widget, isToolbarDisabledNew, isWidgetDisabledNew, focusableElementSelector);
+                                checkDisabledState(toolbar, widget, newToolbarDisabledValue, newWidgetDisabledValue, focusableElementSelector);
                             });
                         });
+                    });
+
+
+                    QUnit.test(`Disabled state for nested widgets, locateInMenu: ${locateInMenu}, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].options.disabled=${isWidgetDisabled} -> change toolbar.disabled -> change items[${widget}].options.disabled`, function() {
+                        const toolbarOptions = {
+                            items: [{
+                                location: 'after',
+                                locateInMenu,
+                                widget,
+                            }]
+                        };
+
+                        if(isToolbarDisabled !== 'not declared') {
+                            toolbarOptions.disabled = isToolbarDisabled;
+                        }
+                        if(isWidgetDisabled !== 'not declared') {
+                            toolbarOptions.items[0].options = { disabled: isWidgetDisabled };
+                        }
+
+                        const toolbar = $('#toolbar').dxToolbar(toolbarOptions).dxToolbar('instance');
+
+                        openDropDownMenuIfExist(toolbar);
+                        checkDisabledState(toolbar, widget, isToolbarDisabled, isWidgetDisabled, focusableElementSelector);
+
+                        let currentWidgetDisabledState = isWidgetDisabled;
+                        [true, false, undefined].forEach((newToolbarDisabledValue) => {
+                            [true, false, undefined].forEach((newWidgetDisabledValue) => {
+
+                                toolbar.option('disabled', newToolbarDisabledValue);
+                                openDropDownMenuIfExist(toolbar);
+                                checkDisabledState(toolbar, widget, newToolbarDisabledValue, currentWidgetDisabledState, focusableElementSelector);
+
+                                currentWidgetDisabledState = newWidgetDisabledValue;
+                                toolbar.option('items[0].options.disabled', newWidgetDisabledValue);
+                                checkDisabledState(toolbar, widget, newToolbarDisabledValue, newWidgetDisabledValue, focusableElementSelector);
+                            });
+                        });
+                    });
+                });
+
+                [true, false, undefined].forEach((isToolbarDisabledNew) => {
+                    [true, false, undefined].forEach((isWidgetDisabledNew) => {
 
                         QUnit.test(`new dxToolbar({
                             toolbar.disabled:${isToolbarDisabled},
