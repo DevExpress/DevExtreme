@@ -2,7 +2,7 @@ import { isDefined, isObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { calculateTextHeight, convertToUsedPDFUnit } from './pdf_utils_v3';
 
-const defaultBorderLineWidth = 0.5;
+const defaultBorderLineWidth = 9 / 20;
 
 function roundToThreeDecimals(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%

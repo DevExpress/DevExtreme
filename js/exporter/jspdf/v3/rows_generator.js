@@ -30,10 +30,13 @@ import { convertToUsedPDFUnit } from './pdf_utils_v3';
 // ]
 
 const defaultStyles = {
-    header: { textColor: 128, borderColor: 128, font: { size: 10 } },
-    group: { borderColor: 128, font: { size: 10, style: 'bold' } },
-    data: { borderColor: 128, font: { size: 10 } }
+    header: { font: { size: 10 }, textColor: 128, borderColor: 128 },
+    group: { font: { style: 'bold', size: 10 }, borderColor: 128 },
+    data: { font: { size: 10 }, borderColor: 128 },
+    groupFooter: { font: { style: 'bold', size: 10 }, borderColor: 128 },
+    totalFooter: { font: { style: 'bold', size: 10 }, borderColor: 128 },
 };
+
 
 function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
     const result = [];
@@ -81,12 +84,7 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
             horizontalAlign: columns[cellIndex].alignment ?? 'left',
             wordWrapEnabled,
             backgroundColor,
-            padding: {
-                top: convertToUsedPDFUnit(doc, 4),
-                right: convertToUsedPDFUnit(doc, 5),
-                bottom: convertToUsedPDFUnit(doc, 4),
-                left: convertToUsedPDFUnit(doc, 5),
-            },
+            padding: convertToUsedPDFUnit(doc, 4),
             _rect: {}
         };
 
