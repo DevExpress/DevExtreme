@@ -277,6 +277,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                     storeLoadOptions.skip += this._totalCountCorrection;
                 }
             }
+
             return this.callBase.apply(this, arguments);
         },
         dispose: function() {
@@ -1088,7 +1089,15 @@ export const virtualScrollingModule = {
                             this._updateLoadViewportParams();
 
                             let result = items;
-                            this._allItems = items;
+                            if(isAppendMode(this)) {
+                                this._appendItems(items);
+                                if(this._allItems) {
+                                    this._itemCount = this._allItems.filter(item => isItemCountableByDataSource(item, this._dataSource)).length;
+                                }
+                            } else {
+                                this._allItems = items;
+                            }
+
                             if(items.length) {
                                 const { skipForCurrentPage } = this.getLoadPageParams(true);
                                 const skip = items[0].loadIndex + skipForCurrentPage;
@@ -1108,6 +1117,38 @@ export const virtualScrollingModule = {
                         }
 
                         return this.callBase.apply(this, arguments);
+                    },
+                    _appendItems: function(items) {
+                        if(!this._allItems || !items.length) {
+                            this._allItems = items;
+                        } else {
+                            const firstLoadIndex = items[0].loadIndex;
+                            const lastLoadIndex = items[items.length - 1].loadIndex;
+                            let startIndex = -1;
+                            let endIndex = -1;
+
+                            for(let i = 0; i < this._allItems.length; i++) {
+                                if(startIndex === -1 && this._allItems[i].loadIndex === firstLoadIndex) {
+                                    startIndex = i;
+                                }
+                                if(this._allItems[i].loadIndex === lastLoadIndex) {
+                                    endIndex = endIndex !== -1 ? endIndex + 1 : i;
+                                }
+                                if(this._allItems[i].loadIndex > lastLoadIndex) {
+                                    break;
+                                }
+                            }
+
+                            if(startIndex === -1) {
+                                this._allItems = [...this._allItems, ...items];
+                            } else {
+                                this._allItems = [
+                                    ...startIndex > 0 ? this._allItems.slice(0, startIndex) : [],
+                                    ...items,
+                                    ...endIndex > 0 ? this._allItems.slice(endIndex + 1) : []
+                                ];
+                            }
+                        }
                     },
                     _applyChange: function(change) {
                         const that = this;
@@ -1179,7 +1220,7 @@ export const virtualScrollingModule = {
                                 offset = rowsScrollController.beginPageIndex() * rowsScrollController.pageSize();
                             }
                         } else if(virtualPaging && newMode && dataSource) {
-                            offset = dataSource.lastLoadOptions().skip ?? 0;
+                            offset = !isAppendMode(this) ? dataSource.lastLoadOptions().skip : 0;
                         } else if(isVirtualMode(this) && dataSource) {
                             offset = dataSource.beginPageIndex() * dataSource.pageSize();
                         }
@@ -1461,7 +1502,11 @@ export const virtualScrollingModule = {
 
                         const { operationTypes } = e;
                         if(this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this) && operationTypes) {
-                            if(e.isDataChanged && operationTypes.pageIndex && !operationTypes.fullReload) {
+                            const appendMode = isAppendMode(this);
+                            const { fullReload, pageIndex, sorting, grouping } = operationTypes;
+                            const sortingOrGroupingInAppendMode = appendMode && (sorting || grouping);
+
+                            if(e.isDataChanged && !fullReload && (pageIndex || sortingOrGroupingInAppendMode)) {
                                 this._updateVisiblePageIndex(this._dataSource.pageIndex());
                             }
                         }
@@ -1495,6 +1540,17 @@ export const virtualScrollingModule = {
                     reset: function() {
                         this._itemCount = 0;
                         this._allItems = null;
+                        this.callBase.apply(this, arguments);
+                    },
+                    _handleColumnsChanged: function(e) {
+                        const { sorting, grouping } = e.changeTypes;
+
+                        if(!this.option(LEGACY_SCROLLING_MODE) && isAppendMode(this) && (sorting || grouping)) {
+                            this._allItems = null;
+                            this._rowsScrollController.reset();
+                            this._dataSource.pageIndex(0);
+                        }
+
                         this.callBase.apply(this, arguments);
                     }
                 };
