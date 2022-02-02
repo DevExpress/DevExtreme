@@ -3,6 +3,7 @@ import Quill from 'devextreme-quill';
 import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
 import { getWindow } from '../../../core/utils/window';
+import eventsEngine from '../../../events/core/events_engine';
 
 import BaseModule from './base';
 
@@ -31,6 +32,7 @@ if(Quill) {
             this.options = extend({}, this._getDefaultOptions(), options);
             this._popup = this.renderPopup();
             this._popup.$wrapper().addClass(SUGGESTION_LIST_WRAPPER_CLASS);
+            this._preventFocusOut();
         }
 
         renderList($container, options) {
@@ -98,6 +100,12 @@ if(Quill) {
 
                 this.insertEmbedContent(e);
             }
+        }
+
+        _preventFocusOut() {
+            eventsEngine.on(this._popup.$wrapper(), 'mousedown', (e) => {
+                e.preventDefault();
+            });
         }
 
         insertEmbedContent(selectionChangedEvent) { }
