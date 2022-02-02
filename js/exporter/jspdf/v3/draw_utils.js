@@ -1,8 +1,8 @@
 import { isDefined, isObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { calculateTextHeight, convertToUsedPDFUnit } from './pdf_utils_v3';
+import { calculateTextHeight } from './pdf_utils_v3';
 
-const defaultBorderLineWidth = 9 / 20;
+const defaultBorderLineWidth = 0.5;
 
 function roundToThreeDecimals(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
@@ -165,7 +165,7 @@ function setTextStyles(doc, { textColor, font }, docStyles) {
 }
 
 function setLinesStyles(doc, { borderColor }, docStyles) {
-    doc.setLineWidth(convertToUsedPDFUnit(doc, defaultBorderLineWidth));
+    doc.setLineWidth(defaultBorderLineWidth);
     const currentBorderColor = isDefined(borderColor) ? borderColor : docStyles.borderColor;
     if(currentBorderColor !== doc.getDrawColor()) {
         callMethodWithColorParameter(doc, 'setDrawColor', currentBorderColor);

@@ -14,27 +14,27 @@ const JSPdfCustomDrawCellTests = {
 
                 const customDrawCell = ({ doc, rect, pdfCell, gridCell, cancel }) => {
                     const expectedRect = pdfCell.text === 'f1'
-                        ? { h: 22.166666666666664, w: 250, x: 50, y: 50 }
-                        : { h: 22.166666666666664, w: 250, x: 300, y: 50 };
+                        ? { h: 21.5, w: 250, x: 50, y: 50 }
+                        : { h: 21.5, w: 250, x: 300, y: 50 };
 
                     assert.equal(doc, pdfDoc, 'doc object is correct');
                     assert.deepEqual(rect, expectedRect, 'rect is correct');
 
                     assert.deepEqual(pdfCell, {
                         backgroundColor: undefined,
-                        borderColor: 128,
+                        borderColor: '#979797',
                         font: {
                             size: 10
                         },
                         horizontalAlign: 'left',
                         padding: {
-                            bottom: 5.333333333333333,
-                            left: 5.333333333333333,
-                            right: 5.333333333333333,
-                            top: 5.333333333333333
+                            bottom: 5,
+                            left: 5,
+                            right: 5,
+                            top: 5
                         },
                         text: pdfCell.text === 'f1' ? 'f1' : 'f2',
-                        textColor: 128,
+                        textColor: '#979797',
                         verticalAlign: 'middle',
                         wordWrapEnabled: false
                     }, 'pdfCell is correct');
@@ -68,15 +68,15 @@ const JSPdfCustomDrawCellTests = {
                     arg.cancel = arg.pdfCell.text === 'f1';
                 };
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,f2,305.333,61.083,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,50,250,22.167',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,300,50,250,22.167',
+                    'text,f2,305,60.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,50,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,50,250,21.5',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -102,15 +102,15 @@ const JSPdfCustomDrawCellTests = {
                     arg.cancel = arg.pdfCell.text === 'f2';
                 };
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,f1,55.333,61.083,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,50,250,22.167',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,300,50,250,22.167',
+                    'text,f1,55,60.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,50,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,50,250,21.5',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -134,17 +134,17 @@ const JSPdfCustomDrawCellTests = {
 
                 const customDrawCell = () => { };
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,f1,55.333,61.083,{baseline:middle}',
-                    'setTextColor,128',
-                    'text,f2,305.333,61.083,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,50,250,22.167',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,300,50,250,22.167',
+                    'text,f1,55,60.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f2,305,60.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,50,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,50,250,21.5',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -179,22 +179,22 @@ const JSPdfCustomDrawCellTests = {
 
                 const expectedLog = [
                     'setFillColor,#880000',
-                    'rect,50,50,250,22.166666666666664,F',
+                    'rect,50,50,250,21.5,F',
                     'setFillColor,#808080',
-                    'rect,50,50,250,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,50,250,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,f1,55.333,61.083,{baseline:middle}',
+                    'text,f1,55,60.75,{baseline:middle}',
                     'setFillColor,#880000',
-                    'rect,300,50,250,22.166666666666664,F',
-                    'setTextColor,128',
-                    'text,f2,305.333,61.083,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,50,250,22.167',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,300,50,250,22.167',
+                    'rect,300,50,250,21.5,F',
+                    'setTextColor,#979797',
+                    'text,f2,305,60.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,50,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,50,250,21.5',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -224,19 +224,19 @@ const JSPdfCustomDrawCellTests = {
                 const expectedLog = [
                     'setFillColor,#880000',
                     'setTextColor,#880000',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,f1,55.333,61.083,{baseline:middle}',
+                    'text,f1,55,60.75,{baseline:middle}',
                     'setFillColor,#880000',
                     'setTextColor,#880000',
-                    'setTextColor,128',
-                    'text,f2,305.333,61.083,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,50,250,22.167',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,300,50,250,22.167',
+                    'setTextColor,#979797',
+                    'text,f2,305,60.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,50,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,50,250,21.5',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'

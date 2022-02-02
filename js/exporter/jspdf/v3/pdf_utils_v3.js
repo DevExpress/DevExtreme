@@ -1,11 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
 
-function convertToUsedPDFUnit(doc, value) {
-    const magic_pixel_size = 3 / 4; // https://github.com/parallax/jsPDF/blob/master/src/jspdf.js#L3227
-    const coefficient = doc.internal.scaleFactor * magic_pixel_size;
-    return value / coefficient;
-}
-
 function getPageWidth(doc) {
     return doc.internal.pageSize.getWidth();
 }
@@ -85,4 +79,4 @@ function applyWordWrap(doc, rowsInfo, options) {
     });
 }
 
-export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth, getPageHeight, applyWordWrap, convertToUsedPDFUnit };
+export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth, getPageHeight, applyWordWrap };

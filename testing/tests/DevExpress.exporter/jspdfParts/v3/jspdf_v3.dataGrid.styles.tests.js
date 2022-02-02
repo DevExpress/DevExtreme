@@ -34,17 +34,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -72,17 +72,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,128',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -114,17 +114,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128,128,128',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,128,128,128',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -156,17 +156,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,0,0,1,0',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,0,0,1,0',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -205,17 +205,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#ffff00',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -250,17 +250,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -295,17 +295,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128,128,128',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -340,17 +340,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,0,0,1,0',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -385,19 +385,19 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setFillColor,#ffff00',
-                    'rect,50,77.167,90,22.167,F',
+                    'rect,50,76.5,90,21.5,F',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -432,19 +432,19 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setFillColor,128',
-                    'rect,50,77.167,90,22.167,F',
+                    'rect,50,76.5,90,21.5,F',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -479,19 +479,19 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setFillColor,255,255,0',
-                    'rect,50,77.167,90,22.167,F',
+                    'rect,50,76.5,90,21.5,F',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -526,19 +526,19 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,50,55,90,22.167,F',
-                    'setTextColor,128',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,140,55,80,22.167,F',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setFillColor,0,0,1,0',
-                    'rect,50,77.167,90,22.167,F',
+                    'rect,50,76.5,90,21.5,F',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -578,12 +578,12 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'setTextColor,#0000ff',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -619,12 +619,12 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'setTextColor,128',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -660,12 +660,12 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'setTextColor,0,0,255',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -701,12 +701,12 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'setTextColor,0,0,1,0',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -740,15 +740,15 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,#0000ff',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16',
                     'setTextColor,#000000'
                 ];
@@ -783,15 +783,15 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,128',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16',
                     'setTextColor,#000000'
                 ];
@@ -826,15 +826,15 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,0,0,255',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16',
                     'setTextColor,#000000'
                 ];
@@ -869,15 +869,15 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,0,0,1,0',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16',
                     'setTextColor,#000000'
                 ];
@@ -917,13 +917,13 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'setTextColor,128',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
-                    'setTextColor,128',
-                    'text,F2,145.333,66.083,',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,0,0,255',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16',
                     'setTextColor,#000000'
                 ];
@@ -960,12 +960,12 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'setTextColor,128',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setTextColor,0,0,255',
-                    'text,F2,145.333,66.083,',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -1006,12 +1006,12 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'setTextColor,#ff0000',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setTextColor,#0000ff',
-                    'text,F2,145.333,66.083,',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,55.333,88.25,',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16'
                 ];
 
@@ -1049,13 +1049,13 @@ const JSPdfStylesTests = {
                 const expectedLog = [
                     'setTextColor,128',
                     'setFontSize,10',
-                    'text,F1,55.333,66.083,',
+                    'text,F1,55,65.75,',
                     'setTextColor,0,0,255',
-                    'text,F2,145.333,66.083,',
+                    'text,F2,145,65.75,',
                     'setTextColor,128',
-                    'text,f1_1,55.333,88.25,',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,0,0,255',
-                    'text,f1_2,145.333,88.25,',
+                    'text,f1_2,145,87.25,',
                     'setFontSize,16',
                     'setTextColor,#000000'
                 ];
@@ -1081,12 +1081,12 @@ const JSPdfStylesTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line,55.333,71.833,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,33.667',
+                    'text,line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -1110,12 +1110,12 @@ const JSPdfStylesTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line,55.333,71.833,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,33.667',
+                    'text,line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -1139,12 +1139,12 @@ const JSPdfStylesTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line,55.333,71.833,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,33.667',
+                    'text,line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'

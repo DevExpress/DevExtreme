@@ -12,11 +12,11 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line1,55.333,85,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,line1,55,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -40,12 +40,12 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line1,55.333,66.083,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,22.167',
+                    'text,line1,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,21.5',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -67,11 +67,11 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1,55.333,85,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,line1,55,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -96,12 +96,12 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1,55.333,71.833,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,33.667',
+                    'text,line1,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -124,11 +124,11 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1,55,71.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -155,12 +155,12 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line1\n' +
-'line2,55.333,79.25,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'line2,55,79.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -184,13 +184,13 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line1\n' +
-'line2,55.333,66.083,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,33.667',
+'line2,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -212,12 +212,12 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
-'line2,55.333,73.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'line2,55,73.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -242,13 +242,13 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
-'line2,55.333,71.833,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,56.667',
+'line2,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,56',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -271,12 +271,12 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
 'line2,55,71.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,56',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -304,13 +304,13 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line1\n' +
 'line2\n' +
-'line3,55.333,83.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'line3,55,83.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,80',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -334,14 +334,14 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line1\n' +
 'line2\n' +
-'line3,55.333,66.083,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,45.167',
+'line3,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,44.5',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -363,13 +363,13 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
 'line2\n' +
-'line3,55.333,72,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'line3,55,72,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,80',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -394,14 +394,14 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
 'line2\n' +
-'line3,55.333,71.833,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,79.667',
+'line3,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -424,13 +424,13 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
 'line2\n' +
 'line3,55,71.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,79',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -461,17 +461,17 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line1,55.333,85,{baseline:middle}',
-                    'setTextColor,128',
+                    'text,line1,55,85,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1,155.333,85,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,line1,155,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -503,18 +503,18 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line1,55.333,71.833,{baseline:middle}',
-                    'setTextColor,128',
+                    'text,line1,55,71.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1,155.333,71.833,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,33.667',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,150,55,100,33.667',
+                    'text,line1,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,33',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -544,17 +544,17 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1,55.333,85,{baseline:middle}',
-                    'setTextColor,128',
+                    'text,line1,55,85,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,line1,155.333,85,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,line1,155,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -588,18 +588,18 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1,55.333,77.583,{baseline:middle}',
-                    'setTextColor,128',
+                    'text,line1,55,77.25,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,line1,155.333,77.583,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,45.167',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,150,55,100,45.167',
+                    'text,line1,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,44.5',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -631,17 +631,17 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1,55,77.25,{baseline:middle}',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,30',
                     'text,line1,155,77.25,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,150,55,100,44.5',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -675,19 +675,19 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line1\n' +
-'line2,55.333,79.25,{baseline:middle}',
-                    'setTextColor,128',
+'line2,55,79.25,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
-'line2,155.333,73.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'line2,155,73.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -719,20 +719,20 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line1\n' +
-'line2,55.333,77.583,{baseline:middle}',
-                    'setTextColor,128',
+'line2,55,77.25,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
-'line2,155.333,71.833,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,56.667',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,150,55,100,56.667',
+'line2,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,56',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -762,19 +762,19 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
-'line2,55.333,73.5,{baseline:middle}',
-                    'setTextColor,128',
+'line2,55,73.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
                     'text,line1\n' +
-'line2,155.333,67.75,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'line2,155,67.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -808,20 +808,20 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
-'line2,55.333,83.333,{baseline:middle}',
-                    'setTextColor,128',
+'line2,55,83,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
                     'text,line1\n' +
-'line2,155.333,77.583,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,79.667',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,150,55,100,79.667',
+'line2,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,79',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -853,19 +853,19 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
 'line2,55,83,{baseline:middle}',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,30',
                     'text,line1\n' +
 'line2,155,77.25,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,79',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,150,55,100,79',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -899,21 +899,21 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line1\n' +
 'line2\n' +
-'line3,55.333,83.5,{baseline:middle}',
-                    'setTextColor,128',
+'line3,55,83.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
 'line2\n' +
-'line3,155.333,72,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'line3,155,72,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,80',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,150,55,100,80',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -945,22 +945,22 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line1\n' +
 'line2\n' +
-'line3,55.333,83.333,{baseline:middle}',
-                    'setTextColor,128',
+'line3,55,83,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
 'line2\n' +
-'line3,155.333,71.833,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,79.667',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,150,55,100,79.667',
+'line3,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,79',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -990,21 +990,21 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
 'line2\n' +
-'line3,55.333,77,{baseline:middle}',
-                    'setTextColor,128',
+'line3,55,77,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
                     'text,line1\n' +
 'line2\n' +
-'line3,155.333,65.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'line3,155,65.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,90',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,150,55,100,90',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1038,22 +1038,22 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
 'line2\n' +
-'line3,55.333,89.083,{baseline:middle}',
-                    'setTextColor,128',
+'line3,55,88.75,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
                     'text,line1\n' +
 'line2\n' +
-'line3,155.333,77.583,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,50,55,100,114.167',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
-                    'rect,150,55,100,114.167',
+'line3,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,113.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,113.5',
                     'setFontSize,16',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
@@ -1085,21 +1085,21 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line1\n' +
 'line2\n' +
 'line3,55,88.75,{baseline:middle}',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,30',
                     'text,line1\n' +
 'line2\n' +
 'line3,155,77.25,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,113.5',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,150,55,100,113.5',
                     'setFontSize,16',
                     'setDrawColor,#000000',

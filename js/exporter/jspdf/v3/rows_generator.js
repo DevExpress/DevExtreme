@@ -1,5 +1,4 @@
 import { isDefined } from '../../../core/utils/type';
-import { convertToUsedPDFUnit } from './pdf_utils_v3';
 
 // Returns IPdfRowInfo[]
 // [
@@ -30,15 +29,15 @@ import { convertToUsedPDFUnit } from './pdf_utils_v3';
 // ]
 
 const defaultStyles = {
-    header: { font: { size: 10 }, textColor: 128, borderColor: 128 },
-    group: { font: { style: 'bold', size: 10 }, borderColor: 128 },
-    data: { font: { size: 10 }, borderColor: 128 },
-    groupFooter: { font: { style: 'bold', size: 10 }, borderColor: 128 },
-    totalFooter: { font: { style: 'bold', size: 10 }, borderColor: 128 },
+    header: { font: { size: 10 }, textColor: '#979797', borderColor: '#979797' },
+    group: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
+    data: { font: { size: 10 }, borderColor: '#979797' },
+    groupFooter: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
+    totalFooter: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
 };
 
 
-function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
+function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
     const result = [];
 
     const rowsCount = dataProvider.getRowsCount();
@@ -57,7 +56,6 @@ function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
             rowType: rowType,
             indentLevel,
             cells: generateRowCells({
-                doc,
                 dataProvider,
                 rowIndex,
                 wordWrapEnabled,
@@ -72,7 +70,7 @@ function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
     return result;
 }
 
-function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor }) {
+function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor }) {
     const result = [];
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
@@ -84,7 +82,7 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
             horizontalAlign: columns[cellIndex].alignment ?? 'left',
             wordWrapEnabled,
             backgroundColor,
-            padding: convertToUsedPDFUnit(doc, 4),
+            padding: 5,
             _rect: {}
         };
 

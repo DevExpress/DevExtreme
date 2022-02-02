@@ -16,11 +16,11 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'top'; };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,60.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,60,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -47,11 +47,11 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'middle'; };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,80,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,80,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -78,11 +78,11 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'bottom'; };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,99.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,100,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -112,11 +112,11 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,60.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,60,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -146,11 +146,11 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,80,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,80,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -180,11 +180,11 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,99.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,100,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -214,11 +214,11 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,F1,55.333,60.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,60,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -248,11 +248,11 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,F1,55.333,80,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,80,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -282,11 +282,11 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,F1,55.333,99.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,100,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -315,11 +315,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,58.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,58.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -348,11 +348,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,78.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,78.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -381,11 +381,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,98.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,98.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -417,11 +417,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,58.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,58.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -453,11 +453,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,78.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,78.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -489,11 +489,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,98.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,98.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -525,11 +525,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,F1,55.333,57.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,57,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -561,11 +561,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,F1,55.333,77,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,77,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -597,11 +597,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,F1,55.333,96.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,97,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -630,11 +630,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,63.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,63.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -663,11 +663,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,83.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,83.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -696,11 +696,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,103.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,103.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -732,11 +732,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,63.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,63.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -768,11 +768,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,83.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,83.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -804,11 +804,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F1,55.333,103.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,103.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -840,11 +840,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,F1,55.333,67.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,67,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -876,11 +876,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,F1,55.333,87,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,87,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -912,11 +912,11 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,F1,55.333,106.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+                    'text,F1,55,107,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -945,12 +945,12 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'top'; };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,60.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,60,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -977,12 +977,12 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'middle'; };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,74.25,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,74.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1009,12 +1009,12 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'bottom'; };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,88.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,88.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1044,12 +1044,12 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,60.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,60,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1079,12 +1079,12 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,74.25,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,74.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1114,12 +1114,12 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,88.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,88.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1149,12 +1149,12 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
-'f2,55.333,60.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,60,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1184,12 +1184,12 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
-'f2,55.333,68.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,68.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1219,12 +1219,12 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
-'f2,55.333,76.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,77,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1253,12 +1253,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,58.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,58.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1287,12 +1287,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,73.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,73.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1321,12 +1321,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,88.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,88.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1358,12 +1358,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,58.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,58.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1395,12 +1395,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,73.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,73.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1432,12 +1432,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,88.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,88.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1469,12 +1469,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
-'f2,55.333,57.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,57,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1506,12 +1506,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
-'f2,55.333,67,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,67,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1543,12 +1543,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
-'f2,55.333,76.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,77,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1577,12 +1577,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,63.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,63.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1611,12 +1611,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,76,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,76,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1645,12 +1645,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,88.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,88.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1682,12 +1682,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,63.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,63.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1719,12 +1719,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,76,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,76,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1756,12 +1756,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
-'f2,55.333,88.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,88.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1793,12 +1793,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
-'f2,55.333,67.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,67,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1830,12 +1830,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
-'f2,55.333,72,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,72,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1867,12 +1867,12 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
-'f2,55.333,76.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f2,55,77,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1899,13 +1899,13 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'top'; };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,60.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,60,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1932,13 +1932,13 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'middle'; };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,68.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,68.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -1965,13 +1965,13 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'bottom'; };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,76.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,77,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2001,13 +2001,13 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,60.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,60,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2037,13 +2037,13 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,68.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,68.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2073,13 +2073,13 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,76.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,77,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2109,13 +2109,13 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,60.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,60,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2145,13 +2145,13 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,57,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,57,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2181,13 +2181,13 @@ const JSPdfVerticalAlignTests = {
                 };
 
                 const expectedLog = [
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,53.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,54,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2216,13 +2216,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,58.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,58.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2251,13 +2251,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,68.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,68.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2286,13 +2286,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,78.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,78.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2324,13 +2324,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,58.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,58.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2362,13 +2362,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,68.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,68.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2400,13 +2400,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,78.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,78.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2438,13 +2438,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,57.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,57,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2476,13 +2476,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,57,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,57,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2514,13 +2514,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,56.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,57,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2549,13 +2549,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,63.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,63.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2584,13 +2584,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,68.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,68.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2619,13 +2619,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,73.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,73.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2657,13 +2657,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,63.833,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,63.5,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2695,13 +2695,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,68.5,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,68.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2733,13 +2733,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,10',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,73.167,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,73.5,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2771,13 +2771,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,67.333,{baseline:top}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,67,{baseline:top}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2809,13 +2809,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,57,{baseline:middle}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,57,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
@@ -2847,13 +2847,13 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'setTextColor,128',
+                    'setTextColor,#979797',
                     'setFontSize,20',
                     'text,f1\n' +
 'f2\n' +
-'f3,55.333,46.667,{baseline:bottom}',
-                    'setLineWidth,0.6',
-                    'setDrawColor,128',
+'f3,55,47,{baseline:bottom}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
                     'setDrawColor,#000000',
