@@ -323,14 +323,6 @@ export const VirtualScrollController = Class.inherit((function() {
             }
         },
         reset: function(isRefresh) {
-            if(this.option(LEGACY_SCROLLING_MODE) === false) {
-                this._viewportItemIndex = 0;
-                this._position = 0;
-                this._isScrollingBack = false;
-                this._itemSizes = {};
-                return;
-            }
-
             this._dataLoader.reset();
             if(!isRefresh) {
                 this._itemSizes = {};
