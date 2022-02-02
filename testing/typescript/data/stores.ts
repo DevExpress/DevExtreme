@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 // eslint-disable-next-line import/no-extraneous-dependencies
 import $ from 'jquery';
-import { HttpClient, HttpHandler } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import CustomStore from '../../../js/data/custom_store';
 import { Store, StoreOptions } from '../../../js/data';
 import { ANY, notAny } from '../consts';
