@@ -873,24 +873,26 @@ class Scheduler extends Widget {
     }
 
     _dimensionChanged() {
-        this._toggleSmallClass();
+        if(this._isVisible()) {
+            this._toggleSmallClass();
 
-        const workspace = this.getWorkSpace();
+            const workspace = this.getWorkSpace();
 
-        if(!this._isAgenda() && this.filteredItems && this._isVisible() && workspace) {
-            workspace.option('allDayExpanded', this._isAllDayExpanded());
-            workspace._dimensionChanged();
+            if(!this._isAgenda() && this.filteredItems && this._isVisible() && workspace) {
+                workspace.option('allDayExpanded', this._isAllDayExpanded());
+                workspace._dimensionChanged();
 
-            const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
+                const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
 
-            this._appointments.option('items', appointments);
+                this._appointments.option('items', appointments);
+            }
+
+            this.hideAppointmentTooltip();
+
+            // TODO popup
+            this._appointmentPopup.triggerResize();
+            this._appointmentPopup.updatePopupFullScreenMode();
         }
-
-        this.hideAppointmentTooltip();
-
-        // TODO popup
-        this._appointmentPopup.triggerResize();
-        this._appointmentPopup.updatePopupFullScreenMode();
     }
 
     _clean() {
