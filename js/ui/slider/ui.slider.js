@@ -407,7 +407,7 @@ const Slider = TrackBar.inherit({
                     .appendTo(this._$wrapper);
             }
 
-            this._$minLabel.html(numberLocalization.format(min, labelFormat));
+            this._$minLabel.text(numberLocalization.format(min, labelFormat));
 
             if(!this._$maxLabel) {
                 this._$maxLabel = $('<div>')
@@ -415,7 +415,7 @@ const Slider = TrackBar.inherit({
                     .appendTo(this._$wrapper);
             }
 
-            this._$maxLabel.html(numberLocalization.format(max, labelFormat));
+            this._$maxLabel.text(numberLocalization.format(max, labelFormat));
 
             this.$element().addClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + position);
 
