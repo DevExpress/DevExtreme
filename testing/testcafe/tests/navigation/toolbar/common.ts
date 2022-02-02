@@ -74,7 +74,7 @@ fixture`Toolbar_common`
         }, { dependencies: { } })();
 
         await t
-          .expect(await takeScreenshot(`Toolbar with dropDownButton,theme=${theme},items[]locateInMenu=${locateInMenu}.png`, Selector('.dx-dropdownmenu-popup .dx-overlay-content')))
+          .expect(await takeScreenshot(`Toolbar with dropDownButton in menu,theme=${theme},items[]locateInMenu=${locateInMenu}.png`, Selector('.dx-dropdownmenu-popup .dx-overlay-content')))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
