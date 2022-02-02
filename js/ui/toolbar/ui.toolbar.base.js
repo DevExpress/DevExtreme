@@ -2,7 +2,7 @@ import { getWidth, getOuterWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { isMaterial, waitWebFont } from '../themes';
 import { noop } from '../../core/utils/common';
-import { isPlainObject } from '../../core/utils/type';
+import { isPlainObject, isDefined } from '../../core/utils/type';
 import registerComponent from '../../core/component_registrator';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
@@ -65,10 +65,13 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
 
                 if(data.widget === 'dxDropDownButton') {
                     data.options = data.options || {};
-                    data.options.stylingMode = data.options.stylingMode || DEFAULT_DROPDOWNBUTTON_STYLING_MODE;
 
-                    if(this.option('useFlatButtons')) {
-                        data.options.stylingMode = data.options.stylingMode || TEXT_BUTTON_MODE;
+                    if(!isDefined(data.options.stylingMode)) {
+                        data.options.stylingMode = DEFAULT_DROPDOWNBUTTON_STYLING_MODE;
+
+                        if(this.option('useFlatButtons')) {
+                            data.options.stylingMode = TEXT_BUTTON_MODE;
+                        }
                     }
                 }
 
