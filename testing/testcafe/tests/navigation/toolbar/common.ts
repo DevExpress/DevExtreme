@@ -8,7 +8,7 @@ import { Item } from '../../../../../js/ui/toolbar.d';
 fixture`Toolbar_common`
   .page(url(__dirname, '../../container.html'));
 
-['material.blue.light.compact'].forEach((theme) => {
+['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
   const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
   (['always', 'never'] as any[]).forEach((locateInMenu) => {
