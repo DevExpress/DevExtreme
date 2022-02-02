@@ -67,11 +67,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
                     data.options = data.options || {};
 
                     if(!isDefined(data.options.stylingMode)) {
-                        data.options.stylingMode = DEFAULT_DROPDOWNBUTTON_STYLING_MODE;
-
-                        if(this.option('useFlatButtons')) {
-                            data.options.stylingMode = TEXT_BUTTON_MODE;
-                        }
+                        data.options.stylingMode = this.option('useFlatButtons') ? TEXT_BUTTON_MODE : DEFAULT_DROPDOWNBUTTON_STYLING_MODE;
                     }
                 }
 
