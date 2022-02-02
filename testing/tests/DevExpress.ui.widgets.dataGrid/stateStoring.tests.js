@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import { setupDataGridModules, MockDataController } from '../../helpers/dataGridMocks.js';
 import ArrayStore from 'data/array_store';
-import Promise from 'core/polyfills/promise';
 import fx from 'animation/fx';
 
 import 'ui/data_grid';

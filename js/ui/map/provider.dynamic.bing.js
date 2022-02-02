@@ -2,7 +2,6 @@ import { getWidth, getHeight } from '../../core/utils/size';
 import { noop } from '../../core/utils/common';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
-import Promise from '../../core/polyfills/promise';
 import { extend } from '../../core/utils/extend';
 import errors from '../widget/ui.errors';
 import { map, each } from '../../core/utils/iterator';
