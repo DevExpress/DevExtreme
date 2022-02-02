@@ -30,6 +30,7 @@ const TOOLBAR_LABEL_SELECTOR = '.' + TOOLBAR_LABEL_CLASS;
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TEXT_BUTTON_MODE = 'text';
 const DEFAULT_BUTTON_TYPE = 'default';
+const DEFAULT_DROPDOWNBUTTON_STYLING_MODE = 'contained';
 
 const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
 
@@ -63,8 +64,10 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
                 }
 
                 if(data.widget === 'dxDropDownButton') {
+                    data.options = data.options || {};
+                    data.options.stylingMode = data.options.stylingMode || DEFAULT_DROPDOWNBUTTON_STYLING_MODE;
+
                     if(this.option('useFlatButtons')) {
-                        data.options = data.options || {};
                         data.options.stylingMode = data.options.stylingMode || TEXT_BUTTON_MODE;
                     }
                 }
