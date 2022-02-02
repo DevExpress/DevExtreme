@@ -6315,9 +6315,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
         const pointer = pointerMock($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(3)'));
         pointer.start({ shiftKey: true }).down().up();
-        const selectedKeys = devices.real().ios ? [4, 11, 10, 9, 8, 7, 6, 5] : [4, 12, 11, 10, 9, 8, 7, 6, 5];
 
         // assert
-        assert.deepEqual(dataGrid.getSelectedRowKeys(), selectedKeys, 'selected keys after scroll');
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [4, 12, 11, 10, 9, 8, 7, 6, 5], 'selected keys after scroll');
     });
 });
