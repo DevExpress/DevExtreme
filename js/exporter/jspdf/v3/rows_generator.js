@@ -1,4 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
+import { toPdfPoint } from './pdf_utils_v3';
 
 // Returns IPdfRowInfo[]
 // [
@@ -37,7 +38,7 @@ const defaultStyles = {
 };
 
 
-function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
+function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
     const result = [];
 
     const rowsCount = dataProvider.getRowsCount();
@@ -56,6 +57,7 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
             rowType: rowType,
             indentLevel,
             cells: generateRowCells({
+                doc,
                 dataProvider,
                 rowIndex,
                 wordWrapEnabled,
@@ -70,7 +72,7 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
     return result;
 }
 
-function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor }) {
+function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor }) {
     const result = [];
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
@@ -82,7 +84,7 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, columns, ro
             horizontalAlign: columns[cellIndex].alignment ?? 'left',
             wordWrapEnabled,
             backgroundColor,
-            padding: 5,
+            padding: toPdfPoint(doc, 5),
             _rect: {}
         };
 

@@ -1,5 +1,11 @@
 import { isDefined } from '../../../core/utils/type';
 
+function toPdfPoint(doc, value) {
+    const defaultScaleFactor = 1; // https://github.com/parallax/jsPDF/blob/master/src/jspdf.js#L3212
+    const coefficient = defaultScaleFactor / doc.internal.scaleFactor;
+    return value * coefficient;
+}
+
 function getPageWidth(doc) {
     return doc.internal.pageSize.getWidth();
 }
@@ -79,4 +85,4 @@ function applyWordWrap(doc, rowsInfo, options) {
     });
 }
 
-export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth, getPageHeight, applyWordWrap };
+export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth, getPageHeight, applyWordWrap, toPdfPoint };
