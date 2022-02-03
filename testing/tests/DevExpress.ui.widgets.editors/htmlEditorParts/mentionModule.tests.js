@@ -642,4 +642,21 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert(' ');
         assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
     });
+
+    test('mention popup should prevent default mousedown event (T1063461)', function(assert) {
+        const mention = new Mentions(this.quillMock, this.options);
+
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
+
+        this.clock.tick();
+
+        const $wrapper = $(mention._popup.$wrapper());
+
+        $wrapper.on('mousedown', (e) => {
+            assert.ok(e.isDefaultPrevented(), 'Default prevented');
+        });
+
+        $wrapper.trigger('mousedown');
+    });
 });

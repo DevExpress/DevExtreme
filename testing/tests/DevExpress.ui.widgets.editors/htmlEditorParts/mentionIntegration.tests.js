@@ -571,30 +571,5 @@ export default function() {
             const value = prepareEmbedValue(this.$element.find(`.${MENTION_CLASS}`).parent().html());
             assert.strictEqual(value, expectedMention);
         });
-
-        test('click to the mentions popup should not raise focusout event (T1063461)', function(assert) {
-            const done = assert.async();
-            const focusOutSpy = sinon.spy(() => {});
-
-            const valueChangeSpy = sinon.spy(({ value }) => {
-                if(valueChangeSpy.calledOnce) {
-                    $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(1).trigger('dxclick');
-
-                    this.clock.tick();
-                } else {
-                    this.getItems().eq(2).trigger('mousedown');
-                    assert.strictEqual(focusOutSpy.callCount, 0);
-                    done();
-                }
-            });
-
-            this.options.onValueChanged = valueChangeSpy;
-            this.options.onFocusOut = focusOutSpy;
-
-            this.createWidget();
-            this.instance.focus();
-            this.$element.find('p').first().text('@');
-            this.clock.tick();
-        });
     });
 }
