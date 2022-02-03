@@ -23,10 +23,13 @@ function _getFullOptions(options) {
         throw 'options.topLeft is required';
     }
     if(!isDefined(fullOptions.indent)) {
-        fullOptions.indent = 10;
+        fullOptions.indent = 0;
     }
     if(!isDefined(fullOptions.repeatHeaders)) {
-        fullOptions.repeatHeaders = false;
+        fullOptions.repeatHeaders = true;
+    }
+    if(!isDefined(fullOptions.margin)) {
+        fullOptions.margin = 40;
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
     return fullOptions;

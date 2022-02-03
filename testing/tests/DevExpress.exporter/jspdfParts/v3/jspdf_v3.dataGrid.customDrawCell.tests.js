@@ -14,22 +14,27 @@ const JSPdfCustomDrawCellTests = {
 
                 const customDrawCell = ({ doc, rect, pdfCell, gridCell, cancel }) => {
                     const expectedRect = pdfCell.text === 'f1'
-                        ? { h: 18.4, w: 250, x: 10, y: 10 }
-                        : { h: 18.4, w: 250, x: 260, y: 10 };
+                        ? { h: 21.5, w: 250, x: 50, y: 50 }
+                        : { h: 21.5, w: 250, x: 300, y: 50 };
 
                     assert.equal(doc, pdfDoc, 'doc object is correct');
                     assert.deepEqual(rect, expectedRect, 'rect is correct');
 
                     assert.deepEqual(pdfCell, {
                         backgroundColor: undefined,
+                        borderColor: '#979797',
+                        font: {
+                            size: 10
+                        },
                         horizontalAlign: 'left',
                         padding: {
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            top: 0
+                            bottom: 5,
+                            left: 5,
+                            right: 5,
+                            top: 5
                         },
                         text: pdfCell.text === 'f1' ? 'f1' : 'f2',
+                        textColor: '#979797',
                         verticalAlign: 'middle',
                         wordWrapEnabled: false
                     }, 'pdfCell is correct');
@@ -63,11 +68,18 @@ const JSPdfCustomDrawCellTests = {
                     arg.cancel = arg.pdfCell.text === 'f1';
                 };
                 const expectedLog = [
-                    'text,f2,260,19.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,10,250,18.4',
-                    'setLineWidth,1',
-                    'rect,260,10,250,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,f2,305,60.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,50,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,50,250,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
@@ -90,11 +102,18 @@ const JSPdfCustomDrawCellTests = {
                     arg.cancel = arg.pdfCell.text === 'f2';
                 };
                 const expectedLog = [
-                    'text,f1,10,19.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,10,250,18.4',
-                    'setLineWidth,1',
-                    'rect,260,10,250,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,f1,55,60.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,50,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,50,250,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
@@ -115,12 +134,20 @@ const JSPdfCustomDrawCellTests = {
 
                 const customDrawCell = () => { };
                 const expectedLog = [
-                    'text,f1,10,19.2,{baseline:middle}',
-                    'text,f2,260,19.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,10,250,18.4',
-                    'setLineWidth,1',
-                    'rect,260,10,250,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,f1,55,60.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f2,305,60.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,50,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,50,250,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
@@ -152,17 +179,25 @@ const JSPdfCustomDrawCellTests = {
 
                 const expectedLog = [
                     'setFillColor,#880000',
-                    'rect,10,10,250,18.4,F',
+                    'rect,50,50,250,21.5,F',
                     'setFillColor,#808080',
-                    'rect,10,10,250,18.4,F',
-                    'text,f1,10,19.2,{baseline:middle}',
+                    'rect,50,50,250,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,f1,55,60.75,{baseline:middle}',
                     'setFillColor,#880000',
-                    'rect,260,10,250,18.4,F',
-                    'text,f2,260,19.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,10,250,18.4',
-                    'setLineWidth,1',
-                    'rect,260,10,250,18.4'
+                    'rect,300,50,250,21.5,F',
+                    'setTextColor,#979797',
+                    'text,f2,305,60.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,50,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,50,250,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customizeCell, customDrawCell }).then(() => {
@@ -189,16 +224,22 @@ const JSPdfCustomDrawCellTests = {
                 const expectedLog = [
                     'setFillColor,#880000',
                     'setTextColor,#880000',
-                    'setTextColor,#000000',
-                    'text,f1,10,19.2,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,f1,55,60.75,{baseline:middle}',
                     'setFillColor,#880000',
                     'setTextColor,#880000',
-                    'setTextColor,#000000',
-                    'text,f2,260,19.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,10,250,18.4',
-                    'setLineWidth,1',
-                    'rect,260,10,250,18.4'
+                    'setTextColor,#979797',
+                    'text,f2,305,60.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,50,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,50,250,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {

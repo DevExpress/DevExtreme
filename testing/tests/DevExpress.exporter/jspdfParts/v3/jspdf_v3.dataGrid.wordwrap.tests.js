@@ -13,9 +13,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line,10,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line,55,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -36,9 +42,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line,10,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line,55,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -59,9 +71,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -81,9 +99,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -107,9 +131,15 @@ const JSPdfWordWrapTests = {
                 };
 
                 const expectedLog = [
-                    'text,very long\nline,15,29.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,46.8'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -129,11 +159,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,10,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
+                    'text,long line,55,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -155,11 +189,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,10,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
+                    'text,long line,55,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -181,11 +219,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
+                    'text,long line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -206,11 +248,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
+                    'text,long line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -231,11 +277,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,15,31.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,33',
-                    'setFontSize,16'
+                    'text,long line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => {
@@ -260,9 +310,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text very long text,10,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long text very long text,55,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -283,9 +339,16 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text\nvery long text,10,35.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long text very\n' +
+'long text,55,79.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -306,9 +369,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text very long text,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long text very long text,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -328,9 +397,16 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text\nvery long text,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,36.8'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long text very\n' +
+'long text,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -354,9 +430,16 @@ const JSPdfWordWrapTests = {
                 };
 
                 const expectedLog = [
-                    'text,very long\ntext very\nlong text,15,29.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,65.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long text very\n' +
+'long text,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -376,11 +459,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line,10,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
+                    'text,long line long line,55,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -402,11 +489,16 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line,10,33.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
+                    'text,long line\n' +
+'long line,55,73.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -428,11 +520,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
+                    'text,long line long line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -453,11 +549,16 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,46',
+                    'text,long line\n' +
+'long line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,56',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -478,11 +579,16 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line,15,31.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,56',
-                    'setFontSize,16'
+                    'text,long line\n' +
+'long line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,56',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => {
@@ -507,9 +613,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line very long line,10,55,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,80'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very long line very long line,55,95,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,80',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -530,9 +642,17 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,36.6,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,80'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very\n' +
+'long line very long\n' +
+'line,55,83.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,80',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -553,9 +673,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line very long line,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very long line very long line,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -575,9 +701,17 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very\n' +
+'long line very long\n' +
+'line,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,44.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -601,9 +735,17 @@ const JSPdfWordWrapTests = {
                 };
 
                 const expectedLog = [
-                    'text,very long\nline very\nlong line\nvery long\nline,15,29.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,102'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very\n' +
+'long line very long\n' +
+'line,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,44.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -623,9 +765,16 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line very long line,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,36.8'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line\n' +
+'very long line very long line,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -645,9 +794,17 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line\n' +
+'very long line very\n' +
+'long line,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,44.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -671,9 +828,17 @@ const JSPdfWordWrapTests = {
                 };
 
                 const expectedLog = [
-                    'text,very long\nline\nvery long\nline very\nlong line,15,29.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,102'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line\n' +
+'very long line very\n' +
+'long line,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,44.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -693,11 +858,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line long line,10,55,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,80',
+                    'text,long line long line long line,55,95,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,80',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -719,11 +888,17 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,32,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,80',
+                    'text,long line\n' +
+'long line\n' +
+'long line,55,72,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,80',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -745,11 +920,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line long line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
+                    'text,long line long line long line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -770,11 +949,17 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,69',
+                    'text,long line\n' +
+'long line\n' +
+'long line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
@@ -795,11 +980,17 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,79',
-                    'setFontSize,16'
+                    'text,long line\n' +
+'long line\n' +
+'long line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => {
@@ -824,11 +1015,17 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,69',
+                    'text,long line\n' +
+'long line\n' +
+'long line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
@@ -849,11 +1046,17 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,79',
-                    'setFontSize,16'
+                    'text,long line\n' +
+'long line\n' +
+'long line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
@@ -879,15 +1082,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,vert long line,10,45,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,vert long line,55,85,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,110,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,long line,155,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
-
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -916,14 +1125,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,vert long line,10,45,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,vert long line,55,85,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,110,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,long line,155,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -952,14 +1168,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,vert long line,10,26.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,vert long line,55,71.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,110,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
-                    'setLineWidth,1',
-                    'rect,110,15,100,23',
+                    'text,long line,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,33',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -987,14 +1210,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,vert long line,10,26.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,vert long line,55,71.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,110,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
-                    'setLineWidth,1',
-                    'rect,110,15,100,23',
+                    'text,long line,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,33',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1022,14 +1252,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,vert long line,10,31.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,vert long line,55,71.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,115,31.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,33',
-                    'setLineWidth,1',
-                    'rect,110,15,100,33',
-                    'setFontSize,16'
+                    'text,long line,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1058,15 +1295,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,10,45,{baseline:middle}',
+                    'text,long line,55,85,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line,110,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,big line,155,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -1097,15 +1340,22 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,10,45,{baseline:middle}',
+                    'text,long line,55,85,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line,110,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,big\n' +
+'line,155,67.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -1136,15 +1386,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,10,32.25,{baseline:middle}',
+                    'text,long line,55,77.25,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line,110,32.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,34.5',
-                    'setLineWidth,1',
-                    'rect,110,15,100,34.5',
+                    'text,big line,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,44.5',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1174,15 +1430,22 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,10,32.25,{baseline:middle}',
+                    'text,long line,55,94.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line,110,32.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,34.5',
-                    'setLineWidth,1',
-                    'rect,110,15,100,34.5',
+                    'text,big\n' +
+'line,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1212,15 +1475,22 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line,15,54.5,{baseline:middle}',
+                    'text,long line,55,94.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big\nline,115,37.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,79',
-                    'setLineWidth,1',
-                    'rect,110,15,100,79',
-                    'setFontSize,16'
+                    'text,big\n' +
+'line,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,79',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1251,14 +1521,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line,10,45,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very long line,55,85,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line,110,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,long line long line,155,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -1287,14 +1564,23 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line,10,35.8,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very\n' +
+'long line,55,79.25,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line,110,33.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,long line\n' +
+'long line,155,73.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -1323,14 +1609,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line,10,26.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very long line,55,71.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line,110,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
-                    'setLineWidth,1',
-                    'rect,110,15,100,23',
+                    'text,long line long line,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,33',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1358,14 +1651,23 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line,10,28.8,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very\n' +
+'long line,55,77.25,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line,110,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,46',
-                    'setLineWidth,1',
-                    'rect,110,15,100,46',
+                    'text,long line\n' +
+'long line,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,56',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1393,14 +1695,23 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long\nline very\nlong line,15,29.2,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very\n' +
+'long line,55,77.25,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line,115,36.1,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,65.2',
-                    'setLineWidth,1',
-                    'rect,110,15,100,65.2',
-                    'setFontSize,16'
+                    'text,long line\n' +
+'long line,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,56',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1429,15 +1740,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line,10,45,{baseline:middle}',
+                    'text,long line long line,55,85,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line big line,110,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,big line big line,155,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -1468,15 +1785,25 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line,10,33.5,{baseline:middle}',
+                    'text,long line\n' +
+'long line,55,73.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line\nbig line,110,27.75,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60',
-                    'setLineWidth,1',
-                    'rect,110,15,100,60',
+                    'text,big\n' +
+'line\n' +
+'big\n' +
+'line,155,33.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -1507,15 +1834,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line,10,32.25,{baseline:middle}',
+                    'text,long line long line,55,77.25,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line big line,110,32.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,34.5',
-                    'setLineWidth,1',
-                    'rect,110,15,100,34.5',
+                    'text,big line big line,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,44.5',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1545,15 +1878,25 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line,10,38,{baseline:middle}',
+                    'text,long line\n' +
+'long line,55,117.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line\nbig line,110,32.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,69',
-                    'setLineWidth,1',
-                    'rect,110,15,100,69',
+                    'text,big\n' +
+'line\n' +
+'big\n' +
+'line,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,148',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,148',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1583,15 +1926,25 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line,15,77.5,{baseline:middle}',
+                    'text,long line\n' +
+'long line,55,117.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big\nline\nbig\nline,115,37.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,148',
-                    'setLineWidth,1',
-                    'rect,110,15,100,148',
-                    'setFontSize,16'
+                    'text,big\n' +
+'line\n' +
+'big\n' +
+'line,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,148',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,148',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1622,14 +1975,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line very long line,10,55,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very long line very long line,55,95,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line long line,110,55,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,80',
-                    'setLineWidth,1',
-                    'rect,110,15,100,80',
+                    'text,long line long line long line,155,95,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,80',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,80',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -1658,14 +2018,25 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,36.6,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very\n' +
+'long line very long\n' +
+'line,55,83.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,110,32,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,80',
-                    'setLineWidth,1',
-                    'rect,110,15,100,80',
+                    'text,long line\n' +
+'long line\n' +
+'long line,155,72,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,80',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,80',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
@@ -1694,14 +2065,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line very long line,10,26.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very long line very long line,55,71.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line long line,110,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
-                    'setLineWidth,1',
-                    'rect,110,15,100,23',
+                    'text,long line long line long line,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,33',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1729,14 +2107,25 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,31.1,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very\n' +
+'long line very long\n' +
+'line,55,83,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,110,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,69',
-                    'setLineWidth,1',
-                    'rect,110,15,100,69',
+                    'text,long line\n' +
+'long line\n' +
+'long line,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1764,14 +2153,25 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long\nline very\nlong line\nvery long\nline,15,29.2,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very\n' +
+'long line very long\n' +
+'line,55,83,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,115,43,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,102',
-                    'setLineWidth,1',
-                    'rect,110,15,100,102',
-                    'setFontSize,16'
+                    'text,long line\n' +
+'long line\n' +
+'long line,155,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,79',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1800,15 +2200,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line long line,10,60,{baseline:middle}',
+                    'text,long line long line long line,55,100,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line big line big line,110,60,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,90',
-                    'setLineWidth,1',
-                    'rect,110,15,100,90',
+                    'text,big line big line big line,155,100,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,90',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,90',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 90; };
@@ -1839,15 +2245,28 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,37,{baseline:middle}',
+                    'text,long line\n' +
+'long line\n' +
+'long line,55,77,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line\nbig line\nbig line,110,25.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,90',
-                    'setLineWidth,1',
-                    'rect,110,15,100,90',
+                    'text,big\n' +
+'line\n' +
+'big\n' +
+'line\n' +
+'big\n' +
+'line,155,13.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,90',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,90',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 90; };
@@ -1878,15 +2297,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line long line long line,10,32.25,{baseline:middle}',
+                    'text,long line long line long line,55,77.25,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line big line big line,110,32.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,34.5',
-                    'setLineWidth,1',
-                    'rect,110,15,100,34.5',
+                    'text,big line big line big line,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,44.5',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1916,15 +2341,28 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,43.75,{baseline:middle}',
+                    'text,long line\n' +
+'long line\n' +
+'long line,55,140.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line\nbig line\nbig line,110,32.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,103.5',
-                    'setLineWidth,1',
-                    'rect,110,15,100,103.5',
+                    'text,big\n' +
+'line\n' +
+'big\n' +
+'line\n' +
+'big\n' +
+'line,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,217',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,217',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1954,15 +2392,28 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,15,100.5,{baseline:middle}',
+                    'text,long line\n' +
+'long line\n' +
+'long line,55,140.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big\nline\nbig\nline\nbig\nline,115,37.25,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,217',
-                    'setLineWidth,1',
-                    'rect,110,15,100,217',
-                    'setFontSize,16'
+                    'text,big\n' +
+'line\n' +
+'big\n' +
+'line\n' +
+'big\n' +
+'line,155,77.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,217',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,217',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -1990,9 +2441,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text very long text,10,45,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,60'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long text very long text,55,85,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,200,60',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -2013,9 +2470,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text very long text,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,200,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long text very long text,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,200,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
@@ -2037,15 +2500,23 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,26.5,{baseline:middle}',
+                    'text,long line\n' +
+'long line\n' +
+'long line,55,71.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line big line big line,110,49.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,69',
-                    'setLineWidth,1',
-                    'rect,110,15,100,69',
+                    'text,big line big line big line,155,94.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -2075,15 +2546,23 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle}',
+                    'text,long line\n' +
+'long line\n' +
+'long line,55,71.5,{baseline:middle}',
+                    'setTextColor,#979797',
                     'setFontSize,30',
-                    'text,big line big line big line,110,54.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,79',
-                    'setLineWidth,1',
-                    'rect,110,15,100,79',
-                    'setFontSize,16'
+                    'text,big line big line big line,150,94.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,150,55,100,79',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -2112,9 +2591,19 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text\nvery long text\nvery long text\nvery long text\nvery long text,10,8.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,60'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long text very\n' +
+'long text\n' +
+'very long text\n' +
+'very long text\n' +
+'very long text,55,62,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,60',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
@@ -2135,9 +2624,19 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text\nvery long text\nvery long text\nvery long text\nvery long text,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,92'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long text very\n' +
+'long text\n' +
+'very long text\n' +
+'very long text\n' +
+'very long text,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,67.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -2157,9 +2656,19 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long\ntext very\nlong text\nvery long\ntext\nvery long\ntext\nvery long\ntext,15,29.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,175.6'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long text very\n' +
+'long text\n' +
+'very long text\n' +
+'very long text\n' +
+'very long text,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,67.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
@@ -2183,9 +2692,17 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very\n' +
+'long line very long\n' +
+'line,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,44.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     pdfCell.wordWrapEnabled = true;
@@ -2207,9 +2724,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line very long line,10,24.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,very long line very long line very long line,55,65.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     pdfCell.wordWrapEnabled = false;
@@ -2233,44 +2756,58 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFont,helvetica,bold,',
                     'setFontSize,20',
-                    'text,capti\n' +
-                  'on:\n' +
-                  'very\n' +
-                  'long\n' +
-                  'line\n' +
-                  'very\n' +
-                  'long\n' +
-                  'line\n' +
-                  'very\n' +
-                  'long\n' +
-                  'line,0,11.5,{baseline:middle}',
+                    'text,cap\n' +
+'tion\n' +
+': ve\n' +
+'ry l\n' +
+'ong\n' +
+'line \n' +
+'ver\n' +
+'y lo\n' +
+'ng\n' +
+'line \n' +
+'ver\n' +
+'y lo\n' +
+'ng\n' +
+'line,45,56.5,{baseline:middle}',
+                    'setTextColor,#000000',
                     'setFont,helvetica,italic,',
                     'setFontSize,10',
                     'text,line1: sf\n' +
-                  'sgfgsf gsdf\n' +
-                  'sdf sfdg\n' +
-                  'sdfgsfdg s,0,258.75,{baseline:middle}',
+'sgfgsf\n' +
+'gsdf sdf\n' +
+'sfdg\n' +
+'sdfgsfdg\n' +
+'s,45,382.75,{baseline:middle}',
                     'setFont,helvetica,normal,',
                     'setFontSize,15',
-                    'text,line2:\n' +
-                  'sdfgnsf \n' +
-                  'gfkjghg\n' +
-                  'sf sdd\n' +
-                  'jbfgjsfb\n' +
-                  'sjf dsrg\n' +
-                  'fgsfg\n' +
-                  'sfg\n' +
-                  'sfdgfs\n' +
-                  'gfd sd,0,307.625,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,0,0,50,253',
-                    'setLineWidth,1',
-                    'rect,0,253,50,46',
-                    'setLineWidth,1',
-                    'rect,0,299,50,172.5',
-                    'setFontSize,16'
+                    'text,line2: \n' +
+'sdfgn\n' +
+'sf gfkj\n' +
+'ghgsf\n' +
+'sdd jb\n' +
+'fgjsfb\n' +
+'sjf\n' +
+'dsrg\n' +
+'fgsfg\n' +
+'sfg\n' +
+'sfdgfs\n' +
+'gfd\n' +
+'sd,45,464.625,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,40,50,332',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,372,50,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,451,50,234.25',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 const customizeCell = ({ pdfCell }) => {
                     if(pdfCell.text.indexOf('caption') >= 0) {
@@ -2300,46 +2837,54 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFont,helvetica,italic,',
                     'setFontSize,20',
-                    'text,capti\n' +
-                   'on:\n' +
-                   'very\n' +
-                   'long\n' +
-                   'line\n' +
-                   'very\n' +
-                   'long\n' +
-                   'line\n' +
-                   'very\n' +
-                   'long\n' +
-                   'line,0,11.5,{baseline:middle}',
+                    'text,capt\n' +
+'ion:\n' +
+'very\n' +
+'long\n' +
+'line\n' +
+'very\n' +
+'long\n' +
+'line\n' +
+'very\n' +
+'long\n' +
+'line,45,56.5,{baseline:middle}',
+                    'setTextColor,#000000',
                     'setFont,helvetica,bold,',
                     'setFontSize,10',
                     'text,line1: sf\n' +
-                  'sgfgsf\n' +
-                  'gsdf sdf\n' +
-                  'sfdg\n' +
-                  'sdfgsfdg\n' +
-                  's,0,258.75,{baseline:middle}',
+'sgfgsf\n' +
+'gsdf sdf\n' +
+'sfdg sdf\n' +
+'gsfdg s,45,313.75,{baseline:middle}',
                     'setFont,helvetica,normal,',
                     'setFontSize,15',
-                    'text,line2:\n' +
-                  'sdfgnsf \n' +
-                  'gfkjghg\n' +
-                  'sf sdd\n' +
-                  'jbfgjsfb\n' +
-                  'sjf dsrg\n' +
-                  'fgsfg\n' +
-                  'sfg\n' +
-                  'sfdgfs\n' +
-                  'gfd sd,0,330.625,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,0,0,50,253',
-                    'setLineWidth,1',
-                    'rect,0,253,50,69',
-                    'setLineWidth,1',
-                    'rect,0,322,50,172.5',
-                    'setFontSize,16'
+                    'text,line2: \n' +
+'sdfgn\n' +
+'sf gfkj\n' +
+'ghgsf\n' +
+'sdd jb\n' +
+'fgjsfb\n' +
+'sjf\n' +
+'dsrg\n' +
+'fgsfg\n' +
+'sfg\n' +
+'sfdgfs\n' +
+'gfd\n' +
+'sd,45,384.125,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,40,50,263',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,303,50,67.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,370.5,50,234.25',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 const customizeCell = ({ pdfCell }) => {
                     if(pdfCell.text.indexOf('caption') >= 0) {
@@ -2369,46 +2914,54 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,capti\n' +
-                  'on:\n' +
-                  'very\n' +
-                  'long\n' +
-                  'line\n' +
-                  'very\n' +
-                  'long\n' +
-                  'line\n' +
-                  'very\n' +
-                  'long\n' +
-                  'line,0,11.5,{baseline:middle}',
+                    'text,capt\n' +
+'ion:\n' +
+'very\n' +
+'long\n' +
+'line\n' +
+'very\n' +
+'long\n' +
+'line\n' +
+'very\n' +
+'long\n' +
+'line,45,56.5,{baseline:middle}',
+                    'setTextColor,#000000',
                     'setFont,helvetica,bold,',
                     'setFontSize,10',
                     'text,line1: sf\n' +
-                  'sgfgsf\n' +
-                  'gsdf sdf\n' +
-                  'sfdg\n' +
-                  'sdfgsfdg\n' +
-                  's,0,258.75,{baseline:middle}',
+'sgfgsf\n' +
+'gsdf sdf\n' +
+'sfdg sdf\n' +
+'gsfdg s,45,313.75,{baseline:middle}',
                     'setFont,helvetica,italic,',
                     'setFontSize,15',
-                    'text,line2:\n' +
-                  'sdfgnsf \n' +
-                  'gfkjghg\n' +
-                  'sf sdd\n' +
-                  'jbfgjsfb\n' +
-                  'sjf dsrg\n' +
-                  'fgsfg\n' +
-                  'sfg\n' +
-                  'sfdgfs\n' +
-                  'gfd sd,0,330.625,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,0,0,50,253',
-                    'setLineWidth,1',
-                    'rect,0,253,50,69',
-                    'setLineWidth,1',
-                    'rect,0,322,50,172.5',
+                    'text,line2: \n' +
+'sdfgn\n' +
+'sf gfkj\n' +
+'ghgsf\n' +
+'sdd jb\n' +
+'fgjsfb\n' +
+'sjf\n' +
+'dsrg\n' +
+'fgsfg\n' +
+'sfg\n' +
+'sfdgfs\n' +
+'gfd\n' +
+'sd,45,384.125,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,40,50,263',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,303,50,67.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,370.5,50,234.25',
                     'setFont,helvetica,normal,',
-                    'setFontSize,16'
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 const customizeCell = ({ pdfCell }) => {
                     if(pdfCell.text.indexOf('caption') >= 0) {
@@ -2444,15 +2997,25 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 line1\nline 2,10,24.2,{baseline:middle}',
-                    'text,F1,10,61,{baseline:middle}',
-                    'text,f1_1 long line\nvery long line,10,79.4,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,36.8',
-                    'setLineWidth,1',
-                    'rect,10,51.8,100,18.4',
-                    'setLineWidth,1',
-                    'rect,10,70.2,100,36.8'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 line1 line 2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F1,55,87.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 long line very\n' +
+'long line,55,108.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,100,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,100,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
@@ -2475,21 +3038,34 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 long line 1\nling line 2,10,24.2,{baseline:middle}',
-                    'text,F1,10,61,{baseline:middle}',
-                    'text,F2,80,61,{baseline:middle}',
-                    'text,f1_1 line,10,97.8,{baseline:middle}',
-                    'text,f2_1 line\nlong line\nlong line,80,79.4,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,140,36.8',
-                    'setLineWidth,1',
-                    'rect,10,51.8,70,18.4',
-                    'setLineWidth,1',
-                    'rect,80,51.8,70,18.4',
-                    'setLineWidth,1',
-                    'rect,10,70.2,70,55.2',
-                    'setLineWidth,1',
-                    'rect,80,70.2,70,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 long line 1 ling line 2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F1,55,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F2,125,87.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 line,55,114.5,{baseline:middle}',
+                    'text,f2_1 line long\n' +
+'line long line,125,108.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,70,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,98,70,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
@@ -2512,27 +3088,43 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 long line 1 ling line 2,10,24.2,{baseline:middle}',
-                    'text,F1,10,42.6,{baseline:middle}',
-                    'text,F2,80,42.6,{baseline:middle}',
-                    'text,F3,150,42.6,{baseline:middle}',
-                    'text,f1_1 line,10,79.4,{baseline:middle}',
-                    'text,f2_1 line\nlong line\nlong line,80,61,{baseline:middle}',
-                    'text,f3,150,79.4,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,210,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,70,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,70,18.4',
-                    'setLineWidth,1',
-                    'rect,150,33.4,70,18.4',
-                    'setLineWidth,1',
-                    'rect,10,51.8,70,55.2',
-                    'setLineWidth,1',
-                    'rect,80,51.8,70,55.2',
-                    'setLineWidth,1',
-                    'rect,150,51.8,70,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 long line 1 ling line 2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F1,55,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F2,125,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,195,87.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 line,55,114.5,{baseline:middle}',
+                    'text,f2_1 line long\n' +
+'line long line,125,108.75,{baseline:middle}',
+                    'text,f3,195,114.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,210,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,190,76.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,70,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,98,70,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,190,98,70,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70, 70 ] }).then(() => {
@@ -2571,30 +3163,60 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle}',
-                    'text,Band1 line,80,30.333,{baseline:middle}',
-                    'text,Band1_2,80,79.4,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,160,67.133,{baseline:middle}',
-                    'text,f3,80,146.867,{baseline:middle}',
-                    'text,f1_1,10,189.8,{baseline:middle}',
-                    'text,f3_1,80,189.8,{baseline:middle}',
-                    'text,f4_1,160,189.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,165.6',
-                    'setLineWidth,1',
-                    'rect,80,15,140,30.667',
-                    'setLineWidth,1',
-                    'rect,80,45.667,80,67.467',
-                    'setLineWidth,1',
-                    'rect,160,45.667,60,134.933',
-                    'setLineWidth,1',
-                    'rect,80,113.133,80,67.467',
-                    'setLineWidth,1',
-                    'rect,10,180.6,70,18.4',
-                    'setLineWidth,1',
-                    'rect,80,180.6,80,18.4',
-                    'setLineWidth,1',
-                    'rect,160,180.6,60,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,67.917,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,102.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6,205,95.917,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f3,125,146.583,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,179.25,{baseline:middle}',
+                    'text,f3_1,125,179.25,{baseline:middle}',
+                    'text,f4_1,205,179.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,113.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,140,25.833',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,80.833,80,43.833',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,80.833,60,87.667',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,124.667,80,43.833',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,168.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,168.5,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,168.5,60,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -2632,30 +3254,62 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,70.2,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8,160,42.6,{baseline:middle}',
-                    'text,f3,80,143.8,{baseline:middle}',
-                    'text,f1_1,10,189.8,{baseline:middle}',
-                    'text,f3_1,80,189.8,{baseline:middle}',
-                    'text,f4_1,160,189.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,165.6',
-                    'setLineWidth,1',
-                    'rect,80,15,140,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,80,73.6',
-                    'setLineWidth,1',
-                    'rect,160,33.4,60,147.2',
-                    'setLineWidth,1',
-                    'rect,80,107,80,73.6',
-                    'setLineWidth,1',
-                    'rect,10,180.6,70,18.4',
-                    'setLineWidth,1',
-                    'rect,80,180.6,80,18.4',
-                    'setLineWidth,1',
-                    'rect,160,180.6,60,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,55,70.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,102,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8,205,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f3,125,153,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,189.25,{baseline:middle}',
+                    'text,f3_1,125,189.25,{baseline:middle}',
+                    'text,f4_1,205,189.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,123.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,80,51',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,76.5,60,102',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,127.5,80,51',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,178.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,178.5,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,178.5,60,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -2693,33 +3347,71 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,33.4,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,51.8,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,160,42.6,{baseline:middle}',
-                    'text,f1_2_3,80,88.6,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4,80,125.4,{baseline:middle}',
-                    'text,f1_1,10,208.2,{baseline:middle}',
-                    'text,f3_1_1,80,208.2,{baseline:middle}',
-                    'text,f4_1,160,208.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,184',
-                    'setLineWidth,1',
-                    'rect,80,15,140,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,80,36.8',
-                    'setLineWidth,1',
-                    'rect,160,33.4,60,165.6',
-                    'setLineWidth,1',
-                    'rect,80,70.2,80,36.8',
-                    'setLineWidth,1',
-                    'rect,80,107,80,92',
-                    'setLineWidth,1',
-                    'rect,10,199,70,18.4',
-                    'setLineWidth,1',
-                    'rect,80,199,80,18.4',
-                    'setLineWidth,1',
-                    'rect,160,199,60,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,55,76.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,89.667,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,205,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f1_2_3,125,116,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4,125,142.333,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,200.75,{baseline:middle}',
+                    'text,f3_1_1,125,200.75,{baseline:middle}',
+                    'text,f4_1,205,200.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,135',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,80,26.333',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,76.5,60,113.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,102.833,80,26.333',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,129.167,80,60.833',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,190,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,190,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,190,60,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -2757,33 +3449,73 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,33.4,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,45.667,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,160,42.6,{baseline:middle}',
-                    'text,f1_2_3,80,70.2,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,80,94.733,{baseline:middle}',
-                    'text,f1_1,10,208.2,{baseline:middle}',
-                    'text,f3_1_1,80,208.2,{baseline:middle}',
-                    'text,f4_1,160,208.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,184',
-                    'setLineWidth,1',
-                    'rect,80,15,140,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,80,24.533',
-                    'setLineWidth,1',
-                    'rect,160,33.4,60,165.6',
-                    'setLineWidth,1',
-                    'rect,80,57.933,80,24.533',
-                    'setLineWidth,1',
-                    'rect,80,82.467,80,116.533',
-                    'setLineWidth,1',
-                    'rect,10,199,70,18.4',
-                    'setLineWidth,1',
-                    'rect,80,199,80,18.4',
-                    'setLineWidth,1',
-                    'rect,160,199,60,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,55,80.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,205,91.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f1_2_3,125,108.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6,125,130.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,209.25,{baseline:middle}',
+                    'text,f3_1_1,125,209.25,{baseline:middle}',
+                    'text,f4_1,205,209.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,143.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,76.5,60,122',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,98,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,119.5,80,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,198.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,198.5,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,198.5,60,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -2826,36 +3558,65 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,97.8,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,61,{baseline:middle}',
-                    'text,f5 long\nline very\nlong line\nlong line\nvery long\nline long\nline very\nlong line,220,42.6,{baseline:middle}',
-                    'text,f3 long line\nvery long\nline,80,116.2,{baseline:middle}',
-                    'text,f4 long\nline very\nlong line,160,116.2,{baseline:middle}',
-                    'text,f1_1 line,10,208.2,{baseline:middle}',
-                    'text,f3_1,80,208.2,{baseline:middle}',
-                    'text,f4_1\nvery\nlong line,160,189.8,{baseline:middle}',
-                    'text,f5_1 long\nline,220,199,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,165.6',
-                    'setLineWidth,1',
-                    'rect,80,15,210,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,140,55.2',
-                    'setLineWidth,1',
-                    'rect,220,33.4,70,147.2',
-                    'setLineWidth,1',
-                    'rect,80,88.6,80,92',
-                    'setLineWidth,1',
-                    'rect,160,88.6,60,92',
-                    'setLineWidth,1',
-                    'rect,10,180.6,70,55.2',
-                    'setLineWidth,1',
-                    'rect,80,180.6,80,55.2',
-                    'setLineWidth,1',
-                    'rect,160,180.6,60,55.2',
-                    'setLineWidth,1',
-                    'rect,220,180.6,70,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,105.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,90.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f5 long line\n' +
+'very long line\n' +
+'long line very\n' +
+'long line long\n' +
+'line very long\n' +
+'line,265,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f3 long line very\n' +
+'long line,125,124.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f4 long line\n' +
+'very long\n' +
+'line,205,118.5,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 line,55,172,{baseline:middle}',
+                    'text,f3_1,125,172,{baseline:middle}',
+                    'text,f4_1 very\n' +
+'long line,205,166.25,{baseline:middle}',
+                    'text,f5_1 long line,265,172,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,100.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,210,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,140,28',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,76.5,70,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,104.5,80,51',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,104.5,60,51',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,155.5,70,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,155.5,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,155.5,60,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,155.5,70,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
@@ -2899,36 +3660,65 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,97.8,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,78.9,{baseline:middle}',
-                    'text,f5 long\nline very\nlong line\nlong line\nvery long\nline long\nline very\nlong line,220,42.6,{baseline:middle}',
-                    'text,f3 long line\nvery long\nline,80,134.1,{baseline:middle}',
-                    'text,f4 long\nline very\nlong line,160,134.1,{baseline:middle}',
-                    'text,f1_1 line,10,208.2,{baseline:middle}',
-                    'text,f3_1,80,208.2,{baseline:middle}',
-                    'text,f4_1\nvery\nlong line,160,189.8,{baseline:middle}',
-                    'text,f5_1 long\nline,220,199,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,165.6',
-                    'setLineWidth,1',
-                    'rect,80,15,210,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,140,91',
-                    'setLineWidth,1',
-                    'rect,220,33.4,70,147.2',
-                    'setLineWidth,1',
-                    'rect,80,124.4,80,56.2',
-                    'setLineWidth,1',
-                    'rect,160,124.4,60,56.2',
-                    'setLineWidth,1',
-                    'rect,10,180.6,70,55.2',
-                    'setLineWidth,1',
-                    'rect,80,180.6,80,55.2',
-                    'setLineWidth,1',
-                    'rect,160,180.6,60,55.2',
-                    'setLineWidth,1',
-                    'rect,220,180.6,70,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,133,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,121.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f5 long line\n' +
+'very long line\n' +
+'long line very\n' +
+'long line long\n' +
+'line very long\n' +
+'line,265,115,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f3 long line very\n' +
+'long line,125,183,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f4 long line\n' +
+'very long\n' +
+'line,205,177.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 line,55,227.5,{baseline:middle}',
+                    'text,f3_1,125,227.5,{baseline:middle}',
+                    'text,f4_1 very\n' +
+'long line,205,221.75,{baseline:middle}',
+                    'text,f5_1 long line,265,227.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,156',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,210,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,140,90',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,76.5,70,134.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,166.5,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,166.5,60,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,211,70,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,211,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,211,60,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,211,70,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 const onRowExporting = (e) => {
@@ -2979,36 +3769,61 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,61,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,42.6,{baseline:middle}',
-                    'text,f5 long\nline very\nlong line,220,51.8,{baseline:middle}',
-                    'text,f3 long line\nvery long\nline,80,61,{baseline:middle}',
-                    'text,f4 long\nline very\nlong line,160,61,{baseline:middle}',
-                    'text,f1_1 line,10,134.6,{baseline:middle}',
-                    'text,f3_1,80,134.6,{baseline:middle}',
-                    'text,f4_1\nvery\nlong line,160,116.2,{baseline:middle}',
-                    'text,f5_1 long\nline,220,125.4,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,92',
-                    'setLineWidth,1',
-                    'rect,80,15,210,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,140,18.4',
-                    'setLineWidth,1',
-                    'rect,220,33.4,70,73.6',
-                    'setLineWidth,1',
-                    'rect,80,51.8,80,55.2',
-                    'setLineWidth,1',
-                    'rect,160,51.8,60,55.2',
-                    'setLineWidth,1',
-                    'rect,10,107,70,55.2',
-                    'setLineWidth,1',
-                    'rect,80,107,80,55.2',
-                    'setLineWidth,1',
-                    'rect,160,107,60,55.2',
-                    'setLineWidth,1',
-                    'rect,220,107,70,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,98.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f5 long line\n' +
+'very long line,265,103.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f3 long line very\n' +
+'long line,125,114.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f4 long line\n' +
+'very long\n' +
+'line,205,108.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 line,55,159,{baseline:middle}',
+                    'text,f3_1,125,159,{baseline:middle}',
+                    'text,f4_1 very\n' +
+'long line,205,153.25,{baseline:middle}',
+                    'text,f5_1 long line,265,159,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,87.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,210,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,76.5,70,66',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,98,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,98,60,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,142.5,70,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,142.5,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,142.5,60,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,142.5,70,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -3052,42 +3867,81 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle}',
-                    'text,Band1 line,80,27.88,{baseline:middle}',
-                    'text,Band1_2,80,53.64,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,220,64.68,{baseline:middle}',
-                    'text,f1_2_3,80,79.4,{baseline:middle}',
-                    'text,line1,80,105.16,{baseline:middle}',
-                    'text,F3,80,149.32,{baseline:middle}',
-                    'text,line1\nline2\nline3,160,130.92,{baseline:middle}',
-                    'text,f1_1,10,189.8,{baseline:middle}',
-                    'text,f3_1_1,80,189.8,{baseline:middle}',
-                    'text,f4_1,160,189.8,{baseline:middle}',
-                    'text,f5_1,220,189.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,165.6',
-                    'setLineWidth,1',
-                    'rect,80,15,210,25.76',
-                    'setLineWidth,1',
-                    'rect,80,40.76,140,25.76',
-                    'setLineWidth,1',
-                    'rect,220,40.76,70,139.84',
-                    'setLineWidth,1',
-                    'rect,80,66.52,140,25.76',
-                    'setLineWidth,1',
-                    'rect,80,92.28,140,25.76',
-                    'setLineWidth,1',
-                    'rect,80,118.04,80,62.56',
-                    'setLineWidth,1',
-                    'rect,160,118.04,60,62.56',
-                    'setLineWidth,1',
-                    'rect,10,180.6,70,18.4',
-                    'setLineWidth,1',
-                    'rect,80,180.6,80,18.4',
-                    'setLineWidth,1',
-                    'rect,160,180.6,60,18.4',
-                    'setLineWidth,1',
-                    'rect,220,180.6,70,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,55,74.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6,265,102.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f1_2_3,125,108.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1,125,130.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,125,163.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3,205,151.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,196.25,{baseline:middle}',
+                    'text,f3_1_1,125,196.25,{baseline:middle}',
+                    'text,f4_1,205,196.25,{baseline:middle}',
+                    'text,f5_1,265,196.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,130.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,210,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,76.5,70,109',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,98,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,119.5,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,141,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,141,60,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,185.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,185.5,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,185.5,60,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,185.5,70,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -3131,42 +3985,79 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle}',
-                    'text,Band1 line,80,27.88,{baseline:middle}',
-                    'text,Band1_2,80,58.24,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,220,64.68,{baseline:middle}',
-                    'text,f1_2_3,80,93.2,{baseline:middle}',
-                    'text,line1,80,128.16,{baseline:middle}',
-                    'text,F3,80,163.12,{baseline:middle}',
-                    'text,line1,160,163.12,{baseline:middle}',
-                    'text,f1_1,10,189.8,{baseline:middle}',
-                    'text,f3_1_1,80,189.8,{baseline:middle}',
-                    'text,f4_1,160,189.8,{baseline:middle}',
-                    'text,f5_1,220,189.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,165.6',
-                    'setLineWidth,1',
-                    'rect,80,15,210,25.76',
-                    'setLineWidth,1',
-                    'rect,80,40.76,140,34.96',
-                    'setLineWidth,1',
-                    'rect,220,40.76,70,139.84',
-                    'setLineWidth,1',
-                    'rect,80,75.72,140,34.96',
-                    'setLineWidth,1',
-                    'rect,80,110.68,140,34.96',
-                    'setLineWidth,1',
-                    'rect,80,145.64,80,34.96',
-                    'setLineWidth,1',
-                    'rect,160,145.64,60,34.96',
-                    'setLineWidth,1',
-                    'rect,10,180.6,70,18.4',
-                    'setLineWidth,1',
-                    'rect,80,180.6,80,18.4',
-                    'setLineWidth,1',
-                    'rect,160,180.6,60,18.4',
-                    'setLineWidth,1',
-                    'rect,220,180.6,70,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,66.35,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,89.05,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6,265,94.35,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f1_2_3,125,111.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1,125,134.45,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,125,157.15,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1,205,157.15,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,179.25,{baseline:middle}',
+                    'text,f3_1_1,125,179.25,{baseline:middle}',
+                    'text,f4_1,205,179.25,{baseline:middle}',
+                    'text,f5_1,265,179.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,113.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,210,22.7',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,77.7,140,22.7',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,77.7,70,90.8',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,100.4,140,22.7',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,123.1,140,22.7',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,145.8,80,22.7',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,145.8,60,22.7',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,168.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,168.5,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,168.5,60,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,168.5,70,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -3210,42 +4101,73 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3,10,61,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,47.2,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,220,42.6,{baseline:middle}',
-                    'text,f1_2_3,80,74.8,{baseline:middle}',
-                    'text,line1,80,102.4,{baseline:middle}',
-                    'text,F3,80,130,{baseline:middle}',
-                    'text,line1,160,130,{baseline:middle}',
-                    'text,f1_1,10,153,{baseline:middle}',
-                    'text,f3_1_1,80,153,{baseline:middle}',
-                    'text,f4_1,160,153,{baseline:middle}',
-                    'text,f5_1,220,153,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,128.8',
-                    'setLineWidth,1',
-                    'rect,80,15,210,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,140,27.6',
-                    'setLineWidth,1',
-                    'rect,220,33.4,70,110.4',
-                    'setLineWidth,1',
-                    'rect,80,61,140,27.6',
-                    'setLineWidth,1',
-                    'rect,80,88.6,140,27.6',
-                    'setLineWidth,1',
-                    'rect,80,116.2,80,27.6',
-                    'setLineWidth,1',
-                    'rect,160,116.2,60,27.6',
-                    'setLineWidth,1',
-                    'rect,10,143.8,70,18.4',
-                    'setLineWidth,1',
-                    'rect,80,143.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,160,143.8,60,18.4',
-                    'setLineWidth,1',
-                    'rect,220,143.8,70,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3,55,97.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6,265,90.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f1_2_3,125,108.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1,125,130.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,125,151.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1,205,151.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,173.25,{baseline:middle}',
+                    'text,f3_1_1,125,173.25,{baseline:middle}',
+                    'text,f4_1,205,173.25,{baseline:middle}',
+                    'text,f5_1,265,173.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,107.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,210,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,76.5,70,86',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,98,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,119.5,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,141,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,141,60,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,162.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,162.5,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,162.5,60,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,162.5,70,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -3289,42 +4211,86 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,33.4,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,44.9,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,220,42.6,{baseline:middle}',
-                    'text,f1_2_3,80,67.9,{baseline:middle}',
-                    'text,line1\nline2\nline3,80,90.9,{baseline:middle}',
-                    'text,F3,80,169.1,{baseline:middle}',
-                    'text,line1\nline2\nline3,160,150.7,{baseline:middle}',
-                    'text,f1_1,10,208.2,{baseline:middle}',
-                    'text,f3_1_1,80,208.2,{baseline:middle}',
-                    'text,f4_1,160,208.2,{baseline:middle}',
-                    'text,f5_1,220,208.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,184',
-                    'setLineWidth,1',
-                    'rect,80,15,210,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,140,23',
-                    'setLineWidth,1',
-                    'rect,220,33.4,70,165.6',
-                    'setLineWidth,1',
-                    'rect,80,56.4,140,23',
-                    'setLineWidth,1',
-                    'rect,80,79.4,140,59.8',
-                    'setLineWidth,1',
-                    'rect,80,139.2,80,59.8',
-                    'setLineWidth,1',
-                    'rect,160,139.2,60,59.8',
-                    'setLineWidth,1',
-                    'rect,10,199,70,18.4',
-                    'setLineWidth,1',
-                    'rect,80,199,80,18.4',
-                    'setLineWidth,1',
-                    'rect,160,199,60,18.4',
-                    'setLineWidth,1',
-                    'rect,220,199,70,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,55,85.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,265,96.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f1_2_3,125,108.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3,125,130.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,125,186.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3,205,174.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,219.25,{baseline:middle}',
+                    'text,f3_1_1,125,219.25,{baseline:middle}',
+                    'text,f4_1,205,219.25,{baseline:middle}',
+                    'text,f5_1,265,219.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,153.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,210,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,76.5,70,132',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,98,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,119.5,140,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,164,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,164,60,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,208.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,208.5,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,208.5,60,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,208.5,70,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -3368,42 +4334,89 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,51.8,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,42.6,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,220,61,{baseline:middle}',
-                    'text,f1_2_3,80,61,{baseline:middle}',
-                    'text,line1\nline2\nline3,80,79.4,{baseline:middle}',
-                    'text,F3,80,180.6,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,160,134.6,{baseline:middle}',
-                    'text,f1_1,10,245,{baseline:middle}',
-                    'text,f3_1_1,80,245,{baseline:middle}',
-                    'text,f4_1,160,245,{baseline:middle}',
-                    'text,f5_1,220,245,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,220.8',
-                    'setLineWidth,1',
-                    'rect,80,15,210,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,140,18.4',
-                    'setLineWidth,1',
-                    'rect,220,33.4,70,202.4',
-                    'setLineWidth,1',
-                    'rect,80,51.8,140,18.4',
-                    'setLineWidth,1',
-                    'rect,80,70.2,140,55.2',
-                    'setLineWidth,1',
-                    'rect,80,125.4,80,110.4',
-                    'setLineWidth,1',
-                    'rect,160,125.4,60,110.4',
-                    'setLineWidth,1',
-                    'rect,10,235.8,70,18.4',
-                    'setLineWidth,1',
-                    'rect,80,235.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,160,235.8,60,18.4',
-                    'setLineWidth,1',
-                    'rect,220,235.8,70,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,55,103,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6\n' +
+'line7\n' +
+'line8\n' +
+'line9,265,113.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f1_2_3,125,108.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3,125,130.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,125,203.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,line1\n' +
+'line2\n' +
+'line3\n' +
+'line4\n' +
+'line5\n' +
+'line6,205,174.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,253.75,{baseline:middle}',
+                    'text,f3_1_1,125,253.75,{baseline:middle}',
+                    'text,f4_1,205,253.75,{baseline:middle}',
+                    'text,f5_1,265,253.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,188',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,210,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,76.5,70,166.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,98,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,119.5,140,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,164,80,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,164,60,79',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,243,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,243,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,243,60,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,243,70,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -3443,36 +4456,61 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,96.8,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,78.4,{baseline:middle}',
-                    'text,f5 long\nline very\nlong line,220,87.6,{baseline:middle}',
-                    'text,f3 long line\nvery long\nline,80,132.6,{baseline:middle}',
-                    'text,f4 long\nline very\nlong line,160,132.6,{baseline:middle}',
-                    'text,f1_1 line,10,206.2,{baseline:middle}',
-                    'text,f3_1,80,206.2,{baseline:middle}',
-                    'text,f4_1\nvery\nlong line,160,187.8,{baseline:middle}',
-                    'text,f5_1 long\nline,220,197,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,163.6',
-                    'setLineWidth,1',
-                    'rect,80,15,210,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,140,90',
-                    'setLineWidth,1',
-                    'rect,220,33.4,70,145.2',
-                    'setLineWidth,1',
-                    'rect,80,123.4,80,55.2',
-                    'setLineWidth,1',
-                    'rect,160,123.4,60,55.2',
-                    'setLineWidth,1',
-                    'rect,10,178.6,70,55.2',
-                    'setLineWidth,1',
-                    'rect,80,178.6,80,55.2',
-                    'setLineWidth,1',
-                    'rect,160,178.6,60,55.2',
-                    'setLineWidth,1',
-                    'rect,220,178.6,70,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,133,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,125,121.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f5 long line\n' +
+'very long line,265,138,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f3 long line very\n' +
+'long line,125,183,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f4 long line\n' +
+'very long\n' +
+'line,205,177.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 line,55,227.5,{baseline:middle}',
+                    'text,f3_1,125,227.5,{baseline:middle}',
+                    'text,f4_1 very\n' +
+'long line,205,221.75,{baseline:middle}',
+                    'text,f5_1 long line,265,227.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,156',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,210,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,140,90',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,76.5,70,134.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,166.5,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,166.5,60,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,211,70,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,211,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,211,60,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,211,70,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
                 const onRowExporting = (e) => {
                     const notEmptyCell = e.rowCells.filter((cell) => cell.text)[0];
@@ -3510,24 +4548,42 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 line1,10,24.2,{baseline:middle}',
-                    'text,F1,10,61,{baseline:middle}',
-                    'text,Band1_2\nlong line,70,42.6,{baseline:middle}',
-                    'text,F2,70,79.4,{baseline:middle}',
-                    'text,f1_1 line\nlong line,10,116.2,{baseline:middle}',
-                    'text,f2_1_1\nvery long\nline very\nlong line,70,97.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,130,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,60,55.2',
-                    'setLineWidth,1',
-                    'rect,70,33.4,70,36.8',
-                    'setLineWidth,1',
-                    'rect,70,70.2,70,18.4',
-                    'setLineWidth,1',
-                    'rect,10,88.6,60,73.6',
-                    'setLineWidth,1',
-                    'rect,70,88.6,70,73.6'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 line1,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F1,55,103.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2\n' +
+'long line,115,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F2,115,120.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 line\n' +
+'long line,55,147.5,{baseline:middle}',
+                    'text,f2_1_1 very\n' +
+'long line very\n' +
+'long line,115,141.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,130,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,60,54.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,110,76.5,70,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,110,109.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,131,60,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,110,131,70,44.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ] }).then(() => {
@@ -3556,30 +4612,52 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle}',
-                    'text,F1,10,88.6,{baseline:middle}',
-                    'text,Band1_2 long line\nvery long line very\nlong,70,42.6,{baseline:middle}',
-                    'text,F2,70,116.2,{baseline:middle}',
-                    'text,f3 long line\nvery long\nline,140,97.8,{baseline:middle}',
-                    'text,f1_1 line,10,180.6,{baseline:middle}',
-                    'text,f2_1_2\nvery long\nline very\nlong line,70,153,{baseline:middle}',
-                    'text,f3_1_2\nlong line,140,171.4,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,210,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,60,110.4',
-                    'setLineWidth,1',
-                    'rect,70,33.4,150,55.2',
-                    'setLineWidth,1',
-                    'rect,70,88.6,70,55.2',
-                    'setLineWidth,1',
-                    'rect,140,88.6,80,55.2',
-                    'setLineWidth,1',
-                    'rect,10,143.8,60,73.6',
-                    'setLineWidth,1',
-                    'rect,70,143.8,70,73.6',
-                    'setLineWidth,1',
-                    'rect,140,143.8,80,73.6'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F1,55,109.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2 long line very long\n' +
+'line very long,115,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F2,115,126,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f3 long line very\n' +
+'long line,185,120.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 line,55,164.75,{baseline:middle}',
+                    'text,f2_1_2 very\n' +
+'long line very\n' +
+'long line,115,153.25,{baseline:middle}',
+                    'text,f3_1_2 long\n' +
+'line,185,159,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,210,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,60,66',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,110,76.5,150,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,110,109.5,70,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,180,109.5,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,142.5,60,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,110,142.5,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,180,142.5,80,44.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ] }).then(() => {
@@ -3603,21 +4681,35 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,42.6,{baseline:middle}',
-                    'text,Band2\nlong line,80,24.2,{baseline:middle}',
-                    'text,F2,80,61,{baseline:middle}',
-                    'text,f1_1 line,10,107,{baseline:middle}',
-                    'text,f2_1 very\nlong line\nvery long\nline,80,79.4,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,55.2',
-                    'setLineWidth,1',
-                    'rect,80,15,80,36.8',
-                    'setLineWidth,1',
-                    'rect,80,51.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,70.2,70,73.6',
-                    'setLineWidth,1',
-                    'rect,80,70.2,80,73.6'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,76.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band2 long line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F2,125,87.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 line,55,120.25,{baseline:middle}',
+                    'text,f2_1 very long\n' +
+'line very long\n' +
+'line,125,108.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,43',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,98,80,44.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting: () => {} }).then(() => {
@@ -3641,27 +4733,45 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,42.6,{baseline:middle}',
-                    'text,Band2 line long line\nvery long line,80,24.2,{baseline:middle}',
-                    'text,F2,80,61,{baseline:middle}',
-                    'text,F3,160,61,{baseline:middle}',
-                    'text,f1_1 line,10,107,{baseline:middle}',
-                    'text,f2_1 very\nlong line\nvery long\nline,80,79.4,{baseline:middle}',
-                    'text,f3_1,160,107,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,55.2',
-                    'setLineWidth,1',
-                    'rect,80,15,140,36.8',
-                    'setLineWidth,1',
-                    'rect,80,51.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,160,51.8,60,18.4',
-                    'setLineWidth,1',
-                    'rect,10,70.2,70,73.6',
-                    'setLineWidth,1',
-                    'rect,80,70.2,80,73.6',
-                    'setLineWidth,1',
-                    'rect,160,70.2,60,73.6'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,82.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band2 line long line very long\n' +
+'line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F2,125,98.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,205,98.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 line,55,131.75,{baseline:middle}',
+                    'text,f2_1 very long\n' +
+'line very long\n' +
+'line,125,120.25,{baseline:middle}',
+                    'text,f3_1,205,131.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,54.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,140,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,88,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,88,60,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,109.5,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,109.5,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,109.5,60,44.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting: () => {} }).then(() => {
@@ -3686,33 +4796,54 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,42.6,{baseline:middle}',
-                    'text,Band2,80,24.2,{baseline:middle}',
-                    'text,f4 very\nlong line,220,33.4,{baseline:middle}',
-                    'text,F2,80,51.8,{baseline:middle}',
-                    'text,f3 long\nline,160,42.6,{baseline:middle}',
-                    'text,f1_1,10,107,{baseline:middle}',
-                    'text,f2_1 line\nvery long\nline very\nlong line,80,79.4,{baseline:middle}',
-                    'text,f3_1,160,107,{baseline:middle}',
-                    'text,f4_1 long\nline,220,97.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,55.2',
-                    'setLineWidth,1',
-                    'rect,80,15,140,18.4',
-                    'setLineWidth,1',
-                    'rect,220,15,70,55.2',
-                    'setLineWidth,1',
-                    'rect,80,33.4,80,36.8',
-                    'setLineWidth,1',
-                    'rect,160,33.4,60,36.8',
-                    'setLineWidth,1',
-                    'rect,10,70.2,70,73.6',
-                    'setLineWidth,1',
-                    'rect,80,70.2,80,73.6',
-                    'setLineWidth,1',
-                    'rect,160,70.2,60,73.6',
-                    'setLineWidth,1',
-                    'rect,220,70.2,70,73.6'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,76.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band2,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f4 very long\n' +
+'line,265,70.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F2,125,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f3 long line,205,87.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,120.25,{baseline:middle}',
+                    'text,f2_1 line very\n' +
+'long line very\n' +
+'long line,125,108.75,{baseline:middle}',
+                    'text,f3_1,205,120.25,{baseline:middle}',
+                    'text,f4_1 long line,265,120.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,43',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,140,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,55,70,43',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,76.5,60,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,98,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,98,60,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,98,70,44.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ] }).then(() => {
@@ -3762,57 +4893,109 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,180.6,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,F2,80,189.8,{baseline:middle}',
-                    'text,Band1_1 long line\nvery long line,160,88.6,{baseline:middle}',
-                    'text,Band1_2,290,97.8,{baseline:middle}',
-                    'text,f7 long\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong\nline,380,42.6,{baseline:middle}',
-                    'text,f3  long\nline,160,245,{baseline:middle}',
-                    'text,f4  long\nline very\nlong line,220,235.8,{baseline:middle}',
-                    'text,f5 long\nline\nvery\nlong\nline,290,217.4,{baseline:middle}',
-                    'text,F6,340,254.2,{baseline:middle}',
-                    'text,f1_1 line,10,392.2,{baseline:middle}',
-                    'text,f2_1 long\nline very\nlong line,80,373.8,{baseline:middle}',
-                    'text,f3_1,160,392.2,{baseline:middle}',
-                    'text,f4_1 very\nlong line\nvery long\nline very\nlong line,220,355.4,{baseline:middle}',
-                    'text,f5_1\nlong\nline,290,373.8,{baseline:middle}',
-                    'text,f6_1,340,392.2,{baseline:middle}',
-                    'text,f7_1\nline,380,383,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,331.2',
-                    'setLineWidth,1',
-                    'rect,80,15,350,18.4',
-                    'setLineWidth,1',
-                    'rect,80,33.4,80,312.8',
-                    'setLineWidth,1',
-                    'rect,160,33.4,130,128.8',
-                    'setLineWidth,1',
-                    'rect,290,33.4,90,128.8',
-                    'setLineWidth,1',
-                    'rect,380,33.4,50,312.8',
-                    'setLineWidth,1',
-                    'rect,160,162.2,60,184',
-                    'setLineWidth,1',
-                    'rect,220,162.2,70,184',
-                    'setLineWidth,1',
-                    'rect,290,162.2,50,184',
-                    'setLineWidth,1',
-                    'rect,340,162.2,40,184',
-                    'setLineWidth,1',
-                    'rect,10,346.2,70,92',
-                    'setLineWidth,1',
-                    'rect,80,346.2,80,92',
-                    'setLineWidth,1',
-                    'rect,160,346.2,60,92',
-                    'setLineWidth,1',
-                    'rect,220,346.2,70,92',
-                    'setLineWidth,1',
-                    'rect,290,346.2,50,92',
-                    'setLineWidth,1',
-                    'rect,340,346.2,40,92',
-                    'setLineWidth,1',
-                    'rect,380,346.2,50,92'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,139.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1 line,125,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F2,125,150.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_1 long line very\n' +
+'long line,205,104.875,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,335,110.625,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f7 long\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long line,425,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f3  long\n' +
+'line,205,178.875,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f4  long line\n' +
+'very long line,265,178.875,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f5 long\n' +
+'line very\n' +
+'long line,335,173.125,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F6,385,184.625,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1_1 line,55,252.5,{baseline:middle}',
+                    'text,f2_1 long line\n' +
+'very long line,125,246.75,{baseline:middle}',
+                    'text,f3_1,205,252.5,{baseline:middle}',
+                    'text,f4_1 very\n' +
+'long line very\n' +
+'long line very\n' +
+'long line,265,235.25,{baseline:middle}',
+                    'text,f5_1\n' +
+'long line,335,246.75,{baseline:middle}',
+                    'text,f6_1,385,252.5,{baseline:middle}',
+                    'text,f7_1 line,425,252.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,169.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,350,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,80,148',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,76.5,130,68.25',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,330,76.5,90,68.25',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,420,76.5,50,148',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,144.75,60,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,144.75,70,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,330,144.75,50,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,380,144.75,40,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,224.5,70,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,224.5,80,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,224.5,60,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,224.5,70,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,330,224.5,50,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,380,224.5,40,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,420,224.5,50,56',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, {
@@ -3853,30 +5036,50 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,100,24.2,{baseline:middle}',
-                    'text,F1: f1 line line,10,42.6,{baseline:middle}',
-                    'text,f1_2 line\nlong line,20,70.2,{baseline:middle}',
-                    'text,f1_3 line\nlong line\nlong line,100,61,{baseline:middle}',
-                    'text,F1: f1 long line long line\nlong line,10,116.2,{baseline:middle}',
-                    'text,f2_2 line,20,171.4,{baseline:middle}',
-                    'text,f2_3 line\nlong line\nline,100,153,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,18.4',
-                    'setLineWidth,1',
-                    'rect,20,51.8,80,55.2',
-                    'setLineWidth,1',
-                    'rect,100,51.8,80,55.2',
-                    'setLineWidth,1',
-                    'rect,10,107,170,36.8',
-                    'setLineWidth,1',
-                    'rect,20,143.8,80,55.2',
-                    'setLineWidth,1',
-                    'rect,100,143.8,80,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 line line,55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2 line long line,55,114.5,{baseline:middle}',
+                    'text,f1_3 line long\n' +
+'line long line,145,108.75,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line long line long line,55,141.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2 line,55,169,{baseline:middle}',
+                    'text,f2_3 line long\n' +
+'line line,145,163.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,131,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,152.5,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,140,152.5,80,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
@@ -3912,30 +5115,50 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,100,24.2,{baseline:middle}',
-                    'text,F1: f1_1 long line,10,42.6,{baseline:middle}',
-                    'text,f1_2 long\nline long\nline long\nline,20,61,{baseline:middle}',
-                    'text,f1_3 line,100,88.6,{baseline:middle}',
-                    'text,F1: f2_1 long line long\nline long line,10,134.6,{baseline:middle}',
-                    'text,f2_2 line\nlong line,20,171.4,{baseline:middle}',
-                    'text,f2_3,100,180.6,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,18.4',
-                    'setLineWidth,1',
-                    'rect,20,51.8,80,73.6',
-                    'setLineWidth,1',
-                    'rect,100,51.8,80,73.6',
-                    'setLineWidth,1',
-                    'rect,10,125.4,170,36.8',
-                    'setLineWidth,1',
-                    'rect,20,162.2,80,36.8',
-                    'setLineWidth,1',
-                    'rect,100,162.2,80,36.8'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 long line,55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2 long line\n' +
+'long line long line,55,108.75,{baseline:middle}',
+                    'text,f1_3 line,145,114.5,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f2_1 long line long line long\n' +
+'line,55,141.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2 line long line,55,174.75,{baseline:middle}',
+                    'text,f2_3,145,174.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,131,170,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,164,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,140,164,80,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
@@ -3974,36 +5197,58 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,24.2,{baseline:middle}',
-                    'text,F4,100,24.2,{baseline:middle}',
-                    'text,F1: f1 long line,10,42.6,{baseline:middle}',
-                    'text,F2: f2_2 long line long\nline long line long line,20,61,{baseline:middle}',
-                    'text,f2_3 long\nline long\nline,30,97.8,{baseline:middle}',
-                    'text,f2_4,100,116.2,{baseline:middle}',
-                    'text,F1: f1 long line long line\nlong line,10,153,{baseline:middle}',
-                    'text,F2: f1_2 long line,20,189.8,{baseline:middle}',
-                    'text,f1_3 line,30,208.2,{baseline:middle}',
-                    'text,f1_4,100,208.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,18.4',
-                    'setLineWidth,1',
-                    'rect,20,51.8,160,36.8',
-                    'setLineWidth,1',
-                    'rect,30,88.6,70,55.2',
-                    'setLineWidth,1',
-                    'rect,100,88.6,80,55.2',
-                    'setLineWidth,1',
-                    'rect,10,143.8,170,36.8',
-                    'setLineWidth,1',
-                    'rect,20,180.6,160,18.4',
-                    'setLineWidth,1',
-                    'rect,30,199,70,18.4',
-                    'setLineWidth,1',
-                    'rect,100,199,80,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line,55,87.25,{baseline:middle}',
+                    'text,F2: f2_2 long line long line long\n' +
+'line long line,55,108.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_3 long line\n' +
+'long line,55,141.75,{baseline:middle}',
+                    'text,f2_4,145,147.5,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line long line long line,55,174.75,{baseline:middle}',
+                    'text,F2: f1_2 long line,55,196.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_3 line,55,217.75,{baseline:middle}',
+                    'text,f1_4,145,217.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,170,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,131,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,140,131,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,164,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,185.5,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,207,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,140,207,80,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
@@ -4034,27 +5279,44 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,90,24.2,{baseline:middle}',
-                    'text,F4,180,24.2,{baseline:middle}',
-                    'text,F1: f1 line long line (Max: f1 line\nlong line),10,42.6,{baseline:middle}',
-                    'text,f2 line,20,97.8,{baseline:middle}',
-                    'text,f3 long line\nlong line\nlong line,90,79.4,{baseline:middle}',
-                    'text,f4 long line,180,97.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,90,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,250,36.8',
-                    'setLineWidth,1',
-                    'rect,20,70.2,70,55.2',
-                    'setLineWidth,1',
-                    'rect,90,70.2,90,55.2',
-                    'setLineWidth,1',
-                    'rect,180,70.2,80,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,135,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,225,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 line long line (Max: f1 line long line),55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2 line,55,114.5,{baseline:middle}',
+                    'text,f3 long line long\n' +
+'line long line,135,108.75,{baseline:middle}',
+                    'text,f4 long line,225,114.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,220,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,98,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,220,98,80,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ] }).then(() => {
@@ -4086,38 +5348,58 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,24.2,{baseline:middle}',
-                    'text,F4,260,24.2,{baseline:middle}',
-                    'text,F1: f1 long line long line long line\n(Max: f1 long line long line long\nline),10,42.6,{baseline:middle}',
-                    'text,Max: f4 long\nline long line,260,51.8,{baseline:middle}',
-                    'text,F2: f2 long line (Max of F1 is f1\nlong line long line long line),20,97.8,{baseline:middle}',
-                    'text,Max: f4 long\nline long line,260,97.8,{baseline:middle}',
-                    'text,f3 line,30,143.8,{baseline:middle}',
-                    'text,f4 long line\nlong line,260,134.6,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,250,18.4',
-                    'setLineWidth,1',
-                    'rect,260,15,100,18.4',
-                    'setLineWidth,1',
-                    'line,10,33.4,260,33.4',
-                    'line,10,33.4,10,88.6',
-                    'line,10,88.6,260,88.6',
-                    'setLineWidth,1',
-                    'line,260,33.4,360,33.4',
-                    'line,360,33.4,360,88.6',
-                    'line,260,88.6,360,88.6',
-                    'setLineWidth,1',
-                    'line,20,88.6,260,88.6',
-                    'line,20,88.6,20,125.4',
-                    'line,20,125.4,260,125.4',
-                    'setLineWidth,1',
-                    'line,260,88.6,360,88.6',
-                    'line,360,88.6,360,125.4',
-                    'line,260,125.4,360,125.4',
-                    'setLineWidth,1',
-                    'rect,30,125.4,230,36.8',
-                    'setLineWidth,1',
-                    'rect,260,125.4,100,36.8'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,305,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line long line long line (Max: f1 long\n' +
+'line long line long line),55,87.25,{baseline:middle}',
+                    'text,Max: f4 long line\n' +
+'long line,305,87.25,{baseline:middle}',
+                    'text,F2: f2 long line (Max of F1 is f1 long line long line\n' +
+'long line),55,120.25,{baseline:middle}',
+                    'text,Max: f4 long line\n' +
+'long line,305,120.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f3 line,55,153.25,{baseline:middle}',
+                    'text,f4 long line long line,305,153.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,55,100,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'line,50,76.5,300,76.5',
+                    'line,50,76.5,50,109.5',
+                    'line,50,109.5,300,109.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'line,300,76.5,400,76.5',
+                    'line,400,76.5,400,109.5',
+                    'line,300,109.5,400,109.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'line,50,109.5,300,109.5',
+                    'line,50,109.5,50,142.5',
+                    'line,50,142.5,300,142.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'line,300,109.5,400,109.5',
+                    'line,400,109.5,400,142.5',
+                    'line,300,142.5,400,142.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,142.5,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,300,142.5,100,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting: () => {} }).then(() => {
@@ -4149,34 +5431,55 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,160,24.2,{baseline:middle}',
-                    'text,F4,250,24.2,{baseline:middle}',
-                    'text,F1: f1 long line (Max: f1 long line),10,42.6,{baseline:middle}',
-                    'text,f2 very long line\nvery long line,20,61,{baseline:middle}',
-                    'text,f3 line,160,70.2,{baseline:middle}',
-                    'text,f4 long line,250,70.2,{baseline:middle}',
-                    'text,Max: f3 line,160,97.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,150,18.4',
-                    'setLineWidth,1',
-                    'rect,160,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,250,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,320,18.4',
-                    'setLineWidth,1',
-                    'rect,20,51.8,140,36.8',
-                    'setLineWidth,1',
-                    'rect,160,51.8,90,36.8',
-                    'setLineWidth,1',
-                    'rect,250,51.8,80,36.8',
-                    'setLineWidth,1',
-                    'rect,20,88.6,140,18.4',
-                    'setLineWidth,1',
-                    'rect,160,88.6,90,18.4',
-                    'setLineWidth,1',
-                    'rect,250,88.6,80,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,205,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,295,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line (Max: f1 long line),55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2 very long line very long line,55,108.75,{baseline:middle}',
+                    'text,f3 line,205,108.75,{baseline:middle}',
+                    'text,f4 long line,295,108.75,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3 line,205,130.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,150,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,290,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,320,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,150,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,98,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,290,98,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,150,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,119.5,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,290,119.5,80,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ] }).then(() => {
@@ -4210,34 +5513,58 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,90,24.2,{baseline:middle}',
-                    'text,F4,180,24.2,{baseline:middle}',
-                    'text,F1: f1 long line,10,42.6,{baseline:middle}',
-                    'text,f2 long\nline long\nline long\nline,20,61,{baseline:middle}',
-                    'text,f3 line long\nline long line,90,79.4,{baseline:middle}',
-                    'text,f4 line,180,88.6,{baseline:middle}',
-                    'text,Max: f3 line\nlong line\nlong line,90,134.6,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,90,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,250,18.4',
-                    'setLineWidth,1',
-                    'rect,20,51.8,70,73.6',
-                    'setLineWidth,1',
-                    'rect,90,51.8,90,73.6',
-                    'setLineWidth,1',
-                    'rect,180,51.8,80,73.6',
-                    'setLineWidth,1',
-                    'rect,20,125.4,70,55.2',
-                    'setLineWidth,1',
-                    'rect,90,125.4,90,55.2',
-                    'setLineWidth,1',
-                    'rect,180,125.4,80,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,135,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,225,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line,55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2 long line long\n' +
+'line long line,55,108.75,{baseline:middle}',
+                    'text,f3 line long line\n' +
+'long line,135,108.75,{baseline:middle}',
+                    'text,f4 line,225,114.5,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3 line long\n' +
+'line long line,135,141.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,220,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,98,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,220,98,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,131,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,131,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,220,131,80,33',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [80, 90, 80] }).then(() => {
@@ -4274,61 +5601,112 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,24.2,{baseline:middle}',
-                    'text,F4,90,24.2,{baseline:middle}',
-                    'text,F1: f1 very ling line very\nlong line very long line,10,42.6,{baseline:middle}',
-                    'text,F2: f2_1 line,20,79.4,{baseline:middle}',
-                    'text,f3line1\nline2\nline3\nline4,30,97.8,{baseline:middle}',
-                    'text,f4,90,125.4,{baseline:middle}',
-                    'text,Max:\nf3line1\nline2\nline3\nline4,30,171.4,{baseline:middle}',
-                    'text,Max:\nf3line1\nline2\nline3\nline4,20,263.4,{baseline:middle}',
-                    'text,F1: f1 very long line\nvery long line,10,355.4,{baseline:middle}',
-                    'text,F2: f2_2very long line\nvery long line,20,392.2,{baseline:middle}',
-                    'text,f3very\nlong line\nvery\nlong line,30,429,{baseline:middle}',
-                    'text,f4,90,456.6,{baseline:middle}',
-                    'text,Max:\nf3very\nlong line\nvery\nlong line,30,502.6,{baseline:middle}',
-                    'text,Max:\nf3very\nlong line\nvery long\nline,20,594.6,{baseline:middle}',
-                    'text,Max:\nf3very long\nline very\nlong line,10,686.6,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,90,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,36.8',
-                    'setLineWidth,1',
-                    'rect,20,70.2,160,18.4',
-                    'setLineWidth,1',
-                    'rect,30,88.6,60,73.6',
-                    'setLineWidth,1',
-                    'rect,90,88.6,90,73.6',
-                    'setLineWidth,1',
-                    'rect,30,162.2,60,92',
-                    'setLineWidth,1',
-                    'rect,90,162.2,90,92',
-                    'setLineWidth,1',
-                    'rect,20,254.2,70,92',
-                    'setLineWidth,1',
-                    'rect,90,254.2,90,92',
-                    'setLineWidth,1',
-                    'rect,10,346.2,170,36.8',
-                    'setLineWidth,1',
-                    'rect,20,383,160,36.8',
-                    'setLineWidth,1',
-                    'rect,30,419.8,60,73.6',
-                    'setLineWidth,1',
-                    'rect,90,419.8,90,73.6',
-                    'setLineWidth,1',
-                    'rect,30,493.4,60,92',
-                    'setLineWidth,1',
-                    'rect,90,493.4,90,92',
-                    'setLineWidth,1',
-                    'rect,20,585.4,70,92',
-                    'setLineWidth,1',
-                    'rect,90,585.4,90,92',
-                    'setLineWidth,1',
-                    'rect,10,677.4,80,73.6',
-                    'setLineWidth,1',
-                    'rect,90,677.4,90,73.6'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,135,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 very ling line very long line\n' +
+'very long line,55,87.25,{baseline:middle}',
+                    'text,F2: f2_1 line,55,120.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f3line1\n' +
+'line2\n' +
+'line3\n' +
+'line4,55,141.75,{baseline:middle}',
+                    'text,f4,135,159,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3line1\n' +
+'line2\n' +
+'line3\n' +
+'line4,55,197.75,{baseline:middle}',
+                    'text,Max: f3line1\n' +
+'line2\n' +
+'line3\n' +
+'line4,55,253.75,{baseline:middle}',
+                    'text,F1: f1 very long line very long\n' +
+'line,55,309.75,{baseline:middle}',
+                    'text,F2: f2_2very long line very long\n' +
+'line,55,342.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f3very long line\n' +
+'very long line,55,375.75,{baseline:middle}',
+                    'text,f4,135,381.5,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3very\n' +
+'long line very\n' +
+'long line,55,408.75,{baseline:middle}',
+                    'text,Max: f3very\n' +
+'long line very\n' +
+'long line,55,453.25,{baseline:middle}',
+                    'text,Max: f3very\n' +
+'long line very\n' +
+'long line,55,497.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,109.5,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,131,80,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,131,90,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,187,80,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,187,90,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,243,80,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,243,90,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,299,170,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,332,170,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,365,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,365,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,398,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,398,90,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,442.5,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,442.5,90,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,487,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,130,487,90,44.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ] }).then(() => {
@@ -4357,17 +5735,32 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1\nlong line\n1 ling line\n2,10,24.2,{baseline:middle}',
-                    'text,F1: f1_1\nline,10,97.8,{baseline:middle}',
-                    'text,F2: f2_1\nline long\nline long\nline,20,134.6,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,73.6',
-                    'setLineWidth,1',
-                    'rect,10,88.6,70,36.8',
-                    'setLineWidth,1',
-                    'rect,20,125.4,60,73.6',
-                    'setLineWidth,1',
-                    'rect,30,199,50,0'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 long\n' +
+'line 1 ling\n' +
+'line 2,55,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 line,55,110.25,{baseline:middle}',
+                    'text,F2: f2_1 line\n' +
+'long line\n' +
+'long line,55,131.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,99.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,121,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,165.5,70,0',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70 ] }).then(() => {
@@ -4398,23 +5791,42 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1\nlong line\n1 ling line\n2,10,24.2,{baseline:middle}',
-                    'text,f3 line,80,51.8,{baseline:middle}',
-                    'text,F1: f1_1 line (Max:\nf1_1 line),10,97.8,{baseline:middle}',
-                    'text,F2: f2_1 line long\nline long line (Max\nof F1 is f1_1 line),20,134.6,{baseline:middle}',
-                    'text,long line\nvery long\nline,80,189.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,70,73.6',
-                    'setLineWidth,1',
-                    'rect,80,15,70,73.6',
-                    'setLineWidth,1',
-                    'rect,10,88.6,140,36.8',
-                    'setLineWidth,1',
-                    'rect,20,125.4,130,55.2',
-                    'setLineWidth,1',
-                    'rect,30,180.6,50,55.2',
-                    'setLineWidth,1',
-                    'rect,80,180.6,70,55.2'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 long\n' +
+'line 1 ling\n' +
+'line 2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f3 line,125,77.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 line (Max: f1_1\n' +
+'line),55,110.25,{baseline:middle}',
+                    'text,F2: f2_1 line long line long\n' +
+'line (Max of F1 is f1_1 line),55,143.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,long line very\n' +
+'long line,125,176.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,55,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,99.5,140,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,132.5,140,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,165.5,70,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,165.5,70,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
@@ -4463,51 +5875,99 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 line,10,24.2,{baseline:middle}',
-                    'text,Band1_1 long line\nvery long line,10,97.8,{baseline:middle}',
-                    'text,Band1_2,160,107,{baseline:middle}',
-                    'text,f7 long\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong\nline,290,42.6,{baseline:middle}',
-                    'text,f3  long\nline,10,254.2,{baseline:middle}',
-                    'text,f4  long\nline very\nlong line,80,245,{baseline:middle}',
-                    'text,f5 long\nline very\nlong line,160,245,{baseline:middle}',
-                    'text,F6,220,263.4,{baseline:middle}',
-                    'text,F1: f1_1 line,10,355.4,{baseline:middle}',
-                    'text,F2: f2_1 long line very long line,20,373.8,{baseline:middle}',
-                    'text,f3_1,30,429,{baseline:middle}',
-                    'text,f4_1 very\nlong line\nvery long\nline very\nlong line,80,392.2,{baseline:middle}',
-                    'text,f5_1\nlong line,160,419.8,{baseline:middle}',
-                    'text,f6_1,220,429,{baseline:middle}',
-                    'text,f7_1\nline,290,419.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,330,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,150,147.2',
-                    'setLineWidth,1',
-                    'rect,160,33.4,130,147.2',
-                    'setLineWidth,1',
-                    'rect,290,33.4,50,312.8',
-                    'setLineWidth,1',
-                    'rect,10,180.6,70,165.6',
-                    'setLineWidth,1',
-                    'rect,80,180.6,80,165.6',
-                    'setLineWidth,1',
-                    'rect,160,180.6,60,165.6',
-                    'setLineWidth,1',
-                    'rect,220,180.6,70,165.6',
-                    'setLineWidth,1',
-                    'rect,10,346.2,330,18.4',
-                    'setLineWidth,1',
-                    'rect,20,364.6,320,18.4',
-                    'setLineWidth,1',
-                    'rect,30,383,50,92',
-                    'setLineWidth,1',
-                    'rect,80,383,80,92',
-                    'setLineWidth,1',
-                    'rect,160,383,60,92',
-                    'setLineWidth,1',
-                    'rect,220,383,70,92',
-                    'setLineWidth,1',
-                    'rect,290,383,50,92'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 line,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_1 long line very long\n' +
+'line,55,104.875,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,205,110.625,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f7 long\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long line,335,87.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f3  long line,55,184.625,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f4  long line\n' +
+'very long line,125,178.875,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,f5 long line\n' +
+'very long\n' +
+'line,205,173.125,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F6,265,184.625,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 line,55,235.25,{baseline:middle}',
+                    'text,F2: f2_1 long line very long line,55,256.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f3_1,55,295.5,{baseline:middle}',
+                    'text,f4_1 very long\n' +
+'line very long\n' +
+'line very long\n' +
+'line,125,278.25,{baseline:middle}',
+                    'text,f5_1 long\n' +
+'line,205,289.75,{baseline:middle}',
+                    'text,f6_1,265,295.5,{baseline:middle}',
+                    'text,f7_1 line,335,295.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,330,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,150,68.25',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,76.5,130,68.25',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,330,76.5,50,148',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,144.75,70,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,144.75,80,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,144.75,60,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,144.75,70,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,224.5,330,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,246,330,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,267.5,70,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,120,267.5,80,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,200,267.5,60,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,260,267.5,70,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,330,267.5,50,56',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
                 ];
 
                 exportDataGrid(doc, dataGrid, {
