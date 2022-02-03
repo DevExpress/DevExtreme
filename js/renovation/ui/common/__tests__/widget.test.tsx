@@ -196,6 +196,16 @@ describe('Widget', () => {
           expect(widget.active).toBe(false);
         });
 
+        it('should call onInactive after active widget disabling', () => {
+          const widget = new Widget({
+            activeStateEnabled: true, disabled: true, onInactive,
+          });
+          widget.active = true;
+          widget.activeEffect();
+
+          expect(onInactive).toHaveBeenCalledTimes(1);
+        });
+
         it('should not subscribe if widget is not focusable', () => {
           const widget = new Widget({
             activeStateEnabled: false, disabled: false, onActive, onInactive,
@@ -368,6 +378,17 @@ describe('Widget', () => {
 
           expect(widget.focused).toBe(false);
         });
+
+        it('should call onFocusOut after focused widget disabling', () => {
+          const onFocusOut = jest.fn();
+          const widget = new Widget({
+            focusStateEnabled: true, disabled: true, onFocusOut,
+          });
+          widget.focused = true;
+          widget.focusEffect();
+
+          expect(onFocusOut).toHaveBeenCalledTimes(1);
+        });
       });
 
       describe('hoverEffect', () => {
@@ -451,6 +472,17 @@ describe('Widget', () => {
           widget.hoverEffect();
 
           expect(widget.hovered).toBe(false);
+        });
+
+        it('should call onHoverEnd after hovered widget disabling', () => {
+          const onHoverEnd = jest.fn();
+          const widget = new Widget({
+            hoverStateEnabled: true, disabled: true, onHoverEnd,
+          });
+          widget.hovered = true;
+          widget.hoverEffect();
+
+          expect(onHoverEnd).toHaveBeenCalledTimes(1);
         });
       });
 

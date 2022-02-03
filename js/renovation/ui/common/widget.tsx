@@ -99,17 +99,17 @@ export class WidgetProps extends BaseWidgetProps {
 
   @Event() onDimensionChanged?: () => void;
 
-  @Event() onInactive?: (e: Event) => void;
+  @Event() onInactive?: (e?: Event) => void;
 
   @Event() onVisibilityChange?: (args: boolean) => void;
 
   @Event() onFocusIn?: (e: Event) => void;
 
-  @Event() onFocusOut?: (e: Event) => void;
+  @Event() onFocusOut?: (e?: Event) => void;
 
   @Event() onHoverStart?: (e: Event) => void;
 
-  @Event() onHoverEnd?: (e: Event) => void;
+  @Event() onHoverEnd?: (e?: Event) => void;
 
   @Event() onRootElementRendered?: (rootElement: HTMLDivElement) => void;
 }
@@ -165,7 +165,10 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     if (activeStateEnabled) {
       if (disabled) {
-        this.active = false;
+        if (this.active) {
+          this.active = false;
+          onInactive?.();
+        }
       } else {
         active.on(this.widgetElementRef.current,
           ({ event }: { event: Event }) => {
@@ -235,7 +238,10 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     if (focusStateEnabled) {
       if (disabled) {
-        this.focused = false;
+        if (this.focused) {
+          this.focused = false;
+          onFocusOut?.();
+        }
       } else {
         focus.on(this.widgetElementRef.current,
           (e: Event & { isDefaultPrevented: () => boolean }) => {
@@ -271,7 +277,10 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     if (hoverStateEnabled) {
       if (disabled) {
-        this.hovered = false;
+        if (this.hovered) {
+          this.hovered = false;
+          onHoverEnd?.();
+        }
       } else {
         hover.on(this.widgetElementRef.current,
           ({ event }: { event: Event }) => {
