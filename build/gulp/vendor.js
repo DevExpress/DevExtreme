@@ -18,6 +18,12 @@ const JS_VENDORS = [
         path: '/jquery/dist/jquery.js'
     },
     {
+        path: '/jspdf/dist/jspdf.umd.js'
+    },
+    {
+        path: '/jspdf-autotable/dist/jspdf.plugin.autotable.js'
+    },
+    {
         path: '/jszip/dist/jszip.js'
     },
     {
@@ -27,6 +33,12 @@ const JS_VENDORS = [
     {
         path: '/cldrjs/dist/cldr.js',
         noUglyFile: true
+    },
+    {
+        path: '/exceljs/dist/exceljs.js'
+    },
+    {
+        path: '/file-saver/dist/FileSaver.js'
     },
     {
         path: '/globalize/dist/globalize.js',
