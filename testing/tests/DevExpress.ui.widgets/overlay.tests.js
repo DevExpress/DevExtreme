@@ -2273,13 +2273,6 @@ testModule('container', moduleConfig, () => {
         });
     });
 
-    test('content should not be moved if overlay in container', function(assert) {
-        const overlay = $('#overlayInTargetContainer').dxOverlay().dxOverlay('instance');
-
-        overlay.show();
-        assert.strictEqual(viewport().children(toSelector(OVERLAY_CLASS)).children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
-    });
-
     test('css classes from overlay should be duplicated to wrapper if "copyRootClassesToWrapper" is true', function(assert) {
         const instance = $('#overlayWithClass').dxOverlay({
             visible: true,

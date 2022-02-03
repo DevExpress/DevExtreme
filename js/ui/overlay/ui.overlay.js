@@ -915,21 +915,8 @@ const Overlay = Widget.inherit({
     },
 
     _moveToContainer: function() {
-        this._attachWrapperToContainer();
-
+        this._$wrapper.appendTo(this._positionController.$container);
         this._$content.appendTo(this._$wrapper);
-    },
-
-    _attachWrapperToContainer: function() {
-        const $element = this.$element();
-
-        let renderContainer = this._positionController.$container;
-
-        if(renderContainer && renderContainer[0] === $element.parent()[0]) {
-            renderContainer = $element;
-        }
-
-        this._$wrapper.appendTo(renderContainer);
     },
 
     _renderGeometry: function(options) {

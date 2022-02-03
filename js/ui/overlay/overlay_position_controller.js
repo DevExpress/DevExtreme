@@ -100,7 +100,7 @@ class OverlayPositionController {
         this._props.container = containerProp;
 
         this._$markupContainer = containerProp
-            ? containerProp
+            ? $(containerProp)
             : swatch.getSwatchContainer(this._$root);
 
         this.updateVisualContainer(this._props.visualContainer);
