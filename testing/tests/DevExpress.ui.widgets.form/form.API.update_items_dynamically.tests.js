@@ -2361,7 +2361,6 @@ module('Validation', () => {
         });
 
         testWrapper._form.option('items[0].items[0].visible', true);
-        testWrapper._form._validationSummary._initGroupRegistration();
         testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
         testWrapper.checkValidationSummaryContent(['dataField2 is required']);
     });
