@@ -30,7 +30,7 @@ fixture`Toolbar_common`
       }, { dependencies: { targetContainerSelector } })();
 
       await t
-        .expect(await takeScreenshot(`Default-nested-widgets-render-in-toolbar,theme=${theme},items.locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
+        .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -53,6 +53,8 @@ fixture`Toolbar_common`
       return createWidget('dxToolbar', {
         items: toolbarItems,
       });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
 
     test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=${locateInMenu}`, async () => {
@@ -73,7 +75,7 @@ fixture`Toolbar_common`
       }, { dependencies: { targetContainerSelector } })();
 
       await t
-        .expect(await takeScreenshot(`Toolbar with dropDownButton,theme=${theme},items.locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
+        .expect(await takeScreenshot(`Toolbar with dropDownButton,theme=${theme.replace(/\./g, '-')},locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -121,6 +123,8 @@ fixture`Toolbar_common`
       return createWidget('dxToolbar', {
         items: toolbarItems,
       });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
   });
 });
