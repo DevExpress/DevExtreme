@@ -384,7 +384,8 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         let clickFired = 0;
 
         const element = this.Button({
-            onClick: () => clickFired++
+            onClick: () => clickFired++,
+            focusStateEnabled: true
         });
 
         const keyboard = keyboardMock(element);
@@ -401,7 +402,8 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         const clickHandler = sinon.spy();
 
         const element = this.Button({
-            onClick: clickHandler
+            onClick: clickHandler,
+            focusStateEnabled: true,
         });
 
         const keyboard = keyboardMock(element);

@@ -1,6 +1,5 @@
 import { data as elementData } from '../../core/element_data';
 import eventsEngine from '../../events/core/events_engine';
-import WeakMap from '../polyfills/weak_map';
 import { isDefined } from './type';
 import { removeEvent } from '../../events/remove';
 

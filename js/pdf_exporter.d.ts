@@ -198,12 +198,14 @@ export interface PdfExportGanttFont {
   /**
   * @docid
   * @default 'normal'
+  * @acceptValues "bold" | "normal" | "italic"
   * @public
   */
   style?: string;
   /**
   * @docid
   * @default undefined
+  * @acceptValues  "normal" | "bold" | 400 | 700
   * @public
   */
   weight?: string | number;

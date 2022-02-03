@@ -9,7 +9,6 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { getBoundingRect } from '../../core/utils/position';
 import AsyncCollectionWidget from '../collection/ui.collection_widget.async';
-import Promise from '../../core/polyfills/promise';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 import errors from '../../core/errors';
 import fx from '../../animation/fx';

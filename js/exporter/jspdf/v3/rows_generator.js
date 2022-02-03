@@ -28,6 +28,15 @@ import { isDefined } from '../../../core/utils/type';
 //    }
 // ]
 
+const defaultStyles = {
+    header: { font: { size: 10 }, textColor: '#979797', borderColor: '#979797' },
+    group: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
+    data: { font: { size: 10 }, borderColor: '#979797' },
+    groupFooter: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
+    totalFooter: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
+};
+
+
 function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
     const result = [];
 
@@ -65,17 +74,21 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, columns, ro
     const result = [];
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
+        const style = defaultStyles[rowType];
+
+        const pdfCell = {
+            text: cellData.value?.toString(),
+            verticalAlign: 'middle',
+            horizontalAlign: columns[cellIndex].alignment ?? 'left',
+            wordWrapEnabled,
+            backgroundColor,
+            padding: 5,
+            _rect: {}
+        };
+
         const cellInfo = {
             gridCell: cellData.cellSourceData,
-            pdfCell: {
-                text: cellData.value?.toString(),
-                verticalAlign: 'middle',
-                horizontalAlign: columns[cellIndex].alignment ?? 'left',
-                wordWrapEnabled,
-                backgroundColor,
-                padding: 0,
-                _rect: {}
-            }
+            pdfCell: Object.assign({}, pdfCell, style)
         };
 
         if(rowType === 'header') {
