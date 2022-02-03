@@ -35,7 +35,7 @@ if(Quill) {
             this.options = extend({}, this._getDefaultOptions(), options);
             this._popup = this.renderPopup();
             this._popup.$wrapper().addClass(SUGGESTION_LIST_WRAPPER_CLASS);
-            this._preventFocusOut();
+            this._preventPopupFocusOut();
         }
 
         renderList($container, options) {
@@ -105,7 +105,7 @@ if(Quill) {
             }
         }
 
-        _preventFocusOut() {
+        _preventPopupFocusOut() {
             const eventName = addNamespace('mousedown', MODULE_NAMESPACE);
 
             eventsEngine.on(this._popup.$wrapper(), eventName, (e) => {
