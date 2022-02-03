@@ -4,7 +4,7 @@ import { extend } from '../../core/utils/extend';
 import positionUtils from '../../animation/position';
 import { resetPosition, move, locate } from '../../animation/translator';
 import { getWindow } from '../../core/utils/window';
-import { value as viewPort } from '../../core/utils/view_port';
+import swatch from '../widget/swatch_container';
 
 const window = getWindow();
 
@@ -57,6 +57,8 @@ class OverlayPositionController {
     }
 
     get $container() {
+        this.updateContainer(); // NOTE: swatch classes can be updated runtime
+
         return this._$markupContainer;
     }
 
@@ -94,18 +96,12 @@ class OverlayPositionController {
         this._position = this._normalizePosition(positionProp);
     }
 
-    updateContainer(containerProp) {
+    updateContainer(containerProp = this._props.container) {
         this._props.container = containerProp;
 
-        const container = containerProp ?? viewPort();
-
-        let $container = this._$root.closest(container);
-
-        if(!$container.length) {
-            $container = $(container).first();
-        }
-
-        this._$markupContainer = $container.length ? $container : this._$root.parent();
+        this._$markupContainer = containerProp
+            ? containerProp
+            : swatch.getSwatchContainer(this._$root);
 
         this.updateVisualContainer(this._props.visualContainer);
     }

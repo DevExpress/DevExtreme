@@ -27,7 +27,6 @@ import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../event
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import { tabbable } from '../widget/selectors';
-import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
@@ -923,8 +922,8 @@ const Overlay = Widget.inherit({
 
     _attachWrapperToContainer: function() {
         const $element = this.$element();
-        const containerDefined = this.option('container') !== undefined;
-        let renderContainer = containerDefined ? this._positionController.$container : swatch.getSwatchContainer($element);
+
+        let renderContainer = this._positionController.$container;
 
         if(renderContainer && renderContainer[0] === $element.parent()[0]) {
             renderContainer = $element;

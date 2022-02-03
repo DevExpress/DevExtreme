@@ -2280,16 +2280,6 @@ testModule('container', moduleConfig, () => {
         assert.strictEqual(viewport().children(toSelector(OVERLAY_CLASS)).children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
     });
 
-    test('content should be moved to parent overlay element if container equals \'null\'', function(assert) {
-        const overlay = $('#overlay').dxOverlay({
-            container: false
-        }).dxOverlay('instance');
-
-        overlay.show();
-        assert.strictEqual($('#overlay').children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
-        assert.strictEqual($(toSelector(VIEWPORT_CLASS)).children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 0);
-    });
-
     test('css classes from overlay should be duplicated to wrapper if "copyRootClassesToWrapper" is true', function(assert) {
         const instance = $('#overlayWithClass').dxOverlay({
             visible: true,
@@ -2487,12 +2477,12 @@ testModule('container', moduleConfig, () => {
         }
     });
 
-    test('widget should react on viewport change with correct container', function(assert) {
+    test('widget should not react on viewport change with correct container', function(assert) {
         const origViewport = viewPort();
 
         try {
             $('#overlay').dxOverlay({
-                container: false,
+                container: $('#container'),
                 visible: true
             });
 
@@ -3624,7 +3614,7 @@ QUnit.module('prevent safari scrolling on ios devices', {
     });
 });
 
-// visualContainer -> container -> swatch -> viewport -> body -> parent element
+// visualContainer -> container -> window
 QUnit.module('wrapper covered element choice', () => {
     QUnit.test('position.of has no affect on wrapper dimensions', function(assert) {
         const overlay = $('#overlay').dxOverlay({
