@@ -13,7 +13,7 @@ import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isFunction, isObject } from '../../core/utils/type';
+import { isFunction, isObject, isWindow } from '../../core/utils/type';
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import errors from '../../core/errors';
@@ -149,6 +149,8 @@ const Overlay = Widget.inherit({
             restorePosition: true,
 
             container: undefined,
+
+            visualContainer: undefined,
 
             // NOTE: private options
             hideTopOverlayHandler: () => { this.hide(); },
@@ -848,11 +850,12 @@ const Overlay = Widget.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { container, _fixWrapperPosition, restorePosition } = this.option();
+        const { container, visualContainer, _fixWrapperPosition, restorePosition } = this.option();
         // NOTE: position is passed to controller in renderGeometry to prevent window field using in server side mode
 
         return {
             container,
+            visualContainer,
             $root: this.$element(),
             $content: this._$content,
             $wrapper: this._$wrapper,
@@ -951,7 +954,7 @@ const Overlay = Widget.inherit({
     },
 
     _isAllWindowCovered: function() {
-        return this._positionController.isAllWindowCoveredByWrapper() && this.option('shading');
+        return isWindow(this._positionController.$visualContainer) && this.option('shading');
     },
 
     _toggleSafariScrolling: function() {
@@ -986,18 +989,12 @@ const Overlay = Widget.inherit({
     },
 
     _renderWrapperDimensions: function() {
-        let wrapperWidth;
-        let wrapperHeight;
-        const $container = this._positionController._$wrapperCoveredElement;
-
-        if(!$container) {
-            return;
-        }
-
-        const isWindow = this._positionController.isAllWindowCoveredByWrapper();
+        const $visualContainer = this._positionController.$visualContainer;
         const documentElement = domAdapter.getDocumentElement();
-        wrapperWidth = isWindow ? documentElement.clientWidth : getOuterWidth($container),
-        wrapperHeight = isWindow ? window.innerHeight : getOuterHeight($container);
+        const isVisualContainerWindow = isWindow($visualContainer);
+
+        const wrapperWidth = isVisualContainerWindow ? documentElement.clientWidth : getOuterWidth($visualContainer);
+        const wrapperHeight = isVisualContainerWindow ? window.innerHeight : getOuterHeight($visualContainer);
 
         this._$wrapper.css({
             width: wrapperWidth,

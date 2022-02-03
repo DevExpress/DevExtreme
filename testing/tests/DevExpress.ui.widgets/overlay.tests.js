@@ -3623,3 +3623,55 @@ QUnit.module('prevent safari scrolling on ios devices', {
         assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "container" is window');
     });
 });
+
+// visualContainer -> container -> swatch -> viewport -> body -> parent element
+QUnit.module('wrapper covered element choice', () => {
+    QUnit.test('position.of has no affect on wrapper dimensions', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            position: { of: '#container' },
+            visible: true
+        }).dxOverlay('instance');
+
+        const $wrapper = overlay.$wrapper();
+
+        assert.strictEqual(getWidth($wrapper), getWidth(window), 'wrapper has window width');
+        assert.strictEqual(getHeight($wrapper), getHeight(window), 'wrapper has window height');
+    });
+
+    QUnit.test('wrapper covers container element if visualPosition is not specified', function(assert) {
+        const $container = $('#container');
+        const overlay = $('#overlay').dxOverlay({
+            container: $container,
+            visible: true
+        }).dxOverlay('instance');
+
+        const $wrapper = overlay.$wrapper();
+
+        assert.strictEqual(getWidth($wrapper), getWidth($container), 'wrapper has container width');
+        assert.strictEqual(getHeight($wrapper), getHeight($container), 'wrapper has container height');
+
+        const wrapperLocation = $wrapper.position();
+        const containerLocation = $container.position();
+        assert.strictEqual(wrapperLocation.left, containerLocation.left, 'wrapper is left positioned by container');
+        assert.strictEqual(wrapperLocation.top, containerLocation.top, 'wrapper is top positioned by container');
+    });
+
+    QUnit.test('wrapper covers visualContainer element if it is specified', function(assert) {
+        const $container = $('#container');
+        const overlay = $('#overlay').dxOverlay({
+            visualContainer: $container,
+            container: viewport(),
+            visible: true
+        }).dxOverlay('instance');
+
+        const $wrapper = overlay.$wrapper();
+
+        assert.strictEqual(getWidth($wrapper), getWidth($container), 'wrapper has visual container width');
+        assert.strictEqual(getHeight($wrapper), getHeight($container), 'wrapper has visual container height');
+
+        const wrapperLocation = $wrapper.position();
+        const containerLocation = $container.position();
+        assert.strictEqual(wrapperLocation.left, containerLocation.left, 'wrapper is left positioned by visual container');
+        assert.strictEqual(wrapperLocation.top, containerLocation.top, 'wrapper is top positioned by visual container');
+    });
+});

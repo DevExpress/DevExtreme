@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { isDefined, isString, isEvent, isWindow } from '../../core/utils/type';
+import { isDefined, isString, isWindow } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import positionUtils from '../../animation/position';
 import { resetPosition, move, locate } from '../../animation/translator';
@@ -23,7 +23,7 @@ const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 
 class OverlayPositionController {
     constructor({
-        position, container,
+        position, container, visualContainer,
         $root, $content, $wrapper,
         onPositioned, onVisualPositionChanged,
         restorePosition,
@@ -32,6 +32,7 @@ class OverlayPositionController {
         this._props = {
             position,
             container,
+            visualContainer,
             restorePosition,
             onPositioned,
             onVisualPositionChanged,
@@ -43,7 +44,7 @@ class OverlayPositionController {
         this._$wrapper = $wrapper;
 
         this._$markupContainer = undefined;
-        this._$wrapperCoveredElement = undefined;
+        this._$visualContainer = undefined;
 
         this._shouldRenderContentInitialPosition = true;
         this._visualPosition = undefined;
@@ -52,10 +53,15 @@ class OverlayPositionController {
 
         this.updateContainer(container);
         this.updatePosition(position);
+        this.updateVisualContainer(visualContainer);
     }
 
     get $container() {
         return this._$markupContainer;
+    }
+
+    get $visualContainer() {
+        return this._$visualContainer;
     }
 
     get position() {
@@ -86,8 +92,6 @@ class OverlayPositionController {
     updatePosition(positionProp) {
         this._props.position = positionProp;
         this._position = this._normalizePosition(positionProp);
-
-        this._updateWrapperCoveredElement();
     }
 
     updateContainer(containerProp) {
@@ -103,7 +107,13 @@ class OverlayPositionController {
 
         this._$markupContainer = $container.length ? $container : this._$root.parent();
 
-        this._updateWrapperCoveredElement();
+        this.updateVisualContainer(this._props.visualContainer);
+    }
+
+    updateVisualContainer(visualContainer) {
+        this._props.visualContainer = visualContainer;
+
+        this._$visualContainer = this._getVisualContainer();
     }
 
     detectVisualPositionChange(event) {
@@ -121,17 +131,13 @@ class OverlayPositionController {
     }
 
     positionWrapper() {
-        if(this._$wrapperCoveredElement) {
-            positionUtils.setup(this._$wrapper, { my: 'top left', at: 'top left', of: this._$wrapperCoveredElement });
+        if(this._$visualContainer) {
+            positionUtils.setup(this._$wrapper, { my: 'top left', at: 'top left', of: this._$visualContainer });
         }
     }
 
-    isAllWindowCoveredByWrapper() {
-        return !this._$wrapperCoveredElement || isWindow(this._$wrapperCoveredElement.get(0));
-    }
-
     styleWrapperPosition() {
-        const useFixed = this.isAllWindowCoveredByWrapper() || this._props._fixWrapperPosition;
+        const useFixed = isWindow(this._$visualContainer) || this._props._fixWrapperPosition;
 
         const positionStyle = useFixed ? 'fixed' : 'absolute';
         this._$wrapper.css('position', positionStyle);
@@ -173,25 +179,24 @@ class OverlayPositionController {
         });
     }
 
-    _updateWrapperCoveredElement() {
-        this._$wrapperCoveredElement = this._getWrapperCoveredElement();
-    }
-
     _renderBoundaryOffset() {
         const boundaryOffset = this._position ?? { boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET };
 
         this._$content.css('margin', `${boundaryOffset.v}px ${boundaryOffset.h}px`);
     }
 
-    _getWrapperCoveredElement() {
+    _getVisualContainer() {
         const containerProp = this._props.container;
+        const visualContainerProp = this._props.visualContainer;
 
+        if(visualContainerProp) {
+            return $(visualContainerProp);
+        }
         if(containerProp) {
             return $(containerProp);
         }
-        if(this._position) {
-            return $(isEvent(this._position.of) ? window : (this._position.of || window));
-        }
+
+        return $(window);
     }
 
     _normalizePosition(positionProp) {
