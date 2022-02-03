@@ -95,7 +95,7 @@ fixture`Toolbar_common`
           widget: 'dxDropDownButton',
           options: {
             stylingMode: 'text',
-            text: 'opts.stylingMode: text',
+            text: 'stylingMode: text',
           },
         },
         {
@@ -104,7 +104,7 @@ fixture`Toolbar_common`
           widget: 'dxDropDownButton',
           options: {
             stylingMode: 'outlined',
-            text: 'opts.stylingMode: outlined',
+            text: 'stylingMode: outlined',
           },
         },
         {
@@ -113,7 +113,7 @@ fixture`Toolbar_common`
           widget: 'dxDropDownButton',
           options: {
             stylingMode: 'contained',
-            text: 'opts.stylingMode: contained',
+            text: 'stylingMode: contained',
           },
         },
       ] as Item[];
