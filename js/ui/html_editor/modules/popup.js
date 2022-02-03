@@ -4,11 +4,14 @@ import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
 import { getWindow } from '../../../core/utils/window';
 import eventsEngine from '../../../events/core/events_engine';
+import { addNamespace } from '../../../events/utils/index';
 
 import BaseModule from './base';
 
 import Popup from '../../popup';
 import List from '../../list_light';
+
+const MODULE_NAMESPACE = 'dxHtmlEditorPopupModule';
 
 let ListPopupModule = BaseModule;
 
@@ -103,7 +106,9 @@ if(Quill) {
         }
 
         _preventFocusOut() {
-            eventsEngine.on(this._popup.$wrapper(), 'mousedown', (e) => {
+            const eventName = addNamespace('mousedown', MODULE_NAMESPACE);
+
+            eventsEngine.on(this._popup.$wrapper(), eventName, (e) => {
                 e.preventDefault();
             });
         }
