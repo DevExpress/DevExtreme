@@ -15,27 +15,25 @@ fixture`Toolbar_common`
     test(`Default nested widgets render,theme=${theme},items[].locateInMenu=${locateInMenu}`, async () => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      let targetContainerSelector = '#container';
+
       if (locateInMenu === 'always') {
         await ClientFunction(() => {
           $('.dx-toolbar .dx-dropdownmenu-button').click();
         }, { dependencies: { } })();
 
-        await ClientFunction(() => {
-          $('.dx-dropdownmenu-popup .dx-overlay-content').css({ backgroundColor: 'gold' });
-        }, { dependencies: { } })();
-
-        await t
-          .expect(await takeScreenshot(`Default-nested-widgets-render-in-toolbarmenu,theme=${theme},items[]locateInMenu=${locateInMenu}.png`, Selector('.dx-dropdownmenu-popup .dx-overlay-content')))
-          .ok()
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      } else {
-        await t
-          .expect(await takeScreenshot(`Default-nested-widgets-render-in-toolbar,theme=${theme},items[]locateInMenu=${locateInMenu}.png`, Selector('#container')))
-          .ok()
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
+        targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
       }
+
+      await ClientFunction(() => {
+        $(targetContainerSelector).css({ backgroundColor: 'gold' });
+      }, { dependencies: { } })();
+
+      await t
+        .expect(await takeScreenshot(`Default-nested-widgets-render-in-toolbar,theme=${theme},items.locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
+        .ok()
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
     }).before(async () => {
       await changeTheme(theme);
 
@@ -52,10 +50,6 @@ fixture`Toolbar_common`
         });
       });
 
-      await ClientFunction(() => {
-        $('#container').css({ backgroundColor: 'gold' });
-      }, { dependencies: { } })();
-
       return createWidget('dxToolbar', {
         items: toolbarItems,
       });
@@ -64,27 +58,25 @@ fixture`Toolbar_common`
     test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=${locateInMenu}`, async () => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      let targetContainerSelector = '#container';
+
       if (locateInMenu === 'always') {
         await ClientFunction(() => {
           $('.dx-toolbar .dx-dropdownmenu-button').click();
         }, { dependencies: { } })();
 
-        await ClientFunction(() => {
-          $('.dx-dropdownmenu-popup .dx-overlay-content').css({ backgroundColor: 'gold' });
-        }, { dependencies: { } })();
-
-        await t
-          .expect(await takeScreenshot(`Toolbar with dropDownButton in menu,theme=${theme},items[]locateInMenu=${locateInMenu}.png`, Selector('.dx-dropdownmenu-popup .dx-overlay-content')))
-          .ok()
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      } else {
-        await t
-          .expect(await takeScreenshot(`Toolbar with dropDownButton,theme=${theme},items[]locateInMenu=${locateInMenu}.png`, Selector('#container')))
-          .ok()
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
+        targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
       }
+
+      await ClientFunction(() => {
+        $(targetContainerSelector).css({ backgroundColor: 'gold' });
+      }, { dependencies: { } })();
+
+      await t
+        .expect(await takeScreenshot(`Toolbar with dropDownButton,theme=${theme},items.locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
+        .ok()
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
     }).before(async () => {
       await changeTheme(theme);
 
@@ -125,10 +117,6 @@ fixture`Toolbar_common`
           },
         },
       ] as Item[];
-
-      await ClientFunction(() => {
-        $('#container').css({ backgroundColor: 'gold' });
-      }, { dependencies: { } })();
 
       return createWidget('dxToolbar', {
         items: toolbarItems,
