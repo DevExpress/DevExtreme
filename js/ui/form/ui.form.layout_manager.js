@@ -593,7 +593,7 @@ const LayoutManager = Widget.inherit({
             labelMode: this.option('labelMode'),
         }));
 
-        this.option('onFieldItemRendered') && this.option('onFieldItemRendered')();
+        this.option('onFieldItemRendered')?.();
 
         if(widgetInstance && item.dataField) {
             // TODO: move to renderFieldItem ?
