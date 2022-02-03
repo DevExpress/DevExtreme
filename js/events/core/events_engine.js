@@ -7,7 +7,6 @@ import injector from '../../core/utils/dependency_injector';
 import { isWindow, isFunction, isString } from '../../core/utils/type';
 import Callbacks from '../../core/utils/callbacks';
 import errors from '../../core/errors';
-import WeakMap from '../../core/polyfills/weak_map';
 import hookTouchProps from '../../events/core/hook_touch_props';
 import callOnce from '../../core/utils/call_once';
 
