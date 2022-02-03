@@ -3,6 +3,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import Sortable from '../sortable';
 import gridCoreUtils from './ui.grid_core.utils';
+import { deferUpdate } from '../../core/utils/common';
 
 const COMMAND_HANDLE_CLASS = 'dx-command-drag';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -112,13 +113,29 @@ const RowDraggingExtender = {
         return $content;
     },
 
-    _resizeCore: function() {
+    _renderCore(e) {
         this.callBase.apply(this, arguments);
+
+        if(e && e.changeType === 'update' &&
+        e.repaintChangesOnly &&
+        gridCoreUtils.isVirtualRowRendering(this)) {
+            deferUpdate(() => {
+                this._updateSortable();
+            });
+        }
+    },
+
+    _updateSortable() {
         const offset = this._dataController.getRowIndexOffset();
         [this._sortable, this._sortableFixed].forEach((sortable) => {
             sortable?.option('offset', offset);
             sortable?.update();
         });
+    },
+
+    _resizeCore: function() {
+        this.callBase.apply(this, arguments);
+        this._updateSortable();
     },
 
     _getDraggableGridOptions: function(options) {

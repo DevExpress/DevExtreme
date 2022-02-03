@@ -304,3 +304,43 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
     }, false, '#otherContainer'),
   ]);
 });
+
+test('Virtual rendering during auto scrolling should not cause errors in onDragChange', async (t) => {
+  await t.drag(Selector('.dx-data-row .dx-command-drag').nth(0), 0, 100, { speed: 0.01 });
+
+  const lastRow = Selector('tr').withAttribute('aria-rowindex', '10');
+
+  await t
+    .expect(lastRow.exists)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  height: 200,
+  keyExpr: 'id',
+  scrolling: {
+    mode: 'virtual',
+  },
+  dataSource: [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+    { id: 6 },
+    { id: 7 },
+    { id: 8 },
+    { id: 9 },
+    { id: 10 },
+  ],
+  columns: ['id'],
+  rowDragging: {
+    allowReordering: true,
+    scrollSpeed: 300,
+    onDragChange(e) {
+      const visibleRows = e.component.getVisibleRows();
+      const row = visibleRows[e.toIndex];
+      if (!row) {
+        throw new Error('row is null');
+      }
+    },
+  },
+}));
