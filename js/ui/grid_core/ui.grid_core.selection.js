@@ -123,6 +123,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
             const dataController = this._dataController;
             const selectionOptions = this.option('selection') || {};
             const deferred = selectionOptions.deferred;
+            const scrollingMode = this.option('scrolling.mode');
 
             return {
                 selectedKeys: this.option('selectedRowKeys'),
@@ -131,6 +132,9 @@ const SelectionController = gridCore.Controller.inherit((function() {
                 maxFilterLengthInRequest: selectionOptions.maxFilterLengthInRequest,
                 selectionFilter: this.option('selectionFilter'),
                 ignoreDisabledItems: true,
+                allowSelectAll: this.option('selection.allowSelectAll'),
+                virtualPaging: scrollingMode === 'virtual' || scrollingMode === 'infinite',
+                legacyScrollingMode: this.option('scrolling.legacyMode'),
                 key: function() {
                     return dataController?.key();
                 },
@@ -160,6 +164,25 @@ const SelectionController = gridCore.Controller.inherit((function() {
                 },
                 totalCount: () => {
                     return dataController.totalCount();
+                },
+                getLoadOptions: function(loadItemIndex, focusedItemIndex, shiftItemIndex) {
+                    const { sort, filter } = dataController.dataSource()?.lastLoadOptions() ?? {};
+                    let minIndex = Math.min(loadItemIndex, focusedItemIndex);
+                    let maxIndex = Math.max(loadItemIndex, focusedItemIndex);
+
+                    if(isDefined(shiftItemIndex)) {
+                        minIndex = Math.min(shiftItemIndex, minIndex);
+                        maxIndex = Math.max(shiftItemIndex, maxIndex);
+                    }
+
+                    const take = maxIndex - minIndex + 1;
+
+                    return {
+                        skip: minIndex,
+                        take,
+                        filter,
+                        sort
+                    };
                 },
                 onSelectionChanged: this._updateSelectedItems.bind(this)
             };
