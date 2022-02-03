@@ -27,7 +27,7 @@ fixture`Toolbar_common`
 
       await ClientFunction(() => {
         $(targetContainerSelector).css({ backgroundColor: 'gold' });
-      }, { dependencies: { } })();
+      }, { dependencies: { targetContainerSelector } })();
 
       await t
         .expect(await takeScreenshot(`Default-nested-widgets-render-in-toolbar,theme=${theme},items.locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
@@ -70,7 +70,7 @@ fixture`Toolbar_common`
 
       await ClientFunction(() => {
         $(targetContainerSelector).css({ backgroundColor: 'gold' });
-      }, { dependencies: { } })();
+      }, { dependencies: { targetContainerSelector } })();
 
       await t
         .expect(await takeScreenshot(`Toolbar with dropDownButton,theme=${theme},items.locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
