@@ -2,7 +2,7 @@ import { getWidth, getOuterWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { isMaterial, waitWebFont } from '../themes';
 import { noop } from '../../core/utils/common';
-import { isPlainObject } from '../../core/utils/type';
+import { isPlainObject, isDefined } from '../../core/utils/type';
 import registerComponent from '../../core/component_registrator';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
@@ -30,6 +30,7 @@ const TOOLBAR_LABEL_SELECTOR = '.' + TOOLBAR_LABEL_CLASS;
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TEXT_BUTTON_MODE = 'text';
 const DEFAULT_BUTTON_TYPE = 'default';
+const TOOLBAR_SUPPORTED_WIDGETS = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
 const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
 
@@ -82,15 +83,21 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
 
             const model = { ...rawModel };
 
-            if(rawModel.options) {
-                const isDeepExtend = true;
-                model.options = extend(isDeepExtend, {}, rawModel.options);
+            if(isDefined(rawModel.widget) && TOOLBAR_SUPPORTED_WIDGETS.indexOf(rawModel.widget) !== -1) {
+                if(rawModel.options) {
+                    const isDeepExtend = true;
+                    model.options = extend(isDeepExtend, {}, rawModel.options);
+                }
+
+                model.options = model.options || {};
+                model.options.disabled = model.options.disabled ?? model.disabled;
 
                 // in dom_component we prevent syncronization disabled in nested component if property exists in model
-                if(this.option('disabled') && model.options.disabled === false) {
+                if(this.option('disabled') && !model.options.disabled) {
                     delete model.options.disabled;
                 }
             }
+
 
             this._getTemplate('dx-polymorph-widget').render({
                 container: $container,
@@ -450,6 +457,14 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _itemOptionChanged: function(item, property, value) {
+        if(property === 'disabled') {
+            const $item = this._findItemElementByItem(item);
+
+            if($item.length) {
+                this._refreshItem($item);
+            }
+        }
+
         this.callBase.apply(this, [item, property, value]);
         this._arrangeItems();
     },

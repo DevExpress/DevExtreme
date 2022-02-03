@@ -708,268 +708,385 @@ QUnit.module('toolbar with menu', {
     });
 });
 
-QUnit.module('disabled state', () => {
-    const openDropDownMenuIfExist = (toolbar) => {
-        const $dropDownMenu = $(toolbar.element()).find(`.${DROP_DOWN_MENU_CLASS}`);
+['never', 'always'].forEach((locateInMenu) => {
+    QUnit.module(`Disabled state, locateInMenu: ${locateInMenu}`, {
+        before: function() {
+            this.$fixture = $('#qunit-fixture');
+        },
+        beforeEach: function() {
+            this.createInstance = (options) => {
+                this.$element = $('<div></div>');
+                this.$element.appendTo(this.$fixture);
 
-        if($dropDownMenu.length) {
-            const dropDownMenu = $dropDownMenu.dxDropDownMenu('instance');
-            dropDownMenu.open();
+                this.toolbar = this.$element.dxToolbar(options).dxToolbar('instance');
+            };
+        },
+        afterEach: function() {
+            this.$element.remove();
+            delete this.$element;
         }
-    };
+    }, () => {
+        const itemClickHandler = sinon.spy();
+        const buttonClickHandler = sinon.spy();
 
-    const getExpectedDisabledState = (widgetDisabled, toolbarDisabled) => {
-        return [
-            { toolbarDisabled: true, widgetDisabled: true, expectedDisabled: { toolbar: true, widget: true, widgetItemOption: true } },
-            { toolbarDisabled: true, widgetDisabled: false, expectedDisabled: { toolbar: true, widget: true, widgetItemOption: false } },
-            { toolbarDisabled: true, widgetDisabled: undefined, expectedDisabled: { toolbar: true, widget: true, widgetItemOption: undefined } },
-            { toolbarDisabled: true, widgetDisabled: 'not declared', expectedDisabled: { toolbar: true, widget: true, widgetItemOption: undefined } },
-            { toolbarDisabled: false, widgetDisabled: true, expectedDisabled: { toolbar: false, widget: true, widgetItemOption: true } },
-            { toolbarDisabled: false, widgetDisabled: false, expectedDisabled: { toolbar: false, widget: false, widgetItemOption: false } },
-            { toolbarDisabled: false, widgetDisabled: undefined, expectedDisabled: { toolbar: false, widget: false, widgetItemOption: undefined } },
-            { toolbarDisabled: false, widgetDisabled: 'not declared', expectedDisabled: { toolbar: false, widget: false, widgetItemOption: undefined } },
-            { toolbarDisabled: undefined, widgetDisabled: true, expectedDisabled: { toolbar: undefined, widget: true, widgetItemOption: true } },
-            { toolbarDisabled: undefined, widgetDisabled: false, expectedDisabled: { toolbar: undefined, widget: false, widgetItemOption: false } },
-            { toolbarDisabled: undefined, widgetDisabled: undefined, expectedDisabled: { toolbar: undefined, widget: undefined, widgetItemOption: undefined } },
-            { toolbarDisabled: undefined, widgetDisabled: 'not declared', expectedDisabled: { toolbar: undefined, widget: false, widgetItemOption: undefined } },
-            { toolbarDisabled: 'not declared', widgetDisabled: true, expectedDisabled: { toolbar: false, widget: true, widgetItemOption: true } },
-            { toolbarDisabled: 'not declared', widgetDisabled: false, expectedDisabled: { toolbar: false, widget: false, widgetItemOption: false } },
-            { toolbarDisabled: 'not declared', widgetDisabled: undefined, expectedDisabled: { toolbar: false, widget: undefined, widgetItemOption: undefined } },
-            { toolbarDisabled: 'not declared', widgetDisabled: 'not declared', expectedDisabled: { toolbar: false, widget: false, widgetItemOption: undefined } }
-        ].filter((config) => (config.toolbarDisabled === toolbarDisabled && config.widgetDisabled === widgetDisabled))[0].expectedDisabled;
-    };
+        const getDropDownMenu = (toolbar) => {
+            const $dropDownMenu = $(toolbar.element()).find(`.${DROP_DOWN_MENU_CLASS}`).eq(0);
 
-    const checkClickHandlers = (assert, itemClickHandler, buttonClickHandler, buttonDisabled, toolbarDisabled, locateInMenu) => {
-        assert.strictEqual(itemClickHandler.callCount, toolbarDisabled ? 0 : 1, `onItemClick ${itemClickHandler.callCount}`);
-        assert.strictEqual(buttonClickHandler.callCount, buttonDisabled || toolbarDisabled ? 0 : 1, `onButtonClick ${buttonClickHandler.callCount}`);
-    };
+            if($dropDownMenu.length) {
+                return $dropDownMenu.dxDropDownMenu('instance');
+            }
+        };
 
-    const checkFocusableElementTabIndex = (widgetName, toolbarDisabled, widgetDisabled, focusableElementSelector) => {
-        const expectedDisabled = getExpectedDisabledState(widgetDisabled, toolbarDisabled);
-        const expectedFocusableElementTabIndex = expectedDisabled.widget || (['dxButton', 'dxCheckBox', 'dxMenu', 'dxTabs'].indexOf(widgetName) !== -1 && devices.real().deviceType !== 'desktop')
-            ? -1
-            : 0;
+        const openDropDownMenuIfExist = (toolbar) => {
+            const dropDownMenu = getDropDownMenu(toolbar);
+            if(dropDownMenu) {
+                dropDownMenu.open();
+            }
+        };
 
-        QUnit.assert.strictEqual($(focusableElementSelector).get(0).tabIndex, expectedFocusableElementTabIndex, `${widgetName}.tabIndex`);
-    };
+        const getExpectedDisabledState = (toolbarDisabled, itemDisabled, itemOptionsDisabled) => {
+            return [
+                { toolbarDisabled: true, itemDisabled: true, itemOptionsDisabled: true, expectedDisabled: { toolbar: true, item: true, itemDisabled: true, itemOptionsDisabled: true } },
+                { toolbarDisabled: true, itemDisabled: true, itemOptionsDisabled: false, expectedDisabled: { toolbar: true, item: true, itemDisabled: true, itemOptionsDisabled: false } },
+                { toolbarDisabled: true, itemDisabled: true, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: true, item: true, itemDisabled: true, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: true, itemDisabled: true, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: true, item: true, itemDisabled: true, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: true, itemDisabled: false, itemOptionsDisabled: true, expectedDisabled: { toolbar: true, item: true, itemDisabled: false, itemOptionsDisabled: true } },
+                { toolbarDisabled: true, itemDisabled: false, itemOptionsDisabled: false, expectedDisabled: { toolbar: true, item: true, itemDisabled: false, itemOptionsDisabled: false } },
+                { toolbarDisabled: true, itemDisabled: false, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: true, item: true, itemDisabled: false, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: true, itemDisabled: false, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: true, item: true, itemDisabled: false, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: true, itemDisabled: undefined, itemOptionsDisabled: true, expectedDisabled: { toolbar: true, item: true, itemDisabled: undefined, itemOptionsDisabled: true } },
+                { toolbarDisabled: true, itemDisabled: undefined, itemOptionsDisabled: false, expectedDisabled: { toolbar: true, item: true, itemDisabled: undefined, itemOptionsDisabled: false } },
+                { toolbarDisabled: true, itemDisabled: undefined, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: true, item: true, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: true, itemDisabled: undefined, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: true, item: true, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: true, itemDisabled: 'not declared', itemOptionsDisabled: true, expectedDisabled: { toolbar: true, item: true, itemDisabled: undefined, itemOptionsDisabled: true } },
+                { toolbarDisabled: true, itemDisabled: 'not declared', itemOptionsDisabled: false, expectedDisabled: { toolbar: true, item: true, itemDisabled: undefined, itemOptionsDisabled: false } },
+                { toolbarDisabled: true, itemDisabled: 'not declared', itemOptionsDisabled: undefined, expectedDisabled: { toolbar: true, item: true, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: true, itemDisabled: 'not declared', itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: true, item: true, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: false, itemDisabled: true, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, item: true, itemDisabled: true, itemOptionsDisabled: true } },
+                { toolbarDisabled: false, itemDisabled: true, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, item: false, itemDisabled: true, itemOptionsDisabled: false } },
+                { toolbarDisabled: false, itemDisabled: true, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, item: true, itemDisabled: true, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: false, itemDisabled: true, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, item: true, itemDisabled: true, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: false, itemDisabled: false, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, item: true, itemDisabled: false, itemOptionsDisabled: true } },
+                { toolbarDisabled: false, itemDisabled: false, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, item: false, itemDisabled: false, itemOptionsDisabled: false } },
+                { toolbarDisabled: false, itemDisabled: false, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, item: false, itemDisabled: false, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: false, itemDisabled: false, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, item: false, itemDisabled: false, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: false, itemDisabled: undefined, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, item: true, itemDisabled: undefined, itemOptionsDisabled: true } },
+                { toolbarDisabled: false, itemDisabled: undefined, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, item: false, itemDisabled: undefined, itemOptionsDisabled: false } },
+                { toolbarDisabled: false, itemDisabled: undefined, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, item: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: false, itemDisabled: undefined, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, item: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: false, itemDisabled: 'not declared', itemOptionsDisabled: true, expectedDisabled: { toolbar: false, item: true, itemDisabled: undefined, itemOptionsDisabled: true } },
+                { toolbarDisabled: false, itemDisabled: 'not declared', itemOptionsDisabled: false, expectedDisabled: { toolbar: false, item: false, itemDisabled: undefined, itemOptionsDisabled: false } },
+                { toolbarDisabled: false, itemDisabled: 'not declared', itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, item: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: false, itemDisabled: 'not declared', itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, item: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: undefined, itemDisabled: true, itemOptionsDisabled: true, expectedDisabled: { toolbar: undefined, item: true, itemDisabled: true, itemOptionsDisabled: true } },
+                { toolbarDisabled: undefined, itemDisabled: true, itemOptionsDisabled: false, expectedDisabled: { toolbar: undefined, item: false, itemDisabled: true, itemOptionsDisabled: false } },
+                { toolbarDisabled: undefined, itemDisabled: true, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: undefined, item: true, itemDisabled: true, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: undefined, itemDisabled: true, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: undefined, item: true, itemDisabled: true, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: undefined, itemDisabled: false, itemOptionsDisabled: true, expectedDisabled: { toolbar: undefined, item: true, itemDisabled: false, itemOptionsDisabled: true } },
+                { toolbarDisabled: undefined, itemDisabled: false, itemOptionsDisabled: false, expectedDisabled: { toolbar: undefined, item: false, itemDisabled: false, itemOptionsDisabled: false } },
+                { toolbarDisabled: undefined, itemDisabled: false, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: undefined, item: undefined, itemDisabled: false, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: undefined, itemDisabled: false, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: undefined, item: false, itemDisabled: false, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: undefined, itemDisabled: undefined, itemOptionsDisabled: true, expectedDisabled: { toolbar: undefined, item: true, itemDisabled: undefined, itemOptionsDisabled: true } },
+                { toolbarDisabled: undefined, itemDisabled: undefined, itemOptionsDisabled: false, expectedDisabled: { toolbar: undefined, item: false, itemDisabled: undefined, itemOptionsDisabled: false } },
+                { toolbarDisabled: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: undefined, item: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: undefined, itemDisabled: undefined, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: undefined, item: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: undefined, itemDisabled: 'not declared', itemOptionsDisabled: true, expectedDisabled: { toolbar: undefined, item: true, itemDisabled: undefined, itemOptionsDisabled: true } },
+                { toolbarDisabled: undefined, itemDisabled: 'not declared', itemOptionsDisabled: false, expectedDisabled: { toolbar: undefined, item: false, itemDisabled: undefined, itemOptionsDisabled: false } },
+                { toolbarDisabled: undefined, itemDisabled: 'not declared', itemOptionsDisabled: undefined, expectedDisabled: { toolbar: undefined, item: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: undefined, itemDisabled: 'not declared', itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: undefined, item: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: 'not declared', itemDisabled: true, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, item: true, itemDisabled: true, itemOptionsDisabled: true } },
+                { toolbarDisabled: 'not declared', itemDisabled: true, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, item: false, itemDisabled: true, itemOptionsDisabled: false } },
+                { toolbarDisabled: 'not declared', itemDisabled: true, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, item: true, itemDisabled: true, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: 'not declared', itemDisabled: true, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, item: true, itemDisabled: true, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: 'not declared', itemDisabled: false, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, item: true, itemDisabled: false, itemOptionsDisabled: true } },
+                { toolbarDisabled: 'not declared', itemDisabled: false, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, item: false, itemDisabled: false, itemOptionsDisabled: false } },
+                { toolbarDisabled: 'not declared', itemDisabled: false, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, item: undefined, itemDisabled: false, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: 'not declared', itemDisabled: false, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, item: false, itemDisabled: false, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: 'not declared', itemDisabled: undefined, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, item: true, itemDisabled: undefined, itemOptionsDisabled: true } },
+                { toolbarDisabled: 'not declared', itemDisabled: undefined, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, item: false, itemDisabled: undefined, itemOptionsDisabled: false } },
+                { toolbarDisabled: 'not declared', itemDisabled: undefined, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, item: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: 'not declared', itemDisabled: undefined, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, item: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: 'not declared', itemDisabled: 'not declared', itemOptionsDisabled: true, expectedDisabled: { toolbar: false, item: true, itemDisabled: undefined, itemOptionsDisabled: true } },
+                { toolbarDisabled: 'not declared', itemDisabled: 'not declared', itemOptionsDisabled: false, expectedDisabled: { toolbar: false, item: false, itemDisabled: undefined, itemOptionsDisabled: false } },
+                { toolbarDisabled: 'not declared', itemDisabled: 'not declared', itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, item: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined } },
+                { toolbarDisabled: 'not declared', itemDisabled: 'not declared', itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, item: false, itemDisabled: undefined, itemOptionsDisabled: undefined } }
+            ].filter((config) => (config.toolbarDisabled === toolbarDisabled && config.itemDisabled === itemDisabled && config.itemOptionsDisabled === itemOptionsDisabled))[0].expectedDisabled;
+        };
 
-    const checkDisabledState = (toolbar, widgetName, toolbarDisabled, widgetDisabled, focusableElementSelector) => {
-        const expectedDisabled = getExpectedDisabledState(widgetDisabled, toolbarDisabled);
+        const checkClickHandlers = ($item, toolbarDisabled, isItemDisabled, itemDisabled) => {
+            eventsEngine.trigger($item, 'dxclick');
 
-        QUnit.assert.strictEqual(toolbar.option('disabled'), expectedDisabled.toolbar, 'toolbar.disabled');
-        QUnit.assert.strictEqual($(toolbar.element()).hasClass('dx-state-disabled'), !!expectedDisabled.toolbar, 'toolbar disabled class');
+            QUnit.assert.strictEqual(itemClickHandler.callCount, itemDisabled || toolbarDisabled ? 0 : 1, `onItemClick ${itemClickHandler.callCount}`);
+            QUnit.assert.strictEqual(buttonClickHandler.callCount, isItemDisabled || itemDisabled || toolbarDisabled ? 0 : 1, `onButtonClick ${buttonClickHandler.callCount}`);
 
-        const itemDisabledOption = toolbar.option('items')[0].options && toolbar.option('items')[0].options.disabled;
-        QUnit.assert.strictEqual(itemDisabledOption, expectedDisabled.widgetItemOption, 'item.options.disabled');
+            itemClickHandler.reset();
+            buttonClickHandler.reset();
+        };
 
-        const widgetElementSelector = focusableElementSelector.split(' ')[0];
-        QUnit.assert.strictEqual($(widgetElementSelector).hasClass('dx-state-disabled'), !!expectedDisabled.widget, `${widgetName} disabled class`);
-        checkFocusableElementTabIndex(widgetName, toolbarDisabled, widgetDisabled, focusableElementSelector);
-    };
+        const checkFocusableElementTabIndex = (toolbar, widgetName, expectedDisabled, focusableElementSelector) => {
+            const expectedFocusableElementTabIndex = expectedDisabled.item || (['dxButton', 'dxCheckBox', 'dxMenu', 'dxTabs'].indexOf(widgetName) !== -1 && devices.real().deviceType !== 'desktop')
+                ? -1
+                : 0;
 
-    const getToolbarButton = (locateInMenu) => {
-        return locateInMenu === 'never' ? $('#toolbar').find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0) : $(`.dx-button:not(.${DROP_DOWN_MENU_CLASS})`).eq(0);
-    };
+            QUnit.assert.strictEqual(getItemElement(toolbar, focusableElementSelector).get(0).tabIndex, expectedFocusableElementTabIndex, `${widgetName}.tabIndex`);
+        };
 
-    [true, false, undefined, 'not declared'].forEach((isToolbarDisabled) => {
-        [true, false, undefined, 'not declared'].forEach((isWidgetDisabled) => {
-            ['never', 'always'].forEach((locateInMenu) => {
-                [
-                    { widget: 'dxAutocomplete', focusableElementSelector: '.dx-autocomplete .dx-texteditor-input' },
-                    { widget: 'dxButton', focusableElementSelector: '.dx-button:not(.dx-dropdownmenu-button)' },
-                    { widget: 'dxCheckBox', focusableElementSelector: '.dx-checkbox' },
-                    { widget: 'dxDateBox', focusableElementSelector: '.dx-datebox .dx-texteditor-input' },
-                    { widget: 'dxMenu', focusableElementSelector: '.dx-menu' },
-                    { widget: 'dxSelectBox', focusableElementSelector: '.dx-selectbox .dx-texteditor-input' },
-                    { widget: 'dxTabs', focusableElementSelector: '.dx-tabs' },
-                    { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },
-                    { widget: 'dxButtonGroup', focusableElementSelector: '.dx-buttongroup' },
-                    { widget: 'dxDropDownButton', focusableElementSelector: '.dx-dropdownbutton .dx-buttongroup' }
-                ].forEach(({ widget, focusableElementSelector }) => {
-                    QUnit.test(`Disabled state for nested widgets, locateInMenu: ${locateInMenu}, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].options.disabled=${isWidgetDisabled} -> change items[${widget}].options.disabled -> change toolbar.disabled`, function() {
-                        const toolbarOptions = {
-                            items: [{
-                                location: 'after',
-                                locateInMenu,
-                                widget,
-                            }]
+        const checkDisabledState = (toolbar, widgetName, toolbarDisabled, itemDisabled, itemOptionsDisabled, focusableElementSelector) => {
+            const expectedDisabled = getExpectedDisabledState(toolbarDisabled, itemDisabled, itemOptionsDisabled);
+
+            QUnit.assert.strictEqual(toolbar.option('disabled'), expectedDisabled.toolbar, 'toolbar.disabled');
+            QUnit.assert.strictEqual($(toolbar.element()).hasClass('dx-state-disabled'), !!expectedDisabled.toolbar, 'toolbar disabled class');
+
+            const itemElementSelector = focusableElementSelector.split(' ')[0];
+            const $item = getItemElement(toolbar, itemElementSelector);
+
+            const $itemElement = $item.parent().parent();
+            QUnit.assert.strictEqual($itemElement.hasClass('dx-state-disabled'), !!expectedDisabled.itemDisabled, 'toolbar item disabled class');
+            QUnit.assert.strictEqual(toolbar.option('items')[0].disabled, expectedDisabled.itemDisabled, 'item.disabled');
+
+            const itemDisabledOption = toolbar.option('items')[0].options && toolbar.option('items')[0].options.disabled;
+            QUnit.assert.strictEqual(itemDisabledOption, expectedDisabled.itemOptionsDisabled, 'item.options.disabled');
+
+            QUnit.assert.strictEqual($item.hasClass('dx-state-disabled'), !!expectedDisabled.item, `${widgetName} disabled class`);
+            checkFocusableElementTabIndex(toolbar, widgetName, expectedDisabled, focusableElementSelector);
+
+            if(widgetName === 'dxButton') {
+                checkClickHandlers($item, expectedDisabled.toolbar, expectedDisabled.item, expectedDisabled.itemDisabled);
+            }
+        };
+
+        const getItemElement = (toolbar, itemElementSelector) => {
+            return locateInMenu === 'never' ? $(toolbar.element()).find(itemElementSelector) : $(getDropDownMenu(toolbar)._popup._$content).find(itemElementSelector);
+        };
+
+        [true, false, undefined, 'not declared'].forEach((isToolbarDisabled) => {
+            [true, false, undefined, 'not declared'].forEach((isItemOptionsDisabled) => {
+                [true, false, undefined, 'not declared'].forEach((isItemDisabled) => {
+                    [
+                        { widget: 'dxButton', focusableElementSelector: '.dx-button:not(.dx-dropdownmenu-button)' },
+                        { widget: 'dxAutocomplete', focusableElementSelector: '.dx-autocomplete .dx-texteditor-input' },
+                        { widget: 'dxCheckBox', focusableElementSelector: '.dx-checkbox' },
+                        { widget: 'dxDateBox', focusableElementSelector: '.dx-datebox .dx-texteditor-input' },
+                        { widget: 'dxMenu', focusableElementSelector: '.dx-menu' },
+                        { widget: 'dxSelectBox', focusableElementSelector: '.dx-selectbox .dx-texteditor-input' },
+                        { widget: 'dxTabs', focusableElementSelector: '.dx-tabs' },
+                        { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },
+                        { widget: 'dxButtonGroup', focusableElementSelector: '.dx-buttongroup' },
+                        { widget: 'dxDropDownButton', focusableElementSelector: '.dx-dropdownbutton .dx-buttongroup' }
+                    ].forEach(({ widget, focusableElementSelector }) => {
+                        const getInitialToolbarOptions = () => {
+                            const initialToolbarOptions = {
+                                onItemClick: itemClickHandler,
+                                items: [{
+                                    location: 'after',
+                                    locateInMenu,
+                                    widget,
+                                    options: {
+                                        onClick: buttonClickHandler
+                                    }
+                                }]
+                            };
+
+                            if(isToolbarDisabled !== 'not declared') {
+                                initialToolbarOptions.disabled = isToolbarDisabled;
+                            }
+                            if(isItemDisabled !== 'not declared') {
+                                initialToolbarOptions.items[0].disabled = isItemDisabled;
+                            }
+                            if(isItemOptionsDisabled !== 'not declared') {
+                                initialToolbarOptions.items[0].options.disabled = isItemOptionsDisabled;
+                            }
+
+                            return initialToolbarOptions;
                         };
 
-                        if(isToolbarDisabled !== 'not declared') {
-                            toolbarOptions.disabled = isToolbarDisabled;
-                        }
-                        if(isWidgetDisabled !== 'not declared') {
-                            toolbarOptions.items[0].options = { disabled: isWidgetDisabled };
-                        }
+                        QUnit.test(`Disabled state for nested widgets, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].disabled=${isItemDisabled}, items[${widget}].options.disabled=${isItemOptionsDisabled} -> change order: items[${widget}].options.disabled -> toolbar.disabled -> items[${widget}].disabled`, function() {
+                            this.createInstance(getInitialToolbarOptions());
 
-                        const toolbar = $('#toolbar').dxToolbar(toolbarOptions).dxToolbar('instance');
+                            openDropDownMenuIfExist(this.toolbar);
+                            checkDisabledState(this.toolbar, widget, isToolbarDisabled, isItemDisabled, isItemOptionsDisabled, focusableElementSelector);
 
-                        openDropDownMenuIfExist(toolbar);
-                        checkDisabledState(toolbar, widget, isToolbarDisabled, isWidgetDisabled, focusableElementSelector);
+                            let currentToolbarDisabledState = isToolbarDisabled;
+                            let currentItemOptionsDisabledState = isItemOptionsDisabled;
+                            let currentItemDisabledState = isItemDisabled;
 
-                        let currentToolbarDisabledState = isToolbarDisabled;
-                        [true, false, undefined].forEach((newWidgetDisabledValue) => {
                             [true, false, undefined].forEach((newToolbarDisabledValue) => {
+                                [true, false, undefined].forEach((newItemDisabledValue) => {
+                                    [true, false, undefined].forEach((newItemOptionsDisabledValue) => {
+                                        this.toolbar.option('items[0].options.disabled', newItemOptionsDisabledValue);
+                                        currentItemOptionsDisabledState = newItemOptionsDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
 
-                                toolbar.option('items[0].options.disabled', newWidgetDisabledValue);
-                                checkDisabledState(toolbar, widget, currentToolbarDisabledState, newWidgetDisabledValue, focusableElementSelector);
+                                        this.toolbar.option('disabled', newToolbarDisabledValue);
+                                        currentToolbarDisabledState = newToolbarDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
 
-                                currentToolbarDisabledState = newToolbarDisabledValue;
-
-                                toolbar.option('disabled', newToolbarDisabledValue);
-                                openDropDownMenuIfExist(toolbar);
-                                checkDisabledState(toolbar, widget, newToolbarDisabledValue, newWidgetDisabledValue, focusableElementSelector);
+                                        this.toolbar.option('items[0].disabled', newItemDisabledValue);
+                                        currentItemDisabledState = newItemDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
+                                    });
+                                });
                             });
                         });
-                    });
 
+                        QUnit.test(`Disabled state for nested widgets, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].disabled=${isItemDisabled}, items[${widget}].options.disabled=${isItemOptionsDisabled} -> change order: items[${widget}].options.disabled -> items[${widget}].disabled -> toolbar.disabled`, function() {
+                            this.createInstance(getInitialToolbarOptions());
 
-                    QUnit.test(`Disabled state for nested widgets, locateInMenu: ${locateInMenu}, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].options.disabled=${isWidgetDisabled} -> change toolbar.disabled -> change items[${widget}].options.disabled`, function() {
-                        const toolbarOptions = {
-                            items: [{
-                                location: 'after',
-                                locateInMenu,
-                                widget,
-                            }]
-                        };
+                            openDropDownMenuIfExist(this.toolbar);
+                            checkDisabledState(this.toolbar, widget, isToolbarDisabled, isItemDisabled, isItemOptionsDisabled, focusableElementSelector);
 
-                        if(isToolbarDisabled !== 'not declared') {
-                            toolbarOptions.disabled = isToolbarDisabled;
-                        }
-                        if(isWidgetDisabled !== 'not declared') {
-                            toolbarOptions.items[0].options = { disabled: isWidgetDisabled };
-                        }
+                            let currentToolbarDisabledState = isToolbarDisabled;
+                            let currentItemOptionsDisabledState = isItemOptionsDisabled;
+                            let currentItemDisabledState = isItemDisabled;
+                            [true, false, undefined].forEach((newToolbarDisabledValue) => {
+                                [true, false, undefined].forEach((newItemDisabledValue) => {
+                                    [true, false, undefined].forEach((newItemOptionsDisabledValue) => {
+                                        this.toolbar.option('items[0].options.disabled', newItemOptionsDisabledValue);
+                                        currentItemOptionsDisabledState = newItemOptionsDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
 
-                        const toolbar = $('#toolbar').dxToolbar(toolbarOptions).dxToolbar('instance');
+                                        this.toolbar.option('items[0].disabled', newItemDisabledValue);
+                                        currentItemDisabledState = newItemDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
 
-                        openDropDownMenuIfExist(toolbar);
-                        checkDisabledState(toolbar, widget, isToolbarDisabled, isWidgetDisabled, focusableElementSelector);
-
-                        let currentWidgetDisabledState = isWidgetDisabled;
-                        [true, false, undefined].forEach((newToolbarDisabledValue) => {
-                            [true, false, undefined].forEach((newWidgetDisabledValue) => {
-
-                                toolbar.option('disabled', newToolbarDisabledValue);
-                                openDropDownMenuIfExist(toolbar);
-                                checkDisabledState(toolbar, widget, newToolbarDisabledValue, currentWidgetDisabledState, focusableElementSelector);
-
-                                currentWidgetDisabledState = newWidgetDisabledValue;
-                                toolbar.option('items[0].options.disabled', newWidgetDisabledValue);
-                                checkDisabledState(toolbar, widget, newToolbarDisabledValue, newWidgetDisabledValue, focusableElementSelector);
+                                        this.toolbar.option('disabled', newToolbarDisabledValue);
+                                        currentToolbarDisabledState = newToolbarDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
+                                    });
+                                });
                             });
                         });
-                    });
-                });
 
-                [true, false, undefined].forEach((isToolbarDisabledNew) => {
-                    [true, false, undefined].forEach((isWidgetDisabledNew) => {
+                        QUnit.test(`Disabled state for nested widgets, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].disabled=${isItemDisabled}, items[${widget}].options.disabled=${isItemOptionsDisabled} -> change order: toolbar.disabled -> items[${widget}].options.disabled -> items[${widget}].disabled`, function() {
+                            this.createInstance(getInitialToolbarOptions());
 
-                        QUnit.test(`new dxToolbar({
-                            toolbar.disabled:${isToolbarDisabled},
-                            button.disabled:${isWidgetDisabled})}) ->
-                            button.disabled=${isWidgetDisabledNew} ->
-                            toolbar.disabled${isToolbarDisabledNew},
-                            locateInMenu: ${locateInMenu}`,
-                        function(assert) {
-                            const itemClickHandler = sinon.spy();
-                            const buttonClickHandler = sinon.spy();
-                            const toolbarOptions = {
-                                onItemClick: itemClickHandler,
-                                items: [{
-                                    location: 'after',
-                                    locateInMenu: locateInMenu,
-                                    widget: 'dxButton',
-                                    options: {
-                                        onClick: buttonClickHandler
-                                    }
-                                }]
-                            };
+                            openDropDownMenuIfExist(this.toolbar);
+                            checkDisabledState(this.toolbar, widget, isToolbarDisabled, isItemDisabled, isItemOptionsDisabled, focusableElementSelector);
 
-                            if(isToolbarDisabled !== 'not declared') {
-                                toolbarOptions.disabled = isToolbarDisabled;
-                            }
-                            if(isWidgetDisabled !== 'not declared') {
-                                toolbarOptions.items[0].options.disabled = isWidgetDisabled;
-                            }
+                            let currentToolbarDisabledState = isToolbarDisabled;
+                            let currentItemOptionsDisabledState = isItemOptionsDisabled;
+                            let currentItemDisabledState = isItemDisabled;
+                            [true, false, undefined].forEach((newToolbarDisabledValue) => {
+                                [true, false, undefined].forEach((newItemDisabledValue) => {
+                                    [true, false, undefined].forEach((newItemOptionsDisabledValue) => {
+                                        this.toolbar.option('disabled', newToolbarDisabledValue);
+                                        currentToolbarDisabledState = newToolbarDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
 
-                            const $element = $('#toolbar');
-                            const toolbar = $element.dxToolbar(toolbarOptions).dxToolbar('instance');
-                            const focusableElementSelector = '.dx-button:not(.dx-dropdownmenu-button)';
+                                        this.toolbar.option('items[0].options.disabled', newItemOptionsDisabledValue);
+                                        currentItemOptionsDisabledState = newItemOptionsDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
 
-                            openDropDownMenuIfExist(toolbar);
-                            checkDisabledState(toolbar, 'dxButton', isToolbarDisabled, isWidgetDisabled, focusableElementSelector);
-
-                            eventsEngine.trigger(getToolbarButton(locateInMenu), 'dxclick');
-                            let expectedDisabled = getExpectedDisabledState(isWidgetDisabled, isToolbarDisabled);
-                            checkClickHandlers(assert, itemClickHandler, buttonClickHandler, expectedDisabled.widget, expectedDisabled.toolbar, locateInMenu);
-
-                            itemClickHandler.reset();
-                            buttonClickHandler.reset();
-
-                            toolbar.option('items[0].options.disabled', isWidgetDisabledNew);
-                            $element.dxToolbar('option', 'disabled', isToolbarDisabledNew);
-                            openDropDownMenuIfExist(toolbar);
-
-                            checkDisabledState(toolbar, 'dxButton', isToolbarDisabledNew, isWidgetDisabledNew, focusableElementSelector);
-
-                            eventsEngine.trigger(getToolbarButton(locateInMenu), 'dxclick');
-                            expectedDisabled = getExpectedDisabledState(isWidgetDisabledNew, isToolbarDisabledNew);
-                            checkClickHandlers(assert, itemClickHandler, buttonClickHandler, expectedDisabled.widget, expectedDisabled.toolbar, locateInMenu);
+                                        this.toolbar.option('items[0].disabled', newItemDisabledValue);
+                                        currentItemDisabledState = newItemDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
+                                    });
+                                });
+                            });
                         });
 
-                        QUnit.test(`new dxToolbar({
-                            toolbar.disabled:${isToolbarDisabled},
-                            button.disabled:${isWidgetDisabled})}) ->
-                            toolbar.disabled${isToolbarDisabledNew},
-                            button.disabled=${isWidgetDisabledNew} ->
-                            locateInMenu: ${locateInMenu}`,
-                        function(assert) {
-                            const itemClickHandler = sinon.spy();
-                            const buttonClickHandler = sinon.spy();
-                            const toolbarOptions = {
-                                onItemClick: itemClickHandler,
-                                items: [{
-                                    location: 'after',
-                                    locateInMenu: locateInMenu,
-                                    widget: 'dxButton',
-                                    options: {
-                                        onClick: buttonClickHandler
-                                    }
-                                }]
-                            };
+                        QUnit.test(`Disabled state for nested widgets, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].disabled=${isItemDisabled}, items[${widget}].options.disabled=${isItemOptionsDisabled} -> change order: toolbar.disabled -> items[${widget}].disabled -> items[${widget}].options.disabled`, function() {
+                            this.createInstance(getInitialToolbarOptions());
 
-                            if(isToolbarDisabled !== 'not declared') {
-                                toolbarOptions.disabled = isToolbarDisabled;
-                            }
-                            if(isWidgetDisabled !== 'not declared') {
-                                toolbarOptions.items[0].options.disabled = isWidgetDisabled;
-                            }
+                            openDropDownMenuIfExist(this.toolbar);
+                            checkDisabledState(this.toolbar, widget, isToolbarDisabled, isItemDisabled, isItemOptionsDisabled, focusableElementSelector);
 
-                            const $element = $('#toolbar');
-                            const toolbar = $element.dxToolbar(toolbarOptions).dxToolbar('instance');
-                            const focusableElementSelector = '.dx-button:not(.dx-dropdownmenu-button)';
+                            let currentToolbarDisabledState = isToolbarDisabled;
+                            let currentItemOptionsDisabledState = isItemOptionsDisabled;
+                            let currentItemDisabledState = isItemDisabled;
+                            [true, false, undefined].forEach((newToolbarDisabledValue) => {
+                                [true, false, undefined].forEach((newItemDisabledValue) => {
+                                    [true, false, undefined].forEach((newItemOptionsDisabledValue) => {
+                                        this.toolbar.option('disabled', newToolbarDisabledValue);
+                                        currentToolbarDisabledState = newToolbarDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
 
-                            openDropDownMenuIfExist(toolbar);
-                            checkDisabledState(toolbar, 'dxButton', isToolbarDisabled, isWidgetDisabled, focusableElementSelector);
+                                        this.toolbar.option('items[0].options.disabled', newItemOptionsDisabledValue);
+                                        currentItemOptionsDisabledState = newItemOptionsDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
 
-                            eventsEngine.trigger(getToolbarButton(locateInMenu), 'dxclick');
+                                        this.toolbar.option('items[0].disabled', newItemDisabledValue);
+                                        currentItemDisabledState = newItemDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
 
-                            let expectedDisabled = getExpectedDisabledState(isWidgetDisabled, isToolbarDisabled);
-                            checkClickHandlers(assert, itemClickHandler, buttonClickHandler, expectedDisabled.widget, expectedDisabled.toolbar, locateInMenu);
+                                    });
+                                });
+                            });
+                        });
 
-                            itemClickHandler.reset();
-                            buttonClickHandler.reset();
+                        QUnit.test(`Disabled state for nested widgets, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].disabled=${isItemDisabled}, items[${widget}].options.disabled=${isItemOptionsDisabled} -> change order: items[${widget}].disabled -> toolbar.disabled -> items[${widget}].options.disabled`, function() {
+                            this.createInstance(getInitialToolbarOptions());
 
-                            $element.dxToolbar('option', 'disabled', isToolbarDisabledNew);
-                            openDropDownMenuIfExist(toolbar);
-                            checkDisabledState(toolbar, 'dxButton', isToolbarDisabledNew, isWidgetDisabled, focusableElementSelector);
-                            toolbar.option('items[0].options.disabled', isWidgetDisabledNew);
+                            openDropDownMenuIfExist(this.toolbar);
+                            checkDisabledState(this.toolbar, widget, isToolbarDisabled, isItemDisabled, isItemOptionsDisabled, focusableElementSelector);
 
-                            checkDisabledState(toolbar, 'dxButton', isToolbarDisabledNew, isWidgetDisabledNew, focusableElementSelector);
+                            let currentToolbarDisabledState = isToolbarDisabled;
+                            let currentItemOptionsDisabledState = isItemOptionsDisabled;
+                            let currentItemDisabledState = isItemDisabled;
+                            [true, false, undefined].forEach((newToolbarDisabledValue) => {
+                                [true, false, undefined].forEach((newItemDisabledValue) => {
+                                    [true, false, undefined].forEach((newItemOptionsDisabledValue) => {
+                                        this.toolbar.option('items[0].disabled', newItemDisabledValue);
+                                        currentItemDisabledState = newItemDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
 
-                            eventsEngine.trigger(getToolbarButton(locateInMenu), 'dxclick');
-                            expectedDisabled = getExpectedDisabledState(isWidgetDisabledNew, isToolbarDisabledNew);
-                            checkClickHandlers(assert, itemClickHandler, buttonClickHandler, expectedDisabled.widget, expectedDisabled.toolbar, locateInMenu);
+                                        this.toolbar.option('disabled', newToolbarDisabledValue);
+                                        currentToolbarDisabledState = newToolbarDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
+
+                                        this.toolbar.option('items[0].options.disabled', newItemOptionsDisabledValue);
+                                        currentItemOptionsDisabledState = newItemOptionsDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
+                                    });
+                                });
+                            });
+                        });
+
+                        QUnit.test(`Disabled state for nested widgets, Toolbar.disabled=${isToolbarDisabled}, items[${widget}].disabled=${isItemDisabled}, items[${widget}].options.disabled=${isItemOptionsDisabled} -> change order: items[${widget}].disabled -> items[${widget}].options.disabled -> toolbar.disabled`, function() {
+                            this.createInstance(getInitialToolbarOptions());
+
+                            openDropDownMenuIfExist(this.toolbar);
+                            checkDisabledState(this.toolbar, widget, isToolbarDisabled, isItemDisabled, isItemOptionsDisabled, focusableElementSelector);
+
+                            let currentToolbarDisabledState = isToolbarDisabled;
+                            let currentItemOptionsDisabledState = isItemOptionsDisabled;
+                            let currentItemDisabledState = isItemDisabled;
+                            [true, false, undefined].forEach((newToolbarDisabledValue) => {
+                                [true, false, undefined].forEach((newItemDisabledValue) => {
+                                    [true, false, undefined].forEach((newItemOptionsDisabledValue) => {
+                                        this.toolbar.option('items[0].disabled', newItemDisabledValue);
+                                        currentItemDisabledState = newItemDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
+
+                                        this.toolbar.option('items[0].options.disabled', newItemOptionsDisabledValue);
+                                        currentItemOptionsDisabledState = newItemOptionsDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
+
+                                        this.toolbar.option('disabled', newToolbarDisabledValue);
+                                        currentToolbarDisabledState = newToolbarDisabledValue;
+                                        openDropDownMenuIfExist(this.toolbar);
+                                        checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
+
+                                    });
+                                });
+                            });
                         });
                     });
                 });
