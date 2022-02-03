@@ -30,7 +30,7 @@ fixture`Toolbar_common`
       }, { dependencies: { targetContainerSelector } })();
 
       await t
-        .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
+        .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -57,76 +57,74 @@ fixture`Toolbar_common`
       await changeTheme('generic.light');
     });
 
-    // eslint-disable-next-line max-len
-    // test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=${locateInMenu}`, async () => {
-    //   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=${locateInMenu}`, async () => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    //   let targetContainerSelector = '#container';
+      let targetContainerSelector = '#container';
 
-    //   if (locateInMenu === 'always') {
-    //     await ClientFunction(() => {
-    //       $('.dx-toolbar .dx-dropdownmenu-button').click();
-    //     }, { dependencies: { } })();
+      if (locateInMenu === 'always') {
+        await ClientFunction(() => {
+          $('.dx-toolbar .dx-dropdownmenu-button').click();
+        }, { dependencies: { } })();
 
-    //     targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
-    //   }
+        targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+      }
 
-    //   await ClientFunction(() => {
-    //     $(targetContainerSelector).css({ backgroundColor: 'gold' });
-    //   }, { dependencies: { targetContainerSelector } })();
+      await ClientFunction(() => {
+        $(targetContainerSelector).css({ backgroundColor: 'gold' });
+      }, { dependencies: { targetContainerSelector } })();
 
-    //   await t
-    // eslint-disable-next-line max-len
-    //     .expect(await takeScreenshot(`Toolbar with dropDownButton,theme=${theme.replace(/\./g, '-')},locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
-    //     .ok()
-    //     .expect(compareResults.isValid())
-    //     .ok(compareResults.errorMessages());
-    // }).before(async () => {
-    //   await changeTheme(theme);
+      await t
+        .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector('#container')))
+        .ok()
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await changeTheme(theme);
 
-    //   const toolbarItems = [
-    //     {
-    //       location: 'before',
-    //       locateInMenu,
-    //       widget: 'dxDropDownButton',
-    //       options: {
-    //         text: 'default',
-    //       },
-    //     },
-    //     {
-    //       location: 'before',
-    //       locateInMenu,
-    //       widget: 'dxDropDownButton',
-    //       options: {
-    //         stylingMode: 'text',
-    //         text: 'stylingMode: text',
-    //       },
-    //     },
-    //     {
-    //       location: 'before',
-    //       locateInMenu,
-    //       widget: 'dxDropDownButton',
-    //       options: {
-    //         stylingMode: 'outlined',
-    //         text: 'stylingMode: outlined',
-    //       },
-    //     },
-    //     {
-    //       location: 'before',
-    //       locateInMenu,
-    //       widget: 'dxDropDownButton',
-    //       options: {
-    //         stylingMode: 'contained',
-    //         text: 'stylingMode: contained',
-    //       },
-    //     },
-    //   ] as Item[];
+      const toolbarItems = [
+        {
+          location: 'before',
+          locateInMenu,
+          widget: 'dxDropDownButton',
+          options: {
+            text: 'default',
+          },
+        },
+        {
+          location: 'before',
+          locateInMenu,
+          widget: 'dxDropDownButton',
+          options: {
+            stylingMode: 'text',
+            text: 'opts.stylingMode: text',
+          },
+        },
+        {
+          location: 'before',
+          locateInMenu,
+          widget: 'dxDropDownButton',
+          options: {
+            stylingMode: 'outlined',
+            text: 'opts.stylingMode: outlined',
+          },
+        },
+        {
+          location: 'before',
+          locateInMenu,
+          widget: 'dxDropDownButton',
+          options: {
+            stylingMode: 'contained',
+            text: 'opts.stylingMode: contained',
+          },
+        },
+      ] as Item[];
 
-    //   return createWidget('dxToolbar', {
-    //     items: toolbarItems,
-    //   });
-    // }).after(async () => {
-    //   await changeTheme('generic.light');
-    // });
+      return createWidget('dxToolbar', {
+        items: toolbarItems,
+      });
+    }).after(async () => {
+      await changeTheme('generic.light');
+    });
   });
 });
