@@ -166,9 +166,9 @@ export class Widget extends JSXComponent(WidgetProps) {
     if (activeStateEnabled) {
       if (disabled) {
         if (this.active) {
-          this.active = false;
           onInactive?.();
         }
+        this.active = false;
       } else {
         active.on(this.widgetElementRef.current,
           ({ event }: { event: Event }) => {
@@ -239,9 +239,9 @@ export class Widget extends JSXComponent(WidgetProps) {
     if (focusStateEnabled) {
       if (disabled) {
         if (this.focused) {
-          this.focused = false;
           onFocusOut?.();
         }
+        this.focused = false;
       } else {
         focus.on(this.widgetElementRef.current,
           (e: Event & { isDefaultPrevented: () => boolean }) => {
@@ -278,9 +278,9 @@ export class Widget extends JSXComponent(WidgetProps) {
     if (hoverStateEnabled) {
       if (disabled) {
         if (this.hovered) {
-          this.hovered = false;
           onHoverEnd?.();
         }
+        this.hovered = false;
       } else {
         hover.on(this.widgetElementRef.current,
           ({ event }: { event: Event }) => {
