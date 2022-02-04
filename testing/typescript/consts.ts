@@ -11,12 +11,26 @@ export interface AnotherType {
   cxL0AirnXku3C1OAt0nIKw: any;
 }
 
+/**
+ * Checks that the value type is not `any`.
+ * Otherwise compilation is broken by requiring argument of the `never` type.
+ */
 export function notAny<T>(x: 0 extends (1 & T) ? never : T): void {}
 
+/**
+ * Checks that the value type is not `never`.
+ * Otherwise compilation is broken by requiring second argument that should never be passed.
+ */
 export function notNever<T>(t: T, ...args: NeverSwitch<T, ['unexpected never'], []>) {}
 type NeverSwitch<T, TNever, TNotNever> = 2 extends (T extends never ? 1 : 2) ? TNotNever : TNever;
 
-export function assertType<T>(actual: TypeAssertion<T>): void { return ANY; }
+/**
+ * Checks that the value can be used as the expected type.
+ * Ensures that actual type has all required props and all optional props of expected type.
+ *
+ * Use {@link toAssertion} to use value as an argument
+ */
+export function assertType<ExpectedType>(actual: TypeAssertion<ExpectedType>): void { return ANY; }
 export function toAssertion<T>(t?: T): T extends never ? 123: TypeAssertion<T> { return ANY; }
 export interface TypeAssertion<T> {
   type: T;
