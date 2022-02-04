@@ -22,6 +22,7 @@ export type WidgetName =
 'dxTextBox' |
 'dxTextArea' |
 'dxTagBox' |
+'dxToolbar' |
 'dxTreeView' |
 'dxDateBox' |
 'dxLookup' |
