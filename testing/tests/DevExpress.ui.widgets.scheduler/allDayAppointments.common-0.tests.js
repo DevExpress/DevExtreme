@@ -186,11 +186,11 @@ module('AllDay appointments - Common Part-0', config, () => {
                 let pointer = pointerMock(scheduler.appointments.getAppointment(0).find(CLASSES.resizableHandle.right)).start();
 
                 pointer.dragStart().drag(cellWidth, 0).dragEnd();
-                assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 11), 'End date is OK');
+                assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 11, 8), 'End date is OK');
 
                 pointer = pointerMock(scheduler.appointments.getAppointment(0).find(CLASSES.resizableHandle.right)).start();
                 pointer.dragStart().drag(-cellWidth, 0).dragEnd();
-                assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 10), 'End date is OK');
+                assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 10, 8), 'End date is OK');
             });
 
             test('All-day appointment startDate should be correct after resize when startDayHour & endDayHour', function(assert) {

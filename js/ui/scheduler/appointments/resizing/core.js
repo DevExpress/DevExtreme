@@ -50,86 +50,6 @@ const getAppointmentLeftCell = (options) => {
     };
 };
 
-const getAppointmentTopCell = (options) => {
-    const {
-        cellHeight,
-        cellWidth,
-        viewDataProvider,
-        relativeAppointmentRect,
-        appointmentSettings,
-        rtlEnabled,
-    } = options;
-
-    const cellRowIndex = Math.floor(relativeAppointmentRect.top / cellHeight);
-    const cellColumnIndex = Math.round(relativeAppointmentRect.left / cellWidth);
-
-    const topCell = getCellData(
-        viewDataProvider,
-        cellRowIndex,
-        cellColumnIndex,
-        appointmentSettings.allDay,
-        rtlEnabled
-    );
-
-    return {
-        ...topCell,
-        startDate: getEndResizeAppointmentStartDate(
-            options,
-            topCell.startDate
-        )
-    };
-};
-
-const getDateRangeVertical = (options) => {
-    const {
-        cellHeight,
-        cellCountInRow,
-        viewDataProvider,
-        relativeAppointmentRect,
-        appointmentSettings,
-        handles,
-    } = options;
-
-    const appointmentFirstCell = getAppointmentTopCell(options);
-    const appointmentRowsAmount = Math.round(relativeAppointmentRect.height / cellHeight);
-    const appointmentRowIndex = Math.ceil((appointmentFirstCell.index + 1) / cellCountInRow) + appointmentRowsAmount - 2;
-    const appointmentColumnIndex = appointmentFirstCell.index % cellCountInRow;
-
-    const { sourceAppointment } = appointmentSettings.info;
-
-    if(handles.top) {
-        const startDate = normalizeStartDate(
-            options,
-            appointmentFirstCell.startDate,
-            sourceAppointment.startDate
-        );
-
-        return {
-            startDate,
-            endDate: sourceAppointment.endDate,
-        };
-    }
-
-    const appointmentLastCell = getCellData(
-        viewDataProvider,
-        appointmentRowIndex,
-        appointmentColumnIndex,
-        options.allDay,
-        options.rtlEnabled
-    );
-
-    const endDate = normalizeEndDate(
-        options,
-        appointmentLastCell.endDate,
-        sourceAppointment.endDate
-    );
-
-    return {
-        startDate: sourceAppointment.startDate,
-        endDate,
-    };
-};
-
 const getDateRangeHorizontal = (options) => {
     const {
         cellWidth,
@@ -278,7 +198,6 @@ const getAppointmentCellsInfo = (options) => {
 
 export const getAppointmentDateRange = (options) => {
     const {
-        isVerticalViewDirection,
         appointmentSettings
     } = options;
 
@@ -294,11 +213,6 @@ export const getAppointmentDateRange = (options) => {
         considerTime,
         relativeAppointmentRect
     };
-    const isVertical = isVerticalViewDirection && !appointmentSettings.allDay;
-
-    if(isVertical) {
-        return getDateRangeVertical(extendedOptions);
-    }
 
     return !options.rtlEnabled
         ? getDateRangeHorizontal(extendedOptions)
