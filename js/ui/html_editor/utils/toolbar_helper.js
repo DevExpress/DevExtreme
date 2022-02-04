@@ -17,6 +17,7 @@ import Form from '../../form';
 import ButtonGroup from '../../button_group';
 import ColorBox from '../../color_box';
 import ScrollView from '../../scroll_view';
+import FileUploader from '../../file_uploader';
 
 import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
 
@@ -237,7 +238,7 @@ function prepareImageHandler(module) {
 
         const promise = module.editorInstance.showFormDialog({
             formData: formData,
-            items: imageFormItems()
+            items: imageFormItems(module)
         });
 
         promise
@@ -299,12 +300,50 @@ function defaultPasteIndex(module) {
     return selection?.index ?? module.quill.getLength();
 }
 
-function imageFormItems() {
+function imageFormItems(module) {
+    const editorInstance = module.editorInstance;
+
     return [
-        { dataField: 'src', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
-        { dataField: 'width', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) } },
-        { dataField: 'height', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) } },
-        { dataField: 'alt', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
+        {
+            itemType: 'tabbed',
+            tabs: [{
+                title: 'Image Information', // localization
+                items: [
+                    { dataField: 'src', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
+                    { dataField: 'width', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) } },
+                    { dataField: 'height', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) } },
+                    { dataField: 'alt', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
+                ]
+            }, {
+                title: 'Upload Image', // localization
+                items: [
+                    {
+                        itemType: 'simple',
+                        dataField: '',
+                        label: { text: '' }, // localization
+                        template: (e) => {
+                            const $content = $('<div>');
+                            editorInstance._createComponent($content, FileUploader, {
+                                multiple: false,
+                                width: 300, //
+                                accept: '*',
+                                value: [],
+                                uploadMode: 'instantly',
+                            });
+                            return $content;
+                        }
+                    }, {
+                        itemType: 'simple',
+                        dataField: '',
+                        editorType: 'dxCheckBox',
+                        editorOptions: {
+                            value: false,
+                            text: 'Encode to base 64' // localization
+                        }
+                    }
+                ]
+            }]
+        }
     ];
 }
 
