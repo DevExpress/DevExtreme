@@ -211,6 +211,30 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         ]);
     });
 
+    QUnit.test('Lookup column with boolean values should not have showEditorAlways (T1063568)', function(assert) {
+        const dataSource = createDataSource(this, [
+            { boolField: true }
+        ]);
+        dataSource.load();
+
+        this.columnsController.applyDataSource(dataSource);
+
+        this.applyOptions({
+            columns: [
+                { dataField: 'boolField', lookup: { dataSource: [false, true] } },
+            ]
+        });
+
+        this.editingController.init();
+
+        assert.ok(this.columnsController.isInitialized());
+        const visibleColumns = this.columnsController.getVisibleColumns();
+
+        assert.strictEqual(visibleColumns[0].dataType, 'boolean');
+        assert.strictEqual(visibleColumns[0].lookup.dataType, 'boolean');
+        assert.strictEqual(visibleColumns[0].showEditorAlways, false);
+    });
+
     QUnit.test('Boolean columns initialize with correct \'showEditorAlways\' option when cellTemplate is defined', function(assert) {
         this.applyOptions({
             columns: [{

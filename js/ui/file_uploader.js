@@ -445,7 +445,12 @@ class FileUploader extends Editor {
 
     _validateFileExtension(file) {
         const allowedExtensions = this.option('allowedFileExtensions');
+        const accept = this.option('accept');
+        const allowedTypes = this._getAllowedFileTypes(accept);
         const fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
+        if(accept.length !== 0 && !this._isFileTypeAllowed(file.value, allowedTypes)) {
+            return false;
+        }
         if(allowedExtensions.length === 0) {
             return true;
         }
@@ -1002,7 +1007,7 @@ class FileUploader extends Editor {
             return;
         }
 
-        this._changeValue(this._filterFiles(files));
+        this._changeValue(files);
 
         if(this.option('uploadMode') === 'instantly') {
             this._uploadFiles();
@@ -1014,29 +1019,6 @@ class FileUploader extends Editor {
         if(areAllFilesLoaded) {
             this._filesUploadedAction();
         }
-    }
-
-    _filterFiles(files) {
-        if(!files.length) {
-            return files;
-        }
-
-        const accept = this.option('accept');
-
-        if(!accept.length) {
-            return files;
-        }
-
-        const result = [];
-        const allowedTypes = this._getAllowedFileTypes(accept);
-
-        for(let i = 0, n = files.length; i < n; i++) {
-            if(this._isFileTypeAllowed(files[i], allowedTypes)) {
-                result.push(files[i]);
-            }
-        }
-
-        return result;
     }
 
     _getAllowedFileTypes(acceptSting) {
