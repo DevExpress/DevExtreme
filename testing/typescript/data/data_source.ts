@@ -52,7 +52,7 @@ export function DataSourceLikeIsNarrowed() {
   if (!isString(actual) && !isArray(actual) && !isStore(actual) && !isDataSource(actual)) {
     notNever(actual);
     notAny(actual);
-    assertType<DataSourceOptionsStub>(toAssertion(actual));
+    assertType<DataSourceOptionsStub<any, any, Item>>(toAssertion(actual));
   }
 
   if (!isString(actual)
@@ -62,7 +62,7 @@ export function DataSourceLikeIsNarrowed() {
   ) {
     notNever(actual);
     notAny(actual);
-    assertType<DataSource>(toAssertion(actual));
+    assertType<DataSource<Item, Key>>(toAssertion(actual));
   }
 
   if (!isString(actual)
@@ -72,7 +72,7 @@ export function DataSourceLikeIsNarrowed() {
   ) {
     notNever(actual);
     notAny(actual);
-    assertType<Store>(toAssertion(actual));
+    assertType<Store<Item, Key>>(toAssertion(actual));
   }
 
   if (!isArray(actual)
