@@ -61,7 +61,10 @@ function argumentsToString() {
 
 function createMockPdfDoc(options) {
     const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
-    const pdfOptions = extend(options || {}, { unit: 'pt' });
+    const unit = isDefined(options) && isDefined(options.unit)
+        ? options.init
+        : 'pt';
+    const pdfOptions = extend(options || {}, { unit });
     const result = _jsPDF(pdfOptions);
     result.__log = [];
 
