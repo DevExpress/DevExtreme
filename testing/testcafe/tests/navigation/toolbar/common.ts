@@ -75,7 +75,7 @@ fixture`Toolbar_common`
       }, { dependencies: { targetContainerSelector } })();
 
       await t
-        .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector('#container')))
+        .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
