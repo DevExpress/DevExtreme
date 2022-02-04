@@ -1,5 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
-import { toPdfPoint } from './pdf_utils_v3';
+import { toPdfUnit } from './pdf_utils_v3';
 
 // Returns IPdfRowInfo[]
 // [
@@ -84,7 +84,7 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
             horizontalAlign: columns[cellIndex].alignment ?? 'left',
             wordWrapEnabled,
             backgroundColor,
-            padding: toPdfPoint(doc, 5),
+            padding: toPdfUnit(doc, 5),
             _rect: {}
         };
 

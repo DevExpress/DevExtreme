@@ -1,6 +1,6 @@
 import { isDefined, isObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { calculateTextHeight, toPdfPoint } from './pdf_utils_v3';
+import { calculateTextHeight, toPdfUnit } from './pdf_utils_v3';
 
 const defaultBorderLineWidth = 0.5;
 
@@ -165,7 +165,7 @@ function setTextStyles(doc, { textColor, font }, docStyles) {
 }
 
 function setLinesStyles(doc, { borderColor }, docStyles) {
-    doc.setLineWidth(toPdfPoint(doc, defaultBorderLineWidth));
+    doc.setLineWidth(toPdfUnit(doc, defaultBorderLineWidth));
     const currentBorderColor = isDefined(borderColor) ? borderColor : docStyles.borderColor;
     if(currentBorderColor !== doc.getDrawColor()) {
         callMethodWithColorParameter(doc, 'setDrawColor', currentBorderColor);

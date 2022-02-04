@@ -6,7 +6,7 @@ import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
 import { splitByPages } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
-import { applyWordWrap, toPdfPoint } from './pdf_utils_v3';
+import { applyWordWrap, toPdfUnit } from './pdf_utils_v3';
 
 // TODO: check names with techwritters
 // IPDFExportOptions: {
@@ -29,7 +29,7 @@ function _getFullOptions(doc, options) {
         fullOptions.repeatHeaders = true;
     }
     if(!isDefined(fullOptions.margin)) {
-        fullOptions.margin = toPdfPoint(doc, 40);
+        fullOptions.margin = toPdfUnit(doc, 40);
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
     return fullOptions;
