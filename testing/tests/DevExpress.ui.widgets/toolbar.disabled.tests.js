@@ -2,6 +2,9 @@ import 'ui/action_sheet';
 import 'ui/drop_down_menu';
 
 import $ from 'jquery';
+import 'ui/toolbar';
+import 'ui/toolbar/ui.toolbar.base';
+
 import eventsEngine from 'events/core/events_engine';
 import devices from 'core/devices';
 
@@ -16,9 +19,10 @@ import 'ui/autocomplete';
 import 'ui/date_box';
 import 'ui/menu';
 
+
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 
-[/* 'never',*/ 'always'].forEach((locateInMenu) => {
+['never', 'always'].forEach((locateInMenu) => {
     QUnit.module(`Disabled state, locateInMenu: ${locateInMenu}`, {
         before: function() {
             this.$fixture = $('#qunit-fixture');
@@ -186,19 +190,16 @@ const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
                     [true, false, undefined, 'not declared'].forEach((isItemDisabled) => {
                         const getInitialToolbarOptions = () => {
                             const initialToolbarOptions = {
+                                onItemClick: itemClickHandler,
                                 items: [{
                                     location: 'after',
                                     locateInMenu,
                                     widget,
                                     options: {
+                                        onClick: buttonClickHandler
                                     }
                                 }]
                             };
-
-                            if(widget === 'dxButton') {
-                                initialToolbarOptions.items[0].onItemClick = itemClickHandler;
-                                initialToolbarOptions.items[0].options.onClick = buttonClickHandler;
-                            }
 
                             if(isToolbarDisabled !== 'not declared') {
                                 initialToolbarOptions.disabled = isToolbarDisabled;
@@ -229,10 +230,6 @@ const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
                                     [true, false, undefined].forEach((newItemOptionsDisabledValue) => {
                                         this.toolbar.option('items[0].options.disabled', newItemOptionsDisabledValue);
                                         currentItemOptionsDisabledState = newItemOptionsDisabledValue;
-                                        const dropDownMenu = getDropDownMenu(this.toolbar);
-                                        if(dropDownMenu) {
-                                            dropDownMenu.close();
-                                        }
                                         openDropDownMenuIfExist(this.toolbar);
                                         checkDisabledState(this.toolbar, widget, currentToolbarDisabledState, currentItemDisabledState, currentItemOptionsDisabledState, focusableElementSelector);
 
