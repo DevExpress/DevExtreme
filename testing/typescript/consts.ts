@@ -31,7 +31,7 @@ type NeverSwitch<T, TNever, TNotNever> = 2 extends (T extends never ? 1 : 2) ? T
  * Use {@link toAssertion} to use value as an argument
  */
 export function assertType<ExpectedType>(actual: TypeAssertion<ExpectedType>): void { return ANY; }
-export function toAssertion<T>(t?: T): T extends never ? 123: TypeAssertion<T> { return ANY; }
+export function toAssertion<T>(t?: T): TypeAssertion<T> { return ANY; }
 export interface TypeAssertion<T> {
   type: T;
   required: Required<T>;
