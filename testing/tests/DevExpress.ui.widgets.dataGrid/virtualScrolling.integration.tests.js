@@ -5152,6 +5152,72 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             // assert
             assert.deepEqual(dataGrid.getSelectedRowKeys(), [5, 1, 2, 3, 4], 'selected keys after scroll up to the top');
         });
+
+        QUnit.test(`${scrollingMode} - Rows should be selected correctly with Shift when master-detail enabled (T1059242)`, function(assert) {
+            // arrange
+            const getData = function() {
+                const items = [];
+                for(let i = 0; i < 100; i++) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`
+                    });
+                }
+                return items;
+            };
+
+            const dataGrid = createDataGrid({
+                dataSource: getData(),
+                keyExpr: 'id',
+                remoteOperations: true,
+                scrolling: {
+                    mode: scrollingMode.toLowerCase(),
+                    useNative: false
+                },
+                selection: {
+                    mode: 'multiple',
+                    showCheckBoxesMode: 'always'
+                },
+                height: 300,
+                paging: {
+                    pageSize: 10
+                },
+                masterDetail: {
+                    enabled: true
+                }
+            });
+
+            this.clock.tick(300);
+
+            // act
+            $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(2)').trigger('dxclick');
+            this.clock.tick(300);
+
+            // assert
+            assert.strictEqual(dataGrid.getVisibleRows()[3].rowType, 'detail', 'detail row is rendered');
+
+            // act
+            $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(2)').trigger('dxclick');
+
+            // assert
+            assert.deepEqual(dataGrid.getSelectedRowKeys(), [3], 'selected keys after expanding detail row');
+
+            // act
+            let pointer = pointerMock($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(5)'));
+            pointer.start({ shiftKey: true }).down().up();
+            this.clock.tick(300);
+
+            // assert
+            assert.deepEqual(dataGrid.getSelectedRowKeys(), [3, 6, 5, 4], 'selected keys after selecting with shift');
+
+            // act
+            pointer = pointerMock($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(3)'));
+            pointer.start({ shiftKey: true }).down().up();
+            this.clock.tick(300);
+
+            // assert
+            assert.deepEqual(dataGrid.getSelectedRowKeys(), [3, 4], 'selected keys after selecting with shift for the second time');
+        });
     });
 });
 

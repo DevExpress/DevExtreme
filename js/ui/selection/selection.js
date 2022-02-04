@@ -113,7 +113,8 @@ export default Class.inherit({
         const items = this.options.plainItems();
         const item = items[itemIndex];
         let deferred;
-        const multipleSelectionInVirtualMode = this.options.virtualPaging && !this.options.legacyScrollingMode && this.options.allowSelectAll;
+        const multipleSelectionInVirtualMode = this.options.virtualPaging && !this.options.legacyScrollingMode && this.options.allowSelectAll && !this.options.deferred;
+        const focusedItemNotLoadedInVirtualMode = multipleSelectionInVirtualMode && !items.filter(it => it.loadIndex === this._focusedItemIndex).length;
 
         if(!this.isSelectable() || !this.isDataItem(item)) {
             return false;
@@ -125,7 +126,6 @@ export default Class.inherit({
         keys = keys || {};
 
         if(keys.shift && this.options.mode === 'multiple' && this._focusedItemIndex >= 0) {
-            const focusedItemNotLoadedInVirtualMode = multipleSelectionInVirtualMode && !items.filter(it => it.loadIndex === this._focusedItemIndex).length;
             if(focusedItemNotLoadedInVirtualMode) {
                 isSelectedItemsChanged = item.loadIndex !== this._shiftFocusedItemIndex || this._focusedItemIndex !== this._shiftFocusedItemIndex;
 
@@ -158,7 +158,7 @@ export default Class.inherit({
 
         if(isSelectedItemsChanged) {
             when(deferred).done(() => {
-                this._focusedItemIndex = multipleSelectionInVirtualMode ? item.loadIndex : itemIndex;
+                this._focusedItemIndex = focusedItemNotLoadedInVirtualMode ? item.loadIndex : itemIndex;
                 this.onSelectionChanged();
             });
             return true;
@@ -206,13 +206,13 @@ export default Class.inherit({
     changeItemSelectionWhenShiftKeyPressed: function(itemIndex, items, indexOffset) {
         let isSelectedItemsChanged = false;
         let itemIndexStep;
-        let index = isDefined(indexOffset) ? this._focusedItemIndex - indexOffset : this._focusedItemIndex;
+        const indexOffsetDefined = isDefined(indexOffset);
+        let index = indexOffsetDefined ? this._focusedItemIndex - indexOffset : this._focusedItemIndex;
         const keyOf = this.options.keyOf;
         const focusedItem = items[index];
         const focusedData = this.options.getItemData(focusedItem);
         const focusedKey = keyOf(focusedData);
         const isFocusedItemSelected = focusedItem && this.isItemDataSelected(focusedData);
-        const indexOffsetDefined = isDefined(indexOffset);
 
         if(!isDefined(this._shiftFocusedItemIndex)) {
             this._shiftFocusedItemIndex = this._focusedItemIndex;
