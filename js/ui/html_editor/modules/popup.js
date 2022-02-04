@@ -2,11 +2,15 @@ import Quill from 'devextreme-quill';
 import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
 import { getWindow } from '../../../core/utils/window';
+import eventsEngine from '../../../events/core/events_engine';
+import { addNamespace } from '../../../events/utils/index';
 
 import BaseModule from './base';
 
 import Popup from '../../popup';
 import List from '../../list';
+
+const MODULE_NAMESPACE = 'dxHtmlEditorPopupModule';
 
 let ListPopupModule = BaseModule;
 
@@ -30,6 +34,7 @@ if(Quill) {
             this.options = extend({}, this._getDefaultOptions(), options);
             this._popup = this.renderPopup();
             this._popup.$wrapper().addClass(SUGGESTION_LIST_WRAPPER_CLASS);
+            this._renderPreventFocusOut();
         }
 
         renderList($container, options) {
@@ -97,6 +102,14 @@ if(Quill) {
 
                 this.insertEmbedContent(e);
             }
+        }
+
+        _renderPreventFocusOut() {
+            const eventName = addNamespace('mousedown', MODULE_NAMESPACE);
+
+            eventsEngine.on(this._popup.$wrapper(), eventName, (e) => {
+                e.preventDefault();
+            });
         }
 
         insertEmbedContent(selectionChangedEvent) { }
