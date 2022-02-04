@@ -104,7 +104,7 @@ class BaseStrategy {
         });
 
         return {
-            positionByMap,
+            cellInfo,
             cellPosition: position.left + shift.cellPosition,
             top: position.top + shift.top,
             left: position.left + shift.left,

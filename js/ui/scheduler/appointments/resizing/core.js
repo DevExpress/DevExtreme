@@ -175,6 +175,7 @@ const getAppointmentCellsInfo = (options) => {
     const {
         appointmentSettings,
         isVerticalGroupedWorkSpace,
+        viewDataProvider,
         DOMMetaData,
     } = options;
 
@@ -182,7 +183,8 @@ const getAppointmentCellsInfo = (options) => {
         ? [DOMMetaData.allDayPanelCellsMeta]
         : DOMMetaData.dateTableCellsMeta;
 
-    const { positionByMap } = appointmentSettings;
+    const { cellInfo } = appointmentSettings;
+    const positionByMap = viewDataProvider.findCellPositionInMap(cellInfo);
     const {
         height: cellHeight,
         width: cellWidth,
