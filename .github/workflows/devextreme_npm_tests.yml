@@ -160,6 +160,10 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: npm install --no-audit --no-fund
 
+    - name: Discover declarations in devextreme repo
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: npm run discover-declarations
+
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
       if: github.event_name == 'pull_request' && steps.last_run_status.outputs.last_run_status != 'success'
