@@ -356,6 +356,13 @@ export class GanttView extends Widget {
     destroyTemplate(container) {
         $(container).empty();
     }
+    onTaskAreaSizeChanged(info) {
+        const scrollView = this._taskAreaContainer._scrollView;
+        if(isDefined(info?.height)) {
+            const direction = info?.height > this._taskAreaContainer.getHeight() ? 'both' : 'horizontal';
+            scrollView.option('direction', direction);
+        }
+    }
     // export
     getTreeListTableStyle() {
         return this.callExportHelperMethod('getTreeListTableStyle');
