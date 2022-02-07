@@ -558,6 +558,19 @@ describe('Widget', () => {
           expect(onHoverEnd).toHaveBeenCalledWith(defaultEvent);
         });
 
+        it('should work without errors if onHoverEnd is not defined', () => {
+          const e = { ...defaultEvent };
+          const widget = new Widget({
+            hoverStateEnabled: true, disabled: false, onHoverEnd: undefined,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.hovered = true;
+          widget.hoverEndEffect();
+
+          emit(EVENT.hoverEnd, e);
+          expect(widget.hovered).toBe(false);
+        });
+
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ hoverStateEnabled: true, disabled: false });
           widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
@@ -586,11 +599,9 @@ describe('Widget', () => {
             hoverStateEnabled: true, onHoverEnd,
           });
           widget.widgetElementRef = {} as any;
-          widget.focusOutEffect();
-          widget.hovered = true;
+          widget.hoverEndEffect();
 
           emit(EVENT.hoverEnd);
-          expect(widget.hovered).toBe(true);
           expect(onHoverEnd).toHaveBeenCalledTimes(0);
         });
 
