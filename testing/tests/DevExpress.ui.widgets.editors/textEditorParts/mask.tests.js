@@ -1856,7 +1856,7 @@ QUnit.module('validation', {}, () => {
         keyboard.type('1');
         $input.trigger('change');
 
-        assert.equal($('.dx-invalid-message').eq(0).text(), 'test', 'validation message');
+        assert.equal($('.dx-invalid-message-content').text(), 'test', 'validation message');
     });
 
     QUnit.test('mask should be validated before valueChangeEvent is fired', function(assert) {
