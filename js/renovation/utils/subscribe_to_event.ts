@@ -47,3 +47,4 @@ export const subscribeToDxHoverStartEvent = subscribeToEvent('dxhoverstart');
 export const subscribeToDxHoverEndEvent = subscribeToEvent('dxhoverend');
 export const subscribeToDxFocusInEvent = subscribeToEvent('focusin');
 export const subscribeToDxFocusOutEvent = subscribeToEvent('focusout');
+export const subscribeToBeforeActivateEvent = subscribeToEvent('beforeactivate');

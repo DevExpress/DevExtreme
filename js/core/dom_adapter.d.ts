@@ -9,6 +9,7 @@ export interface DomAdapter {
     offsetHeight: number;
     clientHeight: number;
   };
+  hasDocumentProperty(prop: any): boolean;
   isNode(node: unknown): boolean;
   getBody(): HTMLBodyElement;
   isElementNode(element: unknown): boolean;

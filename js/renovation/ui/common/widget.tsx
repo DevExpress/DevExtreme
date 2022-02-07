@@ -27,9 +27,11 @@ import {
   subscribeToDxHoverEndEvent,
   subscribeToDxFocusInEvent,
   subscribeToDxFocusOutEvent,
+  subscribeToBeforeActivateEvent,
 } from '../../utils/subscribe_to_event';
 import { combineClasses } from '../../utils/combine_classes';
 import { extend } from '../../../core/utils/extend';
+import { focusable } from '../../../ui/widget/selectors';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import { BaseWidgetProps } from './base_props';
 import { EffectReturn } from '../../utils/effect_return';
@@ -256,6 +258,14 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     if (focusStateEnabled) {
       if (!disabled) {
+        if (domAdapter.hasDocumentProperty('onbeforeactivate')) {
+          subscribeToBeforeActivateEvent(this.widgetElementRef.current,
+            (event: Event) => {
+              focusable(null, event.target) || event.preventDefault();
+            },
+            undefined, namespace);
+        }
+
         return subscribeToDxFocusInEvent(this.widgetElementRef.current,
           (event: Event & { isDefaultPrevented: () => boolean }) => {
             if (!event.isDefaultPrevented()) {
