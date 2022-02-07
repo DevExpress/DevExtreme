@@ -3666,6 +3666,7 @@ QUnit.module('default options', {
                         my: 'center',
                         of: $(window)
                     },
+                    visualContainer: window,
                     width: popupWidth,
                     height: popupHeight
                 }
