@@ -179,8 +179,22 @@ export default SelectionStrategy.inherit({
         selectionFilter = that._denormalizeFilter(selectionFilter);
 
         if(selectionFilter && selectionFilter.length) {
-            that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
+            const removedIndex = that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
             const filterIndex = that._removeSameFilter(selectionFilter, filter, !isDeselect);
+
+            const onlyNegativeFiltersLeft = selectionFilter.every((v, i) => {
+                if(i % 2 === 0) {
+                    return Array.isArray(v) && v[0] === '!';
+                } else {
+                    return v === 'and';
+                }
+            });
+
+            if(isDeselect && (removedIndex !== -1 || filterIndex !== -1) && onlyNegativeFiltersLeft) {
+                selectionFilter = [];
+            }
+
+
             const isKeyOperatorsAfterRemoved = this._isKeyFilter(filter) && this._hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex);
 
             needAddFilter = filter.length && !isKeyOperatorsAfterRemoved;
@@ -192,18 +206,6 @@ export default SelectionStrategy.inherit({
 
         if(needAddFilter) {
             selectionFilter.push(currentFilter);
-        }
-
-        const onlyNegativeFiltersLeft = selectionFilter.every((v, i) => {
-            if(i % 2 === 0) {
-                return Array.isArray(v) && v[0] === '!';
-            } else {
-                return v === 'and';
-            }
-        });
-
-        if(onlyNegativeFiltersLeft) {
-            selectionFilter = [];
         }
 
         selectionFilter = that._normalizeFilter(selectionFilter);
