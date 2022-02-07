@@ -161,6 +161,7 @@ class AppointmentLayoutManager {
                 ...currentSetting,
                 columnIndex,
                 rowIndex,
+                positionByMap: undefined,
                 topVirtualCellCount: undefined,
                 leftVirtualCellCount: undefined,
                 leftVirtualWidth: undefined,
