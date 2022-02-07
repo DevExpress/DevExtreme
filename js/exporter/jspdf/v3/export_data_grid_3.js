@@ -6,7 +6,7 @@ import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
 import { splitByPages } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
-import { applyWordWrap, toPdfUnit } from './pdf_utils_v3';
+import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils_v3';
 
 // TODO: check names with techwritters
 // IPDFExportOptions: {
@@ -39,6 +39,7 @@ function exportDataGrid(doc, dataGrid, options) {
     options = extend({}, _getFullOptions(doc, options));
 
     const dataProvider = dataGrid.getDataProvider();
+    const isRtlEnabled = dataGrid.option('rtlEnabled') ?? false;
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
 
@@ -165,6 +166,10 @@ function exportDataGrid(doc, dataGrid, options) {
             };
 
             const rectsByPages = splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically);
+            if(isRtlEnabled) {
+                applyRtl(doc, rectsByPages);
+            }
+
             rectsByPages.forEach((pdfCellsInfo, index) => {
                 if(index > 0) {
                     doc.addPage();
