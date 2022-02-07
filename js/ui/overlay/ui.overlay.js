@@ -940,7 +940,7 @@ const Overlay = Widget.inherit({
     },
 
     _isAllWindowCovered: function() {
-        return isWindow(this._positionController.$visualContainer) && this.option('shading');
+        return isWindow(this._positionController.$visualContainer.get(0)) && this.option('shading');
     },
 
     _toggleSafariScrolling: function() {
@@ -977,7 +977,7 @@ const Overlay = Widget.inherit({
     _renderWrapperDimensions: function() {
         const $visualContainer = this._positionController.$visualContainer;
         const documentElement = domAdapter.getDocumentElement();
-        const isVisualContainerWindow = isWindow($visualContainer);
+        const isVisualContainerWindow = isWindow($visualContainer.get(0));
 
         const wrapperWidth = isVisualContainerWindow ? documentElement.clientWidth : getOuterWidth($visualContainer);
         const wrapperHeight = isVisualContainerWindow ? window.innerHeight : getOuterHeight($visualContainer);
