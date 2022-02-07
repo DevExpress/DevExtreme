@@ -3,6 +3,7 @@ import React, { createRef } from 'react';
 import { mount } from 'enzyme';
 // import { create as mount } from 'react-test-renderer';
 import { RefObject } from '@devextreme-generator/declarations';
+import { focusable } from '../../../../ui/widget/selectors';
 import { DisposeEffectReturn } from '../../../utils/effect_return';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
@@ -22,6 +23,7 @@ jest.mock('../../../common/config_provider', () => ({ ConfigProvider: () => null
 jest.mock('../../../utils/resolve_rtl');
 jest.mock('../../../../core/utils/resize_callbacks');
 jest.mock('../../../../core/errors');
+jest.mock('../../../../ui/widget/selectors', () => ({ focusable: jest.fn() }));
 
 describe('Widget', () => {
   describe('Render', () => {
@@ -374,6 +376,44 @@ describe('Widget', () => {
           expect(widget.focused).toBe(false);
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(0);
           expect(onFocusIn).toHaveBeenCalledTimes(0);
+        });
+
+        it('should subscribe to beforeactivate event if domAdapter has onbeforeactivate propetry and element is not focusable', () => {
+          const widget = new Widget({ focusStateEnabled: true, disabled: false, onFocusIn });
+          widget.widgetElementRef = {} as any;
+          const event = { ...defaultEvent, preventDefault: jest.fn() };
+
+          jest.spyOn(domAdapter, 'hasDocumentProperty').mockImplementation(() => true);
+          (focusable as jest.Mock).mockImplementation(() => false);
+          widget.focusInEffect();
+
+          emit('beforeactivate', event);
+          expect(event.preventDefault).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not subscribe to beforeactivate event if domAdapter do not have onbeforeactivate propetry', () => {
+          const widget = new Widget({ focusStateEnabled: true, disabled: false, onFocusIn });
+          widget.widgetElementRef = {} as any;
+          const event = { ...defaultEvent, preventDefault: jest.fn() };
+
+          (focusable as jest.Mock).mockImplementation(() => false);
+          widget.focusInEffect();
+
+          emit('beforeactivate', event);
+          expect(event.preventDefault).toHaveBeenCalledTimes(0);
+        });
+
+        it('should not subscribe to beforeactivate event if element is focusable', () => {
+          const widget = new Widget({ focusStateEnabled: true, disabled: false, onFocusIn });
+          widget.widgetElementRef = {} as any;
+          const event = { ...defaultEvent, preventDefault: jest.fn() };
+
+          jest.spyOn(domAdapter, 'hasDocumentProperty').mockImplementation(() => true);
+          (focusable as jest.Mock).mockImplementation(() => false);
+          widget.focusInEffect();
+
+          emit('beforeactivate', event);
+          expect(event.preventDefault).toHaveBeenCalledTimes(1);
         });
       });
 
