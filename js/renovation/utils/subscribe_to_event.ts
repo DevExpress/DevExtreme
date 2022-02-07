@@ -41,9 +41,9 @@ export const subscribeToMouseLeaveEvent = subscribeToEvent('mouseleave');
 
 export const subscribeToKeyDownEvent = subscribeToEvent('keydown');
 
-export const subscribeToDXActiveEvent = subscribeToEvent('dxactive');
-export const subscribeToDXInactiveEvent = subscribeToEvent('dxinactive');
-export const subscribeToDXHoverStartEvent = subscribeToEvent('dxhoverstart');
-export const subscribeToDXHoverEndEvent = subscribeToEvent('dxhoverend');
-export const subscribeToDXFocusInEvent = subscribeToEvent('focusin');
-export const subscribeToDXFocusOutEvent = subscribeToEvent('focusout');
+export const subscribeToDxActiveEvent = subscribeToEvent('dxactive');
+export const subscribeToDxInactiveEvent = subscribeToEvent('dxinactive');
+export const subscribeToDxHoverStartEvent = subscribeToEvent('dxhoverstart');
+export const subscribeToDxHoverEndEvent = subscribeToEvent('dxhoverend');
+export const subscribeToDxFocusInEvent = subscribeToEvent('focusin');
+export const subscribeToDxFocusOutEvent = subscribeToEvent('focusout');

@@ -21,12 +21,12 @@ import {
   dxClick, focus, keyboard, resize, visibility,
 } from '../../../events/short';
 import {
-  subscribeToDXActiveEvent,
-  subscribeToDXInactiveEvent,
-  subscribeToDXHoverStartEvent,
-  subscribeToDXHoverEndEvent,
-  subscribeToDXFocusInEvent,
-  subscribeToDXFocusOutEvent,
+  subscribeToDxActiveEvent,
+  subscribeToDxInactiveEvent,
+  subscribeToDxHoverStartEvent,
+  subscribeToDxHoverEndEvent,
+  subscribeToDxFocusInEvent,
+  subscribeToDxFocusOutEvent,
 } from '../../utils/subscribe_to_event';
 import { combineClasses } from '../../utils/combine_classes';
 import { extend } from '../../../core/utils/extend';
@@ -172,7 +172,7 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     if (activeStateEnabled) {
       if (!disabled) {
-        return subscribeToDXActiveEvent(this.widgetElementRef.current,
+        return subscribeToDxActiveEvent(this.widgetElementRef.current,
           (event: Event) => {
             this.active = true;
             onActive?.(event);
@@ -196,7 +196,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const selector = activeStateUnit;
 
     if (activeStateEnabled) {
-      return subscribeToDXInactiveEvent(this.widgetElementRef.current,
+      return subscribeToDxInactiveEvent(this.widgetElementRef.current,
         (event: Event) => {
           if (this.active) {
             this.active = false;
@@ -256,7 +256,7 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     if (focusStateEnabled) {
       if (!disabled) {
-        return subscribeToDXFocusInEvent(this.widgetElementRef.current,
+        return subscribeToDxFocusInEvent(this.widgetElementRef.current,
           (event: Event & { isDefaultPrevented: () => boolean }) => {
             if (!event.isDefaultPrevented()) {
               this.focused = true;
@@ -277,7 +277,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const namespace = `${name}Focus`;
 
     if (focusStateEnabled) {
-      return subscribeToDXFocusOutEvent(this.widgetElementRef.current,
+      return subscribeToDxFocusOutEvent(this.widgetElementRef.current,
         (event: Event & { isDefaultPrevented: () => boolean }) => {
           if (!event.isDefaultPrevented() && this.focused) {
             this.focused = false;
@@ -299,7 +299,7 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     if (hoverStateEnabled) {
       if (!disabled) {
-        return subscribeToDXHoverStartEvent(this.widgetElementRef.current,
+        return subscribeToDxHoverStartEvent(this.widgetElementRef.current,
           (event: Event) => {
             !this.active && (this.hovered = true);
             onHoverStart?.(event);
@@ -320,7 +320,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const selector = activeStateUnit;
 
     if (hoverStateEnabled) {
-      return subscribeToDXHoverEndEvent(this.widgetElementRef.current,
+      return subscribeToDxHoverEndEvent(this.widgetElementRef.current,
         (event: Event) => {
           if (this.hovered) {
             this.hovered = false;
