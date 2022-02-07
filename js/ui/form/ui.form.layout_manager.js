@@ -590,6 +590,8 @@ const LayoutManager = Widget.inherit({
             managerMarkOptions: this._getMarkOptions(),
         }));
 
+        this.option('onFieldItemRendered')?.();
+
         if(widgetInstance && item.dataField) {
             // TODO: move to renderFieldItem ?
             this._bindDataField(widgetInstance, item.dataField, item.editorType, $fieldEditorContainer);

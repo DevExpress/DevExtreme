@@ -590,6 +590,10 @@ const Form = Widget.inherit({
                 const nestedItemsRunTimeInfo = component.getItemsRunTimeInfo();
                 this._itemsRunTimeInfo.removeItemsByItems(nestedItemsRunTimeInfo);
             },
+            onFieldItemRendered: () => {
+                this._validationSummary?._initGroupRegistration();
+            },
+
             colCount: options.colCount,
             alignItemLabels: options.alignItemLabels,
             cssItemClass: options.cssItemClass,
@@ -750,7 +754,7 @@ const Form = Widget.inherit({
         if(ITEM_OPTIONS_FOR_VALIDATION_UPDATING.indexOf(optionName) > -1) {
             ValidationEngine.addGroup(this._getValidationGroup());
             if(this.option('showValidationSummary')) {
-                this._validationSummary && this._validationSummary._initGroupRegistration();
+                this._validationSummary?._initGroupRegistration();
             }
         }
     },
