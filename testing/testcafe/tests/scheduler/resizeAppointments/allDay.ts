@@ -1,4 +1,3 @@
-/* eslint-disable radix */
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';

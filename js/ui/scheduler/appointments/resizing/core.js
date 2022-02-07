@@ -70,8 +70,7 @@ const getDateRangeHorizontal = (options) => {
         const startDate = normalizeStartDate(
             options,
             appointmentFirstCell.startDate,
-            sourceAppointment.startDate,
-            true
+            sourceAppointment.startDate
         );
 
         return {
