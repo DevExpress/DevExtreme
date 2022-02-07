@@ -194,6 +194,18 @@ export default SelectionStrategy.inherit({
             selectionFilter.push(currentFilter);
         }
 
+        const onlyNegativeFiltersLeft = selectionFilter.every((v, i) => {
+            if(i % 2 === 0) {
+                return Array.isArray(v) && v[0] === '!';
+            } else {
+                return v === 'and';
+            }
+        });
+
+        if(onlyNegativeFiltersLeft) {
+            selectionFilter = [];
+        }
+
         selectionFilter = that._normalizeFilter(selectionFilter);
 
         that._setOption('selectionFilter', !isDeselect && !selectionFilter.length ? null : selectionFilter);
