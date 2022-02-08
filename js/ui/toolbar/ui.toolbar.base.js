@@ -2,7 +2,7 @@ import { getWidth, getOuterWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { isMaterial, waitWebFont } from '../themes';
 import { noop } from '../../core/utils/common';
-import { isPlainObject, isDefined } from '../../core/utils/type';
+import { isPlainObject } from '../../core/utils/type';
 import registerComponent from '../../core/component_registrator';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
@@ -29,7 +29,6 @@ const TOOLBAR_LABEL_SELECTOR = '.' + TOOLBAR_LABEL_CLASS;
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TEXT_BUTTON_MODE = 'text';
 const DEFAULT_BUTTON_TYPE = 'default';
-const TOOLBAR_SUPPORTED_WIDGETS = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
 const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
 
@@ -44,6 +43,10 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         if('height' in this._userOptions) {
             errors.log('W0001', this.NAME, 'height', '20.1', 'Functionality associated with this option is not intended for the Toolbar widget.');
         }
+    },
+
+    _getSynchronizableOptionsForCreateComponent: function() {
+        return this.callBase().filter(item => item !== 'disabled');
     },
 
     _initTemplates: function() {
@@ -80,27 +83,9 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
                 $container.text(String(data));
             }
 
-            const model = { ...rawModel };
-
-            if(isDefined(rawModel.widget) && TOOLBAR_SUPPORTED_WIDGETS.indexOf(rawModel.widget) !== -1) {
-                if(rawModel.options) {
-                    const isDeepExtend = true;
-                    model.options = extend(isDeepExtend, {}, rawModel.options);
-                }
-
-                model.options = model.options || {};
-                model.options.disabled = model.options.disabled ?? model.disabled;
-
-                // in dom_component we prevent syncronization disabled in nested component if property exists in model
-                if(this.option('disabled') && !model.options.disabled) {
-                    delete model.options.disabled;
-                }
-            }
-
-
             this._getTemplate('dx-polymorph-widget').render({
                 container: $container,
-                model,
+                model: rawModel,
                 parent: this
             });
         }.bind(this), ['text', 'html', 'widget', 'options'], this.option('integrationOptions.watchMethod'));
@@ -456,14 +441,6 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _itemOptionChanged: function(item, property, value) {
-        if(property === 'disabled') {
-            const $item = this._findItemElementByItem(item);
-
-            if($item.length) {
-                this._refreshItem($item);
-            }
-        }
-
         this.callBase.apply(this, [item, property, value]);
         this._arrangeItems();
     },
@@ -488,9 +465,6 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
                 this._applyCompactMode();
                 break;
             case 'grouped':
-                break;
-            case 'disabled':
-                this._invalidate();
                 break;
             default:
                 this.callBase.apply(this, arguments);
