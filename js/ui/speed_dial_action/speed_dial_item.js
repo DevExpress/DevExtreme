@@ -24,7 +24,8 @@ class SpeedDialItem extends Overlay {
             callOverlayRenderShading: false,
             width: 'auto',
             zIndex: 1500,
-            _observeContentResize: false
+            _observeContentResize: false,
+            container: this.$element()
         });
     }
 
