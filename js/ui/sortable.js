@@ -283,12 +283,9 @@ const Sortable = Draggable.inherit({
         return true;
     },
 
-    _dragEndHandler: function() {
-        this.callBase.apply(this, arguments);
-        this._unsubscribeFromSourceScroll();
-    },
-
     dragEnd: function(sourceEvent) {
+        this._unsubscribeFromSourceScroll();
+
         const $sourceElement = this._getSourceElement();
         const sourceDraggable = this._getSourceDraggable();
         const isSourceDraggable = sourceDraggable.NAME !== this.NAME;
