@@ -33,6 +33,26 @@ QUnit.module('SliderTooltip', {
         this.init({});
     }
 }, () => {
+    QUnit.test('default options', function(assert) {
+        const defaultOptions = {
+            visible: false,
+            position: 'top',
+            hideOnOutsideClick: false,
+            hideTopOverlayHandler: null,
+            hideOnParentScroll: false,
+            animation: null,
+            templatesRenderAsynchronously: false,
+            _fixWrapperPosition: false,
+            useResizeObserver: false,
+            showMode: 'onHover',
+            value: 0
+        };
+
+        Object.entries(defaultOptions).forEach(([name, value]) => {
+            assert.strictEqual(this.sliderTooltip.option(name), value, `${name} option default value is correct`);
+        });
+    });
+
     QUnit.module('render', {
         beforeEach: function() {
             this.isTooltipRendered = () => {
