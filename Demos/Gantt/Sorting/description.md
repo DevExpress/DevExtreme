@@ -9,4 +9,4 @@ To exclude a column from the sort criteria, hold **Ctrl** and click the column h
 
 A header’s context menu allows a user to define the column’s sort settings. To disable sorting for a particular column, set the column’s [allowSorting](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/#allowSorting) property to **false**.
 
-The [sortOrder]( /Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/#sortOrder) and [sortIndex](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/#sortIndex) properties allow you to specify the initial sort settings and to change them at runtime.
+The [sortOrder](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/#sortOrder) and [sortIndex](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/#sortIndex) properties allow you to specify the initial sort settings and to change them at runtime.
