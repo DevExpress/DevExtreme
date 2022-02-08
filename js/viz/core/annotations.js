@@ -468,6 +468,10 @@ const corePlugin = {
                 .css(this._getAnnotationStyles())
                 .linkOn(this._renderer.root, 'annotations').linkAppend();
             eventsEngine.on(getDocument(), POINTER_ACTION, (e) => {
+                if(this._disposed) {
+                    return;
+                }
+
                 if(!this._annotations.tooltip.isCursorOnTooltip(e.pageX, e.pageY)) {
                     this._annotations.hideTooltip();
                 }
