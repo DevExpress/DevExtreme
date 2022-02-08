@@ -91,7 +91,7 @@ function exportDataGrid(doc, dataGrid, options) {
 
             applyBordersConfig(rowsInfo);
 
-            applyWordWrap(doc, rowsInfo, options);
+            applyWordWrap(doc, rowsInfo);
 
             // splitting to pages
             // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
