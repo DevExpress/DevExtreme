@@ -187,6 +187,7 @@ export const fireEvent = props => {
 };
 
 export const normalizeKeyName = ({ key, which }) => {
+    const originalKey = key;
     const isKeySupported = !!key;
 
     if(key || which) {
@@ -197,7 +198,7 @@ export const normalizeKeyName = ({ key, which }) => {
             key = LEGACY_KEY_CODES[which] || String.fromCharCode(which);
         }
 
-        return key;
+        return key || originalKey;
     }
 };
 
