@@ -88,10 +88,12 @@ const hideShow = ClientFunction((container) => {
 const resize = ClientFunction((container) => {
   const instance = ($(container) as any).dxScheduler('instance');
   // eslint-disable-next-line no-underscore-dangle
+  instance._dimensionChanged();
+  // eslint-disable-next-line no-underscore-dangle
   instance._workSpace._dimensionChanged();
 });
 
-test('Hidden scheduler workspace should not rezize', async (t) => {
+test('Hidden scheduler should not resize', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await hideShow('#container');
