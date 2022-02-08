@@ -741,6 +741,22 @@ export const focusModule = {
 
                 _getLastItemIndex: function() {
                     return this.items(true).length - 1;
+                },
+
+                _isItemEquals: function(item1, item2) {
+                    if(!this.callBase.apply(this, arguments)) {
+                        return false;
+                    }
+
+                    const visibleFocusedIndex = this.option('focusedRowIndex') - this.getRowIndexOffset();
+                    const focusedRowKey = this.option('focusedRowKey');
+                    let result = true;
+
+                    if(visibleFocusedIndex >= 0 && item1.rowIndex === visibleFocusedIndex && !equalByValue(focusedRowKey, item1.key)) {
+                        result = false;
+                    }
+
+                    return result;
                 }
             },
 
