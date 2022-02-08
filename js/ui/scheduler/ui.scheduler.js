@@ -873,11 +873,15 @@ class Scheduler extends Widget {
     }
 
     _dimensionChanged() {
+        if(!this._isVisible()) {
+            return;
+        }
+
         this._toggleSmallClass();
 
         const workspace = this.getWorkSpace();
 
-        if(!this._isAgenda() && this.filteredItems && this._isVisible() && workspace) {
+        if(!this._isAgenda() && this.filteredItems && workspace) {
             workspace.option('allDayExpanded', this._isAllDayExpanded());
             workspace._dimensionChanged();
 
