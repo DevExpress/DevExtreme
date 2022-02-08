@@ -11,7 +11,7 @@ import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
 import type {
-  Column, ColumnUserConfig, KeyExpr, RowData,
+  Column, ColumnUserConfig, KeyExpr, RowData, Row,
 } from './types';
 
 import { TableContent } from './views/table_content';
@@ -19,8 +19,9 @@ import { TableHeader } from './views/table_header';
 import { Footer } from './views/footer';
 
 export const VisibleItems = createGetter<RowData[]>([]);
+export const VisibleRows = createGetter<Row[]>([]);
 export const VisibleColumns = createGetter<Column[]>([]);
-export const DataSource = createValue<RowData[]>();
+export const Items = createValue<RowData[]>();
 export const KeyExprPlugin = createValue<KeyExpr>();
 export const TotalCount = createValue<number>();
 
@@ -42,7 +43,7 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   >
     <div className="dx-datagrid dx-gridbase-container" role="grid" aria-label="Data grid">
       <TableHeader columns={viewModel.visibleColumns} />
-      <TableContent columns={viewModel.visibleColumns} dataSource={viewModel.visibleItems} />
+      <TableContent columns={viewModel.visibleColumns} dataSource={viewModel.visibleRows} />
       <Footer />
       { viewModel.props.children }
     </div>
@@ -83,7 +84,7 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   plugins = new Plugins();
 
   @InternalState()
-  visibleItems: RowData[] = [];
+  visibleRows: Row[] = [];
 
   @InternalState()
   visibleColumns: Column[] = [];
@@ -94,17 +95,31 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   }
 
   @Effect()
-  updateVisibleItems(): () => void {
-    return this.plugins.watch(VisibleItems, (items) => {
-      this.visibleItems = items;
+  updateVisibleRowsByVisibleItems(): () => void {
+    return this.plugins.watch(VisibleItems, () => {
+      this.visibleRows = this.plugins.getValue(VisibleRows) ?? [];
+    });
+  }
+
+  @Effect()
+  updateVisibleRows(): () => void {
+    return this.plugins.watch(VisibleRows, (visibleRows) => {
+      this.visibleRows = visibleRows;
     });
   }
 
   @Effect()
   setDataSourceToVisibleItems(): () => void {
-    return this.plugins.extend(
-      VisibleItems, -1, () => this.props.dataSource,
-    );
+    return this.plugins.extend(VisibleItems, -1, () => this.props.dataSource);
+  }
+
+  @Effect()
+  setVisibleRowsByVisibleItems(): () => void {
+    return this.plugins.extend(VisibleRows, -1, (visibleRows) => {
+      const visibleItems = this.plugins.getValue(VisibleItems);
+
+      return visibleItems ? this.processVisibleItems(visibleItems) : visibleRows;
+    });
   }
 
   @Effect()
@@ -128,7 +143,7 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
 
   @Effect()
   updateDataSource(): void {
-    this.plugins.set(DataSource, this.props.dataSource);
+    this.plugins.set(Items, this.props.dataSource);
   }
 
   get columns(): Column[] {
@@ -136,6 +151,16 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
 
     return userColumns.map((userColumn) => ({
       dataField: userColumn,
+    }));
+  }
+
+  processVisibleItems(visibleItems: RowData[]): Row[] {
+    const keyExpr = this.props.keyExpr as string;
+
+    return visibleItems.map((data) => ({
+      key: data[keyExpr],
+      data,
+      rowType: 'data',
     }));
   }
 }

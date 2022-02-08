@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   DataGridLight, viewFunction as DataGridView, DataGridLightProps,
-  TotalCount, KeyExprPlugin, DataSource,
+  TotalCount, KeyExprPlugin, Items,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
 import { generateData } from './test_data';
@@ -31,7 +31,7 @@ describe('DataGridLight', () => {
       props.dataSource = [{ id: 1 }, { id: 2 }];
       const viewProps = {
         props,
-        visibleItems: props.dataSource,
+        visibleRows: [{ data: { id: 1 }, rowType: 'data' }, { data: { id: 2 }, rowType: 'data' }],
         visibleColumns: [{ dataField: 'id' }],
       } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
@@ -48,7 +48,7 @@ describe('DataGridLight', () => {
       props.dataSource = [{ id: 1, name: 'name 1' }];
       const viewProps = {
         props,
-        visibleItems: props.dataSource,
+        visibleRows: [{ data: { id: 1, name: 'name 1' }, rowType: 'data' }],
         visibleColumns: [
           { dataField: 'id' },
           { dataField: 'name' },
@@ -106,7 +106,7 @@ describe('DataGridLight', () => {
         });
 
         grid.updateDataSource();
-        expect(grid.plugins.getValue(DataSource)).toBe(dataSource);
+        expect(grid.plugins.getValue(Items)).toBe(dataSource);
       });
     });
 
@@ -118,20 +118,20 @@ describe('DataGridLight', () => {
       } as any;
 
       it('should update visibleItems', () => {
-        grid.updateVisibleItems();
+        grid.updateVisibleRows();
 
         const data = generateData(10);
 
         const callback = watchMock.mock.calls[0][1];
         callback(data);
 
-        expect(grid.visibleItems).toBe(data);
+        expect(grid.visibleRows).toBe(data);
       });
     });
 
     describe('setDataSourceToVisibleItems', () => {
       const extendMock = jest.fn();
-      const dataSource = generateData(10);
+      const dataSource = generateData(3);
       const grid = new DataGridLight({
         dataSource,
       });

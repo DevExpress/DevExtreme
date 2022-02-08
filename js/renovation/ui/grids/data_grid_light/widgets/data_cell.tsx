@@ -1,14 +1,14 @@
 import {
   Component, JSXComponent, ComponentBindings, OneWay, JSXTemplate,
 } from '@devextreme-generator/declarations';
-import { Column, RowData } from '../types';
+import { Column, Row, RowData } from '../types';
 
 export const viewFunction = ({
   cellText,
   cellTemplate: CellTemplate,
   classes,
   props: {
-    data,
+    row,
   },
 }: DataCell): JSX.Element => (
   <td
@@ -18,7 +18,7 @@ export const viewFunction = ({
     role="gridcell"
     className={classes}
   >
-    { CellTemplate && <CellTemplate data={data} /> }
+    { CellTemplate && <CellTemplate data={row.data} /> }
     { !CellTemplate && cellText}
   </td>
 );
@@ -26,7 +26,10 @@ export const viewFunction = ({
 @ComponentBindings()
 export class DataCellProps {
   @OneWay()
-  data: RowData = {};
+  row: Row = {
+    data: {},
+    rowType: '',
+  };
 
   @OneWay()
   columnIndex = 0;
@@ -46,7 +49,7 @@ export class DataCell extends JSXComponent(DataCellProps) {
 
   get cellText(): string {
     const { dataField } = this.props.column;
-    const value = dataField && this.props.data[dataField];
+    const value = dataField && this.props.row.data[dataField];
     return value !== undefined ? String(value) : '';
   }
 
