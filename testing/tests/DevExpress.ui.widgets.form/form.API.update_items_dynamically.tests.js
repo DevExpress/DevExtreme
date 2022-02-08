@@ -2342,6 +2342,29 @@ module('Validation', () => {
         testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
     });
 
+    test('Change the visible option of the simple item to force rebuild items and reconnect validation summary', function() {
+        const testWrapper = new FormTestWrapper({
+            showValidationSummary: true,
+            items: [{
+                itemType: 'group',
+                caption: 'General',
+                items: [{
+                    dataField: 'field1', visible: false,
+                }, {
+                    dataField: 'field2',
+                    validationRules: [{
+                        type: 'required',
+                        message: 'dataField2 is required'
+                    }]
+                }]
+            }],
+        });
+
+        testWrapper._form.option('items[0].items[0].visible', true);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
+        testWrapper.checkValidationSummaryContent(['dataField2 is required']);
+    });
+
     test('Change the visible option of the simple item with validationSummary', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
