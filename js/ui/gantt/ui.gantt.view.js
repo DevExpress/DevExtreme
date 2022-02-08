@@ -69,7 +69,7 @@ export class GanttView extends Widget {
         this._ganttViewCore.changeTaskExpanded(id, value);
     }
     updateView() {
-        this._ganttViewCore.updateView();
+        this._ganttViewCore?.updateView();
     }
     updateBarItemsState() {
         this._ganttViewCore.barManager.updateItemsState([]);
@@ -355,6 +355,13 @@ export class GanttView extends Widget {
     }
     destroyTemplate(container) {
         $(container).empty();
+    }
+    onTaskAreaSizeChanged(info) {
+        const scrollView = this._taskAreaContainer._scrollView;
+        if(isDefined(info?.height)) {
+            const direction = info?.height > this._taskAreaContainer.getHeight() ? 'both' : 'horizontal';
+            scrollView.option('direction', direction);
+        }
     }
     // export
     getTreeListTableStyle() {
