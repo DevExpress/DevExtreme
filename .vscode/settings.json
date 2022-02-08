@@ -1,7 +1,4 @@
 {
-    "jest.autoRun": {
-         "watch": true,
-    },
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
     }
