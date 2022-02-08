@@ -85,10 +85,11 @@ function applyWordWrap(doc, rowsInfo) {
     });
 }
 
-function applyRtl(doc, rectsByPages) {
+function applyRtl(doc, rectsByPages, options) {
+    const marginOffset = options.margin.right - options.margin.left;
     rectsByPages.forEach(pageRects => {
         pageRects.forEach(pdfCell => {
-            pdfCell._rect.x = getPageWidth(doc) - pdfCell._rect.x - pdfCell._rect.w;
+            pdfCell._rect.x = getPageWidth(doc) - pdfCell._rect.x - pdfCell._rect.w - marginOffset;
         });
     });
 }

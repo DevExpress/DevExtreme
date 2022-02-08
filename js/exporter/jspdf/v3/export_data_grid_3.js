@@ -167,7 +167,7 @@ function exportDataGrid(doc, dataGrid, options) {
 
             const rectsByPages = splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically);
             if(isRtlEnabled) {
-                applyRtl(doc, rectsByPages);
+                applyRtl(doc, rectsByPages, options);
             }
 
             rectsByPages.forEach((pdfCellsInfo, index) => {
