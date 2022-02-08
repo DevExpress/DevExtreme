@@ -39,7 +39,6 @@ function exportDataGrid(doc, dataGrid, options) {
     options = extend({}, _getFullOptions(doc, options));
 
     const dataProvider = dataGrid.getDataProvider();
-    const isRtlEnabled = dataGrid.option('rtlEnabled') ?? false;
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
 
@@ -166,7 +165,9 @@ function exportDataGrid(doc, dataGrid, options) {
             };
 
             const rectsByPages = splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically);
-            if(isRtlEnabled) {
+
+            const rtlEnabled = !!dataGrid.option('rtlEnabled');
+            if(rtlEnabled) {
                 applyRtl(doc, rectsByPages, options);
             }
 

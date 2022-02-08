@@ -43,6 +43,7 @@ function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
 
     const rowsCount = dataProvider.getRowsCount();
     const wordWrapEnabled = !!dataGrid.option('wordWrapEnabled');
+    const rtlEnabled = !!dataGrid.option('rtlEnabled');
     const columns = dataProvider.getColumns();
 
     for(let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
@@ -63,7 +64,8 @@ function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
                 wordWrapEnabled,
                 columns,
                 rowType,
-                backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined
+                backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined,
+                rtlEnabled
             }),
             rowIndex,
         });
@@ -72,16 +74,17 @@ function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
     return result;
 }
 
-function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor }) {
+function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor, rtlEnabled }) {
     const result = [];
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
         const style = defaultStyles[rowType];
 
+        const defaultAlignment = rtlEnabled ? 'right' : 'left';
         const pdfCell = {
             text: cellData.value?.toString(),
             verticalAlign: 'middle',
-            horizontalAlign: columns[cellIndex].alignment ?? 'left',
+            horizontalAlign: columns[cellIndex].alignment ?? defaultAlignment,
             wordWrapEnabled,
             backgroundColor,
             padding: toPdfUnit(doc, 5),
@@ -102,15 +105,17 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
                 cellInfo.colSpan = cellMerging.colspan;
             }
         } else if(rowType === 'group') {
-            cellInfo.pdfCell.drawLeftBorder = cellIndex === 0;
-            cellInfo.pdfCell.drawRightBorder = cellIndex === columns.length - 1;
+            const drawLeftBorderField = rtlEnabled ? 'drawRightBorder' : 'drawLeftBorder';
+            const drawRightBorderField = rtlEnabled ? 'drawLeftBorder' : 'drawRightBorder';
+            cellInfo.pdfCell[drawLeftBorderField] = cellIndex === 0;
+            cellInfo.pdfCell[drawRightBorderField] = cellIndex === columns.length - 1;
 
             if(cellIndex > 0) {
                 const isEmptyCellsExceptFirst = result.slice(1).reduce(
                     (accumulate, cellInfo) => { return accumulate && !isDefined(cellInfo.pdfCell.text); },
                     true);
                 if(!isDefined(cellInfo.pdfCell.text) && isEmptyCellsExceptFirst) {
-                    result[0].pdfCell.drawRightBorder = true;
+                    result[0].pdfCell[drawRightBorderField] = true;
                     for(let i = 0; i < result.length; i++) {
                         result[i].colSpan = result.length;
                     }
