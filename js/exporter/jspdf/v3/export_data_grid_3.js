@@ -6,7 +6,7 @@ import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
 import { splitByPages } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
-import { applyWordWrap } from './pdf_utils_v3';
+import { applyWordWrap, toPdfUnit } from './pdf_utils_v3';
 
 // TODO: check names with techwritters
 // IPDFExportOptions: {
@@ -17,30 +17,33 @@ import { applyWordWrap } from './pdf_utils_v3';
 //    customizeCell: ({ gridCell, pdfCell }): void
 //    customDrawCell: ({ rect, pdfCell, gridCell, cancel }): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
 // }
-function _getFullOptions(options) {
+function _getFullOptions(doc, options) {
     const fullOptions = extend({}, options);
     if(!isDefined(fullOptions.topLeft)) {
         throw 'options.topLeft is required';
     }
     if(!isDefined(fullOptions.indent)) {
-        fullOptions.indent = 10;
+        fullOptions.indent = 0;
     }
     if(!isDefined(fullOptions.repeatHeaders)) {
-        fullOptions.repeatHeaders = false;
+        fullOptions.repeatHeaders = true;
+    }
+    if(!isDefined(fullOptions.margin)) {
+        fullOptions.margin = toPdfUnit(doc, 40);
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
     return fullOptions;
 }
 
 function exportDataGrid(doc, dataGrid, options) {
-    options = extend({}, _getFullOptions(options));
+    options = extend({}, _getFullOptions(doc, options));
 
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
 
             // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
-            const rowsInfo = generateRowsInfo(dataProvider, dataGrid, options.rowOptions?.headerStyles?.backgroundColor);
+            const rowsInfo = generateRowsInfo(doc, dataProvider, dataGrid, options.rowOptions?.headerStyles?.backgroundColor);
 
             if(options.customizeCell) {
                 rowsInfo.forEach(rowInfo => rowInfo.cells.forEach(cellInfo =>

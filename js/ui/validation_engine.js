@@ -16,7 +16,6 @@ import {
     isNumeric } from '../core/utils/type';
 import numberLocalization from '../localization/number';
 import messageLocalization from '../localization/message';
-import Promise from '../core/polyfills/promise';
 import { fromPromise, Deferred } from '../core/utils/deferred';
 
 // STYLE validation

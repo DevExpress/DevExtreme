@@ -62,7 +62,7 @@ export const getItemPath = (items, item, isTabs) => {
 };
 
 export function convertToLayoutManagerOptions({ form, $formElement, formOptions, items, validationGroup, extendedLayoutManagerOptions,
-    onFieldDataChanged, onContentReady, onDisposing
+    onFieldDataChanged, onContentReady, onDisposing, onFieldItemRendered
 }) {
     const baseOptions = {
         form: form,
@@ -72,6 +72,7 @@ export function convertToLayoutManagerOptions({ form, $formElement, formOptions,
         onFieldDataChanged,
         onContentReady,
         onDisposing,
+        onFieldItemRendered,
         validationBoundary: formOptions.scrollingEnabled ? $formElement : undefined,
         scrollingEnabled: formOptions.scrollingEnabled,
         showRequiredMark: formOptions.showRequiredMark,

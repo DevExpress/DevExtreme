@@ -1,6 +1,5 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
-import Promise from '../core/polyfills/promise';
 import { fromPromise } from '../core/utils/deferred';
 import registerComponent from '../core/component_registrator';
 import errors from './widget/ui.errors';

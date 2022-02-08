@@ -1848,7 +1848,7 @@ export const columnsControllerModule = {
                             setFilterOperationsAsDefaultValues(column);
                         }
                         column.defaultFilterOperation = column.filterOperations && column.filterOperations[0] || '=';
-                        column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : (dataType === 'boolean' && !column.cellTemplate);
+                        column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : (dataType === 'boolean' && !column.cellTemplate && !column.lookup);
                     }
                 },
                 updateColumnDataTypes: function(dataSource) {

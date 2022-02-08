@@ -1,7 +1,6 @@
 import { getWidth, getHeight } from '../../core/utils/size';
 import { each } from '../../core/utils/iterator';
 import eventsEngine from '../../events/core/events_engine';
-import Promise from '../../core/polyfills/promise';
 import Provider from './provider';
 import Color from '../../color';
 import { name as clickEventName } from '../../events/click';

@@ -7,7 +7,6 @@ import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import { getPublicElement } from '../../../core/element';
 import { removeDifferentElements } from '../utils/utils';
-import Number from '../../../core/polyfills/number';
 import { FunctionTemplate } from '../../../core/templates/function_template';
 import { EffectReturn } from '../../utils/effect_return';
 import { isDefined } from '../../../core/utils/type';

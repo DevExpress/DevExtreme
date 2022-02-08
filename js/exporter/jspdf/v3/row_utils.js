@@ -1,7 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
 import { calculateRowHeight, getPageWidth } from './pdf_utils_v3';
-import { normalizeBoundaryValue } from './normalizeOptions';
-
 
 function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
     const columnsWidths = dataProvider.getColumnsWidths();
@@ -12,11 +10,8 @@ function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
     const summaryGridWidth = columnsWidths
         .reduce((accumulator, width) => accumulator + width);
 
-    const normalizedMargin = normalizeBoundaryValue(margin);
-
-    // TODO: check measure units there
     const availablePageWidth = getPageWidth(doc) - (topLeft?.x ?? 0)
-        - normalizedMargin.left - normalizedMargin.right;
+        - margin.left - margin.right;
 
     const ratio = availablePageWidth >= summaryGridWidth
         ? 1
@@ -129,7 +124,7 @@ function applyBordersConfig(rows) {
 
 function calculateCoordinates(doc, rows, options) {
     const topLeft = options?.topLeft;
-    const margin = normalizeBoundaryValue(options?.margin);
+    const margin = options?.margin;
 
     let y = (topLeft?.y ?? 0) + margin.top;
     rows.forEach(row => {

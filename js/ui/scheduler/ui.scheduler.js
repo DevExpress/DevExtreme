@@ -74,13 +74,15 @@ import {
     setResourceToAppointment
 } from './resources/utils';
 import { ExpressionUtils } from './expressionUtils';
-import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import {
+    validateDayHours,
+    isDateAndTimeView
+} from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
 import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
 import { AppointmentDataProvider } from './appointments/dataProvider/appointmentDataProvider';
 import { getAppointmentTakesAllDay } from './appointments/dataProvider/utils';
 import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
-
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -1472,6 +1474,11 @@ class Scheduler extends Widget {
             groups: this._getCurrentViewOption('groups'),
             isRenovatedAppointments: this.option('isRenovatedAppointments'),
             getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
+            getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
+            getViewDataProvider: () => this._workSpace?.viewDataProvider,
+            isVerticalViewDirection: () => this.getRenderingStrategyInstance().getDirection() === 'vertical',
+            isVerticalGroupedWorkSpace: () => this._workSpace._isVerticalGroupedWorkSpace(),
+            isDateAndTimeView: () => isDateAndTimeView(this._workSpace.type),
             onContentReady: () => {
                 this._workSpace?.option('allDayExpanded', this._isAllDayExpanded());
             }
