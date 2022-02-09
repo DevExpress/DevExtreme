@@ -1539,6 +1539,29 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getController('data').items()[0].data, { field1: 3, field2: 4 });
     });
 
+    QUnit.test('dataSource change should render content once if scrolling mode is virtual', function(assert) {
+        const dataChangedSpy = sinon.spy();
+        const dataGrid = createDataGrid({
+            height: 200,
+            dataSource: [],
+            keyExpr: 'id',
+            columns: ['id'],
+            scrolling: {
+                mode: 'virtual'
+            },
+        });
+
+        this.clock.tick(1000);
+        dataGrid.getController('data').changed.add(dataChangedSpy);
+
+        // act
+        dataGrid.option('dataSource', [{ id: 1 }]);
+        this.clock.tick(1000);
+
+        // assert
+        assert.equal(dataChangedSpy.callCount, 1, 'content is rendered once');
+    });
+
     // T531189
     QUnit.test('noData should be hidden after assign dataSource and height', function(assert) {
         // arrange, act

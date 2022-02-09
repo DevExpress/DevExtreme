@@ -1,4 +1,6 @@
-import { isDefined } from '../../../core/utils/type';
+import { isDate, isDefined, isNumeric } from '../../../core/utils/type';
+import dateLocalization from '../../../localization/date';
+import numberLocalization from '../../../localization/number';
 import { toPdfUnit } from './pdf_utils_v3';
 
 // Returns IPdfRowInfo[]
@@ -45,6 +47,7 @@ function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
     const wordWrapEnabled = !!dataGrid.option('wordWrapEnabled');
     const rtlEnabled = !!dataGrid.option('rtlEnabled');
     const columns = dataProvider.getColumns();
+    const styles = dataProvider.getStyles();
 
     for(let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
         const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
@@ -63,6 +66,7 @@ function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
                 rowIndex,
                 wordWrapEnabled,
                 columns,
+                styles,
                 rowType,
                 backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined,
                 rtlEnabled
@@ -74,15 +78,16 @@ function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
     return result;
 }
 
-function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor, rtlEnabled }) {
+function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, columns, styles, rowType, backgroundColor, rtlEnabled }) {
     const result = [];
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
+        const cellStyle = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
         const style = defaultStyles[rowType];
 
         const defaultAlignment = rtlEnabled ? 'right' : 'left';
         const pdfCell = {
-            text: cellData.value?.toString(),
+            text: getFormattedValue(cellData.value, cellStyle.format),
             verticalAlign: 'middle',
             horizontalAlign: columns[cellIndex].alignment ?? defaultAlignment,
             wordWrapEnabled,
@@ -127,6 +132,18 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
         result.push(cellInfo);
     }
     return result;
+}
+
+function getFormattedValue(value, format) {
+    if(isDefined(format)) {
+        if(isDate(value)) {
+            return dateLocalization.format(value, format);
+        }
+        if(isNumeric(value)) {
+            return numberLocalization.format(value, format);
+        }
+    }
+    return value?.toString();
 }
 
 export { generateRowsInfo };

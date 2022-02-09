@@ -22,6 +22,8 @@ import { JSPdfColumnWidthsTests } from './jspdf_v3.dataGrid.columnAutoWidth.test
 import { JSPdfCustomDrawCellTests } from './jspdf_v3.dataGrid.customDrawCell.tests.js';
 import { JSPdfSplittingTests } from './jspdf_v3.dataGrid.splitting.tests.js';
 import { JSPdfMeasureUnitsTests } from './jspdf_v3.dataGrid.measureUnits.tests.js';
+import { JSPdfColumnDataTypesTests } from './jspdf_v3.dataGrid.columnDataTypes.tests.js';
+import { JSPdfColumnDataFormatsTests } from './jspdf_v3.dataGrid.columnDataFormats.tests.js';
 
 import 'generic_light.css!';
 
@@ -1772,3 +1774,5 @@ JSPdfPageMarginsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfCustomDrawCellTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfSplittingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfMeasureUnitsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfColumnDataTypesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfColumnDataFormatsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
