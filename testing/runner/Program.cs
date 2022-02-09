@@ -51,6 +51,7 @@ namespace Runner
                     .Configure(app => app
                         .UseStatusCodePages()
                         .UseDeveloperExceptionPage()
+                        .UseRouting()
                         .UseEndpoints(endpoints => {
                             endpoints.MapControllerRoute("RunSuite", "run/{catName}/{suiteName}", new { controller = "Main", action = "RunSuite" }, new { suiteName = @".*\.js" });
                             endpoints.MapControllerRoute("RunAll", "run", new { controller = "Main", action = "RunAll" });
