@@ -9538,6 +9538,32 @@ QUnit.module('Editing with real dataController', {
             }], 'row change');
         });
 
+        QUnit.test('editing.changes should not highlight changes in edited row in mode="row"', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            $.extend(this.options.editing, {
+                allowUpdating: true,
+                mode: 'row'
+            });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.clock.tick();
+
+            this.option('editing.changes', [{
+                data: { name: 'asd' },
+                key: 1,
+                type: 'update',
+            }]);
+
+            const cell = rowsView.element().find('tbody > tr > td').eq(0);
+
+            assert.notOk(cell.hasClass('dx-cell-modified'));
+        });
+
         QUnit.test('editCell should not create empty changes object', function(assert) {
             // arrange
             const rowsView = this.rowsView;
