@@ -13,7 +13,7 @@ const toMs = dateUtils.dateToMilliseconds;
 
 const subscribes = {
     isCurrentViewAgenda: function() {
-        return this.option('currentView') === 'agenda';
+        return this.currentView === 'agenda';
     },
     currentViewUpdated: function(currentView) {
         this.option('currentView', currentView);
@@ -39,7 +39,7 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
-    isGroupedByDate: function() { // TODO replace with ModelProvider
+    isGroupedByDate: function() {
         return this.getWorkSpace().isGroupedByDate();
     },
 
@@ -124,7 +124,7 @@ const subscribes = {
         const startDate = timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
         const endDate = timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
 
-        const formatType = format || getFormatType(startDate, endDate, targetedAdapter.allDay, this.option('currentView') !== 'month');
+        const formatType = format || getFormatType(startDate, endDate, targetedAdapter.allDay, this.currentView !== 'month');
 
         return {
             text: targetedAdapter.text || appointmentAdapter.text,

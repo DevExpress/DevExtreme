@@ -60,8 +60,6 @@ import {
     createFactoryInstances,
     disposeFactoryInstances,
     getTimeZoneCalculator,
-    getModelProvider,
-    createModelProvider,
     generateKey,
 } from './instanceFactory';
 import {
@@ -83,6 +81,7 @@ import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
 import { AppointmentDataProvider } from './appointments/dataProvider/appointmentDataProvider';
 import { getAppointmentTakesAllDay } from './appointments/dataProvider/utils';
 import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
+import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -372,6 +371,19 @@ class Scheduler extends Widget {
         this._preparedItems = value;
     }
 
+    get currentView() {
+        return getCurrentView(
+            this.option('currentView'),
+            this.option('views')
+        );
+    }
+
+    get currentViewType() {
+        return isObject(this.currentView)
+            ? this.currentView.type
+            : this.currentView;
+    }
+
     _setDeprecatedOptions() {
         super._setDeprecatedOptions();
 
@@ -499,8 +511,6 @@ class Scheduler extends Widget {
                 this._updateOption('workSpace', name, new Date(value));
                 break;
             case 'views':
-                this.modelProvider.updateCurrentView();
-
                 if(this._getCurrentViewOptions()) {
                     this.repaint();
                 } else {
@@ -511,8 +521,6 @@ class Scheduler extends Widget {
                 this._header?.option(name, value);
                 break;
             case 'currentView':
-                this.modelProvider.updateCurrentView();
-
                 this._validateDayHours();
 
                 this._validateCellDuration();
@@ -745,7 +753,7 @@ class Scheduler extends Widget {
                 'max': this._dateOption('max'),
                 'currentDate': this._dateOption('currentDate'),
                 'firstDayOfWeek': this.getFirstDayOfWeek(),
-                'currentView': this.modelProvider.currentView,
+                'currentView': this.currentView,
             }
         );
     }
@@ -801,8 +809,8 @@ class Scheduler extends Widget {
         return this._editing.allowResizing && this._supportAllDayResizing();
     }
 
-    _supportAllDayResizing() { // TODO get rid of mapping
-        return this.modelProvider.supportAllDayResizing();
+    _supportAllDayResizing() {
+        return this.currentViewType !== 'day' || this.currentView.intervalCount > 1;
     }
 
     _isAllDayExpanded() {
@@ -954,8 +962,6 @@ class Scheduler extends Widget {
         this.agendaResourceProcessor = new AgendaResourceProcessor(this.option('resources'));
     }
 
-    get modelProvider() { return getModelProvider(this.key); }
-
     createAppointmentDataProvider() {
         this.appointmentDataProvider = new AppointmentDataProvider({
             dataSource: this._dataSource,
@@ -983,7 +989,6 @@ class Scheduler extends Widget {
 
         if(!isDefined(this.key)) {
             this.key = generateKey();
-            createModelProvider(this.key, model);
         }
 
         if(this.getWorkSpace()) {
@@ -1098,7 +1103,7 @@ class Scheduler extends Widget {
             viewModel = this._getAppointmentsToRepaint();
         }
 
-        if(this.modelProvider.isRenovatedAppointments) {
+        if(this.option('isRenovatedAppointments')) {
             renderAppointments({
                 instance: this,
                 $dateTable: this.getWorkSpace()._getDateTable(),
@@ -1115,7 +1120,7 @@ class Scheduler extends Widget {
         const layoutManager = this.getLayoutManager();
 
         const appointmentsMap = layoutManager.createAppointmentsMap(this.filteredItems);
-        if(this.modelProvider.isRenovatedAppointments) {
+        if(this.option('isRenovatedAppointments')) {
             const appointmentTemplate = this.option('appointmentTemplate') !== DEFAULT_APPOINTMENT_TEMPLATE_NAME
                 ? this.option('appointmentTemplate')
                 : undefined;
@@ -1227,8 +1232,6 @@ class Scheduler extends Widget {
 
         this._validateDayHours();
         this._validateCellDuration();
-
-        this.modelProvider.updateCurrentView();
 
         this._renderMainContainer();
 
@@ -1421,11 +1424,11 @@ class Scheduler extends Widget {
 
         const result = extend({
             firstDayOfWeek: this.getFirstDayOfWeek(),
-            currentView: this.modelProvider.currentView,
-            isAdaptive: this.modelProvider.adaptivityEnabled,
+            currentView: this.currentView,
+            isAdaptive: this.option('adaptivityEnabled'),
             tabIndex: this.option('tabIndex'),
             focusStateEnabled: this.option('focusStateEnabled'),
-            rtlEnabled: this.modelProvider.rtlEnabled,
+            rtlEnabled: this.option('rtlEnabled'),
             useDropDownViewSwitcher: this.option('useDropDownViewSwitcher'),
             customizeDateNavigatorText: this.option('customizeDateNavigatorText'),
             agendaDuration: this.option('agendaDuration') || DEFAULT_AGENDA_DURATION,
@@ -1470,7 +1473,7 @@ class Scheduler extends Widget {
             allowResize: this._allowResizing(),
             allowAllDayResize: this._allowAllDayResizing(),
             rtlEnabled: this.option('rtlEnabled'),
-            currentView: this.option('currentView'),
+            currentView: this.currentView,
             groups: this._getCurrentViewOption('groups'),
             isRenovatedAppointments: this.option('isRenovatedAppointments'),
             getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
@@ -1510,7 +1513,7 @@ class Scheduler extends Widget {
     }
 
     _getCurrentViewType() { // TODO get rid of mapping
-        return this.modelProvider.currentViewType;
+        return this.currentViewType;
     }
 
     _renderWorkSpace(groups) {
@@ -1621,7 +1624,7 @@ class Scheduler extends Widget {
 
             // TODO: SSR does not work correctly with renovated render
             renovateRender: this._isRenovatedRender(isVirtualScrolling),
-            isRenovatedAppointments: this.modelProvider.isRenovatedAppointments
+            isRenovatedAppointments: this.option('isRenovatedAppointments')
         }, currentViewOptions);
 
         result.observer = this;
@@ -1658,12 +1661,16 @@ class Scheduler extends Widget {
         }
     }
 
-    _getCurrentViewOptions() { // TODO get rid of mapping
-        return this.modelProvider.currentViewOptions;
+    _getCurrentViewOptions() {
+        return this.currentView;
     }
 
-    _getCurrentViewOption(optionName) { // TODO get rid of mapping
-        return this.modelProvider.getCurrentViewOption(optionName);
+    _getCurrentViewOption(optionName) {
+        if(this.currentView && this.currentView[optionName] !== undefined) {
+            return this.currentView[optionName];
+        }
+
+        return this.option(optionName);
     }
 
     _getAppointmentTemplate(optionName) {

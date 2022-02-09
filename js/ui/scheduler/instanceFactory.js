@@ -1,13 +1,9 @@
 import { isDefined } from '../../core/utils/type';
-import { ModelProvider } from './modelProvider';
 import { TimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/utils';
 import timeZoneUtils from './utils.timeZone';
 
 const Names = {
     timeZoneCalculator: 'timeZoneCalculator',
-    appointmentDataProvider: 'appointmentDataProvider',
-    model: 'model',
-    modelProvider: 'modelProvider'
 };
 
 const factoryInstances = { };
@@ -21,8 +17,6 @@ export const generateKey = (key) => {
 
 export const createFactoryInstances = (options) => {
     const key = generateKey(options.key);
-
-    createModelProvider(key, options.model);
 
     createTimeZoneCalculator(key, options.timeZone);
 
@@ -64,20 +58,6 @@ const createTimeZoneCalculator = (key, currentTimeZone) => {
     });
 };
 
-export const createModelProvider = (key, model) => {
-    return createInstance(
-        Names.modelProvider,
-        key,
-        () => {
-            const modelProvider = getInstance(Names.modelProvider, key);
-            return isDefined(modelProvider)
-                ? modelProvider
-                : new ModelProvider(model);
-        }
-    );
-};
-
-
 export const disposeFactoryInstances = (key) => {
     Object.getOwnPropertyNames(Names).forEach((name) => {
         removeInstance(name, key);
@@ -85,4 +65,3 @@ export const disposeFactoryInstances = (key) => {
 };
 
 export const getTimeZoneCalculator = (key) => getInstance(Names.timeZoneCalculator, key);
-export const getModelProvider = (key) => getInstance(Names.modelProvider, key);

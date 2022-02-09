@@ -912,13 +912,13 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
+        let countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
 
-        countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
+        countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 'auto', 'overlappingMode is OK');
     });
@@ -938,13 +938,13 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
+        let countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
 
-        countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
+        countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 'unlimited', 'overlappingMode is OK');
     });

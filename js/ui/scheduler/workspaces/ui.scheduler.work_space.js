@@ -632,7 +632,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.option('scrolling.mode') === 'virtual';
     }
 
-    isVirtualScrolling() { // TODO move to the ModelProvider
+    isVirtualScrolling() {
         return this.isRenovatedRender() && this._isVirtualModeOn();
     }
 
@@ -1301,7 +1301,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return cellData ? cellData : undefined;
     }
 
-    isGroupedByDate() { // TODO move to the ModelProvider
+    isGroupedByDate() {
         return this.option('groupByDate')
             && this._isHorizontalGroupedWorkSpace()
             && this._getGroupCount() > 0;
