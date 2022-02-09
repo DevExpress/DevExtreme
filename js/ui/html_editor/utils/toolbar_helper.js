@@ -243,6 +243,8 @@ function prepareImageHandler(module) {
 
         promise
             .done((formData, event) => {
+                // console.log('showFormDialog done');
+
                 let index = defaultIndex;
 
                 module.saveValueChangeEvent(event);
@@ -319,16 +321,29 @@ function imageFormItems(module) {
                 items: [
                     {
                         itemType: 'simple',
-                        dataField: '',
+                        dataField: 'files',
                         label: { text: '' }, // localization
                         template: (e) => {
                             const $content = $('<div>');
                             editorInstance._createComponent($content, FileUploader, {
                                 multiple: false,
                                 width: 300, //
-                                accept: '*',
+                                // accept: '*',
                                 value: [],
+                                accept: 'image/*',
+                                // uploadMethod: 'PUT',
+                                // uploadMode: 'useForm',
                                 uploadMode: 'instantly',
+                                // onBeforeSend: (e) => {
+                                //     const range = module.quill.getSelection();
+                                //     module.quill.getModule('uploader').upload(range, [ e.file ]);
+                                //     module.editorInstance._formDialog.hide();
+                                // },
+                                onValueChanged: (e) => {
+                                    const range = module.quill.getSelection();
+                                    module.quill.getModule('uploader').upload(range, e.value);
+                                    module.editorInstance._formDialog.hide({ file: e.value[0] }, e.event);
+                                }
                             });
                             return $content;
                         }
@@ -337,7 +352,7 @@ function imageFormItems(module) {
                         dataField: '',
                         editorType: 'dxCheckBox',
                         editorOptions: {
-                            value: false,
+                            value: true,
                             text: 'Encode to base 64' // localization
                         }
                     }
