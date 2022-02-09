@@ -15,7 +15,6 @@ import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
 import { getAppointmentColor, createExpressions } from 'ui/scheduler/resources/utils';
-import { getTimeZoneCalculator } from 'ui/scheduler/instanceFactory.js';
 import { getAppointmentTakesSeveralDays } from 'ui/scheduler/appointments/dataProvider/utils';
 
 const {
@@ -563,12 +562,12 @@ module('Subscribes', {
         assert.ok(getAppointmentTakesSeveralDays(
             appointments[0],
             this.instance._dataAccessors,
-            getTimeZoneCalculator(this.instance.key)
+            this.instance.timeZoneCalculator,
         ), 'appointmentTakesSeveralDays works correctly');
         assert.notOk(getAppointmentTakesSeveralDays(
             appointments[1],
             this.instance._dataAccessors,
-            getTimeZoneCalculator(this.instance.key)
+            this.instance.timeZoneCalculator,
         ), 'appointmentTakesSeveralDays works correctly');
     });
 

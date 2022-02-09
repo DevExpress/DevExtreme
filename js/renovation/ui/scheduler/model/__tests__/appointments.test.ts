@@ -6,13 +6,9 @@ import { getViewRenderConfigByType } from '../../workspaces/base/work_space_conf
 import { WorkSpaceProps } from '../../workspaces/props';
 import { CellsMetaData, Group, ViewDataProviderType } from '../../workspaces/types';
 import { getAppointmentsConfig, getAppointmentsModel } from '../appointments';
-import {
-  createFactoryInstances,
-  generateKey,
-} from '../../../../../ui/scheduler/instanceFactory';
-import { createTimeZoneCalculator } from '../../common';
 import { AppointmentsConfigType } from '../types';
 import { TimeZoneCalculator } from '../../timeZoneCalculator/utils';
+import { createTimeZoneCalculator } from '../../timeZoneCalculator/createTimeZoneCalculator';
 
 const prepareInstances = (
   viewType: ViewType,
@@ -56,13 +52,6 @@ const prepareInstances = (
     },
   );
   viewDataProvider.update(generationOptions, true);
-
-  const key = generateKey();
-  createFactoryInstances({
-    key,
-    getIsVirtualScrolling: () => false,
-    getDataAccessors: () => ({ }),
-  });
 
   const appointmentsConfig = getAppointmentsConfig(
     schedulerProps,

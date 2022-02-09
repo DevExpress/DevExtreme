@@ -1,7 +1,7 @@
 import { compileGetter, compileSetter } from '../../../../../core/utils/data';
-import { createTimeZoneCalculator } from '../../common';
 import { DataAccessorType } from '../../types';
 import { getPreparedDataItems, resolveDataItems } from '../data';
+import { createTimeZoneCalculator } from '../../timeZoneCalculator/createTimeZoneCalculator';
 
 const defaultDataAccessors: DataAccessorType = {
   getter: {
