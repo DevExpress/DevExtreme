@@ -1,7 +1,4 @@
 import { equalByValue } from '../../core/utils/common';
-import {
-    getTimeZoneCalculator
-} from './instanceFactory';
 import { AppointmentViewModelGenerator } from './appointments/viewModelGenerator';
 import { getGroupCount } from './resources/utils';
 import { getCellWidth, getCellHeight, getAllDayHeight } from './workspaces/helpers/positionHelper';
@@ -30,7 +27,6 @@ class AppointmentLayoutManager {
 
     _getRenderingStrategyOptions() {
         const workspace = this.instance.getWorkSpace();
-        const key = this.instance.key;
         const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
         const {
             cellCountInsideLeftVirtualCell,
@@ -62,7 +58,6 @@ class AppointmentLayoutManager {
             loadedResources: this.instance.option('loadedResources'),
             getAppointmentColor: this.instance.createGetAppointmentColor(),
             dataAccessors: this.instance._dataAccessors,
-            key,
             isRenovatedAppointments: this.instance.option('isRenovatedAppointments'),
             appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,
             adaptivityEnabled: this.instance.option('adaptivityEnabled'),
@@ -93,7 +88,7 @@ class AppointmentLayoutManager {
             resizableStep: positionHelper.getResizableStep(),
             visibleDayDuration,
             // appointment settings
-            timeZoneCalculator: getTimeZoneCalculator(key),
+            timeZoneCalculator: this.instance.timeZoneCalculator,
             timeZone: this.instance.option('timeZone'),
             firstDayOfWeek: this.instance.getFirstDayOfWeek(),
             viewStartDayHour: this.instance._getCurrentViewOption('startDayHour'),

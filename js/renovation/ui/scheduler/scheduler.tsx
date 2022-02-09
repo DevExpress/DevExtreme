@@ -28,8 +28,9 @@ import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
 import type { AppointmentDataItem, DataAccessorType, DataSourcePromise } from './types';
 import {
-  createDataAccessors, createTimeZoneCalculator, isViewDataProviderConfigValid,
+  createDataAccessors, isViewDataProviderConfigValid,
 } from './common';
+import { createTimeZoneCalculator } from './timeZoneCalculator/createTimeZoneCalculator';
 import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';

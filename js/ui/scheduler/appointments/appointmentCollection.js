@@ -22,7 +22,6 @@ import timeZoneUtils from '../utils.timeZone';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_ITEM_CLASS, APPOINTMENT_DRAG_SOURCE_CLASS } from '../classes';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './appointmentLayout';
-import { getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { getResourcesFromItem } from '../resources/utils';
@@ -655,13 +654,13 @@ class SchedulerAppointments extends CollectionWidget {
             $element,
             dateRange,
             this.option('dataAccessors'),
-            getTimeZoneCalculator(this.option('key'))
+            this.option('timeZoneCalculator'),
         );
     }
 
     resizeAllDay(e) {
         const $element = $(e.element);
-        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
+        const timeZoneCalculator = this.option('timeZoneCalculator');
         const dataAccessors = this.option('dataAccessors');
 
         return getAppointmentDateRange({
@@ -702,10 +701,11 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _getEndResizeAppointmentStartDate(e, rawAppointment, appointmentInfo) {
+        const timeZoneCalculator = this.option('timeZoneCalculator');
         const appointmentAdapter = createAppointmentAdapter(
             rawAppointment,
             this.option('dataAccessors'),
-            getTimeZoneCalculator(this.option('key'))
+            timeZoneCalculator,
         );
 
         let startDate = appointmentInfo.startDate;
@@ -715,7 +715,7 @@ class SchedulerAppointments extends CollectionWidget {
         const isRecurrent = recurrenceProcessor.isValidRecurrenceRule(recurrenceRule);
 
         if(!e.handles.top && !isRecurrent && !isAllDay) {
-            startDate = getTimeZoneCalculator(this.option('key')).createDate(
+            startDate = timeZoneCalculator.createDate(
                 appointmentAdapter.startDate,
                 {
                     appointmentTimeZone: startDateTimeZone,
@@ -945,7 +945,7 @@ class SchedulerAppointments extends CollectionWidget {
         const endViewDate = this.invoke('getEndViewDate').getTime();
         const startViewDate = this.invoke('getStartViewDate').getTime();
 
-        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
+        const timeZoneCalculator = this.option('timeZoneCalculator');
 
         result = result || {
             parts: []
@@ -1036,7 +1036,7 @@ class SchedulerAppointments extends CollectionWidget {
         const maxAllowedDate = this.invoke('getEndViewDate');
         const startDayHour = this.invoke('getStartDayHour');
         const endDayHour = this.invoke('getEndDayHour');
-        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
+        const timeZoneCalculator = this.option('timeZoneCalculator');
 
         const adapter = createAppointmentAdapter(
             appointment,
