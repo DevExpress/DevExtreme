@@ -5089,6 +5089,87 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('1 level - 1 group - [{f1, groupIndex: 0}, f2, f3] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        {
+                            f1: 'f1 line line',
+                            f2: 'f1_2 line long line',
+                            f3: 'f1_3 line long line long line'
+                        },
+                        {
+                            f1: 'f1 long line long line long line',
+                            f2: 'f2_2 line',
+                            f3: 'f2_3 line long line line'
+                        },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,450.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 line line,540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2 line long line,540.28,114.5,{baseline:middle,align:right}',
+                    'text,f1_3 line long\n' +
+'line long line,450.28,108.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line long line long line,540.28,141.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2 line,540.28,169,{baseline:middle,align:right}',
+                    'text,f2_3 line long\n' +
+'line line,450.28,163.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,76.5,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,98,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,131,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,152.5,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,152.5,80,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 level - 2 group - [{f1, groupIndex: 0}, f2, f3] - height auto, word wrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -5157,6 +5238,87 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,164,80,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 level - 2 group - [{f1, groupIndex: 0}, f2, f3] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        {
+                            f1: 'f1_1 long line',
+                            f2: 'f1_2 long line long line long line',
+                            f3: 'f1_3 line'
+                        },
+                        {
+                            f1: 'f2_1 long line long line long line',
+                            f2: 'f2_2 line long line',
+                            f3: 'f2_3'
+                        },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,450.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 long line,540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2 long line\n' +
+'long line long line,540.28,108.75,{baseline:middle,align:right}',
+                    'text,f1_3 line,450.28,114.5,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f2_1 long line long line long\n' +
+'line,540.28,141.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2 line long line,540.28,174.75,{baseline:middle,align:right}',
+                    'text,f2_3,450.28,174.75,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,76.5,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,98,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,131,170,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,164,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,164,80,21.5',
                     'setFontSize,16',
                     'setDrawColor,#000000'
                 ];
@@ -5257,6 +5419,98 @@ const JSPdfWordWrapTests = {
                     done();
                 });
             });
+
+            QUnit.test('2 level - 2 groups - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                    ],
+                    dataSource: [
+                        {
+                            f1: 'f1 long line long line long line',
+                            f2: 'f1_2 long line',
+                            f3: 'f1_3 line',
+                            f4: 'f1_4'
+                        },
+                        {
+                            f1: 'f1 long line',
+                            f2: 'f2_2 long line long line long line long line',
+                            f3: 'f2_3 long line long line',
+                            f4: 'f2_4'
+                        },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,450.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line,540.28,87.25,{baseline:middle,align:right}',
+                    'text,F2: f2_2 long line long line long\n' +
+'line long line,540.28,108.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_3 long line\n' +
+'long line,540.28,141.75,{baseline:middle,align:right}',
+                    'text,f2_4,450.28,147.5,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line long line long line,540.28,174.75,{baseline:middle,align:right}',
+                    'text,F2: f1_2 long line,540.28,196.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_3 line,540.28,217.75,{baseline:middle,align:right}',
+                    'text,f1_4,450.28,217.75,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,76.5,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,170,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,131,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,131,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,164,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,185.5,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,207,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,207,80,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
         });
 
         QUnit.module('WordWrap with summaries and totals', moduleConfig, () => {
@@ -5315,6 +5569,74 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,98,80,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, f2, f3, f4], groupItems: [f1] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [ { column: 'f1', summaryType: 'max' } ]
+                    },
+                    dataSource: [{ f1: 'f1 line long line', f2: 'f2 line', f3: 'f3 long line long line long line', f4: 'f4 long line' }]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,460.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,370.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 line long line (Max: f1 line long line),540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2 line,540.28,114.5,{baseline:middle,align:right}',
+                    'text,f3 long line long\n' +
+'line long line,460.28,108.75,{baseline:middle,align:right}',
+                    'text,f4 long line,370.28,114.5,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,76.5,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,98,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,98,80,33',
                     'setFontSize,16',
                     'setDrawColor,#000000'
                 ];
@@ -5409,6 +5731,91 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1, f3, f4], groupItems: [f1, {f4, alignByColumn}] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 0 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f1', summaryType: 'max' },
+                            { column: 'f4', summaryType: 'max', alignByColumn: true }
+                        ]
+                    },
+                    dataSource: [{ f1: 'f1 long line long line long line', f2: 'f2 long line', f3: 'f3 line', f4: 'f4 long line long line' }]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,290.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line long line long line (Max: f1 long\n' +
+'line long line long line),540.28,87.25,{baseline:middle,align:right}',
+                    'text,Max: f4 long line\n' +
+'long line,290.28,87.25,{baseline:middle,align:right}',
+                    'text,F2: f2 long line (Max of F1 is f1 long line long line\n' +
+'long line),540.28,120.25,{baseline:middle,align:right}',
+                    'text,Max: f4 long line\n' +
+'long line,290.28,120.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f3 line,540.28,153.25,{baseline:middle,align:right}',
+                    'text,f4 long line long line,290.28,153.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,55,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,195.28,55,100,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'line,295.28,76.5,545.28,76.5',
+                    'line,545.28,76.5,545.28,109.5',
+                    'line,295.28,109.5,545.28,109.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'line,195.28,76.5,295.28,76.5',
+                    'line,195.28,76.5,195.28,109.5',
+                    'line,195.28,109.5,295.28,109.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'line,295.28,109.5,545.28,109.5',
+                    'line,545.28,109.5,545.28,142.5',
+                    'line,295.28,142.5,545.28,142.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'line,195.28,109.5,295.28,109.5',
+                    'line,195.28,109.5,195.28,142.5',
+                    'line,195.28,142.5,295.28,142.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,142.5,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,195.28,142.5,100,21.5',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting: () => {} }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('[{f1, groupIndex: 0}, f2, f3, f4], groupItems: [f1, { f3, alignByColumn, showInGroupFooter }] - height auto, word wrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -5477,6 +5884,88 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,290,119.5,80,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, f2, f3, f4], groupItems: [f1, { f3, alignByColumn, showInGroupFooter }] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f1', summaryType: 'max' },
+                            { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ]
+                    },
+                    dataSource: [{ f1: 'f1 long line', f2: 'f2 very long line very long line', f3: 'f3 line', f4: 'f4 long line' }]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,390.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,300.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line (Max: f1 long line),540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2 very long line very long line,540.28,108.75,{baseline:middle,align:right}',
+                    'text,f3 line,390.28,108.75,{baseline:middle,align:right}',
+                    'text,f4 long line,300.28,108.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3 line,390.28,130.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,395.28,55,150,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,305.28,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,76.5,320,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,395.28,98,150,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,305.28,98,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,98,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,395.28,119.5,150,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,305.28,119.5,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,119.5,80,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
                     'setDrawColor,#000000'
@@ -5562,6 +6051,93 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,131,80,33',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [80, 90, 80] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, f2, f3, f4], groupItems: [{f3, alignByColumn, showInGroupFooter}] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [{ column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }]
+                    },
+                    dataSource: [{
+                        f1: 'f1 long line',
+                        f2: 'f2 long line long line long line',
+                        f3: 'f3 line long line long line',
+                        f4: 'f4 line'
+                    }]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,460.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,370.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line,540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2 long line long\n' +
+'line long line,540.28,108.75,{baseline:middle,align:right}',
+                    'text,f3 line long line\n' +
+'long line,460.28,108.75,{baseline:middle,align:right}',
+                    'text,f4 line,370.28,114.5,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3 line long\n' +
+'line long line,460.28,141.75,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,76.5,250,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,98,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,98,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,131,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,131,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,131,80,33',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
                     'setDrawColor,#000000'
@@ -5715,6 +6291,150 @@ const JSPdfWordWrapTests = {
                     done();
                 });
             });
+
+            QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], groupItems: [{f3, alignByColumn, showInGroupFooter}], totalItems: [f3], 2 groups, height auto, wordWrapEnabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'f3', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { f1: 'f1 very ling line very long line very long line', f2: 'f2_1 line', f3: 'f3line1\nline2\nline3\nline4', f4: 'f4' },
+                        { f1: 'f1 very long line very long line', f2: 'f2_2very long line very long line', f3: 'f3very long line very long line', f4: 'f4' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,460.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 very ling line very long line\n' +
+'very long line,540.28,87.25,{baseline:middle,align:right}',
+                    'text,F2: f2_1 line,540.28,120.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f3line1\n' +
+'line2\n' +
+'line3\n' +
+'line4,540.28,141.75,{baseline:middle,align:right}',
+                    'text,f4,460.28,159,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3line1\n' +
+'line2\n' +
+'line3\n' +
+'line4,540.28,197.75,{baseline:middle,align:right}',
+                    'text,Max: f3line1\n' +
+'line2\n' +
+'line3\n' +
+'line4,540.28,253.75,{baseline:middle,align:right}',
+                    'text,F1: f1 very long line very long\n' +
+'line,540.28,309.75,{baseline:middle,align:right}',
+                    'text,F2: f2_2very long line very long\n' +
+'line,540.28,342.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f3very long line\n' +
+'very long line,540.28,375.75,{baseline:middle,align:right}',
+                    'text,f4,460.28,381.5,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3very\n' +
+'long line very\n' +
+'long line,540.28,408.75,{baseline:middle,align:right}',
+                    'text,Max: f3very\n' +
+'long line very\n' +
+'long line,540.28,453.25,{baseline:middle,align:right}',
+                    'text,Max: f3very\n' +
+'long line very\n' +
+'long line,540.28,497.75,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,55,80,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,90,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,76.5,170,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,109.5,170,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,131,80,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,131,90,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,187,80,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,187,90,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,243,80,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,243,90,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,299,170,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,332,170,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,365,80,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,365,90,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,398,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,398,90,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,442.5,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,442.5,90,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,487,80,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,487,90,44.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
         });
 
         QUnit.module('WordWrap with summaries, totals and bands', moduleConfig, () => {
@@ -5758,6 +6478,60 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,165.5,70,0',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[f1, f2]], f1.groupIndex=0,f2.groupIndex=0 - height auto, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'Band1 long line 1 ling line 2', columns: [
+                            { dataField: 'f1', groupIndex: 0 },
+                            { dataField: 'f2', groupIndex: 0 }
+                        ] }
+                    ],
+                    dataSource: [
+                        { f1: 'f1_1 line', f2: 'f2_1 line long line long line' }],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 long\n' +
+'line 1 ling\n' +
+'line 2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 line,540.28,110.25,{baseline:middle,align:right}',
+                    'text,F2: f2_1 line\n' +
+'long line\n' +
+'long line,540.28,131.75,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,55,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,99.5,70,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,121,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,165.5,70,0',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
                     'setDrawColor,#000000'
@@ -5825,6 +6599,74 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,165.5,70,33',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[f1, f2], f3], f1.groupIndex=0,f2.groupIndex=1, summary: groupItems:f1 - height auto, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'Band1 long line 1 ling line 2', columns: [
+                            { dataField: 'f1', groupIndex: 0 },
+                            { dataField: 'f2', groupIndex: 1 }
+                        ] },
+                        { dataField: 'f3', caption: 'f3 line' }
+                    ],
+                    summary: {
+                        groupItems: [ { column: 'f1', summaryType: 'max' } ]
+                    },
+                    dataSource: [
+                        { f1: 'f1_1 line', f2: 'f2_1 line long line long line', f3: 'long line very long line' }],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 long\n' +
+'line 1 ling\n' +
+'line 2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,f3 line,470.28,77.25,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 line (Max: f1_1\n' +
+'line),540.28,110.25,{baseline:middle,align:right}',
+                    'text,F2: f2_1 line long line long\n' +
+'line (Max of F1 is f1_1 line),540.28,143.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,long line very\n' +
+'long line,470.28,176.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,55,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,405.28,55,70,44.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,405.28,99.5,140,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,405.28,132.5,140,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,165.5,70,33',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,405.28,165.5,70,33',
                     'setFontSize,16',
                     'setDrawColor,#000000'
                 ];
@@ -5966,6 +6808,153 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,330,267.5,50,56',
+                    'setFontSize,16',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid(doc, dataGrid, {
+                    topLeft: { x: 10, y: 15 },
+                    columnWidths: [70, 80, 60, 70, 50]
+                }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[f1, band1-[f2, band1_1-[f3,f4], band2_2-[f5,f6],f7]], f1.groupIndex:0, f2.groupIndex 1 - height auto, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        {
+                            caption: 'Band1 line',
+                            columns: [
+                                { dataField: 'f2', groupIndex: 1 },
+                                {
+                                    caption: 'Band1_1 long line very long line',
+                                    columns: [
+                                        { dataField: 'f3', caption: 'f3  long line' },
+                                        { dataField: 'f4', caption: 'f4  long line very long line' }
+                                    ]
+                                },
+                                {
+                                    caption: 'Band1_2',
+                                    columns: [{ dataField: 'f5', caption: 'f5 long line very long line' }, 'f6']
+                                },
+                                {
+                                    caption: 'f7 long line very long linelong line very long linelong line very long linelong line very long line',
+                                    dataField: 'f7'
+                                }
+                            ]
+                        }
+                    ],
+                    dataSource: [{
+                        f1: 'f1_1 line',
+                        f2: 'f2_1 long line very long line',
+                        f3: 'f3_1',
+                        f4: 'f4_1 very long line very long line very long line',
+                        f5: 'f5_1 long line', f6: 'f6_1', f7: 'f7_1 line'
+                    }],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 line,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,Band1_1 long line very long\n' +
+'line,540.28,104.875,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,390.28,110.625,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,f7 long\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long line,260.28,87.25,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,f3  long line,540.28,184.625,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,f4  long line\n' +
+'very long line,470.28,178.875,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,f5 long line\n' +
+'very long\n' +
+'line,390.28,173.125,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F6,330.28,184.625,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 line,540.28,235.25,{baseline:middle,align:right}',
+                    'text,F2: f2_1 long line very long line,540.28,256.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f3_1,540.28,295.5,{baseline:middle,align:right}',
+                    'text,f4_1 very long\n' +
+'line very long\n' +
+'line very long\n' +
+'line,470.28,278.25,{baseline:middle,align:right}',
+                    'text,f5_1 long\n' +
+'line,390.28,289.75,{baseline:middle,align:right}',
+                    'text,f6_1,330.28,295.5,{baseline:middle,align:right}',
+                    'text,f7_1 line,260.28,295.5,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,215.28,55,330,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,395.28,76.5,150,68.25',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,76.5,130,68.25',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,215.28,76.5,50,148',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,144.75,70,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,395.28,144.75,80,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,144.75,60,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,144.75,70,79.75',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,215.28,224.5,330,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,215.28,246,330,21.5',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,267.5,70,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,395.28,267.5,80,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,267.5,60,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,267.5,70,56',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,215.28,267.5,50,56',
                     'setFontSize,16',
                     'setDrawColor,#000000'
                 ];
