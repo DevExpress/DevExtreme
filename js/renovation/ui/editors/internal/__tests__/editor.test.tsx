@@ -75,6 +75,7 @@ describe('Editor', () => {
 
         const validationMessage = tree.find(ValidationMessage);
         const props = validationMessage.props();
+        expect(props.visualContainer).toBe(rootElementRef.current);
         expect(props.target).toBe(rootElementRef.current);
         expect(props.boundary).toBe(rootElementRef.current);
         expect(props.positionRequest).toBe('below');

@@ -243,6 +243,7 @@ const Editor = Widget.inherit({
                 validationErrors,
                 rtlEnabled,
                 target: this._getValidationMessageTarget(),
+                visualContainer: $element,
                 mode: validationMessageMode,
                 positionRequest: 'below',
                 offset: validationMessageOffset,
