@@ -25,7 +25,7 @@ import { createAgendaAppointmentLayout, createAppointmentLayout } from './appoin
 import { getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
-import { getDataAccessors, getResourcesWWWFromItem2 } from '../resources/utils';
+import { getResourcesWWWFromItem2 } from '../resources/utils';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './dataProvider/utils';
 import { getBoundingRect } from '../../../core/utils/position';
 import { getAppointmentDateRange } from './resizing/core';
@@ -588,10 +588,10 @@ class SchedulerAppointments extends CollectionWidget {
         const resources = getResourcesWWWFromItem2(resourceList, dataAccessors, this._getItemData($appointment));
 
         if(resources) {
-            each(resources, function(name) {
-                const resourceValue = getDataAccessors(dataAccessors, name, 'getter')(resources);
+            each(dataAccessors.getter, function(key) {
+                const resourceValue = dataAccessors.getter[key](resources);
                 const values = Array.isArray(resourceValue) ? [...resourceValue] : [resourceValue];
-                const prefix = `data-${normalizeKey(name.toLowerCase())}-`;
+                const prefix = `data-${normalizeKey(key.toLowerCase())}-`;
 
                 values.forEach(value => $appointment.attr(prefix + normalizeKey(value), true));
             });
