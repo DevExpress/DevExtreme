@@ -25,7 +25,6 @@ import { createAgendaAppointmentLayout, createAppointmentLayout } from './appoin
 import { getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
-import { getResourcesWWWFromItem2 } from '../resources/utils';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './dataProvider/utils';
 import { getBoundingRect } from '../../../core/utils/position';
 import { getAppointmentDateRange } from './resizing/core';
@@ -582,20 +581,17 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _applyResourceDataAttr($appointment) {
-        const resourceList = this.option('getResources')();
         const dataAccessors = this.option('getResourceDataAccessors')();
+        const rawAppointment = this._getItemData($appointment);
 
-        const resources = getResourcesWWWFromItem2(resourceList, dataAccessors, this._getItemData($appointment));
+        each(dataAccessors.getter, function(key) {
+            const value = dataAccessors.getter[key](rawAppointment);
+            const listValues = Array.isArray(value) ? [...value] : [value];
 
-        if(resources) {
-            each(dataAccessors.getter, function(key) {
-                const resourceValue = dataAccessors.getter[key](resources);
-                const values = Array.isArray(resourceValue) ? [...resourceValue] : [resourceValue];
-                const prefix = `data-${normalizeKey(key.toLowerCase())}-`;
+            const prefix = `data-${normalizeKey(key.toLowerCase())}-`;
 
-                values.forEach(value => $appointment.attr(prefix + normalizeKey(value), true));
-            });
-        }
+            listValues.forEach(value => $appointment.attr(prefix + normalizeKey(value), true));
+        });
     }
 
     _resizableConfig(appointmentData, itemSetting) {

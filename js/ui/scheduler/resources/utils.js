@@ -376,11 +376,11 @@ export const groupAppointmentsByResourcesCore = (config, appointments, resources
     return result;
 };
 
-export const getResourceTreeLeaves = (getDataAccessors, tree, appointmentResources, result) => {
+export const getResourceTreeLeaves = (getDataAccessors, tree, rawAppointment, result) => {
     result = result || [];
 
     for(let i = 0; i < tree.length; i++) {
-        if(!hasGroupItem(getDataAccessors, appointmentResources, tree[i].name, tree[i].value)) {
+        if(!hasGroupItem(getDataAccessors, rawAppointment, tree[i].name, tree[i].value)) {
             continue;
         }
 
@@ -389,15 +389,15 @@ export const getResourceTreeLeaves = (getDataAccessors, tree, appointmentResourc
         }
 
         if(tree[i].children) {
-            getResourceTreeLeaves(getDataAccessors, tree[i].children, appointmentResources, result);
+            getResourceTreeLeaves(getDataAccessors, tree[i].children, rawAppointment, result);
         }
     }
 
     return result;
 };
 
-const hasGroupItem = (getDataAccessors, resources, groupName, itemValue) => {
-    const resourceValue = getDataAccessors(groupName, 'getter')(resources);
+const hasGroupItem = (getDataAccessors, rawAppointment, groupName, itemValue) => {
+    const resourceValue = getDataAccessors(groupName, 'getter')(rawAppointment);
     const groups = Array.isArray(resourceValue) ? [...resourceValue] : [resourceValue];
 
     if(groups) {
