@@ -35,8 +35,7 @@ namespace Runner
                             .AddMvcCore()
                             .AddViews()
                             .AddRazorViewEngine()
-                            .AddJsonFormatters()
-                            .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+                            .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
                         services.AddWebEncoders();
 
