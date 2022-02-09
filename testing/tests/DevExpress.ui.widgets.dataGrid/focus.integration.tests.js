@@ -3879,6 +3879,43 @@ QUnit.module('View\'s focus', {
             assert.ok(isInputTextSelected($secondCellInput), 'text is selected in the second input cell');
         });
     });
+
+    QUnit.testInActiveWindow('Row should be focused correctly when dataSource and focusedRowKey are changed simultaneously (T1062545)', function(assert) {
+        // arrange
+        const focusedRowIndices = [];
+        this.dataGrid.option({
+            dataSource: [
+                { id: 1, name: 'name 1' },
+                { id: 3, name: 'name 3' }
+            ],
+            keyExpr: 'id',
+            repaintChangesOnly: true,
+            focusedRowEnabled: true,
+            focusedRowKey: 1,
+            onFocusedRowChanged: function(e) {
+                focusedRowIndices.push(e.rowIndex);
+            }
+        });
+        this.clock.tick(300);
+
+        // assert
+        assert.deepEqual(focusedRowIndices, [0], 'initial focused row indices');
+
+        // act
+        this.dataGrid.option('dataSource', [
+            { id: 1, name: 'name 1' },
+            { id: 2, name: 'name 2' },
+            { id: 3, name: 'name 3' }
+        ]);
+        this.dataGrid.option('focusedRowKey', 2);
+        this.clock.tick(300);
+        const $focusedRowElement = $(this.dataGrid.element()).find('.dx-row-focused');
+
+        // assert
+        assert.deepEqual(focusedRowIndices, [0, 1], 'focused row indices');
+        assert.equal($focusedRowElement.length, 1, 'one row is marked as focused');
+        assert.strictEqual($focusedRowElement.attr('aria-rowindex'), '2', 'aria-rowindex');
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
