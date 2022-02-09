@@ -632,6 +632,22 @@ const LayoutManager = Widget.inherit({
     },
 
     _createWatcher: function(editorInstance, $container, dataField) {
+        function compareArrays(array1, array2) {
+            function compareElements(array1, array2) {
+                for(let i = 0; i < array1.length; i++) {
+                    if(array1[i] !== array2[i]) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            return Array.isArray(array1) &&
+                Array.isArray(array2) &&
+                array1.length === array2.length &&
+                compareElements(array1, array2);
+        }
+
         const that = this;
         const watch = that._getWatch();
 
@@ -644,12 +660,21 @@ const LayoutManager = Widget.inherit({
                 return that._getDataByField(dataField);
             },
             function() {
-                editorInstance.option('value', that._getDataByField(dataField));
+                const fieldValue = that._getDataByField(dataField);
+                const editorValue = editorInstance.option('value');
+                if(compareArrays(fieldValue, editorValue)) {
+                    // skip arrays only, T1020953
+                    return;
+                }
+                editorInstance.option('value', fieldValue);
             },
             {
                 deep: true,
                 skipImmediate: true
-            }
+            },
+            ///#DEBUG
+            { createWatcherDataField: dataField }
+            ///#ENDDEBUG
         );
 
         eventsEngine.on($container, removeEvent, dispose);
