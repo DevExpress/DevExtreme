@@ -1845,6 +1845,87 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         assert.ok($firstCellInAddedRow.hasClass('dx-editor-cell'), 'editor is rendered');
         assert.ok($firstCellInAddedRow.hasClass('dx-focused'), 'editor is focused');
     });
+
+    QUnit.testInActiveWindow('Row should be focused correctly when dataSource and focusedRowKey are changed simultaneously (T1062545)', function(assert) {
+        // arrange
+        const focusedRowIndices = [];
+        const treeList = createTreeList({
+            dataSource: [
+                {
+                    id: 1,
+                    name: 'name 1',
+                    hasChildren: true,
+                    children: []
+                },
+                {
+                    id: 3,
+                    name: 'name 3',
+                    hasChildren: false,
+                    children: []
+                }
+            ],
+            keyExpr: 'id',
+            dataStructure: 'tree',
+            rootValue: null,
+            itemsExpr: 'children',
+            focusedRowEnabled: true,
+            repaintChangesOnly: true,
+            hasItemsExpr: 'hasChildren',
+            focusedRowKey: 1,
+            columns: [
+                {
+                    dataField: 'name'
+                }
+            ],
+            onFocusedRowChanged: function(e) {
+                focusedRowIndices.push(e.rowIndex);
+            }
+        });
+        this.clock.tick(300);
+
+        // assert
+        assert.deepEqual(focusedRowIndices, [0], 'initial focused row indices');
+
+        // act
+        treeList.expandRow(1);
+        this.clock.tick(300);
+
+        // assert
+        assert.equal($(treeList.element()).find('.dx-treelist-expanded').length, 1, 'one expanded row');
+
+        // act
+        treeList.option('dataSource', [
+            {
+                id: 1,
+                name: 'name 1',
+                hasChildren: true,
+                children: [
+                    {
+
+                        id: 2,
+                        name: 'name 2',
+                        hasChildren: false,
+                        children: []
+                    }
+                ]
+            },
+            {
+                id: 3,
+                name: 'name 3',
+                hasChildren: false,
+                children: []
+            }
+
+        ]);
+        treeList.option('focusedRowKey', 2);
+        this.clock.tick(300);
+        const $focusedRowElement = $(treeList.element()).find('.dx-row-focused');
+
+        // assert
+        assert.deepEqual(focusedRowIndices, [0, 1], 'focused row indices');
+        assert.equal($focusedRowElement.length, 1, 'one row is marked as focused');
+        assert.strictEqual($focusedRowElement.attr('aria-rowindex'), '2', 'aria-rowindex');
+    });
 });
 
 QUnit.module('Scroll', defaultModuleConfig, () => {
