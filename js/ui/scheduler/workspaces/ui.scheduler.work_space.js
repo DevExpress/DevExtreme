@@ -585,6 +585,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _dimensionChanged() {
+        if(!this._isVisible()) {
+            return;
+        }
+
         if(this.option('crossScrollingEnabled')) {
             this._setTableSizes();
         }
