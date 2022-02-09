@@ -633,19 +633,15 @@ const LayoutManager = Widget.inherit({
 
     _createWatcher: function(editorInstance, $container, dataField) {
         function compareArrays(array1, array2) {
-            function compareElements(array1, array2) {
-                for(let i = 0; i < array1.length; i++) {
-                    if(array1[i] !== array2[i]) {
-                        return false;
-                    }
-                }
-                return true;
+            if(!Array.isArray(array1) || !Array.isArray(array2) || (array1.length !== array2.length)) {
+                return false;
             }
-
-            return Array.isArray(array1) &&
-                Array.isArray(array2) &&
-                array1.length === array2.length &&
-                compareElements(array1, array2);
+            for(let i = 0; i < array1.length; i++) {
+                if(array1[i] !== array2[i]) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         const that = this;
