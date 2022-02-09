@@ -657,9 +657,10 @@ const LayoutManager = Widget.inherit({
             },
             function() {
                 const fieldValue = that._getDataByField(dataField);
+                // if(editorInstance.NAME === 'dxTagBox') - handle dxTagBox only?
                 const editorValue = editorInstance.option('value');
-                if(compareArrays(fieldValue, editorValue)) {
-                    // skip arrays only, T1020953
+                if((fieldValue !== editorValue) && compareArrays(fieldValue, editorValue)) {
+                    // handle array only, it can be wrapped into Proxy (T1020953)
                     return;
                 }
                 editorInstance.option('value', fieldValue);
