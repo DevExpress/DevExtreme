@@ -10,12 +10,14 @@ import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
 import { KeyExprPlugin } from '../data_grid_light';
 
+import CLASSES from '../classes';
+
 export const viewFunction = (viewModel: ExpandColumn): JSX.Element => (
   <td
     ref={viewModel.cellRef}
-    className="dx-command-expand dx-datagrid-group-space dx-datagrid-expand"
+    className={`${CLASSES.commandExpand} ${CLASSES.groupSpace} ${CLASSES.expand}`}
   >
-    <div className={viewModel.isExpanded ? 'dx-datagrid-group-opened' : 'dx-datagrid-group-closed'} />
+    <div className={viewModel.isExpanded ? CLASSES.groupOpened : CLASSES.groupClosed} />
   </td>
 );
 

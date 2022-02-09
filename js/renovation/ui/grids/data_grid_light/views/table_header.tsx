@@ -5,10 +5,11 @@ import {
 import { Table } from '../widgets/table';
 import { HeaderRow } from '../widgets/header_row';
 import { Column } from '../types';
+import CLASSES from '../classes';
 
 export const viewFunction = (viewModel: TableHeader): JSX.Element => (
-  <div className="dx-datagrid-headers dx-datagrid-nowrap" role="presentation">
-    <div className="dx-datagrid-content dx-datagrid-scroll-container" role="presentation">
+  <div className={`${CLASSES.headers} ${CLASSES.noWrap}`} role="presentation">
+    <div className={`${CLASSES.content} ${CLASSES.scrollContainer}`} role="presentation">
       <Table>
         <HeaderRow columns={viewModel.props.columns} />
       </Table>

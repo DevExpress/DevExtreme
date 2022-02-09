@@ -20,6 +20,7 @@ import { RowClick } from '../views/table_content';
 import {
   ClearSelection, IsSelected, SelectableCount, SelectAll, SelectedCount, SetSelected,
 } from './plugins';
+import CLASSES from '../classes';
 
 export const viewFunction = (): JSX.Element => <div />;
 
@@ -113,7 +114,7 @@ export class Selection extends JSXComponent(SelectionProps) {
         if (row.rowType === 'data' && this.isSelected(row.data)) {
           return {
             ...base(row),
-            'dx-selection': true,
+            [CLASSES.selectedRow]: true,
           };
         }
         return base(row);

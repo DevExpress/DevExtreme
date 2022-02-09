@@ -18,6 +18,8 @@ import { TableContent } from './views/table_content';
 import { TableHeader } from './views/table_header';
 import { Footer } from './views/footer';
 
+import CLASSES from './classes';
+
 export const VisibleItems = createGetter<RowData[]>([]);
 export const VisibleRows = createGetter<Row[]>([]);
 export const VisibleColumns = createGetter<Column[]>([]);
@@ -41,7 +43,7 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
     width={viewModel.props.width}
     {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
-    <div className="dx-datagrid dx-gridbase-container" role="grid" aria-label="Data grid">
+    <div className={`${CLASSES.dataGrid} ${CLASSES.gridBaseContainer}`} role="grid" aria-label="Data grid">
       <TableHeader columns={viewModel.visibleColumns} />
       <TableContent columns={viewModel.visibleColumns} dataSource={viewModel.visibleRows} />
       <Footer />

@@ -15,7 +15,7 @@ import { TotalCount } from '../data_grid_light';
 import { FooterPlaceholder } from '../views/footer';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
-const DATAGRID_PAGER_CLASS = 'dx-datagrid-pager';
+import CLASSES from '../classes';
 
 export const viewFunction = ({
   allowedPageSizes, onPageIndexChange, onPageSizeChange,
@@ -29,7 +29,7 @@ export const viewFunction = ({
     deps={[PageIndex, PageSize, TotalCount, PageCount]}
     template={({ deps }): JSX.Element => (
       <PagerContent
-        className={DATAGRID_PAGER_CLASS}
+        className={CLASSES.pager}
         pageSizes={allowedPageSizes}
         displayMode={displayMode}
         infoText={infoText}

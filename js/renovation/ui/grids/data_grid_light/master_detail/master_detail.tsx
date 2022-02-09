@@ -26,6 +26,8 @@ import { ExpandColumn } from './expand_column';
 import { SetExpanded, IsExpanded, MasterDetailTemplate } from './plugins';
 import { MasterDetailRow } from './master_detail_row';
 
+import CLASSES from '../classes';
+
 export const viewFunction = (viewModel: MasterDetail): JSX.Element => (
   <Fragment>
     <GetterExtender type={VisibleRows} order={2} func={viewModel.processVisibleRows} />
@@ -62,7 +64,7 @@ export class MasterDetail extends JSXComponent<MasterDetailProps, 'template'>(Ma
     if (this.props.enabled) {
       return this.plugins.extend(VisibleColumns, 1, (columns) => {
         const expandColumn: Column = {
-          headerCssClass: 'dx-command-expand dx-datagrid-group-space',
+          headerCssClass: `${CLASSES.commandExpand} ${CLASSES.groupSpace}`,
           cellContainerTemplate: ExpandColumn,
         };
 

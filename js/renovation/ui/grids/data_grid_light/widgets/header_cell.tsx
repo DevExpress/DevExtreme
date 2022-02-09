@@ -3,6 +3,8 @@ import {
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../utils/combine_classes';
 
+import CLASSES from '../classes';
+
 import { Column } from '../types';
 
 export const viewFunction = ({
@@ -21,7 +23,7 @@ export const viewFunction = ({
     aria-sort="none"
     tabIndex={0}
   >
-    <div className="dx-datagrid-text-content dx-text-content-alignment-left" role="presentation">
+    <div className={`${CLASSES.textContent} ${CLASSES.textContentAlignmentLeft}`} role="presentation">
       {HeaderTemplate ? <HeaderTemplate /> : column.dataField}
     </div>
   </td>
@@ -52,10 +54,10 @@ export class HeaderCell extends JSXComponent(HeaderCellProps) {
     const { columnIndex, countColumn } = this.props;
 
     const classesMap = {
-      'dx-datagrid-action': true,
-      'dx-cell-focus-disabled': true,
-      'dx-first-child': columnIndex === 0,
-      'dx-last-child': columnIndex === countColumn - 1,
+      [CLASSES.action]: true,
+      [CLASSES.cellFocusDisabled]: true,
+      [CLASSES.firstChild]: columnIndex === 0,
+      [CLASSES.lastChild]: columnIndex === countColumn - 1,
     };
 
     if (this.props.column.headerCssClass) {
