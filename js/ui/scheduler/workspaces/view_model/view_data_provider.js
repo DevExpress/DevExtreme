@@ -154,6 +154,16 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.findCellPositionInMap(cellInfo);
     }
 
+    getCellByPositionInMap(rowIndex, columnIndex, rtlEnabled) {
+        const row = this.completeViewDataMap[rowIndex];
+
+        const actualColumnIndex = !rtlEnabled
+            ? columnIndex
+            : (row.length - 1 - columnIndex);
+
+        return row[actualColumnIndex];
+    }
+
     getCellsGroup(groupIndex) {
         return this._groupedDataMapProvider.getCellsGroup(groupIndex);
     }
