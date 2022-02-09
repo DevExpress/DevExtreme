@@ -36,7 +36,7 @@ namespace Runner
                             .AddViews()
                             .AddRazorViewEngine()
                             .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
-
+                        services.AddMvc(options => options.EnableEndpointRouting = false);
                         services.AddWebEncoders();
 
                         services.Configure<RazorViewEngineOptions>(options => options.ViewLocationExpanders.Add(new ViewLocationExpander()));
