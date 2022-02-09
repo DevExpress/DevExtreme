@@ -110,6 +110,7 @@ export const custom = function(options) {
         width: options.width,
         showCloseButton: options.showCloseButton || false,
         ignoreChildEvents: false,
+        container: $element,
         onContentReady: function(args) {
             args.component.$content()
                 .addClass(DX_DIALOG_CONTENT_CLASSNAME)
