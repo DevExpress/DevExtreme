@@ -286,6 +286,7 @@ export const getResourcesFromItem = (resources = [], dataAccessors, itemData, wr
     let result = null;
     const resourceFields = resources.map(resource => getFieldExpr(resource));
 
+
     resourceFields.forEach(field => {
         each(itemData, (fieldName, fieldValue) => {
             const tempObject = {};
@@ -293,12 +294,16 @@ export const getResourcesFromItem = (resources = [], dataAccessors, itemData, wr
 
             let resourceData = getDataAccessors(dataAccessors, field, 'getter')(tempObject);
             if(isDefined(resourceData)) {
+                // debugger;
+
                 if(!result) {
                     result = {};
                 }
                 if(resourceData.length === 1) {
                     resourceData = resourceData[0];
                 }
+
+
                 if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(resources, field))) {
                     getDataAccessors(dataAccessors, field, 'setter')(tempObject, wrapToArray(resourceData));
                 } else {
@@ -391,11 +396,12 @@ export const getResourceTreeLeaves = (getDataAccessors, tree, appointmentResourc
     return result;
 };
 
-const hasGroupItem = (getDataAccessors, appointmentResources, groupName, itemValue) => {
-    const group = getDataAccessors(groupName, 'getter')(appointmentResources);
+const hasGroupItem = (getDataAccessors, resources, groupName, itemValue) => {
+    const resourceValue = getDataAccessors(groupName, 'getter')(resources);
+    const groups = Array.isArray(resourceValue) ? [...resourceValue] : [resourceValue];
 
-    if(group) {
-        if(inArray(itemValue, group) > -1) {
+    if(groups) {
+        if(inArray(itemValue, groups) > -1) {
             return true;
         }
     }
