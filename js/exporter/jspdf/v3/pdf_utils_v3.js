@@ -86,10 +86,11 @@ function applyWordWrap(doc, rowsInfo) {
 }
 
 function applyRtl(doc, rectsByPages, options) {
-    const marginOffset = options.margin.right - options.margin.left;
     rectsByPages.forEach(pageRects => {
         pageRects.forEach(pdfCell => {
-            pdfCell._rect.x = getPageWidth(doc) - pdfCell._rect.x - pdfCell._rect.w - marginOffset;
+            const mirroredX = getPageWidth(doc) - (pdfCell._rect.x + pdfCell._rect.w);
+            const marginDiff = options.margin.left - options.margin.right;
+            pdfCell._rect.x = mirroredX + marginDiff;
         });
     });
 }
