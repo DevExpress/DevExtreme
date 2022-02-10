@@ -841,14 +841,10 @@ testModule('position', moduleConfig, () => {
         assert.notEqual(position.top, 0);
     });
 
-    test('position of overlay is absolute when position.of is not window', function(assert) {
+    test('position of overlay is absolute when visualContainer is not window', function(assert) {
         $('#overlay').dxOverlay({
             visible: true,
-            position: {
-                my: 'center',
-                at: 'center',
-                of: viewport()
-            }
+            visualContainer: viewPort()
         });
 
         const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
