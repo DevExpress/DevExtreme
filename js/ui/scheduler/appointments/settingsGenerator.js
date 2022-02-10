@@ -47,13 +47,6 @@ export class DateGeneratorBaseStrategy {
     }
 
     generate(appointmentAdapter) {
-        // const itemResources = getResourcesWWWFromItem2(
-        //     this.options.resources,
-        //     this.dataAccessors.resources,
-        //     this.rawAppointment
-        // );
-
-        // const itemGroupIndices = this._getGroupIndices(itemResources);
         const itemGroupIndices = this._getGroupIndices(this.rawAppointment);
 
         let appointmentList = this._createAppointments(appointmentAdapter, itemGroupIndices);

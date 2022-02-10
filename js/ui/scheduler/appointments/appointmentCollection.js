@@ -9,7 +9,7 @@ import { normalizeKey, grep } from '../../../core/utils/common';
 import { isDefined, isDeferred, isString, isPlainObject } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 import { deepExtendArraySafe } from '../../../core/utils/object';
-import { merge, inArray } from '../../../core/utils/array';
+import { merge, inArray, wrapToArray } from '../../../core/utils/array';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { getRecurrenceProcessor } from '../recurrence';
@@ -587,10 +587,9 @@ class SchedulerAppointments extends CollectionWidget {
         each(dataAccessors.getter, function(key) {
             const value = dataAccessors.getter[key](rawAppointment);
             if(value !== undefined) {
-                const listValues = Array.isArray(value) ? [...value] : [value];
                 const prefix = `data-${normalizeKey(key.toLowerCase())}-`;
 
-                listValues.forEach(value => $appointment.attr(prefix + normalizeKey(value), true));
+                wrapToArray(value).forEach(value => $appointment.attr(prefix + normalizeKey(value), true));
             }
         });
     }

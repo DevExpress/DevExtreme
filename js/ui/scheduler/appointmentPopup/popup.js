@@ -9,6 +9,9 @@ import messageLocalization from '../../../localization/message';
 import Popup from '../../popup';
 import { hide as hideLoading, show as showLoading } from '../loading';
 import { createAppointmentAdapter } from '../appointmentAdapter';
+import { each } from '../../../core/utils/iterator';
+import { isResourceMultiple } from '../resources/utils';
+import { wrapToArray } from '../../../core/utils/array';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -160,6 +163,19 @@ export class AppointmentPopup {
     _createFormData(rawAppointment) {
         const appointment = this._createAppointmentAdapter(rawAppointment);
         const resources = this.scheduler.getResourcesFromItem(rawAppointment);
+
+        const result = {
+            ...rawAppointment,
+            repeat: !!appointment.recurrenceRule
+        };
+
+        const t = this.scheduler.getDataAccessors();
+        each(t.resources.getter, (fieldName) => {
+            const value = t.resources.getter[fieldName](rawAppointment);
+            const isMultiple = isResourceMultiple(this.scheduler.getResources(), fieldName);
+
+            result[fieldName] = isMultiple ? wrapToArray(value) : value;
+        });
 
         return {
             ...rawAppointment,

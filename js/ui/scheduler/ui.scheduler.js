@@ -1300,6 +1300,10 @@ class Scheduler extends Widget {
             createComponent: (element, component, options) => this._createComponent(element, component, options),
             focus: () => this.focus(),
 
+            getResources: () => {
+                return this.option('resources');
+            },
+
             getResourcesFromItem: (rawAppointment) => {
                 return getResourcesFromItem(
                     this.option('resources'),
