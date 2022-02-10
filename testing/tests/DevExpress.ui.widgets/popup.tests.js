@@ -300,15 +300,15 @@ QUnit.module('basic', () => {
     });
 
     QUnit.test(`top toolbar has specific ${POPUP_HAS_CLOSE_BUTTON_CLASS} class`, function(assert) {
-        const $popup = $('#popup').dxPopup({ visible: true, showCloseButton: true, showTitle: true });
-        const $titleToolbar = $('.' + POPUP_TITLE_CLASS, $popup);
+        $('#popup').dxPopup({ visible: true, showCloseButton: true, showTitle: true });
+        const $titleToolbar = $('.' + POPUP_TITLE_CLASS);
 
         assert.ok($titleToolbar.hasClass(POPUP_HAS_CLOSE_BUTTON_CLASS));
     });
 
     QUnit.test(`top toolbar has no specific ${POPUP_HAS_CLOSE_BUTTON_CLASS} class if popup has no close button`, function(assert) {
-        const $popup = $('#popup').dxPopup({ visible: true, showCloseButton: true, showTitle: false });
-        const $titleToolbar = $('.' + POPUP_TITLE_CLASS, $popup);
+        $('#popup').dxPopup({ visible: true, showCloseButton: true, showTitle: false });
+        const $titleToolbar = $('.' + POPUP_TITLE_CLASS);
 
         assert.notOk($titleToolbar.hasClass(POPUP_HAS_CLOSE_BUTTON_CLASS));
     });
@@ -513,7 +513,7 @@ QUnit.module('dimensions', {
     });
 
     QUnit.test('dxPopup should render custom template with render function that returns dom node', function(assert) {
-        const $content = $('#popup').dxPopup({
+        const popup = $('#popup').dxPopup({
             visible: true,
             width: 'auto',
             height: 'auto',
@@ -530,9 +530,9 @@ QUnit.module('dimensions', {
                     }
                 }
             }
-        });
+        }).dxPopup('instance');
 
-        assert.equal($content.text(), 'text', 'container is correct');
+        assert.equal(popup.$overlayContent().text(), 'text', 'container is correct');
     });
 
     QUnit.test('dimensions should be shrunk correctly with floating heights', function(assert) {
@@ -1136,16 +1136,16 @@ QUnit.module('options changed callbacks', {
     QUnit.test('showCloseButton option', function(assert) {
         const $popup = $('#popup').dxPopup({ visible: true, toolbarItems: [] });
         const instance = $popup.dxPopup('instance');
-        let $closeButton = $popup.find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
+        let $closeButton = $('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
         assert.ok($closeButton.length, 'Need to show close button by default');
 
         instance.option('showCloseButton', true);
-        $closeButton = $popup.find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
+        $closeButton = $('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
         assert.ok($closeButton.length, 'Close button appears when we set option to the true through api');
 
         instance.option('toolbarItems', [{ shortcut: 'close' }]);
         instance.option('showCloseButton', false);
-        $closeButton = $popup.find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
+        $closeButton = $('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
         assert.ok(!$closeButton.length, 'Close button is independent from the \'buttons\' option');
     });
 
@@ -2220,7 +2220,7 @@ QUnit.module('templates', () => {
             }
         }).dxPopup('instance');
 
-        const toolbarItemText = popup.$element().find('.dx-toolbar-item').text();
+        const toolbarItemText = popup.$overlayContent().find('.dx-toolbar-item').text();
         assert.strictEqual(toolbarItemText, text, 'Custom template rendered');
     });
 
@@ -2256,8 +2256,8 @@ QUnit.module('templates', () => {
             }
         }).dxPopup('instance');
 
-        const toolbarButtonText = popup.$element().find('.dx-popup-bottom .dx-button').text();
-        const toolbarTabTitleText = popup.$element().find('.dx-popup-bottom .dx-tab').text();
+        const toolbarButtonText = popup.$overlayContent().find('.dx-popup-bottom .dx-button').text();
+        const toolbarTabTitleText = popup.$overlayContent().find('.dx-popup-bottom .dx-tab').text();
 
         assert.strictEqual(toolbarButtonText, buttonText, 'default content template rendered');
         assert.strictEqual(toolbarTabTitleText, titleText, 'default title template rendered');
