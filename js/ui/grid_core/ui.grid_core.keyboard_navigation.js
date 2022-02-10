@@ -1245,7 +1245,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._isNeedScroll = false;
         this._focusedCellPosition = {};
         clearTimeout(this._updateFocusTimeout);
-        this._focusedView?.renderFocusState(preventScroll);
+        this._focusedView?.renderFocusState({ preventScroll });
     },
     restoreFocusableElement: function(rowIndex, $event) {
         const that = this;
@@ -1909,6 +1909,15 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._canceledCellPosition = null;
             return isCanceled;
         }
+    },
+    updateFocusedRowIndex: function() {
+        const dataController = this._dataController;
+        const visibleRowIndex = this.getVisibleRowIndex();
+        const visibleItems = dataController.items();
+        const lastVisibleIndex = visibleItems.length ? visibleItems.length - 1 : -1;
+        const rowIndexOffset = dataController.getRowIndexOffset();
+
+        lastVisibleIndex >= 0 && visibleRowIndex > lastVisibleIndex && this.setFocusedRowIndex(lastVisibleIndex + rowIndexOffset);
     }
 });
 
@@ -1967,13 +1976,16 @@ export const keyboardNavigationModule = {
                         }
                     }
                 },
-                renderFocusState: function(preventScroll) {
+                renderFocusState: function(params) {
+                    const { preventScroll, pageSizeChanged } = params ?? {};
                     const keyboardController = this.getController('keyboardNavigation');
                     const $rowsViewElement = this.element();
 
                     if($rowsViewElement && !focused($rowsViewElement)) {
                         $rowsViewElement.attr('tabindex', null);
                     }
+
+                    pageSizeChanged && keyboardController.updateFocusedRowIndex();
 
                     let rowIndex = keyboardController.getVisibleRowIndex();
                     if(!isDefined(rowIndex) || rowIndex < 0) {
@@ -2031,9 +2043,15 @@ export const keyboardNavigationModule = {
                     this._renderFocusByChange(change);
                 },
                 _renderFocusByChange(change) {
-                    if(!change || !change.repaintChangesOnly) {
+                    const { operationTypes, repaintChangesOnly } = change ?? {};
+                    const { fullReload, pageSize } = operationTypes ?? {};
+
+                    if(!change || !repaintChangesOnly || fullReload || pageSize) {
                         const preventScroll = shouldPreventScroll(this);
-                        this.renderFocusState(preventScroll);
+                        this.renderFocusState({
+                            preventScroll,
+                            pageSizeChanged: pageSize
+                        });
                     }
                 },
                 _renderCore: function(change) {
