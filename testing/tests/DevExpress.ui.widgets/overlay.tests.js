@@ -3549,18 +3549,18 @@ QUnit.module('prevent safari scrolling on ios devices', {
         assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "shading" is enabled');
     });
 
-    QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be toggled on "position.of" option change', function(assert) {
+    QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be toggled on "visualContainer" option change', function(assert) {
         if(!IS_SAFARI) {
             assert.expect(0);
             return;
         }
 
         this.instance.show();
-        this.instance.option('position.of', 'body');
+        this.instance.option('visualContainer', 'body');
 
         assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed when "container" is not window');
 
-        this.instance.option('position.of', window);
+        this.instance.option('visualContainer', window);
         assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "container" is window');
     });
 
