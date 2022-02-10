@@ -133,7 +133,7 @@ class OverlayPositionController {
     }
 
     styleWrapperPosition() {
-        const useFixed = isWindow(this._$visualContainer) || this._props._fixWrapperPosition;
+        const useFixed = isWindow(this.$visualContainer.get(0)) || this._props._fixWrapperPosition;
 
         const positionStyle = useFixed ? 'fixed' : 'absolute';
         this._$wrapper.css('position', positionStyle);
