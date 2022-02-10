@@ -290,10 +290,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid
      * @type Enums.TreeMapLayoutAlgorithm | function
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 rect:Array<number>
-     * @type_function_param1_field2 sum:number
-     * @type_function_param1_field3 items:Array<any>
      * @default 'squarified'
      * @type_function_return void
      * @public

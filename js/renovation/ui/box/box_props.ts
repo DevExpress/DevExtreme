@@ -1,5 +1,5 @@
 import { ComponentBindings, OneWay } from '@devextreme-generator/declarations';
-import { BoxAlign, BoxDirection, BoxCrossAlign } from './types';
+import { BoxAlign, BoxCrossAlign, BoxDirection } from './types';
 
 @ComponentBindings()
 export class BoxProps {
