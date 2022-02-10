@@ -1013,10 +1013,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   handleKeyDown(event: DxKeyboardEvent): void {
-    if (!this.props.useKeyboard) {
-      return;
-    }
-
     if (this.scrolling) {
       event.originalEvent.stopPropagation();
       event.originalEvent.preventDefault();
