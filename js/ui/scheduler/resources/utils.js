@@ -252,42 +252,6 @@ export const getDataAccessors = (dataAccessors, fieldName, type) => {
     return actions[fieldName];
 };
 
-export const getResourcesFromItem = (resources = [], dataAccessors, itemData, wrapOnlyMultipleResources = false) => {
-    let result = null;
-    const resourceFields = resources.map(resource => getFieldExpr(resource));
-
-
-    resourceFields.forEach(field => {
-        each(itemData, (fieldName, fieldValue) => {
-            const tempObject = {};
-            tempObject[fieldName] = fieldValue;
-
-            let resourceData = getDataAccessors(dataAccessors, field, 'getter')(tempObject);
-            if(isDefined(resourceData)) {
-                if(!result) {
-                    result = {};
-                }
-                if(resourceData.length === 1) {
-                    resourceData = resourceData[0];
-                }
-
-
-                if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(resources, field))) {
-                    getDataAccessors(dataAccessors, field, 'setter')(tempObject, wrapToArray(resourceData));
-                } else {
-                    getDataAccessors(dataAccessors, field, 'setter')(tempObject, resourceData);
-                }
-
-                extend(result, tempObject);
-
-                return true;
-            }
-        });
-    });
-
-    return result;
-};
-
 export const groupAppointmentsByResources = (config, appointments, groups = []) => {
     let result = { '0': appointments };
 
