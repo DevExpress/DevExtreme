@@ -39,7 +39,6 @@ const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
-const OVERLAY_MODAL_CLASS = 'dx-overlay-modal';
 const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
@@ -643,7 +642,6 @@ const Overlay = Widget.inherit({
     },
 
     _toggleShading: function(visible) {
-        this._$wrapper.toggleClass(OVERLAY_MODAL_CLASS, this.option('shading') && !this.option('container'));
         this._$wrapper.toggleClass(OVERLAY_SHADER_CLASS, visible && this.option('shading'));
 
         this._$wrapper.css('backgroundColor', this.option('shading') ? this.option('shadingColor') : '');

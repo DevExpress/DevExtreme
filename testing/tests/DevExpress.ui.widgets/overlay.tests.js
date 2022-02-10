@@ -113,7 +113,6 @@ const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
-const OVERLAY_MODAL_CLASS = 'dx-overlay-modal';
 const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
 
 const HOVER_STATE_CLASS = 'dx-state-hover';
@@ -2410,28 +2409,6 @@ testModule('container', moduleConfig, () => {
         const $content = $container.find(toSelector(OVERLAY_CONTENT_CLASS));
         assert.strictEqual(getHeight($content), getHeight($container) * 0.5, 'overlay height is correct');
         assert.strictEqual(getWidth($content), getWidth($container) * 0.5, 'overlay width is correct');
-    });
-
-    test('wrong position targeted container (B236074)', function(assert) {
-        const $overlappedDiv = $('<div>').css({ width: 200, height: 150 });
-        $overlappedDiv.appendTo('#qunit-fixture');
-
-        try {
-            const instance = $('<div>')
-                .appendTo('#qunit-fixture')
-                .dxOverlay({
-                    container: $overlappedDiv,
-                    shading: true,
-                    visible: true
-                }).dxOverlay('instance');
-
-            assert.ok(!$(instance.$wrapper()).hasClass(OVERLAY_MODAL_CLASS));
-
-            instance.option('container', null);
-            assert.ok($(instance.$wrapper()).hasClass(OVERLAY_MODAL_CLASS));
-        } finally {
-            $overlappedDiv.remove();
-        }
     });
 
     test('widget should react on viewport change', function(assert) {
