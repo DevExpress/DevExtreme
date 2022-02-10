@@ -1,8 +1,6 @@
 import { utils } from '../../../ui/scheduler/utils';
 import { DataAccessorsProps } from './props';
 import { DataAccessorType } from './types';
-import { TimeZoneCalculator } from './timeZoneCalculator/utils';
-import timeZoneUtils from '../../../ui/scheduler/utils.timeZone';
 import { ViewDataProviderValidationOptions } from './workspaces/types';
 import { createExpressions } from '../../../ui/scheduler/resources/utils';
 
@@ -32,25 +30,6 @@ export const createDataAccessors = (
 
   return dataAccessors;
 };
-
-export const createTimeZoneCalculator = (
-  currentTimeZone: string,
-): TimeZoneCalculator => new TimeZoneCalculator({
-  getClientOffset: (date: Date): number => timeZoneUtils.getClientTimezoneOffset(date),
-  getCommonOffset: (
-    date: Date,
-  ): number => timeZoneUtils.calculateTimezoneByValue(
-    currentTimeZone,
-    date,
-  ) as number,
-  getAppointmentOffset: (
-    date: Date,
-    appointmentTimezone: string | undefined,
-  ): number => timeZoneUtils.calculateTimezoneByValue(
-    appointmentTimezone,
-    date,
-  ) as number,
-});
 
 export const isViewDataProviderConfigValid = (
   viewDataProviderConfig: ViewDataProviderValidationOptions | undefined,

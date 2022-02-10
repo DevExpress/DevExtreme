@@ -1,4 +1,7 @@
-import { isDefined } from '../../../core/utils/type';
+import { isDate, isDefined, isNumeric } from '../../../core/utils/type';
+import dateLocalization from '../../../localization/date';
+import numberLocalization from '../../../localization/number';
+import { toPdfUnit } from './pdf_utils_v3';
 
 // Returns IPdfRowInfo[]
 // [
@@ -37,12 +40,13 @@ const defaultStyles = {
 };
 
 
-function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
+function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
     const result = [];
 
     const rowsCount = dataProvider.getRowsCount();
     const wordWrapEnabled = !!dataGrid.option('wordWrapEnabled');
     const columns = dataProvider.getColumns();
+    const styles = dataProvider.getStyles();
 
     for(let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
         const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
@@ -56,10 +60,12 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
             rowType: rowType,
             indentLevel,
             cells: generateRowCells({
+                doc,
                 dataProvider,
                 rowIndex,
                 wordWrapEnabled,
                 columns,
+                styles,
                 rowType,
                 backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined
             }),
@@ -70,19 +76,20 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
     return result;
 }
 
-function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor }) {
+function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, columns, styles, rowType, backgroundColor }) {
     const result = [];
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
+        const cellStyle = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
         const style = defaultStyles[rowType];
 
         const pdfCell = {
-            text: cellData.value?.toString(),
+            text: getFormattedValue(cellData.value, cellStyle.format),
             verticalAlign: 'middle',
             horizontalAlign: columns[cellIndex].alignment ?? 'left',
             wordWrapEnabled,
             backgroundColor,
-            padding: 5,
+            padding: toPdfUnit(doc, 5),
             _rect: {}
         };
 
@@ -120,6 +127,18 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, columns, ro
         result.push(cellInfo);
     }
     return result;
+}
+
+function getFormattedValue(value, format) {
+    if(isDefined(format)) {
+        if(isDate(value)) {
+            return dateLocalization.format(value, format);
+        }
+        if(isNumeric(value)) {
+            return numberLocalization.format(value, format);
+        }
+    }
+    return value?.toString();
 }
 
 export { generateRowsInfo };
