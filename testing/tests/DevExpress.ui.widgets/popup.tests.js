@@ -1517,7 +1517,8 @@ QUnit.module('drag', {
         this.reinit({
             width: 2,
             height: 2,
-            position: { of: viewPort() }
+            position: { of: viewPort() },
+            visualContainer: viewport()
         });
         const $container = viewPort();
         const pointer = pointerMock(this.$title);
@@ -1609,7 +1610,8 @@ QUnit.module('drag', {
             shading: true,
             height: 20,
             width: 20,
-            position: { of: $container }
+            position: { of: $container },
+            visualContainer: $container
         });
 
         const overlayPosition = this.$overlayContent.position();
@@ -1627,7 +1629,7 @@ QUnit.module('drag', {
     });
 
     QUnit.test('popup changes position after dragging', function(assert) {
-        this.reinit({ position: { my: 'top', at: 'top', of: viewport(), offset: '0 0' } });
+        this.reinit({ position: { my: 'top', at: 'top', of: viewport(), offset: '0 0' }, visualContainer: viewport() });
         const pointer = pointerMock(this.$title);
 
         pointer.start().dragStart().drag(50, 50).dragEnd();
@@ -1887,7 +1889,8 @@ QUnit.module('keyboard navigation', {
             visible: true,
             width: 1,
             height: 1,
-            position: { of: viewPort() }
+            position: { of: viewPort() },
+            visualContainer: viewPort()
         };
         this.init = (options) => {
             this.element = $('#popup');
@@ -1924,13 +1927,14 @@ QUnit.module('keyboard navigation', {
         assert.strictEqual(this.$overlayContent.position().top, this.position.top - offset, 'popup position was change after pressing up arrow');
     });
 
-    QUnit.test('popup should not be dragged when container size less than overlay content}', function(assert) {
+    QUnit.test('popup should not be dragged when container size is less than overlay content size', function(assert) {
         const $container = $('<div>').appendTo('#qunit-fixture').height(14).width(14);
         this.reinit({
             height: 10,
             width: 10,
             container: $container,
-            position: { my: 'center center', at: 'center center', of: $container }
+            position: { my: 'center center', at: 'center center', of: $container },
+            visualContainer: $container
         });
 
         const $overlayContent = this.$overlayContent;
@@ -2376,6 +2380,7 @@ QUnit.module('positioning', {
                     at: 'top left',
                     of: $target
                 },
+                visualContainer: $target,
                 restorePosition: false
             });
             this.popup.option('fullScreen', false);
