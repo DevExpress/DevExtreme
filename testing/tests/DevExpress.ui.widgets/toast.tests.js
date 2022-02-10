@@ -309,7 +309,9 @@ QUnit.module('base z-index', () => {
 
 QUnit.module('close events handling', () => {
     QUnit.test('closeOnSwipe option', function(assert) {
-        const $element = $('#toast').dxToast({ visible: true }); const instance = $element.dxToast('instance'); const pointer = pointerMock($element.find('.dx-toast-content'));
+        const $element = $('#toast').dxToast({ visible: true });
+        const instance = $element.dxToast('instance');
+        const pointer = pointerMock($('.dx-toast-content'));
 
         pointer.start().swipe(-0.5);
         assert.ok(!instance.option('visible'), 'toast should hide on swipe');
@@ -322,7 +324,9 @@ QUnit.module('close events handling', () => {
     });
 
     QUnit.test('closeOnClick option', function(assert) {
-        const $element = $('#toast').dxToast({ visible: true }); const instance = $element.dxToast('instance'); const $content = $element.find('.dx-toast-content');
+        const $element = $('#toast').dxToast({ visible: true });
+        const instance = $element.dxToast('instance');
+        const $content = $('.dx-toast-content');
 
         $($content).trigger('dxclick');
         assert.ok(instance.option('visible'), 'toast should not hide on click if option is false');
