@@ -1781,6 +1781,9 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
                 keyExpr: 'ID',
                 remoteOperations: true,
                 height: 300,
+                editing: {
+                    mode: 'batch'
+                },
                 scrolling: {
                     mode: mode,
                     rowRenderingMode: 'virtual',

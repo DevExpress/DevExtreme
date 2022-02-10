@@ -254,16 +254,15 @@ const checkModifiedCell = async (
     .eql(value);
 
   if (mode !== 'form' && mode !== 'popup') {
-    const isModifiedCalculatedFieldBug = mode === 'row' && dataField === 'calculated'; // TODO
     await t
       .expect(cell.isEditCell)
       .eql(mode === 'row' || dataField === 'boolean')
       .expect(cell.isModified)
-      .eql(mode === 'batch' || isModifiedCalculatedFieldBug);
+      .eql(mode === 'batch');
 
     await t
       .expect(Selector('.dx-cell-modified').count)
-      .eql(mode === 'batch' || isModifiedCalculatedFieldBug ? 2 /* TODO */ : 0);
+      .eql(mode === 'batch' ? 2 : 0);
   }
 };
 
