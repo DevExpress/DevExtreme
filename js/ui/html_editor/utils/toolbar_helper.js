@@ -258,7 +258,8 @@ function prepareImageHandler(module) {
                 }
 
                 if(formData.useObjectUrl) {
-                    $(`<img src="${formData.src}">`).appendTo('body');
+                    // $(`<img src="${formData.src}">`).appendTo('body');
+                    module.quill.insertEmbed(index, 'image', formData.src, USER_ACTION);
                 } else {
                     module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
                 }
