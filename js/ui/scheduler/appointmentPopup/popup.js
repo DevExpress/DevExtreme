@@ -64,6 +64,15 @@ const createCancelButtonConfig = () => ({
     location: isIOSPlatform() ? TOOLBAR_LOCATION.BEFORE : TOOLBAR_LOCATION.AFTER
 });
 
+const modifyResourceFields = (rawAppointment, dataAccessors, returnedObject) => {
+    each(dataAccessors.resources.getter, (fieldName) => {
+        const value = dataAccessors.resources.getter[fieldName](rawAppointment);
+        const isMultiple = isResourceMultiple(this.scheduler.getResources(), fieldName);
+
+        returnedObject[fieldName] = isMultiple ? wrapToArray(value) : value;
+    });
+};
+
 export const ACTION_TO_APPOINTMENT = {
     CREATE: 0,
     UPDATE: 1,
@@ -162,29 +171,16 @@ export class AppointmentPopup {
 
     _createFormData(rawAppointment) {
         const appointment = this._createAppointmentAdapter(rawAppointment);
-        // const resources = this.scheduler.getResourcesFromItem(rawAppointment);
+        const dataAccessors = this.scheduler.getDataAccessors();
 
         const result = {
             ...rawAppointment,
             repeat: !!appointment.recurrenceRule
         };
 
-        const t = this.scheduler.getDataAccessors();
-        each(t.resources.getter, (fieldName) => {
-            const value = t.resources.getter[fieldName](rawAppointment);
-            const isMultiple = isResourceMultiple(this.scheduler.getResources(), fieldName);
-
-            result[fieldName] = isMultiple ? wrapToArray(value) : value;
-
-        });
+        modifyResourceFields(rawAppointment, dataAccessors, result);
 
         return result;
-
-        // return {
-        //     ...rawAppointment,
-        //     ...resources,
-        //     repeat: !!appointment.recurrenceRule,
-        // };
     }
 
     _createForm() {
@@ -352,7 +348,11 @@ export class AppointmentPopup {
                     const endTime = endDate.getTime();
 
                     const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
-                    const resources = this.scheduler.getResourcesFromItem(this.state.lastEditData);
+
+                    const resources = {};
+                    const dataAccessors = this.scheduler.getDataAccessors();
+
+                    modifyResourceFields(this.state.lastEditData, dataAccessors, resources);
 
                     this.scheduler.updateScrollPosition(startDate, resources, inAllDayRow);
                     this.state.lastEditData = null;

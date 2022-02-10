@@ -69,7 +69,6 @@ import {
     createResourceEditorModel,
     getAppointmentColor,
     getCellGroups,
-    getResourcesFromItem,
     loadResources,
     setResourceToAppointment
 } from './resources/utils';
@@ -1302,15 +1301,6 @@ class Scheduler extends Widget {
 
             getResources: () => {
                 return this.option('resources');
-            },
-
-            getResourcesFromItem: (rawAppointment) => {
-                return getResourcesFromItem(
-                    this.option('resources'),
-                    this.getResourceDataAccessors(),
-                    rawAppointment,
-                    true
-                );
             },
 
             getEditingConfig: () => this._editing,
