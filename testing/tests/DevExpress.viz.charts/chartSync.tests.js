@@ -1607,9 +1607,13 @@ const environment = {
 
         this.$container.remove();
 
-        chart._annotationsPointerEventHandler({});
+        try {
+            chart._annotationsPointerEventHandler({});
 
-        assert.ok(true, 'should be no exceptions');
+            assert.ok(true, 'should be no exceptions');
+        } catch(e) {
+            assert.ok(false, 'Exception rised on mousedown');
+        }
     });
 
     // T1063025
@@ -1624,9 +1628,13 @@ const environment = {
             series: [{ type: 'line' }]
         });
 
-        $(domAdapter.getDocument()).trigger(new $.Event('mousedown'));
+        try {
+            $(domAdapter.getDocument()).trigger(new $.Event('mousedown'));
 
-        assert.strictEqual(tooltipModule.Tooltip.lastCall.returnValue.stub('isCursorOnTooltip').callCount, 0);
+            assert.strictEqual(tooltipModule.Tooltip.lastCall.returnValue.stub('isCursorOnTooltip').callCount, 0);
+        } catch(e) {
+            assert.ok(false, 'Exception rised on mousedown');
+        }
     });
 
     QUnit.test('Call Dispose several times', function() {
