@@ -11,7 +11,7 @@ import { isPlainObject, isFunction, isWindow } from '../core/utils/type';
 import { hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../events/drag';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { triggerResizeEvent } from '../events/visibility_change';
 
 const RESIZABLE = 'dxResizable';
