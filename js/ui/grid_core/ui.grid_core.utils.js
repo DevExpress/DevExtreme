@@ -523,9 +523,9 @@ export default {
 
         if(that.option(LEGACY_SCROLLING_MODE) === false && (isVirtualMode || isAppendMode)) {
             return true;
-        } else {
-            return rowRenderingMode === SCROLLING_MODE_VIRTUAL;
         }
+
+        return rowRenderingMode === SCROLLING_MODE_VIRTUAL;
     },
 
     getPixelRatio: function(window) {

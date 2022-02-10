@@ -277,6 +277,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                     storeLoadOptions.skip += this._totalCountCorrection;
                 }
             }
+
             return this.callBase.apply(this, arguments);
         },
         dispose: function() {
@@ -1089,6 +1090,7 @@ export const virtualScrollingModule = {
 
                             let result = items;
                             this._allItems = items;
+
                             if(items.length) {
                                 const { skipForCurrentPage } = this.getLoadPageParams(true);
                                 const skip = items[0].loadIndex + skipForCurrentPage;
@@ -1461,7 +1463,9 @@ export const virtualScrollingModule = {
 
                         const { operationTypes } = e;
                         if(this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this) && operationTypes) {
-                            if(e.isDataChanged && operationTypes.pageIndex && !operationTypes.fullReload) {
+                            const { fullReload, pageIndex } = operationTypes;
+
+                            if(e.isDataChanged && !fullReload && pageIndex) {
                                 this._updateVisiblePageIndex(this._dataSource.pageIndex());
                             }
                         }

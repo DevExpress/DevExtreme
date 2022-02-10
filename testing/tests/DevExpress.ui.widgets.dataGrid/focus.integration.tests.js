@@ -3975,6 +3975,19 @@ QUnit.module('View\'s focus', {
             assert.ok($(this.dataGrid.getCellElement(getVisibleRowIndex(rowIndex), 0)).hasClass('dx-focused'), `Cell[${rowIndex}, 0] is focused`);
         }
     });
+
+    QUnit.test('First cell should have tabindex when repaintChangesOnly is enabled', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [{ id: 1, name: 'name 1' }],
+            keyExpr: 'id',
+            repaintChangesOnly: true
+        });
+        this.clock.tick(300);
+
+        // assert
+        assert.strictEqual($(this.dataGrid.getCellElement(0, 0)).attr('tabindex'), '0', 'tabindex is applied');
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {

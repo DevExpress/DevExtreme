@@ -80,9 +80,11 @@ function createDefaultBatch(dev) {
         }
         tasks.push('check-license-notices');
     }
+    tasks.push('discover-declarations');
     return gulp.series(tasks);
 }
 
+gulp.task('discover-declarations', shell.task('npm run discover-declarations'));
 gulp.task('misc-batch', createMiscBatch());
 gulp.task('style-compiler-batch', createStyleCompilerBatch());
 gulp.task('main-batch', createMainBatch(false));

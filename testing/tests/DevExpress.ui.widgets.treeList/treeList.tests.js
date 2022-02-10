@@ -2299,5 +2299,55 @@ QUnit.module('Selection', defaultModuleConfig, () => {
             assert.deepEqual(treeList.option('selectedRowKeys'), [], 'selected row keys');
         });
     });
+
+    QUnit.test('Rows should be selected correctly with Shift', function(assert) {
+        // arrange
+        const items = [{
+            id: 1,
+            parentId: 0,
+            name: 'Name 1'
+        }, {
+            id: 2,
+            parentId: 1,
+            name: 'Name 2'
+        }, {
+            id: 3,
+            parentId: 1,
+            name: 'Name 3'
+        }, {
+            id: 4,
+            parentId: 1,
+            name: 'Name 4'
+        }, {
+            id: 5,
+            parentId: 4,
+            name: 'Name 5'
+        }];
+
+        const treeList = createTreeList({
+            dataSource: items,
+            selection: {
+                mode: 'multiple'
+            },
+            columns: ['name'],
+            autoExpandAll: true
+        });
+
+        this.clock.tick(300);
+
+        // act
+        $(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(1)').trigger('dxclick');
+
+        // assert
+        assert.deepEqual(treeList.getSelectedRowKeys(), [2], 'selected key');
+
+        // act
+        const pointer = pointerMock($(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(4)'));
+        pointer.start({ shiftKey: true }).down().up();
+        this.clock.tick(300);
+
+        // assert
+        assert.deepEqual(treeList.getSelectedRowKeys(), [2, 5, 4, 3], 'selected keys with Shift');
+    });
 });
 
