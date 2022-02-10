@@ -3820,3 +3820,47 @@ QUnit.test('Should not skip `optionChanged` event handler that has been added on
     });
 });
 
+QUnit.test('TagBox.SelectionChanged is raised once if formData is wrapped into a recursive Proxy', function(assert) {
+    function wrapToRecursiveProxy(target) {
+        const handler = {
+            get: function(obj, prop) {
+                const propValue = obj[prop];
+                return (propValue !== null && typeof propValue === 'object') ? new Proxy(propValue, handler) : propValue;
+            },
+        };
+        return new Proxy(target, handler);
+    }
+
+    const $testContainer = $('#form');
+    const formData = { arrayField: ['item1', 'item2'] };
+    const watchCallbacks = [];
+    let onSelectionChangedCounter = 0;
+
+    const form = $testContainer.dxForm({
+        formData: wrapToRecursiveProxy(formData),
+        items: [
+            {
+                dataField: 'arrayField',
+                editorType: 'dxTagBox',
+                editorOptions: { dataSource: ['item1', 'item2'], onSelectionChanged: () => onSelectionChangedCounter++ }
+            }
+        ],
+        integrationOptions: {
+            watchMethod: function(fn, callback, options, __debug) {
+                if(__debug && __debug.createWatcherDataField === 'arrayField') {
+                    watchCallbacks.push(callback);
+                }
+                return function() {};
+            },
+        },
+    }).dxForm('instance');
+
+    onSelectionChangedCounter = 0;
+    form.getEditor('arrayField').option('value', ['item1']);
+
+    watchCallbacks.forEach(callback => callback());
+
+    assert.deepEqual(form.getEditor('arrayField').option('value'), ['item1'], 'tagBox.option(value)');
+    assert.deepEqual(formData, { arrayField: ['item1'] }, 'formData');
+    assert.strictEqual(onSelectionChangedCounter, 1, 'onSelectionChangedCounter');
+});
