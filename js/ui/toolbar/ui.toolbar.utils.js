@@ -18,21 +18,24 @@ export function toggleItemFocusableElementTabIndex(context, item) {
     }
 
     const itemData = context._getItemData($item);
-    const isItemNotFocusable = itemData.options?.disabled || itemData.disabled || context.option('disabled');
+    const isItemNotFocusable = !!(itemData.options?.disabled || itemData.disabled || context.option('disabled'));
 
     const { widget } = itemData;
 
     if(widget && TOOLBAR_ITEMS.indexOf(widget) !== -1) {
-        const itemInstance = getItemInstance($item.find(widget.toLowerCase().replace('dx', '.dx-')));
-        const $focusTarget = widget === 'dxDropDownButton'
-            ? itemInstance._focusTarget().find(`.${BUTTON_GROUP_CLASS}`)
-            : itemInstance._focusTarget?.() || itemInstance.$element();
+        const $widget = $item.find(widget.toLowerCase().replace('dx', '.dx-'));
+        if($widget.length) {
+            const itemInstance = getItemInstance($widget);
+            const $focusTarget = widget === 'dxDropDownButton'
+                ? itemInstance._focusTarget().find(`.${BUTTON_GROUP_CLASS}`)
+                : itemInstance?._focusTarget?.() || itemInstance.element();
 
-        const tabIndex = itemData.options?.tabIndex;
-        if(isItemNotFocusable) {
-            $focusTarget.attr('tabIndex', -1);
-        } else {
-            $focusTarget.attr('tabIndex', tabIndex ? tabIndex : 0);
+            const tabIndex = itemData.options?.tabIndex;
+            if(isItemNotFocusable) {
+                $focusTarget.attr('tabIndex', -1);
+            } else {
+                $focusTarget.attr('tabIndex', tabIndex ? tabIndex : 0);
+            }
         }
     }
 }
