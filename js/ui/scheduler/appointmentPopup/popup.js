@@ -83,10 +83,6 @@ export class AppointmentPopup {
         };
     }
 
-    get key() {
-        return this.scheduler.getKey();
-    }
-
     get visible() {
         return this.popup ? this.popup.option('visible') : false;
     }
