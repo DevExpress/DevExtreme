@@ -28,7 +28,6 @@ class BaseRenderingStrategy {
         this._initPositioningStrategy();
     }
 
-    get key() { return this.options.key; }
     get isAdaptive() { return this.options.adaptivityEnabled; }
     get rtlEnabled() { return this.options.rtlEnabled; }
     get startDayHour() { return this.options.startDayHour; }

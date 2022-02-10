@@ -1,4 +1,5 @@
 import { ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../helpers/createWidget';
 import Scheduler from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
@@ -77,4 +78,66 @@ test('Vertical grouping should work correctly when there is one group', async (t
     dataSource: [{ id: 1, color: 'black' }],
   }],
   height: 600,
+}));
+
+const hideShow = ClientFunction((container) => {
+  const instance = ($(container) as any).dxScheduler('instance');
+  instance.option('visible', !instance.option('visible'));
+});
+
+const resize = ClientFunction((container) => {
+  const instance = ($(container) as any).dxScheduler('instance');
+  // eslint-disable-next-line no-underscore-dangle
+  instance._dimensionChanged();
+  // eslint-disable-next-line no-underscore-dangle
+  instance._workSpace._dimensionChanged();
+});
+
+test('Hidden scheduler should not resize', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await hideShow('#container');
+  await resize('#container');
+  await hideShow('#container');
+
+  await t
+    .expect(await takeScreenshot('scheduler-after-hiding-and-resizing.png'))
+    .ok()
+
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [
+    {
+      text: 'Google AdWords Strategy',
+      ownerId: [2],
+      startDate: new Date('2021-02-01T16:00:00.000Z'),
+      endDate: new Date('2021-02-01T17:30:00.000Z'),
+      priority: 1,
+    },
+  ],
+  resources: [
+    {
+      fieldExpr: 'priority',
+      dataSource: [
+        {
+          text: 'Priority 1',
+          id: 1,
+          color: '#1e90ff',
+        },
+      ],
+      label: 'Priority',
+    },
+  ],
+  groups: ['priority'],
+  views: [
+    {
+      type: 'timelineMonth',
+      groupOrientation: 'vertical',
+    },
+  ],
+  crossScrollingEnabled: true,
+  currentView: 'timelineMonth',
+  currentDate: new Date(2021, 1, 1),
+  height: 400,
 }));
