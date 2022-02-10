@@ -162,7 +162,7 @@ export class AppointmentPopup {
 
     _createFormData(rawAppointment) {
         const appointment = this._createAppointmentAdapter(rawAppointment);
-        const resources = this.scheduler.getResourcesFromItem(rawAppointment);
+        // const resources = this.scheduler.getResourcesFromItem(rawAppointment);
 
         const result = {
             ...rawAppointment,
@@ -175,13 +175,16 @@ export class AppointmentPopup {
             const isMultiple = isResourceMultiple(this.scheduler.getResources(), fieldName);
 
             result[fieldName] = isMultiple ? wrapToArray(value) : value;
+
         });
 
-        return {
-            ...rawAppointment,
-            ...resources,
-            repeat: !!appointment.recurrenceRule,
-        };
+        return result;
+
+        // return {
+        //     ...rawAppointment,
+        //     ...resources,
+        //     repeat: !!appointment.recurrenceRule,
+        // };
     }
 
     _createForm() {

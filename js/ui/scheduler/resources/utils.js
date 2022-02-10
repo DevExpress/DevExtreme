@@ -252,36 +252,6 @@ export const getDataAccessors = (dataAccessors, fieldName, type) => {
     return actions[fieldName];
 };
 
-export const getResourcesWWWFromItem2 = (resources = [], dataAccessors, itemData) => {
-    let result = null;
-    const resourceFields = resources.map(resource => getFieldExpr(resource));
-
-    resourceFields.forEach(field => {
-        each(itemData, (fieldName, fieldValue) => {
-            const tempObject = {};
-            tempObject[fieldName] = fieldValue;
-
-            const resourceData = getDataAccessors(dataAccessors, field, 'getter')(tempObject);
-            if(isDefined(resourceData)) {
-                if(!result) {
-                    result = {};
-                }
-                // if(resourceData.length === 1) {
-                //     resourceData = resourceData[0];
-                // }
-
-                getDataAccessors(dataAccessors, field, 'setter')(tempObject, resourceData);
-
-                extend(result, tempObject);
-
-                return true;
-            }
-        });
-    });
-
-    return result;
-};
-
 export const getResourcesFromItem = (resources = [], dataAccessors, itemData, wrapOnlyMultipleResources = false) => {
     let result = null;
     const resourceFields = resources.map(resource => getFieldExpr(resource));
@@ -294,8 +264,6 @@ export const getResourcesFromItem = (resources = [], dataAccessors, itemData, wr
 
             let resourceData = getDataAccessors(dataAccessors, field, 'getter')(tempObject);
             if(isDefined(resourceData)) {
-                // debugger;
-
                 if(!result) {
                     result = {};
                 }
@@ -398,7 +366,7 @@ export const getResourceTreeLeaves = (getDataAccessors, tree, rawAppointment, re
 
 const hasGroupItem = (getDataAccessors, rawAppointment, groupName, itemValue) => {
     const resourceValue = getDataAccessors(groupName, 'getter')(rawAppointment);
-    const groups = Array.isArray(resourceValue) ? [...resourceValue] : [resourceValue];
+    const groups = wrapToArray(resourceValue);
 
     if(groups) {
         if(inArray(itemValue, groups) > -1) {
