@@ -18,7 +18,6 @@ export class DateGeneratorBaseStrategy {
         this.options = options;
     }
 
-    get key() { return this.options.key; }
     get rawAppointment() { return this.options.rawAppointment; }
     get timeZoneCalculator() { return this.options.timeZoneCalculator; }
     get viewDataProvider() { return this.options.viewDataProvider; }

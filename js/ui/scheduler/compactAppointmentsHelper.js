@@ -9,7 +9,6 @@ import { getBoundingRect } from '../../core/utils/position';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { LIST_ITEM_DATA_KEY, LIST_ITEM_CLASS } from './constants';
 import { createAppointmentAdapter } from './appointmentAdapter';
-import { getTimeZoneCalculator } from './instanceFactory';
 import { getOverflowIndicatorColor } from '../../renovation/ui/scheduler/appointment/overflow_indicator/utils';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
@@ -22,7 +21,6 @@ const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
 export class CompactAppointmentsHelper {
     constructor(instance) {
         this.instance = instance;
-        this.key = this.instance.key;
         this.elements = [];
     }
 
@@ -55,7 +53,7 @@ export class CompactAppointmentsHelper {
             const targetedAdapter = createAppointmentAdapter(
                 appointment,
                 this.instance._dataAccessors,
-                getTimeZoneCalculator(this.key)
+                this.instance.timeZoneCalculator,
             ).clone();
 
             if(items.settings?.length > 0) {

@@ -624,7 +624,7 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
 export class VirtualScrollingRenderer {
     constructor(workspace) {
         this._workspace = workspace;
-        this._renderAppointmentTimeout = null;
+        this._renderAppointmentTimeoutID = null;
     }
 
     getRenderTimeout() {
@@ -649,9 +649,9 @@ export class VirtualScrollingRenderer {
 
         if(renderTimeout >= 0) {
 
-            clearTimeout(this._renderAppointmentTimeout);
+            clearTimeout(this._renderAppointmentTimeoutID);
 
-            this._renderAppointmentTimeout = setTimeout(
+            this._renderAppointmentTimeoutID = setTimeout(
                 () => this.workspace.updateAppointments(),
                 renderTimeout
             );

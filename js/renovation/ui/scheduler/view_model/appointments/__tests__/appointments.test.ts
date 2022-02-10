@@ -8,7 +8,7 @@ import { CellsMetaData, ViewDataProviderType } from '../../../workspaces/types';
 import { getAppointmentsViewModel } from '../appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from '../../../model/appointments';
 import { compileGetter, compileSetter } from '../../../../../../core/utils/data';
-import { createTimeZoneCalculator } from '../../../common';
+import { createTimeZoneCalculator } from '../../../timeZoneCalculator/createTimeZoneCalculator';
 import { AppointmentsConfigType } from '../../../model/types';
 import { TimeZoneCalculator } from '../../../timeZoneCalculator/utils';
 
