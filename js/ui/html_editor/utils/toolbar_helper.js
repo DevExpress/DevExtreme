@@ -23,9 +23,6 @@ import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/siz
 
 import { getWindow } from '../../../core/utils/window';
 
-const window = getWindow();
-const URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
-
 const MIN_HEIGHT = 400;
 const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'];
 
@@ -257,12 +254,7 @@ function prepareImageHandler(module) {
                     module.quill.deleteText(index, 1, SILENT_ACTION);
                 }
 
-                if(formData.useObjectUrl) {
-                    $(`<img src="${formData.src}">`).appendTo('body');
-                } else {
-                    module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
-                }
-
+                module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
                 module.quill.setSelection(index + 1, 0, USER_ACTION);
             })
             .always(() => {
@@ -312,8 +304,6 @@ function defaultPasteIndex(module) {
 
 function imageFormItems(module) {
     const editorInstance = module.editorInstance;
-    let useBase64 = true;
-    let imgObjectUrl;
 
     return [
         {
@@ -349,35 +339,21 @@ function imageFormItems(module) {
                                 //     module.quill.getModule('uploader').upload(range, [ e.file ]);
                                 //     module.editorInstance._formDialog.hide();
                                 // },
-                                onUploaded: (e) => {
-                                    URL.revokeObjectURL(imgObjectUrl);
-                                    imgObjectUrl = false;
-                                },
                                 onValueChanged: (e) => {
                                     const range = module.quill.getSelection();
-                                    const file = e.value[0];
-                                    if(useBase64) {
-                                        module.quill.getModule('uploader').upload(range, e.value);
-                                        module.editorInstance._formDialog.hide({ file: file }, e.event);
-                                    } else {
-                                        imgObjectUrl = URL.createObjectURL(file);
-                                        module.editorInstance._formDialog.hide({ src: imgObjectUrl, useObjectUrl: true }, e.event);
-                                    }
-
+                                    module.quill.getModule('uploader').upload(range, e.value);
+                                    module.editorInstance._formDialog.hide({ file: e.value[0] }, e.event);
                                 }
                             });
                             return $content;
                         }
                     }, {
                         itemType: 'simple',
-                        dataField: 'useBase64',
+                        dataField: '',
                         editorType: 'dxCheckBox',
                         editorOptions: {
-                            value: useBase64,
-                            text: 'Encode to base 64', // localization
-                            onValueChanged: (e) => {
-                                useBase64 = e.value;
-                            }
+                            value: true,
+                            text: 'Encode to base 64' // localization
                         }
                     }
                 ]
