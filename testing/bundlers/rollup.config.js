@@ -24,7 +24,6 @@ export default {
                 './node_modules/devexpress-diagram/**',
                 './node_modules/devextreme-quill/**',
                 './node_modules/globalize/**',
-                './node_modules/luxon/**',
                 './node_modules/jquery/dist/jquery.js',
                 './node_modules/jszip/**',
                 './node_modules/rxjs/**'
