@@ -463,6 +463,16 @@ QUnit.module('event utils', () => {
             testData: { which: 18 },
             expected: 'alt',
             comment: '\'which\' attribute used where \'key\' attribute unsupported'
+        },
+        {
+            testData: { key: 'â', which: 65 },
+            expected: 'A',
+            comment: '\'which\' attribute used where \'key\' attribute value is unknown (non-invariant locale)'
+        },
+        {
+            testData: { key: 'ƒ', which: 70 },
+            expected: 'F',
+            comment: '\'which\' attribute used where \'key\' attribute value is unknown (non-invariant locale)'
         }
     ].forEach(({ testData, expected, comment }) => {
         test(`normalizeKeyName(${testData.key || testData.which || 'undefined'}) method should normalize key name based on "key" or "which" field`, function(assert) {
