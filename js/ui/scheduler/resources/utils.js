@@ -323,13 +323,7 @@ export const groupAppointmentsByResourcesCore = (config, appointments, resources
     const result = {};
 
     appointments.forEach(appointment => {
-        const appointmentResources = getResourcesFromItem(
-            config.resources,
-            config.dataAccessors,
-            appointment
-        );
-
-        const treeLeaves = getResourceTreeLeaves((field, action) => getDataAccessors(config.dataAccessors, field, action), tree, appointmentResources);
+        const treeLeaves = getResourceTreeLeaves((field, action) => getDataAccessors(config.dataAccessors, field, action), tree, appointment);
 
         for(let i = 0; i < treeLeaves.length; i++) {
             if(!result[treeLeaves[i]]) {
