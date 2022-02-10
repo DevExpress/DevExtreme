@@ -10,6 +10,8 @@ const getItemInstance = function($element) {
 };
 
 export function toggleItemFocusableElementTabIndex(context, item) {
+    if(!context) return;
+
     const $item = context._findItemElementByItem(item);
     if(!$item.length) {
         return;
