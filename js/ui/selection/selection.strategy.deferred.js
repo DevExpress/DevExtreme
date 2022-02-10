@@ -169,6 +169,16 @@ export default SelectionStrategy.inherit({
         return filter;
     },
 
+    _isOnlyNegativeFiltersLeft: function(filters) {
+        return filters.every((filterItem, i) => {
+            if(i % 2 === 0) {
+                return Array.isArray(filterItem) && filterItem[0] === '!';
+            } else {
+                return filterItem === 'and';
+            }
+        });
+    },
+
     _addSelectionFilter: function(isDeselect, filter, isSelectAll) {
         const that = this;
         const currentFilter = isDeselect ? ['!', filter] : filter;
@@ -182,18 +192,14 @@ export default SelectionStrategy.inherit({
             const removedIndex = that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
             const filterIndex = that._removeSameFilter(selectionFilter, filter, !isDeselect);
 
-            const onlyNegativeFiltersLeft = selectionFilter.every((v, i) => {
-                if(i % 2 === 0) {
-                    return Array.isArray(v) && v[0] === '!';
-                } else {
-                    return v === 'and';
-                }
-            });
+            const shouldCleanFilter =
+                isDeselect &&
+                (removedIndex !== -1 || filterIndex !== -1) &&
+                this._isOnlyNegativeFiltersLeft(selectionFilter);
 
-            if(isDeselect && (removedIndex !== -1 || filterIndex !== -1) && onlyNegativeFiltersLeft) {
+            if(shouldCleanFilter) {
                 selectionFilter = [];
             }
-
 
             const isKeyOperatorsAfterRemoved = this._isKeyFilter(filter) && this._hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex);
 
