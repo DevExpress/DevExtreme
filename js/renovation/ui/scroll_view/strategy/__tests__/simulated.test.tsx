@@ -1287,6 +1287,26 @@ describe('Simulated > Behavior', () => {
           expect(helper.viewModel.scrollByLine).toBeCalledWith({ [prop]: keyName === 'upArrow' || keyName === 'leftArrow' ? -1 : 1, [inactiveProp]: 0 });
         });
 
+        it(`should not prevent default key down event by key - ${keyName} if useKeyboard is false`, () => {
+          const event = {
+            key: keyName,
+            originalEvent: {
+              preventDefault: jest.fn(),
+              stopPropagation: jest.fn(),
+            },
+          } as unknown as DxKeyboardEvent;
+          const helper = new ScrollableTestHelper({ direction });
+
+          helper.viewModel.scrollByLine = jest.fn();
+          helper.viewModel.props.useKeyboard = false;
+
+          helper.viewModel.handleKeyDown(event);
+
+          expect(event.originalEvent.preventDefault).not.toBeCalled();
+          expect(event.originalEvent.stopPropagation).not.toBeCalled();
+          expect(helper.viewModel.scrollByLine).not.toBeCalled();
+        });
+
         it('should prevent any key handling if content is scrolling', () => {
           const event = {
             key: 'tab',
