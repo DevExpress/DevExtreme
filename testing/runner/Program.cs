@@ -33,12 +33,11 @@ namespace Runner
                     {
                         services
                             .AddMvcCore()
-                            .AddRazorPages()
                             .AddViews()
                             .AddRazorViewEngine()
                             .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+                        services.AddMvc(options => options.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
                         services.AddWebEncoders();
-
                         services.Configure<RazorViewEngineOptions>(options => options.ViewLocationExpanders.Add(new ViewLocationExpander()));
 
                         services.AddSingleton(new RunFlags
@@ -51,12 +50,11 @@ namespace Runner
                     .Configure(app => app
                         .UseStatusCodePages()
                         .UseDeveloperExceptionPage()
-                        .UseRouting()
-                        .UseEndpoints(endpoints => {
-                            endpoints.MapControllerRoute("RunSuite", "run/{catName}/{suiteName}", new { controller = "Main", action = "RunSuite" }, new { suiteName = @".*\.js" });
-                            endpoints.MapControllerRoute("RunAll", "run", new { controller = "Main", action = "RunAll" });
-                            endpoints.MapControllerRoute("default", "{controller=Main}/{action=Index}/{id?}");
-                        })
+                        .UseMvc(routes => routes
+                            .MapRoute("RunSuite", "run/{catName}/{suiteName}", new { controller = "Main", action = "RunSuite" }, new { suiteName = @".*\.js" })
+                            .MapRoute("RunAll", "run", new { controller = "Main", action = "RunAll" })
+                            .MapRoute("default", "{controller=Main}/{action=Index}/{id?}")
+                        )
                         .UseFileServer(new FileServerOptions
                         {
                             EnableDirectoryBrowsing = true,
