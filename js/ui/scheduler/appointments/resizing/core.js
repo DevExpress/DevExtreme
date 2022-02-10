@@ -1,24 +1,7 @@
 import {
-    getEndResizeAppointmentStartDate,
     normalizeStartDate,
     normalizeEndDate,
 } from './utils';
-
-const getCellData = (viewDataProvider, rowIndex, columnIndex, isAllDayAppointment, rtlEnabled) => {
-    const { viewData } = viewDataProvider;
-    const { allDayPanel } = viewData.groupedData[0];
-    const hasAllDayPanel = !isAllDayAppointment && !viewData.isGroupedAllDayPanel && allDayPanel?.length > 0;
-
-    if(hasAllDayPanel) {
-        rowIndex += 1;
-    }
-
-    return viewDataProvider.getCellByPositionInMap(
-        rowIndex,
-        columnIndex,
-        rtlEnabled
-    );
-};
 
 const getAppointmentLeftCell = (options) => {
     const {
@@ -33,21 +16,14 @@ const getAppointmentLeftCell = (options) => {
     const cellRowIndex = Math.floor(relativeAppointmentRect.top / cellHeight);
     const cellColumnIndex = Math.round(relativeAppointmentRect.left / cellWidth);
 
-    const leftCell = getCellData(
-        viewDataProvider,
+    const leftCell = viewDataProvider.getCellData(
         cellRowIndex,
         cellColumnIndex,
         appointmentSettings.allDay,
-        rtlEnabled
+        rtlEnabled,
     );
 
-    return {
-        ...leftCell,
-        startDate: getEndResizeAppointmentStartDate(
-            options,
-            leftCell.startDate
-        )
-    };
+    return leftCell;
 };
 
 const getDateRangeHorizontal = (options) => {
@@ -64,7 +40,10 @@ const getDateRangeHorizontal = (options) => {
     const appointmentCellsAmount = Math.round(relativeAppointmentRect.width / cellWidth);
     const appointmentLastCellIndex = appointmentFirstCell.index + (appointmentCellsAmount - 1);
 
-    const { sourceAppointment } = appointmentSettings.info;
+    const {
+        allDay,
+        sourceAppointment
+    } = appointmentSettings.info;
 
     if(handles.left) {
         const startDate = normalizeStartDate(
@@ -81,9 +60,10 @@ const getDateRangeHorizontal = (options) => {
 
     const appointmentRowIndex = Math.floor(appointmentLastCellIndex / cellCountInRow);
     const appointmentColumnIndex = appointmentLastCellIndex % cellCountInRow;
-    const appointmentLastCell = viewDataProvider.getCellByPositionInMap(
+    const appointmentLastCell = viewDataProvider.getCellData(
         appointmentRowIndex,
         appointmentColumnIndex,
+        allDay,
     );
 
     let endDate = !options.considerTime
@@ -113,16 +93,21 @@ const getDateRangeHorizontalRTL = (options) => {
 
     const appointmentLastCell = getAppointmentLeftCell(options);
 
-    const { sourceAppointment } = appointmentSettings.info;
+    const {
+        allDay,
+        sourceAppointment
+    } = appointmentSettings.info;
 
     if(handles.right) {
         const appointmentLastCellIndex = appointmentLastCell.index;
         const appointmentCellsAmount = Math.round(relativeAppointmentRect.width / cellWidth);
         const appointmentFirstCellIndex = appointmentLastCellIndex - appointmentCellsAmount + 1;
         const appointmentRowIndex = Math.floor(appointmentLastCellIndex / cellCountInRow);
-        const appointmentFirstCell = viewDataProvider.getCellByPositionInMap(
+        const appointmentFirstCell = viewDataProvider.getCellData(
             appointmentRowIndex,
             appointmentFirstCellIndex,
+            allDay,
+            true,
         );
 
         const startDate = normalizeStartDate(
