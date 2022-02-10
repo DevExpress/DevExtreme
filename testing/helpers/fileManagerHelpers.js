@@ -510,7 +510,7 @@ export class FileManagerWrapper {
     }
 
     getNotificationPopup() {
-        return $(`.${Consts.NOTIFICATION_POPUP_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+        return $(`.${Consts.POPUP_NORMAL_CLASS}`);
     }
 
     getFolderChooserDialog() {
