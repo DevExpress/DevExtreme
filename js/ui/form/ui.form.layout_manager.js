@@ -632,6 +632,18 @@ const LayoutManager = Widget.inherit({
     },
 
     _createWatcher: function(editorInstance, $container, dataField) {
+        function compareArrays(array1, array2) {
+            if(!Array.isArray(array1) || !Array.isArray(array2) || (array1.length !== array2.length)) {
+                return false;
+            }
+            for(let i = 0; i < array1.length; i++) {
+                if(array1[i] !== array2[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         const that = this;
         const watch = that._getWatch();
 
@@ -644,12 +656,23 @@ const LayoutManager = Widget.inherit({
                 return that._getDataByField(dataField);
             },
             function() {
-                editorInstance.option('value', that._getDataByField(dataField));
+                const fieldValue = that._getDataByField(dataField);
+                if(editorInstance.NAME === 'dxTagBox') {
+                    const editorValue = editorInstance.option('value');
+                    if((fieldValue !== editorValue) && compareArrays(fieldValue, editorValue)) {
+                        // handle array only, it can be wrapped into Proxy (T1020953)
+                        return;
+                    }
+                }
+                editorInstance.option('value', fieldValue);
             },
             {
                 deep: true,
                 skipImmediate: true
-            }
+            },
+            ///#DEBUG
+            { createWatcherDataField: dataField }
+            ///#ENDDEBUG
         );
 
         eventsEngine.on($container, removeEvent, dispose);
