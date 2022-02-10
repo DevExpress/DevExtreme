@@ -3657,4 +3657,24 @@ QUnit.module('wrapper covered element choice', () => {
         assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.1, 'wrapper is left positioned by visual container');
         assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.1, 'wrapper is top positioned by visual container');
     });
+
+    QUnit.test('wrapper position and dimensions should be updated after visualContainer change', function(assert) {
+        const $container = $('#container');
+        const overlay = $('#overlay').dxOverlay({
+            container: viewport(),
+            visible: true
+        }).dxOverlay('instance');
+
+        overlay.option('visualContainer', '#container');
+
+        const $wrapper = overlay.$wrapper();
+
+        assert.strictEqual(getWidth($wrapper), getWidth($container), 'wrapper has visual container width');
+        assert.strictEqual(getHeight($wrapper), getHeight($container), 'wrapper has visual container height');
+
+        const wrapperLocation = $wrapper.position();
+        const containerLocation = $container.position();
+        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.1, 'wrapper is left positioned by visual container');
+        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.1, 'wrapper is top positioned by visual container');
+    });
 });

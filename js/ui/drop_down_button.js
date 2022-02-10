@@ -347,6 +347,7 @@ const DropDownButton = Widget.inherit({
                 my: horizontalAlignment + ' top',
                 at: horizontalAlignment + ' bottom'
             },
+            visualContainer: this.$element(),
             wrapperAttr: { class: DROP_DOWN_EDITOR_OVERLAY_CLASS }
         }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
     },

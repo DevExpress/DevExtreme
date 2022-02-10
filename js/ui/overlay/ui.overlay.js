@@ -1132,6 +1132,11 @@ const Overlay = Widget.inherit({
                 this._invalidate();
                 this._toggleSafariScrolling();
                 break;
+            case 'visualContainer':
+                this._positionController.updateVisualContainer(value);
+                this._renderWrapper();
+                this._toggleSafariScrolling();
+                break;
             case 'innerOverlay':
                 this._initInnerOverlayClass();
                 break;
