@@ -1080,10 +1080,6 @@ function AxisWrapper(params) {
 AxisWrapper.prototype = {
     constructor: AxisWrapper,
 
-    calculateInterval: function(value, prevValue) {
-        return this._axis.calculateInterval(value, prevValue);
-    },
-
     update: function(options, isCompactMode, canvas, businessRange, seriesDataSource) {
         const axis = this._axis;
         axis.updateOptions(prepareAxisOptions(options, isCompactMode, canvas.height, canvas.height / 2 - _ceil(options.width / 2)));
