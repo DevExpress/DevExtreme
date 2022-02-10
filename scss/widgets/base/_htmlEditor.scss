@@ -83,6 +83,21 @@ $transparent-border: 1px solid transparent;
   }
 }
 
+.dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
+  padding: 0;
+
+  .dx-multiview-wrapper {
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+  }
+
+  .dx-form-compact-item {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .dx-quill-container {
   box-sizing: border-box;
   display: flex;

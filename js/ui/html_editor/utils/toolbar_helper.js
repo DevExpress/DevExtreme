@@ -18,6 +18,7 @@ import ButtonGroup from '../../button_group';
 import ColorBox from '../../color_box';
 import ScrollView from '../../scroll_view';
 import FileUploader from '../../file_uploader';
+// import Button from '../../button';
 
 import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
 
@@ -235,16 +236,21 @@ function prepareImageHandler(module) {
         const formatIndex = embedFormatIndex(module);
 
         module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
+        module.editorInstance.formDialogOption('toolbarItems[0].options.text', 'Add'); // localization
+        module.editorInstance.formDialogOption('wrapperAttr', { class: 'dx-htmleditor-add-image-popup' });
 
         const promise = module.editorInstance.showFormDialog({
             formData: formData,
+            width: 500,
+
+            // showColonAfterLabel: false,
+            labelLocation: 'top',
+            // minColWidth: 150,
             items: imageFormItems(module)
         });
 
         promise
             .done((formData, event) => {
-                // console.log('showFormDialog done');
-
                 let index = defaultIndex;
 
                 module.saveValueChangeEvent(event);
@@ -258,6 +264,8 @@ function prepareImageHandler(module) {
                 module.quill.setSelection(index + 1, 0, USER_ACTION);
             })
             .always(() => {
+                module.editorInstance.formDialogOption('toolbarItems[0].options.text', localizationMessage.format('OK'));
+                module.editorInstance.formDialogOption('wrapperAttr', { class: '' });
                 module.quill.focus();
             });
     };
@@ -302,6 +310,16 @@ function defaultPasteIndex(module) {
     return selection?.index ?? module.quill.getLength();
 }
 
+// function getFixRatioTemplate(module, e) {
+//     const $content = $('<div>');
+
+//     module.editorInstance._createComponent($content, Button, {
+//         icon: 'plus'
+//     });
+
+//     return $content;
+// }
+
 function imageFormItems(module) {
     const editorInstance = module.editorInstance;
 
@@ -310,11 +328,28 @@ function imageFormItems(module) {
             itemType: 'tabbed',
             tabs: [{
                 title: 'Image Information', // localization
+                colCount: 3,
                 items: [
-                    { dataField: 'src', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
-                    { dataField: 'width', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) } },
-                    { dataField: 'height', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) } },
-                    { dataField: 'alt', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
+                    { dataField: 'src', colSpan: 3, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
+                    { dataField: 'width', colSpan: 1, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) } },
+                    // { dataField: '', colSpan: 1, label: { visible: false }, cssClass: 'dx-form-compact-item', template: (e) => { return getFixRatioTemplate(module, e); } }, // localization
+                    { dataField: 'height', colSpan: 1, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) } },
+                    // { dataField: '', colSpan: 1, label: { visible: false }, template: (e) => { return $('<div>'); } },
+                    { dataField: 'alignment', colSpan: 1, label: { text: 'Alignment' },
+                        // template: () => {
+                        //     const $content = $('<div>');
+                        //     editorInstance._createComponent($content, ButtonGroup, {
+                        //         items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }, { value: 'justify', icon: 'alignjustify' }],
+                        //         keyExpr: 'value',
+                        //         selectedItemKeys: ['left'],
+                        //         onInitialized: (e) => {
+                        //             alignmentEditorInstance = e.component;
+                        //         }
+                        //     });
+                        //     return $content;
+                        // }
+                    }, // localization
+                    { dataField: 'alt', colSpan: 3, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
                 ]
             }, {
                 title: 'Upload Image', // localization
@@ -322,23 +357,16 @@ function imageFormItems(module) {
                     {
                         itemType: 'simple',
                         dataField: 'files',
-                        label: { text: '' }, // localization
+                        label: { visible: false }, // localization
                         template: (e) => {
                             const $content = $('<div>');
                             editorInstance._createComponent($content, FileUploader, {
                                 multiple: false,
-                                width: 300, //
-                                // accept: '*',
+                                // width: 300,
                                 value: [],
                                 accept: 'image/*',
-                                // uploadMethod: 'PUT',
-                                // uploadMode: 'useForm',
+
                                 uploadMode: 'instantly',
-                                // onBeforeSend: (e) => {
-                                //     const range = module.quill.getSelection();
-                                //     module.quill.getModule('uploader').upload(range, [ e.file ]);
-                                //     module.editorInstance._formDialog.hide();
-                                // },
                                 onValueChanged: (e) => {
                                     const range = module.quill.getSelection();
                                     module.quill.getModule('uploader').upload(range, e.value);
@@ -346,14 +374,6 @@ function imageFormItems(module) {
                                 }
                             });
                             return $content;
-                        }
-                    }, {
-                        itemType: 'simple',
-                        dataField: '',
-                        editorType: 'dxCheckBox',
-                        editorOptions: {
-                            value: true,
-                            text: 'Encode to base 64' // localization
                         }
                     }
                 ]
