@@ -64,10 +64,10 @@ const createCancelButtonConfig = () => ({
     location: isIOSPlatform() ? TOOLBAR_LOCATION.BEFORE : TOOLBAR_LOCATION.AFTER
 });
 
-const modifyResourceFields = (rawAppointment, dataAccessors, returnedObject) => {
+const modifyResourceFields = (rawAppointment, dataAccessors, resources, returnedObject) => {
     each(dataAccessors.resources.getter, (fieldName) => {
         const value = dataAccessors.resources.getter[fieldName](rawAppointment);
-        const isMultiple = isResourceMultiple(this.scheduler.getResources(), fieldName);
+        const isMultiple = isResourceMultiple(resources, fieldName);
 
         returnedObject[fieldName] = isMultiple ? wrapToArray(value) : value;
     });
@@ -172,13 +172,14 @@ export class AppointmentPopup {
     _createFormData(rawAppointment) {
         const appointment = this._createAppointmentAdapter(rawAppointment);
         const dataAccessors = this.scheduler.getDataAccessors();
+        const resources = this.scheduler.getResources();
 
         const result = {
             ...rawAppointment,
             repeat: !!appointment.recurrenceRule
         };
 
-        modifyResourceFields(rawAppointment, dataAccessors, result);
+        modifyResourceFields(rawAppointment, dataAccessors, resources, result);
 
         return result;
     }
@@ -351,8 +352,9 @@ export class AppointmentPopup {
 
                     const resources = {};
                     const dataAccessors = this.scheduler.getDataAccessors();
+                    const resourceList = this.scheduler.getResources();
 
-                    modifyResourceFields(this.state.lastEditData, dataAccessors, resources);
+                    modifyResourceFields(this.state.lastEditData, dataAccessors, resourceList, resources);
 
                     this.scheduler.updateScrollPosition(startDate, resources, inAllDayRow);
                     this.state.lastEditData = null;
