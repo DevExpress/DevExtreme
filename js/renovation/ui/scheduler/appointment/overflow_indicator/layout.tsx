@@ -55,7 +55,7 @@ export class OverflowIndicatorProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class OverflowIndicator extends JSXComponent<OverflowIndicatorProps, 'viewModel'>() {
+export class OverflowIndicator extends JSXComponent<OverflowIndicatorProps, 'viewModel' | 'groups'>() {
   @Consumer(AppointmentsContext)
   appointmentsContextValue!: IAppointmentContext;
 
