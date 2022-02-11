@@ -71,7 +71,7 @@ function calculateRowHeight(doc, cells, columnWidths) {
     return rowHeight;
 }
 
-function applyWordWrap(doc, rowsInfo, options) {
+function applyWordWrap(doc, rowsInfo) {
     rowsInfo.forEach(row => {
         row.cells.forEach(({ pdfCell }) => {
             if(isDefined(pdfCell.text)) {
@@ -85,4 +85,14 @@ function applyWordWrap(doc, rowsInfo, options) {
     });
 }
 
-export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth, getPageHeight, applyWordWrap, toPdfUnit };
+function applyRtl(doc, rectsByPages, options) {
+    rectsByPages.forEach(pageRects => {
+        pageRects.forEach(pdfCell => {
+            const mirroredX = getPageWidth(doc) - (pdfCell._rect.x + pdfCell._rect.w);
+            const marginDiff = options.margin.left - options.margin.right;
+            pdfCell._rect.x = mirroredX + marginDiff;
+        });
+    });
+}
+
+export { calculateRowHeight, calculateTextHeight, calculateTargetRectWidth, getTextLines, getPageWidth, getPageHeight, applyWordWrap, toPdfUnit, applyRtl };
