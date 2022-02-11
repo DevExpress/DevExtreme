@@ -2857,7 +2857,7 @@ module('Appointment dragging', {
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 0), 'Start date is correct');
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 5, 0, 30), 'End date is correct');
-                assert.deepEqual(appointmentData.ownerId, { id: [2] }, 'Resources is correct');
+                assert.deepEqual(appointmentData.ownerId, { id: 2 }, 'Resources is correct');
             });
 
             test('Appointment should have correct position while dragging from group, vertical grouping', function(assert) {
@@ -2920,7 +2920,7 @@ module('Appointment dragging', {
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 9, 30), 'Start date is correct');
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 5, 10, 0), 'End date is correct');
-                assert.deepEqual(appointmentData.ownerId, { id: [1] }, 'Resources is correct');
+                assert.deepEqual(appointmentData.ownerId, { id: 1 }, 'Resources is correct');
             });
 
             test('Appointment should have correct position while dragging into allDay panel, vertical grouping', function(assert) {
@@ -2973,7 +2973,7 @@ module('Appointment dragging', {
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 9, 0), 'Start date is correct');
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 9, 0, 30), 'End date is correct');
-                assert.deepEqual(appointmentData.ownerId, { id: [2] }, 'Resources is correct');
+                assert.deepEqual(appointmentData.ownerId, { id: 2 }, 'Resources is correct');
             });
 
             test('Appointment should have correct coordinates after drag if onAppointmentUpdating is canceled (T813826)', function(assert) {
