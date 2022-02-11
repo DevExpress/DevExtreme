@@ -540,6 +540,8 @@ export const focusModule = {
                             this.processUpdateFocusedRow(e);
                         } else if(e.changeType === 'append' || e.changeType === 'prepend') {
                             this._updatePageIndexes();
+                        } else if(e.changeType === 'update' && e.repaintChangesOnly) {
+                            this.processUpdateFocusedRow(e);
                         }
                     }
                 },
