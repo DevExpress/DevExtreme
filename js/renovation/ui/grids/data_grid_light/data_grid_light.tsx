@@ -97,7 +97,7 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   @Effect()
   updateVisibleRowsByVisibleItems(): () => void {
     return this.plugins.watch(VisibleItems, () => {
-      this.visibleRows = this.plugins.getValue(VisibleRows) ?? [];
+      this.visibleRows = this.plugins.getValue(VisibleRows) as Row[];
     });
   }
 
@@ -115,10 +115,10 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
 
   @Effect()
   setVisibleRowsByVisibleItems(): () => void {
-    return this.plugins.extend(VisibleRows, -1, (visibleRows) => {
-      const visibleItems = this.plugins.getValue(VisibleItems);
+    return this.plugins.extend(VisibleRows, -1, () => {
+      const visibleItems = this.plugins.getValue(VisibleItems) as RowData[];
 
-      return visibleItems ? this.processVisibleItems(visibleItems) : visibleRows;
+      return this.processVisibleItems(visibleItems);
     });
   }
 

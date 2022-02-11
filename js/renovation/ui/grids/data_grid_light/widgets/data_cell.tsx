@@ -3,32 +3,45 @@ import {
 } from '@devextreme-generator/declarations';
 import { Column, Row, RowData } from '../types';
 
-export const viewFunction = ({
-  cellText,
-  cellTemplate: CellTemplate,
-  classes,
-  props: {
-    row,
-  },
-}: DataCell): JSX.Element => (
-  <td
-    // TODO uncomment after https://trello.com/c/kVXfSWI7
-    // aria-describedby={`dx-col-${columnIndex + 1}`}
-    aria-selected="false"
-    role="gridcell"
-    className={classes}
-  >
-    { CellTemplate && <CellTemplate data={row.data} /> }
-    { !CellTemplate && cellText}
-  </td>
-);
+export const viewFunction = (viewModel: DataCell): JSX.Element => {
+  const {
+    cellText,
+    cellTemplate: CellTemplate,
+    cellContainerTemplate: CellContainerTemplate,
+    classes,
+  } = viewModel;
+  const { row } = viewModel.props;
+  const cellContentTemplate = CellTemplate
+    ? <CellTemplate data={row.data} />
+    : cellText;
+
+  return (
+    !CellContainerTemplate
+      ? (
+        <td
+          // TODO uncomment after https://trello.com/c/kVXfSWI7
+          // aria-describedby={`dx-col-${columnIndex + 1}`}
+          aria-selected="false"
+          role="gridcell"
+          className={classes}
+        >
+          {cellContentTemplate}
+        </td>
+      )
+      : (
+        <CellContainerTemplate data={row.data}>
+          {cellContentTemplate}
+        </CellContainerTemplate>
+      )
+  );
+};
 
 @ComponentBindings()
 export class DataCellProps {
   @OneWay()
   row: Row = {
     data: {},
-    rowType: '',
+    rowType: 'data',
   };
 
   @OneWay()
@@ -45,6 +58,10 @@ export class DataCellProps {
 export class DataCell extends JSXComponent(DataCellProps) {
   get cellTemplate(): JSXTemplate<{ data: RowData }, 'data'> | undefined {
     return this.props.column.cellTemplate;
+  }
+
+  get cellContainerTemplate(): JSXTemplate<{ data: RowData }, 'data'> | undefined {
+    return this.props.column.cellContainerTemplate;
   }
 
   get cellText(): string {

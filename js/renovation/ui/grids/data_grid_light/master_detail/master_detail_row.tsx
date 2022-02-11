@@ -27,7 +27,7 @@ export class MasterDetailRowProps {
   @OneWay()
   row: Row = {
     data: {},
-    rowType: '',
+    rowType: 'data',
   };
 
   @OneWay()

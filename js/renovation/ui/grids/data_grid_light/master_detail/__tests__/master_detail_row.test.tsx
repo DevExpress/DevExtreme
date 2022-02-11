@@ -5,6 +5,7 @@ import {
 } from '../master_detail_row';
 import { RowClassesGetter } from '../../widgets/row_base';
 import { VisibleColumns } from '../../data_grid_light';
+import { Row } from '../../types';
 import { MasterDetailTemplate } from '../plugins';
 
 describe('DataRow', () => {
@@ -16,7 +17,9 @@ describe('DataRow', () => {
         colSpan: 3,
       } as Partial<MasterDetailRow>;
 
-      const tree = mount(<MasterDetailRowView {...viewProps as any} />);
+      const tree = mount(<MasterDetailRowView {...viewProps as any} />, {
+        attachTo: document.createElement('tbody'),
+      });
       expect(tree.find('td').prop('colSpan')).toEqual(3);
       expect(tree.find('div').text()).toEqual('Some value');
     });
@@ -41,7 +44,7 @@ describe('DataRow', () => {
     });
 
     it('should add dx-master-detail-row class', () => {
-      const row = {
+      const row: Row = {
         data: {},
         rowType: 'detail',
       };
@@ -55,7 +58,7 @@ describe('DataRow', () => {
     });
 
     it('should not add dx-master-detail-row class', () => {
-      const row = {
+      const row: Row = {
         data: {},
         rowType: 'data',
       };

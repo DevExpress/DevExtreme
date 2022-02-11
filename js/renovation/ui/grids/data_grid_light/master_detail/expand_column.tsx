@@ -13,7 +13,7 @@ import { KeyExprPlugin } from '../data_grid_light';
 export const viewFunction = (viewModel: ExpandColumn): JSX.Element => (
   <td
     ref={viewModel.cellRef}
-    className="dx-command-expand dx-datagrid-group-space dx-datagrid-expand dx-selection-disabled dx-cell-focus-disabled"
+    className="dx-command-expand dx-datagrid-group-space dx-datagrid-expand"
   >
     <div className={viewModel.isExpanded ? 'dx-datagrid-group-opened' : 'dx-datagrid-group-closed'} />
   </td>

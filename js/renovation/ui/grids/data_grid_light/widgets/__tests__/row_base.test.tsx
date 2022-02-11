@@ -8,11 +8,13 @@ describe('RowBase', () => {
   describe('View', () => {
     it('default render with template', () => {
       const rowBase = new RowBase({
-        children: <span>Some value</span>,
+        children: <td>Some value</td>,
       });
 
-      const tree = mount(<RowBaseView {...rowBase as any} />);
-      expect(tree.find('span').text()).toEqual('Some value');
+      const tree = mount(<RowBaseView {...rowBase as any} />, {
+        attachTo: document.createElement('tbody'),
+      });
+      expect(tree.find('td').text()).toEqual('Some value');
     });
   });
 

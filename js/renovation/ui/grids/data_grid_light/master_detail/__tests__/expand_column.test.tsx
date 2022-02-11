@@ -21,7 +21,9 @@ describe('Expand column', () => {
         isExpanded: true,
       } as Partial<ExpandColumn>;
 
-      const tree = mount(<ExpandColumnView {...viewProps as any} />);
+      const tree = mount(<ExpandColumnView {...viewProps as any} />, {
+        attachTo: document.createElement('tr'),
+      });
       expect(tree.find('td').hasClass('dx-command-expand dx-datagrid-group-space dx-datagrid-expand')).toBe(true);
       expect(tree.find('div').hasClass('dx-datagrid-group-opened')).toBe(true);
       expect(tree.find('div').hasClass('dx-datagrid-group-closed')).toBe(false);
@@ -33,7 +35,9 @@ describe('Expand column', () => {
         isExpanded: false,
       } as Partial<ExpandColumn>;
 
-      const tree = mount(<ExpandColumnView {...viewProps as any} />);
+      const tree = mount(<ExpandColumnView {...viewProps as any} />, {
+        attachTo: document.createElement('tr'),
+      });
       expect(tree.find('td').hasClass('dx-command-expand dx-datagrid-group-space dx-datagrid-expand')).toBe(true);
       expect(tree.find('div').hasClass('dx-datagrid-group-closed')).toBe(true);
       expect(tree.find('div').hasClass('dx-datagrid-group-opened')).toBe(false);
@@ -121,6 +125,25 @@ describe('Expand column', () => {
         expect(setExpanded).toBeCalledTimes(1);
         expect(setExpanded.mock.calls[0][0]).toEqual(1);
         expect(setExpanded.mock.calls[0][1]).toBe(!expandColumn.isExpanded);
+      });
+
+      it('should not call onExpandColumnClick', () => {
+        const expandColumn = new ExpandColumn({
+          data: {
+            id: 1,
+          },
+        });
+        expandColumn.keyExpr = 'id';
+
+        const setExpanded = jest.fn();
+        expandColumn.plugins.set(SetExpanded, setExpanded);
+
+        expandColumn.onExpandColumnClick({
+          target: {
+            closest: () => false,
+          },
+        } as any);
+        expect(setExpanded).toBeCalledTimes(0);
       });
     });
   });

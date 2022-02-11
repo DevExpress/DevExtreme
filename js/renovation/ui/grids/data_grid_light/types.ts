@@ -12,7 +12,7 @@ export interface Row {
 
   data: RowData;
 
-  rowType: string;
+  rowType: 'data' | 'detail';
 
   template?: JSXTemplate<RowTemplateProps>;
 }

@@ -19,7 +19,7 @@ import {
   KeyExprPlugin, VisibleRows, VisibleColumns,
 } from '../data_grid_light';
 import {
-  KeyExpr, Row, Key, Column,
+  KeyExpr, Row, Key, Column, RowTemplateProps,
 } from '../types';
 import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
@@ -41,7 +41,7 @@ export class MasterDetailProps {
   @TwoWay()
   expandedRowKeys: Key[] = [];
 
-  @Template() template!: JSXTemplate;
+  @Template() template!: JSXTemplate<RowTemplateProps>;
 }
 
 @Component({
@@ -109,21 +109,23 @@ export class MasterDetail extends JSXComponent(MasterDetailProps) {
   }
 
   processVisibleRows(visibleRows: Row[]): Row[] {
+    const result = visibleRows.slice();
+
     for (let i = 0; i < visibleRows.length; i += 1) {
-      const item = visibleRows[i];
+      const item = result[i];
 
       if (this.isExpanded(item.key)) {
-        visibleRows.splice(i + 1, 0, {
+        result.splice(i + 1, 0, {
           ...item,
           rowType: 'detail',
           template: MasterDetailRow,
         });
         i += 1;
       } else if (item.rowType === 'detail') {
-        visibleRows.splice(i, 1);
+        result.splice(i, 1);
       }
     }
 
-    return visibleRows;
+    return result;
   }
 }

@@ -46,10 +46,16 @@ export class HeaderCell extends JSXComponent(HeaderCellProps) {
   }
 
   get classes(): string {
-    return combineClasses({
+    const classesMap = {
       'dx-datagrid-action': true,
       'dx-cell-focus-disabled': true,
       'dx-first-child': this.props.columnIndex === 0,
-    });
+    };
+
+    if (this.props.column.headerCssClass) {
+      classesMap[this.props.column.headerCssClass] = true;
+    }
+
+    return combineClasses(classesMap);
   }
 }

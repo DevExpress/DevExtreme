@@ -8,6 +8,7 @@ import { DataGridLight, DataGridLightProps } from '../../../../js/renovation/ui/
 import { Pager, PagerProps } from '../../../../js/renovation/ui/grids/data_grid_light/pager/pager';
 import { Paging, PagingProps } from '../../../../js/renovation/ui/grids/data_grid_light/paging/paging';
 import { Selection, SelectionProps } from '../../../../js/renovation/ui/grids/data_grid_light/selection/selection';
+import { MasterDetail, MasterDetailProps } from '../../../../js/renovation/ui/grids/data_grid_light/master_detail/master_detail';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 export type OptionsType = DeepPartial<
@@ -15,10 +16,19 @@ DataGridLightProps
 & { pager: PagerProps }
 & { selection: SelectionProps }
 & { paging: PagingProps }
+& { masterDetail: MasterDetailProps }
 >;
 
 export const viewFunction = ({
-  options, pager, paging, selection, setPageIndex, setPageSize, setSelectedRowKeys,
+  options,
+  pager,
+  paging,
+  selection,
+  masterDetail,
+  setPageIndex,
+  setPageSize,
+  setSelectedRowKeys,
+  setExpandedRowKeys,
 }: App): JSX.Element => (
   <DataGridLight
     id="container"
@@ -54,6 +64,15 @@ export const viewFunction = ({
       selectedRowKeysChange={setSelectedRowKeys}
     />
     )}
+
+    { masterDetail.enabled && (
+    <MasterDetail
+      enabled={masterDetail.enabled}
+      template={masterDetail.template}
+      expandedRowKeys={masterDetail.expandedRowKeys}
+      expandedRowKeysChange={setExpandedRowKeys}
+    />
+    )}
   </DataGridLight>
 );
 @ComponentBindings()
@@ -76,6 +95,9 @@ export class App extends JSXComponent<AppProps>() {
   @InternalState()
   selection: Partial<SelectionProps> = { mode: 'none' };
 
+  @InternalState()
+  masterDetail: Partial<MasterDetailProps> = { enabled: false };
+
   setPageIndex(pageIndex: number): void {
     this.paging = {
       ...this.paging,
@@ -97,12 +119,19 @@ export class App extends JSXComponent<AppProps>() {
     };
   }
 
+  setExpandedRowKeys(expandedRowKeys: unknown[]): void {
+    this.masterDetail = {
+      ...this.masterDetail,
+      expandedRowKeys,
+    };
+  }
+
   @Effect({ run: 'once' })
   optionsUpdated(): void {
     (window as unknown as { onOptionsUpdated: (options: OptionsType) => void })
       .onOptionsUpdated = (newOptions) => {
         const {
-          paging, pager, selection, ...rest
+          paging, pager, selection, masterDetail, ...rest
         } = newOptions;
 
         this.options = {
@@ -123,6 +152,11 @@ export class App extends JSXComponent<AppProps>() {
         this.selection = {
           ...this.selection,
           ...selection,
+        };
+
+        this.masterDetail = {
+          ...this.masterDetail,
+          ...masterDetail,
         };
       };
   }

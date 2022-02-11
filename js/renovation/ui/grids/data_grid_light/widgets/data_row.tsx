@@ -25,7 +25,7 @@ export class DataRowProps {
   @OneWay()
   row: Row = {
     data: {},
-    rowType: '',
+    rowType: 'data',
   };
 
   @OneWay()

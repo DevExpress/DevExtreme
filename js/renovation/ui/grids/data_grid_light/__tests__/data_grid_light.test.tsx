@@ -6,7 +6,7 @@ import {
   TotalCount, KeyExprPlugin, Items,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
-import { generateData } from './test_data';
+import { generateData, generateItems } from './test_data';
 
 describe('DataGridLight', () => {
   describe('View', () => {
@@ -110,22 +110,52 @@ describe('DataGridLight', () => {
       });
     });
 
-    describe('updateVisibleItems', () => {
+    describe('updateVisibleRows', () => {
       const watchMock = jest.fn();
       const grid = new DataGridLight({});
       grid.plugins = {
         watch: watchMock,
       } as any;
 
-      it('should update visibleItems', () => {
+      it('should update visibleRows', () => {
         grid.updateVisibleRows();
 
-        const data = generateData(10);
+        const data = generateItems(10);
 
         const callback = watchMock.mock.calls[0][1];
         callback(data);
 
         expect(grid.visibleRows).toBe(data);
+      });
+    });
+
+    describe('updateVisibleRowsByVisibleItems', () => {
+      const watchMock = jest.fn();
+      const grid = new DataGridLight({});
+      grid.plugins = {
+        watch: watchMock,
+        getValue: () => generateItems(2),
+      } as any;
+
+      it('should update visibleRows by visibleItems', () => {
+        grid.updateVisibleRowsByVisibleItems();
+
+        const data = generateItems(2);
+
+        const callback = watchMock.mock.calls[0][1];
+        callback(data);
+
+        expect(grid.visibleRows).toMatchObject([
+          {
+            key: 0,
+            data: { id: 0 },
+            rowType: 'data',
+          }, {
+            key: 1,
+            data: { id: 1 },
+            rowType: 'data',
+          },
+        ]);
       });
     });
 
@@ -143,6 +173,34 @@ describe('DataGridLight', () => {
         grid.setDataSourceToVisibleItems();
 
         expect(extendMock.mock.calls[0][2]()).toBe(dataSource);
+      });
+    });
+
+    describe('setVisibleRowsByVisibleItems', () => {
+      const extendMock = jest.fn();
+      const dataSource = generateData(2);
+      const grid = new DataGridLight({
+        keyExpr: 'id',
+      });
+      grid.plugins = {
+        extend: extendMock,
+        getValue: () => dataSource,
+      } as any;
+
+      it('should return visibleRows', () => {
+        grid.setVisibleRowsByVisibleItems();
+
+        expect(extendMock.mock.calls[0][2]()).toMatchObject([
+          {
+            key: 0,
+            data: { id: 0 },
+            rowType: 'data',
+          }, {
+            key: 1,
+            data: { id: 1 },
+            rowType: 'data',
+          },
+        ]);
       });
     });
 

@@ -27,7 +27,7 @@ export class RowBaseProps {
   @OneWay()
   row: Row = {
     data: {},
-    rowType: '',
+    rowType: 'data',
   };
 
   @Slot()
