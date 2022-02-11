@@ -32,11 +32,12 @@ import { toPdfUnit } from './pdf_utils_v3';
 // ]
 
 const defaultStyles = {
-    header: { font: { size: 10 }, textColor: '#979797', borderColor: '#979797' },
-    group: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
-    data: { font: { size: 10 }, borderColor: '#979797' },
-    groupFooter: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
-    totalFooter: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
+    base: { font: { size: 10 }, borderColor: '#979797' },
+    header: { textColor: '#979797' },
+    group: { },
+    data: { },
+    groupFooter: { },
+    totalFooter: { },
 };
 
 
@@ -81,7 +82,7 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
         const cellStyle = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
-        const style = defaultStyles[rowType];
+        const style = getPdfCellStyle(rowType, cellStyle);
 
         const pdfCell = {
             text: getFormattedValue(cellData.value, cellStyle.format),
@@ -127,6 +128,16 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
         result.push(cellInfo);
     }
     return result;
+}
+
+function getPdfCellStyle(rowType, cellStyle) {
+    const styles = Object.assign({}, defaultStyles['base'], defaultStyles[rowType]);
+
+    if(cellStyle.bold && rowType !== 'header') {
+        styles.font = Object.assign({}, styles.font, { style: 'bold' });
+    }
+
+    return styles;
 }
 
 function getFormattedValue(value, format) {
