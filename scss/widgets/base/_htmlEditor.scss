@@ -96,6 +96,26 @@ $transparent-border: 1px solid transparent;
     padding-left: 0;
     padding-right: 0;
   }
+
+  .dx-multiview-wrapper .dx-field-item:not(.dx-last-col) {
+    padding-right: 5px;
+  }
+
+  .dx-multiview-wrapper .dx-field-item:not(.dx-first-col) {
+    padding-left: 0;
+  }
+
+  .dx-fix-ratio-container {
+    .dx-textbox {
+      display: inline-block;
+      width: calc(100% - 41px);
+    }
+
+    .dx-buttongroup {
+      vertical-align: top;
+      margin-left: 5px;
+    }
+  }
 }
 
 .dx-quill-container {
