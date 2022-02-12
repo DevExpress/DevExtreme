@@ -3,7 +3,7 @@ import { isEmptyObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { getRecurrenceProcessor } from '../recurrence';
 import timeZoneUtils from '../utils.timeZone';
-import { createResourcesTree, getDataAccessors, getGroupCount, getResourcesFromItem, getResourceTreeLeaves } from '../resources/utils';
+import { createResourcesTree, getDataAccessors, getGroupCount, getResourceTreeLeaves } from '../resources/utils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { CellPositionCalculator } from './cellPositionCalculator';
 import { ExpressionUtils } from '../expressionUtils';
@@ -46,13 +46,7 @@ export class DateGeneratorBaseStrategy {
     }
 
     generate(appointmentAdapter) {
-        const itemResources = getResourcesFromItem(
-            this.options.resources,
-            this.dataAccessors.resources,
-            this.rawAppointment
-        );
-
-        const itemGroupIndices = this._getGroupIndices(itemResources);
+        const itemGroupIndices = this._getGroupIndices(this.rawAppointment);
 
         let appointmentList = this._createAppointments(appointmentAdapter, itemGroupIndices);
 
@@ -441,15 +435,15 @@ export class DateGeneratorBaseStrategy {
         );
     }
 
-    _getGroupIndices(appointmentResources) {
+    _getGroupIndices(rawAppointment) {
         let result = [];
-        if(appointmentResources && this.loadedResources.length) {
+        if(rawAppointment && this.loadedResources.length) {
             const tree = createResourcesTree(this.loadedResources);
 
             result = getResourceTreeLeaves(
                 (field, action) => getDataAccessors(this.options.dataAccessors.resources, field, action),
                 tree,
-                appointmentResources
+                rawAppointment
             );
         }
 
