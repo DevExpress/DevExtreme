@@ -167,7 +167,7 @@ addCompilationTask({
     switches: {
         installPackages: true,
     },
-    components: ['Button', 'Scheduler'],
+    components: 'Button',
     steps: {
         installPackages: {
             before: {
