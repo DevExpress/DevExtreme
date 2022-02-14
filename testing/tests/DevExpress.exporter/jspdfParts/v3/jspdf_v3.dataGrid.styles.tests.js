@@ -1088,6 +1088,7 @@ const JSPdfStylesTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1117,6 +1118,7 @@ const JSPdfStylesTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1146,6 +1148,7 @@ const JSPdfStylesTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1176,6 +1179,7 @@ const JSPdfStylesTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,28.4',
                     'setFont,helvetica,normal,',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1219,25 +1223,20 @@ const JSPdfStylesTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,119.5,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 

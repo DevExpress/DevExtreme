@@ -23,6 +23,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -54,6 +55,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -85,6 +87,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -119,6 +122,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -153,6 +157,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -187,6 +192,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -221,6 +227,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -255,6 +262,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -289,6 +297,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -322,6 +331,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -355,6 +365,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -388,6 +399,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -424,6 +436,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -460,6 +473,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -496,6 +510,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -532,6 +547,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -568,6 +584,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -604,6 +621,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -637,6 +655,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -670,6 +689,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -703,6 +723,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -739,6 +760,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -775,6 +797,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -811,6 +834,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -847,6 +871,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -883,6 +908,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -919,6 +945,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -953,6 +980,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -985,6 +1013,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1017,6 +1046,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1052,6 +1082,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1087,6 +1118,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1122,6 +1154,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1157,6 +1190,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1192,6 +1226,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1227,6 +1262,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1261,6 +1297,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1295,6 +1332,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1329,6 +1367,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1366,6 +1405,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1403,6 +1443,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1440,6 +1481,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1477,6 +1519,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1514,6 +1557,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1551,6 +1595,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1585,6 +1630,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1619,6 +1665,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1653,6 +1700,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1690,6 +1738,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1727,6 +1776,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1764,6 +1814,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1801,6 +1852,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1838,6 +1890,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1875,6 +1928,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1908,6 +1962,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1941,6 +1996,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1974,6 +2030,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2010,6 +2067,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2046,6 +2104,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2082,6 +2141,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2118,6 +2178,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2154,6 +2215,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2190,6 +2252,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2225,6 +2288,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2260,6 +2324,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2295,6 +2360,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2333,6 +2399,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2371,6 +2438,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2409,6 +2477,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2447,6 +2516,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2485,6 +2555,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2523,6 +2594,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2558,6 +2630,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2593,6 +2666,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2628,6 +2702,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2666,6 +2741,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2704,6 +2780,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2742,6 +2819,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2780,6 +2858,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2818,6 +2897,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2856,6 +2936,7 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];

@@ -202,7 +202,10 @@ QUnit.module('Table', moduleConfig, () => {
 
         const expectedLog = [
             'setLineWidth,0.5',
-            'rect,10,15,0,0'
+            'setDrawColor,#979797',
+            'rect,10,15,0,0',
+            'setLineWidth,0.200025',
+            'setDrawColor,#000000'
         ];
 
         const customizeCell = () => {
@@ -239,6 +242,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,20',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -274,6 +278,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,20',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -309,6 +314,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,20',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -344,6 +350,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,20',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -379,6 +386,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,20',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -414,6 +422,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,20',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -441,6 +450,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,21.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -472,6 +482,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,21.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -503,6 +514,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,11.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -534,6 +546,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,16.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -565,6 +578,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,11.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -596,6 +610,7 @@ QUnit.module('Table', moduleConfig, () => {
             'setDrawColor,#979797',
             'rect,50,55,100,16.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -665,10 +680,10 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,100,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,75,100,24',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
 
@@ -696,10 +711,10 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,100,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,76.5,100,21.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
 
@@ -731,10 +746,10 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,100,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,76.5,100,21.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
 
@@ -773,13 +788,12 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,100,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,71,100,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,91,100,24',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
 
@@ -808,13 +822,12 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,100,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,76.5,100,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,98,100,21.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
 
@@ -847,13 +860,12 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,100,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,76.5,100,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,98,100,21.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
 
@@ -885,10 +897,10 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,60,16',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -916,10 +928,10 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,60,21.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -952,10 +964,10 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,31.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,60,31.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000',
             'setTextColor,#000000'
         ];
@@ -994,16 +1006,14 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,60,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,71,40,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,71,60,20',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
@@ -1033,16 +1043,14 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,60,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,76.5,40,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,76.5,60,21.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
@@ -1077,16 +1085,14 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,31.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,60,31.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,86.5,40,31.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,86.5,60,31.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], customizeCell }).then(() => {
@@ -1128,22 +1134,18 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,60,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,71,40,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,71,60,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,91,40,24',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,91,60,24',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
@@ -1175,22 +1177,18 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,60,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,76.5,40,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,76.5,60,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,98,40,21.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,98,60,21.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
@@ -1227,22 +1225,18 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,31.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,60,31.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,86.5,40,31.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,86.5,60,31.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,118,40,31.5',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,118,60,31.5',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], customizeCell }).then(() => {
@@ -1284,22 +1278,18 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,0,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,100,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,71,0,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,71,100,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,91,0,24',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,91,100,24',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 0, 100 ], onRowExporting }).then(() => {
@@ -1351,35 +1341,28 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,50,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,55,60,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,50,71,90,71',
             'line,50,71,50,91',
             'line,50,91,90,91',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,90,71,140,71',
             'line,140,71,140,91',
             'line,90,91,140,91',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,71,60,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,91,40,24',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,91,50,24',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,91,60,24',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
@@ -1431,35 +1414,28 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,50,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,55,60,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,71,40,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,90,71,140,71',
             'line,90,71,90,91',
             'line,90,91,140,91',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,140,71,200,71',
             'line,200,71,200,91',
             'line,140,91,200,91',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,91,40,24',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,91,50,24',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,91,60,24',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
@@ -1510,35 +1486,28 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,90,55,140,55',
             'line,90,55,90,71',
             'line,140,55,140,71',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,55,60,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,71,40,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,90,71,90,91',
             'line,140,71,140,91',
             'line,90,91,140,91',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,71,60,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,91,40,24',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,91,50,24',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,91,60,24',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
@@ -1589,35 +1558,28 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,90,55,50,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,55,60,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,71,40,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,90,71,140,71',
             'line,90,71,90,91',
             'line,140,71,140,91',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,71,60,20',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,91,40,24',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,90,91,90,115',
             'line,140,91,140,115',
             'line,90,115,140,115',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,91,60,24',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
@@ -1671,36 +1633,30 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,55,40,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,90,55,140,55',
             'line,90,55,90,71',
             'line,140,55,140,71',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,55,60,16',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,50,71,90,71',
             'line,50,71,50,91',
             'line,50,91,90,91',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,140,71,200,71',
             'line,200,71,200,91',
             'line,140,91,200,91',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,50,91,40,24',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'line,90,91,90,115',
             'line,140,91,140,115',
             'line,90,115,140,115',
-            'setLineWidth,0.5',
             'setDrawColor,#979797',
             'rect,140,91,60,24',
             'setFontSize,16',
+            'setLineWidth,0.200025',
             'setDrawColor,#000000'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
