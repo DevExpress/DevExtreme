@@ -262,7 +262,14 @@ function prepareImageHandler(module) {
                     module.quill.deleteText(index, 1, SILENT_ACTION);
                 }
 
-                module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
+                if(formData.useUrl) {
+                    module.quill.insertEmbed(index, 'image', { src: imageUploadingOption.uploadedUrl + formData.file.name }, USER_ACTION);
+                    // $(`<img src="${imageUploadingOption.uploadedUrl + formData.file.name}">`).appendTo('body');
+                } else {
+                    module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
+                }
+
+
                 module.quill.setSelection(index + 1, 0, USER_ACTION);
             })
             .always(() => {
@@ -319,31 +326,58 @@ function imageFormItems(module, imageUploadingOption) {
     let heightEditor;
     let preventRecalculating = false;
     let resultFormItems;
+    let useBase64 = true;
+    const useUrlUploading = imageUploadingOption.enabled && imageUploadingOption.uploadUrl;
 
-    const selectFileItems = [
+    const selectFileTabItems = [
         {
             itemType: 'simple',
             dataField: 'files',
             label: { visible: false }, // localization
-            template: (e) => {
+            template: (data) => {
                 const $content = $('<div>');
                 editorInstance._createComponent($content, FileUploader, {
                     multiple: false,
                     value: [],
+                    name: 'photo',
                     accept: 'image/*',
+                    uploadUrl: imageUploadingOption.uploadUrl,
                     uploadMode: 'instantly',
                     onValueChanged: (e) => {
-                        const range = module.quill.getSelection();
-                        module.quill.getModule('uploader').upload(range, e.value);
-                        module.editorInstance._formDialog.hide({ file: e.value[0] }, e.event);
+                        if(!useUrlUploading) {
+                            const range = module.quill.getSelection();
+                            module.quill.getModule('uploader').upload(range, e.value);
+                            module.editorInstance._formDialog.hide({ file: e.value[0] }, e.event);
+                        }
+                    },
+                    onUploaded: (e) => {
+                        if(useUrlUploading) {
+                            // const imageUrl = imageUploadingOption.uploadedUrl + e.file.name;
+                            // module.editorInstance._formDialog.hide({ file: e.file.name, url: imageUrl }, e.event);
+                            // data.component.updateData('imageUrl', imageUrl);
+                            data.component.updateData('file', e.file);
+                            data.component.updateData('useUrl', true);
+                        }
                     }
                 });
                 return $content;
             }
+        }, {
+            itemType: 'simple',
+            dataField: 'useBase64',
+            label: { visible: false },
+            editorType: 'dxCheckBox',
+            editorOptions: {
+                value: useBase64,
+                text: 'Encode to base 64', // localization
+                onValueChanged: (e) => {
+                    useBase64 = e.value;
+                },
+            }
         }
     ];
 
-    const specifyURLItems = [
+    const specifyURLTabItems = [
         { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
         { dataField: 'width', colSpan: 5, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) }, template: (data) => {
             const $content = $('<div>');
@@ -412,16 +446,16 @@ function imageFormItems(module, imageUploadingOption) {
                 itemType: 'tabbed',
                 tabs: [{
                     title: 'Select file', // localization
-                    items: selectFileItems
+                    items: selectFileTabItems
                 }, {
                     title: 'Specify URL', // localization
                     colCount: 11,
-                    items: specifyURLItems
+                    items: specifyURLTabItems
                 }]
             }
         ];
     } else {
-        resultFormItems = specifyURLItems;
+        resultFormItems = specifyURLTabItems;
     }
 
     return resultFormItems;
