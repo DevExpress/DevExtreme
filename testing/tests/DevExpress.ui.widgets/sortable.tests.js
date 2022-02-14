@@ -3154,9 +3154,6 @@ QUnit.module('Dragging between sortables with scroll', {
             moveItemOnDrop: true,
         });
 
-        const spy1 = sinon.spy(sortable[0], '_unsubscribeFromSourceScroll');
-        const spy2 = sinon.spy(sortable[1], '_subscribeToSourceScroll');
-
         $('.draggable').width(280);
         this.$elements[0].width(280);
         this.$elements[1].width(280);
@@ -3174,8 +3171,6 @@ QUnit.module('Dragging between sortables with scroll', {
                 assert.equal(itemPoints[1].top, 50);
             } else if(scrollTimes === 1) {
                 // second scroll event, itemPoints must be the same
-                assert.ok(spy1.called);
-                assert.ok(spy2.called);
                 assert.equal(itemPoints[1].top, 49);
                 done();
             }
