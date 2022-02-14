@@ -5222,6 +5222,60 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             assert.deepEqual(dataGrid.getSelectedRowKeys(), [3, 4], 'selected keys after selecting with shift for the second time');
         });
     });
+
+    QUnit.test('No redundant load calls with filter (T1063237)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 50; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const store = new ArrayStore({
+            key: 'id',
+            data: getData()
+        });
+
+        const loadSpy = sinon.spy(function(loadOptions) {
+            return store.load(loadOptions);
+        });
+
+        createDataGrid({
+            dataSource: {
+                key: store.key(),
+                load: loadSpy,
+                totalCount: function(loadOptions) {
+                    return store.totalCount(loadOptions);
+                }
+            },
+            height: 440,
+            filterValue: ['id', '>', 1],
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual'
+            },
+            paging: {
+                pageSize: 15,
+            },
+            columns: ['id', 'name']
+        });
+
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(loadSpy.callCount, 2, 'load call count');
+        assert.strictEqual(loadSpy.args[0][0].filter, undefined, 'filter not defined in the first call');
+        assert.equal(loadSpy.args[0][0].skip, 0, 'skip in the first call');
+        assert.equal(loadSpy.args[0][0].take, 15, 'take in the first call');
+        assert.notStrictEqual(loadSpy.args[1][0].filter, undefined, 'filter is defined in the second call');
+        assert.equal(loadSpy.args[1][0].skip, 0, 'skip in the second call');
+        assert.equal(loadSpy.args[1][0].take, 15, 'take in the second call');
+    });
 });
 
 
