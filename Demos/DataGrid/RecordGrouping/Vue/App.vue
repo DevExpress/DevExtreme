@@ -26,6 +26,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
+          id="autoExpand"
           v-model:value="autoExpandAll"
           text="Expand All Groups"
         />

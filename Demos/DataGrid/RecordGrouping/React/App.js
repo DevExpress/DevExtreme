@@ -46,6 +46,7 @@ class App extends React.Component {
           <div className="caption">Options</div>
           <div className="option">
             <CheckBox text="Expand All Groups"
+              id="autoExpand"
               value={this.state.autoExpandAll}
               onValueChanged={this.onAutoExpandAllChanged} />
           </div>

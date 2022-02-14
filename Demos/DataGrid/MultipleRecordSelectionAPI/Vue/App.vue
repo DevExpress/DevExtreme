@@ -74,12 +74,6 @@ import DxButton from 'devextreme-vue/button';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { employees } from './data.js';
 
-function getEmployeeNames(selectedRowsData) {
-  const getEmployeeName = (row) => `${row.FirstName} ${row.LastName}`;
-
-  return selectedRowsData.length ? selectedRowsData.map(getEmployeeName).join(', ') : 'Nobody has been selected';
-}
-
 export default {
   components: {
     DxButton,
@@ -96,10 +90,19 @@ export default {
       employees,
       prefix: '',
       prefixOptions: ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'],
-      selectedEmployeeNames: 'Nobody has been selected',
-      selectedRowKeys: [],
+      selectedRowsData: [],
       selectionChangedBySelectBox: false,
     };
+  },
+  computed: {
+    selectedRowKeys() {
+      return this.selectedRowsData.map((employee) => employee.ID);
+    },
+    selectedEmployeeNames() {
+      const selectedRowsData = this.selectedRowsData;
+      const getEmployeeName = (row) => `${row.FirstName} ${row.LastName}`;
+      return selectedRowsData.length ? selectedRowsData.map(getEmployeeName).join(', ') : 'Nobody has been selected';
+    },
   },
   methods: {
     clearSelection() {
@@ -115,22 +118,20 @@ export default {
       if (!prefix) {
         return;
       } if (prefix === 'All') {
-        this.selectedRowKeys = this.employees.map((employee) => employee.ID);
+        this.selectedRowsData = this.employees;
       } else {
-        this.selectedRowKeys = this.employees
-          .filter((employee) => employee.Prefix === prefix)
-          .map((employee) => employee.ID);
+        this.selectedRowsData = this.employees
+          .filter((employee) => employee.Prefix === prefix);
       }
 
       this.prefix = prefix;
     },
-    onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
+    onSelectionChanged({ selectedRowsData }) {
       if (!this.selectionChangedBySelectBox) {
         this.prefix = null;
       }
 
-      this.selectedEmployeeNames = getEmployeeNames(selectedRowsData);
-      this.selectedRowKeys = selectedRowKeys;
+      this.selectedRowsData = selectedRowsData;
       this.selectionChangedBySelectBox = false;
     },
   },
