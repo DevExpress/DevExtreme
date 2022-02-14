@@ -262,13 +262,7 @@ function prepareImageHandler(module) {
                     module.quill.deleteText(index, 1, SILENT_ACTION);
                 }
 
-                if(formData.useUrl) {
-                    module.quill.insertEmbed(index, 'image', { src: imageUploadingOption.uploadedUrl + formData.file.name }, USER_ACTION);
-                    // $(`<img src="${imageUploadingOption.uploadedUrl + formData.file.name}">`).appendTo('body');
-                } else {
-                    module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
-                }
-
+                module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
 
                 module.quill.setSelection(index + 1, 0, USER_ACTION);
             })
@@ -352,10 +346,10 @@ function imageFormItems(module, imageUploadingOption) {
                     },
                     onUploaded: (e) => {
                         if(useUrlUploading) {
-                            // const imageUrl = imageUploadingOption.uploadedUrl + e.file.name;
+                            const imageUrl = imageUploadingOption.uploadedUrl + e.file.name;
                             // module.editorInstance._formDialog.hide({ file: e.file.name, url: imageUrl }, e.event);
                             // data.component.updateData('imageUrl', imageUrl);
-                            data.component.updateData('file', e.file);
+                            data.component.updateData('src', imageUrl);
                             data.component.updateData('useUrl', true);
                         }
                     }
