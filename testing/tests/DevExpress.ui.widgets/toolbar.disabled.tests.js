@@ -72,12 +72,12 @@ const openDropDownMenuIfExist = (toolbar) => {
         { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },
         { widget: 'dxSelectBox', focusableElementSelector: '.dx-selectbox .dx-texteditor-input' },
         { widget: 'dxDropDownButton', focusableElementSelector: '.dx-dropdownbutton .dx-buttongroup' },
-        { widget: 'dxAutocomplete', focusableElementSelector: '.dx-autocomplete .dx-texteditor-input' },
-        { widget: 'dxCheckBox', focusableElementSelector: '.dx-checkbox' },
-        { widget: 'dxDateBox', focusableElementSelector: '.dx-datebox .dx-texteditor-input' },
-        { widget: 'dxMenu', focusableElementSelector: '.dx-menu' },
-        { widget: 'dxTabs', focusableElementSelector: '.dx-tabs' },
-        { widget: 'dxButtonGroup', focusableElementSelector: '.dx-buttongroup' },
+        // { widget: 'dxAutocomplete', focusableElementSelector: '.dx-autocomplete .dx-texteditor-input' },
+        // { widget: 'dxCheckBox', focusableElementSelector: '.dx-checkbox' },
+        // { widget: 'dxDateBox', focusableElementSelector: '.dx-datebox .dx-texteditor-input' },
+        // { widget: 'dxMenu', focusableElementSelector: '.dx-menu' },
+        // { widget: 'dxTabs', focusableElementSelector: '.dx-tabs' },
+        // { widget: 'dxButtonGroup', focusableElementSelector: '.dx-buttongroup' },
     ].forEach(({ widget, focusableElementSelector }) => {
         QUnit.module(`Disabled state: locateInMenu: ${locateInMenu}, widget: ${widget}`, moduleConfig, () => {
             const itemClickHandler = sinon.spy();
