@@ -222,6 +222,7 @@ function prepareImageHandler(module) {
         const formData = module.quill.getFormat();
         const isUpdateDialog = Object.prototype.hasOwnProperty.call(formData, 'imageSrc');
         const defaultIndex = defaultPasteIndex(module);
+        // const imageUploadingOption = module.editorInstance.option('imageUploading');
 
         if(isUpdateDialog) {
             const { imageSrc } = module.quill.getFormat(defaultIndex - 1, 1);
@@ -322,12 +323,35 @@ function imageFormItems(module) {
         {
             itemType: 'tabbed',
             tabs: [{
-                title: 'Image Information', // localization
+                title: 'Select file', // localization
+                items: [
+                    {
+                        itemType: 'simple',
+                        dataField: 'files',
+                        label: { visible: false }, // localization
+                        template: (e) => {
+                            const $content = $('<div>');
+                            editorInstance._createComponent($content, FileUploader, {
+                                multiple: false,
+                                value: [],
+                                accept: 'image/*',
+                                uploadMode: 'instantly',
+                                onValueChanged: (e) => {
+                                    const range = module.quill.getSelection();
+                                    module.quill.getModule('uploader').upload(range, e.value);
+                                    module.editorInstance._formDialog.hide({ file: e.value[0] }, e.event);
+                                }
+                            });
+                            return $content;
+                        }
+                    }
+                ]
+            }, {
+                title: 'Specify URL', // localization
                 colCount: 11,
                 items: [
                     { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
                     { dataField: 'width', colSpan: 5, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) }, template: (data) => {
-
                         const $content = $('<div>');
 
                         widthEditor = module.editorInstance._createComponent($content, TextBox, {
@@ -386,30 +410,6 @@ function imageFormItems(module) {
                         return $content;
                     } },
                     { dataField: 'alt', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
-                ]
-            }, {
-                title: 'Upload Image', // localization
-                items: [
-                    {
-                        itemType: 'simple',
-                        dataField: 'files',
-                        label: { visible: false }, // localization
-                        template: (e) => {
-                            const $content = $('<div>');
-                            editorInstance._createComponent($content, FileUploader, {
-                                multiple: false,
-                                value: [],
-                                accept: 'image/*',
-                                uploadMode: 'instantly',
-                                onValueChanged: (e) => {
-                                    const range = module.quill.getSelection();
-                                    module.quill.getModule('uploader').upload(range, e.value);
-                                    module.editorInstance._formDialog.hide({ file: e.value[0] }, e.event);
-                                }
-                            });
-                            return $content;
-                        }
-                    }
                 ]
             }]
         }
