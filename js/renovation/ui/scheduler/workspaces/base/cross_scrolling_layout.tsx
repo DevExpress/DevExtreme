@@ -86,7 +86,8 @@ export const viewFunction = ({
         <div className="dx-scheduler-header-tables-container">
           <Scrollable
             ref={headerScrollableRef}
-            className="dx-scheduler-header-scrollable"
+            // https://trello.com/c/NeBr48AZ/3019-angular-props-are-not-spreaded-via-restattributes-classname-for-scrollable
+            classes="dx-scheduler-header-scrollable"
             useKeyboard={false}
             showScrollbar="never"
             direction="horizontal"
@@ -126,7 +127,8 @@ export const viewFunction = ({
       <div className="dx-scheduler-work-space-flex-container">
         <Scrollable
           ref={sideBarScrollableRef}
-          className="dx-scheduler-sidebar-scrollable"
+          // https://trello.com/c/NeBr48AZ/3019-angular-props-are-not-spreaded-via-restattributes-classname-for-scrollable
+          classes="dx-scheduler-sidebar-scrollable"
           useKeyboard={false}
           showScrollbar="never"
           direction="vertical"
@@ -163,7 +165,8 @@ export const viewFunction = ({
           useKeyboard={false}
           bounceEnabled={false}
           direction="both"
-          className="dx-scheduler-date-table-scrollable"
+          // https://trello.com/c/NeBr48AZ/3019-angular-props-are-not-spreaded-via-restattributes-classname-for-scrollable
+          classes="dx-scheduler-date-table-scrollable"
           onScroll={onDateTableScroll}
         >
           <div className="dx-scheduler-date-table-scrollable-content">
