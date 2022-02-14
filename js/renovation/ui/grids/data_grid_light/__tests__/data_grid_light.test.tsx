@@ -96,6 +96,13 @@ describe('DataGridLight', () => {
         grid.updateKeyExpr();
         expect(grid.plugins.getValue(KeyExprPlugin)).toEqual('some key');
       });
+
+      it('should set keyExpr to null if user did not specified it', () => {
+        const grid = new DataGridLight({});
+
+        grid.updateKeyExpr();
+        expect(grid.plugins.getValue(KeyExprPlugin)).toEqual(null);
+      });
     });
 
     describe('updateDataSource', () => {

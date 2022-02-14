@@ -5,7 +5,8 @@ import { JSXTemplate } from '@devextreme-generator/declarations';
 
 export type RowData = Record<string, unknown>;
 export type ColumnUserConfig = string;
-export type KeyExpr = string;
+export type KeyExprUserConfig = string;
+export type KeyExpr = KeyExprUserConfig | null;
 export type Key = unknown;
 export interface Row {
   key?: Key;

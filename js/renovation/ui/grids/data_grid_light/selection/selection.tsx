@@ -21,6 +21,9 @@ import {
   ClearSelection, IsSelected, SelectableCount, SelectAll, SelectedCount, SetSelected,
 } from './plugins';
 import CLASSES from '../classes';
+import { createGetKey } from '../utils';
+
+const getKey = createGetKey('Selection');
 
 export const viewFunction = (): JSX.Element => <div />;
 
@@ -48,7 +51,7 @@ export class Selection extends JSXComponent(SelectionProps) {
   plugins = new Plugins();
 
   @InternalState()
-  keyExpr: KeyExpr = '';
+  keyExpr?: KeyExpr;
 
   @Effect()
   watchKeyExpr(): () => void {
@@ -132,7 +135,7 @@ export class Selection extends JSXComponent(SelectionProps) {
   @Method()
   selectAll(): void {
     const items = this.getAllItems();
-    this.props.selectedRowKeys = items.map((item) => item[this.keyExpr]);
+    this.props.selectedRowKeys = items.map((item) => getKey(item, this.keyExpr));
   }
 
   @Method()
@@ -141,22 +144,24 @@ export class Selection extends JSXComponent(SelectionProps) {
   }
 
   isSelected(data: RowData): boolean {
-    return this.props.selectedRowKeys.includes(data[this.keyExpr]);
+    return this.props.selectedRowKeys.includes(getKey(data, this.keyExpr));
   }
 
   setSelected(data: RowData, value: boolean): void {
+    const key = getKey(data, this.keyExpr);
+
     if (value) {
       if (this.props.mode === 'multiple') {
         this.props.selectedRowKeys = [
           ...this.props.selectedRowKeys,
-          data[this.keyExpr],
+          key,
         ];
       } else {
-        this.props.selectedRowKeys = [data[this.keyExpr]];
+        this.props.selectedRowKeys = [key];
       }
     } else {
       this.props.selectedRowKeys = this.props.selectedRowKeys
-        .filter((i) => i !== data[this.keyExpr]);
+        .filter((i) => i !== key);
     }
   }
 

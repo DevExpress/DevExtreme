@@ -11,7 +11,7 @@ import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
 import type {
-  Column, ColumnUserConfig, KeyExpr, RowData, Row,
+  Column, ColumnUserConfig, KeyExpr, RowData, Row, KeyExprUserConfig,
 } from './types';
 
 import { TableContent } from './views/table_content';
@@ -58,7 +58,7 @@ export class DataGridLightProps extends BaseWidgetProps {
   dataSource: RowData[] = [];
 
   @OneWay()
-  keyExpr?: KeyExpr;
+  keyExpr?: KeyExprUserConfig;
 
   @OneWay()
   columns: ColumnUserConfig[] = [];
@@ -140,7 +140,7 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
 
   @Effect()
   updateKeyExpr(): void {
-    this.plugins.set(KeyExprPlugin, this.props.keyExpr);
+    this.plugins.set(KeyExprPlugin, this.props.keyExpr ?? null);
   }
 
   @Effect()
