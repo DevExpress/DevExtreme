@@ -3173,11 +3173,11 @@ QUnit.module('Dragging between sortables with scroll', {
 
             if(scrollTimes === 0) {
                 // first scroll event, itemPoints must be the same
-                assert.ok(spy1.called);
-                assert.ok(spy2.called);
                 assert.equal(itemPoints[1].top, 50);
             } else if(scrollTimes === 1) {
                 // second scroll event, itemPoints must be the same
+                assert.ok(spy1.called);
+                assert.ok(spy2.called);
                 assert.equal(itemPoints[1].top, 49);
                 done();
             }
