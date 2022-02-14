@@ -58,6 +58,8 @@ const HtmlEditor = Editor.inherit({
 
             formDialogOptions: null,
 
+            imageUploading: null,
+
             stylingMode: 'outlined'
         });
     },
@@ -510,6 +512,8 @@ const HtmlEditor = Editor.inherit({
             case 'width':
                 this.callBase(args);
                 this._repaintToolbar();
+                break;
+            case 'imageUploading':
                 break;
             default:
                 this.callBase(args);

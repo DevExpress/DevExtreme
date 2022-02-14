@@ -222,7 +222,7 @@ function prepareImageHandler(module) {
         const formData = module.quill.getFormat();
         const isUpdateDialog = Object.prototype.hasOwnProperty.call(formData, 'imageSrc');
         const defaultIndex = defaultPasteIndex(module);
-        // const imageUploadingOption = module.editorInstance.option('imageUploading');
+        const imageUploadingOption = module.editorInstance.option('imageUploading');
 
         if(isUpdateDialog) {
             const { imageSrc } = module.quill.getFormat(defaultIndex - 1, 1);
@@ -248,7 +248,7 @@ function prepareImageHandler(module) {
             // showColonAfterLabel: false,
             labelLocation: 'top',
             // minColWidth: 150,
-            items: imageFormItems(module)
+            items: imageFormItems(module, imageUploadingOption)
         });
 
         promise
@@ -312,108 +312,119 @@ function defaultPasteIndex(module) {
     return selection?.index ?? module.quill.getLength();
 }
 
-function imageFormItems(module) {
+function imageFormItems(module, imageUploadingOption) {
     const editorInstance = module.editorInstance;
     let keepRatio;
     let widthEditor;
     let heightEditor;
     let preventRecalculating = false;
+    let resultFormItems;
 
-    return [
+    const selectFileItems = [
         {
-            itemType: 'tabbed',
-            tabs: [{
-                title: 'Select file', // localization
-                items: [
-                    {
-                        itemType: 'simple',
-                        dataField: 'files',
-                        label: { visible: false }, // localization
-                        template: (e) => {
-                            const $content = $('<div>');
-                            editorInstance._createComponent($content, FileUploader, {
-                                multiple: false,
-                                value: [],
-                                accept: 'image/*',
-                                uploadMode: 'instantly',
-                                onValueChanged: (e) => {
-                                    const range = module.quill.getSelection();
-                                    module.quill.getModule('uploader').upload(range, e.value);
-                                    module.editorInstance._formDialog.hide({ file: e.value[0] }, e.event);
-                                }
-                            });
-                            return $content;
-                        }
+            itemType: 'simple',
+            dataField: 'files',
+            label: { visible: false }, // localization
+            template: (e) => {
+                const $content = $('<div>');
+                editorInstance._createComponent($content, FileUploader, {
+                    multiple: false,
+                    value: [],
+                    accept: 'image/*',
+                    uploadMode: 'instantly',
+                    onValueChanged: (e) => {
+                        const range = module.quill.getSelection();
+                        module.quill.getModule('uploader').upload(range, e.value);
+                        module.editorInstance._formDialog.hide({ file: e.value[0] }, e.event);
                     }
-                ]
-            }, {
-                title: 'Specify URL', // localization
-                colCount: 11,
-                items: [
-                    { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
-                    { dataField: 'width', colSpan: 5, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) }, template: (data) => {
-                        const $content = $('<div>');
-
-                        widthEditor = module.editorInstance._createComponent($content, TextBox, {
-                            onValueChanged: (e) => {
-                                const newValue = parseInt(e.value);
-                                const oldHeight = parseInt(heightEditor.option('value'));
-
-                                if(keepRatio && oldHeight && !preventRecalculating) {
-                                    preventRecalculating = true;
-                                    heightEditor.option('value', Math.round(newValue * oldHeight / parseInt(e.previousValue)));
-                                }
-
-                                preventRecalculating = false;
-
-                                data.component.updateData(data.dataField, newValue);
-                            }
-                        });
-
-                        return $content;
-                    } },
-                    { dataField: 'height', colSpan: 6, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) }, template: (data) => {
-                        const $content = $('<div>').addClass('dx-fix-ratio-container');
-                        const $heightEditor = $('<div>').appendTo($content);
-
-                        heightEditor = module.editorInstance._createComponent($heightEditor, TextBox, {
-                            onValueChanged: (e) => {
-                                const newValue = parseInt(e.value);
-                                const oldWidth = parseInt(widthEditor.option('value'));
-
-                                if(keepRatio && oldWidth && !preventRecalculating) {
-                                    preventRecalculating = true;
-                                    widthEditor.option('value', Math.round(newValue * oldWidth / parseInt(e.previousValue)));
-                                }
-
-                                preventRecalculating = false;
-
-                                data.component.updateData(data.dataField, newValue);
-                            }
-                        });
-
-                        const $ratioEditor = $('<div>').appendTo($content);
-
-                        module.editorInstance._createComponent($ratioEditor, ButtonGroup, {
-                            items: [{
-                                icon: 'link',
-                                value: true,
-                            }],
-                            keyExpr: 'value',
-                            selectionMode: 'multiple',
-                            onSelectionChanged: (e) => {
-                                keepRatio = !!e.component.option('selectedItems').length;
-                            }
-                            // cssClass: 'dx-fix-ratio-button'
-                        });
-
-                        return $content;
-                    } },
-                    { dataField: 'alt', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
-                ]
-            }]
+                });
+                return $content;
+            }
         }
     ];
+
+    const specifyURLItems = [
+        { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
+        { dataField: 'width', colSpan: 5, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) }, template: (data) => {
+            const $content = $('<div>');
+
+            widthEditor = module.editorInstance._createComponent($content, TextBox, {
+                onValueChanged: (e) => {
+                    const newValue = parseInt(e.value);
+                    const oldHeight = parseInt(heightEditor.option('value'));
+
+                    if(keepRatio && oldHeight && !preventRecalculating) {
+                        preventRecalculating = true;
+                        heightEditor.option('value', Math.round(newValue * oldHeight / parseInt(e.previousValue)));
+                    }
+
+                    preventRecalculating = false;
+
+                    data.component.updateData(data.dataField, newValue);
+                }
+            });
+
+            return $content;
+        } },
+        { dataField: 'height', colSpan: 6, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) }, template: (data) => {
+            const $content = $('<div>').addClass('dx-fix-ratio-container');
+            const $heightEditor = $('<div>').appendTo($content);
+
+            heightEditor = module.editorInstance._createComponent($heightEditor, TextBox, {
+                onValueChanged: (e) => {
+                    const newValue = parseInt(e.value);
+                    const oldWidth = parseInt(widthEditor.option('value'));
+
+                    if(keepRatio && oldWidth && !preventRecalculating) {
+                        preventRecalculating = true;
+                        widthEditor.option('value', Math.round(newValue * oldWidth / parseInt(e.previousValue)));
+                    }
+
+                    preventRecalculating = false;
+
+                    data.component.updateData(data.dataField, newValue);
+                }
+            });
+
+            const $ratioEditor = $('<div>').appendTo($content);
+
+            module.editorInstance._createComponent($ratioEditor, ButtonGroup, {
+                items: [{
+                    icon: 'link',
+                    value: true,
+                }],
+                keyExpr: 'value',
+                selectionMode: 'multiple',
+                onSelectionChanged: (e) => {
+                    keepRatio = !!e.component.option('selectedItems').length;
+                }
+                // cssClass: 'dx-fix-ratio-button'
+            });
+
+            return $content;
+        } },
+        { dataField: 'alt', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
+    ];
+
+    if(imageUploadingOption?.enabled) {
+        resultFormItems = [
+            {
+                itemType: 'tabbed',
+                tabs: [{
+                    title: 'Select file', // localization
+                    items: selectFileItems
+                }, {
+                    title: 'Specify URL', // localization
+                    colCount: 11,
+                    items: specifyURLItems
+                }]
+            }
+        ];
+    } else {
+        resultFormItems = specifyURLItems;
+    }
+
+    return resultFormItems;
 }
 
 function prepareColorClickHandler(module, name) {

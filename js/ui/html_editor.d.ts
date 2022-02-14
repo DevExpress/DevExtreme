@@ -104,6 +104,12 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     tableContextMenu?: dxHtmlEditorTableContextMenu;
     /**
      * @docid
+     * @default null
+     * @public
+     */
+    imageUploading?: dxHtmlEditorImageUploading;
+    /**
+     * @docid
      * @hidden false
      * @public
      */
@@ -386,6 +392,26 @@ export interface dxHtmlEditorTableResizing {
   */
  enabled?: boolean;
 }
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+ export interface dxHtmlEditorImageUploading {
+  /**
+   * @docid
+   * @default '/'
+   * @public
+   */
+  uploadUrl?: string;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+  enabled?: boolean;
+ }
 
 /**
  * @docid
