@@ -237,6 +237,12 @@ function setDocumentStyles(doc, styles) {
     }
 }
 
+function addNewPage(doc) {
+    doc.addPage();
+
+    resetDocBorderWidth(doc);
+}
+
 function getDocBorderWidth(doc) {
     // The 'getLineWidth' method was implemented in 2.5.0 version - https://github.com/parallax/jsPDF/pull/3324
     if(isDefined(doc.getLineWidth)) {
@@ -255,6 +261,12 @@ function setDocBorderWidth(doc, width) {
     }
 }
 
+function resetDocBorderWidth(doc) {
+    if(!isDefined(doc.getLineWidth)) {
+        doc.__borderWidth = null;
+    }
+}
+
 function clipOutsideRectContent(doc, x, y, w, h) {
     doc.moveTo(roundToThreeDecimals(x), roundToThreeDecimals(y)); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#moveTo - Begin a new subpath by moving the current point to coordinates (x, y)
     doc.lineTo(roundToThreeDecimals(x + w), roundToThreeDecimals(y)); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#lineTo - Append a straight line segment from the current point to the point (x, y)
@@ -264,4 +276,4 @@ function clipOutsideRectContent(doc, x, y, w, h) {
     doc.discardPath(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#discardPath - Consumes the current path without any effect. Mainly used in combination with clip or clipEvenOdd.
 }
 
-export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, roundToThreeDecimals };
+export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, roundToThreeDecimals, addNewPage };
