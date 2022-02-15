@@ -5221,6 +5221,64 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             // assert
             assert.deepEqual(dataGrid.getSelectedRowKeys(), [3, 4], 'selected keys after selecting with shift for the second time');
         });
+
+        QUnit.test(`${scrollingMode} - Rows should be selected correctly with Shift when grouping is enabled (T1059242)`, function(assert) {
+            // arrange
+            const getData = function() {
+                const items = [];
+                for(let i = 0; i < 100; i++) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`,
+                        category: Math.floor((i + 1) / 20)
+                    });
+                }
+                return items;
+            };
+
+            const dataGrid = createDataGrid({
+                dataSource: getData(),
+                keyExpr: 'id',
+                remoteOperations: true,
+                scrolling: {
+                    mode: scrollingMode.toLowerCase(),
+                    useNative: false
+                },
+                selection: {
+                    mode: 'multiple',
+                    showCheckBoxesMode: 'always'
+                },
+                height: 400,
+                columns: ['id', 'name', {
+                    dataField: 'category',
+                    groupIndex: 0
+                }]
+            });
+
+            this.clock.tick(300);
+
+            // act
+            $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(1)').trigger('dxclick');
+
+            // assert
+            assert.deepEqual(dataGrid.getSelectedRowKeys(), [2], 'selected key');
+
+            // act
+            dataGrid.getScrollable().scrollTo({ top: 1500 });
+            this.clock.tick(300);
+            if(scrollingMode === 'Infinite') {
+                dataGrid.getScrollable().scrollTo({ top: 1500 });
+                this.clock.tick(300);
+                dataGrid.getScrollable().scrollTo({ top: 1500 });
+                this.clock.tick(300);
+            }
+            const pointer = pointerMock($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(9)'));
+            pointer.start({ shiftKey: true }).down().up();
+            this.clock.tick(300);
+
+            // assert
+            assert.deepEqual(dataGrid.getSelectedRowKeys(), [2, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40], 'selected keys after scroll down');
+        });
     });
 });
 
