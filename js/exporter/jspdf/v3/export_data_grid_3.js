@@ -3,9 +3,9 @@ import { extend } from '../../../core/utils/extend';
 import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
-import { generateRowsInfo } from './rows_generator';
+import { generateRowsInfo, getBaseTableStyle } from './rows_generator';
 import { splitByPages } from './rows_splitting';
-import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
+import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, addNewPage } from './draw_utils';
 import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils_v3';
 
 // TODO: check names with techwritters
@@ -32,6 +32,11 @@ function _getFullOptions(doc, options) {
         fullOptions.margin = toPdfUnit(doc, 40);
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
+
+    const tableStyle = getBaseTableStyle();
+    fullOptions.tableBorderWidth = fullOptions.tableBorderWidth ?? tableStyle.borderWidth;
+    fullOptions.tableBorderColor = fullOptions.tableBorderColor ?? tableStyle.borderColor;
+
     return fullOptions;
 }
 
@@ -195,7 +200,7 @@ function exportDataGrid(doc, dataGrid, options) {
 
             rectsByPages.forEach((pdfCellsInfo, index) => {
                 if(index > 0) {
-                    doc.addPage();
+                    addNewPage(doc);
                 }
 
                 drawCellsContent(doc, options.customDrawCell, pdfCellsInfo, docStyles);
@@ -205,7 +210,9 @@ function exportDataGrid(doc, dataGrid, options) {
                 const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
                 if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
                     const tableRect = calculateTableSize(doc, pdfCellsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
-                    drawGridLines(doc, tableRect, docStyles);
+                    const borderWidth = options.tableBorderWidth;
+                    const borderColor = options.tableBorderColor;
+                    drawGridLines(doc, tableRect, { borderWidth, borderColor }, docStyles);
                 }
             });
 

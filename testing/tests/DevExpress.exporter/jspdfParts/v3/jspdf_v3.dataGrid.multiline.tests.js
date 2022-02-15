@@ -19,6 +19,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -47,6 +48,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -74,6 +76,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -103,6 +106,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -131,6 +135,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -163,6 +168,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -192,6 +198,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -220,6 +227,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -250,6 +258,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,56',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -279,6 +288,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,56',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -313,6 +323,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,80',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -343,6 +354,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -372,6 +384,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,80',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -403,6 +416,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -433,6 +447,7 @@ const JSPdfMultilineTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -470,10 +485,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -512,10 +527,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -553,10 +568,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -597,10 +612,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -640,10 +655,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -686,10 +701,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -730,10 +745,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,56',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -773,10 +788,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -819,10 +834,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -864,10 +879,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -912,10 +927,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,80',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,80',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -958,10 +973,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1003,10 +1018,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,90',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1051,10 +1066,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,113.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,113.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1098,10 +1113,10 @@ const JSPdfMultilineTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,113.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,113.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];

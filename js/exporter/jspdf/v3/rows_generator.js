@@ -32,7 +32,7 @@ import { toPdfUnit } from './pdf_utils_v3';
 // ]
 
 const defaultStyles = {
-    base: { font: { size: 10 }, borderColor: '#979797' },
+    base: { font: { size: 10 }, borderWidth: 0.5, borderColor: '#979797' },
     header: { textColor: '#979797' },
     group: { },
     data: { },
@@ -135,6 +135,10 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
     return result;
 }
 
+function getBaseTableStyle() {
+    return defaultStyles['base'];
+}
+
 function getPdfCellStyle(rowType, cellStyle) {
     const styles = Object.assign({}, defaultStyles['base'], defaultStyles[rowType]);
 
@@ -157,4 +161,4 @@ function getFormattedValue(value, format) {
     return value?.toString();
 }
 
-export { generateRowsInfo };
+export { generateRowsInfo, getBaseTableStyle };

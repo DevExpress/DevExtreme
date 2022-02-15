@@ -20,6 +20,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,40,515.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -49,6 +50,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,40,515.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -77,6 +79,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,40,515.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -105,6 +108,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,40,761.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -133,6 +137,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -162,6 +167,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -190,6 +196,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -219,6 +226,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -247,6 +255,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,841.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -276,6 +285,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,841.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -304,6 +314,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -332,6 +343,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -360,6 +372,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,821.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -388,6 +401,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -416,6 +430,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -444,6 +459,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,821.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -472,6 +488,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -500,6 +517,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -528,6 +546,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,831.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -556,6 +575,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -584,6 +604,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -612,6 +633,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,831.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -640,6 +662,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,50,40,505.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -668,6 +691,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,50,40,505.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -696,6 +720,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,50,40,751.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -724,6 +749,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -752,6 +778,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -780,6 +807,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,831.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -808,6 +836,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,565.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -836,6 +865,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,565.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -864,6 +894,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,811.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -892,6 +923,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,565.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -920,6 +952,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,565.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -948,6 +981,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,811.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -976,6 +1010,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1004,6 +1039,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1032,6 +1068,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,821.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1062,6 +1099,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1091,6 +1129,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1120,6 +1159,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,831.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1149,6 +1189,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1178,6 +1219,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1207,6 +1249,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,821.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1237,6 +1280,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1265,6 +1309,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1293,6 +1338,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,821.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1321,6 +1367,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,50,515.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1349,6 +1396,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,50,515.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1377,6 +1425,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,50,761.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1405,6 +1454,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,595.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1433,6 +1483,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,595.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1461,6 +1512,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,841.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1489,6 +1541,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1517,6 +1570,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1545,6 +1599,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,821.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1573,6 +1628,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1601,6 +1657,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1629,6 +1686,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,821.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1657,6 +1715,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1685,6 +1744,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1713,6 +1773,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,831.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1741,6 +1802,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1769,6 +1831,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,585.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1797,6 +1860,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,831.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1826,6 +1890,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,40,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1854,6 +1919,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,40,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1882,6 +1948,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,40,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1910,6 +1977,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1938,6 +2006,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1966,6 +2035,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1994,6 +2064,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2022,6 +2093,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2050,6 +2122,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2078,6 +2151,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2106,6 +2180,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2134,6 +2209,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2162,6 +2238,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2190,6 +2267,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2218,6 +2296,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2246,6 +2325,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2274,6 +2354,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2302,6 +2383,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2330,6 +2412,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,50,40,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2358,6 +2441,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,50,40,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2386,6 +2470,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,50,40,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2414,6 +2499,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2442,6 +2528,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2470,6 +2557,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2498,6 +2586,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2526,6 +2615,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2554,6 +2644,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2582,6 +2673,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2610,6 +2702,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2638,6 +2731,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2666,6 +2760,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2694,6 +2789,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2722,6 +2818,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,20,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2750,6 +2847,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2778,6 +2876,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2806,6 +2905,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2835,6 +2935,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2864,6 +2965,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,575.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2893,6 +2995,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,821.89,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2921,6 +3024,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,50,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2949,6 +3053,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,50,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2977,6 +3082,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,40,50,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3005,6 +3111,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3033,6 +3140,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3061,6 +3169,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3089,6 +3198,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3117,6 +3227,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3145,6 +3256,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3173,6 +3285,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3201,6 +3314,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3229,6 +3343,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3257,6 +3372,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3285,6 +3401,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3313,6 +3430,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,10,20,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3341,6 +3459,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3369,6 +3488,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -3397,6 +3517,7 @@ const JSPdfPageMarginsTests = {
                     'setDrawColor,#979797',
                     'rect,0,10,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
