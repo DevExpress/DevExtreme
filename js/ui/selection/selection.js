@@ -113,7 +113,7 @@ export default Class.inherit({
         const items = this.options.plainItems();
         const item = items[itemIndex];
         let deferred;
-        const focusedItemNotInLoadedRange = this.options.allowLoadByRange && !items.filter(it => it.loadIndex === this._focusedItemIndex).length;
+        const focusedItemNotInLoadedRange = this.options.allowLoadByRange?.() && !items.filter(it => it.loadIndex === this._focusedItemIndex).length;
 
         if(!this.isSelectable() || !this.isDataItem(item)) {
             return false;
