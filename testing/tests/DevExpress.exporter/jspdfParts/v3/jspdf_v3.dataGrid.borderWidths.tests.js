@@ -40,7 +40,7 @@ const JSPdfBorderWidthsTests = {
                     'text,f1_3,225,87.25,',
                     'setLineWidth,1.5',
                     'setDrawColor,#979797',
-                    'rect,50,50,260,48',
+                    'rect,50,55,260,43',
                     'setFontSize,16',
                     'setLineWidth,0.200025',
                     'setDrawColor,#000000'
