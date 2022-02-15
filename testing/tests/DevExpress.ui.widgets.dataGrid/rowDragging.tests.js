@@ -689,6 +689,30 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         assert.equal(fixedScrollable._correctItemPoints.callCount, 1, '_correctItemPoints for fixed sortable is called');
     });
 
+    QUnit.test('_unsubscribeFromSourceScroll should be called after drag (T1063579)', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+        rowsView.height(50);
+
+        const $sortable = $testElement.find('.dx-sortable');
+        const sortable = $sortable.eq(0).dxSortable('instance');
+        sinon.spy(sortable, '_unsubscribeFromSourceScroll');
+        sinon.spy(sortable, '_subscribeToSourceScroll');
+
+        // act
+        const pointer = pointerMock(rowsView.getCellElement(0, 0)).start().down().move(0, 70);
+        // assert
+        assert.equal(sortable._subscribeToSourceScroll.callCount, 1, 'subscribe');
+
+        // act
+        pointer.up();
+        // assert
+        assert.equal(sortable._unsubscribeFromSourceScroll.callCount, 1, 'unsubscribe');
+    });
+
     // T830034
     QUnit.test('Placeholder should not be wider than grid if horizontal scroll exists', function(assert) {
     // arrange
