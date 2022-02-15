@@ -121,6 +121,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
 
         _getSelectionConfig: function() {
             const dataController = this._dataController;
+            const columnsController = this.getController('columns');
             const selectionOptions = this.option('selection') || {};
             const deferred = selectionOptions.deferred;
             const scrollingMode = this.option('scrolling.mode');
@@ -135,7 +136,10 @@ const SelectionController = gridCore.Controller.inherit((function() {
                 maxFilterLengthInRequest: selectionOptions.maxFilterLengthInRequest,
                 selectionFilter: this.option('selectionFilter'),
                 ignoreDisabledItems: true,
-                allowLoadByRange: virtualPaging && !legacyScrollingMode && allowSelectAll && !deferred,
+                allowLoadByRange: function() {
+                    const hasGroupColumns = columnsController.getGroupColumns().length > 0;
+                    return virtualPaging && !legacyScrollingMode && !hasGroupColumns && allowSelectAll && !deferred;
+                },
                 key: function() {
                     return dataController?.key();
                 },
