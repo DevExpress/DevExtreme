@@ -10,16 +10,15 @@ import {
   OneWay,
   TwoWay,
   Consumer,
-  InternalState,
   JSXTemplate,
 } from '@devextreme-generator/declarations';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
 import {
-  KeyExprPlugin, VisibleRows, VisibleColumns,
+  VisibleRows, VisibleColumns,
 } from '../data_grid_light';
 import {
-  KeyExpr, Row, Key, Column, RowTemplateProps,
+  Row, Key, Column, RowTemplateProps,
 } from '../types';
 import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
@@ -49,23 +48,13 @@ export class MasterDetailProps {
   view: viewFunction,
 })
 
-export class MasterDetail extends JSXComponent(MasterDetailProps) {
+export class MasterDetail extends JSXComponent<MasterDetailProps, 'template'>(MasterDetailProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
-
-  @InternalState()
-  keyExpr: KeyExpr = '';
 
   @Effect()
   setMasterDetailTemplate(): void {
     this.plugins.set(MasterDetailTemplate, this.props.template);
-  }
-
-  @Effect()
-  watchKeyExpr(): () => void {
-    return this.plugins.watch(KeyExprPlugin, (keyExpr) => {
-      this.keyExpr = keyExpr;
-    });
   }
 
   @Effect()

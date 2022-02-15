@@ -18,30 +18,15 @@ export const viewFunction = (viewModel: TableContent): JSX.Element => (
       <Table>
         <Fragment>
           {
-          viewModel.props.dataSource.map((item, rowIndex) => {
-            const { template: Template } = item;
-
-            return (
-              Template
-                ? (
-                  <Template
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={rowIndex}
-                    row={item}
-                    rowIndex={rowIndex}
-                  />
-                )
-                : (
-                  <DataRow
-                  // eslint-disable-next-line react/no-array-index-key
-                    key={rowIndex}
-                    row={item}
-                    rowIndex={rowIndex}
-                    columns={viewModel.props.columns}
-                  />
-                )
-            );
-          })
+          viewModel.props.dataSource.map((item, rowIndex) => (
+            <DataRow
+              // eslint-disable-next-line react/no-array-index-key
+              key={rowIndex}
+              row={item}
+              rowIndex={rowIndex}
+              columns={viewModel.props.columns}
+            />
+          ))
           }
         </Fragment>
       </Table>

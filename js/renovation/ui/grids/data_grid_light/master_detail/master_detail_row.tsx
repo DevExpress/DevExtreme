@@ -1,5 +1,12 @@
 import {
-  Component, JSXComponent, ComponentBindings, OneWay, Effect, InternalState, Consumer, JSXTemplate,
+  Component,
+  JSXComponent,
+  ComponentBindings,
+  OneWay,
+  Effect,
+  InternalState,
+  Consumer,
+  JSXTemplate,
 } from '@devextreme-generator/declarations';
 import { PluginsContext, Plugins } from '../../../../utils/plugin/context';
 import { Row, RowTemplateProps } from '../types';
@@ -8,7 +15,7 @@ import { MasterDetailTemplate } from './plugins';
 import { VisibleColumns } from '../data_grid_light';
 
 export const viewFunction = (viewModel: MasterDetailRow): JSX.Element => {
-  const { template: Template, colSpan } = viewModel;
+  const { masterDetailRowTemplate: MasterDetailRowTemplate, colSpan } = viewModel;
   const {
     row,
     rowIndex,
@@ -16,7 +23,7 @@ export const viewFunction = (viewModel: MasterDetailRow): JSX.Element => {
   return (
     <RowBase row={row}>
       <td className="dx-cell-focus-disabled dx-master-detail-cell" colSpan={colSpan}>
-        { Template && <Template row={row} rowIndex={rowIndex} /> }
+        { MasterDetailRowTemplate && <MasterDetailRowTemplate row={row} rowIndex={rowIndex} /> }
       </td>
     </RowBase>
   );
@@ -47,6 +54,10 @@ export class MasterDetailRow extends JSXComponent(MasterDetailRowProps) {
 
   @InternalState()
   colSpan = 1;
+
+  get masterDetailRowTemplate(): JSXTemplate<RowTemplateProps> | undefined {
+    return this.template;
+  }
 
   @Effect()
   updateColSpan(): () => void {

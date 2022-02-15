@@ -13,7 +13,7 @@ describe('DataRow', () => {
     it('default render with template', () => {
       const viewProps = {
         props: new MasterDetailRowProps(),
-        template: () => <div>Some value</div>,
+        masterDetailRowTemplate: () => <div>Some value</div>,
         colSpan: 3,
       } as Partial<MasterDetailRow>;
 
@@ -40,7 +40,7 @@ describe('DataRow', () => {
       masterDetailRow.plugins.set(MasterDetailTemplate, template);
       masterDetailRow.updateTemplate();
 
-      expect(masterDetailRow.template).toEqual(template);
+      expect(masterDetailRow.masterDetailRowTemplate).toEqual(template);
     });
 
     it('should add dx-master-detail-row class', () => {

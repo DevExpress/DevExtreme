@@ -1,24 +1,37 @@
 import {
-  Component, JSXComponent, ComponentBindings, OneWay, Effect, Consumer,
+  Component, JSXComponent, ComponentBindings, OneWay, Effect, Consumer, JSXTemplate,
 } from '@devextreme-generator/declarations';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
-import { Column, Row } from '../types';
+import { Column, Row, RowTemplateProps } from '../types';
 import { DataCell } from './data_cell';
 import { RowBase, RowClassesGetter } from './row_base';
 
-export const viewFunction = (viewModel: DataRow): JSX.Element => (
-  <RowBase row={viewModel.props.row}>
-    {viewModel.props.columns.map((column, index) => (
-      <DataCell
-        // eslint-disable-next-line react/no-array-index-key
-        key={index}
-        columnIndex={index}
-        column={column}
-        row={viewModel.props.row}
-      />
-    ))}
-  </RowBase>
-);
+export const viewFunction = (viewModel: DataRow): JSX.Element => {
+  const { rowTemplate: RowTemplate } = viewModel;
+  const { row, columns, rowIndex } = viewModel.props;
+
+  return (
+    RowTemplate
+      ? (
+        <RowTemplate
+          row={row}
+          rowIndex={rowIndex}
+        />
+      ) : (
+        <RowBase row={row}>
+          {columns.map((column, index) => (
+            <DataCell
+            // eslint-disable-next-line react/no-array-index-key
+              key={index}
+              columnIndex={index}
+              column={column}
+              row={row}
+            />
+          ))}
+        </RowBase>
+      )
+  );
+};
 
 @ComponentBindings()
 export class DataRowProps {
@@ -42,6 +55,10 @@ export class DataRowProps {
 export class DataRow extends JSXComponent(DataRowProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
+
+  get rowTemplate(): JSXTemplate<RowTemplateProps> | undefined {
+    return this.props.row.template;
+  }
 
   @Effect()
   extendDataRowClasses(): () => void {

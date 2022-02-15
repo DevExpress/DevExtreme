@@ -8,7 +8,7 @@ import {
   MasterDetail, MasterDetailProps, viewFunction as MasterDetailView,
 } from '../master_detail';
 import {
-  KeyExprPlugin, VisibleColumns, VisibleRows,
+  VisibleColumns, VisibleRows,
 } from '../../data_grid_light';
 import { GetterExtender } from '../../../../../utils/plugin/getter_extender';
 import { MasterDetailRow } from '../master_detail_row';
@@ -29,16 +29,6 @@ describe('Master Detail', () => {
   });
 
   describe('Effects', () => {
-    describe('watchKeyExpr', () => {
-      it('should update keyExpr', () => {
-        const masterDetail = new MasterDetail({});
-        masterDetail.plugins.set(KeyExprPlugin, 'some someId');
-        masterDetail.watchKeyExpr();
-
-        expect(masterDetail.keyExpr).toEqual('some someId');
-      });
-    });
-
     describe('setMasterDetailTemplate', () => {
       it('should set the master detail template', () => {
         const masterDetailTemplate = () => <div>Some value</div>;
@@ -55,6 +45,7 @@ describe('Master Detail', () => {
       it('should add expand column', () => {
         const masterDetail = new MasterDetail({
           enabled: true,
+          template: () => (<div />),
         });
         masterDetail.addVisibleColumnsHandler();
 
@@ -68,6 +59,7 @@ describe('Master Detail', () => {
       it('should not add expand column when enabled property is false', () => {
         const masterDetail = new MasterDetail({
           enabled: false,
+          template: () => (<div />),
         });
         masterDetail.addVisibleColumnsHandler();
 
@@ -78,7 +70,7 @@ describe('Master Detail', () => {
 
     describe('addPluginMethods', () => {
       it('should set methods', () => {
-        const masterDetail = new MasterDetail({});
+        const masterDetail = new MasterDetail({ template: () => (<div />) });
         masterDetail.addPluginMethods();
 
         expect(masterDetail.plugins.getValue(SetExpanded)).toBe(masterDetail.setExpanded);
@@ -92,8 +84,8 @@ describe('Master Detail', () => {
       it('should work', () => {
         const masterDetail = new MasterDetail({
           expandedRowKeys: [2, 3],
+          template: () => (<div />),
         });
-        masterDetail.keyExpr = 'someId';
 
         expect(masterDetail.isExpanded(1)).toEqual(false);
         expect(masterDetail.isExpanded(2)).toEqual(true);
@@ -106,8 +98,8 @@ describe('Master Detail', () => {
       it('should work', () => {
         const masterDetail = new MasterDetail({
           expandedRowKeys: [],
+          template: () => (<div />),
         });
-        masterDetail.keyExpr = 'someId';
 
         masterDetail.setExpanded(1, true);
         masterDetail.setExpanded(2, true);
@@ -123,6 +115,7 @@ describe('Master Detail', () => {
         it('should return original visibleRows', () => {
           const masterDetail = new MasterDetail({
             expandedRowKeys: [],
+            template: () => (<div />),
           });
 
           expect(masterDetail.processVisibleRows(visibleRows)).toEqual(visibleRows);
@@ -131,6 +124,7 @@ describe('Master Detail', () => {
         it('should return visibleRows with master detail row', () => {
           const masterDetail = new MasterDetail({
             expandedRowKeys: [1],
+            template: () => (<div />),
           });
 
           expect(masterDetail.processVisibleRows(visibleRows)).toEqual([
@@ -147,6 +141,7 @@ describe('Master Detail', () => {
         it('should return visibleRows without master detail row', () => {
           const masterDetail = new MasterDetail({
             expandedRowKeys: [],
+            template: () => (<div />),
           });
 
           expect(masterDetail.processVisibleRows([
