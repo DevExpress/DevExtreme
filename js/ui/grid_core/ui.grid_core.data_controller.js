@@ -939,13 +939,13 @@ export const dataControllerModule = {
                     return null;
                 },
                 _applyFilter: function() {
-                    const that = this;
-                    const dataSource = that._dataSource;
+                    const dataSource = this._dataSource;
 
                     if(dataSource) {
                         dataSource.pageIndex(0);
-
-                        return that.reload().done(that.pageChanged.fire.bind(that.pageChanged));
+                        return this.reload().done(() => {
+                            this.pageChanged.fire();
+                        });
                     }
                 },
                 filter: function(filterExpr) {
