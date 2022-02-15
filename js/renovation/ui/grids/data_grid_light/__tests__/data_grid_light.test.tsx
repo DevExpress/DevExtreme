@@ -6,7 +6,7 @@ import {
   TotalCount, KeyExprPlugin, Items,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
-import { generateData, generateItems } from './test_data';
+import { generateData, generateRows } from './test_data';
 
 describe('DataGridLight', () => {
   describe('View', () => {
@@ -120,7 +120,7 @@ describe('DataGridLight', () => {
       it('should update visibleRows', () => {
         grid.updateVisibleRows();
 
-        const data = generateItems(10);
+        const data = generateRows(10);
 
         const callback = watchMock.mock.calls[0][1];
         callback(data);
@@ -134,13 +134,13 @@ describe('DataGridLight', () => {
       const grid = new DataGridLight({});
       grid.plugins = {
         watch: watchMock,
-        getValue: () => generateItems(2),
+        getValue: () => generateRows(2),
       } as any;
 
       it('should update visibleRows by visibleItems', () => {
         grid.updateVisibleRowsByVisibleItems();
 
-        const data = generateItems(2);
+        const data = generateRows(2);
 
         const callback = watchMock.mock.calls[0][1];
         callback(data);

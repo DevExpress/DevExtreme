@@ -66,11 +66,11 @@ export class ExpandColumn extends JSXComponent<ExpandColumnProps, 'data'>(Expand
     const target = e.target as Element;
 
     if (target.closest('.dx-datagrid-expand')) {
-      this.invertExpanded(this.props.data[this.keyExpr]);
+      this.toggleExpanded(this.props.data[this.keyExpr]);
     }
   }
 
-  invertExpanded(key: Key): void {
+  toggleExpanded(key: Key): void {
     this.plugins.callAction(SetExpanded, key, !this.isExpanded);
   }
 }

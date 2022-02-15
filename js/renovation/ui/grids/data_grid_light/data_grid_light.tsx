@@ -97,7 +97,7 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   @Effect()
   updateVisibleRowsByVisibleItems(): () => void {
     return this.plugins.watch(VisibleItems, () => {
-      this.visibleRows = this.plugins.getValue(VisibleRows) as Row[];
+      this.visibleRows = this.plugins.getValue(VisibleRows) ?? [];
     });
   }
 
@@ -116,9 +116,9 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   @Effect()
   setVisibleRowsByVisibleItems(): () => void {
     return this.plugins.extend(VisibleRows, -1, () => {
-      const visibleItems = this.plugins.getValue(VisibleItems) as RowData[];
+      const visibleItems = this.plugins.getValue(VisibleItems) ?? [];
 
-      return this.processVisibleItems(visibleItems);
+      return this.generateDataRows(visibleItems);
     });
   }
 
@@ -154,11 +154,11 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     }));
   }
 
-  processVisibleItems(visibleItems: RowData[]): Row[] {
-    const keyExpr = this.props.keyExpr as string;
+  generateDataRows(visibleItems: RowData[]): Row[] {
+    const { keyExpr } = this.props;
 
     return visibleItems.map((data) => ({
-      key: data[keyExpr],
+      key: keyExpr ? data[keyExpr] : data,
       data,
       rowType: 'data',
     }));

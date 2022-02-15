@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import {
   SetExpanded, IsExpanded, MasterDetailTemplate,
 } from '../plugins';
-import { generateItems } from '../../__tests__/test_data';
+import { generateRows } from '../../__tests__/test_data';
 import {
   MasterDetail, MasterDetailProps, viewFunction as MasterDetailView,
 } from '../master_detail';
@@ -110,7 +110,7 @@ describe('Master Detail', () => {
       });
 
       describe('processVisibleRows', () => {
-        const visibleRows = generateItems(2);
+        const visibleRows = generateRows(2);
 
         it('should return original visibleRows', () => {
           const masterDetail = new MasterDetail({
