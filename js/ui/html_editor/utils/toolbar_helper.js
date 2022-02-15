@@ -327,8 +327,8 @@ function imageFormItems(module, imageUploadingOption) {
     let heightEditor;
     let preventRecalculating = false;
     let resultFormItems;
-    let useBase64 = !imageUploadingOption.enabled;
-    const useUrlUploading = imageUploadingOption.enabled && imageUploadingOption.uploadUrl;
+    let useBase64 = !imageUploadingOption?.enabled;
+    const useUrlUploading = imageUploadingOption?.enabled && imageUploadingOption?.uploadUrl;
 
     const selectFileTabItems = [
         {
