@@ -230,10 +230,17 @@ function prepareImageHandler(module) {
             formData.src = formData.imageSrc;
             delete formData.imageSrc;
 
+            const imgElement = module.quill.getLeaf(module.editorInstance.getSelection().index)[0].domNode;
+            if(imgElement && (!formData.width && !formData.height)) {
+                formData.width = formData.width || $(imgElement).width();
+                formData.height = formData.height || $(imgElement).height();
+            }
+
             if(!imageSrc || defaultIndex === 0) {
                 module.quill.setSelection(defaultIndex + 1, 0, SILENT_ACTION);
             }
         }
+
 
         const formatIndex = embedFormatIndex(module);
 
@@ -315,12 +322,12 @@ function defaultPasteIndex(module) {
 
 function imageFormItems(module, imageUploadingOption) {
     const editorInstance = module.editorInstance;
-    let keepRatio;
+    let keepRatio = true;
     let widthEditor;
     let heightEditor;
     let preventRecalculating = false;
     let resultFormItems;
-    let useBase64 = true;
+    let useBase64 = !imageUploadingOption.enabled;
     const useUrlUploading = imageUploadingOption.enabled && imageUploadingOption.uploadUrl;
 
     const selectFileTabItems = [
@@ -338,14 +345,14 @@ function imageFormItems(module, imageUploadingOption) {
                     uploadUrl: imageUploadingOption.uploadUrl,
                     uploadMode: 'instantly',
                     onValueChanged: (e) => {
-                        if(!useUrlUploading) {
+                        if(!useUrlUploading || useBase64) {
                             const range = module.quill.getSelection();
                             module.quill.getModule('uploader').upload(range, e.value);
                             module.editorInstance._formDialog.hide({ file: e.value[0] }, e.event);
                         }
                     },
                     onUploaded: (e) => {
-                        if(useUrlUploading) {
+                        if(useUrlUploading && !useBase64) {
                             const imageUrl = imageUploadingOption.uploadedUrl + e.file.name;
                             // module.editorInstance._formDialog.hide({ file: e.file.name, url: imageUrl }, e.event);
                             // data.component.updateData('imageUrl', imageUrl);
@@ -377,6 +384,7 @@ function imageFormItems(module, imageUploadingOption) {
             const $content = $('<div>');
 
             widthEditor = module.editorInstance._createComponent($content, TextBox, {
+                value: data.component.option('formData')[data.dataField],
                 onValueChanged: (e) => {
                     const newValue = parseInt(e.value);
                     const oldHeight = parseInt(heightEditor.option('value'));
@@ -399,6 +407,7 @@ function imageFormItems(module, imageUploadingOption) {
             const $heightEditor = $('<div>').appendTo($content);
 
             heightEditor = module.editorInstance._createComponent($heightEditor, TextBox, {
+                value: data.component.option('formData')[data.dataField],
                 onValueChanged: (e) => {
                     const newValue = parseInt(e.value);
                     const oldWidth = parseInt(widthEditor.option('value'));
@@ -419,10 +428,12 @@ function imageFormItems(module, imageUploadingOption) {
             module.editorInstance._createComponent($ratioEditor, ButtonGroup, {
                 items: [{
                     icon: 'link',
-                    value: true,
+                    value: 'keepRatio',
                 }],
+                hint: 'Keep ratio',
                 keyExpr: 'value',
                 selectionMode: 'multiple',
+                selectedItemKeys: ['keepRatio'],
                 onSelectionChanged: (e) => {
                     keepRatio = !!e.component.option('selectedItems').length;
                 }
