@@ -285,8 +285,7 @@ const Sortable = Draggable.inherit({
     },
 
     dragEnd: function(sourceEvent) {
-        sourceEvent.fromComponent._unsubscribeFromSourceScroll?.();
-        sourceEvent.toComponent._unsubscribeFromSourceScroll?.();
+        this._unsubscribeFromSourceScroll();
 
         const $sourceElement = this._getSourceElement();
         const sourceDraggable = this._getSourceDraggable();
