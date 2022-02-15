@@ -2013,7 +2013,36 @@ QUnit.test('Chart with large scale break', function(assert) {
     }, container);
 
     assert.strictEqual(container.find('.dxc-arg-breaks path').length, 3);
+});
 
+// T1062891
+QUnit.test('Chart with large scale break. No ticks in break', function(assert) {
+    const container = $('#chartContainer');
+
+    try {
+        createChartInstance({
+            size: {
+                width: 100
+            },
+            legend: { visible: false },
+            dataSource: [{ Date: '2022-01-13T00:00:00', Open: 1770.000000 }, { Date: '2022-01-14T00:00:00', Open: 1770.000000 }, { Date: '2022-01-17T00:00:00', Open: 1800.000000 }, { Date: '2022-01-18T00:00:00', Open: 1830.000000 }, { Date: '2022-01-19T00:00:00', Open: 1870.000000 }, { Date: '2022-01-20T00:00:00', Open: 1900.000000 }, { Date: '2022-01-21T00:00:00', Open: 1930.000000 }, { Date: '2022-01-24T00:00:00', Open: 1880.000000 }, { Date: '2022-01-25T00:00:00', Open: 1810.000000 }, { Date: '2022-01-26T00:00:00', Open: 1840.000000 }],
+            commonSeriesSettings: {
+                argumentField: 'Date',
+                type: 'bar'
+            },
+            series: [{
+                valueField: 'Open'
+            }],
+            argumentAxis: {
+                argumentType: 'datetime',
+                workdaysOnly: true
+            }
+        }, container);
+
+        assert.strictEqual(container.find('.dxc-arg-breaks path').length, 0);
+    } catch(e) {
+        assert.ok(false, 'Chart created with exception');
+    }
 });
 
 QUnit.test('Dispose unused axes (T1042940)', function(assert) {
