@@ -8,7 +8,8 @@ import {
   ResizableContainer,
   viewFunction as ResizableContainerComponent,
   ResizableContainerProps,
-  calculateAdaptivityProps,
+  calculateLargeDisplayMode,
+  calculateInfoTextVisible,
 } from '../resizable_container';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 import { InternalPagerProps } from '../common/pager_props';
@@ -226,16 +227,16 @@ describe('resizable-container', () => {
           width: 300, pageSizes: 50, pages: 50, info: 0,
         });
         component.effectUpdateChildProps();
-        expect(component.infoTextVisible).toBe(false);
+        expect(component.infoTextVisible).toBe(true);
         expect(component.isLargeDisplayMode).toBe(false);
         updateComponent(component, {
-          width: 400, pageSizes: 50, pages: 50, info: 0,
+          width: 400, pageSizes: 50, pages: 50, info: 100,
         });
         component.effectUpdateChildProps();
-        expect(component.infoTextVisible).toBe(false);
+        expect(component.infoTextVisible).toBe(true);
         expect(component.isLargeDisplayMode).toBe(true);
         updateComponent(component, {
-          width: 400, pageSizes: 100, pages: 200, info: 0,
+          width: 400, pageSizes: 100, pages: 200, info: 100,
         });
         component.effectUpdateChildProps();
         expect(component.infoTextVisible).toBe(false);
@@ -480,53 +481,62 @@ describe('resizable-container', () => {
     });
   });
 
-  describe('calculateAdaptivityProps', () => {
-    function testChildProps(widths: Parameters<typeof getElementsRef>[0]) {
-      return calculateAdaptivityProps({ parent: widths.width, ...widths });
+  describe('calculateLargeDisplayMode', () => {
+    function testChildProps(widths: { width: number; pageSizes: number; pages: number }) {
+      return calculateLargeDisplayMode({ parent: widths.width, ...widths });
     }
 
     it('fit size', () => {
-      const {
-        infoTextVisible,
-        isLargeDisplayMode,
-      } = testChildProps({
-        width: 400, pageSizes: 100, info: 50, pages: 100 + 50,
+      const isLargeDisplayMode = testChildProps({
+        width: 400, pageSizes: 100, pages: 100 + 50,
       });
-      expect(infoTextVisible).toBe(true);
       expect(isLargeDisplayMode).toBe(true);
     });
 
-    it('showInfo false and infoRef null', () => {
-      const {
-        infoTextVisible,
-        isLargeDisplayMode,
-      } = testChildProps({
-        width: 400, pageSizes: 100, info: null, pages: 100,
+    it('not fit size', () => {
+      const isLargeDisplayMode = testChildProps({
+        width: 200, pageSizes: 100, pages: 100 + 50,
+      });
+      expect(isLargeDisplayMode).toBe(false);
+    });
+  });
+
+  describe('calculateInfoTextVisible', () => {
+    function testChildProps(widths: {
+      width: number;
+      pageSizes: number;
+      info: number;
+      pages: number;
+    }) {
+      return calculateInfoTextVisible({ parent: widths.width, ...widths });
+    }
+
+    it('showInfo false', () => {
+      const infoTextVisible = testChildProps({
+        width: 400, pageSizes: 100, info: 0, pages: 100,
       });
       expect(infoTextVisible).toBe(true);
-      expect(isLargeDisplayMode).toBe(true);
+    });
+
+    it('showInfo true', () => {
+      const infoTextVisible = testChildProps({
+        width: 400, pageSizes: 100, info: 100, pages: 100,
+      });
+      expect(infoTextVisible).toBe(true);
+    });
+
+    it('info text fit', () => {
+      const infoTextVisible = testChildProps({
+        width: 350, pageSizes: 100, info: 100, pages: 100,
+      });
+      expect(infoTextVisible).toBe(true);
     });
 
     it('info text not fit', () => {
-      const {
-        infoTextVisible,
-        isLargeDisplayMode,
-      } = testChildProps({
-        width: 400, pageSizes: 100, info: 300, pages: 100, // 300 + 100,
+      const infoTextVisible = testChildProps({
+        width: 250, pageSizes: 100, info: 100, pages: 100,
       });
       expect(infoTextVisible).toBe(false);
-      expect(isLargeDisplayMode).toBe(true);
-    });
-
-    it('info text not fit and isLargeDisplayMode not possible', () => {
-      const {
-        infoTextVisible,
-        isLargeDisplayMode,
-      } = testChildProps({
-        width: 400, pageSizes: 250, info: 100, pages: 100 + 250,
-      });
-      expect(infoTextVisible).toBe(false);
-      expect(isLargeDisplayMode).toBe(false);
     });
   });
 });
