@@ -140,10 +140,6 @@ fixture`Toolbar_common`
         targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
       }
 
-      await ClientFunction(() => {
-        $(targetContainerSelector).css({ backgroundColor: 'gold' });
-      }, { dependencies: { targetContainerSelector } })();
-
       await t
         .expect(await takeScreenshot(`Toolbar-with-button,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
         .ok()
