@@ -18,15 +18,12 @@ class FileManagerDialogBase extends Widget {
 
         const options = this._getDialogOptions();
 
-        const $popup = $('<div>')
-            .addClass(FILE_MANAGER_DIALOG_POPUP)
-            .appendTo(this.$element());
-
-        if(options.popupCssClass) {
-            $popup.addClass(options.popupCssClass);
-        }
+        const $popup = $('<div>').appendTo(this.$element());
 
         const popupOptions = {
+            wrapperAttr: {
+                class: `${FILE_MANAGER_DIALOG_POPUP} ${options.popupCssClass ?? ''}`
+            },
             showTitle: true,
             title: options.title,
             visible: false,
