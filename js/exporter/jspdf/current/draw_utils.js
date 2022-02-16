@@ -1,6 +1,6 @@
 import { isDefined, isObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { calculateTextHeight, toPdfUnit } from './pdf_utils_v3';
+import { calculateTextHeight, toPdfUnit } from './pdf_utils';
 
 function roundToThreeDecimals(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
