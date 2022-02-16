@@ -29,6 +29,7 @@ const ValidationMessage = Overlay.inherit({
             contentTemplate: this._renderInnerHtml,
             maxWidth: '100%',
 
+            container: this.$element(),
             target: undefined,
             mode: 'auto',
             validationErrors: undefined,

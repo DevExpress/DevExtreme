@@ -57,7 +57,7 @@ QUnit.module('tooltip integration', () => {
         const sliderTooltipOptions = sliderTooltip.option();
 
         assert.strictEqual(sliderTooltipOptions.target, sliderHandle.$element(), 'target is correct');
-        assert.strictEqual(sliderTooltipOptions.container, sliderHandle.$element(), 'container is correct');
+        assert.strictEqual(sliderTooltipOptions.container.get(0), sliderTooltip.$element().get(0), 'container is correct');
         assert.strictEqual(sliderTooltipOptions.position, initConfig.tooltip.position, 'position is correct');
         assert.strictEqual(sliderTooltipOptions.visible, initConfig.tooltip.enabled, 'visible is correct');
         assert.strictEqual(sliderTooltipOptions.format, initConfig.tooltip.format, 'format is correct');
