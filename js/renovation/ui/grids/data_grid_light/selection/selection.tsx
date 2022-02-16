@@ -10,12 +10,12 @@ import { SelectionCheckbox } from './select_checkbox';
 import { SelectAllCheckbox } from './select_all_checkbox';
 
 import {
-  KeyExprPlugin, VisibleColumns, VisibleItems, DataSource,
+  KeyExprPlugin, VisibleColumns, VisibleItems, Items,
 } from '../data_grid_light';
 import {
   Column, KeyExpr, RowData, Key,
 } from '../types';
-import { DataRowClassesGetter, DataRowPropertiesGetter } from '../widgets/data_row';
+import { RowClassesGetter, RowPropertiesGetter } from '../widgets/row_base';
 import { RowClick } from '../views/table_content';
 import {
   ClearSelection, IsSelected, SelectableCount, SelectAll, SelectedCount, SetSelected,
@@ -59,7 +59,7 @@ export class Selection extends JSXComponent(SelectionProps) {
   @Effect()
   addVisibleColumnsHandler(): (() => void) | undefined {
     if (this.props.mode !== 'none') {
-      return this.plugins.extend(VisibleColumns, 1, (columns) => {
+      return this.plugins.extend(VisibleColumns, 2, (columns) => {
         const selectColumn: Column = { cellTemplate: SelectionCheckbox };
 
         if (this.props.mode === 'multiple' && this.props.allowSelectAll) {
@@ -92,15 +92,15 @@ export class Selection extends JSXComponent(SelectionProps) {
   @Effect()
   extendDataRowAttributes(): () => void {
     return this.plugins.extend(
-      DataRowPropertiesGetter, 1,
-      (base) => (data): Record<string, unknown> => {
-        if (this.isSelected(data)) {
+      RowPropertiesGetter, 1,
+      (base) => (row): Record<string, unknown> => {
+        if (row.rowType === 'data' && this.isSelected(row.data)) {
           return {
-            ...base(data),
+            ...base(row),
             'aria-selected': true,
           };
         }
-        return base(data);
+        return base(row);
       },
     );
   }
@@ -108,23 +108,23 @@ export class Selection extends JSXComponent(SelectionProps) {
   @Effect()
   extendDataRowClasses(): () => void {
     return this.plugins.extend(
-      DataRowClassesGetter, 1,
-      (base) => (data): Record<string, boolean> => {
-        if (this.isSelected(data)) {
+      RowClassesGetter, 1,
+      (base) => (row): Record<string, boolean> => {
+        if (row.rowType === 'data' && this.isSelected(row.data)) {
           return {
-            ...base(data),
+            ...base(row),
             'dx-selection': true,
           };
         }
-        return base(data);
+        return base(row);
       },
     );
   }
 
   @Effect()
   setRowClickEvent(): void {
-    this.plugins.set(RowClick, (data) => {
-      this.invertSelected(data);
+    this.plugins.set(RowClick, (row) => {
+      this.invertSelected(row.data);
     });
   }
 
@@ -172,7 +172,7 @@ export class Selection extends JSXComponent(SelectionProps) {
   getAllItems(): RowData[] {
     return (
       this.props.selectAllMode === 'allPages'
-        ? this.plugins.getValue(DataSource)
+        ? this.plugins.getValue(Items)
         : this.plugins.getValue(VisibleItems)
     ) ?? [];
   }

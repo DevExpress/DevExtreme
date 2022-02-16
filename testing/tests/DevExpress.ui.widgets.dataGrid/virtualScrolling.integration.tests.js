@@ -1694,7 +1694,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), devices.real().android ? 1 : 0, 'scroll top is not changed');
+        assert.equal(dataGrid.getScrollable().scrollTop(), 0, 'scroll top is not changed');
     });
 
     // T838096
@@ -5221,6 +5221,118 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             // assert
             assert.deepEqual(dataGrid.getSelectedRowKeys(), [3, 4], 'selected keys after selecting with shift for the second time');
         });
+
+        QUnit.test(`${scrollingMode} - Rows should be selected correctly with Shift when grouping is enabled (T1059242)`, function(assert) {
+            // arrange
+            const getData = function() {
+                const items = [];
+                for(let i = 0; i < 100; i++) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`,
+                        category: Math.floor((i + 1) / 20)
+                    });
+                }
+                return items;
+            };
+
+            const dataGrid = createDataGrid({
+                dataSource: getData(),
+                keyExpr: 'id',
+                remoteOperations: true,
+                scrolling: {
+                    mode: scrollingMode.toLowerCase(),
+                    useNative: false
+                },
+                selection: {
+                    mode: 'multiple',
+                    showCheckBoxesMode: 'always'
+                },
+                height: 400,
+                columns: ['id', 'name', {
+                    dataField: 'category',
+                    groupIndex: 0
+                }]
+            });
+
+            this.clock.tick(300);
+
+            // act
+            $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(1)').trigger('dxclick');
+
+            // assert
+            assert.deepEqual(dataGrid.getSelectedRowKeys(), [2], 'selected key');
+
+            // act
+            dataGrid.getScrollable().scrollTo({ top: 1500 });
+            this.clock.tick(300);
+            if(scrollingMode === 'Infinite') {
+                dataGrid.getScrollable().scrollTo({ top: 1500 });
+                this.clock.tick(300);
+                dataGrid.getScrollable().scrollTo({ top: 1500 });
+                this.clock.tick(300);
+            }
+            const pointer = pointerMock($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(9)'));
+            pointer.start({ shiftKey: true }).down().up();
+            this.clock.tick(300);
+
+            // assert
+            assert.deepEqual(dataGrid.getSelectedRowKeys(), [2, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40], 'selected keys after scroll down');
+        });
+    });
+
+    QUnit.test('No redundant load calls with filter (T1063237)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 50; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const store = new ArrayStore({
+            key: 'id',
+            data: getData()
+        });
+
+        const loadSpy = sinon.spy(function(loadOptions) {
+            return store.load(loadOptions);
+        });
+
+        createDataGrid({
+            dataSource: {
+                key: store.key(),
+                load: loadSpy,
+                totalCount: function(loadOptions) {
+                    return store.totalCount(loadOptions);
+                }
+            },
+            height: 440,
+            filterValue: ['id', '>', 1],
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual'
+            },
+            paging: {
+                pageSize: 15,
+            },
+            columns: ['id', 'name']
+        });
+
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(loadSpy.callCount, 2, 'load call count');
+        assert.strictEqual(loadSpy.args[0][0].filter, undefined, 'filter not defined in the first call');
+        assert.equal(loadSpy.args[0][0].skip, 0, 'skip in the first call');
+        assert.equal(loadSpy.args[0][0].take, 15, 'take in the first call');
+        assert.notStrictEqual(loadSpy.args[1][0].filter, undefined, 'filter is defined in the second call');
+        assert.equal(loadSpy.args[1][0].skip, 0, 'skip in the second call');
+        assert.equal(loadSpy.args[1][0].take, 15, 'take in the second call');
     });
 });
 

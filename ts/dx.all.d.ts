@@ -1461,7 +1461,7 @@ declare module DevExpress.core {
    */
   export type DeepPartial<T> = T extends object
     ? {
-        [P in keyof T]?: DeepPartial<T[P]>;
+        [P in keyof T]?: T[P] extends Function ? T[P] : DeepPartial<T[P]>;
       }
     : T;
   export type DefaultOptionsRule<T> = {

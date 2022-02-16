@@ -46,6 +46,12 @@ import { DataCellTemplateProps, DateTimeCellTemplateProps, ResourceCellTemplateP
 import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from './appointment/types';
 
 @ComponentBindings()
+export class ScrollingProps {
+  @OneWay()
+  mode?: 'standard' | 'virtual';
+}
+
+@ComponentBindings()
 export class ResourceProps {
   @OneWay()
   allowMultiple?: boolean;
@@ -197,12 +203,6 @@ export class AppointmentDraggingProps {
 
   @Event()
   onRemove?: ((e: AppointmentDraggingRemoveEvent) => void);
-}
-
-@ComponentBindings()
-export class ScrollingProps {
-  @OneWay()
-  mode?: 'standard' | 'virtual';
 }
 
 @ComponentBindings()

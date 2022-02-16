@@ -20,7 +20,7 @@ export type Xor<T1, T2 = never, T3 = never, T4 = never, T5 = never, T6 = never, 
   | Seal<T9, KeysOf<T1, T2, T3, T4, T5, T6, T7, T8>>;
 
 export type DeepPartial<T> = T extends object ? {
-  [P in keyof T]?: DeepPartial<T[P]>;
+  [P in keyof T]?: T[P] extends Function ? T[P] : DeepPartial<T[P]>;
 } : T;
 
 // Omit does not exist in TS < 3.5.1

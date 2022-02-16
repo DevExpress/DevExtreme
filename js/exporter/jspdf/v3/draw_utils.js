@@ -2,8 +2,6 @@ import { isDefined, isObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { calculateTextHeight, toPdfUnit } from './pdf_utils_v3';
 
-const defaultBorderLineWidth = 0.5;
-
 function roundToThreeDecimals(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
@@ -109,11 +107,11 @@ function drawCellsLines(doc, cellsArray, docStyles) {
         });
 }
 
-function drawGridLines(doc, rect, docStyles) {
-    drawBorders(doc, rect, {}, docStyles);
+function drawGridLines(doc, rect, { borderWidth, borderColor }, docStyles) {
+    drawBorders(doc, rect, { borderWidth, borderColor }, docStyles);
 }
 
-function drawBorders(doc, rect, { borderColor, drawLeftBorder = true, drawRightBorder = true, drawTopBorder = true, drawBottomBorder = true }, docStyles) {
+function drawBorders(doc, rect, { borderWidth, borderColor, drawLeftBorder = true, drawRightBorder = true, drawTopBorder = true, drawBottomBorder = true }, docStyles) {
     if(!isDefined(rect)) {
         throw 'rect is required';
     }
@@ -121,10 +119,10 @@ function drawBorders(doc, rect, { borderColor, drawLeftBorder = true, drawRightB
     if(!drawLeftBorder && !drawRightBorder && !drawTopBorder && !drawBottomBorder) {
         return;
     } else if(drawLeftBorder && drawRightBorder && drawTopBorder && drawBottomBorder) {
-        setLinesStyles(doc, { borderColor }, docStyles);
+        setLinesStyles(doc, { borderWidth, borderColor }, docStyles);
         drawRect(doc, rect.x, rect.y, rect.w, rect.h);
     } else {
-        setLinesStyles(doc, { borderColor }, docStyles);
+        setLinesStyles(doc, { borderWidth, borderColor }, docStyles);
 
         if(drawTopBorder) {
             drawLine(doc, rect.x, rect.y, rect.x + rect.w, rect.y); // top
@@ -164,8 +162,12 @@ function setTextStyles(doc, { textColor, font }, docStyles) {
     }
 }
 
-function setLinesStyles(doc, { borderColor }, docStyles) {
-    doc.setLineWidth(toPdfUnit(doc, defaultBorderLineWidth));
+function setLinesStyles(doc, { borderWidth, borderColor }, docStyles) {
+    const currentBorderWidth = isDefined(borderWidth) ? borderWidth : docStyles.borderWidth;
+    if(currentBorderWidth !== getDocBorderWidth(doc)) {
+        setDocBorderWidth(doc, toPdfUnit(doc, currentBorderWidth));
+    }
+
     const currentBorderColor = isDefined(borderColor) ? borderColor : docStyles.borderColor;
     if(currentBorderColor !== doc.getDrawColor()) {
         callMethodWithColorParameter(doc, 'setDrawColor', currentBorderColor);
@@ -191,6 +193,7 @@ function getDocumentStyles(doc) {
     const docFont = doc.getFont();
 
     return {
+        borderWidth: getDocBorderWidth(doc),
         borderColor: doc.getDrawColor(),
         font: {
             name: docFont.fontName,
@@ -203,6 +206,7 @@ function getDocumentStyles(doc) {
 
 function setDocumentStyles(doc, styles) {
     const {
+        borderWidth,
         borderColor,
         font,
         textColor
@@ -220,12 +224,46 @@ function setDocumentStyles(doc, styles) {
         doc.setFontSize(font.size);
     }
 
+    if(getDocBorderWidth(doc) !== borderWidth) {
+        setDocBorderWidth(doc, borderWidth);
+    }
+
     if(doc.getDrawColor() !== borderColor) {
         doc.setDrawColor(borderColor);
     }
 
     if(doc.getTextColor() !== textColor) {
         doc.setTextColor(textColor);
+    }
+}
+
+function addNewPage(doc) {
+    doc.addPage();
+
+    resetDocBorderWidth(doc);
+}
+
+function getDocBorderWidth(doc) {
+    // The 'getLineWidth' method was implemented in 2.5.0 version - https://github.com/parallax/jsPDF/pull/3324
+    if(isDefined(doc.getLineWidth)) {
+        return doc.getLineWidth();
+    }
+
+    return doc.__borderWidth ?? 0.200025; // // https://github.com/parallax/jsPDF/blob/a56c882e2c139e74a9adaea0baa78fb1386cbf23/src/jspdf.js#L4946
+}
+
+function setDocBorderWidth(doc, width) {
+    doc.setLineWidth(width);
+
+    // The 'getLineWidth' method was implemented in 2.5.0 version - https://github.com/parallax/jsPDF/pull/3324
+    if(!isDefined(doc.getLineWidth)) {
+        doc.__borderWidth = width;
+    }
+}
+
+function resetDocBorderWidth(doc) {
+    if(!isDefined(doc.getLineWidth)) {
+        doc.__borderWidth = null;
     }
 }
 
@@ -238,4 +276,4 @@ function clipOutsideRectContent(doc, x, y, w, h) {
     doc.discardPath(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#discardPath - Consumes the current path without any effect. Mainly used in combination with clip or clipEvenOdd.
 }
 
-export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, roundToThreeDecimals };
+export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine, roundToThreeDecimals, addNewPage };

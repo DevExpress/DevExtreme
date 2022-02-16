@@ -184,6 +184,7 @@ describe('OverflowIndicator', () => {
         it('should return correct count', () => {
           const overflowIndicator = new OverflowIndicator({
             viewModel: defaultViewModel as any,
+            groups: [],
           });
 
           expect(overflowIndicator.data.appointmentCount)
@@ -199,6 +200,7 @@ describe('OverflowIndicator', () => {
                 ...defaultViewModel as any,
                 isCompact,
               },
+              groups: [],
             });
 
             expect(overflowIndicator.data.isCompact)
@@ -228,6 +230,7 @@ describe('OverflowIndicator', () => {
         it('should return correct value without color', () => {
           const overflowIndicator = new OverflowIndicator({
             viewModel: defaultViewModel as any,
+            groups: [],
           });
 
           expect(overflowIndicator.styles)
@@ -243,6 +246,7 @@ describe('OverflowIndicator', () => {
         it('should return correct value with color', () => {
           const overflowIndicator = new OverflowIndicator({
             viewModel: defaultViewModel as any,
+            groups: [],
           });
 
           overflowIndicator.color = '#aabbcc';
@@ -273,6 +277,7 @@ describe('OverflowIndicator', () => {
                 ...defaultViewModel as any,
                 isCompact,
               },
+              groups: [],
             });
 
             expect(overflowIndicator.text)
@@ -285,6 +290,7 @@ describe('OverflowIndicator', () => {
         it('should return correct classes in compact mode', () => {
           const overflowIndicator = new OverflowIndicator({
             viewModel: defaultViewModel as any,
+            groups: [],
           });
 
           expect(overflowIndicator.classes)
@@ -297,6 +303,7 @@ describe('OverflowIndicator', () => {
               ...defaultViewModel as any,
               isCompact: false,
             },
+            groups: [],
           });
 
           expect(overflowIndicator.classes)

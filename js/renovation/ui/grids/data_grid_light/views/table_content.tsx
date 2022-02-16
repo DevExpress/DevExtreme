@@ -5,7 +5,7 @@ import {
 
 import { Table } from '../widgets/table';
 import { DataRow } from '../widgets/data_row';
-import { Column, RowData } from '../types';
+import { Column, Row } from '../types';
 import {
   createValue, Plugins, PluginsContext,
 } from '../../../../utils/plugin/context';
@@ -17,27 +17,29 @@ export const viewFunction = (viewModel: TableContent): JSX.Element => (
     <div ref={viewModel.divRef} className="dx-datagrid-content">
       <Table>
         <Fragment>
-          {viewModel.props.dataSource.map((data, rowIndex) => (
+          {
+          viewModel.props.dataSource.map((item, rowIndex) => (
             <DataRow
               // eslint-disable-next-line react/no-array-index-key
               key={rowIndex}
-              data={data}
+              row={item}
               rowIndex={rowIndex}
               columns={viewModel.props.columns}
             />
-          ))}
+          ))
+          }
         </Fragment>
       </Table>
     </div>
   </div>
 );
 
-export const RowClick = createValue<(data: RowData) => void>();
+export const RowClick = createValue<(row: Row) => void>();
 
 @ComponentBindings()
 export class TableContentProps {
   @OneWay()
-  dataSource: Record<string, unknown>[] = [];
+  dataSource: Row[] = [];
 
   @OneWay()
   columns: Column[] = [];

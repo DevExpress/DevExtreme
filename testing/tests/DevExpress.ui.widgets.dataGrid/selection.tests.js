@@ -4306,5 +4306,32 @@ QUnit.module('Deferred selection', {
         // assert
         assert.deepEqual(this.option('selectionFilter'), [], 'selectionFilter');
     });
+
+    // T1063462
+    QUnit.test('The selectionFilter should be correctly after multiple selections', function(assert) {
+        // arrange
+        this.setupDataGrid({
+            dataSource: [
+                { id: 1, value: 1 },
+            ],
+            keyExpr: 'id',
+            columns: [
+                { dataField: 'id', dataType: 'number' },
+                { dataField: 'value', filterValue: 1, dataType: 'number' },
+            ],
+            selection: { mode: 'multiple', deferred: true }
+        });
+
+        this.clock.tick();
+
+        this.selectRows([1], true);
+        this.selectionController.selectAll();
+        this.selectionController.deselectAll();
+        this.selectRows([1], true);
+        this.deselectRows([1], true);
+
+        // assert
+        assert.deepEqual(this.option('selectionFilter'), [], 'selectionFilter is empty');
+    });
 });
 

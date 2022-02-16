@@ -189,7 +189,7 @@ describe('OrdinaryLayout', () => {
 
       expect(headerScrollable.props())
         .toEqual({
-          className: 'dx-scheduler-header-scrollable',
+          classes: 'dx-scheduler-header-scrollable',
           useKeyboard: false,
           showScrollbar: 'never',
           direction: 'horizontal',
@@ -269,7 +269,7 @@ describe('OrdinaryLayout', () => {
         .toEqual({
           useKeyboard: false,
           bounceEnabled: false,
-          className: 'dx-scheduler-date-table-scrollable',
+          classes: 'dx-scheduler-date-table-scrollable',
           children: expect.anything(),
           direction: 'both',
           onScroll: onDateTableScroll,
@@ -337,7 +337,7 @@ describe('OrdinaryLayout', () => {
 
       expect(scrollable.props())
         .toEqual({
-          className: 'dx-scheduler-sidebar-scrollable',
+          classes: 'dx-scheduler-sidebar-scrollable',
           useKeyboard: false,
           showScrollbar: 'never',
           direction: 'vertical',
@@ -495,10 +495,10 @@ describe('OrdinaryLayout', () => {
 
       expect(container.exists())
         .toBe(true);
-      expect(container.childAt(0).hasClass('dx-scheduler-sidebar-scrollable'))
-        .toBe(true);
-      expect(container.childAt(1).hasClass('dx-scheduler-date-table-scrollable'))
-        .toBe(true);
+      expect(container.childAt(0).prop('classes'))
+        .toBe('dx-scheduler-sidebar-scrollable');
+      expect(container.childAt(1).prop('classes'))
+        .toBe('dx-scheduler-date-table-scrollable');
     });
   });
 

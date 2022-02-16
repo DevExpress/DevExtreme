@@ -23,6 +23,7 @@ const JSPdfCustomDrawCellTests = {
                     assert.deepEqual(pdfCell, {
                         backgroundColor: undefined,
                         borderColor: '#979797',
+                        borderWidth: 0.5,
                         font: {
                             size: 10
                         },
@@ -74,10 +75,10 @@ const JSPdfCustomDrawCellTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,50,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,50,250,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -108,10 +109,10 @@ const JSPdfCustomDrawCellTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,50,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,50,250,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -142,10 +143,10 @@ const JSPdfCustomDrawCellTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,50,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,50,250,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -192,10 +193,10 @@ const JSPdfCustomDrawCellTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,50,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,50,250,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -234,10 +235,10 @@ const JSPdfCustomDrawCellTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,50,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,50,250,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
