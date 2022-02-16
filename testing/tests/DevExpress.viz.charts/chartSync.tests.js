@@ -2,6 +2,7 @@ const $ = require('jquery');
 const mock = require('../../helpers/mockModule.js').mock;
 const vizMocks = require('../../helpers/vizMocks.js');
 const { ChartTracker } = require('viz/chart_components/tracker');
+const domAdapter = require('core/dom_adapter');
 const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
 const trackerModule = mock('viz/chart_components/tracker', {
     ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters))
@@ -166,9 +167,11 @@ const environment = {
             return layoutManager;
         });
 
-        tooltipModule.Tooltip = function(parameters) {
+
+        sinon.stub(tooltipModule, 'Tooltip', function(parameters) {
             return new StubTooltip(parameters);
-        };
+        });
+
         sinon.stub(vizUtils, 'updatePanesCanvases', function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
@@ -196,6 +199,9 @@ const environment = {
 
         layoutManagerModule.LayoutManager.reset();
         layoutManagerModule.LayoutManager.restore();
+
+        tooltipModule.Tooltip.reset();
+        tooltipModule.Tooltip.restore();
 
         this.layoutManager.layoutElements.reset();
 
@@ -1601,9 +1607,34 @@ const environment = {
 
         this.$container.remove();
 
-        chart._annotationsPointerEventHandler({});
+        try {
+            chart._annotationsPointerEventHandler({});
 
-        assert.ok(true, 'should be no exceptions');
+            assert.ok(true, 'should be no exceptions');
+        } catch(e) {
+            assert.ok(false, 'Exception rised on mousedown');
+        }
+    });
+
+    // T1063025
+    QUnit.test('mousedown handling when chart disposed', function(assert) {
+        $(domAdapter.getDocument()).on('dxpointerdown', () => {
+            this.$container.remove();
+        });
+
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+
+        this.createChart({
+            series: [{ type: 'line' }]
+        });
+
+        try {
+            $(domAdapter.getDocument()).trigger(new $.Event('mousedown'));
+
+            assert.strictEqual(tooltipModule.Tooltip.lastCall.returnValue.stub('isCursorOnTooltip').callCount, 0);
+        } catch(e) {
+            assert.ok(false, 'Exception rised on mousedown');
+        }
     });
 
     QUnit.test('Call Dispose several times', function() {

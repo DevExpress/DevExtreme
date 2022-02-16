@@ -1,4 +1,6 @@
-import { isDefined } from '../../../core/utils/type';
+import { isDate, isDefined, isNumeric } from '../../../core/utils/type';
+import dateLocalization from '../../../localization/date';
+import numberLocalization from '../../../localization/number';
 import { toPdfUnit } from './pdf_utils_v3';
 
 // Returns IPdfRowInfo[]
@@ -30,11 +32,12 @@ import { toPdfUnit } from './pdf_utils_v3';
 // ]
 
 const defaultStyles = {
-    header: { font: { size: 10 }, textColor: '#979797', borderColor: '#979797' },
-    group: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
-    data: { font: { size: 10 }, borderColor: '#979797' },
-    groupFooter: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
-    totalFooter: { font: { style: 'bold', size: 10 }, borderColor: '#979797' },
+    base: { font: { size: 10 }, borderWidth: 0.5, borderColor: '#979797' },
+    header: { textColor: '#979797' },
+    group: { },
+    data: { },
+    groupFooter: { },
+    totalFooter: { },
 };
 
 
@@ -43,7 +46,9 @@ function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
 
     const rowsCount = dataProvider.getRowsCount();
     const wordWrapEnabled = !!dataGrid.option('wordWrapEnabled');
+    const rtlEnabled = !!dataGrid.option('rtlEnabled');
     const columns = dataProvider.getColumns();
+    const styles = dataProvider.getStyles();
 
     for(let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
         const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
@@ -62,8 +67,10 @@ function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
                 rowIndex,
                 wordWrapEnabled,
                 columns,
+                styles,
                 rowType,
-                backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined
+                backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined,
+                rtlEnabled
             }),
             rowIndex,
         });
@@ -72,16 +79,18 @@ function generateRowsInfo(doc, dataProvider, dataGrid, headerBackgroundColor) {
     return result;
 }
 
-function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor }) {
+function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, columns, styles, rowType, backgroundColor, rtlEnabled }) {
     const result = [];
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-        const style = defaultStyles[rowType];
+        const cellStyle = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
+        const style = getPdfCellStyle(rowType, cellStyle);
 
+        const defaultAlignment = rtlEnabled ? 'right' : 'left';
         const pdfCell = {
-            text: cellData.value?.toString(),
+            text: getFormattedValue(cellData.value, cellStyle.format),
             verticalAlign: 'middle',
-            horizontalAlign: columns[cellIndex].alignment ?? 'left',
+            horizontalAlign: columns[cellIndex].alignment ?? defaultAlignment,
             wordWrapEnabled,
             backgroundColor,
             padding: toPdfUnit(doc, 5),
@@ -102,15 +111,17 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
                 cellInfo.colSpan = cellMerging.colspan;
             }
         } else if(rowType === 'group') {
-            cellInfo.pdfCell.drawLeftBorder = cellIndex === 0;
-            cellInfo.pdfCell.drawRightBorder = cellIndex === columns.length - 1;
+            const drawLeftBorderField = rtlEnabled ? 'drawRightBorder' : 'drawLeftBorder';
+            const drawRightBorderField = rtlEnabled ? 'drawLeftBorder' : 'drawRightBorder';
+            cellInfo.pdfCell[drawLeftBorderField] = cellIndex === 0;
+            cellInfo.pdfCell[drawRightBorderField] = cellIndex === columns.length - 1;
 
             if(cellIndex > 0) {
                 const isEmptyCellsExceptFirst = result.slice(1).reduce(
                     (accumulate, cellInfo) => { return accumulate && !isDefined(cellInfo.pdfCell.text); },
                     true);
                 if(!isDefined(cellInfo.pdfCell.text) && isEmptyCellsExceptFirst) {
-                    result[0].pdfCell.drawRightBorder = true;
+                    result[0].pdfCell[drawRightBorderField] = true;
                     for(let i = 0; i < result.length; i++) {
                         result[i].colSpan = result.length;
                     }
@@ -124,4 +135,30 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
     return result;
 }
 
-export { generateRowsInfo };
+function getBaseTableStyle() {
+    return defaultStyles['base'];
+}
+
+function getPdfCellStyle(rowType, cellStyle) {
+    const styles = Object.assign({}, defaultStyles['base'], defaultStyles[rowType]);
+
+    if(cellStyle.bold && rowType !== 'header') {
+        styles.font = Object.assign({}, styles.font, { style: 'bold' });
+    }
+
+    return styles;
+}
+
+function getFormattedValue(value, format) {
+    if(isDefined(format)) {
+        if(isDate(value)) {
+            return dateLocalization.format(value, format);
+        }
+        if(isNumeric(value)) {
+            return numberLocalization.format(value, format);
+        }
+    }
+    return value?.toString();
+}
+
+export { generateRowsInfo, getBaseTableStyle };

@@ -113,8 +113,7 @@ export default Class.inherit({
         const items = this.options.plainItems();
         const item = items[itemIndex];
         let deferred;
-        const multipleSelectionInVirtualMode = this.options.virtualPaging && !this.options.legacyScrollingMode && this.options.allowSelectAll && !this.options.deferred;
-        const focusedItemNotLoadedInVirtualMode = multipleSelectionInVirtualMode && !items.filter(it => it.loadIndex === this._focusedItemIndex).length;
+        const focusedItemNotInLoadedRange = this.options.allowLoadByRange?.() && !items.filter(it => it.loadIndex === this._focusedItemIndex).length;
 
         if(!this.isSelectable() || !this.isDataItem(item)) {
             return false;
@@ -126,7 +125,7 @@ export default Class.inherit({
         keys = keys || {};
 
         if(keys.shift && this.options.mode === 'multiple' && this._focusedItemIndex >= 0) {
-            if(focusedItemNotLoadedInVirtualMode) {
+            if(focusedItemNotInLoadedRange) {
                 isSelectedItemsChanged = item.loadIndex !== this._shiftFocusedItemIndex || this._focusedItemIndex !== this._shiftFocusedItemIndex;
 
                 if(isSelectedItemsChanged) {
@@ -158,7 +157,7 @@ export default Class.inherit({
 
         if(isSelectedItemsChanged) {
             when(deferred).done(() => {
-                this._focusedItemIndex = focusedItemNotLoadedInVirtualMode ? item.loadIndex : itemIndex;
+                this._focusedItemIndex = focusedItemNotInLoadedRange ? item.loadIndex : itemIndex;
                 this.onSelectionChanged();
             });
             return true;

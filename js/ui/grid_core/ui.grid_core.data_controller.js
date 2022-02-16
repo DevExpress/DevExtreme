@@ -141,14 +141,19 @@ export const dataControllerModule = {
                     }
 
                     if(args.name === 'dataSource' && args.name === args.fullName && (args.value === args.previousValue || (that.option('columns') && Array.isArray(args.value) && Array.isArray(args.previousValue)))) {
-                        if(args.value !== args.previousValue) {
+                        const isValueChanged = args.value !== args.previousValue;
+                        if(isValueChanged) {
                             const store = that.store();
                             if(store) {
                                 store._array = args.value;
                             }
                         }
+
                         handled();
-                        that.refresh(that.option('repaintChangesOnly'));
+                        const isParasiteChange = Array.isArray(args.value) && !isValueChanged && this._dataSource?.isLoading();
+                        if(!isParasiteChange) {
+                            that.refresh(that.option('repaintChangesOnly'));
+                        }
                         return;
                     }
 
@@ -934,13 +939,13 @@ export const dataControllerModule = {
                     return null;
                 },
                 _applyFilter: function() {
-                    const that = this;
-                    const dataSource = that._dataSource;
+                    const dataSource = this._dataSource;
 
                     if(dataSource) {
                         dataSource.pageIndex(0);
-
-                        return that.reload().done(that.pageChanged.fire.bind(that.pageChanged));
+                        return this.reload().done(() => {
+                            this.pageChanged.fire();
+                        });
                     }
                 },
                 filter: function(filterExpr) {

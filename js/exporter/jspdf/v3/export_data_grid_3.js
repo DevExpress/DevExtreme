@@ -3,10 +3,10 @@ import { extend } from '../../../core/utils/extend';
 import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
-import { generateRowsInfo } from './rows_generator';
+import { generateRowsInfo, getBaseTableStyle } from './rows_generator';
 import { splitByPages } from './rows_splitting';
-import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
-import { applyWordWrap, toPdfUnit } from './pdf_utils_v3';
+import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, addNewPage } from './draw_utils';
+import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils_v3';
 
 // TODO: check names with techwritters
 // IPDFExportOptions: {
@@ -32,6 +32,11 @@ function _getFullOptions(doc, options) {
         fullOptions.margin = toPdfUnit(doc, 40);
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
+
+    const tableStyle = getBaseTableStyle();
+    fullOptions.tableBorderWidth = fullOptions.tableBorderWidth ?? tableStyle.borderWidth;
+    fullOptions.tableBorderColor = fullOptions.tableBorderColor ?? tableStyle.borderColor;
+
     return fullOptions;
 }
 
@@ -90,40 +95,64 @@ function exportDataGrid(doc, dataGrid, options) {
 
             applyBordersConfig(rowsInfo);
 
-            applyWordWrap(doc, rowsInfo, options);
+            applyWordWrap(doc, rowsInfo);
 
             // splitting to pages
             // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
             // TODO: applySplitting()
 
             const docStyles = getDocumentStyles(doc);
-
+            const rtlEnabled = !!dataGrid.option('rtlEnabled');
             const onSeparateRectHorizontally = ({ sourceRect, leftRect, rightRect }) => {
                 let leftRectTextOptions = {};
                 let rightRectTextOptions = {};
                 const isTextNotEmpty = sourceRect.sourceCellInfo.text?.length > 0;
                 if(isTextNotEmpty) {
-                    const isTextWidthGreaterThanRect = doc.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
-                    const isTextLeftAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'left';
-                    if(isTextWidthGreaterThanRect || !isTextLeftAlignment) {
-                        let leftTextLeftOffset;
-                        let rightTextLeftOffset;
-                        if(sourceRect.sourceCellInfo?.horizontalAlign === 'left') {
-                            leftTextLeftOffset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
-                            rightTextLeftOffset = leftTextLeftOffset - leftRect.w;
-                        } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'center') {
-                            const offset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
-                            leftTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (leftRect.x + leftRect.w / 2);
-                            rightTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (rightRect.x + rightRect.w / 2);
-                        } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'right') {
-                            leftTextLeftOffset = (sourceRect.x + sourceRect.w) - (leftRect.x + leftRect.w);
-                            rightTextLeftOffset = (sourceRect.x + sourceRect.w) - (rightRect.x + rightRect.w);
-                        }
+                    if(rtlEnabled) {
+                        const isTextWidthGreaterThanRect = doc.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
+                        const isTextRightAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'right';
+                        if(isTextWidthGreaterThanRect || !isTextRightAlignment) {
+                            let rightRectTextOffset;
+                            let leftRectTextOffset;
+                            if(sourceRect.sourceCellInfo?.horizontalAlign === 'right') {
+                                rightRectTextOffset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
+                                leftRectTextOffset = rightRectTextOffset + leftRect.w;
+                            } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'center') {
+                                leftRectTextOffset = (sourceRect.x + sourceRect.w) - (rightRect.x + rightRect.w) + sourceRect.sourceCellInfo._rect.w / 2 - leftRect.w / 2;
+                                rightRectTextOffset = leftRectTextOffset - rightRect.w;
+                            } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'left') {
+                                leftRectTextOffset = (sourceRect.x + sourceRect.w) - (rightRect.x + rightRect.w);
+                                rightRectTextOffset = leftRectTextOffset - rightRect.w;
+                            }
 
-                        leftRectTextOptions = Object.assign({}, { _textLeftOffset: leftTextLeftOffset });
-                        rightRectTextOptions = Object.assign({}, { _textLeftOffset: rightTextLeftOffset });
+                            leftRectTextOptions = Object.assign({}, { _textLeftOffset: rightRectTextOffset });
+                            rightRectTextOptions = Object.assign({}, { _textLeftOffset: leftRectTextOffset });
+                        } else {
+                            rightRectTextOptions = Object.assign({}, { text: '' });
+                        }
                     } else {
-                        rightRectTextOptions = Object.assign({}, { text: '' });
+                        const isTextWidthGreaterThanRect = doc.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
+                        const isTextLeftAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'left';
+                        if(isTextWidthGreaterThanRect || !isTextLeftAlignment) {
+                            let leftTextLeftOffset;
+                            let rightTextLeftOffset;
+                            if(sourceRect.sourceCellInfo?.horizontalAlign === 'left') {
+                                leftTextLeftOffset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
+                                rightTextLeftOffset = leftTextLeftOffset - leftRect.w;
+                            } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'center') {
+                                const offset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
+                                leftTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (leftRect.x + leftRect.w / 2);
+                                rightTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (rightRect.x + rightRect.w / 2);
+                            } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'right') {
+                                leftTextLeftOffset = (sourceRect.x + sourceRect.w) - (leftRect.x + leftRect.w);
+                                rightTextLeftOffset = (sourceRect.x + sourceRect.w) - (rightRect.x + rightRect.w);
+                            }
+
+                            leftRectTextOptions = Object.assign({}, { _textLeftOffset: leftTextLeftOffset });
+                            rightRectTextOptions = Object.assign({}, { _textLeftOffset: rightTextLeftOffset });
+                        } else {
+                            rightRectTextOptions = Object.assign({}, { text: '' });
+                        }
                     }
                 }
 
@@ -165,9 +194,13 @@ function exportDataGrid(doc, dataGrid, options) {
             };
 
             const rectsByPages = splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically);
+            if(rtlEnabled) {
+                applyRtl(doc, rectsByPages, options);
+            }
+
             rectsByPages.forEach((pdfCellsInfo, index) => {
                 if(index > 0) {
-                    doc.addPage();
+                    addNewPage(doc);
                 }
 
                 drawCellsContent(doc, options.customDrawCell, pdfCellsInfo, docStyles);
@@ -177,7 +210,9 @@ function exportDataGrid(doc, dataGrid, options) {
                 const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
                 if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
                     const tableRect = calculateTableSize(doc, pdfCellsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
-                    drawGridLines(doc, tableRect, docStyles);
+                    const borderWidth = options.tableBorderWidth;
+                    const borderColor = options.tableBorderColor;
+                    drawGridLines(doc, tableRect, { borderWidth, borderColor }, docStyles);
                 }
             });
 
