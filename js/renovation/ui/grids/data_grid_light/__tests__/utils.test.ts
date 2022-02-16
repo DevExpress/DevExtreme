@@ -1,4 +1,5 @@
-import { createGetKey } from '../utils';
+import { Row } from '../types';
+import { createGetKey, getReactRowKey } from '../utils';
 
 describe('getKey', () => {
   const getKey = createGetKey('(Module name)');
@@ -26,5 +27,36 @@ http://js.devexpress.com/error/%VERSION%/E1046"
   it('return key', () => {
     const key = getKey({ id: '123' }, 'id');
     expect(key).toEqual('123');
+  });
+});
+
+describe('getReactRowKey', () => {
+  it('should return key with row key and row type', () => {
+    const row: Row = {
+      data: {},
+      key: 'someKey',
+      rowType: 'data',
+    };
+
+    expect(getReactRowKey(row, 11)).toEqual('data_someKey');
+  });
+
+  it('should return index if no key', () => {
+    const row: Row = {
+      data: {},
+      rowType: 'data',
+    };
+
+    expect(getReactRowKey(row, 11)).toEqual('11');
+  });
+
+  it('should index if key is complex', () => {
+    const row: Row = {
+      data: {},
+      key: {},
+      rowType: 'data',
+    };
+
+    expect(getReactRowKey(row, 11)).toEqual('11');
   });
 });

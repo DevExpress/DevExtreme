@@ -12,6 +12,7 @@ import {
 import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
 import CLASSES from '../classes';
+import { getReactRowKey } from '../utils';
 
 export const viewFunction = (viewModel: TableContent): JSX.Element => (
   <div className={`${CLASSES.rowsView} ${CLASSES.noWrap} ${CLASSES.afterHeaders}`} role="presentation">
@@ -19,12 +20,11 @@ export const viewFunction = (viewModel: TableContent): JSX.Element => (
       <Table>
         <Fragment>
           {
-          viewModel.props.dataSource.map((item, rowIndex) => (
+          viewModel.rows.map((item) => (
             <DataRow
-              // eslint-disable-next-line react/no-array-index-key
-              key={rowIndex}
+              key={item.reactKey}
               row={item}
-              rowIndex={rowIndex}
+              rowIndex={item.index}
               columns={viewModel.props.columns}
             />
           ))
@@ -70,5 +70,13 @@ export class TableContent extends JSXComponent(TableContentProps) {
     if (index >= 0) {
       this.plugins.callAction(RowClick, this.props.dataSource[index]);
     }
+  }
+
+  get rows(): (Row & { index: number; reactKey: string })[] {
+    return this.props.dataSource.map((row, index) => ({
+      ...row,
+      index,
+      reactKey: getReactRowKey(row, index),
+    }));
   }
 }

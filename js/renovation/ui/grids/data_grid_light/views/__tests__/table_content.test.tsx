@@ -17,7 +17,7 @@ describe('TableContent', () => {
         columns,
       });
 
-      const tree = mount(<TableContentView {...tableContent as any} />);
+      const tree = mount(<TableContentView rows={tableContent.rows} {...tableContent as any} />);
 
       expect(tree.find('table').exists()).toBe(true);
       expect(tree.find('tr').length).toBe(1);
@@ -38,7 +38,7 @@ describe('TableContent', () => {
         columns,
       });
 
-      const tree = mount(<TableContentView {...tableContent as any} />);
+      const tree = mount(<TableContentView rows={tableContent.rows} {...tableContent as any} />);
 
       expect(tree.find('table').exists()).toBe(true);
       expect(tree.find('tr').length).toBe(1);

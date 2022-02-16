@@ -1,5 +1,8 @@
-import { RowData, Key, KeyExpr } from './types';
+import {
+  RowData, Key, KeyExpr, Row,
+} from './types';
 import errors from '../../../../ui/widget/ui.errors';
+import { isString, isNumeric } from '../../../../core/utils/type';
 
 export const createGetKey = (featureName: string) => (
   rowData: RowData,
@@ -21,4 +24,12 @@ export const createGetKey = (featureName: string) => (
   }
 
   return rowData[keyExpr];
+};
+
+export const getReactRowKey = (row: Row, index: number): string => {
+  if (!row.key || !(isNumeric(row.key) || isString(row.key))) {
+    return `${index}`;
+  }
+
+  return `${row.rowType}_${row.key}`;
 };
