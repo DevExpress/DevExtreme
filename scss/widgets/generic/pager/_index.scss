@@ -18,8 +18,12 @@
       min-width: 42px;
     }
 
-    .dx-page-index {
-      min-width: 19px;
+    .dx-page-indexes {
+      vertical-align: middle;
+
+      .dx-page-index {
+        min-width: 19px;
+      }
     }
   }
 
