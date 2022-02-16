@@ -645,12 +645,15 @@ QUnit.test('scrollbar should be hidden when container size is almost similar to 
 
 // T1043437
 QUnit.module('scrollbar visibility', {
+    before: function() {
+        this.$fixture = $('#qunit-fixture');
+    },
     beforeEach: function() {
         this.$outerScrollable = $('<div>').height(250).width(250);
         this.$innerScrollable = $('<div>').height(500).width(500).appendTo(this.$outerScrollable);
         this.$innerScrollable.append('<div>').children().height(750).width(750);
 
-        this.$outerScrollable.appendTo('#qunit-fixture');
+        this.$outerScrollable.appendTo(this.$fixture);
     }
 }, () => {
     const checkScrollbarStyles = (assert, scrollbarClass, $scrollable, useNative, showScrollbar, shouldRenderScrollbar) => {
@@ -661,8 +664,7 @@ QUnit.module('scrollbar visibility', {
         if(shouldRenderScrollbar) {
             const $verticalScroll = $scrollbar.find(`.${SCROLLABLE_SCROLL_CLASS}`);
 
-            assert.equal($scrollbar.length, 1, 'scrollbar exist');
-            assert.equal($scrollbar.is(':hidden'), showScrollbar === 'never', 'scrollbar visibility');
+            assert.equal(window.getComputedStyle($scrollbar.get(0)).display, showScrollbar === 'never' ? 'none' : 'block', 'scrollbar visibility');
             assert.equal($scrollbar.hasClass('dx-state-invisible'), isRenovatedScrollable ? showScrollbar === 'never' : false, 'scrollbar dx-state-invisible class');
             assert.equal($verticalScroll.hasClass('dx-state-invisible'), useNative || showScrollbar !== 'always', 'thumb visibility');
         } else {
@@ -704,11 +706,18 @@ QUnit.module('scrollbar visibility', {
     configs.forEach(outerScrollableOptions => {
         configs.forEach(innerScrollableOptions => {
             QUnit.test(`check scrollbar visibility: outerScrollable: ${JSON.stringify(outerScrollableOptions)}, innerScrollable: ${JSON.stringify(innerScrollableOptions)}`, function(assert) {
-                this.$outerScrollable.dxScrollable(outerScrollableOptions);
-                this.$innerScrollable.dxScrollable(innerScrollableOptions);
+                const showScrollbarValues = ['onScroll', 'onHover', 'always', 'never'];
 
-                checkStyles(assert, this.$outerScrollable, outerScrollableOptions);
-                checkStyles(assert, this.$innerScrollable, innerScrollableOptions);
+                showScrollbarValues.forEach((outerShowScrollbarValue) => {
+                    this.$outerScrollable.dxScrollable({ showScrollbar: outerShowScrollbarValue, ...outerScrollableOptions });
+
+                    showScrollbarValues.forEach((innerShowScrollbarValue) => {
+                        this.$innerScrollable.dxScrollable({ showScrollbar: innerShowScrollbarValue, ...innerScrollableOptions });
+
+                        checkStyles(assert, this.$outerScrollable, { showScrollbar: outerShowScrollbarValue, ...outerScrollableOptions });
+                        checkStyles(assert, this.$innerScrollable, { showScrollbar: innerShowScrollbarValue, ...innerScrollableOptions });
+                    });
+                });
             });
         });
     });
