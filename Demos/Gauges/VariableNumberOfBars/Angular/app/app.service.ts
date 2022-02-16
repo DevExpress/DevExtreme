@@ -11,11 +11,11 @@ export class Product {
 }
 
 const products: Product[] = [{
-  name: 'Hummers',
+  name: 'Hammers',
   count: 41,
   active: true,
 }, {
-  name: 'Shovers',
+  name: 'Shovels',
   count: 32,
   active: true,
 }, {
