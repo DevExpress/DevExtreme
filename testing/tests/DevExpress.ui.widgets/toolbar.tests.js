@@ -1,5 +1,3 @@
-import 'ui/action_sheet';
-import 'ui/drop_down_menu';
 import errors from 'core/errors';
 
 import $ from 'jquery';
@@ -13,17 +11,10 @@ import { getHeight } from 'core/utils/size';
 import domAdapter from 'core/dom_adapter';
 import devices from 'core/devices';
 
-import 'ui/button_group';
 import 'ui/text_box';
-
 import 'generic_light.css!';
-import 'ui/button';
 import 'ui/drop_down_button';
 import 'ui/tabs';
-import 'ui/autocomplete';
-import 'ui/date_box';
-import 'ui/menu';
-
 
 $('#qunit-fixture').html('<style>\
         #toolbarWithMenu .dx-toolbar-menu-container {\

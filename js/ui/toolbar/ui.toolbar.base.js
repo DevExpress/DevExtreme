@@ -28,8 +28,8 @@ const TOOLBAR_COMPACT_CLASS = 'dx-toolbar-compact';
 const TOOLBAR_LABEL_SELECTOR = '.' + TOOLBAR_LABEL_CLASS;
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TEXT_BUTTON_MODE = 'text';
-const DEFAULT_BUTTON_TYPE = 'default';
 
+const DEFAULT_BUTTON_TYPE = 'default';
 const DEFAULT_DROPDOWNBUTTON_STYLING_MODE = 'contained';
 
 const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
