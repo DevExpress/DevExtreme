@@ -2,6 +2,7 @@ import {
   Component, JSXComponent, ComponentBindings, OneWay, JSXTemplate,
 } from '@devextreme-generator/declarations';
 import { Column, Row, RowData } from '../types';
+import { combineClasses } from '../../../../utils/combine_classes';
 
 export const viewFunction = (viewModel: DataCell): JSX.Element => {
   const {
@@ -48,6 +49,9 @@ export class DataCellProps {
   columnIndex = 0;
 
   @OneWay()
+  countColumn = 0;
+
+  @OneWay()
   column: Column = {};
 }
 
@@ -71,6 +75,13 @@ export class DataCell extends JSXComponent(DataCellProps) {
   }
 
   get classes(): string {
-    return this.props.columnIndex === 0 ? 'dx-first-child' : '';
+    const { columnIndex, countColumn } = this.props;
+
+    const classesMap = {
+      'dx-first-child': columnIndex === 0,
+      'dx-last-child': columnIndex === countColumn - 1,
+    };
+
+    return combineClasses(classesMap);
   }
 }
