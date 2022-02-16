@@ -43,7 +43,7 @@ function _getFullOptions(doc, options) {
 function exportDataGrid(doc, dataGrid, options) {
     options = extend({}, _getFullOptions(doc, options));
 
-    const dataProvider = dataGrid.getDataProvider();
+    const dataProvider = dataGrid.getDataProvider(options.selectedRowsOnly);
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
 
