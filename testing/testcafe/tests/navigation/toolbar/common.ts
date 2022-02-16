@@ -156,6 +156,7 @@ fixture`Toolbar_common`
           options: {
             type: 'default',
             text: 'default',
+            icon: 'money',
           },
         },
         {
@@ -165,6 +166,7 @@ fixture`Toolbar_common`
           options: {
             type: 'back',
             text: 'back',
+            icon: 'money',
           },
         },
         {
@@ -174,6 +176,7 @@ fixture`Toolbar_common`
           options: {
             type: 'danger',
             text: 'danger',
+            icon: 'money',
           },
         },
         {
@@ -183,6 +186,7 @@ fixture`Toolbar_common`
           options: {
             type: 'normal',
             text: 'normal',
+            icon: 'money',
           },
         },
         {
@@ -192,6 +196,7 @@ fixture`Toolbar_common`
           options: {
             type: 'success',
             text: 'success',
+            icon: 'money',
           },
         },
       ] as Item[];
