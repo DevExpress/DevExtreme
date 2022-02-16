@@ -7,7 +7,6 @@ import 'ui/toolbar';
 import 'ui/toolbar/ui.toolbar.base';
 
 import eventsEngine from 'events/core/events_engine';
-import devices from 'core/devices';
 
 import 'ui/button_group';
 import 'ui/text_box';
@@ -72,12 +71,12 @@ const openDropDownMenuIfExist = (toolbar) => {
         { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },
         { widget: 'dxSelectBox', focusableElementSelector: '.dx-selectbox .dx-texteditor-input' },
         { widget: 'dxDropDownButton', focusableElementSelector: '.dx-dropdownbutton .dx-buttongroup' },
-        // { widget: 'dxAutocomplete', focusableElementSelector: '.dx-autocomplete .dx-texteditor-input' },
-        // { widget: 'dxCheckBox', focusableElementSelector: '.dx-checkbox' },
-        // { widget: 'dxDateBox', focusableElementSelector: '.dx-datebox .dx-texteditor-input' },
-        // { widget: 'dxMenu', focusableElementSelector: '.dx-menu' },
-        // { widget: 'dxTabs', focusableElementSelector: '.dx-tabs' },
-        // { widget: 'dxButtonGroup', focusableElementSelector: '.dx-buttongroup' },
+        { widget: 'dxAutocomplete', focusableElementSelector: '.dx-autocomplete .dx-texteditor-input' },
+        { widget: 'dxCheckBox', focusableElementSelector: '.dx-checkbox' },
+        { widget: 'dxDateBox', focusableElementSelector: '.dx-datebox .dx-texteditor-input' },
+        { widget: 'dxMenu', focusableElementSelector: '.dx-menu' },
+        { widget: 'dxTabs', focusableElementSelector: '.dx-tabs' },
+        { widget: 'dxButtonGroup', focusableElementSelector: '.dx-buttongroup' },
     ].forEach(({ widget, focusableElementSelector }) => {
         QUnit.module(`Disabled state: locateInMenu: ${locateInMenu}, widget: ${widget}`, moduleConfig, () => {
             const itemClickHandler = sinon.spy();
@@ -163,7 +162,7 @@ const openDropDownMenuIfExist = (toolbar) => {
             };
 
             const checkFocusableElementTabIndex = (focusableElement, widgetName, expectedDisabled) => {
-                const expectedFocusableElementTabIndex = expectedDisabled.itemOptionsDisabled || expectedDisabled.itemDisabled || expectedDisabled.toolbar || (['dxButton', 'dxCheckBox', 'dxMenu', 'dxTabs'].indexOf(widgetName) !== -1 && devices.real().deviceType !== 'desktop')
+                const expectedFocusableElementTabIndex = expectedDisabled.itemOptionsDisabled || expectedDisabled.itemDisabled || expectedDisabled.toolbar
                     ? -1
                     : 0;
 
