@@ -495,7 +495,7 @@ export const Scroller = Class.inherit({
     _validateEvent: function(e) {
         const $target = $(e.originalEvent.target);
 
-        return this._isThumb($target) || this._isScrollbar($target) || this._isContent($target);
+        return this._isThumb($target) || this._isScrollbar($target);
     },
 
     _isThumb: function($element) {
@@ -504,10 +504,6 @@ export const Scroller = Class.inherit({
 
     _isScrollbar: function($element) {
         return this._scrollByThumb && $element && $element.is(this._$scrollbar);
-    },
-
-    _isContent: function($element) {
-        return this._scrollByContent && !!$element.closest(this._$element).length;
     },
 
     _reachedMin: function() {
@@ -591,7 +587,6 @@ export const SimulatedStrategy = Class.inherit({
             $container: this._$container,
             $wrapper: this._$wrapper,
             $element: this._$element,
-            scrollByContent: this.option('scrollByContent'),
             scrollByThumb: this.option('scrollByThumb'),
             scrollbarVisible: this.option('showScrollbar'),
             bounceEnabled: this.option('bounceEnabled'),
@@ -636,9 +631,15 @@ export const SimulatedStrategy = Class.inherit({
 
         this._prepareDirections();
         this._eachScroller(function(scroller, direction) {
-            const isValid = scroller._validateEvent(e);
+            const $target = $(e.originalEvent.target);
+
+            const isValid = scroller._validateEvent(e) || (this.option('scrollByContent') && this._isContent($target));
             this._validDirections[direction] = isValid;
         });
+    },
+
+    _isContent: function($element) {
+        return !!$element.closest(this._$element).length;
     },
 
     _prepareDirections: function(value) {
