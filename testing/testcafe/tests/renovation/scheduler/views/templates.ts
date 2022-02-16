@@ -6,11 +6,11 @@ const SCHEDULER_SELECTOR = '#container';
 
 const testJquery = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery'],
+  platforms: ['jquery', 'angular'],
 });
 const testReact = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['react'],
+  platforms: ['react', 'angular'],
 });
 
 fixture('Renovated scheduler - Templates');

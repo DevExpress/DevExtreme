@@ -5,7 +5,7 @@ import { multiPlatformTest, createWidget, updateComponentOptions } from '../../.
 
 const test = multiPlatformTest({
   page: 'declaration/schedulerMaterial',
-  platforms: ['jquery', 'react'],
+  platforms: ['jquery', 'react', 'angular'],
 });
 
 // TODO resolve material theme container

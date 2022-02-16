@@ -12,12 +12,12 @@ import { PlatformType } from '../../../../../../helpers/multi-platform-test/plat
 
 const test = multiPlatformTest({
   page: 'declaration/schedulerMaterial',
-  platforms: ['jquery', 'react'],
+  platforms: ['jquery', 'react', 'angular'],
 });
 
 const testJQuery = multiPlatformTest({
   page: 'declaration/schedulerMaterial',
-  platforms: ['jquery'],
+  platforms: ['jquery', 'angular'],
 });
 
 fixture('Scheduler: Adaptive Material theme layout in RTL');

@@ -5,7 +5,7 @@ import { multiPlatformTest, createWidget } from '../../../../../helpers/multi-pl
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery'],
+  platforms: ['jquery', 'angular'],
 });
 
 fixture('Layout:Templates:CellTemplate');

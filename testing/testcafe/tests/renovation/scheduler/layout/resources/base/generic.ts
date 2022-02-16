@@ -6,7 +6,7 @@ import { PlatformType } from '../../../../../../helpers/multi-platform-test/plat
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery', 'react'],
+  platforms: ['jquery', 'react', 'angular'],
 });
 
 fixture.skip('Scheduler: Generic theme layout'); // TODO unskip after fixing tooltip

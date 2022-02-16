@@ -5,7 +5,7 @@ import { PlatformType } from '../../../../../helpers/multi-platform-test/platfor
 
 const test = multiPlatformTest({
   page: 'declaration/schedulerCellSizesCustomizationContainer',
-  platforms: ['jquery', 'react'],
+  platforms: ['jquery', 'react', 'angular'],
 });
 
 fixture('Scheduler: Layout Customization: Cell Sizes');

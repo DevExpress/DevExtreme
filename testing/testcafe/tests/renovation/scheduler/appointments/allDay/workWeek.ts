@@ -3,7 +3,7 @@ import { multiPlatformTest, createWidget } from '../../../../../helpers/multi-pl
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery', 'react'],
+  platforms: ['jquery', 'react', 'angular'],
 });
 
 fixture('Layout:Appointments:AllDay:WorkWeek');

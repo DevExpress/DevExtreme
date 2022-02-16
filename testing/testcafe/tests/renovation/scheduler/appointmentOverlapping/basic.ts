@@ -5,7 +5,7 @@ import { multiPlatformTest } from '../../../../helpers/multi-platform-test';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery', 'react'],
+  platforms: ['jquery', 'react', 'angular'],
 });
 
 fixture('Appointment overlapping in Scheduler');

@@ -5,7 +5,7 @@ const SCHEDULER_SELECTOR = '#container';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: [/* 'jquery', */'react'], // TODO unskip after fix children in tooltip
+  platforms: [/* 'jquery', */'react', 'angular'], // TODO unskip after fix children in tooltip
 });
 
 fixture('Renovated scheduler - Reduced icon tooltip');

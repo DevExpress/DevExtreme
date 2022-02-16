@@ -4,7 +4,7 @@ import { multiPlatformTest, createWidget, updateComponentOptions } from '../../.
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery', 'react'],
+  platforms: ['jquery', 'react', 'angular'],
 });
 
 fixture('Scheduler: Layout Views: Timeline Month');

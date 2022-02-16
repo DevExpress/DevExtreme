@@ -13,7 +13,7 @@ import { PlatformType } from '../../../../helpers/multi-platform-test/platform-t
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery', 'react'],
+  platforms: ['jquery', 'react', 'angular'],
 });
 
 // TODO unskip after scrollTo implementation

@@ -4,7 +4,7 @@ import { multiPlatformTest, createWidget } from '../../../../../../helpers/multi
 
 const test = multiPlatformTest({
   page: 'declaration/schedulerMaterial',
-  platforms: ['jquery', 'react'],
+  platforms: ['jquery', 'react', 'angular'],
 });
 
 fixture('Scheduler: Material theme and all-day panel');
