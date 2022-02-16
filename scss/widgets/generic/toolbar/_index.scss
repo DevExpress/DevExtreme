@@ -78,6 +78,17 @@
   .dx-toolbar-item-auto-hide {
     padding: $generic-toolbar-item-spacing $generic-toolbar-item-spacing * 2;
   }
+
+  .dx-toolbar-hidden-button {
+    .dx-button-default,
+    .dx-button-success,
+    .dx-button-danger {
+      &,
+      & .dx-icon {
+        color: $button-normal-color;
+      }
+    }
+  }
 }
 
 .dx-toolbar-text-auto-hide .dx-button {
