@@ -157,6 +157,16 @@ describe('DataGridLight', () => {
           },
         ]);
       });
+
+      it('should not update visibleRows when it is undefined', () => {
+        grid.plugins.getValue = () => undefined;
+        grid.updateVisibleRowsByVisibleItems();
+
+        const callback = watchMock.mock.calls[0][1];
+        callback();
+
+        expect(grid.visibleRows).toMatchObject([]);
+      });
     });
 
     describe('setDataSourceToVisibleItems', () => {
@@ -201,6 +211,30 @@ describe('DataGridLight', () => {
             rowType: 'data',
           },
         ]);
+      });
+
+      it('should return visibleRows when keyExpr is not set', () => {
+        grid.props.keyExpr = undefined;
+        grid.setVisibleRowsByVisibleItems();
+
+        expect(extendMock.mock.calls[0][2]()).toMatchObject([
+          {
+            key: { id: 0 },
+            data: { id: 0 },
+            rowType: 'data',
+          }, {
+            key: { id: 1 },
+            data: { id: 1 },
+            rowType: 'data',
+          },
+        ]);
+      });
+
+      it('should not return visibleRows when dataSource is not set', () => {
+        grid.plugins.getValue = () => undefined;
+        grid.setVisibleRowsByVisibleItems();
+
+        expect(extendMock.mock.calls[0][2]()).toMatchObject([]);
       });
     });
 
