@@ -119,7 +119,7 @@
     "gulp-jsbeautifier": "^2.0.3",
     "gulp-json-editor": "^2.5.1",
     "gulp-multi-process": "^1.3.1",
-    "gulp-notify": "^2.2.0",
+    "gulp-notify": "^4.0.0",
     "gulp-plumber": "^1.1.0",
     "gulp-remote-src": "^0.4.4",
     "gulp-rename": "^1.2.2",
