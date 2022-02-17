@@ -48,9 +48,10 @@ function exportDataGrid(options) {
     const {
         jsPDFDocument,
         component,
+        selectedRowsOnly,
     } = options;
 
-    const dataProvider = component.getDataProvider();
+    const dataProvider = component.getDataProvider(selectedRowsOnly);
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
 
