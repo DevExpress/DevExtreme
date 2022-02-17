@@ -1,12 +1,12 @@
-import { isDefined } from '../../../core/utils/type';
-import { extend } from '../../../core/utils/extend';
-import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
-import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
-import { updateRowsAndCellsHeights } from './height_updater';
-import { generateRowsInfo, getBaseTableStyle } from './rows_generator';
-import { splitByPages } from './rows_splitting';
-import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, addNewPage } from './draw_utils';
-import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils';
+import { isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { normalizeRowsInfo, normalizeBoundaryValue } from './current/normalizeOptions';
+import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './current/row_utils';
+import { updateRowsAndCellsHeights } from './current/height_updater';
+import { generateRowsInfo, getBaseTableStyle } from './current/rows_generator';
+import { splitByPages } from './current/rows_splitting';
+import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, addNewPage } from './current/draw_utils';
+import { applyRtl, applyWordWrap, toPdfUnit } from './current/pdf_utils';
 
 // TODO: check names with techwritters
 // IPDFExportOptions: {
@@ -19,6 +19,7 @@ import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils';
 //    customizeCell: ({ gridCell, pdfCell }): void
 //    customDrawCell: ({ rect, pdfCell, gridCell, cancel }): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
 // }
+
 function _getFullOptions(doc, options) {
     const fullOptions = extend({}, options);
     if(!isDefined(fullOptions.topLeft)) {
@@ -48,16 +49,14 @@ function exportDataGrid(options) {
         component,
     } = options;
 
-    const fullOptions = extend({}, _getFullOptions(jsPDFDocument, options));
-
     const dataProvider = component.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
 
             // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
-            const rowsInfo = generateRowsInfo(jsPDFDocument, dataProvider, component, fullOptions.rowOptions?.headerStyles?.backgroundColor);
+            const rowsInfo = generateRowsInfo(jsPDFDocument, dataProvider, component, options.rowOptions?.headerStyles?.backgroundColor);
 
-            if(fullOptions.customizeCell) {
+            if(options.customizeCell) {
                 rowsInfo.forEach(rowInfo => rowInfo.cells.forEach(cellInfo =>
                     // In 'customizeCell' callback you can change values of these properties:
                     // - e.pdfCell.height - will be used instead of a calculated height
@@ -70,23 +69,23 @@ function exportDataGrid(options) {
                     // And, you can read values of these properties ('readonly'):
                     // - e.gridCell (TODO: list of properties)
                     // - e.pdfCell (TODO: list of properties)
-                    fullOptions.customizeCell(cellInfo)
+                    options.customizeCell(cellInfo)
                 ));
             }
 
             normalizeRowsInfo(rowsInfo);
 
             // computes withs of the cells depending of the fullOptions
-            initializeCellsWidth(jsPDFDocument, dataProvider, rowsInfo, fullOptions);
+            initializeCellsWidth(jsPDFDocument, dataProvider, rowsInfo, options);
 
             // apply intends for correctly set width and colSpan for grouped rows
-            resizeFirstColumnByIndentLevel(rowsInfo, fullOptions);
+            resizeFirstColumnByIndentLevel(rowsInfo, options);
 
             // apply colSpans + recalculate cellsWidth
             applyColSpans(rowsInfo);
 
             // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled+padding or use value from customizeCell
-            calculateHeights(jsPDFDocument, rowsInfo, fullOptions);
+            calculateHeights(jsPDFDocument, rowsInfo, options);
 
             // apply rowSpans + recalculate cells height
             applyRowSpans(rowsInfo);
@@ -95,7 +94,7 @@ function exportDataGrid(options) {
             updateRowsAndCellsHeights(jsPDFDocument, rowsInfo);
 
             // when we known all sizes we can calculate all coordinates
-            calculateCoordinates(jsPDFDocument, rowsInfo, fullOptions); // set/init/update 'pdfCell.top/left'
+            calculateCoordinates(jsPDFDocument, rowsInfo, options); // set/init/update 'pdfCell.top/left'
 
             // recalculate for grouped rows
             // TODO: applyGroupIndents()
@@ -200,9 +199,9 @@ function exportDataGrid(options) {
                 bottomRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, bottomRectTextOptions);
             };
 
-            const rectsByPages = splitByPages(jsPDFDocument, rowsInfo, fullOptions, onSeparateRectHorizontally, onSeparateRectVertically);
+            const rectsByPages = splitByPages(jsPDFDocument, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically);
             if(rtlEnabled) {
-                applyRtl(jsPDFDocument, rectsByPages, fullOptions);
+                applyRtl(jsPDFDocument, rectsByPages, options);
             }
 
             rectsByPages.forEach((pdfCellsInfo, index) => {
@@ -210,15 +209,15 @@ function exportDataGrid(options) {
                     addNewPage(jsPDFDocument);
                 }
 
-                drawCellsContent(jsPDFDocument, fullOptions.customDrawCell, pdfCellsInfo, docStyles);
+                drawCellsContent(jsPDFDocument, options.customDrawCell, pdfCellsInfo, docStyles);
                 drawCellsLines(jsPDFDocument, pdfCellsInfo, docStyles);
 
-                const isDrawTableBorderSpecified = fullOptions.drawTableBorder === true;
+                const isDrawTableBorderSpecified = options.drawTableBorder === true;
                 const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
                 if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
-                    const tableRect = calculateTableSize(jsPDFDocument, pdfCellsInfo, fullOptions); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
-                    const borderWidth = fullOptions.tableBorderWidth;
-                    const borderColor = fullOptions.tableBorderColor;
+                    const tableRect = calculateTableSize(jsPDFDocument, pdfCellsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
+                    const borderWidth = options.tableBorderWidth;
+                    const borderColor = options.tableBorderColor;
                     drawGridLines(jsPDFDocument, tableRect, { borderWidth, borderColor }, docStyles);
                 }
             });
@@ -230,4 +229,7 @@ function exportDataGrid(options) {
     });
 }
 
-export { exportDataGrid };
+export const Export = {
+    getFullOptions: _getFullOptions,
+    export: exportDataGrid
+};
