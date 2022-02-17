@@ -772,8 +772,8 @@ Axis.prototype = {
         return isFunction(labelOptions.customizeHint) ? labelOptions.customizeHint.call(formatObject, formatObject) : undefined;
     },
 
-    formatRange(startValue, endValue, interval) {
-        return formatRange(startValue, endValue, interval, this.getOptions());
+    formatRange(startValue, endValue, interval, argumentFormat) {
+        return formatRange(startValue, endValue, interval, { argumentFormat, ...this.getOptions() });
     },
 
     _setTickOffset: function() {
