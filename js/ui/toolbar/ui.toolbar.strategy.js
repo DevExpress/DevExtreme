@@ -82,6 +82,10 @@ const ToolbarStrategy = Class.inherit({
     widgetOption: function(name, value) {
         this._menu && this._menu.option(name, value);
     },
+
+    itemOption: function() {
+        this.renderMenuItems();
+    }
 });
 
 export default ToolbarStrategy;
