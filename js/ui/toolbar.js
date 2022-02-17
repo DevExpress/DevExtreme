@@ -9,6 +9,7 @@ import ActionSheetStrategy from './toolbar/ui.toolbar.strategy.action_sheet';
 import DropDownMenuStrategy from './toolbar/ui.toolbar.strategy.drop_down_menu';
 import ToolbarBase from './toolbar/ui.toolbar.base';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
+import { toggleItemFocusableElementTabIndex } from './toolbar/ui.toolbar.utils';
 
 // STYLE toolbar
 
@@ -119,6 +120,8 @@ const Toolbar = ToolbarBase.inherit({
 
     _initMarkup: function() {
         this.callBase();
+
+        this._updateFocusableItemsTabIndex();
         this._renderMenu();
     },
 
@@ -267,17 +270,25 @@ const Toolbar = ToolbarBase.inherit({
 
     _itemOptionChanged: function(item, property, value) {
         if(this._isMenuItem(item)) {
-            this._menuStrategy.renderMenuItems();
+            this._menuStrategy.itemOption(item, property, value);
         } else if(this._isToolbarItem(item)) {
             this.callBase(item, property, value);
         } else {
             this.callBase(item, property, value);
-            this._menuStrategy.renderMenuItems();
+            this._menuStrategy.itemOption(item, property, value);
+        }
+
+        if(property === 'disabled' || property === 'options.disabled') {
+            toggleItemFocusableElementTabIndex(this, item);
         }
 
         if(property === 'location') {
             this.repaint();
         }
+    },
+
+    _updateFocusableItemsTabIndex() {
+        this._getToolbarItems().forEach(item => toggleItemFocusableElementTabIndex(this, item));
     },
 
     _isMenuItem: function(itemData) {
@@ -307,6 +318,12 @@ const Toolbar = ToolbarBase.inherit({
                 break;
             case 'overflowMenuVisible':
                 this._changeMenuOption(this._menuStrategy.NAME === 'dropDownMenu' ? 'opened' : 'visible', value);
+                break;
+            case 'disabled':
+                this._changeMenuOption('disabled', value);
+                this.callBase.apply(this, arguments);
+
+                this._updateFocusableItemsTabIndex();
                 break;
             default:
                 this.callBase.apply(this, arguments);

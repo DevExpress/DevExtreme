@@ -41,6 +41,7 @@ const DropDownMenuStrategy = ToolbarStrategy.inherit({
         return extend(this.callBase(), {
             deferRendering: true,
             container: this._toolbar.option('menuContainer'),
+            disabled: this._toolbar.option('disabled'),
             popupMaxHeight: (devices.current().platform === 'android') // T1010948
                 ? domAdapter.getDocumentElement().clientHeight - topAndBottomOffset
                 : undefined,
@@ -76,8 +77,15 @@ const DropDownMenuStrategy = ToolbarStrategy.inherit({
 
     _menuContainer: function() {
         return this._$menuButtonContainer;
-    }
+    },
 
+    itemOption: function(item, property, value) {
+        if(property === 'disabled' || property === 'options.disabled') {
+            this._menu?._itemOptionChanged(item, property, value);
+        } else {
+            this.callBase();
+        }
+    }
 });
 
 export default DropDownMenuStrategy;
