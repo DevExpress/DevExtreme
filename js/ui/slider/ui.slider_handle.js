@@ -38,9 +38,10 @@ const SliderHandle = Widget.inherit({
         const { tooltip, value } = this.option();
         const { position, format, enabled, showMode } = tooltip;
 
-        this._sliderTooltip = this._createComponent($('<div>'), SliderTooltip, {
+        const $sliderTooltip = $('<div>');
+        this._sliderTooltip = this._createComponent($sliderTooltip, SliderTooltip, {
             target: this.$element(),
-            container: this.$element(),
+            container: $sliderTooltip,
             position,
             visible: enabled,
 

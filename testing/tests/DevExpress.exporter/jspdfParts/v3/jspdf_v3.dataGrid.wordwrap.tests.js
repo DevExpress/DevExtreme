@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfWordWrapTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -26,7 +26,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -56,7 +56,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -85,7 +85,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -114,7 +114,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -147,7 +147,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -178,7 +178,7 @@ const JSPdfWordWrapTests = {
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -209,7 +209,7 @@ const JSPdfWordWrapTests = {
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -239,7 +239,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -269,7 +269,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -303,7 +303,7 @@ const JSPdfWordWrapTests = {
                     pdfCell.padding = 5;
                 };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -333,7 +333,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -364,7 +364,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -393,7 +393,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -423,7 +423,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -457,7 +457,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -488,7 +488,7 @@ const JSPdfWordWrapTests = {
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -520,7 +520,7 @@ const JSPdfWordWrapTests = {
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -550,7 +550,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -581,7 +581,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -616,7 +616,7 @@ const JSPdfWordWrapTests = {
                     pdfCell.padding = 5;
                 };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -646,7 +646,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -678,7 +678,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -707,7 +707,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -738,7 +738,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -773,7 +773,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -803,7 +803,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -834,7 +834,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -869,7 +869,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -900,7 +900,7 @@ const JSPdfWordWrapTests = {
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -933,7 +933,7 @@ const JSPdfWordWrapTests = {
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -963,7 +963,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -995,7 +995,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1031,7 +1031,7 @@ const JSPdfWordWrapTests = {
                     pdfCell.padding = 5;
                 };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1063,7 +1063,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1097,7 +1097,7 @@ const JSPdfWordWrapTests = {
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.padding = 5; };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1140,7 +1140,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1183,7 +1183,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1225,7 +1225,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1267,7 +1267,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1310,7 +1310,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.padding = 5;
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1355,7 +1355,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1401,7 +1401,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1445,7 +1445,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1490,7 +1490,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1536,7 +1536,7 @@ const JSPdfWordWrapTests = {
                     };
                     pdfCell.padding = 5;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1579,7 +1579,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1624,7 +1624,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1666,7 +1666,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1710,7 +1710,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1755,7 +1755,7 @@ const JSPdfWordWrapTests = {
                     }
                     pdfCell.padding = 5;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1800,7 +1800,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1849,7 +1849,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1893,7 +1893,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1941,7 +1941,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1990,7 +1990,7 @@ const JSPdfWordWrapTests = {
                     };
                     pdfCell.padding = 5;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2033,7 +2033,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2080,7 +2080,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2122,7 +2122,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2168,7 +2168,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2215,7 +2215,7 @@ const JSPdfWordWrapTests = {
                     }
                     pdfCell.padding = 5;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2260,7 +2260,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2312,7 +2312,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2356,7 +2356,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2407,7 +2407,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2459,7 +2459,7 @@ const JSPdfWordWrapTests = {
                     };
                     pdfCell.padding = 5;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2489,7 +2489,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2518,7 +2518,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2564,7 +2564,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2611,7 +2611,7 @@ const JSPdfWordWrapTests = {
                     };
                     pdfCell.padding = gridCell.column.index === 0 ? 5 : 0;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2645,7 +2645,7 @@ const JSPdfWordWrapTests = {
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2678,7 +2678,7 @@ const JSPdfWordWrapTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2715,7 +2715,7 @@ const JSPdfWordWrapTests = {
                     pdfCell.padding = 5;
                 };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2748,7 +2748,7 @@ const JSPdfWordWrapTests = {
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     pdfCell.wordWrapEnabled = true;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2779,7 +2779,7 @@ const JSPdfWordWrapTests = {
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     pdfCell.wordWrapEnabled = false;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2859,7 +2859,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 15, style: 'normal' };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2935,7 +2935,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 15, style: 'normal' };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3011,7 +3011,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 15, style: 'italic' };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3056,7 +3056,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3103,7 +3103,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3157,7 +3157,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70, 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70, 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3242,7 +3242,7 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3329,7 +3329,7 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3424,7 +3424,7 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3521,7 +3521,7 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3615,7 +3615,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3715,7 +3715,7 @@ const JSPdfWordWrapTests = {
                         e.rowHeight = 90;
                     }
                 };
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 10, y: 15 },
                     columnWidths: [70, 80, 60, 70],
                     onRowExporting
@@ -3805,7 +3805,7 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3913,7 +3913,7 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4019,7 +4019,7 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4119,7 +4119,7 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4232,7 +4232,7 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4348,7 +4348,7 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4440,7 +4440,7 @@ const JSPdfWordWrapTests = {
                         e.rowHeight = 90;
                     }
                 };
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 10, y: 15 },
                     columnWidths: [70, 80, 60, 70],
                     onRowExporting
@@ -4504,7 +4504,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4572,7 +4572,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4621,7 +4621,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4678,7 +4678,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4743,7 +4743,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4880,7 +4880,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 10, y: 15 },
                     columnWidths: [70, 80, 60, 70, 50, 40, 50]
                 }).then(() => {
@@ -4958,7 +4958,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5033,7 +5033,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5106,7 +5106,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5181,7 +5181,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5263,7 +5263,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5347,7 +5347,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5410,7 +5410,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5473,7 +5473,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5550,7 +5550,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5629,7 +5629,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5701,7 +5701,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5775,7 +5775,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5852,7 +5852,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [80, 90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [80, 90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5931,7 +5931,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [80, 90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [80, 90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6055,7 +6055,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6181,7 +6181,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6233,7 +6233,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6285,7 +6285,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6347,7 +6347,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6411,7 +6411,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6539,7 +6539,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 10, y: 15 },
                     columnWidths: [70, 80, 60, 70, 50]
                 }).then(() => {
@@ -6673,7 +6673,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 10, y: 15 },
                     columnWidths: [70, 80, 60, 70, 50]
                 }).then(() => {

@@ -3,10 +3,10 @@ import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   DataGridLight, viewFunction as DataGridView, DataGridLightProps,
-  TotalCount, KeyExprPlugin, DataSource,
+  TotalCount, KeyExprPlugin, Items,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
-import { generateData } from './test_data';
+import { generateData, generateRows } from './test_data';
 
 describe('DataGridLight', () => {
   describe('View', () => {
@@ -31,7 +31,7 @@ describe('DataGridLight', () => {
       props.dataSource = [{ id: 1 }, { id: 2 }];
       const viewProps = {
         props,
-        visibleItems: props.dataSource,
+        visibleRows: [{ data: { id: 1 }, rowType: 'data' }, { data: { id: 2 }, rowType: 'data' }],
         visibleColumns: [{ dataField: 'id' }],
       } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
@@ -48,7 +48,7 @@ describe('DataGridLight', () => {
       props.dataSource = [{ id: 1, name: 'name 1' }];
       const viewProps = {
         props,
-        visibleItems: props.dataSource,
+        visibleRows: [{ data: { id: 1, name: 'name 1' }, rowType: 'data' }],
         visibleColumns: [
           { dataField: 'id' },
           { dataField: 'name' },
@@ -106,32 +106,72 @@ describe('DataGridLight', () => {
         });
 
         grid.updateDataSource();
-        expect(grid.plugins.getValue(DataSource)).toBe(dataSource);
+        expect(grid.plugins.getValue(Items)).toBe(dataSource);
       });
     });
 
-    describe('updateVisibleItems', () => {
+    describe('updateVisibleRows', () => {
       const watchMock = jest.fn();
       const grid = new DataGridLight({});
       grid.plugins = {
         watch: watchMock,
       } as any;
 
-      it('should update visibleItems', () => {
-        grid.updateVisibleItems();
+      it('should update visibleRows', () => {
+        grid.updateVisibleRows();
 
-        const data = generateData(10);
+        const data = generateRows(10);
 
         const callback = watchMock.mock.calls[0][1];
         callback(data);
 
-        expect(grid.visibleItems).toBe(data);
+        expect(grid.visibleRows).toBe(data);
+      });
+    });
+
+    describe('updateVisibleRowsByVisibleItems', () => {
+      const watchMock = jest.fn();
+      const grid = new DataGridLight({});
+      grid.plugins = {
+        watch: watchMock,
+        getValue: () => generateRows(2),
+      } as any;
+
+      it('should update visibleRows by visibleItems', () => {
+        grid.updateVisibleRowsByVisibleItems();
+
+        const data = generateRows(2);
+
+        const callback = watchMock.mock.calls[0][1];
+        callback(data);
+
+        expect(grid.visibleRows).toMatchObject([
+          {
+            key: 0,
+            data: { id: 0 },
+            rowType: 'data',
+          }, {
+            key: 1,
+            data: { id: 1 },
+            rowType: 'data',
+          },
+        ]);
+      });
+
+      it('should not update visibleRows when it is undefined', () => {
+        grid.plugins.getValue = () => undefined;
+        grid.updateVisibleRowsByVisibleItems();
+
+        const callback = watchMock.mock.calls[0][1];
+        callback();
+
+        expect(grid.visibleRows).toMatchObject([]);
       });
     });
 
     describe('setDataSourceToVisibleItems', () => {
       const extendMock = jest.fn();
-      const dataSource = generateData(10);
+      const dataSource = generateData(3);
       const grid = new DataGridLight({
         dataSource,
       });
@@ -143,6 +183,58 @@ describe('DataGridLight', () => {
         grid.setDataSourceToVisibleItems();
 
         expect(extendMock.mock.calls[0][2]()).toBe(dataSource);
+      });
+    });
+
+    describe('setVisibleRowsByVisibleItems', () => {
+      const extendMock = jest.fn();
+      const dataSource = generateData(2);
+      const grid = new DataGridLight({
+        keyExpr: 'id',
+      });
+      grid.plugins = {
+        extend: extendMock,
+        getValue: () => dataSource,
+      } as any;
+
+      it('should return visibleRows', () => {
+        grid.setVisibleRowsByVisibleItems();
+
+        expect(extendMock.mock.calls[0][2]()).toMatchObject([
+          {
+            key: 0,
+            data: { id: 0 },
+            rowType: 'data',
+          }, {
+            key: 1,
+            data: { id: 1 },
+            rowType: 'data',
+          },
+        ]);
+      });
+
+      it('should return visibleRows when keyExpr is not set', () => {
+        grid.props.keyExpr = undefined;
+        grid.setVisibleRowsByVisibleItems();
+
+        expect(extendMock.mock.calls[0][2]()).toMatchObject([
+          {
+            key: { id: 0 },
+            data: { id: 0 },
+            rowType: 'data',
+          }, {
+            key: { id: 1 },
+            data: { id: 1 },
+            rowType: 'data',
+          },
+        ]);
+      });
+
+      it('should not return visibleRows when dataSource is not set', () => {
+        grid.plugins.getValue = () => undefined;
+        grid.setVisibleRowsByVisibleItems();
+
+        expect(extendMock.mock.calls[0][2]()).toMatchObject([]);
       });
     });
 

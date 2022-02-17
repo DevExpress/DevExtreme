@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfMeasureUnitsTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -31,7 +31,7 @@ const JSPdfMeasureUnitsTests = {
                 ];
 
                 const doc = createMockPdfDoc({ unit: 'pt' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 0, y: 0 }
                 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -69,7 +69,7 @@ const JSPdfMeasureUnitsTests = {
                 ];
 
                 const doc = createMockPdfDoc({ unit: 'px' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 0, y: 0 }
                 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -107,7 +107,7 @@ const JSPdfMeasureUnitsTests = {
                 ];
 
                 const doc = createMockPdfDoc({ unit: 'cm' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 0, y: 0 }
                 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -145,7 +145,7 @@ const JSPdfMeasureUnitsTests = {
                 ];
 
                 const doc = createMockPdfDoc({ unit: 'mm' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 0, y: 0 }
                 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -183,7 +183,7 @@ const JSPdfMeasureUnitsTests = {
                 ];
 
                 const doc = createMockPdfDoc({ unit: 'in' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 0, y: 0 }
                 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -229,7 +229,7 @@ const JSPdfMeasureUnitsTests = {
 
 
                 const doc = createMockPdfDoc({ unit: 'pt' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     margin: 30,
                     topLeft: { x: 0, y: 0 },
                     columnWidths: [200],
@@ -279,7 +279,7 @@ const JSPdfMeasureUnitsTests = {
 
 
                 const doc = createMockPdfDoc({ unit: 'px' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     margin: 30,
                     topLeft: { x: 0, y: 0 },
                     columnWidths: [200],
@@ -329,7 +329,7 @@ const JSPdfMeasureUnitsTests = {
 
 
                 const doc = createMockPdfDoc({ unit: 'cm' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     margin: 30,
                     topLeft: { x: 0, y: 0 },
                     columnWidths: [200],
@@ -379,7 +379,7 @@ const JSPdfMeasureUnitsTests = {
 
 
                 const doc = createMockPdfDoc({ unit: 'mm' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     margin: 30,
                     topLeft: { x: 0, y: 0 },
                     columnWidths: [200],
@@ -429,7 +429,7 @@ const JSPdfMeasureUnitsTests = {
 
 
                 const doc = createMockPdfDoc({ unit: 'in' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     margin: 30,
                     topLeft: { x: 0, y: 0 },
                     columnWidths: [200],

@@ -756,7 +756,7 @@ const Popup = Overlay.inherit({
                 };
             }
         } else {
-            const container = $(this._positionController._$wrapperCoveredElement).get(0);
+            const container = $(this._positionController.$visualContainer).get(0);
             const maxHeightValue = addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container);
             const minHeightValue = addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
 

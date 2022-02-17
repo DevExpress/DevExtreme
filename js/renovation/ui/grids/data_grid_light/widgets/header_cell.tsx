@@ -34,6 +34,9 @@ export class HeaderCellProps {
 
   @OneWay()
   columnIndex = 0;
+
+  @OneWay()
+  countColumn = 0;
 }
 
 @Component({
@@ -46,10 +49,19 @@ export class HeaderCell extends JSXComponent(HeaderCellProps) {
   }
 
   get classes(): string {
-    return combineClasses({
+    const { columnIndex, countColumn } = this.props;
+
+    const classesMap = {
       'dx-datagrid-action': true,
       'dx-cell-focus-disabled': true,
-      'dx-first-child': this.props.columnIndex === 0,
-    });
+      'dx-first-child': columnIndex === 0,
+      'dx-last-child': columnIndex === countColumn - 1,
+    };
+
+    if (this.props.column.headerCssClass) {
+      classesMap[this.props.column.headerCssClass] = true;
+    }
+
+    return combineClasses(classesMap);
   }
 }

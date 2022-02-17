@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfGroupingTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -67,7 +67,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -133,7 +133,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -190,7 +190,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -253,7 +253,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -330,7 +330,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -398,7 +398,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -460,7 +460,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -528,7 +528,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -604,7 +604,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -676,7 +676,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -737,7 +737,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -804,7 +804,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -887,7 +887,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -961,7 +961,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1027,7 +1027,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1099,7 +1099,7 @@ const JSPdfGroupingTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

@@ -6,7 +6,7 @@ import { isDefined, isFunction } from 'core/utils/type';
 import { JSPdfDataGridTestHelper } from './jspdfTestHelper.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import { JSPdfOptionTests } from './jspdf.options.tests.js';
-import { exportDataGrid } from 'pdf_exporter';
+import { exportDataGrid } from 'exporter/jspdf/old/export_data_grid';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
 import 'ui/data_grid';

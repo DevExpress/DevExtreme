@@ -654,7 +654,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             this.clock.tick(300);
             scheduler.tooltip.clickOnItem();
 
-            assert.ok($('.dx-dialog.dx-overlay-modal').length, 'Dialog was shown');
+            assert.ok($('.dx-dialog').length, 'Dialog was shown');
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
         });
 
@@ -797,7 +797,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger(dblclickEvent.name);
             this.clock.tick(300);
 
-            assert.ok($('.dx-dialog.dx-overlay-modal').length, 'Dialog was shown');
+            assert.ok($('.dx-dialog').length, 'Dialog was shown');
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
         });
 

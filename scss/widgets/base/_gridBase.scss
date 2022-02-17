@@ -432,6 +432,10 @@
           border-left: 0;
         }
 
+        &.dx-last-child {
+          border-right: 0;
+        }
+
         &.dx-#{$widget-name}-group-space {
           border-right: none;
           vertical-align: top;

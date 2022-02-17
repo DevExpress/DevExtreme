@@ -87,7 +87,7 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
           rtlEnabled={rtlEnabled}
           target={validationMessageTarget}
           boundary={validationMessageTarget}
-          container={validationMessageTarget}
+          visualContainer={validationMessageTarget}
           contentId={validationMessageGuid}
         />
         )}
