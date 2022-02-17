@@ -22,23 +22,23 @@
     "@angular/platform-browser": "^11.0.4",
     "@angular/platform-browser-dynamic": "^11.0.4",
     "angular2-template-loader": "^0.6.2",
+    "core-js": "^3.19.1",
     "inferno": "^7.4.6",
     "inferno-compat": "^7.4.6",
     "inferno-create-element": "^7.4.6",
     "inferno-hydrate": "^7.4.6",
-    "react-dom": "^16.13.1",
     "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "rxjs": "^6.5.4",
     "vue": "^2.6.11",
-    "zone.js": "^0.10.3",
-    "core-js": "^3.19.1"
+    "zone.js": "^0.10.3"
   },
   "devDependencies": {
-    "html-loader": "^2.1.2",
     "babel-preset-react-app": "^10.0.0",
+    "html-loader": "^2.1.2",
     "raw-loader": "^4.0.2",
     "ts-loader": "^9.2.4",
-    "vue-loader": "^15.9.8",
+    "vue-loader": "^17.0.0",
     "vue-template-compiler": "^2.6.11"
   }
 }
