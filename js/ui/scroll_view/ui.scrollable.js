@@ -247,7 +247,6 @@ const Scrollable = DOMComponent.inherit({
                 this._invalidate();
                 break;
             case 'inertiaEnabled':
-            case 'scrollByContent':
             case 'scrollByThumb':
             case 'bounceEnabled':
             case 'useKeyboard':
@@ -260,6 +259,7 @@ const Scrollable = DOMComponent.inherit({
                 this._strategy && this._strategy.disabledChanged();
                 break;
             case 'updateManually':
+            case 'scrollByContent':
                 break;
             case 'width':
                 this.callBase(args);
