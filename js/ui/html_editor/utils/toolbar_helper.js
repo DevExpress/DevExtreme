@@ -21,7 +21,7 @@ import FileUploader from '../../file_uploader';
 import TextBox from '../../text_box';
 // import Button from '../../button';
 
-import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
+import { getHeight, getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
 
 import { getWindow } from '../../../core/utils/window';
 
@@ -67,7 +67,7 @@ function getFormatHandlers(module) {
             }
         },
         link: prepareLinkHandler(module),
-        image: prepareImageHandler(module),
+        image: prepareImageHandler(module, module.editorInstance.option('imageUploading')),
         color: prepareColorClickHandler(module, 'color'),
         background: prepareColorClickHandler(module, 'background'),
         orderedList: prepareShortcutHandler(module, 'list', 'ordered'),
@@ -217,12 +217,11 @@ function prepareLinkHandler(module) {
     };
 }
 
-function prepareImageHandler(module) {
+function prepareImageHandler(module, imageUploadingOption) {
     return () => {
         const formData = module.quill.getFormat();
         const isUpdateDialog = Object.prototype.hasOwnProperty.call(formData, 'imageSrc');
         const defaultIndex = defaultPasteIndex(module);
-        const imageUploadingOption = module.editorInstance.option('imageUploading');
 
         if(isUpdateDialog) {
             const { imageSrc } = module.quill.getFormat(defaultIndex - 1, 1);
@@ -231,9 +230,10 @@ function prepareImageHandler(module) {
             delete formData.imageSrc;
 
             const imgElement = module.quill.getLeaf(module.editorInstance.getSelection().index)[0].domNode;
+
             if(imgElement && (!formData.width && !formData.height)) {
-                formData.width = formData.width || $(imgElement).width();
-                formData.height = formData.height || $(imgElement).height();
+                formData.width = formData.width || getWidth($(imgElement));
+                formData.height = formData.height || getHeight($(imgElement));
             }
 
             if(!imageSrc || defaultIndex === 0) {
@@ -241,20 +241,14 @@ function prepareImageHandler(module) {
             }
         }
 
-
         const formatIndex = embedFormatIndex(module);
 
-        module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
-        module.editorInstance.formDialogOption('toolbarItems[0].options.text', 'Add'); // localization
-        module.editorInstance.formDialogOption('wrapperAttr', { class: 'dx-htmleditor-add-image-popup' });
+        modifyImageUploadingDialog(module);
 
         const promise = module.editorInstance.showFormDialog({
             formData: formData,
             width: 493,
-
-            // showColonAfterLabel: false,
             labelLocation: 'top',
-            // minColWidth: 150,
             items: imageFormItems(module, imageUploadingOption)
         });
 
@@ -269,16 +263,29 @@ function prepareImageHandler(module) {
                     module.quill.deleteText(index, 1, SILENT_ACTION);
                 }
 
+                formData.width = String(formData.width) || undefined;
+                formData.height = String(formData.height) || undefined;
+
                 module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
 
                 module.quill.setSelection(index + 1, 0, USER_ACTION);
             })
             .always(() => {
-                module.editorInstance.formDialogOption('toolbarItems[0].options.text', localizationMessage.format('OK'));
-                module.editorInstance.formDialogOption('wrapperAttr', { class: '' });
+                revertImageUploadingDialog(module);
                 module.quill.focus();
             });
     };
+}
+
+function modifyImageUploadingDialog(module) {
+    module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
+    module.editorInstance.formDialogOption('toolbarItems[0].options.text', 'Add'); // localization
+    module.editorInstance.formDialogOption('wrapperAttr', { class: 'dx-htmleditor-add-image-popup dx-formdialog' });
+}
+
+function revertImageUploadingDialog(module) {
+    module.editorInstance.formDialogOption('toolbarItems[0].options.text', localizationMessage.format('OK'));
+    module.editorInstance.formDialogOption('wrapperAttr', { class: 'dx-formdialog' });
 }
 
 function getLinkFormItems(module, selection) {
@@ -385,6 +392,7 @@ function imageFormItems(module, imageUploadingOption) {
 
             widthEditor = module.editorInstance._createComponent($content, TextBox, {
                 value: data.component.option('formData')[data.dataField],
+                onEnterKey: data.component.option('onEditorEnterKey').bind(module.editorInstance._formDialog, data),
                 onValueChanged: (e) => {
                     const newValue = parseInt(e.value);
                     const oldHeight = parseInt(heightEditor.option('value'));
@@ -408,6 +416,7 @@ function imageFormItems(module, imageUploadingOption) {
 
             heightEditor = module.editorInstance._createComponent($heightEditor, TextBox, {
                 value: data.component.option('formData')[data.dataField],
+                onEnterKey: data.component.option('onEditorEnterKey').bind(module.editorInstance._formDialog, data),
                 onValueChanged: (e) => {
                     const newValue = parseInt(e.value);
                     const oldWidth = parseInt(widthEditor.option('value'));
