@@ -335,7 +335,8 @@ QUnit.module('check action buttons position', {
             floatingActionButtonConfig: {
                 position: {
                     of: $('#fabs')
-                }
+                },
+                visualContainer: $('#fabs')
             }
         });
 

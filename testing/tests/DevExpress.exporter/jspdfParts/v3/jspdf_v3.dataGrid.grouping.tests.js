@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfGroupingTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -50,29 +50,24 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,16',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,16',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,71,170,20',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,91,90,24',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,91,80,24',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,115,90,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,115,80,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -112,29 +107,24 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,119.5,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -180,29 +170,24 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,119.5,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -260,32 +245,26 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,16',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,16',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,71,170,20',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,91,90,24',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,91,80,24',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,115,170,20',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,135,90,24',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,135,80,24',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -328,32 +307,26 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,141,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,141,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -402,32 +375,26 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,141,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,141,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -484,32 +451,26 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,16',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,16',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,71,170,20',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,91,170,20',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,111,90,24',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,111,80,24',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,135,90,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,135,80,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -551,32 +512,26 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,119.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,141,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,141,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -624,32 +579,26 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,119.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,141,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,141,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -711,35 +660,28 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,16',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,16',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,71,170,20',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,91,170,20',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,111,90,24',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,111,80,24',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,135,170,20',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,155,90,24',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,155,80,24',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -784,35 +726,28 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,119.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,141,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,162.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,162.5,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -863,35 +798,28 @@ const JSPdfGroupingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,119.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,141,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,162.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,162.5,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

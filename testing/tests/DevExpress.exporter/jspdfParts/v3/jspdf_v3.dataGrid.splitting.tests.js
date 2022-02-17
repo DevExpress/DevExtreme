@@ -1,5 +1,5 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
-import { normalizeBoundaryValue } from 'exporter/jspdf/v3/normalizeOptions';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
+import { normalizeBoundaryValue } from 'exporter/jspdf/current/normalizeOptions';
 
 const JSPdfSplittingTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -44,14 +44,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -81,7 +81,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
                     'addPage,',
@@ -92,14 +91,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -130,7 +129,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
                     'addPage,',
@@ -141,7 +139,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'addPage,',
@@ -152,14 +149,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -196,7 +193,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,10,36.5,210,36.5',
                     'line,10,36.5,10,58',
@@ -209,7 +205,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,0,36.5,200,36.5',
                     'line,0,58,200,58',
@@ -221,16 +216,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,0,36.5,200,36.5',
                     'line,200,36.5,200,58',
                     'line,0,58,200,58',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -267,7 +262,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,10,36.5,210,36.5',
                     'line,10,36.5,10,58',
@@ -280,7 +274,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,0,36.5,200,36.5',
                     'line,0,58,200,58',
@@ -292,16 +285,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,0,36.5,200,36.5',
                     'line,200,36.5,200,58',
                     'line,0,58,200,58',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -342,12 +335,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,10,36.5,210,36.5',
                     'line,10,36.5,10,58',
                     'line,10,58,210,58',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
                     'addPage,',
@@ -361,7 +352,6 @@ const JSPdfSplittingTests = {
                     'line,0,15,200,15',
                     'line,0,15,0,36.5',
                     'line,200,15,200,36.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,0,58,0,79.5',
                     'line,200,58,200,79.5',
@@ -375,19 +365,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,0,36.5,200,36.5',
                     'line,200,36.5,200,58',
                     'line,0,58,200,58',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -418,7 +407,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,100,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,100,21.5',
                     'addPage,',
@@ -429,7 +417,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'addPage,',
@@ -440,14 +427,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,100,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 15 }, columnWidths: [ 100, 200, 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 15 }, columnWidths: [ 100, 200, 100 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -478,7 +465,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,100,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,100,21.5',
                     'addPage,',
@@ -489,7 +475,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,100,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,100,21.5',
                     'addPage,',
@@ -500,14 +485,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,100,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 15 }, columnWidths: [ 100, 100, 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 15 }, columnWidths: [ 100, 100, 100 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -537,7 +522,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'addPage,',
@@ -548,14 +532,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 15 }, columnWidths: [ 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 15 }, columnWidths: [ 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -588,20 +572,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,36.5,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -632,7 +614,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,36.5,200,21.5',
                     'addPage,',
@@ -643,7 +624,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,200,21.5',
                     'addPage,',
@@ -654,14 +634,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -698,10 +678,11 @@ const JSPdfSplittingTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,200,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -731,7 +712,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,595.28,30',
                     'addPage,',
@@ -740,10 +720,11 @@ const JSPdfSplittingTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -773,7 +754,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,595.28,30',
                     'addPage,',
@@ -784,14 +764,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,595.28,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -822,7 +802,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,10,200,30',
                     'addPage,',
@@ -831,14 +810,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,0,200,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200, 200 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200, 200 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -872,13 +851,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,30,297.64,30',
                     'addPage,',
@@ -887,14 +863,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -928,13 +904,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,30,297.64,30',
                     'addPage,',
@@ -948,20 +921,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,30,297.64,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1001,10 +972,11 @@ const JSPdfSplittingTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,200,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1034,7 +1006,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,595.28,30',
                     'addPage,',
@@ -1043,14 +1014,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,595.28,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1080,7 +1051,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,595.28,30',
                     'addPage,',
@@ -1091,7 +1061,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,595.28,30',
                     'addPage,',
@@ -1102,14 +1071,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,595.28,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1139,7 +1108,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,200,30',
                     'addPage,',
@@ -1148,10 +1116,11 @@ const JSPdfSplittingTests = {
                     'setDrawColor,#979797',
                     'rect,10,0,200,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1182,10 +1151,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,595.28,30',
                     'addPage,',
@@ -1194,10 +1161,11 @@ const JSPdfSplittingTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1228,10 +1196,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,595.28,30',
                     'addPage,',
@@ -1242,14 +1208,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,595.28,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,595.28,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1280,7 +1246,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,10,200,30',
                     'addPage,',
@@ -1289,7 +1254,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,0,200,30',
                     'addPage,',
@@ -1298,14 +1262,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,0,200,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200, 200 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200, 200 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1339,13 +1303,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,30,297.64,30',
                     'addPage,',
@@ -1356,20 +1317,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,30,297.64,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1403,13 +1362,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,30,297.64,30',
                     'addPage,',
@@ -1423,13 +1379,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,30,297.64,30',
                     'addPage,',
@@ -1443,20 +1396,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,30,297.64,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1489,13 +1440,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,10,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,40,200,30',
                     'addPage,',
@@ -1504,14 +1452,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,0,200,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200, 200 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 10 }, columnWidths: [ 200, 200 ], onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1547,19 +1495,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,60,297.64,30',
                     'addPage,',
@@ -1568,14 +1511,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1611,19 +1554,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,60,297.64,30',
                     'addPage,',
@@ -1637,20 +1575,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,30,297.64,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1696,13 +1632,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
                     'addPage,',
@@ -1717,20 +1650,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1784,13 +1715,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
                     'addPage,',
@@ -1815,21 +1743,19 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1884,13 +1810,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
                     'addPage,',
@@ -1915,21 +1838,19 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1978,22 +1899,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -2008,20 +1923,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2080,22 +1993,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -2120,21 +2027,19 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2194,22 +2099,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -2234,21 +2133,19 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2298,22 +2195,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -2332,29 +2223,24 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2414,22 +2300,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -2458,30 +2338,25 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2542,22 +2417,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -2586,30 +2455,25 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2660,22 +2524,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -2694,22 +2552,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
                     'addPage,',
@@ -2723,20 +2575,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2797,22 +2647,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -2841,22 +2685,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
                     'addPage,',
@@ -2881,21 +2719,19 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2957,22 +2793,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -3001,22 +2831,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
                     'addPage,',
@@ -3041,21 +2865,19 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3108,25 +2930,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,400,21.5',
                     'addPage,',
@@ -3143,23 +2958,20 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3231,25 +3043,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,400,21.5',
                     'addPage,',
@@ -3285,24 +3090,21 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3375,25 +3177,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,400,21.5',
                     'addPage,',
@@ -3429,24 +3224,21 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3500,25 +3292,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,400,21.5',
                     'addPage,',
@@ -3539,32 +3324,26 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3637,25 +3416,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,400,21.5',
                     'addPage,',
@@ -3695,33 +3467,27 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,400,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3795,25 +3561,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,400,21.5',
                     'addPage,',
@@ -3853,33 +3612,27 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,400,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3934,25 +3687,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,400,21.5',
                     'addPage,',
@@ -3973,25 +3719,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,400,21.5',
                     'addPage,',
@@ -4007,23 +3746,20 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4097,25 +3833,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,400,21.5',
                     'addPage,',
@@ -4155,25 +3884,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,400,21.5',
                     'addPage,',
@@ -4209,24 +3931,21 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4301,25 +4020,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,400,21.5',
                     'addPage,',
@@ -4359,25 +4071,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,400,21.5',
                     'addPage,',
@@ -4413,24 +4118,21 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,101,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4468,10 +4170,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
                     'addPage,',
@@ -4484,17 +4184,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4541,10 +4240,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
                     'addPage,',
@@ -4567,18 +4264,17 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4625,10 +4321,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
                     'addPage,',
@@ -4651,18 +4345,17 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4708,10 +4401,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
                     'addPage,',
@@ -4734,18 +4425,17 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4792,10 +4482,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
                     'addPage,',
@@ -4818,18 +4506,17 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4879,13 +4566,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
                     'addPage,',
@@ -4900,13 +4584,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'addPage,',
@@ -4919,17 +4600,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,43',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4996,13 +4676,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
                     'addPage,',
@@ -5037,13 +4714,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'addPage,',
@@ -5066,18 +4740,17 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,43',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5144,13 +4817,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
                     'addPage,',
@@ -5185,13 +4855,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'addPage,',
@@ -5214,18 +4881,17 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,43',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5291,13 +4957,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
                     'addPage,',
@@ -5332,13 +4995,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'addPage,',
@@ -5361,18 +5021,17 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,43',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5439,13 +5098,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,200,21.5',
                     'addPage,',
@@ -5480,13 +5136,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'addPage,',
@@ -5509,18 +5162,17 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,43',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5581,19 +5233,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -5615,22 +5262,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'addPage,',
@@ -5648,26 +5289,22 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5745,19 +5382,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -5807,22 +5439,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'addPage,',
@@ -5860,27 +5486,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5958,19 +5580,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -6020,22 +5637,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'addPage,',
@@ -6073,27 +5684,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6170,19 +5777,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -6232,22 +5834,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'addPage,',
@@ -6285,27 +5881,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6383,19 +5975,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -6445,22 +6032,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'addPage,',
@@ -6498,27 +6079,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6596,19 +6173,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -6658,22 +6230,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'addPage,',
@@ -6711,27 +6277,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -6809,19 +6371,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,36.5,400,21.5',
                     'addPage,',
@@ -6871,22 +6428,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'addPage,',
@@ -6924,27 +6475,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -7005,19 +6552,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,36.5,400,21.5',
                     'addPage,',
@@ -7039,22 +6581,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'addPage,',
@@ -7072,26 +6608,22 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -7169,19 +6701,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,36.5,400,21.5',
                     'addPage,',
@@ -7231,22 +6758,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'addPage,',
@@ -7284,27 +6805,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -7382,19 +6899,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,36.5,400,21.5',
                     'addPage,',
@@ -7444,22 +6956,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'addPage,',
@@ -7497,27 +7003,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -7594,19 +7096,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,36.5,400,21.5',
                     'addPage,',
@@ -7656,22 +7153,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'addPage,',
@@ -7709,27 +7200,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -7807,19 +7294,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,36.5,400,21.5',
                     'addPage,',
@@ -7869,22 +7351,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'addPage,',
@@ -7922,27 +7398,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -8020,19 +7492,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,36.5,400,21.5',
                     'addPage,',
@@ -8082,22 +7549,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'addPage,',
@@ -8135,27 +7596,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -8233,19 +7690,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,225,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,15,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,25,36.5,400,21.5',
                     'addPage,',
@@ -8295,22 +7747,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,36.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'addPage,',
@@ -8348,27 +7794,23 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,58,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215,79.5,200,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,36.5,400,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,15,15,400,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200, 200, 200, 200 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -8405,7 +7847,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,30',
                     'addPage,',
@@ -8420,24 +7861,21 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,80,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -8475,7 +7913,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,30',
                     'addPage,',
@@ -8490,24 +7927,21 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,80,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -8550,7 +7984,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,30',
                     'addPage,',
@@ -8575,24 +8008,21 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,80,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -8638,7 +8068,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,30',
                     'addPage,',
@@ -8663,24 +8092,21 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,80,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -8723,7 +8149,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,30',
                     'addPage,',
@@ -8748,24 +8173,21 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,80,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -8805,16 +8227,12 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,60,297.64,30',
                     'addPage,',
@@ -8823,14 +8241,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -8870,16 +8288,12 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,60,297.64,30',
                     'addPage,',
@@ -8895,23 +8309,20 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,0,297.64,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,297.64,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,297.64,60,297.64,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -8957,7 +8368,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,30',
                     'addPage,',
@@ -8982,24 +8392,21 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,80,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -9039,7 +8446,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,30',
                     'addPage,',
@@ -9062,36 +8468,29 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,140,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -9135,13 +8534,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,30',
                     'addPage,',
@@ -9160,33 +8556,27 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -9226,7 +8616,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,40,150,30',
                     'addPage,',
@@ -9249,36 +8638,29 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,140,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -9325,13 +8707,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,30',
                     'addPage,',
@@ -9350,33 +8729,27 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -9419,7 +8792,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,40,150,30',
                     'addPage,',
@@ -9442,36 +8814,29 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,140,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -9519,7 +8884,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,30',
                     'addPage,',
@@ -9552,36 +8916,29 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,140,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -9632,25 +8989,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,396.853,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,396.853,0,198.427,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,198.427,30,198.427,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,198.427,90,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,396.853,90,198.427,30',
                     'addPage,',
@@ -9660,17 +9010,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,198.427,0,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,396.853,0,198.427,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -9721,25 +9070,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,396.853,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,396.853,0,198.427,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,198.427,30,198.427,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,198.427,90,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,396.853,90,198.427,30',
                     'addPage,',
@@ -9760,32 +9102,26 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,396.853,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,396.853,0,198.427,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,198.427,30,198.427,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,198.427,90,198.427,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,396.853,90,198.427,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -9846,13 +9182,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,30',
                     'addPage,',
@@ -9891,33 +9224,27 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -9966,7 +9293,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,40,150,30',
                     'addPage,',
@@ -9999,36 +9325,29 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,140,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -10091,13 +9410,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,30',
                     'addPage,',
@@ -10136,33 +9452,27 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -10213,7 +9523,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,40,150,30',
                     'addPage,',
@@ -10246,36 +9555,29 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,140,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -10323,7 +9625,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,30',
                     'addPage,',
@@ -10356,36 +9657,29 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,140,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -10445,13 +9739,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,30',
                     'addPage,',
@@ -10490,33 +9781,27 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -10564,7 +9849,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,40,150,30',
                     'addPage,',
@@ -10597,36 +9881,29 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,140,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -10689,13 +9966,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,30',
                     'addPage,',
@@ -10734,33 +10008,27 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -10811,7 +10079,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,40,150,30',
                     'addPage,',
@@ -10844,36 +10111,29 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,10,300,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,10,150,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,40,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,40,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,70,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,160,110,150,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,140,150,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,310,110,150,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 30 }, columnWidths: [ 150, 150, 150 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -10924,25 +10184,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,20,390.187,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,400.187,20,195.093,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,50,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,205.093,50,195.093,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,205.093,110,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,400.187,110,195.093,30',
                     'addPage,',
@@ -10955,26 +10208,22 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,205.093,0,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,400.187,0,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,30,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,205.093,30,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,400.187,30,195.093,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 20 }, repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -11025,25 +10274,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,20,390.187,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,400.187,20,195.093,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,50,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,205.093,50,195.093,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,205.093,110,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,400.187,110,195.093,30',
                     'addPage,',
@@ -11067,41 +10309,32 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,390.187,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,400.187,0,195.093,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,30,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,205.093,30,195.093,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,60,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,90,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,205.093,90,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,400.187,90,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,120,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,205.093,120,195.093,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,400.187,120,195.093,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 20 }, repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -11151,25 +10384,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,20,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,20,100,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,50,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,50,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,110,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,110,100,30',
                     'addPage,',
@@ -11182,26 +10408,22 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,30,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [100, 100, 100], repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 20 }, columnWidths: [100, 100, 100], repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -11251,25 +10473,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,20,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,20,100,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,50,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,50,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,110,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,110,100,30',
                     'addPage,',
@@ -11293,41 +10508,32 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,200,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,0,100,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,30,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,60,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,90,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,90,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,90,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,120,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,120,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,210,120,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [100, 100, 100], repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 20 }, columnWidths: [100, 100, 100], repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -11360,7 +10566,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11371,7 +10576,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11385,10 +10589,11 @@ const JSPdfSplittingTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -11419,7 +10624,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11430,7 +10634,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11441,7 +10644,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11452,14 +10654,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -11490,7 +10692,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11501,7 +10702,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11510,7 +10710,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11519,14 +10718,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -11557,7 +10756,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11568,7 +10766,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11579,7 +10776,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11590,7 +10786,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11601,7 +10796,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11612,14 +10806,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -11651,10 +10845,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -11666,10 +10858,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -11683,10 +10873,11 @@ const JSPdfSplittingTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -11718,10 +10909,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -11733,10 +10922,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -11747,7 +10934,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11758,14 +10944,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -11798,10 +10984,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -11813,10 +10997,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -11828,10 +11010,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -11850,10 +11030,11 @@ const JSPdfSplittingTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100, 100], repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100, 100], repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -11886,10 +11067,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -11901,10 +11080,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -11916,10 +11093,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -11930,7 +11105,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11941,7 +11115,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'addPage,',
@@ -11952,14 +11125,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100, 100], repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100, 100], repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -12002,19 +11175,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,390,540,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,490,540,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,390,640,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,490,640,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,390,740,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,490,740,100,100',
                     'addPage,',
@@ -12030,19 +11198,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,540,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,100,540,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,640,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,100,640,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,740,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,100,740,100,100',
                     'addPage,',
@@ -12053,13 +11216,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,390,0,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,490,0,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,390,100,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,490,100,100,100',
                     'addPage,',
@@ -12070,20 +11230,18 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,100,0,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,100,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,100,100,100,100',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 390, y: 540 }, columnWidths: [100, 100, 100, 100], repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 390, y: 540 }, columnWidths: [100, 100, 100, 100], repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -12126,19 +11284,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,390,540,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,490,540,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,390,640,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,490,640,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,390,740,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,490,740,100,100',
                     'addPage,',
@@ -12154,19 +11307,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,540,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,100,540,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,640,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,100,640,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,740,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,100,740,100,100',
                     'addPage,',
@@ -12182,19 +11330,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,390,0,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,490,0,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,390,100,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,490,100,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,390,200,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,490,200,100,100',
                     'addPage,',
@@ -12210,26 +11353,22 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,100,0,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,100,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,100,100,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,200,100,100',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,100,200,100,100',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 390, y: 540 }, columnWidths: [100, 100, 100, 100], repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 390, y: 540 }, columnWidths: [100, 100, 100, 100], repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -12268,10 +11407,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -12282,7 +11419,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -12296,10 +11432,11 @@ const JSPdfSplittingTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -12336,10 +11473,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -12350,7 +11485,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -12363,10 +11497,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'addPage,',
@@ -12377,14 +11509,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100], repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -12428,13 +11560,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
                     'addPage,',
@@ -12445,10 +11574,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,100,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
                     'addPage,',
@@ -12459,7 +11586,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,100,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,100,30',
                     'addPage,',
@@ -12478,10 +11604,11 @@ const JSPdfSplittingTests = {
                     'setDrawColor,#979797',
                     'rect,0,0,100,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100, 100], repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [100, 100, 100], repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -12525,13 +11652,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,30',
                     'addPage,',
@@ -12542,10 +11666,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,80,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,30',
                     'addPage,',
@@ -12556,7 +11678,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,80,30',
                     'addPage,',
@@ -12571,13 +11692,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,60,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,30',
                     'addPage,',
@@ -12588,10 +11706,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,80,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,30',
                     'addPage,',
@@ -12602,14 +11718,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,80,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 0, y: 0 }, columnWidths: [80, 80, 80], repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 0, y: 0 }, columnWidths: [80, 80, 80], repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -12653,13 +11769,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,50,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,20,80,30',
                     'addPage,',
@@ -12670,10 +11783,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,50,80,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,110,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,20,80,30',
                     'addPage,',
@@ -12684,7 +11795,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,20,80,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,110,80,30',
                     'addPage,',
@@ -12693,7 +11803,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,30,80,30',
                     'addPage,',
@@ -12702,7 +11811,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,80,30',
                     'addPage,',
@@ -12711,14 +11819,14 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,80,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: false, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: false, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -12762,13 +11870,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,50,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,80,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,110,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,20,80,30',
                     'addPage,',
@@ -12779,10 +11884,8 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,50,80,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,110,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,20,80,30',
                     'addPage,',
@@ -12793,7 +11896,6 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,20,80,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,110,80,30',
                     'addPage,',
@@ -12809,16 +11911,12 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,30,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,60,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,90,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,120,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,80,30',
                     'addPage,',
@@ -12830,13 +11928,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,30,80,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,120,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,30',
                     'addPage,',
@@ -12848,17 +11943,16 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,90,80,30',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,120,80,30',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: true, onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: true, onRowExporting }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -12917,16 +12011,12 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,74.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,96,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,117.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,20,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,53,80,21.5',
                     'addPage,',
@@ -12959,16 +12049,12 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,74.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,96,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,117.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,20,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,53,80,21.5',
                     'addPage,',
@@ -13001,16 +12087,12 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,74.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,96,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,117.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,20,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,53,80,21.5',
                     'addPage,',
@@ -13042,13 +12124,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,54.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,76,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,33,80,21.5',
                     'addPage,',
@@ -13080,13 +12159,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,54.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,76,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,33,80,21.5',
                     'addPage,',
@@ -13118,21 +12194,19 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,54.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,76,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,33,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: true }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: true }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -13197,16 +12271,12 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,74.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,96,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,117.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,20,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,53,80,21.5',
                     'addPage,',
@@ -13239,16 +12309,12 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,74.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,96,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,117.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,20,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,53,80,21.5',
                     'addPage,',
@@ -13281,16 +12347,12 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,74.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,96,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,117.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,20,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,53,80,21.5',
                     'addPage,',
@@ -13322,13 +12384,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,54.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,76,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,0,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,33,80,21.5',
                     'addPage,',
@@ -13360,13 +12419,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,54.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,76,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,33,80,21.5',
                     'addPage,',
@@ -13398,21 +12454,19 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,54.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,76,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,0,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,33,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: true, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80, 80], repeatHeaders: true, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -13451,13 +12505,10 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,20,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,74.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,96,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,10,41.5,80,33',
                     'addPage,',
@@ -13481,21 +12532,1667 @@ const JSPdfSplittingTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,20,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,74.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,96,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,0,41.5,80,33',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80], repeatHeaders: true }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin, topLeft: { x: 10, y: 20 }, columnWidths: [80, 80], repeatHeaders: true }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+        });
+
+        QUnit.module('RTL support', moduleConfig, () => {
+            QUnit.test('2 pages, 4 cols with bands, grouping, and column widths. horizontalAlign=undefined', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        'CompanyName',
+                        'Phone',
+                        { caption: 'address 1111111111111111111111111', columns: [ 'Fax', 'City' ] },
+                        {
+                            dataField: 'State',
+                            groupIndex: 0,
+                        },
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'City', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'City', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 12345678901011121314151617181920' },
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 1234567890101112' },
+                    ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Company Name,480.28,51.5,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,Phone,330.28,51.5,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,Test company,480.28,105.25,{baseline:middle,align:right}',
+                    'text,123456(678),330.28,105.25,{baseline:middle,align:right}',
+                    'text,Test company,480.28,169.75,{baseline:middle,align:right}',
+                    'text,123456(678),330.28,169.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,State: Washington 1234567890101112,480.28,83.75,{baseline:middle,align:right}',
+                    'saveGraphicsState,',
+                    'moveTo,165.28,137.5',
+                    'lineTo,485.28,137.5',
+                    'lineTo,485.28,159',
+                    'lineTo,165.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,480.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,30,150,43',
+                    'setDrawColor,#979797',
+                    'rect,165.28,30,170,43',
+                    'setDrawColor,#979797',
+                    'rect,335.28,94.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,94.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,116,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,116,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,159,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,159,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,180.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,180.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,202,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,202,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,73,320,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,137.5,320,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,address 1111111111111111111111111,480.28,40.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,Fax,480.28,62.25,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,City,360.28,62.25,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,123456,480.28,105.25,{baseline:middle,align:right}',
+                    'text,Minneapolis,360.28,105.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,360.28,126.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,123456,480.28,169.75,{baseline:middle,align:right}',
+                    'text,Minneapolis,360.28,169.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,360.28,191.25,{baseline:middle,align:right}',
+                    'text,Max: Minneapolis,360.28,212.75,{baseline:middle,align:right}',
+                    'saveGraphicsState,',
+                    'moveTo,225.28,137.5',
+                    'lineTo,485.28,137.5',
+                    'lineTo,485.28,159',
+                    'lineTo,225.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,800.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,30,260,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,51.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,51.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,94.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,94.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,116,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,116,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,159,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,159,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,180.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,180.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,202,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,202,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,73,260,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,137.5,260,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 30, right: 110, bottom: 30, left: 110 }, topLeft: { x: 0, y: 0 }, columnWidths: [150, 170, 120, 140] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 pages, 4 cols with bands, grouping, and column widths. horizontalAlign=undefined, horizontalAlign=left', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        'CompanyName',
+                        'Phone',
+                        { caption: 'address 1111111111111111111111111', columns: [ 'Fax', 'City' ] },
+                        {
+                            dataField: 'State',
+                            groupIndex: 0,
+                        },
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'City', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'City', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 12345678901011121314151617181920' },
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 1234567890101112' },
+                    ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Company Name,340.28,51.5,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Phone,170.28,51.5,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,Test company,340.28,105.25,{baseline:middle}',
+                    'text,123456(678),170.28,105.25,{baseline:middle}',
+                    'text,Test company,340.28,169.75,{baseline:middle}',
+                    'text,123456(678),170.28,169.75,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,165.28,73',
+                    'lineTo,485.28,73',
+                    'lineTo,485.28,94.5',
+                    'lineTo,165.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,-89.72,83.75,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,165.28,137.5',
+                    'lineTo,485.28,137.5',
+                    'lineTo,485.28,159',
+                    'lineTo,165.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,-89.72,148.25,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,30,150,43',
+                    'setDrawColor,#979797',
+                    'rect,165.28,30,170,43',
+                    'setDrawColor,#979797',
+                    'rect,335.28,94.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,94.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,116,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,116,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,159,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,159,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,180.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,180.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,202,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,202,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,73,320,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,137.5,320,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,address 1111111111111111111111111,230.28,40.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,Fax,370.28,62.25,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,City,230.28,62.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,123456,370.28,105.25,{baseline:middle}',
+                    'text,Minneapolis,230.28,105.25,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,230.28,126.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,123456,370.28,169.75,{baseline:middle}',
+                    'text,Minneapolis,230.28,169.75,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,230.28,191.25,{baseline:middle}',
+                    'text,Max: Minneapolis,230.28,212.75,{baseline:middle}',
+                    'saveGraphicsState,',
+                    'moveTo,225.28,73',
+                    'lineTo,485.28,73',
+                    'lineTo,485.28,94.5',
+                    'lineTo,225.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,230.28,83.75,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,225.28,137.5',
+                    'lineTo,485.28,137.5',
+                    'lineTo,485.28,159',
+                    'lineTo,225.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,230.28,148.25,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,30,260,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,51.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,51.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,94.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,94.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,116,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,116,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,159,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,159,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,180.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,180.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,202,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,202,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,73,260,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,137.5,260,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 30, right: 110, bottom: 30, left: 110 }, topLeft: { x: 0, y: 0 },
+                    customizeCell: ({ pdfCell }) => {
+                        pdfCell.horizontalAlign = 'left';
+                    }, columnWidths: [150, 170, 120, 140] }
+                ).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 pages, 4 cols with bands, grouping, and column widths. horizontalAlign=undefined, horizontalAlign=center', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        'CompanyName',
+                        'Phone',
+                        { caption: 'address 1111111111111111111111111', columns: [ 'Fax', 'City' ] },
+                        {
+                            dataField: 'State',
+                            groupIndex: 0,
+                        },
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'City', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'City', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 12345678901011121314151617181920' },
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 1234567890101112' },
+                    ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Company Name,410.28,51.5,{baseline:middle,align:center}',
+                    'setTextColor,#979797',
+                    'text,Phone,250.28,51.5,{baseline:middle,align:center}',
+                    'setTextColor,#000000',
+                    'text,Test company,410.28,105.25,{baseline:middle,align:center}',
+                    'text,123456(678),250.28,105.25,{baseline:middle,align:center}',
+                    'text,Test company,410.28,169.75,{baseline:middle,align:center}',
+                    'text,123456(678),250.28,169.75,{baseline:middle,align:center}',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,165.28,73',
+                    'lineTo,485.28,73',
+                    'lineTo,485.28,94.5',
+                    'lineTo,165.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,195.28,83.75,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,165.28,137.5',
+                    'lineTo,485.28,137.5',
+                    'lineTo,485.28,159',
+                    'lineTo,165.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,195.28,148.25,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,30,150,43',
+                    'setDrawColor,#979797',
+                    'rect,165.28,30,170,43',
+                    'setDrawColor,#979797',
+                    'rect,335.28,94.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,94.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,116,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,116,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,159,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,159,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,180.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,180.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,202,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,202,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,73,320,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,137.5,320,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,address 1111111111111111111111111,355.28,40.75,{baseline:middle,align:center}',
+                    'setTextColor,#979797',
+                    'text,Fax,425.28,62.25,{baseline:middle,align:center}',
+                    'setTextColor,#979797',
+                    'text,City,295.28,62.25,{baseline:middle,align:center}',
+                    'setTextColor,#000000',
+                    'text,123456,425.28,105.25,{baseline:middle,align:center}',
+                    'text,Minneapolis,295.28,105.25,{baseline:middle,align:center}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,295.28,126.75,{baseline:middle,align:center}',
+                    'setFont,helvetica,normal,',
+                    'text,123456,425.28,169.75,{baseline:middle,align:center}',
+                    'text,Minneapolis,295.28,169.75,{baseline:middle,align:center}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,295.28,191.25,{baseline:middle,align:center}',
+                    'text,Max: Minneapolis,295.28,212.75,{baseline:middle,align:center}',
+                    'saveGraphicsState,',
+                    'moveTo,225.28,73',
+                    'lineTo,485.28,73',
+                    'lineTo,485.28,94.5',
+                    'lineTo,225.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,485.28,83.75,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,225.28,137.5',
+                    'lineTo,485.28,137.5',
+                    'lineTo,485.28,159',
+                    'lineTo,225.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,485.28,148.25,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,30,260,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,51.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,51.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,94.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,94.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,116,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,116,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,159,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,159,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,180.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,180.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,202,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,202,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,73,260,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,137.5,260,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 30, right: 110, bottom: 30, left: 110 }, topLeft: { x: 0, y: 0 },
+                    customizeCell: ({ pdfCell }) => {
+                        pdfCell.horizontalAlign = 'center';
+                    }, columnWidths: [150, 170, 120, 140] }
+                ).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 pages, 4 cols with bands, grouping, and column widths. horizontalAlign=undefined, horizontalAlign=right', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        'CompanyName',
+                        'Phone',
+                        { caption: 'address 1111111111111111111111111', columns: [ 'Fax', 'City' ] },
+                        {
+                            dataField: 'State',
+                            groupIndex: 0,
+                        },
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'City', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'City', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 12345678901011121314151617181920' },
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 1234567890101112' },
+                    ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Company Name,480.28,51.5,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,Phone,330.28,51.5,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,Test company,480.28,105.25,{baseline:middle,align:right}',
+                    'text,123456(678),330.28,105.25,{baseline:middle,align:right}',
+                    'text,Test company,480.28,169.75,{baseline:middle,align:right}',
+                    'text,123456(678),330.28,169.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,State: Washington 1234567890101112,480.28,83.75,{baseline:middle,align:right}',
+                    'saveGraphicsState,',
+                    'moveTo,165.28,137.5',
+                    'lineTo,485.28,137.5',
+                    'lineTo,485.28,159',
+                    'lineTo,165.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,480.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,30,150,43',
+                    'setDrawColor,#979797',
+                    'rect,165.28,30,170,43',
+                    'setDrawColor,#979797',
+                    'rect,335.28,94.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,94.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,116,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,116,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,159,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,159,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,180.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,180.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,335.28,202,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,202,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,73,320,21.5',
+                    'setDrawColor,#979797',
+                    'rect,165.28,137.5,320,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,address 1111111111111111111111111,480.28,40.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,Fax,480.28,62.25,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,City,360.28,62.25,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,123456,480.28,105.25,{baseline:middle,align:right}',
+                    'text,Minneapolis,360.28,105.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,360.28,126.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,123456,480.28,169.75,{baseline:middle,align:right}',
+                    'text,Minneapolis,360.28,169.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,360.28,191.25,{baseline:middle,align:right}',
+                    'text,Max: Minneapolis,360.28,212.75,{baseline:middle,align:right}',
+                    'saveGraphicsState,',
+                    'moveTo,225.28,137.5',
+                    'lineTo,485.28,137.5',
+                    'lineTo,485.28,159',
+                    'lineTo,225.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,800.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,30,260,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,51.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,51.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,94.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,94.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,116,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,116,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,159,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,159,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,180.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,180.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,365.28,202,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,202,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,73,260,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,137.5,260,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 30, right: 110, bottom: 30, left: 110 }, topLeft: { x: 0, y: 0 },
+                    customizeCell: ({ pdfCell }) => {
+                        pdfCell.horizontalAlign = 'right';
+                    }, columnWidths: [150, 170, 120, 140] }
+                ).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('4 pages, 4 cols with bands, grouping, and column widths. horizontalAlign=undefined', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        'CompanyName',
+                        'Phone',
+                        { caption: 'address 1111111111111111111111111', columns: [ 'Fax', 'City' ] },
+                        {
+                            dataField: 'State',
+                            groupIndex: 0,
+                        },
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'City', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'City', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 12345678901011121314151617181920' },
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 1234567890101112' },
+                    ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Company Name,410.28,51.5,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,Test company,410.28,105.25,{baseline:middle,align:right}',
+                    'text,Test company,410.28,169.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,265.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,265.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,410.28,83.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,265.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,265.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,410.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,30,150,43',
+                    'setDrawColor,#979797',
+                    'rect,265.28,94.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,116,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,159,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,180.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,202,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,73,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,137.5,150,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,Phone,410.28,51.5,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,123456(678),410.28,105.25,{baseline:middle,align:right}',
+                    'text,123456(678),410.28,169.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,245.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,245.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,560.28,83.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,245.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,245.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,560.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,30,170,43',
+                    'setDrawColor,#979797',
+                    'rect,245.28,94.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,116,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,159,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,180.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,202,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,73,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,137.5,170,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,Fax,410.28,62.25,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,123456,410.28,105.25,{baseline:middle,align:right}',
+                    'text,123456,410.28,169.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,30',
+                    'lineTo,415.28,30',
+                    'lineTo,415.28,51.5',
+                    'lineTo,295.28,51.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,address 1111111111111111111111111,410.28,40.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,295.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,730.28,83.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,295.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,730.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,51.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,94.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,116,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,159,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,180.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,202,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,30,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,73,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,137.5,120,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,City,410.28,62.25,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,Minneapolis,410.28,105.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,410.28,126.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,Minneapolis,410.28,169.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,410.28,191.25,{baseline:middle,align:right}',
+                    'text,Max: Minneapolis,410.28,212.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,30',
+                    'lineTo,415.28,30',
+                    'lineTo,415.28,51.5',
+                    'lineTo,275.28,51.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,address 1111111111111111111111111,530.28,40.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,275.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,850.28,83.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,275.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,850.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,51.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,94.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,116,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,159,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,180.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,202,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,30,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,73,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,137.5,140,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 30, right: 180, bottom: 30, left: 180 }, topLeft: { x: 0, y: 0 }, columnWidths: [150, 170, 120, 140] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('4 pages, 4 cols with bands, grouping, and column widths. horizontalAlign=undefined, horizontalAlign=left', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        'CompanyName',
+                        'Phone',
+                        { caption: 'address 1111111111111111111111111', columns: [ 'Fax', 'City' ] },
+                        {
+                            dataField: 'State',
+                            groupIndex: 0,
+                        },
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'City', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'City', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 12345678901011121314151617181920' },
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 1234567890101112' },
+                    ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Company Name,270.28,51.5,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,Test company,270.28,105.25,{baseline:middle}',
+                    'text,Test company,270.28,169.75,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,265.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,265.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,-159.72,83.75,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,265.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,265.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,-159.72,148.25,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,30,150,43',
+                    'setDrawColor,#979797',
+                    'rect,265.28,94.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,116,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,159,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,180.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,202,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,73,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,137.5,150,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,Phone,250.28,51.5,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,123456(678),250.28,105.25,{baseline:middle}',
+                    'text,123456(678),250.28,169.75,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,245.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,245.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,-9.72,83.75,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,245.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,245.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,-9.72,148.25,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,30,170,43',
+                    'setDrawColor,#979797',
+                    'rect,245.28,94.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,116,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,159,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,180.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,202,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,73,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,137.5,170,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,Fax,300.28,62.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,123456,300.28,105.25,{baseline:middle}',
+                    'text,123456,300.28,169.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,30',
+                    'lineTo,415.28,30',
+                    'lineTo,415.28,51.5',
+                    'lineTo,295.28,51.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,address 1111111111111111111111111,160.28,40.75,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,295.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,160.28,83.75,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,295.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,160.28,148.25,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,51.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,94.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,116,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,159,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,180.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,202,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,30,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,73,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,137.5,120,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,City,280.28,62.25,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,Minneapolis,280.28,105.25,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,280.28,126.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,Minneapolis,280.28,169.75,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,280.28,191.25,{baseline:middle}',
+                    'text,Max: Minneapolis,280.28,212.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,30',
+                    'lineTo,415.28,30',
+                    'lineTo,415.28,51.5',
+                    'lineTo,275.28,51.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,address 1111111111111111111111111,280.28,40.75,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,275.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,280.28,83.75,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,275.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,280.28,148.25,{baseline:middle}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,51.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,94.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,116,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,159,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,180.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,202,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,30,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,73,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,137.5,140,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 30, right: 180, bottom: 30, left: 180 }, topLeft: { x: 0, y: 0 },
+                    customizeCell: ({ pdfCell }) => {
+                        pdfCell.horizontalAlign = 'left';
+                    }, columnWidths: [150, 170, 120, 140] }
+                ).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('4 pages, 4 cols with bands, grouping, and column widths. horizontalAlign=undefined, horizontalAlign=center', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        'CompanyName',
+                        'Phone',
+                        { caption: 'address 1111111111111111111111111', columns: [ 'Fax', 'City' ] },
+                        {
+                            dataField: 'State',
+                            groupIndex: 0,
+                        },
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'City', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'City', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 12345678901011121314151617181920' },
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 1234567890101112' },
+                    ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Company Name,340.28,51.5,{baseline:middle,align:center}',
+                    'setTextColor,#000000',
+                    'text,Test company,340.28,105.25,{baseline:middle,align:center}',
+                    'text,Test company,340.28,169.75,{baseline:middle,align:center}',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,265.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,265.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,125.28,83.75,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,265.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,265.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,125.28,148.25,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,30,150,43',
+                    'setDrawColor,#979797',
+                    'rect,265.28,94.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,116,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,159,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,180.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,202,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,73,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,137.5,150,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,Phone,330.28,51.5,{baseline:middle,align:center}',
+                    'setTextColor,#000000',
+                    'text,123456(678),330.28,105.25,{baseline:middle,align:center}',
+                    'text,123456(678),330.28,169.75,{baseline:middle,align:center}',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,245.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,245.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,275.28,83.75,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,245.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,245.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,275.28,148.25,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,30,170,43',
+                    'setDrawColor,#979797',
+                    'rect,245.28,94.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,116,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,159,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,180.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,202,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,73,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,137.5,170,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,Fax,355.28,62.25,{baseline:middle,align:center}',
+                    'setTextColor,#000000',
+                    'text,123456,355.28,105.25,{baseline:middle,align:center}',
+                    'text,123456,355.28,169.75,{baseline:middle,align:center}',
+                    'setTextColor,#979797',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,30',
+                    'lineTo,415.28,30',
+                    'lineTo,415.28,51.5',
+                    'lineTo,295.28,51.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,address 1111111111111111111111111,285.28,40.75,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,295.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,445.28,83.75,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,295.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,445.28,148.25,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,51.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,94.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,116,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,159,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,180.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,202,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,30,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,73,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,137.5,120,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,City,345.28,62.25,{baseline:middle,align:center}',
+                    'setTextColor,#000000',
+                    'text,Minneapolis,345.28,105.25,{baseline:middle,align:center}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,345.28,126.75,{baseline:middle,align:center}',
+                    'setFont,helvetica,normal,',
+                    'text,Minneapolis,345.28,169.75,{baseline:middle,align:center}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,345.28,191.25,{baseline:middle,align:center}',
+                    'text,Max: Minneapolis,345.28,212.75,{baseline:middle,align:center}',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,30',
+                    'lineTo,415.28,30',
+                    'lineTo,415.28,51.5',
+                    'lineTo,275.28,51.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,address 1111111111111111111111111,415.28,40.75,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,275.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,575.28,83.75,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,275.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,575.28,148.25,{baseline:middle,align:center}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,51.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,94.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,116,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,159,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,180.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,202,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,30,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,73,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,137.5,140,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 30, right: 180, bottom: 30, left: 180 }, topLeft: { x: 0, y: 0 },
+                    customizeCell: ({ pdfCell }) => {
+                        pdfCell.horizontalAlign = 'center';
+                    }, columnWidths: [150, 170, 120, 140] }
+                ).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('4 pages, 4 cols with bands, grouping, and column widths. horizontalAlign=undefined, horizontalAlign=right', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        'CompanyName',
+                        'Phone',
+                        { caption: 'address 1111111111111111111111111', columns: [ 'Fax', 'City' ] },
+                        {
+                            dataField: 'State',
+                            groupIndex: 0,
+                        },
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'City', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'City', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 12345678901011121314151617181920' },
+                        { CompanyName: 'Test company', Phone: '123456(678)', Fax: '123456', City: 'Minneapolis', State: 'Washington 1234567890101112' },
+                    ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Company Name,410.28,51.5,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,Test company,410.28,105.25,{baseline:middle,align:right}',
+                    'text,Test company,410.28,169.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,265.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,265.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,410.28,83.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,265.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,265.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,410.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,30,150,43',
+                    'setDrawColor,#979797',
+                    'rect,265.28,94.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,116,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,159,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,180.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,202,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,73,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,265.28,137.5,150,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,Phone,410.28,51.5,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,123456(678),410.28,105.25,{baseline:middle,align:right}',
+                    'text,123456(678),410.28,169.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,245.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,245.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,560.28,83.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,245.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,245.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,560.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,30,170,43',
+                    'setDrawColor,#979797',
+                    'rect,245.28,94.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,116,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,159,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,180.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,202,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,73,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,245.28,137.5,170,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,Fax,410.28,62.25,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,123456,410.28,105.25,{baseline:middle,align:right}',
+                    'text,123456,410.28,169.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,30',
+                    'lineTo,415.28,30',
+                    'lineTo,415.28,51.5',
+                    'lineTo,295.28,51.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,address 1111111111111111111111111,410.28,40.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,295.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,730.28,83.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,295.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,295.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,730.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,51.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,94.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,116,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,159,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,180.5,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,202,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,30,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,73,120,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,137.5,120,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'text,City,410.28,62.25,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'text,Minneapolis,410.28,105.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,410.28,126.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,Minneapolis,410.28,169.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: Minneapolis,410.28,191.25,{baseline:middle,align:right}',
+                    'text,Max: Minneapolis,410.28,212.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'setFont,helvetica,normal,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,30',
+                    'lineTo,415.28,30',
+                    'lineTo,415.28,51.5',
+                    'lineTo,275.28,51.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,address 1111111111111111111111111,530.28,40.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,73',
+                    'lineTo,415.28,73',
+                    'lineTo,415.28,94.5',
+                    'lineTo,275.28,94.5',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 1234567890101112,850.28,83.75,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'saveGraphicsState,',
+                    'moveTo,275.28,137.5',
+                    'lineTo,415.28,137.5',
+                    'lineTo,415.28,159',
+                    'lineTo,275.28,159',
+                    'clip,',
+                    'discardPath,',
+                    'text,State: Washington 12345678901011121314151617181920,850.28,148.25,{baseline:middle,align:right}',
+                    'restoreGraphicsState,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,51.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,94.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,116,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,159,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,180.5,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,202,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,30,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,73,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,275.28,137.5,140,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 30, right: 180, bottom: 30, left: 180 }, topLeft: { x: 0, y: 0 },
+                    customizeCell: ({ pdfCell }) => {
+                        pdfCell.horizontalAlign = 'right';
+                    }, columnWidths: [150, 170, 120, 140] }
+                ).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfWordWrapTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -20,12 +20,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -49,12 +50,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -78,11 +80,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -106,11 +109,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -138,11 +142,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -166,13 +171,14 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -196,13 +202,14 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -226,12 +233,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -255,12 +263,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -284,6 +293,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -293,7 +303,7 @@ const JSPdfWordWrapTests = {
                     pdfCell.padding = 5;
                 };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -317,12 +327,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -347,12 +358,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -376,11 +388,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -405,11 +418,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -438,11 +452,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -466,13 +481,14 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -497,13 +513,14 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -527,12 +544,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -557,12 +575,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,56',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -587,6 +606,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,56',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -596,7 +616,7 @@ const JSPdfWordWrapTests = {
                     pdfCell.padding = 5;
                 };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -620,12 +640,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,80',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -651,12 +672,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,80',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -680,11 +702,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -710,11 +733,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -744,11 +768,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -773,11 +798,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -803,11 +829,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -837,11 +864,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -865,13 +893,14 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,80',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -897,13 +926,14 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,80',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -927,12 +957,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -958,12 +989,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -989,6 +1021,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -998,7 +1031,7 @@ const JSPdfWordWrapTests = {
                     pdfCell.padding = 5;
                 };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1024,12 +1057,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1055,6 +1089,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1062,7 +1097,7 @@ const JSPdfWordWrapTests = {
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.padding = 5; };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1091,10 +1126,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1105,7 +1140,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1134,10 +1169,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1148,7 +1183,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1177,10 +1212,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1190,7 +1225,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1219,10 +1254,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1232,7 +1267,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1261,10 +1296,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1275,7 +1310,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.padding = 5;
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1304,10 +1339,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1320,7 +1355,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1350,10 +1385,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1366,7 +1401,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1395,10 +1430,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1410,7 +1445,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1440,10 +1475,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1455,7 +1490,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1485,10 +1520,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1501,7 +1536,7 @@ const JSPdfWordWrapTests = {
                     };
                     pdfCell.padding = 5;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1530,10 +1565,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1544,7 +1579,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1575,10 +1610,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1589,7 +1624,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1618,10 +1653,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1631,7 +1666,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1662,10 +1697,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,56',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1675,7 +1710,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1706,10 +1741,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,56',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1720,7 +1755,7 @@ const JSPdfWordWrapTests = {
                     }
                     pdfCell.padding = 5;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1749,10 +1784,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1765,7 +1800,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1798,10 +1833,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1814,7 +1849,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1843,10 +1878,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1858,7 +1893,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1891,10 +1926,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,148',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,148',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1906,7 +1941,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1939,10 +1974,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,148',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,148',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1955,7 +1990,7 @@ const JSPdfWordWrapTests = {
                     };
                     pdfCell.padding = 5;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1984,10 +2019,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,80',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,80',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -1998,7 +2033,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2031,10 +2066,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,80',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,80',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2045,7 +2080,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2074,10 +2109,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2087,7 +2122,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2120,10 +2155,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2133,7 +2168,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 20 };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2166,10 +2201,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2180,7 +2215,7 @@ const JSPdfWordWrapTests = {
                     }
                     pdfCell.padding = 5;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2209,10 +2244,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,90',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2225,7 +2260,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2261,10 +2296,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,90',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2277,7 +2312,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2306,10 +2341,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2321,7 +2356,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2357,10 +2392,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,217',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,217',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2372,7 +2407,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2408,10 +2443,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,217',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,217',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2424,7 +2459,7 @@ const JSPdfWordWrapTests = {
                     };
                     pdfCell.padding = 5;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2448,12 +2483,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,200,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2477,11 +2513,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,200,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2511,10 +2548,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2527,7 +2564,7 @@ const JSPdfWordWrapTests = {
                             : 30
                     };
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2557,10 +2594,10 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,150,55,100,79',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2574,7 +2611,7 @@ const JSPdfWordWrapTests = {
                     };
                     pdfCell.padding = gridCell.column.index === 0 ? 5 : 0;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2602,12 +2639,13 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,60',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowHeight = 60; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2635,11 +2673,12 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,67.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2667,6 +2706,7 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,67.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
@@ -2675,7 +2715,7 @@ const JSPdfWordWrapTests = {
                     pdfCell.padding = 5;
                 };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2701,13 +2741,14 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     pdfCell.wordWrapEnabled = true;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2731,13 +2772,14 @@ const JSPdfWordWrapTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     pdfCell.wordWrapEnabled = false;
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2800,13 +2842,12 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,40,40,50,332',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,40,372,50,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,40,451,50,234.25',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
                 const customizeCell = ({ pdfCell }) => {
@@ -2818,7 +2859,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 15, style: 'normal' };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2877,13 +2918,12 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,40,40,50,263',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,40,303,50,67.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,40,370.5,50,234.25',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
                 const customizeCell = ({ pdfCell }) => {
@@ -2895,7 +2935,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 15, style: 'normal' };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2953,14 +2993,13 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,40,40,50,263',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,40,303,50,67.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,40,370.5,50,234.25',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
                 const customizeCell = ({ pdfCell }) => {
@@ -2972,7 +3011,7 @@ const JSPdfWordWrapTests = {
                         pdfCell.font = { size: 15, style: 'italic' };
                     }
                 };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 }, columnWidths: [ 50 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3008,17 +3047,16 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,100,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3052,23 +3090,20 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,70,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,98,70,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3105,29 +3140,24 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,210,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,190,76.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,70,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,98,70,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,190,98,70,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70, 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70, 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3194,31 +3224,25 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,113.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,140,25.833',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,80.833,80,43.833',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,80.833,60,87.667',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,124.667,80,43.833',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,168.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,168.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,168.5,60,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3287,31 +3311,25 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,123.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,80,51',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,76.5,60,102',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,127.5,80,51',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,178.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,178.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,178.5,60,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3386,34 +3404,27 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,135',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,80,26.333',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,76.5,60,113.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,102.833,80,26.333',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,129.167,80,60.833',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,190,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,190,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,190,60,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3490,34 +3501,27 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,143.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,76.5,60,122',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,119.5,80,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,198.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,198.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,198.5,60,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3588,38 +3592,30 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,100.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,210,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,140,28',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,76.5,70,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,104.5,80,51',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,104.5,60,51',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,155.5,70,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,155.5,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,155.5,60,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,155.5,70,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3690,34 +3686,26 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,156',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,210,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,140,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,76.5,70,134.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,166.5,80,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,166.5,60,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,211,70,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,211,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,211,60,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,211,70,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
@@ -3727,7 +3715,7 @@ const JSPdfWordWrapTests = {
                         e.rowHeight = 90;
                     }
                 };
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 10, y: 15 },
                     columnWidths: [70, 80, 60, 70],
                     onRowExporting
@@ -3795,37 +3783,29 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,87.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,210,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,76.5,70,66',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,98,80,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,98,60,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,142.5,70,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,142.5,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,142.5,60,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,142.5,70,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3907,43 +3887,33 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,130.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,210,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,76.5,70,109',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,98,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,119.5,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,141,80,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,141,60,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,185.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,185.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,185.5,60,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,185.5,70,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4023,43 +3993,33 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,113.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,210,22.7',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,77.7,140,22.7',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,77.7,70,90.8',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,100.4,140,22.7',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,123.1,140,22.7',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,145.8,80,22.7',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,145.8,60,22.7',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,168.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,168.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,168.5,60,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,168.5,70,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4133,43 +4093,33 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,107.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,210,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,76.5,70,86',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,98,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,119.5,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,141,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,141,60,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,162.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,162.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,162.5,60,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,162.5,70,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4256,43 +4206,33 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,153.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,210,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,76.5,70,132',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,98,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,119.5,140,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,164,80,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,164,60,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,208.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,208.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,208.5,60,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,208.5,70,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4382,43 +4322,33 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,188',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,210,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,76.5,70,166.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,98,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,119.5,140,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,164,80,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,164,60,79',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,243,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,243,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,243,60,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,243,70,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [70, 80, 60, 70] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4482,34 +4412,26 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,156',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,210,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,140,90',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,76.5,70,134.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,166.5,80,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,166.5,60,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,211,70,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,211,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,211,60,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,211,70,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
                 const onRowExporting = (e) => {
@@ -4518,7 +4440,7 @@ const JSPdfWordWrapTests = {
                         e.rowHeight = 90;
                     }
                 };
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 10, y: 15 },
                     columnWidths: [70, 80, 60, 70],
                     onRowExporting
@@ -4567,26 +4489,22 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,130,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,60,54.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,76.5,70,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,109.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,131,60,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,131,70,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4635,32 +4553,26 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,210,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,60,66',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,76.5,150,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,109.5,70,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,180,109.5,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,142.5,60,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,142.5,70,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,180,142.5,80,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4696,23 +4608,20 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,43',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,70,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,98,80,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4752,29 +4661,24 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,54.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,140,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,88,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,88,60,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,109.5,70,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,109.5,80,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,109.5,60,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4818,35 +4722,28 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,43',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,55,70,43',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,76.5,60,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,70,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,98,80,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,98,60,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,98,70,44.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -4946,59 +4843,44 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,169.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,350,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,80,148',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,76.5,130,68.25',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,330,76.5,90,68.25',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,420,76.5,50,148',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,144.75,60,79.75',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,144.75,70,79.75',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,330,144.75,50,79.75',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,380,144.75,40,79.75',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,224.5,70,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,224.5,80,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,224.5,60,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,224.5,70,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,330,224.5,50,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,380,224.5,40,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,420,224.5,50,56',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 10, y: 15 },
                     columnWidths: [70, 80, 60, 70, 50, 40, 50]
                 }).then(() => {
@@ -5057,32 +4939,101 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,90,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,98,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,131,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,152.5,90,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,152.5,80,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 level - 1 group - [{f1, groupIndex: 0}, f2, f3] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        {
+                            f1: 'f1 line line',
+                            f2: 'f1_2 line long line',
+                            f3: 'f1_3 line long line long line'
+                        },
+                        {
+                            f1: 'f1 long line long line long line',
+                            f2: 'f2_2 line',
+                            f3: 'f2_3 line long line line'
+                        },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,450.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 line line,540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2 line long line,540.28,114.5,{baseline:middle,align:right}',
+                    'text,f1_3 line long\n' +
+'line long line,450.28,108.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line long line long line,540.28,141.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2 line,540.28,169,{baseline:middle,align:right}',
+                    'text,f2_3 line long\n' +
+'line line,450.28,163.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,98,90,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,80,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,131,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,152.5,90,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,152.5,80,33',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5136,32 +5087,101 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,90,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,98,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,131,170,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,164,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,164,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 level - 2 group - [{f1, groupIndex: 0}, f2, f3] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        {
+                            f1: 'f1_1 long line',
+                            f2: 'f1_2 long line long line long line',
+                            f3: 'f1_3 line'
+                        },
+                        {
+                            f1: 'f2_1 long line long line long line',
+                            f2: 'f2_2 line long line',
+                            f3: 'f2_3'
+                        },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,450.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 long line,540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2 long line\n' +
+'long line long line,540.28,108.75,{baseline:middle,align:right}',
+                    'text,f1_3 line,450.28,114.5,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f2_1 long line long line long\n' +
+'line,540.28,141.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2 line long line,540.28,174.75,{baseline:middle,align:right}',
+                    'text,f2_3,450.28,174.75,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,98,90,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,80,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,131,170,33',
+                    'setDrawColor,#979797',
+                    'rect,455.28,164,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,164,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5220,38 +5240,114 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,170,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,131,90,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,131,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,164,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,185.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,207,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,207,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 level - 2 groups - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                    ],
+                    dataSource: [
+                        {
+                            f1: 'f1 long line long line long line',
+                            f2: 'f1_2 long line',
+                            f3: 'f1_3 line',
+                            f4: 'f1_4'
+                        },
+                        {
+                            f1: 'f1 long line',
+                            f2: 'f2_2 long line long line long line long line',
+                            f3: 'f2_3 long line long line',
+                            f4: 'f2_4'
+                        },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,450.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line,540.28,87.25,{baseline:middle,align:right}',
+                    'text,F2: f2_2 long line long line long\n' +
+'line long line,540.28,108.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_3 long line\n' +
+'long line,540.28,141.75,{baseline:middle,align:right}',
+                    'text,f2_4,450.28,147.5,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line long line long line,540.28,174.75,{baseline:middle,align:right}',
+                    'text,F2: f1_2 long line,540.28,196.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_3 line,540.28,217.75,{baseline:middle,align:right}',
+                    'text,f1_4,450.28,217.75,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,170,33',
+                    'setDrawColor,#979797',
+                    'rect,455.28,131,90,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,131,80,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,164,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,185.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,207,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,207,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5297,29 +5393,87 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,98,90,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,98,80,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, f2, f3, f4], groupItems: [f1] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [ { column: 'f1', summaryType: 'max' } ]
+                    },
+                    dataSource: [{ f1: 'f1 line long line', f2: 'f2 line', f3: 'f3 long line long line long line', f4: 'f4 long line' }]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,460.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,370.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 line long line (Max: f1 line long line),540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2 line,540.28,114.5,{baseline:middle,align:right}',
+                    'text,f3 long line long\n' +
+'line long line,460.28,108.75,{baseline:middle,align:right}',
+                    'text,f4 long line,370.28,114.5,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,76.5,250,21.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,98,80,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,90,33',
+                    'setDrawColor,#979797',
+                    'rect,295.28,98,80,33',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5369,40 +5523,113 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,55,100,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,50,76.5,300,76.5',
                     'line,50,76.5,50,109.5',
                     'line,50,109.5,300,109.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,300,76.5,400,76.5',
                     'line,400,76.5,400,109.5',
                     'line,300,109.5,400,109.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,50,109.5,300,109.5',
                     'line,50,109.5,50,142.5',
                     'line,50,142.5,300,142.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,300,109.5,400,109.5',
                     'line,400,109.5,400,142.5',
                     'line,300,142.5,400,142.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,142.5,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,142.5,100,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting: () => {} }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1, f3, f4], groupItems: [f1, {f4, alignByColumn}] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 0 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f1', summaryType: 'max' },
+                            { column: 'f4', summaryType: 'max', alignByColumn: true }
+                        ]
+                    },
+                    dataSource: [{ f1: 'f1 long line long line long line', f2: 'f2 long line', f3: 'f3 line', f4: 'f4 long line long line' }]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,290.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line long line long line (Max: f1 long\n' +
+'line long line long line),540.28,87.25,{baseline:middle,align:right}',
+                    'text,Max: f4 long line\n' +
+'long line,290.28,87.25,{baseline:middle,align:right}',
+                    'text,F2: f2 long line (Max of F1 is f1 long line long line\n' +
+'long line),540.28,120.25,{baseline:middle,align:right}',
+                    'text,Max: f4 long line\n' +
+'long line,290.28,120.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f3 line,540.28,153.25,{baseline:middle,align:right}',
+                    'text,f4 long line long line,290.28,153.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,55,250,21.5',
+                    'setDrawColor,#979797',
+                    'rect,195.28,55,100,21.5',
+                    'setDrawColor,#979797',
+                    'line,295.28,76.5,545.28,76.5',
+                    'line,545.28,76.5,545.28,109.5',
+                    'line,295.28,109.5,545.28,109.5',
+                    'setDrawColor,#979797',
+                    'line,195.28,76.5,295.28,76.5',
+                    'line,195.28,76.5,195.28,109.5',
+                    'line,195.28,109.5,295.28,109.5',
+                    'setDrawColor,#979797',
+                    'line,295.28,109.5,545.28,109.5',
+                    'line,545.28,109.5,545.28,142.5',
+                    'line,295.28,142.5,545.28,142.5',
+                    'setDrawColor,#979797',
+                    'line,195.28,109.5,295.28,109.5',
+                    'line,195.28,109.5,195.28,142.5',
+                    'line,195.28,142.5,295.28,142.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,142.5,250,21.5',
+                    'setDrawColor,#979797',
+                    'rect,195.28,142.5,100,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5450,39 +5677,105 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,150,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,290,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,320,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,150,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,290,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,150,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,119.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,290,119.5,80,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, f2, f3, f4], groupItems: [f1, { f3, alignByColumn, showInGroupFooter }] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f1', summaryType: 'max' },
+                            { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ]
+                    },
+                    dataSource: [{ f1: 'f1 long line', f2: 'f2 very long line very long line', f3: 'f3 line', f4: 'f4 long line' }]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,390.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,300.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line (Max: f1 long line),540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2 very long line very long line,540.28,108.75,{baseline:middle,align:right}',
+                    'text,f3 line,390.28,108.75,{baseline:middle,align:right}',
+                    'text,f4 long line,300.28,108.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3 line,390.28,130.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,395.28,55,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,305.28,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,76.5,320,21.5',
+                    'setDrawColor,#979797',
+                    'rect,395.28,98,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,305.28,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,395.28,119.5,150,21.5',
+                    'setDrawColor,#979797',
+                    'rect,305.28,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,225.28,119.5,80,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5535,39 +5828,110 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,98,90,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,98,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,131,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,131,90,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,131,80,33',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [80, 90, 80] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [80, 90, 80] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, f2, f3, f4], groupItems: [{f3, alignByColumn, showInGroupFooter}] - height auto, word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [{ column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }]
+                    },
+                    dataSource: [{
+                        f1: 'f1 long line',
+                        f2: 'f2 long line long line long line',
+                        f3: 'f3 line long line long line',
+                        f4: 'f4 line'
+                    }]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,460.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,370.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 long line,540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f2 long line long\n' +
+'line long line,540.28,108.75,{baseline:middle,align:right}',
+                    'text,f3 line long line\n' +
+'long line,460.28,108.75,{baseline:middle,align:right}',
+                    'text,f4 line,370.28,114.5,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3 line long\n' +
+'line long line,460.28,141.75,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,295.28,76.5,250,21.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,98,80,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,90,33',
+                    'setDrawColor,#979797',
+                    'rect,295.28,98,80,33',
+                    'setDrawColor,#979797',
+                    'rect,465.28,131,80,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,131,90,33',
+                    'setDrawColor,#979797',
+                    'rect,295.28,131,80,33',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [80, 90, 80] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5647,69 +6011,177 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,109.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,131,80,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,131,90,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,187,80,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,187,90,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,243,80,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,243,90,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,299,170,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,332,170,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,365,80,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,365,90,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,398,80,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,398,90,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,442.5,80,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,442.5,90,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,487,80,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,487,90,44.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], groupItems: [{f3, alignByColumn, showInGroupFooter}], totalItems: [f3], 2 groups, height auto, wordWrapEnabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'f3', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { f1: 'f1 very ling line very long line very long line', f2: 'f2_1 line', f3: 'f3line1\nline2\nline3\nline4', f4: 'f4' },
+                        { f1: 'f1 very long line very long line', f2: 'f2_2very long line very long line', f3: 'f3very long line very long line', f4: 'f4' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F4,460.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 very ling line very long line\n' +
+'very long line,540.28,87.25,{baseline:middle,align:right}',
+                    'text,F2: f2_1 line,540.28,120.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f3line1\n' +
+'line2\n' +
+'line3\n' +
+'line4,540.28,141.75,{baseline:middle,align:right}',
+                    'text,f4,460.28,159,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3line1\n' +
+'line2\n' +
+'line3\n' +
+'line4,540.28,197.75,{baseline:middle,align:right}',
+                    'text,Max: f3line1\n' +
+'line2\n' +
+'line3\n' +
+'line4,540.28,253.75,{baseline:middle,align:right}',
+                    'text,F1: f1 very long line very long\n' +
+'line,540.28,309.75,{baseline:middle,align:right}',
+                    'text,F2: f2_2very long line very long\n' +
+'line,540.28,342.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f3very long line\n' +
+'very long line,540.28,375.75,{baseline:middle,align:right}',
+                    'text,f4,460.28,381.5,{baseline:middle,align:right}',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f3very\n' +
+'long line very\n' +
+'long line,540.28,408.75,{baseline:middle,align:right}',
+                    'text,Max: f3very\n' +
+'long line very\n' +
+'long line,540.28,453.25,{baseline:middle,align:right}',
+                    'text,Max: f3very\n' +
+'long line very\n' +
+'long line,540.28,497.75,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,76.5,170,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,109.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,131,80,56',
+                    'setDrawColor,#979797',
+                    'rect,375.28,131,90,56',
+                    'setDrawColor,#979797',
+                    'rect,465.28,187,80,56',
+                    'setDrawColor,#979797',
+                    'rect,375.28,187,90,56',
+                    'setDrawColor,#979797',
+                    'rect,465.28,243,80,56',
+                    'setDrawColor,#979797',
+                    'rect,375.28,243,90,56',
+                    'setDrawColor,#979797',
+                    'rect,375.28,299,170,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,332,170,33',
+                    'setDrawColor,#979797',
+                    'rect,465.28,365,80,33',
+                    'setDrawColor,#979797',
+                    'rect,375.28,365,90,33',
+                    'setDrawColor,#979797',
+                    'rect,465.28,398,80,44.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,398,90,44.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,442.5,80,44.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,442.5,90,44.5',
+                    'setDrawColor,#979797',
+                    'rect,465.28,487,80,44.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,487,90,44.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5749,21 +6221,71 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,99.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,121,70,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,165.5,70,0',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[f1, f2]], f1.groupIndex=0,f2.groupIndex=0 - height auto, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'Band1 long line 1 ling line 2', columns: [
+                            { dataField: 'f1', groupIndex: 0 },
+                            { dataField: 'f2', groupIndex: 0 }
+                        ] }
+                    ],
+                    dataSource: [
+                        { f1: 'f1_1 line', f2: 'f2_1 line long line long line' }],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 long\n' +
+'line 1 ling\n' +
+'line 2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 line,540.28,110.25,{baseline:middle,align:right}',
+                    'text,F2: f2_1 line\n' +
+'long line\n' +
+'long line,540.28,131.75,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,55,70,44.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,99.5,70,21.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,121,70,44.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,165.5,70,0',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5810,26 +6332,86 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,70,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,55,70,44.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,99.5,140,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,132.5,140,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,165.5,70,33',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,165.5,70,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[f1, f2], f3], f1.groupIndex=0,f2.groupIndex=1, summary: groupItems:f1 - height auto, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'Band1 long line 1 ling line 2', columns: [
+                            { dataField: 'f1', groupIndex: 0 },
+                            { dataField: 'f2', groupIndex: 1 }
+                        ] },
+                        { dataField: 'f3', caption: 'f3 line' }
+                    ],
+                    summary: {
+                        groupItems: [ { column: 'f1', summaryType: 'max' } ]
+                    },
+                    dataSource: [
+                        { f1: 'f1_1 line', f2: 'f2_1 line long line long line', f3: 'long line very long line' }],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 long\n' +
+'line 1 ling\n' +
+'line 2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,f3 line,470.28,77.25,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 line (Max: f1_1\n' +
+'line),540.28,110.25,{baseline:middle,align:right}',
+                    'text,F2: f2_1 line long line long\n' +
+'line (Max of F1 is f1_1 line),540.28,143.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,long line very\n' +
+'long line,470.28,176.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,55,70,44.5',
+                    'setDrawColor,#979797',
+                    'rect,405.28,55,70,44.5',
+                    'setDrawColor,#979797',
+                    'rect,405.28,99.5,140,33',
+                    'setDrawColor,#979797',
+                    'rect,405.28,132.5,140,33',
+                    'setDrawColor,#979797',
+                    'rect,475.28,165.5,70,33',
+                    'setDrawColor,#979797',
+                    'rect,405.28,165.5,70,33',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ] }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -5924,53 +6506,174 @@ const JSPdfWordWrapTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,330,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,150,68.25',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,76.5,130,68.25',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,330,76.5,50,148',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,144.75,70,79.75',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,144.75,80,79.75',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,144.75,60,79.75',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,144.75,70,79.75',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,224.5,330,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,246,330,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,267.5,70,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,267.5,80,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,200,267.5,60,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,260,267.5,70,56',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,330,267.5,50,56',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
+                    topLeft: { x: 10, y: 15 },
+                    columnWidths: [70, 80, 60, 70, 50]
+                }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[f1, band1-[f2, band1_1-[f3,f4], band2_2-[f5,f6],f7]], f1.groupIndex:0, f2.groupIndex 1 - height auto, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions.hAlign = true;
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        {
+                            caption: 'Band1 line',
+                            columns: [
+                                { dataField: 'f2', groupIndex: 1 },
+                                {
+                                    caption: 'Band1_1 long line very long line',
+                                    columns: [
+                                        { dataField: 'f3', caption: 'f3  long line' },
+                                        { dataField: 'f4', caption: 'f4  long line very long line' }
+                                    ]
+                                },
+                                {
+                                    caption: 'Band1_2',
+                                    columns: [{ dataField: 'f5', caption: 'f5 long line very long line' }, 'f6']
+                                },
+                                {
+                                    caption: 'f7 long line very long linelong line very long linelong line very long linelong line very long line',
+                                    dataField: 'f7'
+                                }
+                            ]
+                        }
+                    ],
+                    dataSource: [{
+                        f1: 'f1_1 line',
+                        f2: 'f2_1 long line very long line',
+                        f3: 'f3_1',
+                        f4: 'f4_1 very long line very long line very long line',
+                        f5: 'f5_1 long line', f6: 'f6_1', f7: 'f7_1 line'
+                    }],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1 line,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,Band1_1 long line very long\n' +
+'line,540.28,104.875,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,Band1_2,390.28,110.625,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,f7 long\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long\n' +
+'linelong\n' +
+'line very\n' +
+'long line,260.28,87.25,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,f3  long line,540.28,184.625,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,f4  long line\n' +
+'very long line,470.28,178.875,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,f5 long line\n' +
+'very long\n' +
+'line,390.28,173.125,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F6,330.28,184.625,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1 line,540.28,235.25,{baseline:middle,align:right}',
+                    'text,F2: f2_1 long line very long line,540.28,256.75,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f3_1,540.28,295.5,{baseline:middle,align:right}',
+                    'text,f4_1 very long\n' +
+'line very long\n' +
+'line very long\n' +
+'line,470.28,278.25,{baseline:middle,align:right}',
+                    'text,f5_1 long\n' +
+'line,390.28,289.75,{baseline:middle,align:right}',
+                    'text,f6_1,330.28,295.5,{baseline:middle,align:right}',
+                    'text,f7_1 line,260.28,295.5,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,215.28,55,330,21.5',
+                    'setDrawColor,#979797',
+                    'rect,395.28,76.5,150,68.25',
+                    'setDrawColor,#979797',
+                    'rect,265.28,76.5,130,68.25',
+                    'setDrawColor,#979797',
+                    'rect,215.28,76.5,50,148',
+                    'setDrawColor,#979797',
+                    'rect,475.28,144.75,70,79.75',
+                    'setDrawColor,#979797',
+                    'rect,395.28,144.75,80,79.75',
+                    'setDrawColor,#979797',
+                    'rect,335.28,144.75,60,79.75',
+                    'setDrawColor,#979797',
+                    'rect,265.28,144.75,70,79.75',
+                    'setDrawColor,#979797',
+                    'rect,215.28,224.5,330,21.5',
+                    'setDrawColor,#979797',
+                    'rect,215.28,246,330,21.5',
+                    'setDrawColor,#979797',
+                    'rect,475.28,267.5,70,56',
+                    'setDrawColor,#979797',
+                    'rect,395.28,267.5,80,56',
+                    'setDrawColor,#979797',
+                    'rect,335.28,267.5,60,56',
+                    'setDrawColor,#979797',
+                    'rect,265.28,267.5,70,56',
+                    'setDrawColor,#979797',
+                    'rect,215.28,267.5,50,56',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 10, y: 15 },
                     columnWidths: [70, 80, 60, 70, 50]
                 }).then(() => {

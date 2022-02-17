@@ -44,6 +44,7 @@ export const viewFunction = ({
       overflowIndicators.map((item) => (
         <OverflowIndicator
           viewModel={item}
+          groups={groups}
           overflowIndicatorTemplate={overflowIndicatorTemplate}
           key={item.key}
         />

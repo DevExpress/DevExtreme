@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfBorderColorsTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -45,26 +45,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -108,26 +104,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,128',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -171,26 +163,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,255,0',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -234,26 +222,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,0,1,0',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -297,24 +281,20 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -358,26 +338,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,128',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,128',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,128',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -421,26 +397,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,0,255,0',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,255,0',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,255,0',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -484,26 +456,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,0,0,1,0',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,0,1,0',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,0,1,0',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -548,26 +516,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#ff0000',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#00ff00',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#0000ff',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -612,26 +576,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,80',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,128',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,255',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -676,26 +636,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,255,0,0',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,255,0',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,0,255',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -740,26 +696,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,1,0,0,0',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,1,0,0',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,0,1,0',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -807,35 +759,28 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,98,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -883,35 +828,28 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,140,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,98,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -962,35 +900,28 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#ff0000',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#00ff00',
                     'rect,140,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#0000ff',
                     'rect,140,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,98,90,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1035,19 +966,17 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,50,76.5,140,76.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,140,76.5,220,76.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1090,22 +1019,20 @@ const JSPdfBorderColorsTests = {
                     'setDrawColor,#dddd00',
                     'line,50,55,140,55',
                     'line,50,76.5,140,76.5',
-                    'setLineWidth,0.5',
                     'line,140,55,220,55',
                     'line,140,76.5,220,76.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,50,76.5,140,76.5',
                     'line,50,98,140,98',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,140,76.5,220,76.5',
                     'line,140,98,220,98',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1148,22 +1075,20 @@ const JSPdfBorderColorsTests = {
                     'setDrawColor,#dddd00',
                     'line,50,55,50,76.5',
                     'line,140,55,140,76.5',
-                    'setLineWidth,0.5',
                     'line,140,55,140,76.5',
                     'line,220,55,220,76.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,50,76.5,50,98',
                     'line,140,76.5,140,98',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,140,76.5,140,98',
                     'line,220,76.5,220,98',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1203,19 +1128,17 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'rect,140,76.5,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1255,20 +1178,18 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,128',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,128',
                     'rect,140,76.5,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1308,20 +1229,18 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,255,0',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,255,0',
                     'rect,140,76.5,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1361,20 +1280,18 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,1,0,0',
                     'rect,50,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,1,0,0',
                     'rect,140,76.5,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1417,22 +1334,20 @@ const JSPdfBorderColorsTests = {
                     'setDrawColor,#979797',
                     'line,50,55,140,55',
                     'line,50,76.5,140,76.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,140,55,220,55',
                     'line,140,76.5,220,76.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'line,50,76.5,140,76.5',
                     'line,50,98,140,98',
-                    'setLineWidth,0.5',
                     'line,140,76.5,220,76.5',
                     'line,140,98,220,98',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1475,22 +1390,20 @@ const JSPdfBorderColorsTests = {
                     'setDrawColor,#979797',
                     'line,50,55,50,76.5',
                     'line,140,55,140,76.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'line,140,55,140,76.5',
                     'line,220,55,220,76.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'line,50,76.5,50,98',
                     'line,140,76.5,140,98',
-                    'setLineWidth,0.5',
                     'line,140,76.5,140,98',
                     'line,220,76.5,220,98',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1540,32 +1453,26 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,50,119.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,141,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,141,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1617,32 +1524,26 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,100',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,0,221',
                     'rect,50,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,100',
                     'rect,50,119.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,0,221',
                     'rect,50,141,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,141,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1696,40 +1597,34 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,0,221',
                     'line,50,98,140,98',
                     'line,50,98,50,119.5',
                     'line,50,119.5,140,119.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,0,221',
                     'line,140,98,220,98',
                     'line,220,98,220,119.5',
                     'line,140,119.5,220,119.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,50,119.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,0,221',
                     'line,50,141,140,141',
                     'line,50,141,50,162.5',
                     'line,50,162.5,140,162.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,0,0,221',
                     'line,140,141,220,141',
                     'line,220,141,220,162.5',
                     'line,140,162.5,220,162.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1781,35 +1676,28 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#00dddd',
                     'rect,50,98,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,119.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#00dddd',
                     'rect,50,141,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,162.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,140,162.5,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1860,37 +1748,29 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,220,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,50,119.5,80,21.5',
-                    'setLineWidth,0.5',
                     'rect,130,119.5,90,21.5',
-                    'setLineWidth,0.5',
                     'rect,220,119.5,80,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1945,38 +1825,30 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,55,100,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,350,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,350,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,119.5,100,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,221,221,0',
                     'rect,50,141,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,221,221,0',
                     'rect,300,141,100,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#00dddd',
                     'rect,50,162.5,250,21.5',
-                    'setLineWidth,0.5',
                     'rect,300,162.5,100,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2021,26 +1893,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,76.5,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
                     'rect,50,98,80,21.5',
-                    'setLineWidth,0.5',
                     'rect,130,98,90,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2089,30 +1957,25 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,55,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,170,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,130,98,90,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,221,221,0',
                     'rect,50,119.5,80,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,221,221,0',
                     'rect,130,119.5,90,21.5',
                     'setFont,helvetica,normal,',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2151,23 +2014,20 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#ffff00',
                     'rect,50,55,140,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,98,70,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2216,26 +2076,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,221,221,0',
                     'rect,50,55,150,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#ffff00',
                     'rect,50,76.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,76.5,80,43',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,98,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,120,119.5,80,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2285,26 +2141,22 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,221,221,0',
                     'rect,50,55,130,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,60,43',
-                    'setLineWidth,0.5',
                     'setDrawColor,#ffff00',
                     'rect,110,76.5,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,98,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,60,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,119.5,70,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2355,28 +2207,24 @@ const JSPdfBorderColorsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,221,221,0',
                     'rect,50,55,130,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,76.5,60,43',
-                    'setLineWidth,0.5',
                     'setDrawColor,#ffff00',
                     'line,110,76.5,110,98',
                     'line,180,76.5,180,98',
                     'line,110,98,180,98',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,98,70,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,119.5,60,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,110,119.5,70,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

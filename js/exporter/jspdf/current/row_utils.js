@@ -1,5 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
-import { calculateRowHeight, getPageWidth } from './pdf_utils_v3';
+import { calculateRowHeight, getPageWidth } from './pdf_utils';
 
 function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
     const columnsWidths = dataProvider.getColumnsWidths();
@@ -139,17 +139,33 @@ function calculateCoordinates(doc, rows, options) {
     });
 }
 
-function calculateTableSize(doc, rows, options) {
-    const topLeft = options?.topLeft;
-    const columnWidths = options?.columnWidths;
-    const rowHeights = rows.map(row => row.height);
+function calculateTableSize(doc, cells, options) {
+    let leftPos;
+    let topPos;
+    let rightPos;
+    let bottomPos;
 
-    return {
-        x: topLeft?.x ?? 0,
-        y: topLeft?.y ?? 0,
-        w: columnWidths?.reduce((a, b) => a + b, 0) ?? 0,
-        h: rowHeights?.reduce((a, b) => a + b, 0) ?? 0
-    };
+    cells.forEach(cell => {
+        if(!isDefined(leftPos) || leftPos > cell._rect.x) {
+            leftPos = cell._rect.x;
+        }
+        if(!isDefined(topPos) || topPos > cell._rect.y) {
+            topPos = cell._rect.y;
+        }
+        if(!isDefined(rightPos) || rightPos < cell._rect.x + cell._rect.w) {
+            rightPos = cell._rect.x + cell._rect.w;
+        }
+        if(!isDefined(bottomPos) || bottomPos < cell._rect.y + cell._rect.h) {
+            bottomPos = cell._rect.y + cell._rect.h;
+        }
+    });
+
+    const x = leftPos ?? options?.topLeft?.x ?? 0;
+    const y = topPos ?? options?.topLeft?.y ?? 0;
+    const w = isDefined(rightPos) ? rightPos - x : 0;
+    const h = isDefined(bottomPos) ? bottomPos - y : 0;
+
+    return { x, y, w, h };
 }
 
 export { initializeCellsWidth, applyColSpans, applyRowSpans, resizeFirstColumnByIndentLevel, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };

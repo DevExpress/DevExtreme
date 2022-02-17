@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfMeasureUnitsTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -23,15 +23,15 @@ const JSPdfMeasureUnitsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,40,40,515.28,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,40,61.5,515.28,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
                 const doc = createMockPdfDoc({ unit: 'pt' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 0, y: 0 }
                 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -64,11 +64,12 @@ const JSPdfMeasureUnitsTests = {
                     'setDrawColor,#979797',
                     'rect,30,46.125,386.46,16.125',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
                 const doc = createMockPdfDoc({ unit: 'px' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 0, y: 0 }
                 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -101,11 +102,12 @@ const JSPdfMeasureUnitsTests = {
                     'setDrawColor,#979797',
                     'rect,1.411,2.17,18.178,0.758',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
                 const doc = createMockPdfDoc({ unit: 'cm' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 0, y: 0 }
                 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -138,11 +140,12 @@ const JSPdfMeasureUnitsTests = {
                     'setDrawColor,#979797',
                     'rect,14.111,21.696,181.779,7.585',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
                 const doc = createMockPdfDoc({ unit: 'mm' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 0, y: 0 }
                 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -175,11 +178,12 @@ const JSPdfMeasureUnitsTests = {
                     'setDrawColor,#979797',
                     'rect,0.556,0.854,7.157,0.299',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
                 const doc = createMockPdfDoc({ unit: 'in' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     topLeft: { x: 0, y: 0 }
                 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -208,10 +212,10 @@ const JSPdfMeasureUnitsTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,30,30,200,51.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,30,81.5,200,51.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
@@ -225,7 +229,7 @@ const JSPdfMeasureUnitsTests = {
 
 
                 const doc = createMockPdfDoc({ unit: 'pt' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     margin: 30,
                     topLeft: { x: 0, y: 0 },
                     columnWidths: [200],
@@ -261,6 +265,7 @@ const JSPdfMeasureUnitsTests = {
                     'setDrawColor,#979797',
                     'rect,30,78.625,200,48.625',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
@@ -274,7 +279,7 @@ const JSPdfMeasureUnitsTests = {
 
 
                 const doc = createMockPdfDoc({ unit: 'px' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     margin: 30,
                     topLeft: { x: 0, y: 0 },
                     columnWidths: [200],
@@ -310,6 +315,7 @@ const JSPdfMeasureUnitsTests = {
                     'setDrawColor,#979797',
                     'rect,60,100.406,200,40.406',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
@@ -323,7 +329,7 @@ const JSPdfMeasureUnitsTests = {
 
 
                 const doc = createMockPdfDoc({ unit: 'cm' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     margin: 30,
                     topLeft: { x: 0, y: 0 },
                     columnWidths: [200],
@@ -359,6 +365,7 @@ const JSPdfMeasureUnitsTests = {
                     'setDrawColor,#979797',
                     'rect,60,74.057,200,44.057',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
@@ -372,7 +379,7 @@ const JSPdfMeasureUnitsTests = {
 
 
                 const doc = createMockPdfDoc({ unit: 'mm' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     margin: 30,
                     topLeft: { x: 0, y: 0 },
                     columnWidths: [200],
@@ -408,6 +415,7 @@ const JSPdfMeasureUnitsTests = {
                     'setDrawColor,#979797',
                     'rect,60,100.16,200,40.16',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
@@ -421,7 +429,7 @@ const JSPdfMeasureUnitsTests = {
 
 
                 const doc = createMockPdfDoc({ unit: 'in' });
-                exportDataGrid(doc, dataGrid, {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid,
                     margin: 30,
                     topLeft: { x: 0, y: 0 },
                     columnWidths: [200],

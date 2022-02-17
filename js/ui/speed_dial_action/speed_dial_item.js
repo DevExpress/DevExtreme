@@ -8,6 +8,7 @@ import Overlay from '../overlay/ui.overlay';
 import { render } from '../widget/utils.ink_ripple';
 import { isMaterial } from '../themes';
 import { isPlainObject } from '../../core/utils/type';
+import { getWindow } from '../../core/utils/window';
 
 const FAB_CLASS = 'dx-fa-button';
 const FAB_ICON_CLASS = 'dx-fa-button-icon';
@@ -24,7 +25,9 @@ class SpeedDialItem extends Overlay {
             callOverlayRenderShading: false,
             width: 'auto',
             zIndex: 1500,
-            _observeContentResize: false
+            _observeContentResize: false,
+            container: this.$element(),
+            visualContainer: getWindow()
         });
     }
 

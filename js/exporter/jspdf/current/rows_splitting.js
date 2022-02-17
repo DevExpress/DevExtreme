@@ -1,6 +1,6 @@
 import { isDefined } from '../../../core/utils/type';
 import { roundToThreeDecimals } from './draw_utils';
-import { getPageWidth, getPageHeight } from './pdf_utils_v3';
+import { getPageWidth, getPageHeight } from './pdf_utils';
 
 function convertToCellsArray(rows) {
     return [].concat.apply([],

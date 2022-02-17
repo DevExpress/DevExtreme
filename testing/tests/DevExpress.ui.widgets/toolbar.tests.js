@@ -1,5 +1,3 @@
-import 'ui/action_sheet';
-import 'ui/drop_down_menu';
 import errors from 'core/errors';
 
 import $ from 'jquery';
@@ -8,17 +6,13 @@ import ToolbarBase from 'ui/toolbar/ui.toolbar.base';
 import fx from 'animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
-import eventsEngine from 'events/core/events_engine';
 import { deferUpdate } from 'core/utils/common';
 import { getHeight } from 'core/utils/size';
 import domAdapter from 'core/dom_adapter';
 import devices from 'core/devices';
 
-import 'ui/button_group';
 import 'ui/text_box';
-
 import 'generic_light.css!';
-import 'ui/button';
 import 'ui/drop_down_button';
 import 'ui/tabs';
 
@@ -701,95 +695,6 @@ QUnit.module('toolbar with menu', {
 
         assert.equal(position.at, 'bottom right', 'at position is correct');
         assert.equal(position.my, 'top right', 'my position is correct');
-    });
-});
-
-QUnit.module('disabled state', () => {
-    [true, false, undefined, 'not declared'].forEach((isToolbarDisabled) => {
-        [true, false, undefined, 'not declared'].forEach((isButtonDisabled) => {
-
-            const checkClickHandlers = (assert, itemClickHandler, buttonClickHandler, buttonDisabled, toolbarDisabled, locateInMenu) => {
-                if(locateInMenu !== 'never') {
-                    return;
-                }
-
-                assert.strictEqual(itemClickHandler.callCount, toolbarDisabled ? 0 : 1, `onItemClick ${itemClickHandler.callCount}`);
-                assert.strictEqual(buttonClickHandler.callCount, buttonDisabled || toolbarDisabled ? 0 : 1, `onButtonClick ${buttonClickHandler.callCount}`);
-            };
-
-            const checkDisabledState = (assert, $button, $toolbar, expectedButtonDisabled, expectedToolbarDisabled) => {
-                assert.strictEqual($button.dxButton('option', 'disabled'), expectedButtonDisabled, `button.disabled ${expectedButtonDisabled}`);
-                assert.strictEqual($toolbar.dxToolbar('option', 'disabled'), expectedToolbarDisabled, `toolbar.disabled ${expectedToolbarDisabled}`);
-            };
-
-            [true, false, undefined].forEach((isToolbarDisabledNew) => {
-                [true, false, undefined].forEach((isButtonDisabledNew) => {
-                    [true, false].forEach((changeDisabledOrder) => {
-                        ['never', 'always'].forEach((locateInMenu) => {
-                            QUnit.test(`new dxToolbar({
-                                    toolbar.disabled: ${isToolbarDisabled},
-                                    button.disabled: ${isButtonDisabled}),
-                                    toolbar.disabled new: ${isToolbarDisabledNew},
-                                    button.disabled new: ${isButtonDisabledNew},
-                                    changeDisableOrder: ${changeDisabledOrder},
-                                    locateInMenu: ${locateInMenu}`,
-                            function(assert) {
-                                const itemClickHandler = sinon.spy();
-                                const buttonClickHandler = sinon.spy();
-                                const toolbarOptions = {
-                                    onItemClick: itemClickHandler,
-                                    items: [{
-                                        location: 'after',
-                                        locateInMenu: locateInMenu,
-                                        widget: 'dxButton',
-                                        options: {
-                                            onClick: buttonClickHandler
-                                        }
-                                    }]
-                                };
-
-                                if(isToolbarDisabled !== 'not declared') {
-                                    toolbarOptions.disabled = isToolbarDisabled;
-                                }
-                                if(isButtonDisabled !== 'not declared') {
-                                    toolbarOptions.items[0].options.disabled = isButtonDisabled;
-                                }
-
-                                const $element = $('#toolbar');
-                                $element.dxToolbar(toolbarOptions);
-
-                                const $button = locateInMenu === 'never' ? $element.find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0) : $element.find(`.${DROP_DOWN_MENU_CLASS}`).eq(0);
-
-                                const expectedToolbarValue = isToolbarDisabled !== 'not declared' ? isToolbarDisabled : false;
-                                const expectedButtonValue = isButtonDisabled !== 'not declared' ? isButtonDisabled : false;
-
-                                checkDisabledState(assert, $button, $element, locateInMenu === 'never' ? expectedButtonValue : false, expectedToolbarValue);
-
-                                eventsEngine.trigger($button, 'dxclick');
-                                checkClickHandlers(assert, itemClickHandler, buttonClickHandler, expectedButtonValue, expectedToolbarValue, locateInMenu);
-
-                                itemClickHandler.reset();
-                                buttonClickHandler.reset();
-
-                                if(changeDisabledOrder) {
-                                    $button.dxButton('option', 'disabled', isButtonDisabledNew);
-                                    $element.dxToolbar('option', 'disabled', isToolbarDisabledNew);
-                                } else {
-                                    $element.dxToolbar('option', 'disabled', isToolbarDisabledNew);
-                                    checkDisabledState(assert, $button, $element, locateInMenu === 'never' ? expectedButtonValue : false, isToolbarDisabledNew);
-                                    $button.dxButton('option', 'disabled', isButtonDisabledNew);
-                                }
-
-                                checkDisabledState(assert, $button, $element, isButtonDisabledNew, isToolbarDisabledNew);
-
-                                eventsEngine.trigger($button, 'dxclick');
-                                checkClickHandlers(assert, itemClickHandler, buttonClickHandler, isButtonDisabledNew, isToolbarDisabledNew, locateInMenu);
-                            });
-                        });
-                    });
-                });
-            });
-        });
     });
 });
 

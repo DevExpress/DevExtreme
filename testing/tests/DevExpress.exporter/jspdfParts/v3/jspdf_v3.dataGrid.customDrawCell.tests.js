@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfCustomDrawCellTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -23,6 +23,7 @@ const JSPdfCustomDrawCellTests = {
                     assert.deepEqual(pdfCell, {
                         backgroundColor: undefined,
                         borderColor: '#979797',
+                        borderWidth: 0.5,
                         font: {
                             size: 10
                         },
@@ -49,7 +50,7 @@ const JSPdfCustomDrawCellTests = {
                     assert.equal(cancel, false, 'cancel value is correct');
                 };
 
-                exportDataGrid(pdfDoc, dataGrid, { topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: pdfDoc, component: dataGrid, topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     done();
                 });
@@ -74,15 +75,15 @@ const JSPdfCustomDrawCellTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,50,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,50,250,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -108,15 +109,15 @@ const JSPdfCustomDrawCellTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,50,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,50,250,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -142,15 +143,15 @@ const JSPdfCustomDrawCellTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,50,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,50,250,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -192,15 +193,15 @@ const JSPdfCustomDrawCellTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,50,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,50,250,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customizeCell, customDrawCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 10 }, customizeCell, customDrawCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -234,15 +235,15 @@ const JSPdfCustomDrawCellTests = {
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,50,250,21.5',
-                    'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,300,50,250,21.5',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

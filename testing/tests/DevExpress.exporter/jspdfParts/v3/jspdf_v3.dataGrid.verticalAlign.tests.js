@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfVerticalAlignTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -23,11 +23,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -54,11 +55,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -85,11 +87,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -119,11 +122,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -153,11 +157,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -187,11 +192,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -221,11 +227,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -255,11 +262,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -289,11 +297,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -322,11 +331,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -355,11 +365,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -388,11 +399,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -424,11 +436,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -460,11 +473,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -496,11 +510,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -532,11 +547,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -568,11 +584,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -604,11 +621,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -637,11 +655,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -670,11 +689,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -703,11 +723,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -739,11 +760,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -775,11 +797,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -811,11 +834,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -847,11 +871,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -883,11 +908,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -919,11 +945,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -953,11 +980,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -985,11 +1013,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1017,11 +1046,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1052,11 +1082,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1087,11 +1118,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1122,11 +1154,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1157,11 +1190,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1192,11 +1226,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1227,11 +1262,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1261,11 +1297,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1295,11 +1332,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1329,11 +1367,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1366,11 +1405,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1403,11 +1443,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1440,11 +1481,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1477,11 +1519,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1514,11 +1557,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1551,11 +1595,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1585,11 +1630,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1619,11 +1665,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1653,11 +1700,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1690,11 +1738,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1727,11 +1776,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1764,11 +1814,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1801,11 +1852,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1838,11 +1890,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1875,11 +1928,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1908,11 +1962,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1941,11 +1996,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1974,11 +2030,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2010,11 +2067,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2046,11 +2104,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2082,11 +2141,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2118,11 +2178,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2154,11 +2215,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2190,11 +2252,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2225,11 +2288,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2260,11 +2324,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2295,11 +2360,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2333,11 +2399,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2371,11 +2438,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2409,11 +2477,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2447,11 +2516,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2485,11 +2555,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2523,11 +2594,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2558,11 +2630,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2593,11 +2666,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2628,11 +2702,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2666,11 +2741,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2704,11 +2780,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2742,11 +2819,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2780,11 +2858,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2818,11 +2897,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2856,11 +2936,12 @@ const JSPdfVerticalAlignTests = {
                     'setDrawColor,#979797',
                     'rect,50,55,100,50',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

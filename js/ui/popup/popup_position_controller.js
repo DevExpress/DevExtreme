@@ -127,12 +127,12 @@ class PopupPositionController extends OverlayPositionController {
         return isContainerDefined ? this._$markupContainer : $(window);
     }
 
-    _getWrapperCoveredElement() {
+    _getVisualContainer() {
         if(this._props.fullScreen) {
             return $(window);
         }
 
-        return super._getWrapperCoveredElement();
+        return super._getVisualContainer();
     }
 
     _fullScreenEnabled() {

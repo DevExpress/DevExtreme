@@ -3,24 +3,28 @@ import { extend } from '../../../core/utils/extend';
 import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
-import { generateRowsInfo } from './rows_generator';
+import { generateRowsInfo, getBaseTableStyle } from './rows_generator';
 import { splitByPages } from './rows_splitting';
-import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
-import { applyWordWrap, toPdfUnit } from './pdf_utils_v3';
+import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, addNewPage } from './draw_utils';
+import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils';
 
 // TODO: check names with techwritters
 // IPDFExportOptions: {
 //    repeatHeaders: false,
+//    tableBorderWidth: number,
+//    tableBorderColor: color,
 //    topLeft: {x: number, y: number},
 //    indent: number,
 //    margin: { top:number, left:number, right:number, bottom:number } | number
 //    customizeCell: ({ gridCell, pdfCell }): void
 //    customDrawCell: ({ rect, pdfCell, gridCell, cancel }): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
 // }
-function _getFullOptions(doc, options) {
+
+function _getFullOptions(options) {
+    const { jsPDFDocument } = options;
     const fullOptions = extend({}, options);
     if(!isDefined(fullOptions.topLeft)) {
-        throw 'options.topLeft is required';
+        fullOptions.topLeft = { x: 0, y: 0 };
     }
     if(!isDefined(fullOptions.indent)) {
         fullOptions.indent = 0;
@@ -29,21 +33,29 @@ function _getFullOptions(doc, options) {
         fullOptions.repeatHeaders = true;
     }
     if(!isDefined(fullOptions.margin)) {
-        fullOptions.margin = toPdfUnit(doc, 40);
+        fullOptions.margin = toPdfUnit(jsPDFDocument, 40);
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
+
+    const tableStyle = getBaseTableStyle();
+    fullOptions.tableBorderWidth = fullOptions.tableBorderWidth ?? tableStyle.borderWidth;
+    fullOptions.tableBorderColor = fullOptions.tableBorderColor ?? tableStyle.borderColor;
+
     return fullOptions;
 }
 
-function exportDataGrid(doc, dataGrid, options) {
-    options = extend({}, _getFullOptions(doc, options));
+function exportDataGrid(options) {
+    const {
+        jsPDFDocument,
+        component,
+    } = options;
 
-    const dataProvider = dataGrid.getDataProvider();
+    const dataProvider = component.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
 
             // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
-            const rowsInfo = generateRowsInfo(doc, dataProvider, dataGrid, options.rowOptions?.headerStyles?.backgroundColor);
+            const rowsInfo = generateRowsInfo(jsPDFDocument, dataProvider, component, options.rowOptions?.headerStyles?.backgroundColor);
 
             if(options.customizeCell) {
                 rowsInfo.forEach(rowInfo => rowInfo.cells.forEach(cellInfo =>
@@ -64,8 +76,8 @@ function exportDataGrid(doc, dataGrid, options) {
 
             normalizeRowsInfo(rowsInfo);
 
-            // computes withs of the cells depending of the options
-            initializeCellsWidth(doc, dataProvider, rowsInfo, options);
+            // computes withs of the cells depending of the fullOptions
+            initializeCellsWidth(jsPDFDocument, dataProvider, rowsInfo, options);
 
             // apply intends for correctly set width and colSpan for grouped rows
             resizeFirstColumnByIndentLevel(rowsInfo, options);
@@ -74,56 +86,80 @@ function exportDataGrid(doc, dataGrid, options) {
             applyColSpans(rowsInfo);
 
             // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled+padding or use value from customizeCell
-            calculateHeights(doc, rowsInfo, options);
+            calculateHeights(jsPDFDocument, rowsInfo, options);
 
             // apply rowSpans + recalculate cells height
             applyRowSpans(rowsInfo);
 
             // when we know all rowSpans we can recalculate rowsHeight
-            updateRowsAndCellsHeights(doc, rowsInfo);
+            updateRowsAndCellsHeights(jsPDFDocument, rowsInfo);
 
             // when we known all sizes we can calculate all coordinates
-            calculateCoordinates(doc, rowsInfo, options); // set/init/update 'pdfCell.top/left'
+            calculateCoordinates(jsPDFDocument, rowsInfo, options); // set/init/update 'pdfCell.top/left'
 
             // recalculate for grouped rows
             // TODO: applyGroupIndents()
 
             applyBordersConfig(rowsInfo);
 
-            applyWordWrap(doc, rowsInfo, options);
+            applyWordWrap(jsPDFDocument, rowsInfo);
 
             // splitting to pages
             // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
             // TODO: applySplitting()
 
-            const docStyles = getDocumentStyles(doc);
-
+            const docStyles = getDocumentStyles(jsPDFDocument);
+            const rtlEnabled = !!component.option('rtlEnabled');
             const onSeparateRectHorizontally = ({ sourceRect, leftRect, rightRect }) => {
                 let leftRectTextOptions = {};
                 let rightRectTextOptions = {};
                 const isTextNotEmpty = sourceRect.sourceCellInfo.text?.length > 0;
                 if(isTextNotEmpty) {
-                    const isTextWidthGreaterThanRect = doc.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
-                    const isTextLeftAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'left';
-                    if(isTextWidthGreaterThanRect || !isTextLeftAlignment) {
-                        let leftTextLeftOffset;
-                        let rightTextLeftOffset;
-                        if(sourceRect.sourceCellInfo?.horizontalAlign === 'left') {
-                            leftTextLeftOffset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
-                            rightTextLeftOffset = leftTextLeftOffset - leftRect.w;
-                        } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'center') {
-                            const offset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
-                            leftTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (leftRect.x + leftRect.w / 2);
-                            rightTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (rightRect.x + rightRect.w / 2);
-                        } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'right') {
-                            leftTextLeftOffset = (sourceRect.x + sourceRect.w) - (leftRect.x + leftRect.w);
-                            rightTextLeftOffset = (sourceRect.x + sourceRect.w) - (rightRect.x + rightRect.w);
-                        }
+                    if(rtlEnabled) {
+                        const isTextWidthGreaterThanRect = jsPDFDocument.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
+                        const isTextRightAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'right';
+                        if(isTextWidthGreaterThanRect || !isTextRightAlignment) {
+                            let rightRectTextOffset;
+                            let leftRectTextOffset;
+                            if(sourceRect.sourceCellInfo?.horizontalAlign === 'right') {
+                                rightRectTextOffset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
+                                leftRectTextOffset = rightRectTextOffset + leftRect.w;
+                            } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'center') {
+                                leftRectTextOffset = (sourceRect.x + sourceRect.w) - (rightRect.x + rightRect.w) + sourceRect.sourceCellInfo._rect.w / 2 - leftRect.w / 2;
+                                rightRectTextOffset = leftRectTextOffset - rightRect.w;
+                            } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'left') {
+                                leftRectTextOffset = (sourceRect.x + sourceRect.w) - (rightRect.x + rightRect.w);
+                                rightRectTextOffset = leftRectTextOffset - rightRect.w;
+                            }
 
-                        leftRectTextOptions = Object.assign({}, { _textLeftOffset: leftTextLeftOffset });
-                        rightRectTextOptions = Object.assign({}, { _textLeftOffset: rightTextLeftOffset });
+                            leftRectTextOptions = Object.assign({}, { _textLeftOffset: rightRectTextOffset });
+                            rightRectTextOptions = Object.assign({}, { _textLeftOffset: leftRectTextOffset });
+                        } else {
+                            rightRectTextOptions = Object.assign({}, { text: '' });
+                        }
                     } else {
-                        rightRectTextOptions = Object.assign({}, { text: '' });
+                        const isTextWidthGreaterThanRect = jsPDFDocument.getTextWidth(sourceRect.sourceCellInfo.text) > leftRect.w;
+                        const isTextLeftAlignment = !isDefined(sourceRect.sourceCellInfo.horizontalAlign) || sourceRect.sourceCellInfo.horizontalAlign === 'left';
+                        if(isTextWidthGreaterThanRect || !isTextLeftAlignment) {
+                            let leftTextLeftOffset;
+                            let rightTextLeftOffset;
+                            if(sourceRect.sourceCellInfo?.horizontalAlign === 'left') {
+                                leftTextLeftOffset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
+                                rightTextLeftOffset = leftTextLeftOffset - leftRect.w;
+                            } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'center') {
+                                const offset = sourceRect.sourceCellInfo._textLeftOffset ?? 0;
+                                leftTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (leftRect.x + leftRect.w / 2);
+                                rightTextLeftOffset = offset + (sourceRect.x + sourceRect.w / 2) - (rightRect.x + rightRect.w / 2);
+                            } else if(sourceRect.sourceCellInfo?.horizontalAlign === 'right') {
+                                leftTextLeftOffset = (sourceRect.x + sourceRect.w) - (leftRect.x + leftRect.w);
+                                rightTextLeftOffset = (sourceRect.x + sourceRect.w) - (rightRect.x + rightRect.w);
+                            }
+
+                            leftRectTextOptions = Object.assign({}, { _textLeftOffset: leftTextLeftOffset });
+                            rightRectTextOptions = Object.assign({}, { _textLeftOffset: rightTextLeftOffset });
+                        } else {
+                            rightRectTextOptions = Object.assign({}, { text: '' });
+                        }
                     }
                 }
 
@@ -136,7 +172,7 @@ function exportDataGrid(doc, dataGrid, options) {
                 let bottomRectTextOptions = {};
                 const isTextNotEmpty = sourceRect.sourceCellInfo.text?.length > 0;
                 if(isTextNotEmpty) {
-                    const isTextHeightGreaterThanRect = doc.getTextDimensions(sourceRect.sourceCellInfo.text).h > topRect.h;
+                    const isTextHeightGreaterThanRect = jsPDFDocument.getTextDimensions(sourceRect.sourceCellInfo.text).h > topRect.h;
                     const isTextTopAlignment = sourceRect.sourceCellInfo?.verticalAlign === 'top';
                     if(isTextHeightGreaterThanRect || !isTextTopAlignment) {
                         let topTextTopOffset;
@@ -164,28 +200,37 @@ function exportDataGrid(doc, dataGrid, options) {
                 bottomRect.sourceCellInfo = Object.assign({}, sourceRect.sourceCellInfo, { debugSourceCellInfo: sourceRect.sourceCellInfo }, bottomRectTextOptions);
             };
 
-            const rectsByPages = splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically);
+            const rectsByPages = splitByPages(jsPDFDocument, rowsInfo, options, onSeparateRectHorizontally, onSeparateRectVertically);
+            if(rtlEnabled) {
+                applyRtl(jsPDFDocument, rectsByPages, options);
+            }
+
             rectsByPages.forEach((pdfCellsInfo, index) => {
                 if(index > 0) {
-                    doc.addPage();
+                    addNewPage(jsPDFDocument);
                 }
 
-                drawCellsContent(doc, options.customDrawCell, pdfCellsInfo, docStyles);
-                drawCellsLines(doc, pdfCellsInfo, docStyles);
+                drawCellsContent(jsPDFDocument, options.customDrawCell, pdfCellsInfo, docStyles);
+                drawCellsLines(jsPDFDocument, pdfCellsInfo, docStyles);
 
                 const isDrawTableBorderSpecified = options.drawTableBorder === true;
                 const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
                 if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
-                    const tableRect = calculateTableSize(doc, pdfCellsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
-                    drawGridLines(doc, tableRect, docStyles);
+                    const tableRect = calculateTableSize(jsPDFDocument, pdfCellsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
+                    const borderWidth = options.tableBorderWidth;
+                    const borderColor = options.tableBorderColor;
+                    drawGridLines(jsPDFDocument, tableRect, { borderWidth, borderColor }, docStyles);
                 }
             });
 
-            setDocumentStyles(doc, docStyles);
+            setDocumentStyles(jsPDFDocument, docStyles);
 
             resolve();
         });
     });
 }
 
-export { exportDataGrid };
+export const Export = {
+    getFullOptions: _getFullOptions,
+    export: exportDataGrid
+};
