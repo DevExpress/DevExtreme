@@ -1,5 +1,7 @@
+import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction } from '../appointment_list';
+import { viewFunction as ViewFunction } from '../appointment_list';
+import { List } from '../../../../list';
 
 describe('Appointment list', () => {
   const defaultViewModel = {
@@ -34,20 +36,20 @@ describe('Appointment list', () => {
 
   describe('Render', () => {
     const render = (viewModel = {} as any): ShallowWrapper => shallow(
-      viewFunction({
-        ...viewModel,
-        props: {
+      <ViewFunction
+        {...viewModel}
+        props={{
           appointments: [defaultViewModel],
           ...viewModel.props,
-        },
-      }),
+        }}
+      />,
     );
 
     it('it should have correct render', () => {
       const list = render();
 
-      expect(list.is('div'))
-        .toBe(true);
+      expect(list.type())
+        .toBe(List);
     });
   });
 });
