@@ -1,12 +1,12 @@
-import { isDefined } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
-import { normalizeRowsInfo, normalizeBoundaryValue } from './current/normalizeOptions';
-import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './current/row_utils';
-import { updateRowsAndCellsHeights } from './current/height_updater';
-import { generateRowsInfo, getBaseTableStyle } from './current/rows_generator';
-import { splitByPages } from './current/rows_splitting';
-import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, addNewPage } from './current/draw_utils';
-import { applyRtl, applyWordWrap, toPdfUnit } from './current/pdf_utils';
+import { isDefined } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
+import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
+import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
+import { updateRowsAndCellsHeights } from './height_updater';
+import { generateRowsInfo, getBaseTableStyle } from './rows_generator';
+import { splitByPages } from './rows_splitting';
+import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, addNewPage } from './draw_utils';
+import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils';
 
 // TODO: check names with techwritters
 // IPDFExportOptions: {
@@ -20,7 +20,8 @@ import { applyRtl, applyWordWrap, toPdfUnit } from './current/pdf_utils';
 //    customDrawCell: ({ rect, pdfCell, gridCell, cancel }): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
 // }
 
-function _getFullOptions(doc, options) {
+function _getFullOptions(options) {
+    const { jsPDFDocument } = options;
     const fullOptions = extend({}, options);
     if(!isDefined(fullOptions.topLeft)) {
         fullOptions.topLeft = { x: 0, y: 0 };
@@ -32,7 +33,7 @@ function _getFullOptions(doc, options) {
         fullOptions.repeatHeaders = true;
     }
     if(!isDefined(fullOptions.margin)) {
-        fullOptions.margin = toPdfUnit(doc, 40);
+        fullOptions.margin = toPdfUnit(jsPDFDocument, 40);
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
 

@@ -1,4 +1,4 @@
-import { isDefined, isObject } from '../../../core/utils/type';
+import { isDefined, isObject } from '../../core/utils/type';
 import { Export } from './current/export';
 
 function _getFullOptions(options) {
@@ -10,9 +10,6 @@ function _getFullOptions(options) {
     }
     if(!(isDefined(options.jsPDFDocument) && isObject(options.jsPDFDocument))) {
         throw Error('The "jsPDFDocument" field must contain a jsPDF instance.');
-    }
-    if(!isDefined(options.selectedRowsOnly)) {
-        options.selectedRowsOnly = false;
     }
     return Export.getFullOptions(options);
 }

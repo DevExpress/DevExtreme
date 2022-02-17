@@ -5,7 +5,7 @@ import { isFunction, isObject, isDefined } from 'core/utils/type';
 import { extend } from 'core/utils//extend';
 
 import 'ui/data_grid';
-import { exportDataGrid } from 'exporter/jspdf/current/export_data_grid.js';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../../commonParts/objectAssignHelper.js';
 
 import { JSPdfMultilineTests } from './jspdf_v3.dataGrid.multiline.tests.js';

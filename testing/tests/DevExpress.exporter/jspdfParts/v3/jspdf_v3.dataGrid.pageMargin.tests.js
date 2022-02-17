@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/current/export_data_grid';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfPageMarginsTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
