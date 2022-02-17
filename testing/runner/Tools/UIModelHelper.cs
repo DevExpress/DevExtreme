@@ -53,10 +53,10 @@ namespace Runner.Tools
             return String.Format("~/testing/tests/{0}/{1}", catName, suiteName);
         }
 
-        public IEnumerable<Suite> GetAllSuites(bool deviceMode, string constellation, ISet<string> includeCategories, ISet<string> excludeCategories, int partIndex, int partCount)
+        public IEnumerable<Suite> GetAllSuites(bool deviceMode, string constellation, ISet<string> includeCategories, ISet<string> excludeCategories, ISet<string> excludeSuites, int partIndex, int partCount)
         {
-            var includesSpecified = includeCategories != null && includeCategories.Any();
-            var excludesSpecified = excludeCategories != null && excludeCategories.Any();
+            var includeCategoriesSpecified = includeCategories != null && includeCategories.Any();
+            var excludeCategoriesSpecified = excludeCategories != null && excludeCategories.Any();
 
             foreach (var cat in ReadCategories())
             {
@@ -66,22 +66,23 @@ namespace Runner.Tools
                 if (!String.IsNullOrEmpty(constellation) && cat.Constellation != constellation)
                     continue;
 
-                if (includesSpecified && !includeCategories.Contains(cat.Name))
+                if (includeCategoriesSpecified && !includeCategories.Contains(cat.Name))
                     continue;
 
                 if (cat.Explicit)
                 {
-                    if (!includesSpecified || !includeCategories.Contains(cat.Name))
+                    if (!includeCategoriesSpecified || !includeCategories.Contains(cat.Name))
                         continue;
                 }
 
-                if (excludesSpecified && excludeCategories.Contains(cat.Name))
+                if (excludeCategoriesSpecified && excludeCategories.Contains(cat.Name))
                     continue;
 
                 int index = 0;
                 foreach (var suite in ReadSuites(cat.Name)) {
                     if(partCount <= 1 || (index % partCount) == partIndex) {
-                        yield return suite;
+                        if (excludeSuites?.Contains(suite.FullName) != true)
+                            yield return suite;
 
                     }
                     index++;
