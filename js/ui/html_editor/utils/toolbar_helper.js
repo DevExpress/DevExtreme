@@ -243,7 +243,7 @@ function prepareImageHandler(module, imageUploadingOption) {
 
         const formatIndex = embedFormatIndex(module);
 
-        modifyImageUploadingDialog(module);
+        modifyImageUploadingDialog(module, imageUploadingOption);
 
         const promise = module.editorInstance.showFormDialog({
             formData: formData,
@@ -277,10 +277,12 @@ function prepareImageHandler(module, imageUploadingOption) {
     };
 }
 
-function modifyImageUploadingDialog(module) {
+function modifyImageUploadingDialog(module, imageUploadingOption) {
     module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
     module.editorInstance.formDialogOption('toolbarItems[0].options.text', 'Add'); // localization
-    module.editorInstance.formDialogOption('wrapperAttr', { class: 'dx-htmleditor-add-image-popup dx-formdialog' });
+    if(imageUploadingOption?.enabled) {
+        module.editorInstance.formDialogOption('wrapperAttr', { class: 'dx-htmleditor-add-image-popup dx-htmleditor-add-image-popup-with-tabs dx-formdialog' });
+    }
 }
 
 function revertImageUploadingDialog(module) {
@@ -439,7 +441,7 @@ function imageFormItems(module, imageUploadingOption) {
                     icon: 'link',
                     value: 'keepRatio',
                 }],
-                hint: 'Keep ratio',
+                hint: 'Keep aspect ratio', // localization
                 keyExpr: 'value',
                 selectionMode: 'multiple',
                 selectedItemKeys: ['keepRatio'],
