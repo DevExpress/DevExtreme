@@ -389,7 +389,7 @@ function imageFormItems(module, imageUploadingOption) {
                     const newValue = parseInt(e.value);
                     const oldHeight = parseInt(heightEditor.option('value'));
 
-                    if(keepRatio && oldHeight && !preventRecalculating) {
+                    if(keepRatio && oldHeight && e.previousValue && !preventRecalculating) {
                         preventRecalculating = true;
                         heightEditor.option('value', Math.round(newValue * oldHeight / parseInt(e.previousValue)));
                     }
@@ -412,7 +412,7 @@ function imageFormItems(module, imageUploadingOption) {
                     const newValue = parseInt(e.value);
                     const oldWidth = parseInt(widthEditor.option('value'));
 
-                    if(keepRatio && oldWidth && !preventRecalculating) {
+                    if(keepRatio && oldWidth && e.previousValue && !preventRecalculating) {
                         preventRecalculating = true;
                         widthEditor.option('value', Math.round(newValue * oldWidth / parseInt(e.previousValue)));
                     }
