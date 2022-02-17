@@ -361,6 +361,10 @@ Tooltip.prototype = {
         return format(value, options.format);
     },
 
+    getOptions() {
+        return this._options;
+    },
+
     getLocation: function() {
         return normalizeEnum(this._options.location);
     },
