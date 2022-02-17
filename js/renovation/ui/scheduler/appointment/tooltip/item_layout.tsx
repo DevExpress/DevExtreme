@@ -10,7 +10,9 @@ export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => (
   <div
     className="dx-tooltip-appointment-item"
   >
-    <Marker />
+    <Marker
+      color={viewModel.props.item.color}
+    />
     <TooltipItemContent
       text={viewModel.text}
       formattedDate={viewModel.dateText}
