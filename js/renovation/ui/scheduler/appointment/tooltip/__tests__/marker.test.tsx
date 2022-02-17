@@ -8,7 +8,7 @@ describe('Tooltip marker', () => {
   }));
 
   describe('Render', () => {
-    it('it should have correct render', () => {
+    it('should have correct render', () => {
       const marker = render({});
       const markerBody = marker.childAt(0);
 

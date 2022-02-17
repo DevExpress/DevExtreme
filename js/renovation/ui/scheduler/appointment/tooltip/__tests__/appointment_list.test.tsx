@@ -45,7 +45,7 @@ describe('Appointment list', () => {
       />,
     );
 
-    it('it should have correct render', () => {
+    it('should have correct render', () => {
       const list = render();
 
       expect(list.type())
