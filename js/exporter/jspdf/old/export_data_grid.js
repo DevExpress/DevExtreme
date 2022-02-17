@@ -1,5 +1,5 @@
-import { isDefined, isObject } from '../../core/utils/type';
-import { Export } from './current/export';
+import { isDefined, isObject } from '../../../core/utils/type';
+import { Export } from './export';
 
 function _getFullOptions(options) {
     if(!(isDefined(options) && isObject(options))) {
@@ -8,8 +8,8 @@ function _getFullOptions(options) {
     if(!(isDefined(options.component) && isObject(options.component) && options.component.NAME === 'dxDataGrid')) {
         throw Error('The "component" field must contain a DataGrid instance.');
     }
-    if(!(isDefined(options.jsPDFDocument) && isObject(options.jsPDFDocument))) {
-        throw Error('The "jsPDFDocument" field must contain a jsPDF instance.');
+    if(!isDefined(options.selectedRowsOnly)) {
+        options.selectedRowsOnly = false;
     }
     return Export.getFullOptions(options);
 }

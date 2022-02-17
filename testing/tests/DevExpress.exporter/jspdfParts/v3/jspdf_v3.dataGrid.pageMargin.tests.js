@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfPageMarginsTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -25,7 +25,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -55,7 +55,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -84,7 +84,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -113,7 +113,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -142,7 +142,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -172,7 +172,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -201,7 +201,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -231,7 +231,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -260,7 +260,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -290,7 +290,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -319,7 +319,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -348,7 +348,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -377,7 +377,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -406,7 +406,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -435,7 +435,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -464,7 +464,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -493,7 +493,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -522,7 +522,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -551,7 +551,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -580,7 +580,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -609,7 +609,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -638,7 +638,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -667,7 +667,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -696,7 +696,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -725,7 +725,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -754,7 +754,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -783,7 +783,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -812,7 +812,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -841,7 +841,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -870,7 +870,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -899,7 +899,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -928,7 +928,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -957,7 +957,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -986,7 +986,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1015,7 +1015,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1044,7 +1044,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1073,7 +1073,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1104,7 +1104,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1134,7 +1134,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1164,7 +1164,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1194,7 +1194,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1224,7 +1224,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1254,7 +1254,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1285,7 +1285,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1314,7 +1314,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1343,7 +1343,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1372,7 +1372,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1401,7 +1401,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1430,7 +1430,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1459,7 +1459,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1488,7 +1488,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1517,7 +1517,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1546,7 +1546,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1575,7 +1575,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1604,7 +1604,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1633,7 +1633,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1662,7 +1662,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1691,7 +1691,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1720,7 +1720,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1749,7 +1749,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1778,7 +1778,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1807,7 +1807,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1836,7 +1836,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1865,7 +1865,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1895,7 +1895,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1924,7 +1924,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1953,7 +1953,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1982,7 +1982,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2011,7 +2011,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2040,7 +2040,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2069,7 +2069,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2098,7 +2098,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2127,7 +2127,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2156,7 +2156,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2185,7 +2185,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2214,7 +2214,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2243,7 +2243,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2272,7 +2272,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2301,7 +2301,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2330,7 +2330,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2359,7 +2359,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2388,7 +2388,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2417,7 +2417,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2446,7 +2446,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2475,7 +2475,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2504,7 +2504,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2533,7 +2533,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2562,7 +2562,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2591,7 +2591,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2620,7 +2620,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2649,7 +2649,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2678,7 +2678,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2707,7 +2707,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2736,7 +2736,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2765,7 +2765,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2794,7 +2794,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2823,7 +2823,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2852,7 +2852,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2881,7 +2881,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2910,7 +2910,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2940,7 +2940,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2970,7 +2970,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3000,7 +3000,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 10, y: 0 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3029,7 +3029,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3058,7 +3058,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3087,7 +3087,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3116,7 +3116,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3145,7 +3145,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3174,7 +3174,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 0, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3203,7 +3203,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3232,7 +3232,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3261,7 +3261,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 10, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3290,7 +3290,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3319,7 +3319,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3348,7 +3348,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, right: 10, bottom: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3377,7 +3377,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3406,7 +3406,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3435,7 +3435,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { top: 10, left: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3464,7 +3464,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3493,7 +3493,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -3522,7 +3522,7 @@ const JSPdfPageMarginsTests = {
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: { right: 10, bottom: 10 }, topLeft: { x: 0, y: 10 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

@@ -1,7 +1,7 @@
 import { isDate, isDefined, isNumeric } from '../../../core/utils/type';
 import dateLocalization from '../../../localization/date';
 import numberLocalization from '../../../localization/number';
-import { toPdfUnit } from './pdf_utils_v3';
+import { toPdfUnit } from './pdf_utils';
 
 // Returns IPdfRowInfo[]
 // [

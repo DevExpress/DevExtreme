@@ -1,5 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
-import { calculateRowHeight, getPageWidth } from './pdf_utils_v3';
+import { calculateRowHeight, getPageWidth } from './pdf_utils';
 
 function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
     const columnsWidths = dataProvider.getColumnsWidths();

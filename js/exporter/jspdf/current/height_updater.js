@@ -1,5 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
-import { calculateTextHeight, calculateTargetRectWidth } from './pdf_utils_v3';
+import { calculateTextHeight, calculateTargetRectWidth } from './pdf_utils';
 
 function updateRowsAndCellsHeights(doc, rows) {
     const rowsAdditionalHeights = calculateAdditionalRowsHeights(doc, rows);
