@@ -88,6 +88,8 @@ function run_test_impl {
     case "$BROWSER" in
 
         "firefox")
+            kill -9 $(ps -x | grep firefox | awk '{print $1}')
+
             local firefox_args="$url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
@@ -187,7 +189,7 @@ function start_runner_watchdog {
     local last_suite_time=unknown
 
     while true; do
-        sleep 600
+        sleep 180
 
         if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
             echo "Runner stalled"
