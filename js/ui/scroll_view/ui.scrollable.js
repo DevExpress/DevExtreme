@@ -260,6 +260,7 @@ const Scrollable = DOMComponent.inherit({
                 this._strategy && this._strategy.disabledChanged();
                 break;
             case 'updateManually':
+            case 'scrollByContent':
                 break;
             case 'width':
                 this.callBase(args);
