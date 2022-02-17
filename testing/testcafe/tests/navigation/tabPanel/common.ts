@@ -12,7 +12,7 @@ fixture`TabPanel_common`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(`TabPanel_borders_with_scrolling,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await takeScreenshot(`TabPanel_borders_with_scrolling,theme=${theme.replace(/\./g, '-')}.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -82,7 +82,7 @@ fixture`TabPanel_common`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(`TabPanel_borders_without_scrolling,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await takeScreenshot(`TabPanel_borders_without_scrolling,theme=${theme.replace(/\./g, '-')}.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

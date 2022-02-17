@@ -12,7 +12,7 @@ fixture`Tabs_common`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(`Tabs_items_alignment_,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await takeScreenshot(`Tabs_items_alignment_,theme=${theme.replace(/\./g, '-')}.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

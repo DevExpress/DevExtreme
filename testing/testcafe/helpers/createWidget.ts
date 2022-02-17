@@ -19,6 +19,7 @@ export type WidgetName =
 'dxContextMenu' |
 'dxDropDownMenu' |
 'dxChart' |
+'dxMenu' |
 'dxPopup' |
 'dxSelectBox' |
 'dxButton' |
