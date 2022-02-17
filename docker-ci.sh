@@ -88,6 +88,8 @@ function run_test_impl {
     case "$BROWSER" in
 
         "firefox")
+            kill -9 $(ps -x | grep firefox | awk '{print $1}')
+
             local firefox_args="$url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 

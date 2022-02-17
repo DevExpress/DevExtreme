@@ -90,8 +90,10 @@ jobs:
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc", name: 'misc-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui", name: 'ui-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.editors", name: 'ui.editors-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid", name: 'ui.grid-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler", name: 'ui.scheduler-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid(1/2)", name: 'ui.grid(1/2)-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid(2/2)", name: 'ui.grid(2/2)-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler(1/2)", name: 'ui.scheduler(1/2)-firefox' },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler(2/2)", name: 'ui.scheduler(2/2)-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz", name: 'viz-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation", name: 'renovation-firefox' } 
         ]
