@@ -14,6 +14,7 @@ export type WidgetName =
 'dxTreeList' |
 'dxPager' |
 'dxScheduler' |
+'dxTabs' |
 'dxTagBox' |
 'dxContextMenu' |
 'dxDropDownMenu' |
