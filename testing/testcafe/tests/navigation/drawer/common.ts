@@ -170,13 +170,13 @@ openedStateModeConfigs.forEach((config) => {
       createDrawer(config);
     })({ createDrawer, config });
 
-    await t.click('#container #menu .dx-menu-item:eq(0)');
+    await t.click('#container #menu .dx-menu-item');
 
     await t
       .expect(await takeScreenshot(`${getScreenshotName('MenuDrawer', '#container')}.png`))
       .ok();
 
-    await t.click('#popup1_template #menu .dx-menu-item:eq(0)');
+    await t.click('#popup1_template #menu .dx-menu-item');
     await t.click(Selector('#showPopupBtn'));
 
     await t
@@ -229,13 +229,13 @@ openedStateModeConfigs.forEach((config) => {
       createDrawer(config);
     })({ createDrawer, config });
 
-    await t.click('#container #menu .dx-menu-item:eq(0)');
+    await t.click('#container #menu .dx-menu-item');
 
     await t
       .expect(await takeScreenshot(`${getScreenshotName('MenuOuter', '#container')}.png`))
       .ok();
 
-    await t.click('#popup1_template #menu .dx-menu-item:eq(0)');
+    await t.click('#popup1_template #menu .dx-menu-item');
     await t.click(Selector('#showPopupBtn'));
 
     await t

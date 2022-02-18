@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
@@ -33,5 +34,7 @@ fixture`ContextMenu_common`
     return createWidget('dxContextMenu', { elementAttr: { id: 'contextMenu' }, items: menuItems, target: 'body' });
   }).after(async () => {
     await changeTheme('generic.light');
+  }).after(async (t) => {
+    await restoreBrowserSize(t);
   });
 });
