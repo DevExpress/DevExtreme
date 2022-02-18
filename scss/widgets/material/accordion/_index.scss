@@ -102,7 +102,7 @@ $material-accordion-disabled-opacity: 0.5;
     font-weight: normal;
     color: $accordion-icon-color;
     content: "\f016";
-    font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
+    font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
     font-size: $material-base-icon-size;
     height: $material-base-icon-size;
     width: $material-base-icon-size;

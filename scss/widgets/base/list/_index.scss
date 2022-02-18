@@ -261,7 +261,7 @@ $list-searchbox-margin-bottom: 5px;
   overflow: hidden;
 
   .dx-device-ios & {
-    -webkit-mask-image: -webkit-radial-gradient(white, black); // stylelint-disable-line property-no-vendor-prefix
+    -webkit-mask-image: -webkit-radial-gradient(white, black); // stylelint-disable-line property-no-vendor-prefix, value-no-vendor-prefix
   }
 }
 
