@@ -31,7 +31,7 @@ export const AddMasterDetailRows = createSelector(
   (visibleRows: Row[], isExpanded): Row[] => {
     const result = visibleRows.slice();
 
-    for (let i = 0; i < visibleRows.length; i += 1) {
+    for (let i = 0; i < result.length; i += 1) {
       const item = result[i];
 
       if (isExpanded(item.key)) {

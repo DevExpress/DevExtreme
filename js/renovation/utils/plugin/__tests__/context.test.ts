@@ -218,6 +218,20 @@ describe('Plugins', () => {
       expect(plugins.getValue(someGetterPlugin)).toEqual(103);
     });
 
+    it('should skip extend if deps are not defined', () => {
+      const plugins = new Plugins();
+
+      plugins.extend(someGetterPlugin, -1, () => 100);
+      plugins.extend(
+        someGetterPlugin,
+        0,
+        ((base: number, someValue: number) => base + someValue) as (base: number) => number,
+        [someGetterPlugin, someValuePlugin],
+      );
+
+      expect(plugins.getValue(someGetterPlugin)).toEqual(100);
+    });
+
     it('should subscribe to deps', () => {
       const plugins = new Plugins();
       const watchFnMock = jest.fn();

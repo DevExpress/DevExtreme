@@ -43,6 +43,11 @@ export class PluginGetter<T> extends PluginEntity<T, GetterStoreValue<T>> {
     }
     return value.reduce((base, item) => {
       if (plugins && item.deps) {
+        const hasValues = item.deps.every((entity) => plugins.hasValue(entity));
+        if (!hasValues) {
+          return base;
+        }
+
         const args = item.deps.map((entity) => {
           if (entity.id === this.id) {
             return base;
