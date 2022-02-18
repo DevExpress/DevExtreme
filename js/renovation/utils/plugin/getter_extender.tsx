@@ -4,7 +4,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
-  PluginsContext, Plugins, PluginGetter,
+  PluginsContext, Plugins, PluginGetter, PluginSelector,
 } from './context';
 
 export const viewFunction = (): JSX.Element => <div />;
@@ -15,11 +15,11 @@ export class GetterExtenderProps {
 
   @OneWay() order!: number;
 
-  @OneWay() func!: (base: any) => any;
+  @OneWay() selector!: PluginSelector<unknown>;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class GetterExtender extends JSXComponent<GetterExtenderProps, 'type' | 'order' | 'func'>(GetterExtenderProps) {
+export class GetterExtender extends JSXComponent<GetterExtenderProps, 'type' | 'order' | 'selector'>(GetterExtenderProps) {
   @Consumer(PluginsContext)
   plugins!: Plugins;
 
@@ -28,7 +28,8 @@ export class GetterExtender extends JSXComponent<GetterExtenderProps, 'type' | '
     return this.plugins.extend(
       this.props.type,
       this.props.order,
-      this.props.func,
+      this.props.selector.func,
+      this.props.selector.deps,
     );
   }
 }
