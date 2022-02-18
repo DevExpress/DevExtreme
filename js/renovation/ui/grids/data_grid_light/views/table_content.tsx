@@ -5,25 +5,26 @@ import {
 
 import { Table } from '../widgets/table';
 import { DataRow } from '../widgets/data_row';
-import { Column, Row } from '../types';
+import { ColumnInternal, Row } from '../types';
 import {
   createValue, Plugins, PluginsContext,
 } from '../../../../utils/plugin/context';
 import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
+import CLASSES from '../classes';
+import { getReactRowKey } from '../utils';
 
 export const viewFunction = (viewModel: TableContent): JSX.Element => (
-  <div className="dx-datagrid-rowsview dx-datagrid-nowrap dx-datagrid-after-headers" role="presentation">
-    <div ref={viewModel.divRef} className="dx-datagrid-content">
+  <div className={`${CLASSES.rowsView} ${CLASSES.noWrap} ${CLASSES.afterHeaders}`} role="presentation">
+    <div ref={viewModel.divRef} className={`${CLASSES.content}`}>
       <Table>
         <Fragment>
           {
-          viewModel.props.dataSource.map((item, rowIndex) => (
+          viewModel.rows.map((item) => (
             <DataRow
-              // eslint-disable-next-line react/no-array-index-key
-              key={rowIndex}
+              key={item.reactKey}
               row={item}
-              rowIndex={rowIndex}
+              rowIndex={item.index}
               columns={viewModel.props.columns}
             />
           ))
@@ -42,7 +43,7 @@ export class TableContentProps {
   dataSource: Row[] = [];
 
   @OneWay()
-  columns: Column[] = [];
+  columns: ColumnInternal[] = [];
 }
 
 @Component({
@@ -59,15 +60,23 @@ export class TableContent extends JSXComponent(TableContentProps) {
 
   @Effect()
   subscribeToRowClick(): () => void {
-    eventsEngine.on(this.divRef.current, clickEvent, '.dx-row', this.onRowClick);
+    eventsEngine.on(this.divRef.current, clickEvent, `.${CLASSES.row}`, this.onRowClick);
     return (): void => eventsEngine.off(this.divRef.current, clickEvent, this.onRowClick);
   }
 
   onRowClick(e: Event): void {
-    const allRows = this.divRef.current!.getElementsByClassName('dx-row');
+    const allRows = this.divRef.current!.getElementsByClassName(CLASSES.row);
     const index = Array.from(allRows).indexOf(e.currentTarget as Element);
     if (index >= 0) {
       this.plugins.callAction(RowClick, this.props.dataSource[index]);
     }
+  }
+
+  get rows(): (Row & { index: number; reactKey: string })[] {
+    return this.props.dataSource.map((row, index) => ({
+      ...row,
+      index,
+      reactKey: getReactRowKey(row, index),
+    }));
   }
 }

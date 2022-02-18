@@ -18,13 +18,15 @@ import {
   VisibleRows, VisibleColumns,
 } from '../data_grid_light';
 import {
-  Row, Key, Column, RowTemplateProps,
+  Row, Key, ColumnInternal, RowTemplateProps,
 } from '../types';
 import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
 import { ExpandColumn } from './expand_column';
 import { SetExpanded, IsExpanded, MasterDetailTemplate } from './plugins';
 import { MasterDetailRow } from './master_detail_row';
+
+import CLASSES from '../classes';
 
 export const viewFunction = (viewModel: MasterDetail): JSX.Element => (
   <Fragment>
@@ -61,8 +63,8 @@ export class MasterDetail extends JSXComponent<MasterDetailProps, 'template'>(Ma
   addVisibleColumnsHandler(): (() => void) | undefined {
     if (this.props.enabled) {
       return this.plugins.extend(VisibleColumns, 1, (columns) => {
-        const expandColumn: Column = {
-          headerCssClass: 'dx-command-expand dx-datagrid-group-space',
+        const expandColumn: ColumnInternal = {
+          headerCssClass: `${CLASSES.commandExpand} ${CLASSES.groupSpace}`,
           cellContainerTemplate: ExpandColumn,
         };
 
