@@ -13,7 +13,7 @@ import {
   KeyExprPlugin, VisibleColumns, VisibleItems, Items,
 } from '../data_grid_light';
 import {
-  Column, KeyExpr, RowData, Key,
+  ColumnInternal, KeyExprInternal, RowData, Key,
 } from '../types';
 import { RowClassesGetter, RowPropertiesGetter } from '../widgets/row_base';
 import { RowClick } from '../views/table_content';
@@ -51,7 +51,7 @@ export class Selection extends JSXComponent(SelectionProps) {
   plugins = new Plugins();
 
   @InternalState()
-  keyExpr?: KeyExpr;
+  keyExpr?: KeyExprInternal;
 
   @Effect()
   watchKeyExpr(): () => void {
@@ -64,7 +64,7 @@ export class Selection extends JSXComponent(SelectionProps) {
   addVisibleColumnsHandler(): (() => void) | undefined {
     if (this.props.mode !== 'none') {
       return this.plugins.extend(VisibleColumns, 2, (columns) => {
-        const selectColumn: Column = { cellTemplate: SelectionCheckbox };
+        const selectColumn: ColumnInternal = { cellTemplate: SelectionCheckbox };
 
         if (this.props.mode === 'multiple' && this.props.allowSelectAll) {
           selectColumn.headerTemplate = SelectAllCheckbox;

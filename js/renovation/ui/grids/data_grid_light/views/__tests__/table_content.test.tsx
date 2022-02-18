@@ -4,13 +4,13 @@ import {
   emit, fakeClickEvent, clear, EVENT,
 } from '../../../../../test_utils/events_mock';
 import { RowClick, TableContent, viewFunction as TableContentView } from '../table_content';
-import { Row, Column } from '../../types';
+import { Row, ColumnInternal } from '../../types';
 
 describe('TableContent', () => {
   describe('View', () => {
     it('default render', () => {
       const rows: Row[] = [{ data: { id: 1, field: 'test' }, key: 1, rowType: 'data' }];
-      const columns: Column[] = [{ dataField: 'id' }, { dataField: 'field' }];
+      const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
 
       const tableContent = new TableContent({
         dataSource: rows,
@@ -31,7 +31,7 @@ describe('TableContent', () => {
         rowType: 'data',
         template: () => <tr className="myRow"><td>Test</td></tr>,
       }];
-      const columns: Column[] = [{ dataField: 'id' }, { dataField: 'field' }];
+      const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
 
       const tableContent = new TableContent({
         dataSource: rows,

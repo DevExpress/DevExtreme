@@ -1,7 +1,7 @@
 import {
   Component, JSXComponent, ComponentBindings, OneWay, JSXTemplate,
 } from '@devextreme-generator/declarations';
-import { Column, Row, RowData } from '../types';
+import { ColumnInternal, Row, RowData } from '../types';
 import { combineClasses } from '../../../../utils/combine_classes';
 
 import CLASSES from '../classes';
@@ -54,7 +54,7 @@ export class DataCellProps {
   countColumn = 0;
 
   @OneWay()
-  column: Column = {};
+  column: ColumnInternal = {};
 }
 
 @Component({

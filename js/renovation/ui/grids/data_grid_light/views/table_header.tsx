@@ -4,7 +4,7 @@ import {
 
 import { Table } from '../widgets/table';
 import { HeaderRow } from '../widgets/header_row';
-import { Column } from '../types';
+import { ColumnInternal } from '../types';
 import CLASSES from '../classes';
 
 export const viewFunction = (viewModel: TableHeader): JSX.Element => (
@@ -20,7 +20,7 @@ export const viewFunction = (viewModel: TableHeader): JSX.Element => (
 @ComponentBindings()
 export class TableHeaderProps {
   @OneWay()
-  columns: Column[] = [];
+  columns: ColumnInternal[] = [];
 }
 
 @Component({

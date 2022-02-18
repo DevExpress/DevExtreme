@@ -4,7 +4,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
-import { Key, KeyExpr, RowData } from '../types';
+import { Key, KeyExprInternal, RowData } from '../types';
 import { IsExpanded, SetExpanded } from './plugins';
 import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
@@ -42,7 +42,7 @@ export class ExpandColumn extends JSXComponent<ExpandColumnProps, 'data'>(Expand
   plugins: Plugins = new Plugins();
 
   @InternalState()
-  keyExpr?: KeyExpr;
+  keyExpr?: KeyExprInternal;
 
   @InternalState()
   isExpanded = false;

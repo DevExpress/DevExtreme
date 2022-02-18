@@ -1,7 +1,7 @@
 import {
   Component, JSXComponent, ComponentBindings, OneWay,
 } from '@devextreme-generator/declarations';
-import { Column } from '../types';
+import { ColumnInternal } from '../types';
 import { HeaderCell } from './header_cell';
 
 import CLASSES from '../classes';
@@ -23,7 +23,7 @@ export const viewFunction = (viewModel: HeaderRow): JSX.Element => (
 @ComponentBindings()
 export class HeaderRowProps {
   @OneWay()
-  columns: Column[] = [];
+  columns: ColumnInternal[] = [];
 }
 
 @Component({

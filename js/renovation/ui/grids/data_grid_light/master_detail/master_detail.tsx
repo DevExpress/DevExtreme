@@ -18,7 +18,7 @@ import {
   VisibleRows, VisibleColumns,
 } from '../data_grid_light';
 import {
-  Row, Key, Column, RowTemplateProps,
+  Row, Key, ColumnInternal, RowTemplateProps,
 } from '../types';
 import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
@@ -63,7 +63,7 @@ export class MasterDetail extends JSXComponent<MasterDetailProps, 'template'>(Ma
   addVisibleColumnsHandler(): (() => void) | undefined {
     if (this.props.enabled) {
       return this.plugins.extend(VisibleColumns, 1, (columns) => {
-        const expandColumn: Column = {
+        const expandColumn: ColumnInternal = {
           headerCssClass: `${CLASSES.commandExpand} ${CLASSES.groupSpace}`,
           cellContainerTemplate: ExpandColumn,
         };

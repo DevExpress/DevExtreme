@@ -5,7 +5,7 @@ import {
 
 import { Table } from '../widgets/table';
 import { DataRow } from '../widgets/data_row';
-import { Column, Row } from '../types';
+import { ColumnInternal, Row } from '../types';
 import {
   createValue, Plugins, PluginsContext,
 } from '../../../../utils/plugin/context';
@@ -43,7 +43,7 @@ export class TableContentProps {
   dataSource: Row[] = [];
 
   @OneWay()
-  columns: Column[] = [];
+  columns: ColumnInternal[] = [];
 }
 
 @Component({

@@ -1,12 +1,12 @@
 import {
-  RowData, Key, KeyExpr, Row,
+  RowData, Key, KeyExprInternal, Row,
 } from './types';
 import errors from '../../../../ui/widget/ui.errors';
 import { isString, isNumeric } from '../../../../core/utils/type';
 
 export const createGetKey = (featureName: string) => (
   rowData: RowData,
-  keyExpr: KeyExpr | undefined,
+  keyExpr: KeyExprInternal | undefined,
 ): Key => {
   if (keyExpr === undefined) {
     // keyExpr wasn't updated on effect

@@ -4,9 +4,9 @@
 import { JSXTemplate } from '@devextreme-generator/declarations';
 
 export type RowData = Record<string, unknown>;
-export type ColumnUserConfig = string;
-export type KeyExprUserConfig = string;
-export type KeyExpr = KeyExprUserConfig | null;
+export type Column = string;
+export type KeyExpr = string;
+export type KeyExprInternal = KeyExpr | null;
 export type Key = unknown;
 export interface Row {
   key?: Key;
@@ -23,7 +23,7 @@ export interface RowTemplateProps {
   rowIndex: number;
 }
 
-export interface Column {
+export interface ColumnInternal {
   dataField?: string;
 
   headerCssClass?: string;

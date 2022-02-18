@@ -11,7 +11,7 @@ import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
 import type {
-  Column, ColumnUserConfig, KeyExpr, RowData, Row, KeyExprUserConfig,
+  ColumnInternal, Column, KeyExprInternal, RowData, Row, KeyExpr,
 } from './types';
 
 import { TableContent } from './views/table_content';
@@ -22,9 +22,9 @@ import CLASSES from './classes';
 
 export const VisibleItems = createGetter<RowData[]>([]);
 export const VisibleRows = createGetter<Row[]>([]);
-export const VisibleColumns = createGetter<Column[]>([]);
+export const VisibleColumns = createGetter<ColumnInternal[]>([]);
 export const Items = createValue<RowData[]>();
-export const KeyExprPlugin = createValue<KeyExpr>();
+export const KeyExprPlugin = createValue<KeyExprInternal>();
 export const TotalCount = createValue<number>();
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
@@ -58,10 +58,10 @@ export class DataGridLightProps extends BaseWidgetProps {
   dataSource: RowData[] = [];
 
   @OneWay()
-  keyExpr?: KeyExprUserConfig;
+  keyExpr?: KeyExpr;
 
   @OneWay()
-  columns: ColumnUserConfig[] = [];
+  columns: Column[] = [];
 
   @Slot()
   children?: JSX.Element | JSX.Element[];
@@ -89,7 +89,7 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   visibleRows: Row[] = [];
 
   @InternalState()
-  visibleColumns: Column[] = [];
+  visibleColumns: ColumnInternal[] = [];
 
   @Effect()
   updateTotalCount(): void {
@@ -148,7 +148,7 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     this.plugins.set(Items, this.props.dataSource);
   }
 
-  get columns(): Column[] {
+  get columns(): ColumnInternal[] {
     const userColumns = this.props.columns;
 
     return userColumns.map((userColumn) => ({

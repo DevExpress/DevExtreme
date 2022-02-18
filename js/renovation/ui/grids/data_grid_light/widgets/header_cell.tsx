@@ -5,7 +5,7 @@ import { combineClasses } from '../../../../utils/combine_classes';
 
 import CLASSES from '../classes';
 
-import { Column } from '../types';
+import { ColumnInternal } from '../types';
 
 export const viewFunction = ({
   props: { column, columnIndex },
@@ -18,7 +18,7 @@ export const viewFunction = ({
     // TODO uncomment after https://trello.com/c/kVXfSWI7
     // aria-colindex={index + 1}
     id={`dx-col-${columnIndex + 1}`}
-    aria-label={`Column ${column.dataField}`}
+    aria-label={`ColumnInternal ${column.dataField}`}
     className={classes}
     aria-sort="none"
     tabIndex={0}
@@ -32,7 +32,7 @@ export const viewFunction = ({
 @ComponentBindings()
 export class HeaderCellProps {
   @OneWay()
-  column: Column = {};
+  column: ColumnInternal = {};
 
   @OneWay()
   columnIndex = 0;
