@@ -1,5 +1,7 @@
 import { isDefined } from '../../../core/utils/type';
 
+const DOTS_TEXT = '...';
+
 function toPdfUnit(doc, value) {
     const defaultScaleFactor = 1; // https://github.com/parallax/jsPDF/blob/master/src/jspdf.js#L3212
     const coefficient = defaultScaleFactor / doc.internal.scaleFactor;
@@ -16,7 +18,6 @@ function getPageHeight(doc) {
 
 function getTextLines(doc, text, font, { wordWrapEnabled, targetRectWidth }) {
     if(wordWrapEnabled) {
-        // it also splits text by '\n' automatically
         const usedFont = doc.getFont(font?.name, font?.style);
         return doc.splitTextToSize(text, targetRectWidth, {
             fontSize: font?.size || doc.getFontSize(),
@@ -24,7 +25,18 @@ function getTextLines(doc, text, font, { wordWrapEnabled, targetRectWidth }) {
             fontStyle: usedFont.fontStyle
         });
     }
-    return text.split('\n');
+
+    let textWithoutLineBreak = text.split('\n').filter(ch => ch !== '').join(' ');
+    if(getTextDimensions(doc, textWithoutLineBreak, font).w <= targetRectWidth) {
+        return [textWithoutLineBreak];
+    }
+
+    while(textWithoutLineBreak.length > 0 && getTextDimensions(doc, textWithoutLineBreak + DOTS_TEXT, font).w > targetRectWidth) {
+        textWithoutLineBreak = textWithoutLineBreak.substring(0, textWithoutLineBreak.length - 1);
+    }
+
+    return [textWithoutLineBreak + DOTS_TEXT];
+
 }
 
 function calculateTargetRectWidth(columnWidth, padding) {
