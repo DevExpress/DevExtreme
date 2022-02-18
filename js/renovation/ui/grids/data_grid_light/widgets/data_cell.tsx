@@ -1,8 +1,10 @@
 import {
   Component, JSXComponent, ComponentBindings, OneWay, JSXTemplate,
 } from '@devextreme-generator/declarations';
-import { Column, Row, RowData } from '../types';
+import { ColumnInternal, Row, RowData } from '../types';
 import { combineClasses } from '../../../../utils/combine_classes';
+
+import CLASSES from '../classes';
 
 export const viewFunction = (viewModel: DataCell): JSX.Element => {
   const {
@@ -52,7 +54,7 @@ export class DataCellProps {
   countColumn = 0;
 
   @OneWay()
-  column: Column = {};
+  column: ColumnInternal = {};
 }
 
 @Component({
@@ -78,8 +80,8 @@ export class DataCell extends JSXComponent(DataCellProps) {
     const { columnIndex, countColumn } = this.props;
 
     const classesMap = {
-      'dx-first-child': columnIndex === 0,
-      'dx-last-child': columnIndex === countColumn - 1,
+      [CLASSES.firstChild]: columnIndex === 0,
+      [CLASSES.lastChild]: columnIndex === countColumn - 1,
     };
 
     return combineClasses(classesMap);

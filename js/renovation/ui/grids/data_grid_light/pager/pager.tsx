@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable max-classes-per-file */
 import {
-  Component, JSXComponent, ComponentBindings, OneWay, Consumer,
+  Component, JSXComponent, ComponentBindings, OneWay, Consumer, InternalState, Effect,
 } from '@devextreme-generator/declarations';
 import { PlaceholderExtender } from '../../../../utils/plugin/placeholder_extender';
 
@@ -15,7 +15,7 @@ import { TotalCount } from '../data_grid_light';
 import { FooterPlaceholder } from '../views/footer';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
-const DATAGRID_PAGER_CLASS = 'dx-datagrid-pager';
+import CLASSES from '../classes';
 
 export const viewFunction = ({
   allowedPageSizes, onPageIndexChange, onPageSizeChange,
@@ -29,7 +29,7 @@ export const viewFunction = ({
     deps={[PageIndex, PageSize, TotalCount, PageCount]}
     template={({ deps }): JSX.Element => (
       <PagerContent
-        className={DATAGRID_PAGER_CLASS}
+        className={CLASSES.pager}
         pageSizes={allowedPageSizes}
         displayMode={displayMode}
         infoText={infoText}
@@ -87,25 +87,31 @@ export class Pager extends JSXComponent(PagerProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
 
-  onPageSizeChange(pageSize: number): void {
-    const setPageSize = this.plugins.getValue(SetPageSize);
-    if (!setPageSize) {
-      return;
-    }
+  @InternalState()
+  pageSize: number | 'all' = 'all';
 
+  @Effect()
+  updatePageSize(): () => void {
+    return this.plugins.watch(PageSize, (pageSize) => {
+      this.pageSize = pageSize;
+    });
+  }
+
+  onPageSizeChange(pageSize: number): void {
     if (pageSize === 0) {
-      setPageSize('all');
+      this.plugins.callAction(SetPageSize, 'all');
     } else {
-      setPageSize(pageSize);
+      this.plugins.callAction(SetPageSize, pageSize);
     }
   }
 
   onPageIndexChange(pageIndex: number): void {
-    this.plugins.getValue(SetPageIndex)?.(pageIndex);
+    this.plugins.callAction(SetPageIndex, pageIndex);
   }
 
   get allowedPageSizes(): (number | 'all')[] {
-    const pageSize = this.plugins.getValue(PageSize) ?? 'all';
+    // eslint-disable-next-line prefer-destructuring
+    const pageSize = this.pageSize;
 
     if (this.props.allowedPageSizes === 'auto') {
       if (pageSize === 'all') {

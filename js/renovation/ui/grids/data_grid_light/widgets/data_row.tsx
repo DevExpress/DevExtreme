@@ -2,9 +2,10 @@ import {
   Component, JSXComponent, ComponentBindings, OneWay, Effect, Consumer, JSXTemplate,
 } from '@devextreme-generator/declarations';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
-import { Column, Row, RowTemplateProps } from '../types';
+import { ColumnInternal, Row, RowTemplateProps } from '../types';
 import { DataCell } from './data_cell';
 import { RowBase, RowClassesGetter } from './row_base';
+import CLASSES from '../classes';
 
 export const viewFunction = (viewModel: DataRow): JSX.Element => {
   const { rowTemplate: RowTemplate } = viewModel;
@@ -46,7 +47,7 @@ export class DataRowProps {
   rowIndex = 0;
 
   @OneWay()
-  columns: Column[] = [];
+  columns: ColumnInternal[] = [];
 }
 
 @Component({
@@ -69,7 +70,7 @@ export class DataRow extends JSXComponent(DataRowProps) {
         if (row.rowType === 'data') {
           return {
             ...base(row),
-            'dx-data-row': true,
+            [CLASSES.dataRow]: true,
           };
         }
         return base(row);

@@ -7,6 +7,9 @@ import { generateRowsInfo, getBaseTableStyle } from './rows_generator';
 import { splitByPages } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, addNewPage } from './draw_utils';
 import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils';
+import messageLocalization from '../../../localization/message';
+import { ExportLoadPanel } from '../../common/export_load_panel';
+import { hasWindow } from '../../../core/utils/window';
 
 // TODO: check names with techwritters
 // IPDFExportOptions: {
@@ -18,6 +21,7 @@ import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils';
 //    margin: { top:number, left:number, right:number, bottom:number } | number
 //    customizeCell: ({ gridCell, pdfCell }): void
 //    customDrawCell: ({ rect, pdfCell, gridCell, cancel }): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
+//    loadPanel: Object
 // }
 
 function _getFullOptions(options) {
@@ -37,9 +41,21 @@ function _getFullOptions(options) {
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
 
-    const tableStyle = getBaseTableStyle();
-    fullOptions.tableBorderWidth = fullOptions.tableBorderWidth ?? tableStyle.borderWidth;
-    fullOptions.tableBorderColor = fullOptions.tableBorderColor ?? tableStyle.borderColor;
+    if(!isDefined(fullOptions.tableBorderWidth)) {
+        fullOptions.tableBorderWidth = getBaseTableStyle().borderWidth;
+    }
+    if(!isDefined(fullOptions.tableBorderColor)) {
+        fullOptions.tableBorderColor = getBaseTableStyle().borderColor;
+    }
+    if(!isDefined(fullOptions.loadPanel)) {
+        fullOptions.loadPanel = {};
+    }
+    if(!isDefined(fullOptions.loadPanel.enabled)) {
+        fullOptions.loadPanel.enabled = true;
+    }
+    if(!isDefined(fullOptions.loadPanel.text)) {
+        fullOptions.loadPanel.text = messageLocalization.format('dxDataGrid-exporting');
+    }
 
     return fullOptions;
 }
@@ -49,7 +65,23 @@ function exportDataGrid(options) {
         jsPDFDocument,
         component,
         selectedRowsOnly,
+        loadPanel,
     } = options;
+
+    const internalComponent = component._getInternalInstance?.() || component;
+    const initialLoadPanelEnabledOption = internalComponent.option('loadPanel') && internalComponent.option('loadPanel').enabled;
+
+    if(initialLoadPanelEnabledOption) {
+        component.option('loadPanel.enabled', false);
+    }
+
+    let exportLoadPanel;
+    if(loadPanel.enabled && hasWindow()) {
+        const rowsView = component.getView('rowsView');
+
+        exportLoadPanel = new ExportLoadPanel(component, rowsView.element(), rowsView.element().parent(), loadPanel);
+        exportLoadPanel.show();
+    }
 
     const dataProvider = component.getDataProvider(selectedRowsOnly);
     return new Promise((resolve) => {
@@ -227,6 +259,14 @@ function exportDataGrid(options) {
             setDocumentStyles(jsPDFDocument, docStyles);
 
             resolve();
+        }).always(() => {
+            if(initialLoadPanelEnabledOption) {
+                component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
+            }
+
+            if(loadPanel.enabled && hasWindow()) {
+                exportLoadPanel.dispose();
+            }
         });
     });
 }

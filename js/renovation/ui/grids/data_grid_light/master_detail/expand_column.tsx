@@ -4,18 +4,23 @@ import {
 } from '@devextreme-generator/declarations';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
-import { Key, KeyExpr, RowData } from '../types';
+import { Key, KeyExprInternal, RowData } from '../types';
 import { IsExpanded, SetExpanded } from './plugins';
 import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
 import { KeyExprPlugin } from '../data_grid_light';
+import { createGetKey } from '../utils';
+
+import CLASSES from '../classes';
+
+const getKey = createGetKey('Master-Detail');
 
 export const viewFunction = (viewModel: ExpandColumn): JSX.Element => (
   <td
     ref={viewModel.cellRef}
-    className="dx-command-expand dx-datagrid-group-space dx-datagrid-expand"
+    className={`${CLASSES.commandExpand} ${CLASSES.groupSpace} ${CLASSES.expand}`}
   >
-    <div className={viewModel.isExpanded ? 'dx-datagrid-group-opened' : 'dx-datagrid-group-closed'} />
+    <div className={viewModel.isExpanded ? CLASSES.groupOpened : CLASSES.groupClosed} />
   </td>
 );
 
@@ -37,7 +42,7 @@ export class ExpandColumn extends JSXComponent<ExpandColumnProps, 'data'>(Expand
   plugins: Plugins = new Plugins();
 
   @InternalState()
-  keyExpr: KeyExpr = '';
+  keyExpr?: KeyExprInternal;
 
   @InternalState()
   isExpanded = false;
@@ -52,7 +57,7 @@ export class ExpandColumn extends JSXComponent<ExpandColumnProps, 'data'>(Expand
   @Effect()
   updateIsExpanded(): () => void {
     return this.plugins.watch(IsExpanded, (isExpanded) => {
-      this.isExpanded = isExpanded(this.props.data[this.keyExpr]);
+      this.isExpanded = isExpanded(getKey(this.props.data, this.keyExpr));
     });
   }
 
@@ -66,7 +71,7 @@ export class ExpandColumn extends JSXComponent<ExpandColumnProps, 'data'>(Expand
     const target = e.target as Element;
 
     if (target.closest('.dx-datagrid-expand')) {
-      this.toggleExpanded(this.props.data[this.keyExpr]);
+      this.toggleExpanded(getKey(this.props.data, this.keyExpr));
     }
   }
 

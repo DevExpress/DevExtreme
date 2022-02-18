@@ -1,9 +1,10 @@
 import {
   Component, JSXComponent, ComponentBindings, Slot,
 } from '@devextreme-generator/declarations';
+import CLASSES from '../classes';
 
 export const viewFunction = (viewModel: Table): JSX.Element => (
-  <table className="dx-datagrid-table dx-datagrid-table-fixed" role="presentation">
+  <table className={`${CLASSES.table} ${CLASSES.fixedTable}`} role="presentation">
     <tbody role="presentation">
       {viewModel.props.children}
     </tbody>
