@@ -12,13 +12,20 @@ export class PluginEntity<T, S=T> {
     nextEntityId += 1;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getValue(value: S): T {
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
+  getValue(value: S, _plugins: Plugins): T {
     return value as unknown as T;
   }
 }
 
-export type GetterStoreValue<T> = ({ order: number; func: (base: T) => T })[];
+export interface GetterStoreValueItem<T> {
+  order: number;
+  func: (...args: unknown[]) => T;
+  deps?: PluginEntity<unknown, unknown> [];
+  unsubscribe?: () => void;
+}
+
+export type GetterStoreValue<T> = GetterStoreValueItem<T>[];
 
 export type PlaceholderStoreValue = { order: number; component: unknown }[];
 
@@ -30,12 +37,22 @@ export class PluginGetter<T> extends PluginEntity<T, GetterStoreValue<T>> {
     this.defaultValue = defaultValue;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getValue(value: GetterStoreValue<T>): T {
+  getValue(value: GetterStoreValue<T>, plugins: Plugins): T {
     if (!value) {
       return this.defaultValue;
     }
-    return value.reduce((base, item) => item.func(base), this.defaultValue);
+    return value.reduce((base, item) => {
+      if (plugins && item.deps) {
+        const args = item.deps.map((entity) => {
+          if (entity.id === this.id) {
+            return base;
+          }
+          return plugins.getValue(entity);
+        });
+        return item.func.apply(null, args);
+      }
+      return item.func(base);
+    }, this.defaultValue);
   }
 }
 
@@ -57,19 +74,24 @@ export function createValue<T>(): PluginEntity<T> {
   return new PluginEntity<T, T>();
 }
 
-// export function createSelector<A, R>(
-//   deps: [PluginEntity<A, A>],
+// export function createSelector<A, SA, R>(
+//   deps: [PluginEntity<A, SA>],
 //   func: (a: A) => R
 // ): PluginSelector<R>;
 
-// export function createSelector<A, B, R>(
-//   deps: [PluginEntity<A, A>, PluginEntity<B, B>],
+// export function createSelector<A, B, R, SA, SB>(
+//   deps: [PluginEntity<A, SA>, PluginEntity<B, SB>],
 //   func: (a: A, b: B) => R
 // ): PluginSelector<R>;
 
-// export function createSelector<A, B, C, R>(
-//   deps: [PluginEntity<A, A>, PluginEntity<B, B>, PluginEntity<C, C>],
+// export function createSelector<A, B, C, R, SA, SB, SC>(
+//   deps: [PluginEntity<A, SA>, PluginEntity<B, SB>, PluginEntity<C, SC>],
 //   func: (a: A, b: B, c: C) => R
+// ): PluginSelector<R>;
+
+// export function createSelector<A, B, C, D, R, SA, SB, SC, SD>(
+//   deps: [PluginEntity<A, SA>, PluginEntity<B, SB>, PluginEntity<C, SC>, PluginEntity<D, SD>],
+//   func: (a: A, b: B, c: C, d: D) => R
 // ): PluginSelector<R>;
 
 export function createSelector<R>(
@@ -95,6 +117,21 @@ export function createPlaceholder(): PluginEntity<PlaceholderStoreValue, Placeho
 
 type Subscription = (callbackValue: unknown) => void;
 
+function createUnsubscribeFunction(
+  childSubscriptionsList: Subscription[][],
+  subscription: Subscription,
+): () => void {
+  return (): void => {
+    childSubscriptionsList.forEach((childSubscriptions) => {
+      const index = childSubscriptions.indexOf(subscription);
+      /* istanbul ignore next */
+      if (index >= 0) {
+        childSubscriptions.splice(index, 1);
+      }
+    });
+  };
+}
+
 export class Plugins {
   private readonly items: Record<number, unknown> = {};
 
@@ -106,9 +143,16 @@ export class Plugins {
     if (entity.id in this.items && this.items[entity.id] === value && !force) return;
 
     this.items[entity.id] = value;
+
+    this.fireSubscriptions(entity);
+  }
+
+  fireSubscriptions<T, S>(entity: PluginEntity<T, S>): void {
+    const value = this.items[entity.id] as S;
+
     const subscriptions = this.subscriptions[entity.id];
     if (subscriptions) {
-      const callbackValue = entity.getValue(value);
+      const callbackValue = entity.getValue(value, this);
 
       subscriptions.forEach((handler) => {
         handler(callbackValue);
@@ -116,18 +160,28 @@ export class Plugins {
     }
   }
 
-  extend<T>(entity: PluginGetter<T>, order: number, func: (base: T) => T): () => void {
+  extend<T>(
+    entity: PluginGetter<T>,
+    order: number,
+    func: (base: T) => T,
+    deps?: PluginEntity<unknown, unknown> [],
+  ): () => void {
     const value = (this.items[entity.id] || []) as GetterStoreValue<T>;
     const insertIndex = value.filter((item) => item.order < order).length;
-    const item = { order, func };
+    const item = {
+      order,
+      func: func as (...args: unknown[]) => T,
+      deps,
+    };
+    const unsubscribe = deps ? this.subscribeToGetterItemDeps(entity, deps) : undefined;
     value.splice(insertIndex, 0, item);
-
     this.set(entity, value, true);
 
     return (): void => {
       const index = value.indexOf(item);
       if (index >= 0) {
         value.splice(index, 1);
+        unsubscribe?.();
         this.set(entity, value, true);
       }
     };
@@ -144,6 +198,7 @@ export class Plugins {
     const item = { order, component, deps };
     value.splice(insertIndex, 0, item);
     this.set(entity, value, true);
+
     return (): void => {
       const index = value.indexOf(item);
       if (index >= 0) {
@@ -156,7 +211,7 @@ export class Plugins {
   getValue<T, S>(entity: PluginEntity<T, S>): T | undefined {
     this.update(entity);
     const value = this.items[entity.id] as S;
-    return entity.getValue(value);
+    return entity.getValue(value, this);
   }
 
   hasValue<T, S>(entity: PluginEntity<T, S>): boolean {
@@ -164,7 +219,6 @@ export class Plugins {
   }
 
   updateSelectorValue<R>(entity: PluginSelector<R>): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const childValues = entity.deps.map((childEntity) => this.getValue(childEntity));
     const newValue = entity.func.apply(null, childValues);
     this.set(entity, newValue);
@@ -182,17 +236,39 @@ export class Plugins {
     }
   }
 
+  subscribeToGetterItemDeps<T>(
+    getter: PluginGetter<T>,
+    deps: PluginEntity<unknown>[],
+  ): () => void {
+    const fireEntitySubscriptions = (): void => this.fireSubscriptions(getter);
+    const childSubscriptionsList = deps
+      .filter((childEntity) => childEntity.id !== getter.id)
+      .map((childEntity) => this.getSubscriptions(childEntity));
+
+    childSubscriptionsList.forEach((childSubscriptions) => {
+      childSubscriptions.push(fireEntitySubscriptions);
+    });
+    return createUnsubscribeFunction(
+      childSubscriptionsList,
+      fireEntitySubscriptions,
+    );
+  }
+
+  updateSelector<T>(entity: PluginSelector<T>): void {
+    entity.deps.forEach((child) => {
+      this.update(child);
+    });
+
+    this.subscribeToSelectorDeps(entity);
+
+    if (entity.deps.every((childEntity) => this.hasValue(childEntity))) {
+      this.updateSelectorValue(entity);
+    }
+  }
+
   update<T, S>(entity: PluginEntity<T, S>): void {
     if (entity instanceof PluginSelector) {
-      entity.deps.forEach((child) => {
-        this.update(child);
-      });
-
-      this.subscribeToSelectorDeps(entity);
-
-      if (entity.deps.every((childEntity) => this.hasValue(childEntity))) {
-        this.updateSelectorValue(entity);
-      }
+      this.updateSelector(entity);
     }
   }
 
@@ -209,7 +285,7 @@ export class Plugins {
 
     if (this.hasValue(entity)) {
       const value = this.items[entity.id] as S;
-      const callbackValue = entity.getValue(value);
+      const callbackValue = entity.getValue(value, this);
       callback(callbackValue);
     }
 

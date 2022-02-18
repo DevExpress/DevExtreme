@@ -12,7 +12,7 @@ import {
   Consumer,
   JSXTemplate,
 } from '@devextreme-generator/declarations';
-import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
+import { Plugins, PluginsContext, createSelector } from '../../../../utils/plugin/context';
 
 import {
   VisibleRows, VisibleColumns,
@@ -26,9 +26,33 @@ import { ExpandColumn } from './expand_column';
 import { SetExpanded, IsExpanded, MasterDetailTemplate } from './plugins';
 import { MasterDetailRow } from './master_detail_row';
 
-export const viewFunction = (viewModel: MasterDetail): JSX.Element => (
+export const AddMasterDetailRows = createSelector(
+  [VisibleRows, IsExpanded],
+  (visibleRows: Row[], isExpanded): Row[] => {
+    const result = visibleRows.slice();
+
+    for (let i = 0; i < visibleRows.length; i += 1) {
+      const item = result[i];
+
+      if (isExpanded(item.key)) {
+        result.splice(i + 1, 0, {
+          ...item,
+          rowType: 'detail',
+          template: MasterDetailRow,
+        });
+        i += 1;
+      } else if (item.rowType === 'detail') {
+        result.splice(i, 1);
+      }
+    }
+
+    return result;
+  },
+);
+
+export const viewFunction = (): JSX.Element => (
   <Fragment>
-    <GetterExtender type={VisibleRows} order={2} func={viewModel.processVisibleRows} />
+    <GetterExtender type={VisibleRows} order={2} selector={AddMasterDetailRows} />
   </Fragment>
 );
 
@@ -95,26 +119,5 @@ export class MasterDetail extends JSXComponent<MasterDetailProps, 'template'>(Ma
       this.props.expandedRowKeys = this.props.expandedRowKeys
         .filter((i) => i !== key);
     }
-  }
-
-  processVisibleRows(visibleRows: Row[]): Row[] {
-    const result = visibleRows.slice();
-
-    for (let i = 0; i < visibleRows.length; i += 1) {
-      const item = result[i];
-
-      if (this.isExpanded(item.key)) {
-        result.splice(i + 1, 0, {
-          ...item,
-          rowType: 'detail',
-          template: MasterDetailRow,
-        });
-        i += 1;
-      } else if (item.rowType === 'detail') {
-        result.splice(i, 1);
-      }
-    }
-
-    return result;
   }
 }

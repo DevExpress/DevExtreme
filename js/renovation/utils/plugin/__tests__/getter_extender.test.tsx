@@ -1,17 +1,18 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { GetterExtender, viewFunction as GetterExtenderView } from '../getter_extender';
-import { createGetter, Plugins } from '../context';
+import { createGetter, createSelector, Plugins } from '../context';
 
 describe('GetterExtender', () => {
   const SomeGetter = createGetter(1);
+  const testSelector = createSelector([], () => 'test');
 
   describe('View', () => {
     it('should be empty', () => {
       const getterExtender = new GetterExtender({
         type: SomeGetter,
         order: 1,
-        func: () => null,
+        selector: testSelector,
       });
 
       const tree = mount(<GetterExtenderView {...getterExtender as any} />);
@@ -25,10 +26,9 @@ describe('GetterExtender', () => {
         const valueSetter = new GetterExtender({
           type: SomeGetter,
           order: 1,
-          func: () => 'test',
+          selector: testSelector,
         });
         valueSetter.plugins = new Plugins();
-
         valueSetter.updateExtender();
 
         expect(valueSetter.plugins.getValue(SomeGetter)).toEqual('test');

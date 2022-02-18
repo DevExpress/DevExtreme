@@ -19,7 +19,7 @@ describe('PluginEntity', () => {
   describe('getValue', () => {
     it('should return value', () => {
       const entity = new PluginEntity();
-      expect(entity.getValue(1)).toBe(1);
+      expect(entity.getValue(1, new Plugins())).toBe(1);
     });
   });
 });
@@ -31,12 +31,12 @@ describe('PluginGetter', () => {
 
       const handler = {
         order: 0,
-        func: (n: number) => n + 1,
+        func: ((n: number) => n + 1) as (...args: unknown[]) => number,
       };
 
       const handlers = [handler, handler, handler];
 
-      expect(getter.getValue(handlers)).toBe(3);
+      expect(getter.getValue(handlers, new Plugins())).toBe(3);
     });
   });
 });
@@ -201,6 +201,63 @@ describe('Plugins', () => {
 
       dispose();
       expect(dispose).not.toThrow();
+    });
+
+    it('should work with deps', () => {
+      const plugins = new Plugins();
+
+      plugins.set(someValuePlugin, 3);
+      plugins.extend(someGetterPlugin, -1, () => 100);
+      plugins.extend(
+        someGetterPlugin,
+        0,
+        ((base: number, someValue: number) => base + someValue) as (base: number) => number,
+        [someGetterPlugin, someValuePlugin],
+      );
+
+      expect(plugins.getValue(someGetterPlugin)).toEqual(103);
+    });
+
+    it('should subscribe to deps', () => {
+      const plugins = new Plugins();
+      const watchFnMock = jest.fn();
+
+      plugins.set(someValuePlugin, 3);
+      plugins.extend(someGetterPlugin, -1, () => 100);
+      plugins.extend(
+        someGetterPlugin,
+        0,
+        ((base: number, someValue: number) => base + someValue) as (base: number) => number,
+        [someGetterPlugin, someValuePlugin],
+      );
+
+      plugins.watch(someGetterPlugin, watchFnMock);
+      plugins.set(someValuePlugin, 11);
+
+      expect(watchFnMock).toBeCalledTimes(2);
+      expect(watchFnMock).toHaveBeenCalledWith(111);
+      expect(plugins.getValue(someGetterPlugin)).toEqual(111);
+    });
+
+    it('should unsubscribe from deps on dispose', () => {
+      const plugins = new Plugins();
+      const watchFnMock = jest.fn();
+
+      plugins.set(someValuePlugin, 3);
+      const dispose = plugins.extend(
+        someGetterPlugin,
+        0,
+        ((base: number, someValue: number) => base + someValue) as (base: number) => number,
+        [someGetterPlugin, someValuePlugin],
+      );
+      plugins.watch(someGetterPlugin, watchFnMock);
+      dispose();
+      watchFnMock.mockClear();
+
+      plugins.set(someValuePlugin, 10);
+
+      expect(watchFnMock).not.toHaveBeenCalled();
+      expect(plugins.getValue(someGetterPlugin)).toEqual(0);
     });
   });
 
