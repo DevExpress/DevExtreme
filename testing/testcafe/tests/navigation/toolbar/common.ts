@@ -288,7 +288,7 @@ fixture`Toolbar_common`
 
     await appendElementTo('#container', 'div', 'toolbar5', {});
     await createWidget('dxToolbar', { items: [{ locateInMenu: 'always', text: 'text' }] }, false, '#toolbar5');
-  }).after(async () => {
+  }).after(async (t) => {
     await restoreBrowserSize(t);
     await changeTheme('generic.light');
   });
