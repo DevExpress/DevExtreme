@@ -320,7 +320,7 @@ function processDateInterval(interval) {
     return interval;
 }
 
-export function formatRange(startValue, endValue, tickInterval, { argumentFormat, dataType, type, logarithmBase }) {
+export function formatRange({ startValue, endValue, tickInterval, argumentFormat, axisOptions: { dataType, type, logarithmBase } }) {
     if(type === 'discrete') {
         return '';
     }
