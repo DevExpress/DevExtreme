@@ -773,7 +773,7 @@ Axis.prototype = {
     },
 
     formatRange(startValue, endValue, interval, argumentFormat) {
-        return formatRange({ startValue, endValue, interval, argumentFormat, axisOptions: this.getOptions() });
+        return formatRange({ startValue, endValue, tickInterval: interval, argumentFormat, axisOptions: this.getOptions() });
     },
 
     _setTickOffset: function() {
