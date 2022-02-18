@@ -1,5 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
@@ -45,7 +46,8 @@ fixture`Menu_common`
     ] as Item[];
 
     return createWidget('dxMenu', { items: menuItems });
-  }).after(async () => {
+  }).after(async (t) => {
+    await restoreBrowserSize(t);
     await changeTheme('generic.light');
   });
 });

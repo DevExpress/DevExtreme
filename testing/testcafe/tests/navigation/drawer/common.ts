@@ -2,11 +2,15 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createDrawer } from './drawer.helpers';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`Drawer`
   .page(url(__dirname, '../../container.html'))
   .beforeEach(async (t) => {
     await t.resizeWindow(700, 700);
+  })
+  .afterEach(async (t) => {
+    await restoreBrowserSize(t);
   });
 
 const openedStateModeConfigs = [] as any[];

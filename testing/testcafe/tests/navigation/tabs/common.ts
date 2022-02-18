@@ -16,8 +16,7 @@ fixture`Tabs_common`
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(910, 800);
+  }).before(async () => {
     await changeTheme(theme);
 
     const dataSource = [

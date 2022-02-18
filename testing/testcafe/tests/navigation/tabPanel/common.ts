@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
@@ -74,7 +75,8 @@ fixture`TabPanel_common`
     };
 
     return createWidget('dxTabPanel', tabPanelOptions);
-  }).after(async () => {
+  }).after(async (t) => {
+    await restoreBrowserSize(t);
     await changeTheme('generic.light');
   });
 
@@ -144,7 +146,8 @@ fixture`TabPanel_common`
     };
 
     return createWidget('dxTabPanel', tabPanelOptions);
-  }).after(async () => {
+  }).after(async (t) => {
+    await restoreBrowserSize(t);
     await changeTheme('generic.light');
   });
 });

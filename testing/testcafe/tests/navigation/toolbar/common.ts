@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction, Selector } from 'testcafe';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
@@ -288,6 +289,7 @@ fixture`Toolbar_common`
     await appendElementTo('#container', 'div', 'toolbar5', {});
     await createWidget('dxToolbar', { items: [{ locateInMenu: 'always', text: 'text' }] }, false, '#toolbar5');
   }).after(async () => {
+    await restoreBrowserSize(t);
     await changeTheme('generic.light');
   });
 });
