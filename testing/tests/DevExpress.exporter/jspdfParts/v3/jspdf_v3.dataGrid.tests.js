@@ -25,6 +25,7 @@ import { JSPdfSplittingTests } from './jspdf_v3.dataGrid.splitting.tests.js';
 import { JSPdfMeasureUnitsTests } from './jspdf_v3.dataGrid.measureUnits.tests.js';
 import { JSPdfColumnDataTypesTests } from './jspdf_v3.dataGrid.columnDataTypes.tests.js';
 import { JSPdfColumnDataFormatsTests } from './jspdf_v3.dataGrid.columnDataFormats.tests.js';
+import { JSPdfLoadPanelTests } from './jspdf_v3.dataGrid.loadPanel.tests.js';
 
 import 'generic_light.css!';
 
@@ -184,7 +185,9 @@ function createMockPdfDoc(options) {
 }
 
 function createDataGrid(options) {
-    options.loadingTimeout = null;
+    if(!isDefined(options.loadingTimeout)) {
+        options.loadingTimeout = null;
+    }
     return $('#dataGrid').dxDataGrid(options).dxDataGrid('instance');
 }
 
@@ -1734,3 +1737,4 @@ JSPdfSplittingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfMeasureUnitsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfColumnDataTypesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfColumnDataFormatsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfLoadPanelTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
