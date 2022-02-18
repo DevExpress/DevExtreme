@@ -323,7 +323,7 @@ const JSPdfMultilineTests = {
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
                 exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
-                    // doc.save();
+                    // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });
@@ -351,7 +351,7 @@ const JSPdfMultilineTests = {
                 ];
 
                 exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
-                    // doc.save();
+                    // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });
@@ -368,7 +368,7 @@ const JSPdfMultilineTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1...,55,95,{baseline:middle}',
+                    'text,line1 lin...,55,95,{baseline:middle}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,80',
@@ -381,7 +381,7 @@ const JSPdfMultilineTests = {
                 const onRowExporting = (e) => { e.rowHeight = 80; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
                 exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
-                    // doc.save();
+                    // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });
@@ -398,7 +398,7 @@ const JSPdfMultilineTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1...,55,71.5,{baseline:middle}',
+                    'text,line1 lin...,55,71.5,{baseline:middle}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
@@ -427,7 +427,7 @@ const JSPdfMultilineTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1...,55,71.5,{baseline:middle}',
+                    'text,line1 lin...,55,71.5,{baseline:middle}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
@@ -894,7 +894,7 @@ const JSPdfMultilineTests = {
                     'text,line1 line2 line3,55,95,{baseline:middle}',
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1...,155,95,{baseline:middle}',
+                    'text,line1 lin...,155,95,{baseline:middle}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,80',
@@ -936,7 +936,7 @@ const JSPdfMultilineTests = {
                     'text,line1 line2 line3,55,71.5,{baseline:middle}',
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1...,155,71.5,{baseline:middle}',
+                    'text,line1 lin...,155,71.5,{baseline:middle}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,50,55,100,33',
@@ -974,7 +974,7 @@ const JSPdfMultilineTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1...,55,100,{baseline:middle}',
+                    'text,line1 lin...,55,100,{baseline:middle}',
                     'setTextColor,#979797',
                     'setFontSize,30',
                     'text,line1...,155,100,{baseline:middle}',
@@ -1018,7 +1018,7 @@ const JSPdfMultilineTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1...,55,77.25,{baseline:middle}',
+                    'text,line1 lin...,55,77.25,{baseline:middle}',
                     'setTextColor,#979797',
                     'setFontSize,30',
                     'text,line1...,155,77.25,{baseline:middle}',
@@ -1061,7 +1061,7 @@ const JSPdfMultilineTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line1...,55,77.25,{baseline:middle}',
+                    'text,line1 lin...,55,77.25,{baseline:middle}',
                     'setTextColor,#979797',
                     'setFontSize,30',
                     'text,line1...,155,77.25,{baseline:middle}',
@@ -1438,7 +1438,7 @@ const JSPdfMultilineTests = {
 
                 const onRowExporting = (e) => { e.rowHeight = 80; };
                 exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
-                    // doc.save();
+                    // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });
@@ -1470,7 +1470,7 @@ const JSPdfMultilineTests = {
                 ];
 
                 exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
-                    // doc.save();
+                    // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });
@@ -1504,7 +1504,7 @@ const JSPdfMultilineTests = {
                 const onRowExporting = (e) => { e.rowHeight = 80; };
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
                 exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
-                    // doc.save();
+                    // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });

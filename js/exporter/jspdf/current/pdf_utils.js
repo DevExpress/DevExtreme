@@ -17,26 +17,26 @@ function getPageHeight(doc) {
 }
 
 function getTextLines(doc, text, font, { wordWrapEnabled, targetRectWidth }) {
-    const usedFont = doc.getFont(font?.name, font?.style);
-    const fontOptions = {
-        fontSize: font?.size || doc.getFontSize(),
-        fontName: usedFont.fontName,
-        fontStyle: usedFont.fontStyle
-    };
-
     if(wordWrapEnabled) {
-        return doc.splitTextToSize(text, targetRectWidth, fontOptions);
+        const usedFont = doc.getFont(font?.name, font?.style);
+        return doc.splitTextToSize(text, targetRectWidth, {
+            fontSize: font?.size || doc.getFontSize(),
+            fontName: usedFont.fontName,
+            fontStyle: usedFont.fontStyle
+        });
     }
 
-    const textWithoutLineBreak = text.split('\n').join(' ');
-    const textWidth = getTextDimensions(doc, textWithoutLineBreak, font).w;
-    if(textWidth > targetRectWidth) {
-        const dotsWidth = getTextDimensions(doc, DOTS_TEXT, font).w;
-        const textWithDots = doc.splitTextToSize(textWithoutLineBreak, targetRectWidth - dotsWidth, fontOptions)[0] + DOTS_TEXT;
-        return [textWithDots];
+    let textWithoutLineBreak = text.split('\n').filter(ch => ch !== '').join(' ');
+    if(getTextDimensions(doc, textWithoutLineBreak, font).w <= targetRectWidth) {
+        return [textWithoutLineBreak];
     }
 
-    return [textWithoutLineBreak];
+    while(textWithoutLineBreak.length > 0 && getTextDimensions(doc, textWithoutLineBreak + DOTS_TEXT, font).w > targetRectWidth) {
+        textWithoutLineBreak = textWithoutLineBreak.substring(0, textWithoutLineBreak.length - 1);
+    }
+
+    return [textWithoutLineBreak + DOTS_TEXT];
+
 }
 
 function calculateTargetRectWidth(columnWidth, padding) {
