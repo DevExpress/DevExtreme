@@ -696,7 +696,7 @@ const JSPdfBorderWidthsTests = {
                     'text,F4,225,65.75,{baseline:middle}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
-                    'text,F1: f1 (Max: f1),55,87.25,{baseline:middle}',
+                    'text,F1: f1 (Max:...,55,87.25,{baseline:middle}',
                     'text,Max: f3,135,87.25,{baseline:middle}',
                     'text,Max: f4,225,87.25,{baseline:middle}',
                     'setFont,helvetica,normal,',
