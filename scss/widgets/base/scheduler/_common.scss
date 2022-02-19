@@ -51,7 +51,7 @@ $scheduler-popup-scrollable-content-padding: 20px;
     margin: 0 2 * ($scheduler-appointment-collector-margin - 1);
     padding: 0;
 
-    span:last-child {
+    .dx-scheduler-overflow-indicator-text {
       display: inline-block;
       vertical-align: middle;
       line-height: math.div($scheduler-appointment-collector-height, 1.5);
@@ -104,7 +104,7 @@ $scheduler-popup-scrollable-content-padding: 20px;
 
     .dx-scheduler-appointment-collector-content,
     .dx-button-content {
-      span:last-child {
+      .dx-scheduler-overflow-indicator-text {
         line-height: $scheduler-appointment-collector-height;
       }
     }

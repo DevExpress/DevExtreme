@@ -14,6 +14,7 @@ import { getOverflowIndicatorColor } from '../../renovation/ui/scheduler/appoint
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-compact';
 const APPOINTMENT_COLLECTOR_CONTENT_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-content';
+const APPOINTMENT_COLLECTOR_TEXT_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-text';
 
 const WEEK_VIEW_COLLECTOR_OFFSET = 5;
 const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
@@ -209,9 +210,10 @@ export class CompactAppointmentsHelper {
 
     _createButtonTemplate(appointmentCount, element, isCompact) {
         const text = isCompact ? appointmentCount : messageLocalization.getFormatter('dxScheduler-moreAppointments')(appointmentCount);
+        const textElement = $('<span>').addClass(APPOINTMENT_COLLECTOR_TEXT_CLASS).text(text);
 
         return element
-            .append($('<span>').text(text))
+            .append(textElement)
             .addClass(APPOINTMENT_COLLECTOR_CONTENT_CLASS);
     }
 }

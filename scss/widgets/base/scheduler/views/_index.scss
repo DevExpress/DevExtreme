@@ -473,7 +473,7 @@ $scheduler-month-date-text-padding: 6px;
   .dx-scheduler-date-table-row .dx-scheduler-date-table-cell,
   .dx-scheduler-header-row .dx-scheduler-header-panel-cell,
   .dx-scheduler-all-day-table-row .dx-scheduler-all-day-table-cell {
-    &:first-child {
+    &:first-of-type {
       border-left: none;
     }
   }

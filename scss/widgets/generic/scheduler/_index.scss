@@ -332,7 +332,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
   .dx-scheduler-appointment-collector-content,
   .dx-button-content {
-    span:last-child {
+    .dx-scheduler-overflow-indicator-text {
       line-height: math.div($generic-scheduler-appointment-collector-height, 1.5);
       height: $generic-scheduler-appointment-collector-height;
     }

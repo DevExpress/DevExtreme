@@ -37,7 +37,7 @@ export const viewFunction = ({
     {
       OverflowIndicatorTemplate
         ? (<OverflowIndicatorTemplate data={data} />)
-        : (<span>{text}</span>)
+        : (<span className="dx-scheduler-overflow-indicator-text">{text}</span>)
     }
   </Button>
 );
