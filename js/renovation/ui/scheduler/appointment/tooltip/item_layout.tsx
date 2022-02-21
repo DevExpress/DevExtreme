@@ -6,20 +6,24 @@ import { TooltipItemContent } from './item_content';
 import { AppointmentViewModel } from '../types';
 import { DeleteButton } from './delete_button';
 
-export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => (
-  <div
-    className="dx-tooltip-appointment-item"
-  >
-    <Marker
-      color={viewModel.props.item.color}
-    />
-    <TooltipItemContent
-      text={viewModel.text}
-      formattedDate={viewModel.dateText}
-    />
-    <DeleteButton />
-  </div>
-);
+export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => {
+  const { color } = viewModel.props.item;
+
+  return (
+    <div
+      className="dx-tooltip-appointment-item"
+    >
+      <Marker
+        color={color}
+      />
+      <TooltipItemContent
+        text={viewModel.text}
+        formattedDate={viewModel.dateText}
+      />
+      <DeleteButton />
+    </div>
+  );
+};
 
 @ComponentBindings()
 export class TooltipItemLayoutProps {
