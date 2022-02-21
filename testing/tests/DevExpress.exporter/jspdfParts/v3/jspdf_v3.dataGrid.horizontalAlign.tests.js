@@ -143,7 +143,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -176,7 +176,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1,350.28,65.75,{baseline:middle,align:left}',
+                    'text,line 1,350.28,65.75,{baseline:middle,align:left,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -209,7 +209,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1,445.28,65.75,{baseline:middle,align:center}',
+                    'text,line 1,445.28,65.75,{baseline:middle,align:center,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -242,7 +242,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -382,7 +382,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -418,7 +418,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1,350.28,65.75,{baseline:middle,align:left}',
+                    'text,line 1,350.28,65.75,{baseline:middle,align:left,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -454,7 +454,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1,445.28,65.75,{baseline:middle,align:center}',
+                    'text,line 1,445.28,65.75,{baseline:middle,align:center,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -490,7 +490,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -630,7 +630,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line 1,540.28,71.5,{baseline:middle,align:right}',
+                    'text,line 1,540.28,71.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,33',
@@ -666,7 +666,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line 1,350.28,71.5,{baseline:middle,align:left}',
+                    'text,line 1,350.28,71.5,{baseline:middle,align:left,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,33',
@@ -702,7 +702,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line 1,445.28,71.5,{baseline:middle,align:center}',
+                    'text,line 1,445.28,71.5,{baseline:middle,align:center,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,33',
@@ -738,7 +738,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line 1,540.28,71.5,{baseline:middle,align:right}',
+                    'text,line 1,540.28,71.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,33',
@@ -865,7 +865,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1 long line 2,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -898,7 +898,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2,350.28,65.75,{baseline:middle,align:left}',
+                    'text,line 1 long line 2,350.28,65.75,{baseline:middle,align:left,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -931,7 +931,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2,445.28,65.75,{baseline:middle,align:center}',
+                    'text,line 1 long line 2,445.28,65.75,{baseline:middle,align:center,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -964,7 +964,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1 long line 2,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -1104,7 +1104,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1 long line 2,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -1140,7 +1140,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2,350.28,65.75,{baseline:middle,align:left}',
+                    'text,line 1 long line 2,350.28,65.75,{baseline:middle,align:left,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -1176,7 +1176,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2,445.28,65.75,{baseline:middle,align:center}',
+                    'text,line 1 long line 2,445.28,65.75,{baseline:middle,align:center,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -1212,7 +1212,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1 long line 2,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -1352,7 +1352,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line 1 long line 2,540.28,71.5,{baseline:middle,align:right}',
+                    'text,line 1 long line 2,540.28,71.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,33',
@@ -1388,7 +1388,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line 1 long line 2,350.28,71.5,{baseline:middle,align:left}',
+                    'text,line 1 long line 2,350.28,71.5,{baseline:middle,align:left,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,33',
@@ -1424,7 +1424,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line 1 long line 2,445.28,71.5,{baseline:middle,align:center}',
+                    'text,line 1 long line 2,445.28,71.5,{baseline:middle,align:center,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,33',
@@ -1460,7 +1460,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line 1 long line 2,540.28,71.5,{baseline:middle,align:right}',
+                    'text,line 1 long line 2,540.28,71.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,33',
@@ -1692,7 +1692,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2 very long line 3,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1 long line 2 very long line 3,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -1725,7 +1725,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2 very long line 3,350.28,65.75,{baseline:middle,align:left}',
+                    'text,line 1 long line 2 very long line 3,350.28,65.75,{baseline:middle,align:left,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -1758,7 +1758,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2 very long line 3,445.28,65.75,{baseline:middle,align:center}',
+                    'text,line 1 long line 2 very long line 3,445.28,65.75,{baseline:middle,align:center,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -1791,7 +1791,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2 very long line 3,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1 long line 2 very long line 3,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -1931,7 +1931,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2 very long line 3,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1 long line 2 very long line 3,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -1967,7 +1967,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2 very long line 3,350.28,65.75,{baseline:middle,align:left}',
+                    'text,line 1 long line 2 very long line 3,350.28,65.75,{baseline:middle,align:left,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -2003,7 +2003,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2 very long line 3,445.28,65.75,{baseline:middle,align:center}',
+                    'text,line 1 long line 2 very long line 3,445.28,65.75,{baseline:middle,align:center,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -2039,7 +2039,7 @@ const JSPdfHorizontalAlignTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,line 1 long line 2 very long line 3,540.28,65.75,{baseline:middle,align:right}',
+                    'text,line 1 long line 2 very long line 3,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,21.5',
@@ -2291,8 +2291,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,540.28,65.75,{baseline:middle,align:right}',
+'long line 2\n' +
+'very long line 3,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,44.5',
@@ -2327,8 +2327,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,350.28,65.75,{baseline:middle,align:left}',
+'long line 2\n' +
+'very long line 3,350.28,65.75,{baseline:middle,align:left,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,44.5',
@@ -2363,8 +2363,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,445.28,65.75,{baseline:middle,align:center}',
+'long line 2\n' +
+'very long line 3,445.28,65.75,{baseline:middle,align:center,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,44.5',
@@ -2399,8 +2399,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,540.28,65.75,{baseline:middle,align:right}',
+'long line 2\n' +
+'very long line 3,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,44.5',
@@ -2551,8 +2551,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,540.28,65.75,{baseline:middle,align:right}',
+'long line 2\n' +
+'very long line 3,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,44.5',
@@ -2590,8 +2590,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,350.28,65.75,{baseline:middle,align:left}',
+'long line 2\n' +
+'very long line 3,350.28,65.75,{baseline:middle,align:left,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,44.5',
@@ -2629,8 +2629,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,445.28,65.75,{baseline:middle,align:center}',
+'long line 2\n' +
+'very long line 3,445.28,65.75,{baseline:middle,align:center,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,44.5',
@@ -2668,8 +2668,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,10',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,540.28,65.75,{baseline:middle,align:right}',
+'long line 2\n' +
+'very long line 3,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,44.5',
@@ -2912,8 +2912,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,540.28,71.5,{baseline:middle,align:right}',
+'long line 2\n' +
+'very long line 3,540.28,71.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,79',
@@ -2951,8 +2951,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,350.28,71.5,{baseline:middle,align:left}',
+'long line 2\n' +
+'very long line 3,350.28,71.5,{baseline:middle,align:left,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,79',
@@ -2990,8 +2990,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,445.28,71.5,{baseline:middle,align:center}',
+'long line 2\n' +
+'very long line 3,445.28,71.5,{baseline:middle,align:center,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,79',
@@ -3029,8 +3029,8 @@ const JSPdfHorizontalAlignTests = {
                     'setTextColor,#979797',
                     'setFontSize,20',
                     'text,line 1\n' +
-                    'long line 2\n' +
-                    'very long line 3,540.28,71.5,{baseline:middle,align:right}',
+'long line 2\n' +
+'very long line 3,540.28,71.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,345.28,55,200,79',
