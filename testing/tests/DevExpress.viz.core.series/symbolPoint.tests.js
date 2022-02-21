@@ -1889,7 +1889,7 @@ QUnit.test('Image to non-image (image option is string)', function(assert) {
     assert.deepEqual(point.graphic.stub('append').lastCall.args[0], this.group);
 });
 
-QUnit.test('Image to non-image (image option is string)', function(assert) {
+QUnit.test('Image to non-image (image option is object)', function(assert) {
     this.options.image = { url: 'image-url' };
     this.options.symbol = 'circle';
     const point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
@@ -2315,7 +2315,8 @@ QUnit.module('Tooltip', {
         const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
                 return value || value === 0 ? value + ':' + specialFormat : value || '';
-            }
+            },
+            getOptions: sinon.spy(()=>({ argumentFormat: 'argument-format' }))
         });
         this.tooltip = new StubTooltip();
 
@@ -2549,6 +2550,7 @@ QUnit.test('Get tooltip format object with aggreagation info', function(assert) 
     const formatObject = createPoint(this.series, this.data, this.options).getTooltipFormatObject(this.tooltip);
 
     assert.equal(formatObject.valueText, '10:undefined\nrange');
+    assert.equal(this.axis.formatRange.lastCall.args[3], 'argument-format');
 });
 
 QUnit.test('Get tooltip format object with aggreagation info when format range resturn empty string', function(assert) {
