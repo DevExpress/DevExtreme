@@ -850,6 +850,7 @@ export const focusModule = {
 
                     if(scrollable && $row.length) {
                         const position = scrollable.getScrollElementPosition($row, 'vertical');
+                        this._dataController.resetFilterApplying();
                         scrollable.scrollTo({ top: position });
                     }
                 }
