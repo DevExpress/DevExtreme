@@ -266,8 +266,8 @@ openedStateModeConfigs.forEach((config) => {
       .expect(await takeScreenshot(`${getScreenshotName('SelectBoxDrawer', '#container')}.png`))
       .ok();
 
-    await t.click('#popup1_template #selectBox .dx-texteditor-container');
     await t.click(Selector('#showPopupBtn'));
+    await t.click('#popup1_template #selectBox .dx-texteditor-container');
 
     await t
       .expect(await takeScreenshot(`${getScreenshotName('SelectBoxDrawer', '#popup1')}.png`))
@@ -325,8 +325,8 @@ openedStateModeConfigs.forEach((config) => {
       .expect(await takeScreenshot(`${getScreenshotName('SelectBoxOuter', '#container')}.png`))
       .ok();
 
-    await t.click('#popup1_template #selectBox .dx-texteditor-container');
     await t.click(Selector('#showPopupBtn'));
+    await t.click('#popup1_template #selectBox .dx-texteditor-container');
 
     await t
       .expect(await takeScreenshot(`${getScreenshotName('SelectBoxOuter', '#popup1')}.png`))
@@ -385,8 +385,8 @@ openedStateModeConfigs.forEach((config) => {
       .expect(await takeScreenshot(`${getScreenshotName('TextBoxDrawer', '#container')}.png`))
       .ok();
 
-    await t.click('#popup1_template #textBox');
     await t.click(Selector('#showPopupBtn'));
+    await t.click('#popup1_template #textBox');
 
     await t
       .expect(await takeScreenshot(`${getScreenshotName('TextBoxDrawer', '#popup1')}.png`))
