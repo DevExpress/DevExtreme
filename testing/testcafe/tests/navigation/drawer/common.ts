@@ -176,8 +176,8 @@ openedStateModeConfigs.forEach((config) => {
       .expect(await takeScreenshot(`${getScreenshotName('MenuDrawer', '#container')}.png`))
       .ok();
 
-    await t.click('#popup1_template #menu .dx-menu-item');
     await t.click(Selector('#showPopupBtn'));
+    await t.click('#popup1_template #menu .dx-menu-item');
 
     await t
       .expect(await takeScreenshot(`${getScreenshotName('MenuDrawer', '#popup1')}.png`))
