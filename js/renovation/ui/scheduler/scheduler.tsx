@@ -50,6 +50,7 @@ import { ReducedIconTooltip } from './appointment/reduced_icon_tooltip/layout';
 import { AppointmentsContextProvider } from './appointments_context_provider';
 import { IAppointmentContext } from './appointments_context';
 import { ResourceMapType } from './resources/utils';
+import { combineClasses } from '../../utils/combine_classes';
 
 export const viewFunction = ({
   restAttributes,
@@ -68,6 +69,7 @@ export const viewFunction = ({
   changeTooltipVisible,
   workSpaceKey,
   appointmentsContextValue,
+  classes,
 
   props: {
     accessKey,
@@ -121,7 +123,7 @@ export const viewFunction = ({
 
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
-      classes="dx-scheduler dx-scheduler-native"
+      classes={classes}
       accessKey={accessKey}
       activeStateEnabled={activeStateEnabled}
       disabled={disabled}
@@ -527,6 +529,14 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       showReducedIconTooltip: (data) => this.showReducedIconTooltip(data),
       hideReducedIconTooltip: () => this.hideReducedIconTooltip(),
     };
+  }
+
+  get classes(): string {
+    return combineClasses({
+      'dx-scheduler': true,
+      'dx-scheduler-native': true,
+      'dx-scheduler-adaptive': this.props.adaptivityEnabled,
+    });
   }
 
   @Method()

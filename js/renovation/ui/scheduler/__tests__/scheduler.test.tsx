@@ -117,6 +117,7 @@ describe('Scheduler', () => {
       };
       const tree = renderComponent({
         restAttributes: { 'custom-attribute': 'customAttribute' },
+        classes: 'some-classes',
         props,
       });
 
@@ -124,8 +125,8 @@ describe('Scheduler', () => {
         .toEqual({
           ...new WidgetProps(),
           'custom-attribute': 'customAttribute',
-          classes: 'dx-scheduler dx-scheduler-native',
           ...props,
+          classes: 'some-classes',
           children: expect.anything(),
         });
     });
@@ -1458,6 +1459,29 @@ describe('Scheduler', () => {
 
           expect(scheduler.workSpaceKey)
             .toBe('day_horizontal_3_0');
+        });
+      });
+
+      describe('classes', () => {
+        [
+          {
+            value: true,
+            expected: 'dx-scheduler dx-scheduler-native dx-scheduler-adaptive',
+          },
+          {
+            value: false,
+            expected: 'dx-scheduler dx-scheduler-native',
+          },
+        ].forEach(({ value, expected }) => {
+          it(`should return correct classes if adaptivityEnabled is ${value}`, () => {
+            const scheduler = new Scheduler({
+              ...new SchedulerProps(),
+              adaptivityEnabled: value,
+            });
+
+            expect(scheduler.classes)
+              .toBe(expected);
+          });
         });
       });
     });
