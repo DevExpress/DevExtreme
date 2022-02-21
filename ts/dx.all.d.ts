@@ -23136,6 +23136,10 @@ declare module DevExpress.ui {
      */
     selectAll(): void;
     /**
+     * [descr:dxTreeView.getScrollable()]
+     */
+    getScrollable(): DevExpress.ui.dxTreeView.Scrollable;
+    /**
      * [descr:dxTreeView.selectItem(itemData)]
      */
     selectItem(itemData: DevExpress.ui.dxTreeView.Item): boolean;
@@ -23257,6 +23261,16 @@ declare module DevExpress.ui {
     > &
       DevExpress.events.ChangedOptionInfo;
     export type Properties<TKey = any> = dxTreeViewOptions<TKey>;
+    export type Scrollable = DevExpress.core.Skip<
+      dxScrollable,
+      | '_templateManager'
+      | '_cancelOptionChange'
+      | '_getTemplate'
+      | '_invalidate'
+      | '_refresh'
+      | '_notifyOptionChanged'
+      | '_createElement'
+    >;
     export type SelectAllValueChangedEvent<TKey = any> =
       DevExpress.events.EventInfo<dxTreeView<TKey>> & {
         readonly value?: boolean | undefined;
