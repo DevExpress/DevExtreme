@@ -51,7 +51,7 @@ const getItemElement = (toolbar, itemElementSelector) => {
 };
 
 const getDropDownMenu = (toolbar) => {
-    const dropDownMenu = toolbar._menuStrategy._menu; // $(toolbar.element()).find(`.${DROP_DOWN_MENU_CLASS}`).eq(0);
+    const dropDownMenu = toolbar._menu._dropDownMenu; // $(toolbar.element()).find(`.${DROP_DOWN_MENU_CLASS}`).eq(0);
 
     if(dropDownMenu) {
         return dropDownMenu;
