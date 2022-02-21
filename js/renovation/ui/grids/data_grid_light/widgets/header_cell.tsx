@@ -1,5 +1,5 @@
 import {
-  Component, JSXComponent, ComponentBindings, OneWay, JSXTemplate,
+  Component, JSXComponent, ComponentBindings, OneWay, JSXTemplate, Template,
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../utils/combine_classes';
 
@@ -8,8 +8,7 @@ import CLASSES from '../classes';
 import { ColumnInternal } from '../types';
 
 export const viewFunction = ({
-  props: { column, columnIndex },
-  headerTemplate: HeaderTemplate,
+  props: { column, columnIndex, headerTemplate: HeaderTemplate },
   classes,
 }: HeaderCell): JSX.Element => (
   <td
@@ -39,6 +38,9 @@ export class HeaderCellProps {
 
   @OneWay()
   countColumn = 0;
+
+  @Template()
+  headerTemplate?: JSXTemplate;
 }
 
 @Component({
@@ -46,10 +48,6 @@ export class HeaderCellProps {
   view: viewFunction,
 })
 export class HeaderCell extends JSXComponent(HeaderCellProps) {
-  get headerTemplate(): JSXTemplate | undefined {
-    return this.props.column.headerTemplate;
-  }
-
   get classes(): string {
     const { columnIndex, countColumn } = this.props;
 

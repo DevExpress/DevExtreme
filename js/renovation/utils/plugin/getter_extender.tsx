@@ -4,7 +4,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
-  PluginsContext, Plugins, PluginGetter, PluginSelector,
+  PluginsContext, Plugins, PluginGetter, PluginSelector, PluginEntity,
 } from './context';
 
 export const viewFunction = (): JSX.Element => <div />;
@@ -15,21 +15,30 @@ export class GetterExtenderProps {
 
   @OneWay() order!: number;
 
-  @OneWay() selector!: PluginSelector<unknown>;
+  @OneWay() value!: PluginEntity<unknown>;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class GetterExtender extends JSXComponent<GetterExtenderProps, 'type' | 'order' | 'selector'>(GetterExtenderProps) {
+export class GetterExtender extends JSXComponent<GetterExtenderProps, 'type' | 'order' | 'value'>(GetterExtenderProps) {
   @Consumer(PluginsContext)
   plugins!: Plugins;
 
   @Effect()
   updateExtender(): () => void {
+    const { value } = this.props;
+    if (value instanceof PluginSelector) {
+      return this.plugins.extend(
+        this.props.type,
+        this.props.order,
+        value.func,
+        value.deps,
+      );
+    }
     return this.plugins.extend(
       this.props.type,
       this.props.order,
-      this.props.selector.func,
-      this.props.selector.deps,
+      () => this.plugins.getValue(value),
+      [value],
     );
   }
 }

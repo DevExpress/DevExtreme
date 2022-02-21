@@ -12,7 +12,7 @@ describe('GetterExtender', () => {
       const getterExtender = new GetterExtender({
         type: SomeGetter,
         order: 1,
-        selector: testSelector,
+        value: testSelector,
       });
 
       const tree = mount(<GetterExtenderView {...getterExtender as any} />);
@@ -26,7 +26,7 @@ describe('GetterExtender', () => {
         const valueSetter = new GetterExtender({
           type: SomeGetter,
           order: 1,
-          selector: testSelector,
+          value: testSelector,
         });
         valueSetter.plugins = new Plugins();
         valueSetter.updateExtender();

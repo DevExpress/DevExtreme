@@ -39,7 +39,7 @@ describe('Paging', () => {
         type: SetPageSize, value: viewProps.setPageSize,
       });
       expect(tree.find(GetterExtender).at(0).props()).toEqual({
-        type: VisibleItems, order: 1, selector: CalculateVisibleItems,
+        type: VisibleItems, order: 1, value: CalculateVisibleItems,
       });
     });
   });

@@ -7,7 +7,7 @@ import {
   Selection, SelectionProps, viewFunction as SelectionView,
 } from '../selection';
 import {
-  Items, KeyExprPlugin, VisibleColumns, VisibleItems,
+  AllItems, KeyExprPlugin, VisibleColumns, VisibleItems,
 } from '../../data_grid_light';
 import { RowClassesGetter, RowPropertiesGetter } from '../../widgets/row_base';
 import { RowClick } from '../../views/table_content';
@@ -163,7 +163,7 @@ describe('Selection', () => {
 
       const selection = new Selection({});
       selection.keyExpr = 'someId';
-      selection.plugins.set(Items, items);
+      selection.plugins.set(AllItems, items);
       selection.plugins.extend(VisibleItems, -1, () => visibleItems);
 
       it('should work in "allPages" mode', () => {
@@ -238,7 +238,7 @@ describe('Selection', () => {
 
       const selection = new Selection({});
       selection.keyExpr = 'someId';
-      selection.plugins.set(Items, items);
+      selection.plugins.set(AllItems, items);
       selection.plugins.extend(VisibleItems, -1, () => visibleItems);
 
       it('should work in "allPages" mode', () => {

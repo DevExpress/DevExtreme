@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   DataGridLight, viewFunction as DataGridView, DataGridLightProps,
-  TotalCount, KeyExprPlugin, Items,
+  TotalCount, KeyExprPlugin, AllItems,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
 import { generateData, generateRows } from './test_data';
@@ -113,7 +113,7 @@ describe('DataGridLight', () => {
         });
 
         grid.updateDataSource();
-        expect(grid.plugins.getValue(Items)).toBe(dataSource);
+        expect(grid.plugins.getValue(AllItems)).toBe(dataSource);
       });
     });
 
