@@ -27,6 +27,8 @@ import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
+import dxScrollable from './scroll_view/ui.scrollable';
+
 interface ItemInfo<TKey = any> {
     readonly itemData?: Item;
     readonly itemElement?: DxElement;
@@ -439,6 +441,13 @@ export default class dxTreeView<TKey = any>
     selectAll(): void;
     /**
      * @docid
+     * @publicName getScrollable()
+     * @public
+     * @return dxScrollable
+     */
+    getScrollable(): Scrollable;
+    /**
+     * @docid
      * @publicName selectItem(itemData)
      * @param1 itemData:dxTreeViewItem
      * @public
@@ -621,6 +630,9 @@ export interface dxTreeViewNode<TKey = any> {
      */
     text?: string;
 }
+
+/** @public */
+export type Scrollable = Skip<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
 
 /** @public */
 export type ExplicitTypes<TKey = any> = {
