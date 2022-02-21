@@ -220,6 +220,10 @@ export class Plugins {
   }
 
   hasValue<T, S>(entity: PluginEntity<T, S>): boolean {
+    if (entity instanceof PluginGetter) {
+      return true;
+    }
+
     return entity.id in this.items;
   }
 

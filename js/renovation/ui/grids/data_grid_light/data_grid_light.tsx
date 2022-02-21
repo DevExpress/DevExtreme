@@ -117,13 +117,6 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   visibleColumns: ColumnInternal[] = [];
 
   @Effect()
-  updateVisibleRowsByVisibleItems(): () => void {
-    return this.plugins.watch(VisibleItems, () => {
-      this.visibleRows = this.plugins.getValue(VisibleRows) ?? [];
-    });
-  }
-
-  @Effect()
   updateVisibleRows(): () => void {
     return this.plugins.watch(VisibleRows, (visibleRows) => {
       this.visibleRows = visibleRows;
