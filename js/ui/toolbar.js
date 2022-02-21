@@ -208,21 +208,6 @@ const Toolbar = ToolbarBase.inherit({
         }
     },
 
-    _requireDropDownStrategy: function() {
-        const items = this.option('items') || [];
-        let result = false;
-
-        each(items, function(index, item) {
-            if(item.locateInMenu === 'auto') {
-                result = true;
-            } else if(item.locateInMenu === 'always' && item.widget) {
-                result = true;
-            }
-        });
-
-        return result;
-    },
-
     _arrangeItems: function() {
         if(this.$element().is(':hidden')) {
             return;
