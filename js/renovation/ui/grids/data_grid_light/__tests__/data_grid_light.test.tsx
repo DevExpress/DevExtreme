@@ -175,7 +175,7 @@ describe('DataGridLight', () => {
       it('should return count of AllItems', () => {
         const plugins = new Plugins();
 
-        plugins.set(AllItems, [1, 2, 3]);
+        plugins.set(AllItems, generateData(3));
 
         expect(plugins.getValue(TotalCount)).toBe(3);
       });
