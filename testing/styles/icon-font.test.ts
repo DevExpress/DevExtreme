@@ -1,4 +1,4 @@
-import { transfer } from 'font-carrier';
+import { loadSync } from 'opentype.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 
@@ -6,14 +6,12 @@ const BASE_PATH = join(__dirname, '..', '..');
 
 describe('Equals svg to font', () => {
   const getCountElementInFont = (pathToFont: string): number => {
-    const transFont = transfer(pathToFont);
-    const glyphKeys = Object.keys(transFont.allGlyph());
+    // NOTE: Different SVG parsers produce different headers.
+    // For opentype.js: first five glyphs are empty
+    const countEmptySvg = 5;
 
-    // First three svg empty
-    const countEmptySvg = 3;
-    const notEmptyKeys = glyphKeys.slice(countEmptySvg);
-
-    return notEmptyKeys.length;
+    // eslint-disable-next-line spellcheck/spell-checker, @typescript-eslint/no-unsafe-member-access
+    return loadSync(pathToFont).glyphs.length - countEmptySvg;
   };
 
   const getCountElementInSvg = (pathToSvg: string): number => {
