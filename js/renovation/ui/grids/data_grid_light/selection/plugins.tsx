@@ -106,7 +106,7 @@ export const AddSelectionColumnToVisibleColumns = createSelector(
     selectionCheckboxTemplate,
     selectAllCheckboxTemplate,
   ): ColumnInternal[] => {
-    if (selectionMode !== 'multiple') {
+    if (selectionMode === 'none') {
       return visibleColumns;
     }
     const selectColumn: ColumnInternal = { cellTemplate: selectionCheckboxTemplate };
