@@ -537,6 +537,13 @@ QUnit.test('isShared', function(assert) {
     this.testCase(5, true);
 });
 
+QUnit.test('getOptions', function(assert) {
+    const tooltip = new Tooltip({ eventTrigger: {} });
+    tooltip.setOptions(this.options);
+
+    assert.strictEqual(tooltip.getOptions(), this.options);
+});
+
 QUnit.module('Manipulation', {
     beforeEach: function() {
         let tooltip;

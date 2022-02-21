@@ -76,8 +76,8 @@ $transparent-border: 1px solid transparent;
   border: $transparent-border;
 
   &:not(.dx-state-disabled) {
-    li[data-list=checked],
-    li[data-list=unchecked] {
+    li[data-list="checked"],
+    li[data-list="unchecked"] {
       cursor: pointer;
     }
   }
@@ -180,15 +180,15 @@ $transparent-border: 1px solid transparent;
     padding-left: $list-style-outer-width;
     position: relative;
 
-    &[data-list=bullet]::before {
+    &[data-list="bullet"]::before {
       content: '\2022';
     }
 
-    &[data-list=checked]::before {
+    &[data-list="checked"]::before {
       content: '\2611';
     }
 
-    &[data-list=unchecked]::before {
+    &[data-list="unchecked"]::before {
       content: '\2610';
     }
 
@@ -205,8 +205,8 @@ $transparent-border: 1px solid transparent;
       visibility: hidden;
     }
 
-    &[data-list=unchecked],
-    &[data-list=checked] {
+    &[data-list="unchecked"],
+    &[data-list="checked"] {
       > .ql-ui { // stylelint-disable-line selector-class-pattern
         visibility: visible;
       }
@@ -224,7 +224,7 @@ $transparent-border: 1px solid transparent;
     }
   }
 
-  li[data-list=ordered] {
+  li[data-list="ordered"] {
     counter-reset: add-counter-reset($max-indent);
     counter-increment: list-0;
 
@@ -280,11 +280,11 @@ $transparent-border: 1px solid transparent;
   }
 
   .ql-font-serif {
-    font-family: Georgia, Times New Roman, serif;
+    font-family: "Georgia", "Times New Roman", serif;
   }
 
   .ql-font-monospace {
-    font-family: Monaco, Courier New, monospace;
+    font-family: "Monaco", "Courier New", monospace;
   }
 
   .ql-direction-rtl {

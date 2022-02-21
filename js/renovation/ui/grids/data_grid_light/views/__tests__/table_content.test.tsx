@@ -4,20 +4,20 @@ import {
   emit, fakeClickEvent, clear, EVENT,
 } from '../../../../../test_utils/events_mock';
 import { RowClick, TableContent, viewFunction as TableContentView } from '../table_content';
-import { Row, Column } from '../../types';
+import { Row, ColumnInternal } from '../../types';
 
 describe('TableContent', () => {
   describe('View', () => {
     it('default render', () => {
       const rows: Row[] = [{ data: { id: 1, field: 'test' }, key: 1, rowType: 'data' }];
-      const columns: Column[] = [{ dataField: 'id' }, { dataField: 'field' }];
+      const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
 
       const tableContent = new TableContent({
         dataSource: rows,
         columns,
       });
 
-      const tree = mount(<TableContentView {...tableContent as any} />);
+      const tree = mount(<TableContentView rows={tableContent.rows} {...tableContent as any} />);
 
       expect(tree.find('table').exists()).toBe(true);
       expect(tree.find('tr').length).toBe(1);
@@ -31,14 +31,14 @@ describe('TableContent', () => {
         rowType: 'data',
         template: () => <tr className="myRow"><td>Test</td></tr>,
       }];
-      const columns: Column[] = [{ dataField: 'id' }, { dataField: 'field' }];
+      const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
 
       const tableContent = new TableContent({
         dataSource: rows,
         columns,
       });
 
-      const tree = mount(<TableContentView {...tableContent as any} />);
+      const tree = mount(<TableContentView rows={tableContent.rows} {...tableContent as any} />);
 
       expect(tree.find('table').exists()).toBe(true);
       expect(tree.find('tr').length).toBe(1);

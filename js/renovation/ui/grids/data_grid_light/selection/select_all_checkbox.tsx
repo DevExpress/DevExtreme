@@ -10,9 +10,11 @@ import {
   ClearSelection, SelectableCount, SelectAll, SelectedCount,
 } from './plugins';
 
+import CLASSES from '../classes';
+
 export const viewFunction = (viewModel: SelectAllCheckbox): JSX.Element => (
   <CheckBox
-    className="dx-select-checkbox dx-datagrid-checkbox-size"
+    className={`${CLASSES.selectCheckbox} ${CLASSES.checkboxSize}`}
     value={viewModel.value}
     valueChange={viewModel.onValueChange}
   />

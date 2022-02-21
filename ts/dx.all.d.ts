@@ -8776,6 +8776,7 @@ declare module DevExpress.ui {
       | 'auto';
     /**
      * [descr:dxDataGridOptions.rowTemplate]
+     * @deprecated [depNote:dxDataGridOptions.rowTemplate]
      */
     rowTemplate?:
       | DevExpress.core.template
