@@ -11,7 +11,7 @@ $touch-friendly-spin-container-width: 64px;
 
   @include user-select(none);
 
-  input[type=number] {
+  input[type="number"] {
     -moz-appearance: textfield; // stylelint-disable-line property-no-vendor-prefix
 
     &::-webkit-outer-spin-button,
