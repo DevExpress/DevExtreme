@@ -1,11 +1,11 @@
 import { Selector } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
-import TabPanel from '../../model/tabPanel';
-import { appendElementTo, insertElementBefore } from './helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import createWidget from '../../../helpers/createWidget';
+import TabPanel from '../../../model/tabPanel';
+import { appendElementTo, insertElementBefore } from '../helpers/domUtils';
 
 fixture`TabPanel`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 // T821726
 test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', async (t) => {
@@ -262,7 +262,7 @@ test('[{0: selected}] -> focusin by press "tab" -> press "tab"', async (t) => {
 });
 
 fixture`Knockout T827626`
-  .page(url(__dirname, './pages/t827626.html'));
+  .page(url(__dirname, '../pages/t827626.html'));
 
 test('TabPanel should not switch the active tab after content click the if it contains another TabPanel', async (t) => {
   const tabPanel = new TabPanel('#tabPanel');
