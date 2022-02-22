@@ -5,7 +5,7 @@ const viewPort = require('core/utils/view_port').value;
 const fx = require('animation/fx');
 
 function checkTooltip(assert) {
-    const $testContent = $('.dx-tooltip').find('.dx-popup-content').find('.test-content');
+    const $testContent = $('.dx-popup-content').find('.test-content');
     assert.equal($('.dx-tooltip').length, 1);
     assert.equal($testContent.length, 1);
     assert.equal($testContent.text(), 'My tooltip');

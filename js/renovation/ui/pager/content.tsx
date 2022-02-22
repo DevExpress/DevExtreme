@@ -154,7 +154,7 @@ export class PagerContent extends JSXComponent<PagerContentProps, 'pageSizeChang
 
   get infoVisible(): boolean {
     const { showInfo, infoTextVisible } = this.props;
-    return showInfo && infoTextVisible && this.isLargeDisplayMode;
+    return showInfo && infoTextVisible;
   }
 
   get pageIndexSelectorVisible(): boolean {

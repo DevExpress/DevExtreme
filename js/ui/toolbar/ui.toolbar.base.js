@@ -2,7 +2,7 @@ import { getWidth, getOuterWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { isMaterial, waitWebFont } from '../themes';
 import { noop } from '../../core/utils/common';
-import { isPlainObject } from '../../core/utils/type';
+import { isPlainObject, isDefined } from '../../core/utils/type';
 import registerComponent from '../../core/component_registrator';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
@@ -28,7 +28,9 @@ const TOOLBAR_COMPACT_CLASS = 'dx-toolbar-compact';
 const TOOLBAR_LABEL_SELECTOR = '.' + TOOLBAR_LABEL_CLASS;
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TEXT_BUTTON_MODE = 'text';
+
 const DEFAULT_BUTTON_TYPE = 'default';
+const DEFAULT_DROPDOWNBUTTON_STYLING_MODE = 'contained';
 
 const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
 
@@ -62,9 +64,10 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
                 }
 
                 if(data.widget === 'dxDropDownButton') {
-                    if(this.option('useFlatButtons')) {
-                        data.options = data.options || {};
-                        data.options.stylingMode = data.options.stylingMode || TEXT_BUTTON_MODE;
+                    data.options = data.options || {};
+
+                    if(!isDefined(data.options.stylingMode)) {
+                        data.options.stylingMode = this.option('useFlatButtons') ? TEXT_BUTTON_MODE : DEFAULT_DROPDOWNBUTTON_STYLING_MODE;
                     }
                 }
 

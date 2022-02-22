@@ -99,5 +99,5 @@ QUnit.test('Confirmation dialog should not be shown if rrule is invalid', functi
     $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(5).trigger(dragEvents.enter);
     $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0).trigger(dragEvents.end);
 
-    assert.notOk($('.dx-dialog.dx-overlay-modal').length, 'Dialog was not shown');
+    assert.notOk($('.dx-dialog').length, 'Dialog was not shown');
 });

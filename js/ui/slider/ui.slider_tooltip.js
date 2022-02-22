@@ -49,8 +49,9 @@ const SliderTooltip = Tooltip.inherit({
 
     _toggleShowModeClass() {
         const isHoverMode = this.option('showMode') === 'onHover';
+        const $sliderHandle = this.option('target');
 
-        this._positionController.$container.toggleClass(SLIDER_TOOLTIP_VISIBILITY_CLASS, isHoverMode);
+        $sliderHandle.toggleClass(SLIDER_TOOLTIP_VISIBILITY_CLASS, isHoverMode);
     },
 
     _initPositionController() {
@@ -60,8 +61,10 @@ const SliderTooltip = Tooltip.inherit({
     },
 
     _attachToMarkup(enabled) {
+        const $sliderHandle = this.option('target');
+
         enabled
-            ? this.$element().appendTo(this._positionController.$container)
+            ? this.$element().appendTo($sliderHandle)
             : this.$element().detach();
     },
 

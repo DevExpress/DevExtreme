@@ -148,7 +148,7 @@ QUnit.module('render', () => {
             position: { my: 'top left', at: 'center', of: window },
             visible: true
         });
-        const arrow = popover.$element().find(`.${POPOVER_ARROW_CLASS}`);
+        const arrow = popover.$wrapper().find(`.${POPOVER_ARROW_CLASS}`);
 
         assert.strictEqual(getHeight(arrow), 0);
         assert.strictEqual(getWidth(arrow), 0);
@@ -907,7 +907,7 @@ QUnit.module('content positioning', () => {
             });
             const $overlayContent = $('.dx-overlay-content');
             const $popoverContent = popover.$content();
-            const $popoverBottom = $popover.find('.dx-popup-bottom');
+            const $popoverBottom = popover.$wrapper().find('.dx-popup-bottom');
 
             $where.css('top', getHeight($(window)) - getHeight($where) - getHeight($overlayContent));
             popover.repaint();

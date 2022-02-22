@@ -1074,7 +1074,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
             recurrenceRule: 'FREQ=YEARLY'
         });
 
-        assert.ok($('.dx-dialog.dx-overlay-modal').length, 'Dialog was shown');
+        assert.ok($('.dx-dialog').length, 'Dialog was shown');
         $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
     });
 

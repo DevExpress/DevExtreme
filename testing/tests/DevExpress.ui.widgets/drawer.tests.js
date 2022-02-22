@@ -1707,7 +1707,7 @@ QUnit.module('Overlap mode', {
                     let overlay = this.instance.getOverlay();
 
                     assert.equal(overlay.option('shading'), false, 'overlay.shading');
-                    assert.ok(overlay.option('container').hasClass('dx-drawer-wrapper'));
+                    assert.equal(overlay.option('container'), this.instance.content());
 
                     assert.equal(overlay.option('width'), isOpened ? 300 : minSize || 0);
 

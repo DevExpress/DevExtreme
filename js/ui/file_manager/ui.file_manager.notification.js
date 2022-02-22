@@ -271,12 +271,13 @@ export default class FileManagerNotificationControl extends Widget {
 
     _getNotificationPopup() {
         if(!this._notificationPopup) {
-            const $popup = $('<div>')
-                .addClass(FILE_MANAGER_NOTIFICATION_POPUP_CLASS)
-                .appendTo(this.$element());
+            const $popup = $('<div>').appendTo(this.$element());
 
             this._notificationPopup = this._createComponent($popup, Popup, {
                 container: this.$element(),
+                wrapperAttr: {
+                    class: FILE_MANAGER_NOTIFICATION_POPUP_CLASS
+                },
                 width: 'auto',
                 height: 'auto',
                 showTitle: false,

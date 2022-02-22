@@ -4,15 +4,33 @@
 import { JSXTemplate } from '@devextreme-generator/declarations';
 
 export type RowData = Record<string, unknown>;
+export type Column = string;
+export type KeyExpr = string;
+export type KeyExprInternal = KeyExpr | null;
+export type Key = unknown;
+export interface Row {
+  key?: Key;
 
-export interface Column {
+  data: RowData;
+
+  rowType: 'data' | 'detail';
+
+  template?: JSXTemplate<RowTemplateProps>;
+}
+export interface RowTemplateProps {
+  row: Row;
+
+  rowIndex: number;
+}
+
+export interface ColumnInternal {
   dataField?: string;
+
+  headerCssClass?: string;
 
   cellTemplate?: JSXTemplate<{ data: RowData }, 'data'>;
 
   headerTemplate?: JSXTemplate;
-}
 
-export type ColumnUserConfig = string;
-export type KeyExpr = string;
-export type Key = unknown;
+  cellContainerTemplate?: JSXTemplate<{ data: RowData }, 'data'>;
+}

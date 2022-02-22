@@ -86,7 +86,9 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     config.getItemData = (item) => {
                         return item;
                     };
-
+                    config.allowLoadByRange = () => {
+                        return false;
+                    };
                     return config;
                 },
 

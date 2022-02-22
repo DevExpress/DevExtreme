@@ -567,6 +567,7 @@ const DropDownEditor = TextBox.inherit({
             position: extend(this.option('popupPosition'), {
                 of: this.$element()
             }),
+            visualContainer: this.$element(),
             showTitle: this.option('dropDownOptions.showTitle'),
             _ignoreFunctionValueDeprecation: true,
             width: () => getElementWidth(this.$element()),

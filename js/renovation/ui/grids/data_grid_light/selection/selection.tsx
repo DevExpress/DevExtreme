@@ -10,16 +10,20 @@ import { SelectionCheckbox } from './select_checkbox';
 import { SelectAllCheckbox } from './select_all_checkbox';
 
 import {
-  KeyExprPlugin, VisibleColumns, VisibleItems, DataSource,
+  KeyExprPlugin, VisibleColumns, VisibleItems, Items,
 } from '../data_grid_light';
 import {
-  Column, KeyExpr, RowData, Key,
+  ColumnInternal, KeyExprInternal, RowData, Key,
 } from '../types';
-import { DataRowClassesGetter, DataRowPropertiesGetter } from '../widgets/data_row';
+import { RowClassesGetter, RowPropertiesGetter } from '../widgets/row_base';
 import { RowClick } from '../views/table_content';
 import {
   ClearSelection, IsSelected, SelectableCount, SelectAll, SelectedCount, SetSelected,
 } from './plugins';
+import CLASSES from '../classes';
+import { createGetKey } from '../utils';
+
+const getKey = createGetKey('Selection');
 
 export const viewFunction = (): JSX.Element => <div />;
 
@@ -47,7 +51,7 @@ export class Selection extends JSXComponent(SelectionProps) {
   plugins = new Plugins();
 
   @InternalState()
-  keyExpr: KeyExpr = '';
+  keyExpr?: KeyExprInternal;
 
   @Effect()
   watchKeyExpr(): () => void {
@@ -59,8 +63,8 @@ export class Selection extends JSXComponent(SelectionProps) {
   @Effect()
   addVisibleColumnsHandler(): (() => void) | undefined {
     if (this.props.mode !== 'none') {
-      return this.plugins.extend(VisibleColumns, 1, (columns) => {
-        const selectColumn: Column = { cellTemplate: SelectionCheckbox };
+      return this.plugins.extend(VisibleColumns, 2, (columns) => {
+        const selectColumn: ColumnInternal = { cellTemplate: SelectionCheckbox };
 
         if (this.props.mode === 'multiple' && this.props.allowSelectAll) {
           selectColumn.headerTemplate = SelectAllCheckbox;
@@ -92,15 +96,15 @@ export class Selection extends JSXComponent(SelectionProps) {
   @Effect()
   extendDataRowAttributes(): () => void {
     return this.plugins.extend(
-      DataRowPropertiesGetter, 1,
-      (base) => (data): Record<string, unknown> => {
-        if (this.isSelected(data)) {
+      RowPropertiesGetter, 1,
+      (base) => (row): Record<string, unknown> => {
+        if (row.rowType === 'data' && this.isSelected(row.data)) {
           return {
-            ...base(data),
+            ...base(row),
             'aria-selected': true,
           };
         }
-        return base(data);
+        return base(row);
       },
     );
   }
@@ -108,30 +112,30 @@ export class Selection extends JSXComponent(SelectionProps) {
   @Effect()
   extendDataRowClasses(): () => void {
     return this.plugins.extend(
-      DataRowClassesGetter, 1,
-      (base) => (data): Record<string, boolean> => {
-        if (this.isSelected(data)) {
+      RowClassesGetter, 1,
+      (base) => (row): Record<string, boolean> => {
+        if (row.rowType === 'data' && this.isSelected(row.data)) {
           return {
-            ...base(data),
-            'dx-selection': true,
+            ...base(row),
+            [CLASSES.selectedRow]: true,
           };
         }
-        return base(data);
+        return base(row);
       },
     );
   }
 
   @Effect()
   setRowClickEvent(): void {
-    this.plugins.set(RowClick, (data) => {
-      this.invertSelected(data);
+    this.plugins.set(RowClick, (row) => {
+      this.invertSelected(row.data);
     });
   }
 
   @Method()
   selectAll(): void {
     const items = this.getAllItems();
-    this.props.selectedRowKeys = items.map((item) => item[this.keyExpr]);
+    this.props.selectedRowKeys = items.map((item) => getKey(item, this.keyExpr));
   }
 
   @Method()
@@ -140,22 +144,24 @@ export class Selection extends JSXComponent(SelectionProps) {
   }
 
   isSelected(data: RowData): boolean {
-    return this.props.selectedRowKeys.includes(data[this.keyExpr]);
+    return this.props.selectedRowKeys.includes(getKey(data, this.keyExpr));
   }
 
   setSelected(data: RowData, value: boolean): void {
+    const key = getKey(data, this.keyExpr);
+
     if (value) {
       if (this.props.mode === 'multiple') {
         this.props.selectedRowKeys = [
           ...this.props.selectedRowKeys,
-          data[this.keyExpr],
+          key,
         ];
       } else {
-        this.props.selectedRowKeys = [data[this.keyExpr]];
+        this.props.selectedRowKeys = [key];
       }
     } else {
       this.props.selectedRowKeys = this.props.selectedRowKeys
-        .filter((i) => i !== data[this.keyExpr]);
+        .filter((i) => i !== key);
     }
   }
 
@@ -172,7 +178,7 @@ export class Selection extends JSXComponent(SelectionProps) {
   getAllItems(): RowData[] {
     return (
       this.props.selectAllMode === 'allPages'
-        ? this.plugins.getValue(DataSource)
+        ? this.plugins.getValue(Items)
         : this.plugins.getValue(VisibleItems)
     ) ?? [];
   }

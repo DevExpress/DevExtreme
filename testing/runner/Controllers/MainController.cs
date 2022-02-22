@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using IOFile = System.IO.File;
 
@@ -16,6 +17,7 @@ namespace Runner.Controllers
     public class MainController : Controller
     {
         static readonly object IO_SYNC = new object();
+        readonly string _completedSuitesFileName;
 
         UIModelHelper _uiModelHelper;
         IHostingEnvironment _env;
@@ -26,6 +28,8 @@ namespace Runner.Controllers
             ConsoleHelper.Logger.SetWorkingFolder(env.ContentRootPath);
             _env = env;
             _runFlags = runFlags;
+
+            _completedSuitesFileName = Path.Combine(_env.ContentRootPath, "testing/CompletedSuites.txt");
         }
 
         protected UIModelHelper UIModelHelper
@@ -72,7 +76,7 @@ namespace Runner.Controllers
 
         public IActionResult RunAll(string constellation, string include, string exclude)
         {
-            HashSet<string> includeSet = null, excludeSet = null;
+            HashSet<string> includeSet = null, excludeSet = null, excludeSuites = null;
             int partIndex = 0;
             int partCount = 1;
 
@@ -91,12 +95,19 @@ namespace Runner.Controllers
 
             var packageJson = IOFile.ReadAllText(Path.Combine(_env.ContentRootPath, "package.json"));
 
+            if (_runFlags.IsContinuousIntegration) {
+                if (IOFile.Exists(_completedSuitesFileName)) {
+                    var completedSuites = IOFile.ReadAllLines(_completedSuitesFileName);
+                    excludeSuites = new HashSet<string>(completedSuites);
+                }
+            }
+
             var model = new RunAllViewModel
             {
                 Constellation = constellation ?? "",
                 CategoriesList = include,
                 Version = JsonConvert.DeserializeObject<IDictionary>(packageJson)["version"].ToString(),
-                Suites = UIModelHelper.GetAllSuites(HasDeviceModeFlag(), constellation, includeSet, excludeSet, partIndex, partCount)
+                Suites = UIModelHelper.GetAllSuites(HasDeviceModeFlag(), constellation, includeSet, excludeSet, excludeSuites, partIndex, partCount)
             };
 
             AssignBaseRunProps(model);
@@ -122,6 +133,10 @@ namespace Runner.Controllers
             Response.ContentType = "text/plain";
             lock (IO_SYNC)
             {
+                if (passed && _runFlags.IsContinuousIntegration)
+                {
+                    IOFile.AppendAllLines(_completedSuitesFileName, new[] { name });
+                }
                 ConsoleHelper.Write("[");
                 if (passed)
                     ConsoleHelper.Write(" OK ", ConsoleColor.Green);

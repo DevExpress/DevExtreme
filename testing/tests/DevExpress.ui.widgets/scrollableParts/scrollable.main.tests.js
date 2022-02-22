@@ -587,6 +587,48 @@ QUnit.test('disabled scrollable nested in another scrollable causes outer compon
     assert.equal(onScrollHandler.callCount, 1, 'scroll action fired for external dxScrollable');
 });
 
+QUnit.module('scrollByContent', moduleConfig);
+
+QUnit.test('should not reset current scroll position after change scrollByContent option', function(assert) {
+    const $scrollable = $('#scrollable');
+    const scrollable = $scrollable.dxScrollable({
+        height: 50,
+        useNative: false,
+        inertiaEnabled: false,
+        direction: 'both',
+        scrollByContent: true,
+        bounceEnabled: false
+    }).dxScrollable('instance');
+
+    const pointer = pointerMock($(scrollable.content()));
+    pointer
+        .start()
+        .down()
+        .move(-20, -10);
+
+    assert.deepEqual(scrollable.scrollOffset(), { top: 10, left: 20 }, 'scrollable.scrollOffset()');
+
+    scrollable.option('scrollByContent', false);
+
+    assert.deepEqual(scrollable.scrollOffset(), { top: 10, left: 20 }, 'scrollable.scrollOffset()');
+
+    pointer
+        .start()
+        .down()
+        .move(-10, -10);
+
+    scrollable.option('scrollByContent', true);
+
+    assert.deepEqual(scrollable.scrollOffset(), { top: 10, left: 20 }, 'scrollable.scrollOffset()');
+
+    pointer
+        .start()
+        .down()
+        .move(-10, -10);
+
+    assert.deepEqual(scrollable.scrollOffset(), { top: 20, left: 30 }, 'scrollable.scrollOffset()');
+});
+
 QUnit.module('default value nativeScrollable', {
     beforeEach: function() {
         moduleConfig.beforeEach.call(this);

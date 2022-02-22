@@ -3,7 +3,9 @@ import {
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../utils/combine_classes';
 
-import { Column } from '../types';
+import CLASSES from '../classes';
+
+import { ColumnInternal } from '../types';
 
 export const viewFunction = ({
   props: { column, columnIndex },
@@ -16,12 +18,12 @@ export const viewFunction = ({
     // TODO uncomment after https://trello.com/c/kVXfSWI7
     // aria-colindex={index + 1}
     id={`dx-col-${columnIndex + 1}`}
-    aria-label={`Column ${column.dataField}`}
+    aria-label={`ColumnInternal ${column.dataField}`}
     className={classes}
     aria-sort="none"
     tabIndex={0}
   >
-    <div className="dx-datagrid-text-content dx-text-content-alignment-left" role="presentation">
+    <div className={`${CLASSES.textContent} ${CLASSES.textContentAlignmentLeft}`} role="presentation">
       {HeaderTemplate ? <HeaderTemplate /> : column.dataField}
     </div>
   </td>
@@ -30,10 +32,13 @@ export const viewFunction = ({
 @ComponentBindings()
 export class HeaderCellProps {
   @OneWay()
-  column: Column = {};
+  column: ColumnInternal = {};
 
   @OneWay()
   columnIndex = 0;
+
+  @OneWay()
+  countColumn = 0;
 }
 
 @Component({
@@ -46,10 +51,19 @@ export class HeaderCell extends JSXComponent(HeaderCellProps) {
   }
 
   get classes(): string {
-    return combineClasses({
-      'dx-datagrid-action': true,
-      'dx-cell-focus-disabled': true,
-      'dx-first-child': this.props.columnIndex === 0,
-    });
+    const { columnIndex, countColumn } = this.props;
+
+    const classesMap = {
+      [CLASSES.action]: true,
+      [CLASSES.cellFocusDisabled]: true,
+      [CLASSES.firstChild]: columnIndex === 0,
+      [CLASSES.lastChild]: columnIndex === countColumn - 1,
+    };
+
+    if (this.props.column.headerCssClass) {
+      classesMap[this.props.column.headerCssClass] = true;
+    }
+
+    return combineClasses(classesMap);
   }
 }

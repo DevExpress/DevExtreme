@@ -578,6 +578,9 @@ const Form = Widget.inherit({
                 const nestedItemsRunTimeInfo = component.getItemsRunTimeInfo();
                 this._itemsRunTimeInfo.removeItemsByItems(nestedItemsRunTimeInfo);
             },
+            onFieldItemRendered: () => {
+                this._validationSummary?.refreshValidationGroup();
+            }
         });
     },
 
