@@ -3047,6 +3047,351 @@ const JSPdfHorizontalAlignTests = {
                 });
             });
 
+            QUnit.test('1 level - 1 group - [{f1, groupIndex: 0, alignment: \'left\'}, f2, f3]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0, alignment: 'left' },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        { f1: 'f1', f2: 'f1_2', f3: 'f1_3' },
+                        { f1: 'f1', f2: 'f2_2', f3: 'f2_3' },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,108.75,{baseline:middle}',
+                    'text,f1_3,145,108.75,{baseline:middle}',
+                    'text,f2_2,55,130.25,{baseline:middle}',
+                    'text,f2_3,145,130.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,119.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 level - 1 group - [{f1, groupIndex: 0, alignment: \'left\'}, f2, f3], rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0, alignment: 'left' },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        { f1: 'f1', f2: 'f1_2', f3: 'f1_3' },
+                        { f1: 'f1', f2: 'f2_2', f3: 'f2_3' },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,450.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,540.28,108.75,{baseline:middle,align:right}',
+                    'text,f1_3,450.28,108.75,{baseline:middle,align:right}',
+                    'text,f2_2,540.28,130.25,{baseline:middle,align:right}',
+                    'text,f2_3,450.28,130.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,119.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 level - 1 group - [{f1, groupIndex: 0, alignment: \'center\'}, f2, f3]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0, alignment: 'center' },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        { f1: 'f1', f2: 'f1_2', f3: 'f1_3' },
+                        { f1: 'f1', f2: 'f2_2', f3: 'f2_3' },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,108.75,{baseline:middle}',
+                    'text,f1_3,145,108.75,{baseline:middle}',
+                    'text,f2_2,55,130.25,{baseline:middle}',
+                    'text,f2_3,145,130.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,119.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 level - 1 group - [{f1, groupIndex: 0, alignment: \'center\'}, f2, f3], rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0, alignment: 'center' },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        { f1: 'f1', f2: 'f1_2', f3: 'f1_3' },
+                        { f1: 'f1', f2: 'f2_2', f3: 'f2_3' },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,450.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,540.28,108.75,{baseline:middle,align:right}',
+                    'text,f1_3,450.28,108.75,{baseline:middle,align:right}',
+                    'text,f2_2,540.28,130.25,{baseline:middle,align:right}',
+                    'text,f2_3,450.28,130.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,119.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 level - 1 group - [{f1, groupIndex: 0, alignment: \'right\'}, f2, f3]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0, alignment: 'right' },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        { f1: 'f1', f2: 'f1_2', f3: 'f1_3' },
+                        { f1: 'f1', f2: 'f2_2', f3: 'f2_3' },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,108.75,{baseline:middle}',
+                    'text,f1_3,145,108.75,{baseline:middle}',
+                    'text,f2_2,55,130.25,{baseline:middle}',
+                    'text,f2_3,145,130.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,119.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 level - 1 group - [{f1, groupIndex: 0, alignment: \'right\'}, f2, f3], rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0, alignment: 'right' },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        { f1: 'f1', f2: 'f1_2', f3: 'f1_3' },
+                        { f1: 'f1', f2: 'f2_2', f3: 'f2_3' },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#979797',
+                    'text,F3,450.28,65.75,{baseline:middle,align:right}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,540.28,87.25,{baseline:middle,align:right}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,540.28,108.75,{baseline:middle,align:right}',
+                    'text,f1_3,450.28,108.75,{baseline:middle,align:right}',
+                    'text,f2_2,540.28,130.25,{baseline:middle,align:right}',
+                    'text,f2_3,450.28,130.25,{baseline:middle,align:right}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,455.28,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,375.28,119.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ] }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
         });
     }
 };
