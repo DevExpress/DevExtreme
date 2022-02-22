@@ -94,8 +94,17 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
             wordWrapEnabled,
             backgroundColor,
             padding: toPdfUnit(doc, 5),
-            _rect: {}
+            _rect: {},
+            _internalTextOptions: {}
         };
+
+        if(rtlEnabled) {
+            // https://github.com/parallax/jsPDF/issues/2235
+            pdfCell._internalTextOptions.isInputVisual = false;
+            pdfCell._internalTextOptions.isOutputVisual = true;
+            pdfCell._internalTextOptions.isInputRtl = true;
+            pdfCell._internalTextOptions.isOutputRtl = false;
+        }
 
         const cellInfo = {
             gridCell: cellData.cellSourceData,
