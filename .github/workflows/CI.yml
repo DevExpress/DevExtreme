@@ -14,11 +14,6 @@ jobs:
     timeout-minutes: 60
 
     steps:
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '2.1.x'
-
     - name: Get sources
       uses: actions/checkout@v2
 

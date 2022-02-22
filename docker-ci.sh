@@ -40,6 +40,12 @@ function run_ts {
 }
 
 function run_test {
+    if [ "$GITHUBACTION" != "true" ]; then
+        echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-bionic-prod bionic main" > /etc/apt/sources.list.d/dotnetdev.list
+        apt-get update
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y dotnet-sdk-3.1
+    fi
+
     export DEVEXTREME_TEST_CI=true
 
     local port=`node -e "console.log(require('./ports.json').qunit)"`
