@@ -11,7 +11,7 @@ namespace Runner.Controllers
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class ThemesTestController : Controller {
         string _bundlesPath;
-        public ThemesTestController(IHostingEnvironment env)
+        public ThemesTestController(IWebHostEnvironment env)
         {
             ConsoleHelper.Logger.SetWorkingFolder(env.ContentRootPath);
             _bundlesPath = Path.Combine(env.ContentRootPath, "scss", "bundles");
