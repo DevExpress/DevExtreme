@@ -4994,22 +4994,22 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F3,450.28,65.75,{baseline:middle,align:right}',
+                    'text,F3,450.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
-                    'text,F1: f1 line line,540.28,87.25,{baseline:middle,align:right}',
+                    'text,F1: f1 line line,540.28,87.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
-                    'text,f1_2 line long line,540.28,114.5,{baseline:middle,align:right}',
+                    'text,f1_2 line long line,540.28,114.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,f1_3 line long\n' +
-'line long line,450.28,108.75,{baseline:middle,align:right}',
+'line long line,450.28,108.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,bold,',
-                    'text,F1: f1 long line long line long line,540.28,141.75,{baseline:middle,align:right}',
+                    'text,F1: f1 long line long line long line,540.28,141.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
-                    'text,f2_2 line,540.28,169,{baseline:middle,align:right}',
+                    'text,f2_2 line,540.28,169,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,f2_3 line long\n' +
-'line line,450.28,163.25,{baseline:middle,align:right}',
+'line line,450.28,163.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,455.28,55,90,21.5',
@@ -5142,22 +5142,22 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F3,450.28,65.75,{baseline:middle,align:right}',
+                    'text,F3,450.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
-                    'text,F1: f1_1 long line,540.28,87.25,{baseline:middle,align:right}',
+                    'text,F1: f1_1 long line,540.28,87.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
                     'text,f1_2 long line\n' +
-'long line long line,540.28,108.75,{baseline:middle,align:right}',
-                    'text,f1_3 line,450.28,114.5,{baseline:middle,align:right}',
+'long line long line,540.28,108.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f1_3 line,450.28,114.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,bold,',
                     'text,F1: f2_1 long line long line long\n' +
-'line,540.28,141.75,{baseline:middle,align:right}',
+'line,540.28,141.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
-                    'text,f2_2 line long line,540.28,174.75,{baseline:middle,align:right}',
-                    'text,f2_3,450.28,174.75,{baseline:middle,align:right}',
+                    'text,f2_2 line long line,540.28,174.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f2_3,450.28,174.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,455.28,55,90,21.5',
@@ -5302,24 +5302,24 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F3,540.28,65.75,{baseline:middle,align:right}',
+                    'text,F3,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F4,450.28,65.75,{baseline:middle,align:right}',
+                    'text,F4,450.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
-                    'text,F1: f1 long line,540.28,87.25,{baseline:middle,align:right}',
+                    'text,F1: f1 long line,540.28,87.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,F2: f2_2 long line long line long\n' +
-'line long line,540.28,108.75,{baseline:middle,align:right}',
+'line long line,540.28,108.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
                     'text,f2_3 long line\n' +
-'long line,540.28,141.75,{baseline:middle,align:right}',
-                    'text,f2_4,450.28,147.5,{baseline:middle,align:right}',
+'long line,540.28,141.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f2_4,450.28,147.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,bold,',
-                    'text,F1: f1 long line long line long line,540.28,174.75,{baseline:middle,align:right}',
-                    'text,F2: f1_2 long line,540.28,196.25,{baseline:middle,align:right}',
+                    'text,F1: f1 long line long line long line,540.28,174.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,F2: f1_2 long line,540.28,196.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
-                    'text,f1_3 line,540.28,217.75,{baseline:middle,align:right}',
-                    'text,f1_4,450.28,217.75,{baseline:middle,align:right}',
+                    'text,f1_3 line,540.28,217.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f1_4,450.28,217.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,455.28,55,90,21.5',
@@ -5439,19 +5439,19 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F3,460.28,65.75,{baseline:middle,align:right}',
+                    'text,F3,460.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F4,370.28,65.75,{baseline:middle,align:right}',
+                    'text,F4,370.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
-                    'text,F1: f1 line long line (Max: f1 line long line),540.28,87.25,{baseline:middle,align:right}',
+                    'text,F1: f1 line long line (Max: f1 line long line),540.28,87.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
-                    'text,f2 line,540.28,114.5,{baseline:middle,align:right}',
+                    'text,f2 line,540.28,114.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,f3 long line long\n' +
-'line long line,460.28,108.75,{baseline:middle,align:right}',
-                    'text,f4 long line,370.28,114.5,{baseline:middle,align:right}',
+'line long line,460.28,108.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f4 long line,370.28,114.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,465.28,55,80,21.5',
@@ -5582,22 +5582,22 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F3,540.28,65.75,{baseline:middle,align:right}',
+                    'text,F3,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F4,290.28,65.75,{baseline:middle,align:right}',
+                    'text,F4,290.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
                     'text,F1: f1 long line long line long line (Max: f1 long\n' +
-'line long line long line),540.28,87.25,{baseline:middle,align:right}',
+'line long line long line),540.28,87.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,Max: f4 long line\n' +
-'long line,290.28,87.25,{baseline:middle,align:right}',
+'long line,290.28,87.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,F2: f2 long line (Max of F1 is f1 long line long line\n' +
-'long line),540.28,120.25,{baseline:middle,align:right}',
+'long line),540.28,120.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,Max: f4 long line\n' +
-'long line,290.28,120.25,{baseline:middle,align:right}',
+'long line,290.28,120.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
-                    'text,f3 line,540.28,153.25,{baseline:middle,align:right}',
-                    'text,f4 long line long line,290.28,153.25,{baseline:middle,align:right}',
+                    'text,f3 line,540.28,153.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f4 long line long line,290.28,153.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,295.28,55,250,21.5',
@@ -5733,20 +5733,20 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F3,390.28,65.75,{baseline:middle,align:right}',
+                    'text,F3,390.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F4,300.28,65.75,{baseline:middle,align:right}',
+                    'text,F4,300.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
-                    'text,F1: f1 long line (Max: f1 long line),540.28,87.25,{baseline:middle,align:right}',
+                    'text,F1: f1 long line (Max: f1 long line),540.28,87.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
-                    'text,f2 very long line very long line,540.28,108.75,{baseline:middle,align:right}',
-                    'text,f3 line,390.28,108.75,{baseline:middle,align:right}',
-                    'text,f4 long line,300.28,108.75,{baseline:middle,align:right}',
+                    'text,f2 very long line very long line,540.28,108.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f3 line,390.28,108.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f4 long line,300.28,108.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,bold,',
-                    'text,Max: f3 line,390.28,130.25,{baseline:middle,align:right}',
+                    'text,Max: f3 line,390.28,130.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,395.28,55,150,21.5',
@@ -5886,23 +5886,23 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F2,540.28,65.75,{baseline:middle,align:right}',
+                    'text,F2,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F3,460.28,65.75,{baseline:middle,align:right}',
+                    'text,F3,460.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F4,370.28,65.75,{baseline:middle,align:right}',
+                    'text,F4,370.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
-                    'text,F1: f1 long line,540.28,87.25,{baseline:middle,align:right}',
+                    'text,F1: f1 long line,540.28,87.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
                     'text,f2 long line long\n' +
-'line long line,540.28,108.75,{baseline:middle,align:right}',
+'line long line,540.28,108.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,f3 line long line\n' +
-'long line,460.28,108.75,{baseline:middle,align:right}',
-                    'text,f4 line,370.28,114.5,{baseline:middle,align:right}',
+'long line,460.28,108.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f4 line,370.28,114.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,bold,',
                     'text,Max: f3 line long\n' +
-'line long line,460.28,141.75,{baseline:middle,align:right}',
+'line long line,460.28,141.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,465.28,55,80,21.5',
@@ -6092,47 +6092,47 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,F3,540.28,65.75,{baseline:middle,align:right}',
+                    'text,F3,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F4,460.28,65.75,{baseline:middle,align:right}',
+                    'text,F4,460.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
                     'text,F1: f1 very ling line very long line\n' +
-'very long line,540.28,87.25,{baseline:middle,align:right}',
-                    'text,F2: f2_1 line,540.28,120.25,{baseline:middle,align:right}',
+'very long line,540.28,87.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,F2: f2_1 line,540.28,120.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
                     'text,f3line1\n' +
 'line2\n' +
 'line3\n' +
-'line4,540.28,141.75,{baseline:middle,align:right}',
-                    'text,f4,460.28,159,{baseline:middle,align:right}',
+'line4,540.28,141.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f4,460.28,159,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,bold,',
                     'text,Max: f3line1\n' +
 'line2\n' +
 'line3\n' +
-'line4,540.28,197.75,{baseline:middle,align:right}',
+'line4,540.28,197.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,Max: f3line1\n' +
 'line2\n' +
 'line3\n' +
-'line4,540.28,253.75,{baseline:middle,align:right}',
+'line4,540.28,253.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,F1: f1 very long line very long\n' +
-'line,540.28,309.75,{baseline:middle,align:right}',
+'line,540.28,309.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,F2: f2_2very long line very long\n' +
-'line,540.28,342.75,{baseline:middle,align:right}',
+'line,540.28,342.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
                     'text,f3very long line\n' +
-'very long line,540.28,375.75,{baseline:middle,align:right}',
-                    'text,f4,460.28,381.5,{baseline:middle,align:right}',
+'very long line,540.28,375.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f4,460.28,381.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,bold,',
                     'text,Max: f3very\n' +
 'long line very\n' +
-'long line,540.28,408.75,{baseline:middle,align:right}',
+'long line,540.28,408.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,Max: f3very\n' +
 'long line very\n' +
-'long line,540.28,453.25,{baseline:middle,align:right}',
+'long line,540.28,453.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,Max: f3very\n' +
 'long line very\n' +
-'long line,540.28,497.75,{baseline:middle,align:right}',
+'long line,540.28,497.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,465.28,55,80,21.5',
@@ -6262,13 +6262,13 @@ const JSPdfWordWrapTests = {
                     'setFontSize,10',
                     'text,Band1 long\n' +
 'line 1 ling\n' +
-'line 2,540.28,65.75,{baseline:middle,align:right}',
+'line 2,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
-                    'text,F1: f1_1 line,540.28,110.25,{baseline:middle,align:right}',
+                    'text,F1: f1_1 line,540.28,110.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,F2: f2_1 line\n' +
 'long line\n' +
-'long line,540.28,131.75,{baseline:middle,align:right}',
+'long line,540.28,131.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,475.28,55,70,44.5',
@@ -6380,18 +6380,18 @@ const JSPdfWordWrapTests = {
                     'setFontSize,10',
                     'text,Band1 long\n' +
 'line 1 ling\n' +
-'line 2,540.28,65.75,{baseline:middle,align:right}',
+'line 2,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,f3 line,470.28,77.25,{baseline:middle,align:right}',
+                    'text,f3 line,470.28,77.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
                     'text,F1: f1_1 line (Max: f1_1\n' +
-'line),540.28,110.25,{baseline:middle,align:right}',
+'line),540.28,110.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,F2: f2_1 line long line long\n' +
-'line (Max of F1 is f1_1 line),540.28,143.25,{baseline:middle,align:right}',
+'line (Max of F1 is f1_1 line),540.28,143.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
                     'text,long line very\n' +
-'long line,470.28,176.25,{baseline:middle,align:right}',
+'long line,470.28,176.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,475.28,55,70,44.5',
@@ -6592,12 +6592,12 @@ const JSPdfWordWrapTests = {
                 const expectedLog = [
                     'setTextColor,#979797',
                     'setFontSize,10',
-                    'text,Band1 line,540.28,65.75,{baseline:middle,align:right}',
+                    'text,Band1 line,540.28,65.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
                     'text,Band1_1 long line very long\n' +
-'line,540.28,104.875,{baseline:middle,align:right}',
+'line,540.28,104.875,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,Band1_2,390.28,110.625,{baseline:middle,align:right}',
+                    'text,Band1_2,390.28,110.625,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
                     'text,f7 long\n' +
 'line very\n' +
@@ -6610,32 +6610,32 @@ const JSPdfWordWrapTests = {
 'long\n' +
 'linelong\n' +
 'line very\n' +
-'long line,260.28,87.25,{baseline:middle,align:right}',
+'long line,260.28,87.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,f3  long line,540.28,184.625,{baseline:middle,align:right}',
+                    'text,f3  long line,540.28,184.625,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
                     'text,f4  long line\n' +
-'very long line,470.28,178.875,{baseline:middle,align:right}',
+'very long line,470.28,178.875,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
                     'text,f5 long line\n' +
 'very long\n' +
-'line,390.28,173.125,{baseline:middle,align:right}',
+'line,390.28,173.125,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#979797',
-                    'text,F6,330.28,184.625,{baseline:middle,align:right}',
+                    'text,F6,330.28,184.625,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setTextColor,#000000',
                     'setFont,helvetica,bold,',
-                    'text,F1: f1_1 line,540.28,235.25,{baseline:middle,align:right}',
-                    'text,F2: f2_1 long line very long line,540.28,256.75,{baseline:middle,align:right}',
+                    'text,F1: f1_1 line,540.28,235.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,F2: f2_1 long line very long line,540.28,256.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setFont,helvetica,normal,',
-                    'text,f3_1,540.28,295.5,{baseline:middle,align:right}',
+                    'text,f3_1,540.28,295.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,f4_1 very long\n' +
 'line very long\n' +
 'line very long\n' +
-'line,470.28,278.25,{baseline:middle,align:right}',
+'line,470.28,278.25,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'text,f5_1 long\n' +
-'line,390.28,289.75,{baseline:middle,align:right}',
-                    'text,f6_1,330.28,295.5,{baseline:middle,align:right}',
-                    'text,f7_1 line,260.28,295.5,{baseline:middle,align:right}',
+'line,390.28,289.75,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f6_1,330.28,295.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
+                    'text,f7_1 line,260.28,295.5,{baseline:middle,align:right,isInputVisual:false,isOutputVisual:true,isInputRtl:true,isOutputRtl:false}',
                     'setLineWidth,0.5',
                     'setDrawColor,#979797',
                     'rect,215.28,55,330,21.5',
