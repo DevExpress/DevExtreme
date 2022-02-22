@@ -280,9 +280,12 @@ function prepareImageHandler(module, imageUploadingOption) {
 function modifyImageUploadingDialog(module, imageUploadingOption) {
     module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
     module.editorInstance.formDialogOption('toolbarItems[0].options.text', 'Add'); // localization
-    if(imageUploadingOption?.enabled) {
-        module.editorInstance.formDialogOption('wrapperAttr', { class: 'dx-htmleditor-add-image-popup dx-htmleditor-add-image-popup-with-tabs dx-formdialog' });
+    let wrapperClassString = 'dx-htmleditor-add-image-popup dx-formdialog';
+    if(imageUploadingOption?.mode === 'both') {
+        wrapperClassString += ' dx-htmleditor-add-image-popup-with-tabs';
     }
+
+    module.editorInstance.formDialogOption('wrapperAttr', { class: wrapperClassString });
 }
 
 function revertImageUploadingDialog(module) {
@@ -336,13 +339,15 @@ function imageFormItems(module, imageUploadingOption) {
     let heightEditor;
     let preventRecalculating = false;
     let resultFormItems;
-    let useBase64 = !imageUploadingOption?.enabled;
-    const useUrlUploading = imageUploadingOption?.enabled && imageUploadingOption?.uploadUrl;
+    let useBase64 = imageUploadingOption?.mode === 'file';
+    // const useUrlUploading = imageUploadingOption?.enabled && imageUploadingOption?.uploadUrl;
+    const useUrlUploading = imageUploadingOption?.mode !== 'file';
 
     const selectFileTabItems = [
         {
             itemType: 'simple',
             dataField: 'files',
+            colSpan: 11,
             label: { visible: false }, // localization
             template: (data) => {
                 const $content = $('<div>');
@@ -362,7 +367,7 @@ function imageFormItems(module, imageUploadingOption) {
                     },
                     onUploaded: (e) => {
                         if(useUrlUploading && !useBase64) {
-                            const imageUrl = imageUploadingOption.uploadedUrl + e.file.name;
+                            const imageUrl = imageUploadingOption.uploadDirectory + e.file.name;
                             // module.editorInstance._formDialog.hide({ file: e.file.name, url: imageUrl }, e.event);
                             // data.component.updateData('imageUrl', imageUrl);
                             data.component.updateData('src', imageUrl);
@@ -375,6 +380,7 @@ function imageFormItems(module, imageUploadingOption) {
         }, {
             itemType: 'simple',
             dataField: 'useBase64',
+            colSpan: 11,
             label: { visible: false },
             editorType: 'dxCheckBox',
             editorOptions: {
@@ -456,12 +462,13 @@ function imageFormItems(module, imageUploadingOption) {
         { dataField: 'alt', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
     ];
 
-    if(imageUploadingOption?.enabled) {
+    if(imageUploadingOption?.mode === 'both') {
         resultFormItems = [
             {
                 itemType: 'tabbed',
                 tabs: [{
                     title: 'Select file', // localization
+                    colCount: 11,
                     items: selectFileTabItems
                 }, {
                     title: 'Specify URL', // localization
@@ -470,6 +477,8 @@ function imageFormItems(module, imageUploadingOption) {
                 }]
             }
         ];
+    } else if(imageUploadingOption?.mode === 'file') {
+        resultFormItems = selectFileTabItems;
     } else {
         resultFormItems = specifyURLTabItems;
     }

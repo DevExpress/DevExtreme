@@ -407,10 +407,22 @@ export interface dxHtmlEditorTableResizing {
   uploadUrl?: string;
   /**
    * @docid
-   * @default false
+   * @default '/'
    * @public
    */
-  enabled?: boolean;
+  uploadDirectory?: string;
+  /**
+   * @docid
+   * @default 'url'
+   * @public
+   */
+   mode?: 'url' | 'file' | 'both';
+    /**
+   * @docid
+   * @default 'url'
+   * @public
+   */
+    fileUploaderOptions?: 'url' | 'file' | 'both';
  }
 
 /**
