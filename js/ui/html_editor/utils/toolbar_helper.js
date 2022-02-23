@@ -231,7 +231,7 @@ function prepareImageHandler(module, imageUploadingOption) {
 
             const imgElement = module.quill.getLeaf(module.editorInstance.getSelection().index)[0].domNode;
 
-            if(imgElement && (!formData.width && !formData.height)) {
+            if(imgElement && (!formData.width || !formData.height)) {
                 formData.width = formData.width || getWidth($(imgElement));
                 formData.height = formData.height || getHeight($(imgElement));
             }
@@ -339,7 +339,9 @@ function imageFormItems(module, imageUploadingOption) {
     let heightEditor;
     let preventRecalculating = false;
     let resultFormItems;
-    let useBase64 = imageUploadingOption?.mode === 'file';
+
+    imageUploadingOption = imageUploadingOption || {};
+    let useBase64 = imageUploadingOption?.mode === 'file' || !isDefined(imageUploadingOption.uploadUrl);
     // const useUrlUploading = imageUploadingOption?.enabled && imageUploadingOption?.uploadUrl;
     const useUrlUploading = imageUploadingOption?.mode !== 'file';
 
@@ -385,6 +387,7 @@ function imageFormItems(module, imageUploadingOption) {
             editorType: 'dxCheckBox',
             editorOptions: {
                 value: useBase64,
+                disabled: !isDefined(imageUploadingOption.uploadUrl),
                 text: 'Encode to base 64', // localization
                 onValueChanged: (e) => {
                     useBase64 = e.value;
@@ -407,7 +410,7 @@ function imageFormItems(module, imageUploadingOption) {
 
                     if(keepRatio && oldHeight && e.previousValue && !preventRecalculating) {
                         preventRecalculating = true;
-                        heightEditor.option('value', Math.round(newValue * oldHeight / parseInt(e.previousValue)));
+                        heightEditor.option('value', Math.round(newValue * oldHeight / parseInt(e.previousValue)).toString());
                     }
 
                     preventRecalculating = false;
@@ -431,7 +434,7 @@ function imageFormItems(module, imageUploadingOption) {
 
                     if(keepRatio && oldWidth && e.previousValue && !preventRecalculating) {
                         preventRecalculating = true;
-                        widthEditor.option('value', Math.round(newValue * oldWidth / parseInt(e.previousValue)));
+                        widthEditor.option('value', Math.round(newValue * oldWidth / parseInt(e.previousValue)).toString());
                     }
 
                     preventRecalculating = false;
