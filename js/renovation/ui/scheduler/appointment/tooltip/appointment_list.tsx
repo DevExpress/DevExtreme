@@ -6,17 +6,13 @@ import {
 } from '@devextreme-generator/declarations';
 import { TooltipItemLayout } from './item_layout';
 import { AppointmentViewModel } from '../types';
+import { List } from '../../../list';
 
 export const viewFunction = (viewModel: AppointmentList): JSX.Element => (
-  <div>
-    {viewModel.props.appointments.map((item, index) => (
-      <TooltipItemLayout
-        item={item}
-        index={index}
-        key={item.key}
-      />
-    ))}
-  </div>
+  <List
+    itemTemplate={TooltipItemLayout}
+    dataSource={viewModel.props.appointments}
+  />
 );
 
 @ComponentBindings()

@@ -40,6 +40,7 @@ export interface AppointmentViewModel {
   appointment: AppointmentData;
   geometry: AppointmentGeometry;
   info: AppointmentInfo;
+  color?: string;
 }
 
 export interface OverflowIndicatorViewModel {
