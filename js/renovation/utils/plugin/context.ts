@@ -220,6 +220,10 @@ export class Plugins {
   }
 
   hasValue<T, S>(entity: PluginEntity<T, S>): boolean {
+    if (entity instanceof PluginGetter) {
+      return true;
+    }
+
     return entity.id in this.items;
   }
 
@@ -235,7 +239,7 @@ export class Plugins {
       entity.deps.forEach((childEntity) => {
         const childSubscriptions = this.getSubscriptions(childEntity);
         childSubscriptions.push(() => {
-          this.update(entity);
+          this.update(entity, true);
         });
       });
     }
@@ -271,9 +275,11 @@ export class Plugins {
     }
   }
 
-  update<T, S>(entity: PluginEntity<T, S>): void {
+  update<T, S>(entity: PluginEntity<T, S>, force = false): void {
     if (entity instanceof PluginSelector) {
-      this.updateSelector(entity);
+      if (!this.hasValue(entity) || force) {
+        this.updateSelector(entity);
+      }
     }
   }
 

@@ -60,8 +60,9 @@ export class TableContent extends JSXComponent(TableContentProps) {
 
   @Effect()
   subscribeToRowClick(): () => void {
-    eventsEngine.on(this.divRef.current, clickEvent, `.${CLASSES.row}`, this.onRowClick);
-    return (): void => eventsEngine.off(this.divRef.current, clickEvent, this.onRowClick);
+    const onRowClick = this.onRowClick.bind(this);
+    eventsEngine.on(this.divRef.current, clickEvent, `.${CLASSES.row}`, onRowClick);
+    return (): void => eventsEngine.off(this.divRef.current, clickEvent, onRowClick);
   }
 
   onRowClick(e: Event): void {

@@ -21,7 +21,7 @@ export const viewFunction = (viewModel: Paging): JSX.Element => (
     <ValueSetter type={PagingEnabled} value={viewModel.props.enabled} />
     <ValueSetter type={SetPageIndex} value={viewModel.setPageIndex} />
     <ValueSetter type={SetPageSize} value={viewModel.setPageSize} />
-    <GetterExtender type={VisibleItems} order={1} selector={CalculateVisibleItems} />
+    <GetterExtender type={VisibleItems} order={1} value={CalculateVisibleItems} />
   </Fragment>
 );
 
@@ -39,7 +39,9 @@ export class PagingProps {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
+  angular: {
+    innerComponent: false,
+  },
   view: viewFunction,
 })
 export class Paging extends JSXComponent(PagingProps) {

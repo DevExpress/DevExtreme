@@ -34,3 +34,6 @@ export interface ColumnInternal {
 
   cellContainerTemplate?: JSXTemplate<{ data: RowData }, 'data'>;
 }
+
+export type SelectionMode = 'multiple' | 'single' | 'none';
+export type SelectAllMode = 'allPages' | 'page';

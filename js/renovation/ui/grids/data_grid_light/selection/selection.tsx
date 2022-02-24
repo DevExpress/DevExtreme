@@ -2,30 +2,62 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings,
-  TwoWay, Consumer, Effect, OneWay, Method, InternalState,
+  TwoWay, Consumer, Effect, OneWay, Method, Fragment,
 } from '@devextreme-generator/declarations';
-import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
+import type {
+  Key, SelectAllMode, SelectionMode,
+} from '../types';
+import {
+  Plugins, PluginsContext,
+} from '../../../../utils/plugin/context';
+
+import { ValueSetter } from '../../../../utils/plugin/value_setter';
+import { TemplateSetter } from '../../../../utils/plugin/template_setter';
+import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
 import { SelectionCheckbox } from './select_checkbox';
 import { SelectAllCheckbox } from './select_all_checkbox';
 
 import {
-  KeyExprPlugin, VisibleColumns, VisibleItems, Items,
+  VisibleColumns,
 } from '../data_grid_light';
+
 import {
-  ColumnInternal, KeyExprInternal, RowData, Key,
-} from '../types';
-import { RowClassesGetter, RowPropertiesGetter } from '../widgets/row_base';
+  RowClassesGetter, RowPropertiesGetter,
+} from '../widgets/row_base';
 import { RowClick } from '../views/table_content';
 import {
-  ClearSelection, IsSelected, SelectableCount, SelectAll, SelectedCount, SetSelected,
+  ClearSelection, SelectAll,
+  SelectedRowKeys, SetSelectedRowKeys,
+  SelectionModeValue, AllowSelectAllValue, ToggleSelected, SelectAllModeValue,
+  SelectionCheckboxTemplate,
+  SelectAllCheckboxTemplate,
+  AddSelectionColumnToVisibleColumns,
+  AddSelectionToRowClasses,
+  AddSelectionToRowProperties,
 } from './plugins';
-import CLASSES from '../classes';
-import { createGetKey } from '../utils';
 
-const getKey = createGetKey('Selection');
+export const viewFunction = (viewModel: Selection): JSX.Element => (
+  <Fragment>
+    <ValueSetter type={SelectedRowKeys} value={viewModel.props.selectedRowKeys} />
+    <ValueSetter type={SetSelectedRowKeys} value={viewModel.setSelectedRowKeys} />
 
-export const viewFunction = (): JSX.Element => <div />;
+    <ValueSetter type={SelectAllModeValue} value={viewModel.props.selectAllMode} />
+    <ValueSetter type={SelectionModeValue} value={viewModel.props.mode} />
+    <ValueSetter type={AllowSelectAllValue} value={viewModel.props.allowSelectAll} />
+    <TemplateSetter
+      type={SelectionCheckboxTemplate}
+      template={({ data }): JSX.Element => <SelectionCheckbox data={data} />}
+    />
+    <TemplateSetter
+      type={SelectAllCheckboxTemplate}
+      template={SelectAllCheckbox}
+    />
+    <GetterExtender type={VisibleColumns} order={2} value={AddSelectionColumnToVisibleColumns} />
+    <GetterExtender type={RowPropertiesGetter} order={1} value={AddSelectionToRowProperties} />
+    <GetterExtender type={RowClassesGetter} order={1} value={AddSelectionToRowClasses} />
+  </Fragment>
+);
 
 @ComponentBindings()
 export class SelectionProps {
@@ -33,153 +65,44 @@ export class SelectionProps {
   selectedRowKeys: Key[] = [];
 
   @OneWay()
-  mode: 'multiple' | 'single' | 'none' = 'single';
+  mode: SelectionMode = 'single';
 
   @OneWay()
   allowSelectAll = true;
 
   @OneWay()
-  selectAllMode: 'allPages' | 'page' = 'allPages';
+  selectAllMode: SelectAllMode = 'allPages';
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  angular: {
+    innerComponent: false,
+  },
 })
 export class Selection extends JSXComponent(SelectionProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
 
-  @InternalState()
-  keyExpr?: KeyExprInternal;
-
-  @Effect()
-  watchKeyExpr(): () => void {
-    return this.plugins.watch(KeyExprPlugin, (keyExpr) => {
-      this.keyExpr = keyExpr;
-    });
-  }
-
-  @Effect()
-  addVisibleColumnsHandler(): (() => void) | undefined {
-    if (this.props.mode !== 'none') {
-      return this.plugins.extend(VisibleColumns, 2, (columns) => {
-        const selectColumn: ColumnInternal = { cellTemplate: SelectionCheckbox };
-
-        if (this.props.mode === 'multiple' && this.props.allowSelectAll) {
-          selectColumn.headerTemplate = SelectAllCheckbox;
-        }
-
-        return [
-          selectColumn,
-          ...columns,
-        ];
-      });
-    }
-    return undefined;
-  }
-
-  @Effect()
-  addPluginMethods(): void {
-    this.plugins.set(SetSelected, this.setSelected);
-    this.plugins.set(IsSelected, this.isSelected);
-    this.plugins.set(ClearSelection, this.clearSelection);
-    this.plugins.set(SelectAll, this.selectAll);
-  }
-
-  @Effect()
-  addPluginValues(): void {
-    this.plugins.set(SelectedCount, this.props.selectedRowKeys.length);
-    this.plugins.set(SelectableCount, this.selectableCount());
-  }
-
-  @Effect()
-  extendDataRowAttributes(): () => void {
-    return this.plugins.extend(
-      RowPropertiesGetter, 1,
-      (base) => (row): Record<string, unknown> => {
-        if (row.rowType === 'data' && this.isSelected(row.data)) {
-          return {
-            ...base(row),
-            'aria-selected': true,
-          };
-        }
-        return base(row);
-      },
-    );
-  }
-
-  @Effect()
-  extendDataRowClasses(): () => void {
-    return this.plugins.extend(
-      RowClassesGetter, 1,
-      (base) => (row): Record<string, boolean> => {
-        if (row.rowType === 'data' && this.isSelected(row.data)) {
-          return {
-            ...base(row),
-            [CLASSES.selectedRow]: true,
-          };
-        }
-        return base(row);
-      },
-    );
-  }
-
   @Effect()
   setRowClickEvent(): void {
     this.plugins.set(RowClick, (row) => {
-      this.invertSelected(row.data);
+      this.plugins.callAction(ToggleSelected, row.data);
     });
   }
 
   @Method()
   selectAll(): void {
-    const items = this.getAllItems();
-    this.props.selectedRowKeys = items.map((item) => getKey(item, this.keyExpr));
+    this.plugins.callAction(SelectAll);
   }
 
   @Method()
   clearSelection(): void {
-    this.props.selectedRowKeys = [];
+    this.plugins.callAction(ClearSelection);
   }
 
-  isSelected(data: RowData): boolean {
-    return this.props.selectedRowKeys.includes(getKey(data, this.keyExpr));
-  }
-
-  setSelected(data: RowData, value: boolean): void {
-    const key = getKey(data, this.keyExpr);
-
-    if (value) {
-      if (this.props.mode === 'multiple') {
-        this.props.selectedRowKeys = [
-          ...this.props.selectedRowKeys,
-          key,
-        ];
-      } else {
-        this.props.selectedRowKeys = [key];
-      }
-    } else {
-      this.props.selectedRowKeys = this.props.selectedRowKeys
-        .filter((i) => i !== key);
-    }
-  }
-
-  selectableCount(): number {
-    const items = this.getAllItems();
-    return items.length;
-  }
-
-  invertSelected(data: RowData): void {
-    const isSelected = this.isSelected(data);
-    this.setSelected(data, !isSelected);
-  }
-
-  getAllItems(): RowData[] {
-    return (
-      this.props.selectAllMode === 'allPages'
-        ? this.plugins.getValue(Items)
-        : this.plugins.getValue(VisibleItems)
-    ) ?? [];
+  setSelectedRowKeys(keys: Key[]): void {
+    this.props.selectedRowKeys = keys;
   }
 }

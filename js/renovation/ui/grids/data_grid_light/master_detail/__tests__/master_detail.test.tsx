@@ -24,7 +24,7 @@ describe('Master Detail', () => {
       const tree = mount(<MasterDetailView {...viewProps as any} />);
 
       expect(tree.find(GetterExtender).at(0).props()).toEqual({
-        type: VisibleRows, order: 2, selector: AddMasterDetailRows,
+        type: VisibleRows, order: 2, value: AddMasterDetailRows,
       });
     });
   });
