@@ -604,6 +604,46 @@ QUnit.module('Keyboard keys', {
         assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 2, 'rowIndex');
     });
 
+    // T1069664
+    ['A', 'F', 'del', 'backspace'].forEach((keyName) => {
+        QUnit.testInActiveWindow(`The ${keyName} key do not work in masterDetail row`, function(assert) {
+            // assert
+            this.columns = [
+                { visible: true, command: 'expand' },
+                { caption: 'Column 1', visible: true, dataField: 'Column1' }
+            ];
+
+            this.dataControllerOptions = {
+                pageCount: 1,
+                pageIndex: 0,
+                pageSize: 5,
+                items: [
+                    { values: ['test1'], rowType: 'data', key: 0 },
+                    { rowType: 'detail' },
+                ]
+            };
+
+            this.options = { masterDetail: { enabled: true, template: function(container, options) { $('<input>').appendTo(container); } } };
+
+            setupModules(this);
+
+            // act
+            this.gridView.render($('#container'));
+
+            // assert
+            assert.strictEqual($('.dx-datagrid-rowsview .dx-row:not(.dx-freespace-row)').length, 2, 'count row');
+            assert.ok($('.dx-datagrid-rowsview .dx-row').eq(0).hasClass('dx-data-row'), 'data row');
+            assert.ok($('.dx-datagrid-rowsview .dx-row').eq(1).hasClass('dx-master-detail-row'), 'master detail row');
+
+            // act
+            $('#container input').trigger('focus').trigger(CLICK_EVENT);
+            const isStopPropagation = this.triggerKeyDown(keyName).stopPropagation;
+
+            // assert
+            assert.notOk(isStopPropagation, 'stopPropagation is not called');
+        });
+    });
+
     QUnit.testInActiveWindow('Focus grouped row', function(assert) {
         // arrange
         setupModules(this);
