@@ -6255,6 +6255,31 @@ QUnit.module('Editing state', baseModuleConfig, () => {
         });
     });
 
+    QUnit.test('dataSource change should reset changes if dataSource is array and keys are changed (T1065721)', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{ id: 1, field: '111' }],
+            keyExpr: 'id',
+            editing: {
+                allowUpdating: true,
+                mode: 'cell'
+            },
+            columns: ['id', 'field'],
+            loadingTimeout: null
+        }).dxDataGrid('instance');
+
+
+        dataGrid.editCell(0, 1);
+        dataGrid.cellValue(0, 1, 'test');
+
+        // act
+        dataGrid.option('dataSource', [{ id: 2, field: '222' }]);
+
+        // assert
+        assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+        assert.deepEqual(dataGrid.option('editing.editRowKey'), null, 'editRowKey is empty');
+    });
+
     ['Row', 'Form', 'Popup', 'Cell', 'Batch'].forEach(editMode => {
         ['changes', 'editRowKey', 'editColumnName'].forEach(editingOption => {
             QUnit.test(`${editMode} - Changing the editing.${editingOption} option should not raise the onToolbarPreparing event (T949025)`, function(assert) {
