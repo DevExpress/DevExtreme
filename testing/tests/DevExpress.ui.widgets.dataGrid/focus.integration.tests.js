@@ -1748,6 +1748,56 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             assert.equal(dataGrid.option('focusedRowKey'), 80, 'focused row key');
             assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'focused row is rendered');
         });
+
+        // T1062536
+        QUnit.testInActiveWindow(`autoNavigateToFocusedRow should work after resetting the filter when scrolling.mode == "${scrollingMode}"`, function(assert) {
+            // arrange
+            const items = [];
+
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+
+            const dataGrid = createDataGrid({
+                dataSource: items,
+                keyExpr: 'id',
+                height: 500,
+                scrolling: {
+                    mode: scrollingMode,
+                    useNative: false
+                },
+                paging: {
+                    pageSize: 20
+                },
+                focusedRowEnabled: true,
+                autoNavigateToFocusedRow: true
+            });
+
+            this.clock.tick(100);
+
+            dataGrid.columnOption(1, 'filterValue', 'Name 17');
+            this.clock.tick(100);
+
+            // act
+            $(dataGrid.getCellElement(0, 0)).trigger('dxpointerdown').trigger('dxclick');
+            this.clock.tick(500);
+
+            // assert
+            assert.equal(dataGrid.option('focusedRowKey'), 17, 'focused row key');
+
+            // act
+            dataGrid.columnOption(1, 'filterValue', '');
+            this.clock.tick(100);
+            $(dataGrid.getScrollable().container()).trigger('scroll');
+            this.clock.tick(500);
+
+            // assert
+            assert.equal(dataGrid.option('focusedRowKey'), 17, 'focused row key');
+            assert.notEqual(dataGrid.getScrollable().scrollTop(), 0, 'scrollTop > 0');
+        });
     });
 
     ['virtual', 'infinite'].forEach(mode => {

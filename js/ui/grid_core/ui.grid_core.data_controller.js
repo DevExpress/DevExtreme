@@ -899,15 +899,24 @@ export const dataControllerModule = {
                     return null;
                 },
                 _applyFilter: function() {
-                    const that = this;
-                    const dataSource = that._dataSource;
+                    const dataSource = this._dataSource;
 
                     if(dataSource) {
                         dataSource.pageIndex(0);
+                        this._isFilterApplying = true;
 
-                        return that.reload().done(that.pageChanged.fire.bind(that.pageChanged));
+                        return this.reload().done(() => {
+                            if(this._isFilterApplying) {
+                                this.pageChanged.fire();
+                            }
+                        });
                     }
                 },
+
+                resetFilterApplying: function() {
+                    this._isFilterApplying = false;
+                },
+
                 filter: function(filterExpr) {
                     const dataSource = this._dataSource;
                     const filter = dataSource && dataSource.filter();
