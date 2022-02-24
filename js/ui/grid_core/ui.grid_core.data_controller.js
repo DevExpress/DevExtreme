@@ -943,11 +943,20 @@ export const dataControllerModule = {
 
                     if(dataSource) {
                         dataSource.pageIndex(0);
+                        this._isFilterApplying = true;
+
                         return this.reload().done(() => {
-                            this.pageChanged.fire();
+                            if(this._isFilterApplying) {
+                                this.pageChanged.fire();
+                            }
                         });
                     }
                 },
+
+                resetFilterApplying: function() {
+                    this._isFilterApplying = false;
+                },
+
                 filter: function(filterExpr) {
                     const dataSource = this._dataSource;
                     const filter = dataSource && dataSource.filter();
