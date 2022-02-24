@@ -8,37 +8,48 @@ import { DataRow } from '../widgets/data_row';
 import { NoDataText } from '../widgets/no_data_text';
 import { ColumnInternal, Row } from '../types';
 import {
-  createValue, Plugins, PluginsContext,
+  createValue, Plugins, PluginsContext, createPlaceholder,
 } from '../../../../utils/plugin/context';
 import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
 import CLASSES from '../classes';
 import { getReactRowKey } from '../utils';
 import { combineClasses } from '../../../../utils/combine_classes';
+import { Placeholder } from '../../../../utils/plugin/placeholder';
+import { Scrollable } from '../../../scroll_view/scrollable';
+import { ScrollEventArgs, ScrollOffset } from '../../../scroll_view/common/types';
+
+export const TopRowPlaceholder = createPlaceholder();
+export const BottomRowPlaceholder = createPlaceholder();
 
 export const viewFunction = (viewModel: TableContent): JSX.Element => (
   <div className={viewModel.classes} role="presentation">
-    <div ref={viewModel.divRef} className={CLASSES.content}>
-      <Table>
-        <Fragment>
-          {
-          viewModel.rows.map((item) => (
-            <DataRow
-              key={item.reactKey}
-              row={item}
-              rowIndex={item.index}
-              columns={viewModel.props.columns}
-            />
-          ))
-          }
-        </Fragment>
-      </Table>
-    </div>
+    <Scrollable onScroll={viewModel.onScrollContent}>
+      <div ref={viewModel.divRef} className={`${CLASSES.content}`}>
+        <Table>
+          <Fragment>
+            <Placeholder type={TopRowPlaceholder} />
+            {
+              viewModel.rows.map((item) => (
+                <DataRow
+                  key={item.reactKey}
+                  row={item}
+                  rowIndex={item.index}
+                  columns={viewModel.props.columns}
+                />
+              ))
+            }
+            <Placeholder type={BottomRowPlaceholder} />
+          </Fragment>
+        </Table>
+      </div>
+    </Scrollable>
     { viewModel.isEmpty && <NoDataText template={viewModel.props.noDataTemplate} />}
   </div>
 );
 
 export const RowClick = createValue<(row: Row, e: Event) => void>();
+export const RowsViewScroll = createValue<(offset: ScrollOffset) => void>();
 
 @ComponentBindings()
 export class TableContentProps {
@@ -98,5 +109,9 @@ export class TableContent extends JSXComponent(TableContentProps) {
 
   get isEmpty(): boolean {
     return this.props.dataSource.length === 0;
+  }
+
+  onScrollContent(e: ScrollEventArgs): void {
+    this.plugins.callAction(RowsViewScroll, e.scrollOffset);
   }
 }
