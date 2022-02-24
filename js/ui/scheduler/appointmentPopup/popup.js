@@ -243,7 +243,9 @@ export class AppointmentPopup {
     }
 
     triggerResize() {
-        this.popup && triggerResizeEvent(this.popup.$element());
+        if(this.popup) {
+            triggerResizeEvent(this.popup.$element());
+        }
     }
 
     _getMaxWidth(isRecurrence) {
@@ -254,11 +256,15 @@ export class AppointmentPopup {
     }
 
     changeSize(isRecurrence) {
-        const fullScreen = this._isPopupFullScreenNeeded();
-        this.popup.option({
-            fullScreen,
-            maxWidth: fullScreen ? '100%' : this._getMaxWidth(isRecurrence),
-        });
+        if(this.popup) {
+            const fullScreen = this._isPopupFullScreenNeeded();
+            this.popup.option({
+                fullScreen,
+                maxWidth: fullScreen
+                    ? '100%'
+                    : this._getMaxWidth(isRecurrence),
+            });
+        }
     }
 
     updatePopupFullScreenMode() {
