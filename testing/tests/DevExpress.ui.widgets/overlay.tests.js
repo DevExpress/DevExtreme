@@ -66,10 +66,8 @@ QUnit.testStart(function() {
             </div>\
         </div>\
         \
-        <div id="Q518355">\
-            <div id="Q518355_overlay_1"></div>\
-            <div id="Q518355_overlay_2"></div>\
-        </div>\
+        <div id="overlay_1"></div>\
+        <div id="overlay_2"></div>\
         \
         <div id="overlayWithContentTemplate">\
             <div data-options="dxTemplate: { name: \'custom\' }">\
@@ -517,20 +515,42 @@ testModule('visibility', moduleConfig, () => {
     });
 
     test('new shown overlay should be displayed with greater z-index (Q518355)', function(assert) {
-        const $overlay1 = $('#Q518355_overlay_1').dxOverlay();
-        const $overlay2 = $('#Q518355_overlay_2').dxOverlay();
-        const overlay1 = $overlay1.dxOverlay('instance');
-        const overlay2 = $overlay2.dxOverlay('instance');
-
-        overlay1.show();
+        const overlay1 = $('#overlay_1').dxOverlay({ visible: true }).dxOverlay('instance');
+        const overlay2 = $('#overlay_2').dxOverlay({ visible: true }).dxOverlay('instance');
         const $content1 = overlay1.$content();
         const contentZIndex = parseInt($content1.css('zIndex'), 10);
         const wrapperZIndex = parseInt(overlay1.$wrapper().css('zIndex'), 10);
 
-        overlay2.show();
         const $content2 = overlay2.$content();
         assert.strictEqual(parseInt($content2.css('zIndex'), 10), contentZIndex + 1);
         assert.strictEqual(parseInt(overlay2.$wrapper().css('zIndex'), 10), wrapperZIndex + 1);
+    });
+
+    test('overlay should get the biggest z-index after addaing focusing class', function(assert) {
+        const overlay1 = $('#overlay_1').dxOverlay({ visible: true }).dxOverlay('instance');
+        const overlay2 = $('#overlay_2').dxOverlay({ visible: true }).dxOverlay('instance');
+        const overlay1InitialZIndex = 1501;
+
+        overlay1._toggleFocusClass(true, overlay1.$content());
+
+        const contentZIndex = parseInt(overlay1.$content().css('zIndex'), 10);
+
+        assert.strictEqual(contentZIndex, parseInt(overlay2.$content().css('zIndex'), 10) + 1);
+        assert.strictEqual(contentZIndex, overlay1InitialZIndex + 2);
+    });
+
+    test('overlay should get back initial z-index after removing focusing class', function(assert) {
+        const overlay1 = $('#overlay_1').dxOverlay({ visible: true }).dxOverlay('instance');
+        const overlay2 = $('#overlay_2').dxOverlay({ visible: true }).dxOverlay('instance');
+        const overlay1InitialZIndex = 1501;
+
+        overlay1._toggleFocusClass(true, overlay1.$content());
+        overlay1._toggleFocusClass(false, overlay1.$content());
+
+        const contentZIndex = parseInt(overlay1.$content().css('zIndex'), 10);
+
+        assert.strictEqual(contentZIndex, parseInt(overlay2.$content().css('zIndex'), 10) - 1);
+        assert.strictEqual(contentZIndex, overlay1InitialZIndex);
     });
 
     test('Cancel visibility change in hiding', function(assert) {
