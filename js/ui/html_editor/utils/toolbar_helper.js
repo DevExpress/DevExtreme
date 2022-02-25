@@ -263,8 +263,12 @@ function prepareImageHandler(module, imageUploadingOption) {
                     module.quill.deleteText(index, 1, SILENT_ACTION);
                 }
 
-                formData.width = String(formData.width) || undefined;
-                formData.height = String(formData.height) || undefined;
+                if(formData.width) {
+                    formData.width = String(formData.width);
+                }
+                if(formData.height) {
+                    formData.height = String(formData.height);
+                }
 
                 module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
 

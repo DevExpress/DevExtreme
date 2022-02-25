@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import '../../../helpers/xmlHttpRequestMock.js';
 
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -36,7 +37,8 @@ module('Image uploading integration', {
             toolbar: { items: ['image'] },
             imageUploading: {
                 mode: 'both',
-                uploadUrl: '/'
+                uploadUrl: '/',
+                uploadDirectory: '/uploadDirectory/'
             },
             value: markup
         };
@@ -206,11 +208,6 @@ module('Image uploading integration', {
             assert.strictEqual(uploadSpy.getCall(0).args[0].index, 1, 'first upload arg index is correct');
             assert.deepEqual(uploadSpy.getCall(0).args[1], [fakeFile], 'file upload arg is correct');
         });
-
-        // { check aspect ratio }
-        // { check size changing }
-        // { file uploading }
-
 
         function prepareImageUpdateTest(caretPosition, selectionLength) {
             return function(assert) {
@@ -518,6 +515,58 @@ module('Image uploading integration', {
 
         assert.strictEqual(heightEditor.option('value'), undefined, 'height value is recalculated');
         assert.strictEqual(widthEditor.option('value'), '50', 'width value is recalculated');
+    });
+
+    test('check file uploading to the server', function(assert) {
+        const expectedValue = '<p>t<img src="/uploadDirectory/fakefile1.jpeg">est text</p><p><br></p>';
+        this.createWidget();
+        this.clock.tick(TIME_TO_WAIT);
+
+
+        this.xhrMock = new window.XMLHttpRequestMock();
+        this._nativeXhr = XMLHttpRequest;
+        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+        this.formDataMock = new window.FormDataMock();
+        this._nativeFormData = window.FormData;
+        window.FormData = this.formDataMock.FormData;
+
+        this.instance.focus();
+
+        this.instance.setSelection(1, 2);
+
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $form = $('.dx-form');
+        const fileUploader = $form.find('.dx-fileuploader').dxFileUploader('instance');
+
+        fileUploader.option('value', [fakeFile]);
+
+        fileUploader.upload(fileUploader.option('value[0]'));
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+
+        const request = this.xhrMock.getInstanceAt();
+
+        $('.dx-formdialog .dx-toolbar .dx-button')
+            .first()
+            .trigger('dxclick');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.ok(request.uploaded, 'upload is done');
+        assert.strictEqual(this.instance.option('value'), expectedValue, 'value is correct');
+
+        window.XMLHttpRequest = this._nativeXhr;
+        window.FormData = this._nativeFormData;
+
+        this.xhrMock.dispose();
+        delete this.xhrMock;
+        delete this.formDataMock;
     });
 
 });
