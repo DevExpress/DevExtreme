@@ -5,6 +5,8 @@ import {
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 import { PlaceholderExtender } from '../../../../utils/plugin/placeholder_extender';
 import { RowsViewScroll, TopRowPlaceholder, BottomRowPlaceholder } from '../views/table_content';
+import { TotalCount, VisibleRows } from '../data_grid_light';
+// import { PageIndex, PageSize } from '../data_grid_light/paging/plugins';
 import { VirtualRow } from './virtual_row';
 
 export const viewFunction = (viewModel: Scrolling): JSX.Element => {
@@ -61,5 +63,20 @@ export class Scrolling extends JSXComponent(ScrollingProps) {
     this.plugins.set(RowsViewScroll, (offset) => {
       console.log(offset);
     });
+  }
+
+  @Effect()
+  updateTotalCount(): () => void {
+    return this.plugins.watch(TotalCount, () => {
+      this.updateContent();
+    });
+  }
+
+  updateContent(): void {
+    const totalCount = this.plugins.getValue(TotalCount) ?? 0;
+    const visibleRowCount = this.plugins.getValue(VisibleRows)?.length ?? 0;
+    const rowHeight = 34;
+
+    this.bottomVirtualRowHeight = (totalCount - visibleRowCount) * rowHeight;
   }
 }

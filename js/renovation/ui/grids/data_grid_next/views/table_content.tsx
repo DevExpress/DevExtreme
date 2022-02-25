@@ -13,17 +13,20 @@ import {
 import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
 import CLASSES from '../classes';
-import { getReactRowKey } from '../utils';
 import { combineClasses } from '../../../../utils/combine_classes';
+import { getReactRowKey, getElementHeight } from '../utils';
 import { Placeholder } from '../../../../utils/plugin/placeholder';
 import { Scrollable } from '../../../scroll_view/scrollable';
 import { ScrollEventArgs, ScrollOffset } from '../../../scroll_view/common/types';
 
 export const TopRowPlaceholder = createPlaceholder();
 export const BottomRowPlaceholder = createPlaceholder();
+export const RowClick = createValue<(row: Row, e: Event) => void>();
+export const RowsViewScroll = createValue<(offset: ScrollOffset) => void>();
+export const RowsViewHeight = createValue<number>();
 
 export const viewFunction = (viewModel: TableContent): JSX.Element => (
-  <div className={viewModel.classes} role="presentation">
+  <div ref={viewModel.rowsViewRef} className={viewModel.classes} role="presentation">
     <Scrollable onScroll={viewModel.onScrollContent}>
       <div ref={viewModel.divRef} className={`${CLASSES.content}`}>
         <Table>
@@ -48,9 +51,6 @@ export const viewFunction = (viewModel: TableContent): JSX.Element => (
   </div>
 );
 
-export const RowClick = createValue<(row: Row, e: Event) => void>();
-export const RowsViewScroll = createValue<(offset: ScrollOffset) => void>();
-
 @ComponentBindings()
 export class TableContentProps {
   @OneWay()
@@ -70,6 +70,9 @@ export class TableContentProps {
 })
 export class TableContent extends JSXComponent(TableContentProps) {
   @Ref()
+  rowsViewRef!: RefObject<HTMLDivElement>;
+
+  @Ref()
   divRef!: RefObject<HTMLDivElement>;
 
   @Consumer(PluginsContext)
@@ -80,6 +83,11 @@ export class TableContent extends JSXComponent(TableContentProps) {
     const onRowClick = this.onRowClick.bind(this);
     eventsEngine.on(this.divRef.current, clickEvent, `.${CLASSES.row}`, onRowClick);
     return (): void => eventsEngine.off(this.divRef.current, clickEvent, onRowClick);
+  }
+
+  @Effect()
+  calculateRowsViewHeight(): void {
+    this.plugins.set(RowsViewHeight, getElementHeight(this.rowsViewRef.current));
   }
 
   onRowClick(e: Event): void {

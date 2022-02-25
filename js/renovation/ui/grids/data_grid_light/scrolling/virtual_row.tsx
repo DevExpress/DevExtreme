@@ -1,6 +1,6 @@
 import {
   Component, JSXComponent, ComponentBindings,
-  OneWay, Fragment,
+  OneWay,
 } from '@devextreme-generator/declarations';
 import CLASSES from '../classes';
 import { combineClasses } from '../../../../utils/combine_classes';
@@ -14,14 +14,13 @@ const rowClasses = combineClasses({
 export const viewFunction = ({
   virtualCells,
 }: VirtualRow): JSX.Element => (
-  <Fragment>
-    <tr
-      className={rowClasses}
-      role="presentation"
-    >
-      {virtualCells.map((height) => <td style={{ height }} />)}
-    </tr>
-  </Fragment>
+  <tr
+    className={rowClasses}
+    role="presentation"
+    style={{ width: '100%' }} // remove after the fix https://github.com/DevExpress/devextreme-renovation/issues/883
+  >
+    {virtualCells.map((height) => <td style={{ height }} />)}
+  </tr>
 );
 
 @ComponentBindings()
