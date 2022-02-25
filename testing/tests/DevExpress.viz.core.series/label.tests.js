@@ -122,6 +122,14 @@ QUnit.test('Label format object, financial series', function(assert) {
     assert.strictEqual(data.totalText, undefined);
 });
 
+QUnit.module('Label pattern', {
+    format: labelModule.Label._DEBUG_formatText
+});
+
+QUnit.test('Number pattern', function(assert) {
+    assert.deepEqual({ value: 1 }, { pattern: '{value}' });
+});
+
 QUnit.module('Draw Label', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
