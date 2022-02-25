@@ -6,7 +6,7 @@ describe('Delete button', () => {
   describe('Render', () => {
     const render = (): ShallowWrapper => shallow(viewFunction());
 
-    it('should have correct render', () => {
+    it('it should have correct render', () => {
       const buttonContainer = render();
       const button = buttonContainer.childAt(0);
 

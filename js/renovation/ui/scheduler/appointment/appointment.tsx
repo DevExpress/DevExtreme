@@ -174,10 +174,8 @@ AppointmentProps,
   }
 
   onItemClick(): void {
-    const viewModel = { ...this.props.viewModel, color: this.color };
-
     const e = {
-      data: [viewModel],
+      data: [this.props.viewModel],
       target: this.ref.current as HTMLDivElement,
       index: this.props.index,
     };
