@@ -2374,8 +2374,8 @@ testModule('container', moduleConfig, () => {
             const wrapperRect = $overlayWrapper.get(0).getBoundingClientRect();
             const targetRect = $targetContainer.get(0).getBoundingClientRect();
 
-            assert.roughEqual(wrapperRect.left, targetRect.left, 0.5, 'left coordinates are equal');
-            assert.roughEqual(wrapperRect.top, targetRect.top, 0.5, 'top coordinates are equal');
+            assert.roughEqual(wrapperRect.left, targetRect.left, 0.51, 'left coordinates are equal');
+            assert.roughEqual(wrapperRect.top, targetRect.top, 0.51, 'top coordinates are equal');
             assert.strictEqual(wrapperRect.width, targetRect.width, 'width coordinates are equal');
             assert.strictEqual(wrapperRect.height, targetRect.height, 'height coordinates are equal');
             assert.strictEqual(wrapperRect.height, 300, 'wrapper height is ok');
@@ -3582,18 +3582,6 @@ QUnit.module('prevent safari scrolling on ios devices', {
 
 // visualContainer -> container -> position.of -> window
 QUnit.module('wrapper covered element choice', () => {
-    QUnit.test('position.of has no affect on wrapper dimensions', function(assert) {
-        const overlay = $('#overlay').dxOverlay({
-            position: { of: '#container' },
-            visible: true
-        }).dxOverlay('instance');
-
-        const $wrapper = overlay.$wrapper();
-
-        assert.strictEqual(getWidth($wrapper), getWidth(window), 'wrapper has window width');
-        assert.strictEqual(getHeight($wrapper), getHeight(window), 'wrapper has window height');
-    });
-
     QUnit.test('wrapper covers container element if visualPosition is not specified', function(assert) {
         const $container = $('#container');
         const overlay = $('#overlay').dxOverlay({
@@ -3608,8 +3596,8 @@ QUnit.module('wrapper covered element choice', () => {
 
         const wrapperLocation = $wrapper.position();
         const containerLocation = $container.position();
-        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.1, 'wrapper is left positioned by container');
-        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.1, 'wrapper is top positioned by container');
+        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.51, 'wrapper is left positioned by container');
+        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by container');
     });
 
     QUnit.test('wrapper covers visualContainer element if it is specified', function(assert) {
@@ -3627,8 +3615,8 @@ QUnit.module('wrapper covered element choice', () => {
 
         const wrapperLocation = $wrapper.position();
         const containerLocation = $container.position();
-        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.1, 'wrapper is left positioned by visual container');
-        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.1, 'wrapper is top positioned by visual container');
+        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.51, 'wrapper is left positioned by visual container');
+        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by visual container');
     });
 
     QUnit.test('wrapper position and dimensions should be updated after visualContainer change', function(assert) {
@@ -3647,8 +3635,8 @@ QUnit.module('wrapper covered element choice', () => {
 
         const wrapperLocation = $wrapper.position();
         const containerLocation = $container.position();
-        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.1, 'wrapper is left positioned by visual container');
-        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.1, 'wrapper is top positioned by visual container');
+        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.51, 'wrapper is left positioned by visual container');
+        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by visual container');
     });
 
     QUnit.test('wrapper covers element specified in position.of if container and visualContainer are not specified', function(assert) {
@@ -3665,7 +3653,7 @@ QUnit.module('wrapper covered element choice', () => {
 
         const wrapperLocation = $wrapper.position();
         const containerLocation = $positionOf.position();
-        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.1, 'wrapper is left positioned by position.of');
-        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.1, 'wrapper is top positioned by position.of');
+        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.51, 'wrapper is left positioned by position.of');
+        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by position.of');
     });
 });
