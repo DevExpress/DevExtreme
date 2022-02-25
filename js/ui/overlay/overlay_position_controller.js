@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { isDefined, isString, isWindow } from '../../core/utils/type';
+import { isDefined, isString, isWindow, isEvent } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import positionUtils from '../../animation/position';
 import { resetPosition, move, locate } from '../../animation/translator';
@@ -108,7 +108,7 @@ class OverlayPositionController {
         this.updateVisualContainer(this._props.visualContainer);
     }
 
-    updateVisualContainer(visualContainer) {
+    updateVisualContainer(visualContainer = this._props.visualContainer) {
         this._props.visualContainer = visualContainer;
 
         this._$visualContainer = this._getVisualContainer();
@@ -186,7 +186,7 @@ class OverlayPositionController {
     _getVisualContainer() {
         const containerProp = this._props.container;
         const visualContainerProp = this._props.visualContainer;
-        const positionOf = this._props.position?.of;
+        const positionOf = isEvent(this._props.position?.of) ? this._props.position.of.target : this._props.position?.of;
 
         if(visualContainerProp) {
             return $(visualContainerProp);
