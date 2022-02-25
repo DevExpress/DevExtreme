@@ -5276,6 +5276,48 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             // assert
             assert.deepEqual(dataGrid.getSelectedRowKeys(), [2, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40], 'selected keys after scroll down');
         });
+
+        QUnit.test(`${scrollingMode} - Rows should be selected correctly with Shift not on the first page (T1070776)`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: Array(100).fill().map((x, i) => ({ id: i })),
+                keyExpr: 'id',
+                showBorders: true,
+                height: 500,
+                scrolling: {
+                    mode: scrollingMode.toLowerCase(),
+                    useNative: false
+                },
+                selection: {
+                    mode: 'multiple',
+                    showCheckBoxesMode: 'always'
+                }
+            });
+
+            this.clock.tick(300);
+
+            // act
+            dataGrid.getScrollable().scrollTo({ top: 1600 });
+            this.clock.tick(300);
+            if(scrollingMode === 'Infinite') {
+                dataGrid.getScrollable().scrollTo({ top: 1600 });
+                this.clock.tick(300);
+                dataGrid.getScrollable().scrollTo({ top: 1600 });
+                this.clock.tick(300);
+            }
+            $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(3)').trigger('dxclick');
+
+            // assert
+            assert.deepEqual(dataGrid.getSelectedRowKeys(), [50], 'selected key');
+
+            // act
+            const pointer = pointerMock($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(8)'));
+            pointer.start({ shiftKey: true }).down().up();
+            this.clock.tick(300);
+
+            // assert
+            assert.deepEqual(dataGrid.getSelectedRowKeys(), [50, 55, 54, 53, 52, 51], 'selected keys with Shift');
+        });
     });
 
     QUnit.test('No redundant load calls with filter (T1063237)', function(assert) {
