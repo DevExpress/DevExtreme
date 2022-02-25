@@ -94,6 +94,8 @@ class OverlayPositionController {
     updatePosition(positionProp) {
         this._props.position = positionProp;
         this._position = this._normalizePosition(positionProp);
+
+        this.updateVisualContainer();
     }
 
     updateContainer(containerProp = this._props.container) {
@@ -184,12 +186,16 @@ class OverlayPositionController {
     _getVisualContainer() {
         const containerProp = this._props.container;
         const visualContainerProp = this._props.visualContainer;
+        const positionOf = this._props.position?.of;
 
         if(visualContainerProp) {
             return $(visualContainerProp);
         }
         if(containerProp) {
             return $(containerProp);
+        }
+        if(positionOf) {
+            return $(positionOf);
         }
 
         return $(window);
