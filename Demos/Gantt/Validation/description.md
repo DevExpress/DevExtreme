@@ -2,10 +2,10 @@ The DevExtreme JavaScript Gantt component allows you to validate relationships b
 
 The Gantt supports the following dependency validation rules:
 
-* Finish to Start (FS) - A successor task's start point should equal the preceding task's end point.
-* Start to Start (SS) - Successor and predecessor tasks should begin at the same time.
-* Finish to Finish (FF) - Successor and predecessor tasks should end at the same time.
-* Start to Finish (SF) - A successor task's end point should equal a preceding task's start point.
+* Finish to Start (FS) - A successor task's start point should be equal or later than the preceding task's end point.
+* Start to Start (SS) - A successor task's start point should be equal or later than the preceding task's start point.
+* Finish to Finish (FF) - A successor task's end point should be equal or later than the preceding task's end point.
+* Start to Finish (SF) - A successor task's end point should be equal or later than a preceding task's start point.
 
 The Gantt also has the [autoUpdateParentTasks](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/validation/#autoUpdateParentTasks) property that enables validation for parent-child relationship:
 
