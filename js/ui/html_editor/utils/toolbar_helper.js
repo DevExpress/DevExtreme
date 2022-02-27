@@ -402,10 +402,11 @@ function imageFormItems(module, imageUploadingOption) {
 
     const specifyURLTabItems = [
         { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
-        { dataField: 'width', colSpan: 5, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) }, template: (data) => {
-            const $content = $('<div>');
+        { dataField: 'width', colSpan: 6, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) }, template: (data) => {
+            const $content = $('<div>').addClass('dx-fix-ratio-container');
+            const $widthEditor = $('<div>').appendTo($content);
 
-            widthEditor = module.editorInstance._createComponent($content, TextBox, {
+            widthEditor = module.editorInstance._createComponent($widthEditor, TextBox, {
                 value: data.component.option('formData')[data.dataField],
                 onEnterKey: data.component.option('onEditorEnterKey').bind(module.editorInstance._formDialog, data),
                 onValueChanged: (e) => {
@@ -415,30 +416,6 @@ function imageFormItems(module, imageUploadingOption) {
                     if(keepRatio && oldHeight && e.previousValue && !preventRecalculating) {
                         preventRecalculating = true;
                         heightEditor.option('value', Math.round(newValue * oldHeight / parseInt(e.previousValue)).toString());
-                    }
-
-                    preventRecalculating = false;
-
-                    data.component.updateData(data.dataField, newValue);
-                }
-            });
-
-            return $content;
-        } },
-        { dataField: 'height', colSpan: 6, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) }, template: (data) => {
-            const $content = $('<div>').addClass('dx-fix-ratio-container');
-            const $heightEditor = $('<div>').appendTo($content);
-
-            heightEditor = module.editorInstance._createComponent($heightEditor, TextBox, {
-                value: data.component.option('formData')[data.dataField],
-                onEnterKey: data.component.option('onEditorEnterKey').bind(module.editorInstance._formDialog, data),
-                onValueChanged: (e) => {
-                    const newValue = parseInt(e.value);
-                    const oldWidth = parseInt(widthEditor.option('value'));
-
-                    if(keepRatio && oldWidth && e.previousValue && !preventRecalculating) {
-                        preventRecalculating = true;
-                        widthEditor.option('value', Math.round(newValue * oldWidth / parseInt(e.previousValue)).toString());
                     }
 
                     preventRecalculating = false;
@@ -462,6 +439,29 @@ function imageFormItems(module, imageUploadingOption) {
                     keepRatio = !!e.component.option('selectedItems').length;
                 }
                 // cssClass: 'dx-fix-ratio-button'
+            });
+
+            return $content;
+        } },
+        { dataField: 'height', colSpan: 5, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) }, template: (data) => {
+            const $content = $('<div>');
+
+            heightEditor = module.editorInstance._createComponent($content, TextBox, {
+                value: data.component.option('formData')[data.dataField],
+                onEnterKey: data.component.option('onEditorEnterKey').bind(module.editorInstance._formDialog, data),
+                onValueChanged: (e) => {
+                    const newValue = parseInt(e.value);
+                    const oldWidth = parseInt(widthEditor.option('value'));
+
+                    if(keepRatio && oldWidth && e.previousValue && !preventRecalculating) {
+                        preventRecalculating = true;
+                        widthEditor.option('value', Math.round(newValue * oldWidth / parseInt(e.previousValue)).toString());
+                    }
+
+                    preventRecalculating = false;
+
+                    data.component.updateData(data.dataField, newValue);
+                }
             });
 
             return $content;
