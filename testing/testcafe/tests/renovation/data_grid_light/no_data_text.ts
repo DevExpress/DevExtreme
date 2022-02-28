@@ -3,6 +3,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../helpers/multi-platform-test';
 
 const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['angular', 'react'] });
+const testReactOnly = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['react'] });
 
 const defaultOptions = {
   columns: ['id', 'text'],
@@ -25,7 +26,8 @@ test('Default template', async (t, { screenshotComparerOptions }) => {
     .ok();
 }).before(prepareDataGrid());
 
-test('Custom template', async (t, { screenshotComparerOptions }) => {
+// it's hard to provide template to angular from testcafe
+testReactOnly('Custom template', async (t, { screenshotComparerOptions }) => {
   await t
     .expect(
       await compareScreenshot(t, 'data_grid_light_no_data_text_custom_template.png', null, screenshotComparerOptions),
