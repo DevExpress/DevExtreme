@@ -1389,6 +1389,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     },
     betweenStartText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenStartText'),
     betweenEndText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenEndText'),
+    showRelevantValues: true,
   };
 
   @Nested() headerFilter?: DataGridHeaderFilter = {
@@ -1402,6 +1403,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
       ok: messageLocalization.format('dxDataGrid-headerFilterOK'),
       cancel: messageLocalization.format('dxDataGrid-headerFilterCancel'),
     },
+    showRelevantValues: true,
   };
 
   @OneWay() useKeyboard?: boolean; // TODO remove
