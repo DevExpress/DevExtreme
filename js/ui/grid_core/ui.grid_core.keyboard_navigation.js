@@ -276,10 +276,10 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     // #region Key_Handlers
     _keyDownHandler: function(e) {
-        const isEditing = this._editingController.isEditing();
         let needStopPropagation = true;
+        let isHandled = this._processOnKeyDown(e);
+        const isEditing = this._editingController.isEditing();
         const originalEvent = e.originalEvent;
-        const isHandled = this._processOnKeyDown(e);
 
         if(originalEvent.isDefaultPrevented()) {
             return;
@@ -295,6 +295,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 case 'leftArrow':
                 case 'rightArrow':
                     this._leftRightKeysHandler(e, isEditing);
+                    isHandled = true;
                     break;
 
                 case 'upArrow':
@@ -304,63 +305,70 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     } else {
                         this._upDownKeysHandler(e, isEditing);
                     }
+                    isHandled = true;
                     break;
 
                 case 'pageUp':
                 case 'pageDown':
                     this._pageUpDownKeyHandler(e);
+                    isHandled = true;
                     break;
 
                 case 'space':
                     this._spaceKeyHandler(e, isEditing);
+                    isHandled = true;
                     break;
 
                 case 'A':
                     if(isCommandKeyPressed(e.originalEvent)) {
                         this._ctrlAKeyHandler(e, isEditing);
+                        isHandled = true;
                     } else {
-                        this._beginFastEditing(e.originalEvent);
+                        isHandled = this._beginFastEditing(e.originalEvent);
                     }
                     break;
 
                 case 'tab':
                     this._tabKeyHandler(e, isEditing);
+                    isHandled = true;
                     break;
 
                 case 'enter':
                     this._enterKeyHandler(e, isEditing);
+                    isHandled = true;
                     break;
 
                 case 'escape':
                     this._escapeKeyHandler(e, isEditing);
+                    isHandled = true;
                     break;
 
                 case 'F':
                     if(isCommandKeyPressed(e.originalEvent)) {
                         this._ctrlFKeyHandler(e);
+                        isHandled = true;
                     } else {
-                        this._beginFastEditing(e.originalEvent);
+                        isHandled = this._beginFastEditing(e.originalEvent);
                     }
                     break;
 
                 case 'F2':
                     this._f2KeyHandler();
+                    isHandled = true;
                     break;
 
                 case 'del':
                 case 'backspace':
                     if(this._isFastEditingAllowed() && !this._isFastEditingStarted()) {
-                        this._beginFastEditing(originalEvent, true);
+                        isHandled = this._beginFastEditing(originalEvent, true);
                     }
                     break;
+            }
 
-                default:
-                    if(!this._beginFastEditing(originalEvent)) {
-                        this._isNeedFocus = false;
-                        this._isNeedScroll = false;
-                        needStopPropagation = false;
-                    }
-                    break;
+            if(!isHandled && !this._beginFastEditing(originalEvent)) {
+                this._isNeedFocus = false;
+                this._isNeedScroll = false;
+                needStopPropagation = false;
             }
 
             if(needStopPropagation) {
