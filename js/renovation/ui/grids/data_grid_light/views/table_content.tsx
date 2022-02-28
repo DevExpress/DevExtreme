@@ -5,6 +5,7 @@ import {
 
 import { Table } from '../widgets/table';
 import { DataRow } from '../widgets/data_row';
+import { NoDataText } from '../widgets/no_data_text';
 import { ColumnInternal, Row } from '../types';
 import {
   createValue, Plugins, PluginsContext,
@@ -13,10 +14,11 @@ import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
 import CLASSES from '../classes';
 import { getReactRowKey } from '../utils';
+import { combineClasses } from '../../../../utils/combine_classes';
 
 export const viewFunction = (viewModel: TableContent): JSX.Element => (
-  <div className={`${CLASSES.rowsView} ${CLASSES.noWrap} ${CLASSES.afterHeaders}`} role="presentation">
-    <div ref={viewModel.divRef} className={`${CLASSES.content}`}>
+  <div className={viewModel.classes} role="presentation">
+    <div ref={viewModel.divRef} className={CLASSES.content}>
       <Table>
         <Fragment>
           {
@@ -32,6 +34,7 @@ export const viewFunction = (viewModel: TableContent): JSX.Element => (
         </Fragment>
       </Table>
     </div>
+    { viewModel.isEmpty && <NoDataText />}
   </div>
 );
 
@@ -73,11 +76,24 @@ export class TableContent extends JSXComponent(TableContentProps) {
     }
   }
 
+  get classes(): string {
+    return combineClasses({
+      [CLASSES.rowsView]: true,
+      [CLASSES.noWrap]: true,
+      [CLASSES.afterHeaders]: true,
+      [CLASSES.empty]: this.isEmpty,
+    });
+  }
+
   get rows(): (Row & { index: number; reactKey: string })[] {
     return this.props.dataSource.map((row, index) => ({
       ...row,
       index,
       reactKey: getReactRowKey(row, index),
     }));
+  }
+
+  get isEmpty(): boolean {
+    return this.props.dataSource.length === 0;
   }
 }
