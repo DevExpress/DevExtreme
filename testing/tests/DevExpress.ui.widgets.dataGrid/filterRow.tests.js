@@ -2211,8 +2211,6 @@ QUnit.module('Filter Row with real dataController and columnsController', {
     });
 
     QUnit.test('Lookup select box should show only relevant values', function(assert) {
-        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
-
         // arrange
         const $testElement = $('#container');
 

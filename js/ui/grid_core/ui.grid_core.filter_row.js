@@ -665,6 +665,10 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 return;
             }
 
+            if(!this.element()) {
+                return;
+            }
+
             const columns = this.getController('columns').getVisibleColumns();
             const dataSource = this.getController('data').dataSource();
             const filterRowController = this.getController('applyFilter');
@@ -683,7 +687,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
 
                 const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
 
-                editor.option('dataSource', lookupDataSource);
+                editor?.option('dataSource', lookupDataSource);
             });
         },
 

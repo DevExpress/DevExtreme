@@ -1072,6 +1072,11 @@ export class DataGridFilterRow {
 
   @OneWay()
   visible?: boolean;
+
+  // private
+
+  @OneWay()
+  showRelevantValues = true;
 }
 
 @ComponentBindings()
@@ -1093,6 +1098,11 @@ export class DataGridHeaderFilter {
 
   @OneWay()
   width?: number;
+
+  // private
+
+  @OneWay()
+  showRelevantValues = true;
 }
 
 @ComponentBindings()
