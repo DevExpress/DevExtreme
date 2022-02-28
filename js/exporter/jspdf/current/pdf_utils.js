@@ -34,10 +34,9 @@ function getTextLines(doc, text, font, { wordWrapEnabled, targetRectWidth }) {
     let textWidth = getTextDimensions(doc, textWithoutLineBreak + DOTS_TEXT, font).w;
     while(textWithoutLineBreak.length > 0 && textWidth > targetRectWidth) {
         let symbolsCountToRemove = 0;
-        if(textWidth >= targetRectWidth * 4) {
+
+        if(textWidth >= targetRectWidth * 2) {
             symbolsCountToRemove = textWithoutLineBreak.length / 2;
-        } else if(textWidth >= targetRectWidth * 2) {
-            symbolsCountToRemove = textWithoutLineBreak.length / 3;
         }
 
         if(symbolsCountToRemove < 1) {
