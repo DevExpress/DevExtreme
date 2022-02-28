@@ -2210,6 +2210,68 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         assert.equal($filterRangeContent.attr('tabIndex'), '3', 'tabIndex of filter range content');
     });
 
+    QUnit.test('Lookup select box should show only relevant values', function(assert) {
+        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
+
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }, {
+            dataField: 'column2',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [
+            { column1: 1, column2: 1 },
+            { column1: 2, column2: 2 },
+        ];
+        this.options.filterRow.showRelevantValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        const dropDown2 = $('.dx-dropdowneditor-button:eq(1)');
+
+        dropDown1.trigger('dxclick');
+        dropDown2.trigger('dxclick');
+
+        // assert
+        const dropDownList1 = $('.dx-list:eq(0)');
+        const dropDownList2 = $('.dx-list:eq(1)');
+
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value2');
+
+        assert.strictEqual(dropDownList2.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
+        assert.strictEqual(dropDownList2.find('.dx-item:eq(2)').text(), 'value2');
+
+        // act
+        dropDownList1.find('.dx-item:eq(1)').trigger('dxclick');
+
+        // assert
+        assert.strictEqual(dropDownList2.find('.dx-item').length, 2);
+        assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
+    });
+
+
     if(device.deviceType === 'desktop') {
     // T306751
         QUnit.testInActiveWindow('Filter range - keyboard navigation', function(assert) {
