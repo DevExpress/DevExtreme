@@ -132,6 +132,17 @@ describe('DataGridLight', () => {
         expect(grid.keyExpr).toEqual('some key');
       });
 
+      it('should return key from Store', () => {
+        const grid = new DataGridLight({
+          dataSource: new CustomStore({
+            key: 'my_key',
+            load: () => [],
+          }),
+        });
+
+        expect(grid.keyExpr).toEqual('my_key');
+      });
+
       it('should return null if user did not specified it', () => {
         const grid = new DataGridLight({});
 
@@ -392,6 +403,48 @@ describe('DataGridLight', () => {
         await Promise.resolve();
 
         expect.assertions(0);
+      });
+    });
+  });
+
+  describe('Methods', () => {
+    describe('refresh', () => {
+      const createDataGridLightWithStore = () => {
+        const loadMock = jest.fn(() => []);
+        const grid = new DataGridLight({
+          dataSource: new CustomStore({
+            load: loadMock,
+          }),
+        });
+        return { loadMock, grid };
+      };
+
+      it('refresh method should load data', () => {
+        const { grid, loadMock } = createDataGridLightWithStore();
+
+        grid.refresh();
+
+        expect(loadMock).toHaveBeenCalled();
+      });
+
+      it('refresh method should load data with correct loadOptions', () => {
+        const loadOptions = { skip: 0, take: 5 };
+        const { grid, loadMock } = createDataGridLightWithStore();
+
+        grid.plugins.extend(LoadOptionsValue, 1, () => loadOptions);
+
+        grid.refresh();
+
+        expect(loadMock).toHaveBeenCalledWith(loadOptions);
+      });
+
+      it('refresh method should load data with correct loadOptions is empty', () => {
+        const { grid, loadMock } = createDataGridLightWithStore();
+        grid.plugins.extend(LoadOptionsValue, 1, () => undefined);
+
+        grid.refresh();
+
+        expect(loadMock).toHaveBeenCalledWith({});
       });
     });
   });

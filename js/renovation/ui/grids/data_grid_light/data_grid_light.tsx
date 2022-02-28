@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings,
-  OneWay, Effect, InternalState, Provider, Slot, TwoWay, Event,
+  OneWay, Effect, InternalState, Provider, Slot, TwoWay, Event, Method,
 } from '@devextreme-generator/declarations';
 
 import {
@@ -190,8 +190,17 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     });
   }
 
+  @Method()
+  refresh(): void {
+    const loadOptions = this.plugins.getValue(LoadOptionsValue) ?? {};
+
+    this.loadStore(this.props.dataSource, loadOptions);
+  }
+
   get keyExpr(): KeyExprInternal {
-    return this.props.keyExpr ?? null; // TODO
+    const { dataSource } = this.props;
+    const storeKey = isStore(dataSource) ? (dataSource.key() as string) : null;
+    return this.props.keyExpr ?? storeKey ?? null;
   }
 
   get columns(): ColumnInternal[] {
