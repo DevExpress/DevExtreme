@@ -731,7 +731,7 @@ const DataControllerFilterRowExtender = {
 
     _applyFilter: function() {
         this.callBase.apply(this, arguments);
-        this.component._views['columnHeadersView'].updateLookupDataSource();
+        this.component._views['columnHeadersView']?.updateLookupDataSource();
     },
 };
 
