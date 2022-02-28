@@ -1076,7 +1076,7 @@ export class DataGridFilterRow {
   // private
 
   @OneWay()
-  showRelevantValues = true;
+  showRelevantValues?: boolean;
 }
 
 @ComponentBindings()
@@ -1102,7 +1102,7 @@ export class DataGridHeaderFilter {
   // private
 
   @OneWay()
-  showRelevantValues = true;
+  showRelevantValues?: boolean;
 }
 
 @ComponentBindings()
