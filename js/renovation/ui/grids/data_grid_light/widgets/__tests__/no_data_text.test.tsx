@@ -8,7 +8,7 @@ describe('NoDataText', () => {
       const noDataText = new NoDataText({});
 
       const tree = mount(
-        <NoDataTextView text={noDataText.text} {...noDataText} />,
+        <NoDataTextView {...noDataText} text={noDataText.text} />,
       );
 
       expect(tree.html()).toMatchInlineSnapshot(
@@ -22,7 +22,7 @@ describe('NoDataText', () => {
       });
 
       const tree = mount(
-        <NoDataTextView text={noDataText.text} {...noDataText} />,
+        <NoDataTextView {...noDataText} text={noDataText.text} />,
       );
 
       expect(tree.html()).toMatchInlineSnapshot(
