@@ -1,17 +1,15 @@
 import {
-  Component, JSXComponent, ComponentBindings, JSXTemplate, Template, Fragment,
+  Component, JSXComponent, ComponentBindings, JSXTemplate, Template,
 } from '@devextreme-generator/declarations';
 import messageLocalization from '../../../../../localization/message';
 
 import CLASSES from '../classes';
 
 export const viewFunction = (viewModel: NoDataText): JSX.Element => (
-  <Fragment>
+  <div className={CLASSES.noData}>
     { viewModel.props.template && <viewModel.props.template /> }
-    {!viewModel.props.template && (
-      <span className={CLASSES.noData}>{viewModel.text}</span>
-    )}
-  </Fragment>
+    {!viewModel.props.template && viewModel.text }
+  </div>
 );
 
 @ComponentBindings()
