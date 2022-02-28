@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings,
-  OneWay, Effect, InternalState, Provider, Slot,
+  OneWay, Effect, InternalState, Provider, Slot, TwoWay, Event,
 } from '@devextreme-generator/declarations';
 
 import {
@@ -14,8 +14,10 @@ import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
 import type {
-  ColumnInternal, Column, KeyExprInternal, RowData, Row, KeyExpr,
+  ColumnInternal, Column, KeyExprInternal, RowData, Row, KeyExpr, DataState, DataSource,
 } from './types';
+import type Store from '../../../../data/abstract_store';
+import type { LoadOptions } from '../../../../data';
 
 import { TableContent } from './views/table_content';
 import { TableHeader } from './views/table_header';
@@ -23,27 +25,47 @@ import { Footer } from './views/footer';
 
 import CLASSES from './classes';
 
-export const AllItems = createValue<RowData[]>();
-export const VisibleItems = createGetter<RowData[]>([]);
+export const LocalData = createValue<RowData[] | Store | undefined>();
+export const LocalVisibleItems = createGetter<RowData[] | undefined>([]);
 export const VisibleRows = createGetter<Row[]>([]);
+export const RemoteOperations = createValue<boolean>();
+
+export const LoadOptionsValue = createGetter<LoadOptions>({});
+export const DataStateValue = createValue<DataState>();
 
 export const Columns = createValue<ColumnInternal[]>();
 export const VisibleColumns = createGetter<ColumnInternal[]>([]);
 
 export const KeyExprPlugin = createValue<KeyExprInternal>();
-export const TotalCount = createSelector<number>(
-  [AllItems],
-  (allItems: RowData[]) => allItems.length,
+export const TotalCount = createSelector<number/* , DataState */>(
+  [DataStateValue],
+  (dataState: DataState) => dataState.totalCount,
 );
 
-export const VisibleDataRows = createSelector<Row[]>(
-  [VisibleItems, KeyExprPlugin],
-  (visibleItems: RowData[], keyExpr: KeyExprInternal): Row[] => visibleItems.map((data) => ({
+export const VisibleDataRows = createSelector<Row[]/* , DataState, KeyExprInternal */>(
+  [
+    DataStateValue, KeyExprPlugin,
+  ],
+  (
+    dataStateValue: DataState, keyExpr: KeyExprInternal,
+  ): Row[] => dataStateValue.data.map((data) => ({
     key: keyExpr ? data[keyExpr] : data,
     data,
     rowType: 'data',
   })),
 );
+
+export const LocalDataState = createSelector(
+  [LocalVisibleItems, LocalData],
+  (visibleItems, localData): DataState | undefined => (Array.isArray(localData) ? {
+    data: visibleItems ?? [],
+    totalCount: localData.length,
+  } : undefined),
+);
+
+function isStore(dataSource: DataSource): dataSource is Store {
+  return dataSource !== undefined && !Array.isArray(dataSource);
+}
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -61,11 +83,13 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
     width={viewModel.props.width}
     {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
-    <ValueSetter type={AllItems} value={viewModel.props.dataSource} />
+    <ValueSetter type={LocalData} value={viewModel.localData} />
     <ValueSetter type={Columns} value={viewModel.columns} />
     <ValueSetter type={KeyExprPlugin} value={viewModel.keyExpr} />
+    <ValueSetter type={RemoteOperations} value={viewModel.props.remoteOperations} />
+    <ValueSetter type={DataStateValue} value={viewModel.props.dataState} />
     <GetterExtender type={VisibleColumns} order={-1} value={Columns} />
-    <GetterExtender type={VisibleItems} order={-1} value={AllItems} />
+    <GetterExtender type={LocalVisibleItems} order={-1} value={LocalData} />
     <GetterExtender type={VisibleRows} order={-1} value={VisibleDataRows} />
 
     <div className={`${CLASSES.dataGrid} ${CLASSES.gridBaseContainer}`} role="grid" aria-label="Data grid">
@@ -80,13 +104,25 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
 @ComponentBindings()
 export class DataGridLightProps extends BaseWidgetProps {
   @OneWay()
-  dataSource: RowData[] = [];
+  dataSource?: DataSource;
+
+  @OneWay()
+  remoteOperations = false;
+
+  @OneWay()
+  cacheEnabled = true;
+
+  @TwoWay()
+  dataState: DataState = { data: [], totalCount: -1 };
 
   @OneWay()
   keyExpr?: KeyExpr;
 
   @OneWay()
   columns: Column[] = [];
+
+  @Event()
+  onDataErrorOccurred?: (e: { error: Error }) => void;
 
   @Slot()
   children?: JSX.Element | JSX.Element[];
@@ -116,6 +152,9 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   @InternalState()
   visibleColumns: ColumnInternal[] = [];
 
+  @InternalState()
+  loadedData?: RowData[];
+
   @Effect()
   updateVisibleRows(): () => void {
     return this.plugins.watch(VisibleRows, (visibleRows) => {
@@ -130,8 +169,29 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     });
   }
 
+  @Effect()
+  updateDataStateFromLocal(): () => void {
+    return this.plugins.watch(LocalDataState, (dataState) => {
+      if (dataState !== undefined) {
+        this.props.dataState = dataState;
+      }
+    });
+  }
+
+  @Effect()
+  updateDataSource(): () => void {
+    const { dataSource, cacheEnabled } = this.props;
+    let prevLoadOptions: LoadOptions | undefined = undefined;
+    return this.plugins.watch(LoadOptionsValue, (loadOptions) => {
+      if (!cacheEnabled || JSON.stringify(loadOptions) !== JSON.stringify(prevLoadOptions)) {
+        prevLoadOptions = loadOptions;
+        this.loadStore(dataSource, loadOptions);
+      }
+    });
+  }
+
   get keyExpr(): KeyExprInternal {
-    return this.props.keyExpr ?? null;
+    return this.props.keyExpr ?? null; // TODO
   }
 
   get columns(): ColumnInternal[] {
@@ -140,5 +200,32 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     return userColumns.map((userColumn) => ({
       dataField: userColumn,
     }));
+  }
+
+  get localData(): RowData[] | undefined {
+    const { dataSource } = this.props;
+    return Array.isArray(dataSource) ? dataSource : this.loadedData;
+  }
+
+  loadStore(dataSource: DataSource, loadOptions: LoadOptions): void {
+    if (isStore(dataSource)) {
+      dataSource.load(loadOptions).then((data, extra) => {
+        if (this.props.remoteOperations) {
+          if (Array.isArray(data)) {
+            this.props.dataState = {
+              data,
+              totalCount: -1,
+              ...extra,
+            };
+          } else {
+            this.props.dataState = data;
+          }
+        } else {
+          this.loadedData = data;
+        }
+      }, (error) => {
+        this.props.onDataErrorOccurred?.({ error });
+      });
+    }
   }
 }
