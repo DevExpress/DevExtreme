@@ -239,7 +239,7 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                             if(convertUTCDates) {
                                 data = convertDataFromUTCToLocal(data, column);
                             }
-                            this._processGroupItems(data, null, null, {
+                            that._processGroupItems(data, null, null, {
                                 level: cutoffLevel,
                                 column: column,
                                 headerFilterOptions: headerFilterOptions
