@@ -1,6 +1,6 @@
 import {
   Component, JSXComponent, ComponentBindings, OneWay, Fragment,
-  Consumer, Effect, Ref, RefObject,
+  Consumer, Effect, Ref, RefObject, Template, JSXTemplate,
 } from '@devextreme-generator/declarations';
 
 import { Table } from '../widgets/table';
@@ -34,7 +34,7 @@ export const viewFunction = (viewModel: TableContent): JSX.Element => (
         </Fragment>
       </Table>
     </div>
-    { viewModel.isEmpty && <NoDataText />}
+    { viewModel.isEmpty && <NoDataText template={viewModel.props.noDataTemplate} />}
   </div>
 );
 
@@ -47,6 +47,9 @@ export class TableContentProps {
 
   @OneWay()
   columns: ColumnInternal[] = [];
+
+  @Template()
+  noDataTemplate?: JSXTemplate;
 }
 
 @Component({
