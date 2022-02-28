@@ -219,22 +219,14 @@ function prepareLinkHandler(module) {
 
 function prepareImageHandler(module, imageUploadingOption) {
     return () => {
-        const formData = module.quill.getFormat();
+        let formData = module.quill.getFormat();
         const isUpdateDialog = Object.prototype.hasOwnProperty.call(formData, 'imageSrc');
         const defaultIndex = defaultPasteIndex(module);
 
         if(isUpdateDialog) {
             const { imageSrc } = module.quill.getFormat(defaultIndex - 1, 1);
 
-            formData.src = formData.imageSrc;
-            delete formData.imageSrc;
-
-            const imgElement = module.quill.getLeaf(module.editorInstance.getSelection().index)[0].domNode;
-
-            if(imgElement && (!formData.width || !formData.height)) {
-                formData.width = formData.width || getWidth($(imgElement));
-                formData.height = formData.height || getHeight($(imgElement));
-            }
+            formData = getUpdatingFormData(module, formData);
 
             if(!imageSrc || defaultIndex === 0) {
                 module.quill.setSelection(defaultIndex + 1, 0, SILENT_ACTION);
@@ -279,6 +271,25 @@ function prepareImageHandler(module, imageUploadingOption) {
                 module.quill.focus();
             });
     };
+}
+
+// function dialogResultHandler() => {
+
+// }
+
+function getUpdatingFormData(module, formData) {
+    const resultFormData = formData;
+    resultFormData.src = resultFormData.imageSrc;
+    delete resultFormData.imageSrc;
+
+    const imgElement = module.quill.getLeaf(module.editorInstance.getSelection().index)[0].domNode;
+
+    if(imgElement && (!resultFormData.width || !resultFormData.height)) {
+        resultFormData.width = resultFormData.width || getWidth($(imgElement));
+        resultFormData.height = resultFormData.height || getHeight($(imgElement));
+    }
+
+    return resultFormData;
 }
 
 function modifyImageUploadingDialog(module, imageUploadingOption) {
