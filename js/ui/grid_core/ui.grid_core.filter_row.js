@@ -68,16 +68,17 @@ function isOnClickApplyFilterMode(that) {
     return that.option('filterRow.applyFilter') === 'onClick';
 }
 
-const ColumnHeadersViewFilterRowExtender = (function() {
-    const getEditorInstance = function($editorContainer) {
-        const $editor = $editorContainer && $editorContainer.children();
-        const componentNames = $editor && $editor.data('dxComponents');
-        const editor = componentNames && componentNames.length && $editor.data(componentNames[0]);
+const getEditorInstance = function($editorContainer) {
+    const $editor = $editorContainer && $editorContainer.children();
+    const componentNames = $editor && $editor.data('dxComponents');
+    const editor = componentNames && componentNames.length && $editor.data(componentNames[0]);
 
-        if(editor instanceof Editor) {
-            return editor;
-        }
-    };
+    if(editor instanceof Editor) {
+        return editor;
+    }
+};
+
+const ColumnHeadersViewFilterRowExtender = (function() {
 
     const getRangeTextByFilterValue = function(that, column) {
         let result = '';
@@ -476,7 +477,25 @@ const ColumnHeadersViewFilterRowExtender = (function() {
 
         _renderEditor: function($editorContainer, options) {
             $editorContainer.empty();
-            return this.getController('editorFactory').createEditor($('<div>').appendTo($editorContainer), options);
+            const $element = $('<div>').appendTo($editorContainer);
+            const editorController = this.getController('editorFactory');
+            const dataSource = this.getController('data').dataSource();
+
+            if(options.lookup && this.option('filterRow.showRelevantValues')) {
+                const filter = this.getController('data').getCombinedFilter();
+
+                const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSource, filter);
+                const lookupOptions = {
+                    ...options,
+                    lookup: {
+                        ...options.lookup,
+                        dataSource: lookupDataSource,
+                    }
+                };
+                return editorController.createEditor($element, lookupOptions);
+            } else {
+                return editorController.createEditor($element, options);
+            }
         },
 
         _renderFilterRangeContent: function($cell, column) {
@@ -641,6 +660,33 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             return result;
         },
 
+        updateLookupDataSource: function() {
+            if(!this.option('filterRow.showRelevantValues')) {
+                return;
+            }
+
+            const columns = this.getController('columns').getVisibleColumns();
+            const dataSource = this.getController('data').dataSource();
+            const filterRowController = this.getController('applyFilter');
+
+            columns.forEach((column) => {
+                if(!column.lookup) {
+                    return;
+                }
+                const rowIndex = this.element().find('.' + this.addWidgetPrefix(FILTER_ROW_CLASS)).index();
+                const $cell = this._getCellElement(rowIndex, column.visibleIndex);
+                const editor = getEditorInstance($cell.find('.dx-editor-container'));
+
+                filterRowController._currentColumn = column;
+                const filter = this.getController('data').getCombinedFilter();
+                filterRowController._currentColumn = null;
+
+                const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+
+                editor.option('dataSource', lookupDataSource);
+            });
+        },
+
         optionChanged: function(args) {
             const that = this;
 
@@ -670,17 +716,23 @@ const DataControllerFilterRowExtender = {
 
         const filters = [this.callBase()];
         const columns = this._columnsController.getVisibleColumns(null, true);
+        const filterRowController = this.getController('applyFilter');
 
         each(columns, function() {
-
-            if(this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue)) {
+            const shouldSkip = filterRowController._currentColumn?.index === this.index;
+            if(this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue) && !shouldSkip) {
                 const filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');
                 filters.push(filter);
             }
         });
 
         return gridCoreUtils.combineFilters(filters);
-    }
+    },
+
+    _applyFilter: function() {
+        this.callBase.apply(this, arguments);
+        this.component._views['columnHeadersView'].updateLookupDataSource();
+    },
 };
 
 const ApplyFilterViewController = modules.ViewController.inherit({
@@ -727,7 +779,7 @@ const ApplyFilterViewController = modules.ViewController.inherit({
             columnHeadersViewElement.find('.' + this.addWidgetPrefix(FILTER_ROW_CLASS) + ' .' + FILTER_MODIFIED_CLASS).removeClass(FILTER_MODIFIED_CLASS);
             this._getHeaderPanel().enableApplyButton(false);
         }
-    }
+    },
 });
 
 export const filterRowModule = {
@@ -737,6 +789,7 @@ export const filterRowModule = {
                 visible: false,
                 showOperationChooser: true,
                 showAllText: messageLocalization.format('dxDataGrid-filterRowShowAllText'),
+                showRelevantValues: true,
                 resetOperationText: messageLocalization.format('dxDataGrid-filterRowResetOperationText'),
                 applyFilter: 'auto',
                 applyFilterText: messageLocalization.format('dxDataGrid-applyFilterText'),
