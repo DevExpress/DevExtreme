@@ -6682,6 +6682,93 @@ const JSPdfWordWrapTests = {
                 });
             });
         });
+
+        QUnit.module('Performance', moduleConfig, () => {
+            QUnit.test('very long text, wordWrap disabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                let longText = 'AAAAAAAAAAAAAAAAAAAAAAAAAAA';
+                for(let i = 0; i <= 10; i++) { longText += longText; }
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: false,
+                    columns: [{ dataField: 'f1' }],
+                    dataSource: [ { f1: longText } ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,45,50.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,AAAAAAAAAAAA...,45,72.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,40,100,21.5',
+                    'setDrawColor,#979797',
+                    'rect,40,61.5,100,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({
+                    jsPDFDocument: doc,
+                    component: dataGrid,
+                    columnWidths: [100]
+                }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('very long text, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                let longText = 'AAAAAAAAAAAAAAAAAAAAAAAAAAA';
+                for(let i = 0; i <= 10; i++) { longText += longText; }
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ dataField: 'f1' }],
+                    dataSource: [ { f1: longText } ]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,45,50.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,40,100,21.5',
+                    'addPage,',
+                    'setTextColor,#979797',
+                    'text,F1,45,50.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'deleted text',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,40,40,100,21.5',
+                    'setDrawColor,#979797',
+                    'rect,40,101.5,100,48931',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({
+                    jsPDFDocument: doc,
+                    component: dataGrid,
+                    columnWidths: [100]
+                }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    doc.__log.splice(10, 1, 'deleted text'); // remove very long text
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+        });
     }
 };
 
