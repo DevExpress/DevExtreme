@@ -226,7 +226,7 @@ function prepareImageHandler(module, imageUploadingOption) {
         if(isUpdateDialog) {
             const { imageSrc } = module.quill.getFormat(defaultIndex - 1, 1);
 
-            formData = getUpdatingFormData(module, formData);
+            formData = getUpdateDialogFormData(module, formData);
 
             if(!imageSrc || defaultIndex === 0) {
                 module.quill.setSelection(defaultIndex + 1, 0, SILENT_ACTION);
@@ -273,11 +273,11 @@ function prepareImageHandler(module, imageUploadingOption) {
     };
 }
 
-// function dialogResultHandler() => {
+// function dialogResultHandler() {
 
 // }
 
-function getUpdatingFormData(module, formData) {
+function getUpdateDialogFormData(module, formData) {
     const resultFormData = formData;
     resultFormData.src = resultFormData.imageSrc;
     delete resultFormData.imageSrc;
