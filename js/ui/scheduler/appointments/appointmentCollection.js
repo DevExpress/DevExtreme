@@ -585,7 +585,7 @@ class SchedulerAppointments extends CollectionWidget {
 
         each(dataAccessors.getter, function(key) {
             const value = dataAccessors.getter[key](rawAppointment);
-            if(value !== undefined) {
+            if(isDefined(value)) {
                 const prefix = `data-${normalizeKey(key.toLowerCase())}-`;
 
                 wrapToArray(value).forEach(value => $appointment.attr(prefix + normalizeKey(value), true));
