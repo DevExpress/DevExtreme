@@ -358,17 +358,20 @@ function defaultPasteIndex(module) {
     return selection?.index ?? module.quill.getLength();
 }
 
-function imageFormItems(module, imageUploadingOption) {
-    const editorInstance = module.editorInstance;
-    let keepRatio = true;
-    let widthEditor;
-    let heightEditor;
-    let preventRecalculating = false;
-    let resultFormItems;
+function base64Upload(module, data) {
+    const range = module.quill.getSelection();
+    module.quill.getModule('uploader').upload(range, data.value);
+    module.editorInstance._formDialog.hide({ file: data.value[0] }, data.event);
+}
 
-    imageUploadingOption = imageUploadingOption || {};
+function serverUpload({ formInstance, file, uploadDirectory }) {
+    const imageUrl = uploadDirectory + file.name;
+    formInstance.updateData('src', imageUrl);
+    formInstance.updateData('useUrl', true);
+}
+
+function getSelectFileTabItems(module, imageUploadingOption) {
     let useBase64 = imageUploadingOption?.mode === 'file' || !isDefined(imageUploadingOption.uploadUrl);
-    // const useUrlUploading = imageUploadingOption?.enabled && imageUploadingOption?.uploadUrl;
     const useUrlUploading = imageUploadingOption?.mode !== 'file';
 
     const selectFileTabItems = [
@@ -377,29 +380,26 @@ function imageFormItems(module, imageUploadingOption) {
             dataField: 'files',
             colSpan: 11,
             label: { visible: false }, // localization
-            template: (data) => {
+            template: (formTemplateData) => {
                 const $content = $('<div>');
-                editorInstance._createComponent($content, FileUploader, {
+                module.editorInstance._createComponent($content, FileUploader, {
                     multiple: false,
                     value: [],
                     name: 'photo',
                     accept: 'image/*',
                     uploadUrl: imageUploadingOption.uploadUrl,
                     uploadMode: 'instantly',
-                    onValueChanged: (e) => {
+                    onValueChanged: (data) => {
                         if(!useUrlUploading || useBase64) {
-                            const range = module.quill.getSelection();
-                            module.quill.getModule('uploader').upload(range, e.value);
-                            module.editorInstance._formDialog.hide({ file: e.value[0] }, e.event);
+                            base64Upload(module, data);
                         }
                     },
-                    onUploaded: (e) => {
+                    onUploaded: (data) => {
                         if(useUrlUploading && !useBase64) {
-                            const imageUrl = imageUploadingOption.uploadDirectory + e.file.name;
-                            // module.editorInstance._formDialog.hide({ file: e.file.name, url: imageUrl }, e.event);
-                            // data.component.updateData('imageUrl', imageUrl);
-                            data.component.updateData('src', imageUrl);
-                            data.component.updateData('useUrl', true);
+                            const formInstance = formTemplateData.component;
+                            const file = data.file;
+                            const uploadDirectory = imageUploadingOption.uploadDirectory;
+                            serverUpload({ formInstance, file, uploadDirectory });
                         }
                     }
                 });
@@ -421,6 +421,15 @@ function imageFormItems(module, imageUploadingOption) {
             }
         }
     ];
+
+    return selectFileTabItems;
+}
+
+function getSpecifyURLTabItems(module, imageUploadingOption) {
+    let keepRatio = true;
+    let widthEditor;
+    let heightEditor;
+    let preventRecalculating = false;
 
     const specifyURLTabItems = [
         { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
@@ -460,7 +469,6 @@ function imageFormItems(module, imageUploadingOption) {
                 onSelectionChanged: (e) => {
                     keepRatio = !!e.component.option('selectedItems').length;
                 }
-                // cssClass: 'dx-fix-ratio-button'
             });
 
             return $content;
@@ -490,6 +498,19 @@ function imageFormItems(module, imageUploadingOption) {
         } },
         { dataField: 'alt', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
     ];
+
+    return specifyURLTabItems;
+}
+
+function imageFormItems(module, imageUploadingOption) {
+
+    let resultFormItems;
+
+    imageUploadingOption = imageUploadingOption || {};
+
+    const selectFileTabItems = getSelectFileTabItems(module, imageUploadingOption);
+
+    const specifyURLTabItems = getSpecifyURLTabItems(module);
 
     if(imageUploadingOption?.mode === 'both') {
         resultFormItems = [
