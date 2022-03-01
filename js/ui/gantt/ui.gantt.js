@@ -783,6 +783,9 @@ class Gantt extends Widget {
             case 'onContextMenuPreparing':
                 this._actionsManager?.createContextMenuPreparingAction();
                 break;
+            case 'onScaleCellPrepared':
+                this._actionsManager?.createScaleCellPreparedAction();
+                break;
             case 'allowSelection':
                 this._ganttTreeList?.setOption('selection.mode', GanttHelper.getSelectionMode(args.value));
                 this._setGanttViewOption('allowSelection', args.value);

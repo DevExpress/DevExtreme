@@ -1195,7 +1195,7 @@
 
 /**
  * @typedef {string} Enums.GanttScaleType
- * @enum {'auto'|'minutes'|'hours'|'days'|'weeks'|'months'|'quarters'|'years'}
+ * @enum {'auto'|'minutes'|'hours'|'sixHours'|'days'|'weeks'|'months'|'quarters'|'years'|'fiveYears'}
  */
 
 /**
