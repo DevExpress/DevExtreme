@@ -2342,7 +2342,7 @@ export const editingModule = {
 
                         }
                         const editRowKey = this.option('editing.editRowKey');
-                        const isEditNewItem = newChanges.find(
+                        const isEditNewItem = newChanges.some(
                             (change) => change.type === 'insert' && equalByValue(editRowKey, change.key)
                         );
                         if(!isEditNewItem && dataSourceKeys.every(key => !equalByValue(editRowKey, key))) {
