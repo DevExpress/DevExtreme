@@ -9735,6 +9735,41 @@ QUnit.module('Summary', {
         }], 'footerItems');
     });
 
+    QUnit.test('CustomStore load summary on filter change if summary is single remote operation (T1071599)', function(assert) {
+        this.options = {
+            dataSource: {
+                load: function(options) {
+                    return $.Deferred().resolve([
+                        { name: 'Alex', age: 19 },
+                        { name: 'Dan', age: 25 }
+                    ], {
+                        summary: [3]
+                    });
+                },
+                pageSize: 2
+            },
+            summary: {
+                totalItems: [{
+                    column: 'age',
+                    summaryType: 'sum'
+                }]
+            },
+            remoteOperations: {
+                summary: true
+            }
+        };
+
+        // act
+        this.setupDataGridModules();
+        this.clock.tick();
+        this.filter(['age', '>', 20]);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(this.getVisibleRows().length, 1, 'rows are filtered');
+        assert.deepEqual(this.getTotalSummaryValue('age'), 3, 'summary value');
+    });
+
     // T306309
     QUnit.test('CustomStore load options when remote summary enabled and summary is not returned', function(assert) {
         let storeLoadOptions;
