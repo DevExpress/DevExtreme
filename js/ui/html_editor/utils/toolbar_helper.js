@@ -233,38 +233,21 @@ function prepareImageHandler(module, imageUploadingOption) {
             }
         }
 
-        const formatIndex = embedFormatIndex(module);
-
         modifyImageUploadingDialog(module, imageUploadingOption);
-
-        const promise = module.editorInstance.showFormDialog({
+        const formDialogOptions = {
             formData: formData,
             width: 493,
             labelLocation: 'top',
             items: imageFormItems(module, imageUploadingOption)
-        });
+        };
+
+        const promise = module.editorInstance.showFormDialog(formDialogOptions);
+
+        const formatIndex = embedFormatIndex(module);
 
         promise
             .done((formData, event) => {
-                let index = defaultIndex;
-
-                module.saveValueChangeEvent(event);
-
-                if(isUpdateDialog) {
-                    index = formatIndex;
-                    module.quill.deleteText(index, 1, SILENT_ACTION);
-                }
-
-                if(formData.width) {
-                    formData.width = String(formData.width);
-                }
-                if(formData.height) {
-                    formData.height = String(formData.height);
-                }
-
-                module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
-
-                module.quill.setSelection(index + 1, 0, USER_ACTION);
+                dialogResultHandler(module, { formData, event, defaultIndex, formatIndex, isUpdateDialog });
             })
             .always(() => {
                 revertImageUploadingDialog(module);
@@ -273,9 +256,37 @@ function prepareImageHandler(module, imageUploadingOption) {
     };
 }
 
-// function dialogResultHandler() {
+function updateFormDataDimensions(formData) {
+    formData = normalizeFormDataDimension(formData, 'width');
+    formData = normalizeFormDataDimension(formData, 'height');
 
-// }
+    return formData;
+}
+
+function normalizeFormDataDimension(formData, name) {
+    if(isDefined(formData[name])) {
+        formData[name] = formData[name].toString();
+    }
+
+    return formData;
+}
+
+function dialogResultHandler(module, { formData, event, defaultIndex, formatIndex, isUpdateDialog }) {
+    let index = defaultIndex;
+
+    module.saveValueChangeEvent(event);
+
+    if(isUpdateDialog) {
+        index = formatIndex;
+        module.quill.deleteText(index, 1, SILENT_ACTION);
+    }
+
+    formData = updateFormDataDimensions(formData);
+
+    module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
+
+    module.quill.setSelection(index + 1, 0, USER_ACTION);
+}
 
 function getUpdateDialogFormData(module, formData) {
     const resultFormData = formData;
