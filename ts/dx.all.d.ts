@@ -1119,6 +1119,75 @@ declare module DevExpress {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
+  export interface PdfCell {
+    /**
+     * [descr:PdfCell.backgroundColor]
+     */
+    backgroundColor?: string;
+    /**
+     * [descr:PdfCell.font]
+     */
+    font?: {
+      /**
+       * [descr:PdfCell.font.size]
+       */
+      size?: number;
+      /**
+       * [descr:PdfCell.font.name]
+       */
+      name?: string;
+      /**
+       * [descr:PdfCell.font.style]
+       */
+      style?: 'normal' | 'bold' | 'italic';
+    };
+    /**
+     * [descr:PdfCell.horizontalAlign]
+     */
+    horizontalAlign?: 'left' | 'center' | 'right';
+    /**
+     * [descr:PdfCell.padding]
+     */
+    padding?:
+      | number
+      | {
+          /**
+           * [descr:PdfCell.padding.top]
+           */
+          top?: number;
+          /**
+           * [descr:PdfCell.padding.left]
+           */
+          left?: number;
+          /**
+           * [descr:PdfCell.padding.right]
+           */
+          right?: number;
+          /**
+           * [descr:PdfCell.padding.bottom]
+           */
+          bottom?: number;
+        };
+    /**
+     * [descr:PdfCell.text]
+     */
+    text?: string;
+    /**
+     * [descr:PdfCell.textColor]
+     */
+    textColor?: string;
+    /**
+     * [descr:PdfCell.verticalAlign]
+     */
+    verticalAlign?: 'top' | 'middle' | 'bottom';
+    /**
+     * [descr:PdfCell.wordWrapEnabled]
+     */
+    wordWrapEnabled?: boolean;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
   export interface PdfExportGanttFont {
     /**
      * [descr:PdfExportGanttFont.fontObject]
@@ -4131,27 +4200,92 @@ declare module DevExpress.pdfExporter {
      */
     jsPDFDocument?: object;
     /**
-     * [descr:PdfExportDataGridProps.autoTableOptions]
-     */
-    autoTableOptions?: object;
-    /**
      * [descr:PdfExportDataGridProps.component]
      */
     component?: DevExpress.ui.dxDataGrid;
+    /**
+     * [descr:PdfExportDataGridProps.topLeft]
+     */
+    topLeft?: {
+      /**
+       * [descr:PdfExportDataGridProps.topLeft.x]
+       */
+      x?: number;
+      /**
+       * [descr:PdfExportDataGridProps.topLeft.y]
+       */
+      y?: string;
+    };
+    /**
+     * [descr:PdfExportDataGridProps.borderColor]
+     */
+    borderColor?: string;
+    /**
+     * [descr:PdfExportDataGridProps.borderWidth]
+     */
+    borderWidth?: number;
+    /**
+     * [descr:PdfExportDataGridProps.columnWidth]
+     */
+    columnWidth?: Array<number>;
+    /**
+     * [descr:PdfExportDataGridProps.indent]
+     */
+    indent?: number;
+    /**
+     * [descr:PdfExportDataGridProps.margin]
+     */
+    margin?:
+      | number
+      | {
+          /**
+           * [descr:PdfExportDataGridProps.margin.top]
+           */
+          top?: number;
+          /**
+           * [descr:PdfExportDataGridProps.margin.left]
+           */
+          left?: number;
+          /**
+           * [descr:PdfExportDataGridProps.margin.right]
+           */
+          right?: number;
+          /**
+           * [descr:PdfExportDataGridProps.margin.bottom]
+           */
+          bottom?: number;
+        };
+    /**
+     * [descr:PdfExportDataGridProps.repeatHeaders]
+     */
+    repeatHeaders?: boolean;
     /**
      * [descr:PdfExportDataGridProps.selectedRowsOnly]
      */
     selectedRowsOnly?: boolean;
     /**
-     * [descr:PdfExportDataGridProps.keepColumnWidths]
+     * [descr:PdfExportDataGridProps.customDrawCell]
      */
-    keepColumnWidths?: boolean;
+    customDrawCell?: (options: {
+      gridCell?: PdfDataGridCell;
+      pdfCell?: PdfCell;
+      doc?: object;
+      rect?: object;
+      cancel?: boolean;
+    }) => void;
     /**
      * [descr:PdfExportDataGridProps.customizeCell]
      */
     customizeCell?: (options: {
       gridCell?: PdfDataGridCell;
-      pdfCell?: any;
+      pdfCell?: PdfCell;
+    }) => void;
+    /**
+     * [descr:PdfExportDataGridProps.onRowExporting]
+     */
+    onRowExporting?: (options: {
+      rowCells?: Array<PdfCell>;
+      rowHeight?: number;
     }) => void;
     /**
      * [descr:PdfExportDataGridProps.loadPanel]
