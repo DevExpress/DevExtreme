@@ -17,6 +17,8 @@ export interface Row {
 
   rowType: 'data' | 'detail';
 
+  loadIndex?: number;
+
   template?: JSXTemplate<RowTemplateProps>;
 }
 export interface RowTemplateProps {
@@ -45,3 +47,9 @@ export interface DataState {
 }
 
 export type DataSource = RowData[] | Store | undefined;
+
+export type ScrollingMode = 'standard' | 'virtual' | 'infinite';
+export interface ViewportParamsProps {
+  skip: number;
+  take: number;
+}

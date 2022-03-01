@@ -99,7 +99,7 @@ export const viewFunction = (viewModel: DataGridNext): JSX.Element => (
       <TableHeader columns={viewModel.visibleColumns} />
       <TableContent
         columns={viewModel.visibleColumns}
-        dataSource={viewModel.visibleRows}
+        visibleRows={viewModel.visibleRows}
         noDataTemplate={viewModel.props.noDataTemplate}
       />
       <Footer />

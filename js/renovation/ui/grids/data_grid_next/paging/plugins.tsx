@@ -10,6 +10,8 @@ export const SetPageIndex = createValue<(pageIndex: number) => void>();
 export const PageSize = createValue<number | 'all'>();
 export const SetPageSize = createValue<(pageSize: number | 'all') => void>();
 export const PagingEnabled = createValue<boolean>();
+export const LoadPageCount = createValue<number>();
+export const SetLoadPageCount = createValue<(loadPageCount: number) => void>();
 
 export const PageCount = createSelector(
   [TotalCount, PageSize],

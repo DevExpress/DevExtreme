@@ -24,6 +24,8 @@ export const BottomRowPlaceholder = createPlaceholder();
 export const RowClick = createValue<(row: Row, e: Event) => void>();
 export const RowsViewScroll = createValue<(offset: ScrollOffset) => void>();
 export const RowsViewHeight = createValue<number>();
+export const SetRowsViewScrollPositionAction = createValue<(offset: ScrollOffset) => void>();
+export const RowsViewHeightValue = createValue<number>();
 
 export const viewFunction = (viewModel: TableContent): JSX.Element => (
   <div ref={viewModel.rowsViewRef} className={viewModel.classes} role="presentation">
@@ -54,7 +56,7 @@ export const viewFunction = (viewModel: TableContent): JSX.Element => (
 @ComponentBindings()
 export class TableContentProps {
   @OneWay()
-  dataSource: Row[] = [];
+  visibleRows: Row[] = [];
 
   @OneWay()
   columns: ColumnInternal[] = [];
@@ -87,14 +89,14 @@ export class TableContent extends JSXComponent(TableContentProps) {
 
   @Effect()
   calculateRowsViewHeight(): void {
-    this.plugins.set(RowsViewHeight, getElementHeight(this.rowsViewRef.current));
+    this.plugins.set(RowsViewHeightValue, getElementHeight(this.rowsViewRef.current));
   }
 
   onRowClick(e: Event): void {
     const allRows = this.divRef.current!.getElementsByClassName(CLASSES.row);
     const index = Array.from(allRows).indexOf(e.currentTarget as Element);
     if (index >= 0) {
-      this.plugins.callAction(RowClick, this.props.dataSource[index], e);
+      this.plugins.callAction(RowClick, this.props.visibleRows[index], e);
     }
   }
 
@@ -108,7 +110,7 @@ export class TableContent extends JSXComponent(TableContentProps) {
   }
 
   get rows(): (Row & { index: number; reactKey: string })[] {
-    return this.props.dataSource.map((row, index) => ({
+    return this.props.visibleRows.map((row, index) => ({
       ...row,
       index,
       reactKey: getReactRowKey(row, index),
@@ -116,10 +118,10 @@ export class TableContent extends JSXComponent(TableContentProps) {
   }
 
   get isEmpty(): boolean {
-    return this.props.dataSource.length === 0;
+    return this.props.visibleRows.length === 0;
   }
 
   onScrollContent(e: ScrollEventArgs): void {
-    this.plugins.callAction(RowsViewScroll, e.scrollOffset);
+    this.plugins.callAction(SetRowsViewScrollPositionAction, e.scrollOffset);
   }
 }

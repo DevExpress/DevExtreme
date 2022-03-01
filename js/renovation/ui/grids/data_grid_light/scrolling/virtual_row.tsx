@@ -13,13 +13,17 @@ const rowClasses = combineClasses({
 
 export const viewFunction = ({
   virtualCells,
+  props: {
+    rowKey,
+  },
 }: VirtualRow): JSX.Element => (
   <tr
+    key={rowKey}
     className={rowClasses}
     role="presentation"
     style={{ width: '100%' }} // remove after the fix https://github.com/DevExpress/devextreme-renovation/issues/883
   >
-    {virtualCells.map((height) => <td style={{ height }} />)}
+    {virtualCells.map(({ height, key }) => <td key={key} style={{ height }} />)}
   </tr>
 );
 
@@ -30,6 +34,9 @@ export class VirtualRowProps {
 
   @OneWay()
   columnCount = 0;
+
+  @OneWay()
+  rowKey = 0;
 }
 
 @Component({
@@ -38,7 +45,13 @@ export class VirtualRowProps {
   view: viewFunction,
 })
 export class VirtualRow extends JSXComponent(VirtualRowProps) {
-  get virtualCells(): number[] {
-    return Array(this.props.columnCount).fill(this.props.height) as number[];
+  get virtualCells(): { key: number; height: number }[] {
+    const { height, columnCount } = this.props;
+    return Array(columnCount).fill(height).map((item, index) => (
+      {
+        height: item,
+        key: index,
+      }
+    ));
   }
 }

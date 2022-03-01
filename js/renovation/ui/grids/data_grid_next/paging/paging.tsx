@@ -2,7 +2,7 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings, OneWay,
-  TwoWay, Fragment,
+  TwoWay, Fragment, InternalState,
 } from '@devextreme-generator/declarations';
 
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
@@ -12,7 +12,7 @@ import { LoadOptionsValue, LocalVisibleItems } from '../data_grid_next';
 
 import {
   PageIndex, PageSize, SetPageIndex, SetPageSize, PagingEnabled,
-  ApplyPagingToVisibleItems, AddPagingToLoadOptions,
+  ApplyPagingToVisibleItems, AddPagingToLoadOptions, LoadPageCount, SetLoadPageCount,
 } from './plugins';
 
 export const viewFunction = (viewModel: DataGridNextPaging): JSX.Element => (
@@ -22,6 +22,8 @@ export const viewFunction = (viewModel: DataGridNextPaging): JSX.Element => (
     <ValueSetter type={PagingEnabled} value={viewModel.props.enabled} />
     <ValueSetter type={SetPageIndex} value={viewModel.setPageIndex} />
     <ValueSetter type={SetPageSize} value={viewModel.setPageSize} />
+    <ValueSetter type={LoadPageCount} value={viewModel.loadPageCount} />
+    <ValueSetter type={SetLoadPageCount} value={viewModel.setLoadPageCount} />
     <GetterExtender type={LocalVisibleItems} order={1} value={ApplyPagingToVisibleItems} />
     <GetterExtender type={LoadOptionsValue} order={1} value={AddPagingToLoadOptions} />
   </Fragment>
@@ -47,6 +49,9 @@ export class DataGridNextPagingProps {
   view: viewFunction,
 })
 export class DataGridNextPaging extends JSXComponent(DataGridNextPagingProps) {
+  @InternalState()
+  loadPageCount = 1;
+
   get pageSize(): number | 'all' {
     if (this.props.pageSize === 0) {
       return 'all';
@@ -60,5 +65,9 @@ export class DataGridNextPaging extends JSXComponent(DataGridNextPagingProps) {
 
   setPageSize(pageSize: number | 'all'): void {
     this.props.pageSize = pageSize;
+  }
+
+  setLoadPageCount(loadPageCount: number): void {
+    this.loadPageCount = loadPageCount;
   }
 }
