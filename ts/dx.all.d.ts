@@ -13782,6 +13782,24 @@ declare module DevExpress.ui {
         readonly values: any;
         readonly key: any;
       };
+    export type ScaleCellPreparedEvent =
+      DevExpress.events.InitializedEventInfo<dxGantt> & {
+        readonly scaleIndex: number;
+        readonly scaleType:
+          | 'minutes'
+          | 'hours'
+          | 'sixHours'
+          | 'days'
+          | 'weeks'
+          | 'months'
+          | 'quarters'
+          | 'years'
+          | 'fiveYears';
+        readonly scaleElement: DevExpress.core.DxElement;
+        readonly separatorElement: DevExpress.core.DxElement;
+        readonly start: Date;
+        readonly end: Date;
+      };
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxGantt> & {
       readonly selectedRowKey?: any;
     };
@@ -14429,6 +14447,13 @@ declare module DevExpress.ui {
      */
     onTaskDblClick?: (e: DevExpress.ui.dxGantt.TaskDblClickEvent) => void;
     /**
+     * [descr:dxGanttOptions.onScaleCellPrepared]
+     */
+    onScaleCellPrepared?: (
+      e: DevExpress.ui.dxGantt.ScaleCellPreparedEvent
+    ) => void;
+
+    /**
      * [descr:dxGanttOptions.resourceAssignments]
      */
     resourceAssignments?: {
@@ -14477,6 +14502,7 @@ declare module DevExpress.ui {
       | 'auto'
       | 'minutes'
       | 'hours'
+      | 'sixHours'
       | 'days'
       | 'weeks'
       | 'months'
@@ -14492,6 +14518,7 @@ declare module DevExpress.ui {
       min?:
         | 'minutes'
         | 'hours'
+        | 'sixHours'
         | 'days'
         | 'weeks'
         | 'months'
@@ -14503,6 +14530,7 @@ declare module DevExpress.ui {
       max?:
         | 'minutes'
         | 'hours'
+        | 'sixHours'
         | 'days'
         | 'weeks'
         | 'months'

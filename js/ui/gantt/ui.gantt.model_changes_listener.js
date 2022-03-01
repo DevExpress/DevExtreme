@@ -37,7 +37,8 @@ export const ModelChangesListener = {
             NotifyResourceRemoving: (args) => { gantt._actionsManager.raiseDeletingAction(GANTT_RESOURCES, args); },
             NotifyResourceAssigning: (args) => { gantt._actionsManager.raiseInsertingAction(GANTT_RESOURCE_ASSIGNMENTS, args); },
             // eslint-disable-next-line spellcheck/spell-checker
-            NotifyResourceUnassigning: (args) => { gantt._actionsManager.raiseDeletingAction(GANTT_RESOURCE_ASSIGNMENTS, args); }
+            NotifyResourceUnassigning: (args) => { gantt._actionsManager.raiseDeletingAction(GANTT_RESOURCE_ASSIGNMENTS, args); },
+            NotifyScaleCellPrepared: (args) => { gantt._actionsManager.raiseScaleCellPreparedAction(args); }
         };
     }
 
