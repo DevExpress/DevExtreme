@@ -181,10 +181,10 @@ export interface PdfExportDataGridProps {
     borderWidth?: number;
     /**
      * @docid
-     * @default 0.5
+     * @default undefined
      * @public
      */
-    columnWidth?: Array<number>;
+    columnWidths?: Array<number>;
     /**
      * @docid
      * @default 0
