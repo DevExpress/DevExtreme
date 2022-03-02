@@ -92,7 +92,7 @@ export interface PdfCell {
    * @docid
    * @public
    */
-  padding?: number | {
+  padding?: {
     /**
      * @docid
      */
@@ -195,7 +195,7 @@ export interface PdfExportDataGridProps {
      * @docid
      * @public
      */
-    margin?: number | {
+    margin?: {
       /**
        * @docid
        */
