@@ -237,9 +237,7 @@ function exportDataGrid(options) {
                 const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
                 if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
                     const tableRect = calculateTableSize(jsPDFDocument, pdfCellsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
-                    const borderWidth = options.borderWidth;
-                    const borderColor = options.borderColor;
-                    drawGridLines(jsPDFDocument, tableRect, { borderWidth, borderColor }, docStyles);
+                    drawGridLines(jsPDFDocument, tableRect, options, docStyles);
                 }
             });
 
