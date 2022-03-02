@@ -165,7 +165,7 @@ export interface PdfExportDataGridProps {
        * @docid
        * @default 0
        */
-      y?: string;
+      y?: number;
     };
     /**
      * @docid
@@ -235,7 +235,7 @@ export interface PdfExportDataGridProps {
       * @type_function_param1_field5 cancel:boolean
       * @public
       */
-    customDrawCell?: ((options: { gridCell?: PdfDataGridCell; pdfCell?: PdfCell; doc?: object; rect?: object; cancel?: boolean }) => void);
+    customDrawCell?: ((options: { gridCell?: PdfDataGridCell; pdfCell?: PdfCell; doc?: any; rect?: { x: number; y: number; h: number; w: number }; cancel?: boolean }) => void);
     /**
      * @docid
      * @type_function_param1 options:Object

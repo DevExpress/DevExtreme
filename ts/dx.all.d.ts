@@ -4214,7 +4214,7 @@ declare module DevExpress.pdfExporter {
       /**
        * [descr:PdfExportDataGridProps.topLeft.y]
        */
-      y?: string;
+      y?: number;
     };
     /**
      * [descr:PdfExportDataGridProps.borderColor]
@@ -4269,8 +4269,8 @@ declare module DevExpress.pdfExporter {
     customDrawCell?: (options: {
       gridCell?: PdfDataGridCell;
       pdfCell?: PdfCell;
-      doc?: object;
-      rect?: object;
+      doc?: any;
+      rect?: { x: number; y: number; h: number; w: number };
       cancel?: boolean;
     }) => void;
     /**
