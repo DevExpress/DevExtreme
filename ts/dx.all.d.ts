@@ -4225,9 +4225,9 @@ declare module DevExpress.pdfExporter {
      */
     borderWidth?: number;
     /**
-     * [descr:PdfExportDataGridProps.columnWidth]
+     * [descr:PdfExportDataGridProps.columnWidths]
      */
-    columnWidth?: Array<number>;
+    columnWidths?: Array<number>;
     /**
      * [descr:PdfExportDataGridProps.indent]
      */
