@@ -414,6 +414,15 @@ QUnit.test('Draw label with undefined custom string', function(assert) {
     assert.equal(this.renderer.stub('rect').callCount, 0);
 });
 
+QUnit.test('Draw label with pattern', function(assert) {
+    this.options.pattern = '{value}test{argument}';
+    this.createAndDrawLabel();
+
+    assert.equal(this.renderer.stub('text').callCount, 1);
+
+    assert.equal(this.renderer.stub('text').firstCall.returnValue.attr.firstCall.args[0].text, '15test25');
+});
+
 QUnit.test('Draw labelBackground (fill is specified)', function(assert) {
     this.options.background.fill = 'red';
     this.renderer.bBoxTemplate = { x: 10, y: 40, height: 10, width: 20 };
