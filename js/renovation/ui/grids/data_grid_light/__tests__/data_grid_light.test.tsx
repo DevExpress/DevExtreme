@@ -221,7 +221,7 @@ describe('DataGridLight', () => {
 
         expect(grid.props.dataState).toEqual({
           data: [],
-          totalCount: -1,
+          totalCount: 0,
         });
       });
 
@@ -250,7 +250,7 @@ describe('DataGridLight', () => {
         });
         grid.plugins = new Plugins();
 
-        grid.updateDataSource();
+        grid.loadDataSource();
 
         expect(grid.localData).toEqual(data);
       });
@@ -265,7 +265,7 @@ describe('DataGridLight', () => {
         });
         grid.plugins = new Plugins();
 
-        grid.updateDataSource();
+        grid.loadDataSource();
 
         expect(grid.localData).toEqual(data);
       });
@@ -280,7 +280,7 @@ describe('DataGridLight', () => {
         });
         grid.plugins = new Plugins();
 
-        grid.updateDataSource();
+        grid.loadDataSource();
 
         grid.plugins.extend(LoadOptionsValue, 1, () => ({}));
 
@@ -297,7 +297,7 @@ describe('DataGridLight', () => {
         });
         grid.plugins = new Plugins();
 
-        grid.updateDataSource();
+        grid.loadDataSource();
 
         grid.plugins.extend(LoadOptionsValue, 1, () => ({}));
 
@@ -316,13 +316,12 @@ describe('DataGridLight', () => {
         });
         grid.plugins = new Plugins();
 
-        grid.updateDataSource();
+        grid.loadDataSource();
 
         await Promise.resolve();
 
         expect(grid.props.dataState).toEqual({
           data,
-          totalCount: -1,
         });
       });
 
@@ -342,7 +341,7 @@ describe('DataGridLight', () => {
         grid.plugins = new Plugins();
         grid.plugins.extend(LoadOptionsValue, 1, () => loadOptions);
 
-        grid.updateDataSource();
+        grid.loadDataSource();
 
         await Promise.resolve();
 
@@ -362,7 +361,7 @@ describe('DataGridLight', () => {
         grid.plugins = new Plugins();
         grid.plugins.extend(LoadOptionsValue, 1, () => loadOptions);
 
-        grid.updateDataSource();
+        grid.loadDataSource();
 
         expect(loadMock).toHaveBeenCalledWith(loadOptions);
       });
@@ -379,7 +378,7 @@ describe('DataGridLight', () => {
         });
         grid.plugins = new Plugins();
 
-        grid.updateDataSource();
+        grid.loadDataSource();
 
         await Promise.resolve();
 
@@ -398,7 +397,7 @@ describe('DataGridLight', () => {
         });
         grid.plugins = new Plugins();
 
-        grid.updateDataSource();
+        grid.loadDataSource();
 
         await Promise.resolve();
 
@@ -454,7 +453,15 @@ describe('DataGridLight', () => {
       it('should return totalCount of DataState', () => {
         const plugins = new Plugins();
 
-        plugins.set(DataStateValue, { data: generateData(3), totalCount: 3 });
+        plugins.set(DataStateValue, { data: generateData(3), totalCount: 10 });
+
+        expect(plugins.getValue(TotalCount)).toBe(10);
+      });
+
+      it('should return data length of DataState if totalCount is not defined', () => {
+        const plugins = new Plugins();
+
+        plugins.set(DataStateValue, { data: generateData(3) });
 
         expect(plugins.getValue(TotalCount)).toBe(3);
       });

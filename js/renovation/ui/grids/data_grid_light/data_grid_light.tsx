@@ -25,7 +25,7 @@ import { Footer } from './views/footer';
 
 import CLASSES from './classes';
 
-export const LocalData = createValue<RowData[] | Store | undefined>();
+export const LocalData = createValue<RowData[] | undefined>();
 export const LocalVisibleItems = createGetter<RowData[] | undefined>([]);
 export const VisibleRows = createGetter<Row[]>([]);
 export const RemoteOperations = createValue<boolean>();
@@ -37,12 +37,12 @@ export const Columns = createValue<ColumnInternal[]>();
 export const VisibleColumns = createGetter<ColumnInternal[]>([]);
 
 export const KeyExprPlugin = createValue<KeyExprInternal>();
-export const TotalCount = createSelector<number/* , DataState */>(
+export const TotalCount = createSelector<number>(
   [DataStateValue],
-  (dataState: DataState) => dataState.totalCount,
+  (dataState: DataState) => dataState.totalCount ?? dataState.data.length,
 );
 
-export const VisibleDataRows = createSelector<Row[]/* , DataState, KeyExprInternal */>(
+export const VisibleDataRows = createSelector<Row[]>(
   [
     DataStateValue, KeyExprPlugin,
   ],
@@ -113,7 +113,7 @@ export class DataGridLightProps extends BaseWidgetProps {
   cacheEnabled = true;
 
   @TwoWay()
-  dataState: DataState = { data: [], totalCount: -1 };
+  dataState: DataState = { data: [], totalCount: 0 };
 
   @OneWay()
   keyExpr?: KeyExpr;
@@ -179,13 +179,13 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   }
 
   @Effect()
-  updateDataSource(): () => void {
+  loadDataSource(): () => void {
     const { dataSource, cacheEnabled } = this.props;
     let prevLoadOptions: LoadOptions | undefined = undefined;
     return this.plugins.watch(LoadOptionsValue, (loadOptions) => {
       if (!cacheEnabled || JSON.stringify(loadOptions) !== JSON.stringify(prevLoadOptions)) {
         prevLoadOptions = loadOptions;
-        this.loadStore(dataSource, loadOptions);
+        this.loadDataSourceIfNeed(dataSource, loadOptions);
       }
     });
   }
@@ -194,7 +194,7 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   refresh(): void {
     const loadOptions = this.plugins.getValue(LoadOptionsValue) ?? {};
 
-    this.loadStore(this.props.dataSource, loadOptions);
+    this.loadDataSourceIfNeed(this.props.dataSource, loadOptions);
   }
 
   get keyExpr(): KeyExprInternal {
@@ -216,25 +216,28 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     return Array.isArray(dataSource) ? dataSource : this.loadedData;
   }
 
-  loadStore(dataSource: DataSource, loadOptions: LoadOptions): void {
+  loadDataSourceIfNeed(dataSource: DataSource, loadOptions: LoadOptions): void {
     if (isStore(dataSource)) {
-      dataSource.load(loadOptions).then((data, extra) => {
-        if (this.props.remoteOperations) {
-          if (Array.isArray(data)) {
-            this.props.dataState = {
-              data,
-              totalCount: -1,
-              ...extra,
-            };
-          } else {
-            this.props.dataState = data;
-          }
-        } else {
-          this.loadedData = data;
-        }
-      }, (error) => {
-        this.props.onDataErrorOccurred?.({ error });
-      });
+      this.loadStore(dataSource, loadOptions);
     }
+  }
+
+  loadStore(store: Store, loadOptions: LoadOptions): void {
+    store.load(loadOptions).then((data, extra) => {
+      if (this.props.remoteOperations) {
+        if (Array.isArray(data)) {
+          this.props.dataState = {
+            data,
+            ...extra,
+          };
+        } else {
+          this.props.dataState = data;
+        }
+      } else {
+        this.loadedData = data;
+      }
+    }, (error) => {
+      this.props.onDataErrorOccurred?.({ error });
+    });
   }
 }
