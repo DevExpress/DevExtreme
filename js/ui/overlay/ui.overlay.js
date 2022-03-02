@@ -1264,7 +1264,7 @@ const Overlay = Widget.inherit({
         this.callBase();
 
         this._toggleSafariScrolling();
-        zIndexPool.remove(this._zIndex);
+        this.option('visible') && zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
     },
