@@ -4004,14 +4004,17 @@ testModule('overlay utils', moduleConfig, () => {
     });
 
     test('overlay should not try to remove its zindex from the stack on dispose if overlay is not visible (T1070941)', function(assert) {
-        // NOTE: because overlay zIndex is not in the stack if it is not visible
+        const instance = new Overlay('#overlay');
 
-        const zIndexRemoveSpy = sinon.spy(zIndex, 'remove');
-        const instance = new Overlay('#overlay', { });
+        instance.show();
+        instance.hide();
+
+        const rememberedZIndex = 1501;
+        zIndex.create();
 
         instance.dispose();
 
-        assert.ok(zIndexRemoveSpy.notCalled);
+        assert.strictEqual(zIndex.create(), rememberedZIndex + 1, 'remembered zIndex was not removed on dispose');
     });
 
     test('overlay should create new zindex only at first showing', function(assert) {
