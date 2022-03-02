@@ -1148,26 +1148,24 @@ declare module DevExpress {
     /**
      * [descr:PdfCell.padding]
      */
-    padding?:
-      | number
-      | {
-          /**
-           * [descr:PdfCell.padding.top]
-           */
-          top?: number;
-          /**
-           * [descr:PdfCell.padding.left]
-           */
-          left?: number;
-          /**
-           * [descr:PdfCell.padding.right]
-           */
-          right?: number;
-          /**
-           * [descr:PdfCell.padding.bottom]
-           */
-          bottom?: number;
-        };
+    padding?: {
+      /**
+       * [descr:PdfCell.padding.top]
+       */
+      top?: number;
+      /**
+       * [descr:PdfCell.padding.left]
+       */
+      left?: number;
+      /**
+       * [descr:PdfCell.padding.right]
+       */
+      right?: number;
+      /**
+       * [descr:PdfCell.padding.bottom]
+       */
+      bottom?: number;
+    };
     /**
      * [descr:PdfCell.text]
      */
@@ -4235,26 +4233,24 @@ declare module DevExpress.pdfExporter {
     /**
      * [descr:PdfExportDataGridProps.margin]
      */
-    margin?:
-      | number
-      | {
-          /**
-           * [descr:PdfExportDataGridProps.margin.top]
-           */
-          top?: number;
-          /**
-           * [descr:PdfExportDataGridProps.margin.left]
-           */
-          left?: number;
-          /**
-           * [descr:PdfExportDataGridProps.margin.right]
-           */
-          right?: number;
-          /**
-           * [descr:PdfExportDataGridProps.margin.bottom]
-           */
-          bottom?: number;
-        };
+    margin?: {
+      /**
+       * [descr:PdfExportDataGridProps.margin.top]
+       */
+      top?: number;
+      /**
+       * [descr:PdfExportDataGridProps.margin.left]
+       */
+      left?: number;
+      /**
+       * [descr:PdfExportDataGridProps.margin.right]
+       */
+      right?: number;
+      /**
+       * [descr:PdfExportDataGridProps.margin.bottom]
+       */
+      bottom?: number;
+    };
     /**
      * [descr:PdfExportDataGridProps.repeatHeaders]
      */
