@@ -2334,15 +2334,18 @@ export const editingModule = {
                     const dataSource = args.value;
                     if(Array.isArray(dataSource) && changes.length) {
                         const dataSourceKeys = dataSource.map(item => this.keyOf(item));
-                        const newChanges = changes.slice().filter((change) => {
-                            return dataSourceKeys.some(key => equalByValue(change.key, key));
+                        const newChanges = changes.filter((change) => {
+                            return change.type === 'insert' || dataSourceKeys.some(key => equalByValue(change.key, key));
                         });
                         if(newChanges.length !== changes.length) {
                             this.option('editing.changes', newChanges);
 
                         }
                         const editRowKey = this.option('editing.editRowKey');
-                        if(dataSourceKeys.every(key => !equalByValue(editRowKey, key))) {
+                        const isEditNewItem = newChanges.some(
+                            (change) => change.type === 'insert' && equalByValue(editRowKey, change.key)
+                        );
+                        if(!isEditNewItem && dataSourceKeys.every(key => !equalByValue(editRowKey, key))) {
                             this.option('editing.editRowKey', null);
                         }
                     }
