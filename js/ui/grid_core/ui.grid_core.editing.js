@@ -2327,6 +2327,26 @@ export const editingModule = {
                     }
 
                     return this.callBase.apply(this, arguments);
+                },
+                _handleDataSourceChange(args) {
+                    const result = this.callBase(args);
+                    const changes = this.option('editing.changes');
+                    const dataSource = args.value;
+                    if(Array.isArray(dataSource) && changes.length) {
+                        const dataSourceKeys = dataSource.map(item => this.keyOf(item));
+                        const newChanges = changes.slice().filter((change) => {
+                            return dataSourceKeys.some(key => equalByValue(change.key, key));
+                        });
+                        if(newChanges.length !== changes.length) {
+                            this.option('editing.changes', newChanges);
+
+                        }
+                        const editRowKey = this.option('editing.editRowKey');
+                        if(dataSourceKeys.every(key => !equalByValue(editRowKey, key))) {
+                            this.option('editing.editRowKey', null);
+                        }
+                    }
+                    return result;
                 }
             }
         },

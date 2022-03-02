@@ -11,15 +11,13 @@ describe('Tooltip item', () => {
       viewFunction({
         ...viewModel,
         props: {
-          item: {
-            color: 'color',
-          },
+          appointments: [],
           ...viewModel.props,
         },
       }),
     );
 
-    it('should have correct default render', () => {
+    it('it should have correct default render', () => {
       const item = render();
       const markerBody = item.childAt(0);
       const tooltipItemContent = item.childAt(1);
