@@ -70,7 +70,7 @@ QUnit.module('Pager', {
 
         // act
         pagerView.render(testElement);
-        const pager = pagerView._getPager();
+        const pager = pagerView.getPager();
 
         // assert
         assert.ok(!pager);
@@ -86,7 +86,7 @@ QUnit.module('Pager', {
 
         // act
         pagerView.render(testElement);
-        const pager = pagerView._getPager();
+        const pager = pagerView.getPager();
 
         // assert
         assert.equal(testElement.find('.dx-pager').length, 1, 'pager element');
@@ -145,7 +145,7 @@ QUnit.module('Pager', {
         this.dataController.pageIndex(13);
 
         // assert
-        assert.equal(pagerView._getPager().option('pageIndex'), 14, 'page index');
+        assert.equal(pagerView.getPager().option('pageIndex'), 14, 'page index');
     });
 
     // T211403
@@ -161,7 +161,7 @@ QUnit.module('Pager', {
         this.clock.tick();
 
         // assert
-        assert.equal(pagerView._getPager().option('pageIndex'), 15, 'page index');
+        assert.equal(pagerView.getPager().option('pageIndex'), 15, 'page index');
     });
 
     // T220755
@@ -176,7 +176,7 @@ QUnit.module('Pager', {
         this.clock.tick();
 
         // assert
-        assert.equal(pagerView._getPager().option('pageIndex'), 15, 'page index changed');
+        assert.equal(pagerView.getPager().option('pageIndex'), 15, 'page index changed');
     });
 
     QUnit.test('Pages count is changed from dataController', function(assert) {
@@ -189,7 +189,7 @@ QUnit.module('Pager', {
         this.dataController.updatePagesCount(7);
 
         // assert
-        assert.equal(pagerView._getPager().option('pageCount'), 7, 'pageCount');
+        assert.equal(pagerView.getPager().option('pageCount'), 7, 'pageCount');
     });
 
     QUnit.test('Page size is changed from dataController', function(assert) {
@@ -202,7 +202,7 @@ QUnit.module('Pager', {
         this.dataController.pageSize(9);
 
         // assert
-        assert.equal(pagerView._getPager().option('pageSize'), 9, 'pageSize');
+        assert.equal(pagerView.getPager().option('pageSize'), 9, 'pageSize');
     });
 
     QUnit.test('HasKnownLastPage is changed from dataController', function(assert) {
@@ -220,7 +220,7 @@ QUnit.module('Pager', {
             assert.strictEqual(testElement.find('.dx-next-button').length, 1, 'pager has next page button');
             assert.strictEqual(testElement.find('.dx-prev-button').length, 0, 'pager doesnt have prev page button');
         } else {
-            assert.ok(pagerView._getPager()._testShowMoreButton, 'showMoreButton in pager');
+            assert.ok(pagerView.getPager()._testShowMoreButton, 'showMoreButton in pager');
         }
     });
 
@@ -270,7 +270,7 @@ QUnit.module('Pager', {
 
         pagerView.render(testElement);
 
-        sinon.spy(pagerView._getPager(), 'option');
+        sinon.spy(pagerView.getPager(), 'option');
 
         assert.equal(pagerView._createComponent.callCount, 1, '_createComponent call count before partial update');
 
@@ -279,8 +279,8 @@ QUnit.module('Pager', {
 
         // assert
         assert.equal(pagerView._createComponent.callCount, 1, '_createComponent call count after partial update');
-        assert.equal(pagerView._getPager().option.callCount, 1, 'pager option call count after partial update');
-        assert.deepEqual(pagerView._getPager().option.getCall(0).args, [{
+        assert.equal(pagerView.getPager().option.callCount, 1, 'pager option call count after partial update');
+        assert.deepEqual(pagerView.getPager().option.getCall(0).args, [{
             hasKnownLastPage: true, // T697587
             totalCount: 143, // #7259
             pageCount: 20,
