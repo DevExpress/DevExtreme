@@ -11,19 +11,6 @@ import messageLocalization from '../../../localization/message';
 import { ExportLoadPanel } from '../../common/export_load_panel';
 import { hasWindow } from '../../../core/utils/window';
 
-// TODO: check names with techwritters
-// IPDFExportOptions: {
-//    repeatHeaders: false,
-//    borderWidth: number,
-//    borderColor: color,
-//    topLeft: {x: number, y: number},
-//    indent: number,
-//    margin: { top:number, left:number, right:number, bottom:number } | number
-//    customizeCell: ({ gridCell, pdfCell }): void
-//    customDrawCell: ({ rect, pdfCell, gridCell, cancel }): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
-//    loadPanel: Object
-// }
-
 function _getFullOptions(options) {
     const { jsPDFDocument } = options;
     const fullOptions = extend({}, options);
