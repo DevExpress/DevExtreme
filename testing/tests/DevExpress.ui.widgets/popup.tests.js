@@ -49,6 +49,7 @@ QUnit.testStart(function() {
         </style>\
         \
         <div id="popup"></div>\
+        <div id="secondPopup"></div>\
         <div id="container"></div>\
         \
         <div id="popupWithAnonymousTmpl">\
@@ -469,6 +470,34 @@ QUnit.module('basic', () => {
         popup.option('disabled', false);
         assert.notOk(popup.topToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from top toolbar');
         assert.notOk(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from bottom toolbar');
+    });
+
+    QUnit.test('popup should update zIndex on focus', function(assert) {
+        const firstPopup = $('#popup').dxPopup({ visible: true, focusStateEnabled: true }).dxPopup('instance');
+        const secondPopup = $('#secondPopup').dxPopup({ visible: true, focusStateEnabled: true }).dxPopup('instance');
+        const baseZIndex = 1501;
+
+        firstPopup.focus();
+
+        const firstPopupZIndex = parseInt(firstPopup.$wrapper().css('zIndex'), 10);
+
+        secondPopup.focus();
+
+        const secondPopupZIndex = parseInt(secondPopup.$wrapper().css('zIndex'), 10);
+
+        assert.strictEqual(firstPopupZIndex, baseZIndex + 2);
+        assert.strictEqual(secondPopupZIndex, baseZIndex + 3);
+    });
+
+    QUnit.test('popup should not update z-index if it is already a biggest one', function(assert) {
+        const popup = $('#popup').dxPopup({ visible: true, focusStateEnabled: true }).dxPopup('instance');
+        const expectedZIndex = 1501;
+
+        popup.focus();
+
+        const ZIndex = parseInt(popup.$wrapper().css('zIndex'), 10);
+
+        assert.strictEqual(ZIndex, expectedZIndex);
     });
 });
 

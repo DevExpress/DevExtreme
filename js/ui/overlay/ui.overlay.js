@@ -720,21 +720,6 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _toggleFocusClass(isFocused, $element) {
-        this.callBase(isFocused, $element);
-
-        if(isFocused) {
-            const zIndex = zIndexPool.create(this._zIndexInitValue());
-            zIndexPool.remove(zIndex);
-
-            this._$wrapper.css('zIndex', zIndex);
-            this._$content.css('zIndex', zIndex);
-        } else {
-            this._$wrapper.css('zIndex', this._zIndex);
-            this._$content.css('zIndex', this._zIndex);
-        }
-    },
-
     _toggleHideTopOverlayCallback: function(subscribe) {
         if(!this._hideTopOverlayHandler) {
             return;

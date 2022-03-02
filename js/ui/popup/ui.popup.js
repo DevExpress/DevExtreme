@@ -31,6 +31,7 @@ import Overlay from '../overlay/ui.overlay';
 import { isMaterial, current as currentTheme } from '../themes';
 import '../toolbar/ui.toolbar.base';
 import resizeObserverSingleton from '../../core/resize_observer';
+import * as zIndexPool from '../overlay/z_index';
 import { PopupPositionController } from './popup_position_controller';
 
 const window = getWindow();
@@ -562,6 +563,19 @@ const Popup = Overlay.inherit({
                 this._$bottom.removeClass(className);
             }
         });
+    },
+
+    _toggleFocusClass(isFocused) {
+        this.callBase(arguments);
+
+        if(isFocused && !zIndexPool.isLastZIndexInStack(this._zIndex)) {
+            const zIndex = zIndexPool.create(this._zIndexInitValue());
+            zIndexPool.remove(this._zIndex);
+            this._zIndex = zIndex;
+
+            this._$wrapper.css('zIndex', zIndex);
+            this._$content.css('zIndex', zIndex);
+        }
     },
 
     _getPositionControllerConfig() {
