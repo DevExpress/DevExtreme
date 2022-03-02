@@ -4,13 +4,18 @@ import {
 } from '@devextreme-generator/declarations';
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import { VirtualScrolling } from './virtual_scrolling';
-import { ScrollingMode } from '../types';
+import { ScrollingMode, VirtualScrollingMode } from '../types';
 import { ScrollingModeValue } from './plugins';
 
-export const viewFunction = (viewModel: Scrolling): JSX.Element => (
+export const viewFunction = ({
+  isVirtualScrolling, virtualScrollingMode,
+  props: {
+    mode,
+  },
+}: Scrolling): JSX.Element => (
   <Fragment>
-    <ValueSetter type={ScrollingModeValue} value={viewModel.props.mode} />
-    {viewModel.isVirtualScrolling && (<VirtualScrolling mode={viewModel.virtualScrollingMode} />)}
+    <ValueSetter type={ScrollingModeValue} value={mode} />
+    {isVirtualScrolling && (<VirtualScrolling mode={virtualScrollingMode} />)}
   </Fragment>
 );
 
@@ -27,11 +32,10 @@ export class ScrollingProps {
 export class Scrolling extends JSXComponent(ScrollingProps) {
   get isVirtualScrolling(): boolean {
     const { mode } = this.props;
-    return mode === 'virtual' || mode === 'infinite';
+    return mode !== 'standard';
   }
 
-  get virtualScrollingMode(): 'virtual' | 'infinite' {
-    const { mode } = this.props;
-    return mode === 'virtual' ? 'virtual' : 'infinite';
+  get virtualScrollingMode(): VirtualScrollingMode {
+    return this.props.mode as VirtualScrollingMode;
   }
 }
