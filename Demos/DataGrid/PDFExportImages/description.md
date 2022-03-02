@@ -1,0 +1,3 @@
+This demo shows how you can use <a href="https://github.com/parallax/jsPDF" target="_blank">jsPDF</a> API to export images to PDF document.
+
+See the [customDrawCell](/Documentation/ApiReference/Common/Object_Structures/ExportDataGridProps/#customDrawCell) callback for implementation details. The **jspdf**.<a href="https://raw.githack.com/parallax/jsPDF/master/docs/module-addImage.html#~addImage" target="_blank">addImage()</a> method specifies image data and encoding.

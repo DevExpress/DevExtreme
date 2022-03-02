@@ -810,19 +810,25 @@
         ]
       },
       {
-        "Name": "Export to PDF (CTP)",
+        "Name": "Export to PDF",
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Overview",
-            "Name": "ExportToPDF",
-            "Badge": "Updated",
+            "Title": "Export Multiple Grids",
+            "Name": "PDFExportMultipleGrids",
             "Widget": "DataGrid",
-            "Modules": "jspdf&jspdf-autotable",
+            "Badge": "New",
+            "Modules": "jspdf",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Export Images",
+            "Name": "PDFExportImages",
+            "Widget": "DataGrid",
+            "Badge": "New",
+            "Modules": "jspdf",
             "MvcAdditionalFiles": [
-              "/Controllers/ApiControllers/DataGridCustomersController.cs",
-              "/Models/Customer.cs",
-              "/Models/SampleData/Customers.cs"
+              "/Scripts/data/employeesEI.js"
             ],
             "DemoType": "Web"
           }

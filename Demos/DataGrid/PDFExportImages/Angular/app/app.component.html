@@ -1,0 +1,29 @@
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="employees"
+  keyExpr="ID"
+  [showBorders]="true"
+  [showRowLines]="true"
+  [showColumnLines]="false"
+>
+  <dxi-column
+    dataField="Picture"
+    cellTemplate="cellTemplate"
+    width="90px"
+  ></dxi-column>
+  <dxi-column dataField="FirstName"></dxi-column>
+  <dxi-column dataField="LastName"></dxi-column>
+  <dxi-column dataField="Position"></dxi-column>
+  <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
+  <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+
+  <div *dxTemplate="let cell of 'cellTemplate'">
+    <img src="{{ cell.value }}" />
+  </div>
+
+  <dxo-toolbar>
+    <dxi-item location="after">
+      <dx-button icon="exportpdf" (onClick)="exportGrid($event)"> </dx-button>
+    </dxi-item>
+  </dxo-toolbar>
+</dx-data-grid>

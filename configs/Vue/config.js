@@ -61,10 +61,9 @@ window.config = {
     'file-saver-es': 'npm:file-saver-es/dist/FileSaver.min.js',
     /**/
 
-    /** jspdf&jspdf-autotable */
+    /** jspdf */
     'fflate': 'npm:fflate/esm/browser.js',
     'jspdf': 'npm:jspdf/dist/jspdf.es.min.js',
-    'jspdf-autotable': 'npm:jspdf-autotable/dist/jspdf.plugin.autotable.min.js',
     /**/
 
     /** devextreme-intl */
