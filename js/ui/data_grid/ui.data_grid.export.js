@@ -9,6 +9,9 @@ import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { export as clientExport, excel } from '../../exporter';
 import messageLocalization from '../../localization/message';
 
+import jsPdf from 'jspdf';
+import { exportDataGrid as exportDataGridToPdf } from '../../pdf_exporter';
+
 import '../button';
 import '../drop_down_button';
 import List from '../list_light';
@@ -21,6 +24,9 @@ const DATAGRID_EXPORT_ICON = 'export-to';
 const DATAGRID_EXPORT_EXCEL_ICON = 'xlsxfile';
 const DATAGRID_EXPORT_SELECTED_ICON = 'exportselected';
 const DATAGRID_EXPORT_EXCEL_BUTTON_ICON = 'export-excel-button';
+
+const DATAGRID_PDF_EXPORT_ICON = 'pdffile';
+const DATAGRID_PDF_EXPORT_SELECTED_ICON = 'pdffile';
 
 export const DataProvider = Class.inherit({
     ctor: function(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
@@ -640,6 +646,16 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
             fileSavingAction: that.getAction('onFileSaving')
         }, excel.getData);
     },
+    exportToPdf: function(selectedRowsOnly) {
+        const doc = new jsPdf();
+        exportDataGridToPdf({
+            jsPDFDocument: doc,
+            component: this.component,
+            selectedRowsOnly
+        }).then(() => {
+            doc.save(this.option('pdfExport.fileName'));
+        });
+    },
 
     publicMethods: function() {
         return ['getDataProvider', 'getExportFormat', 'exportToExcel'];
@@ -668,8 +684,17 @@ dataGridCore.registerModule('export', {
                 ignoreExcelErrors: true,
                 texts: {
                     exportTo: messageLocalization.format('dxDataGrid-exportTo'),
-                    exportAll: messageLocalization.format('dxDataGrid-exportAll'),
-                    exportSelectedRows: messageLocalization.format('dxDataGrid-exportSelectedRows')
+                    exportAll: messageLocalization.format('dxDataGrid-exportAll') + ' to Excel',
+                    exportSelectedRows: messageLocalization.format('dxDataGrid-exportSelectedRows') + ' to Excel'
+                }
+            },
+            'pdfExport': {
+                enabled: false,
+                allowExportSelectedData: false,
+                fileName: 'DataGrid',
+                texts: {
+                    exportAll: messageLocalization.format('dxDataGrid-exportAll') + ' to PDF',
+                    exportSelectedRows: messageLocalization.format('dxDataGrid-exportSelectedRows') + ' to PDF'
                 }
             }
         };
@@ -744,8 +769,9 @@ dataGridCore.registerModule('export', {
                             dropDownOptions: {
                                 wrapperAttr: { class: DATAGRID_EXPORT_MENU_CLASS },
                                 width: 'auto'
-                            }
+                            },
                         };
+
 
                         toolbarButtonOptions.options = widgetOptions;
                         toolbarButtonOptions.widget = 'dxDropDownButton';
@@ -761,6 +787,10 @@ dataGridCore.registerModule('export', {
                 _getExportToolbarItems: function() {
                     const exportOptions = this.option('export');
                     const texts = this.option('export.texts');
+
+                    const pdfExportOptions = this.option('pdfExport');
+                    const pdfTexts = this.option('pdfExport.texts');
+
                     const items = [];
 
                     if(exportOptions.enabled) {
@@ -769,16 +799,36 @@ dataGridCore.registerModule('export', {
                             icon: DATAGRID_EXPORT_EXCEL_ICON,
                             onClick: () => {
                                 this._exportController.exportToExcel();
-                            }
+                            },
                         });
 
                         if(exportOptions.allowExportSelectedData) {
                             items.push({
                                 text: texts.exportSelectedRows,
-                                icon: DATAGRID_EXPORT_SELECTED_ICON,
+                                icon: pdfExportOptions.enabled ? DATAGRID_EXPORT_EXCEL_ICON : DATAGRID_EXPORT_SELECTED_ICON,
                                 onClick: () => {
                                     this._exportController.exportToExcel(true);
-                                }
+                                },
+                            });
+                        }
+                    }
+
+                    if(pdfExportOptions.enabled) {
+                        items.push({
+                            text: pdfTexts.exportAll,
+                            icon: DATAGRID_PDF_EXPORT_ICON,
+                            onClick: () => {
+                                this._exportController.exportToPdf();
+                            },
+                        });
+
+                        if(pdfExportOptions.allowExportSelectedData) {
+                            items.push({
+                                text: pdfTexts.exportSelectedRows,
+                                icon: DATAGRID_PDF_EXPORT_SELECTED_ICON,
+                                onClick: () => {
+                                    this._exportController.exportToPdf(true);
+                                },
                             });
                         }
                     }
@@ -821,7 +871,7 @@ dataGridCore.registerModule('export', {
 
                 optionChanged: function(args) {
                     this.callBase(args);
-                    if(args.name === 'export') {
+                    if(args.name === 'export' || args.name === 'pdfExport') {
                         args.handled = true;
                         this._invalidate();
                     }
