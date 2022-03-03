@@ -1,6 +1,4 @@
-
 @forward "./variables";
-
 @use "./variables" as *;
 @use "sass:color";
 $color: null !default;

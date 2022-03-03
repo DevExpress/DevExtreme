@@ -1,5 +1,7 @@
 import { isDefined } from '../../../core/utils/type';
 
+const DOTS_TEXT = '...';
+
 function toPdfUnit(doc, value) {
     const defaultScaleFactor = 1; // https://github.com/parallax/jsPDF/blob/master/src/jspdf.js#L3212
     const coefficient = defaultScaleFactor / doc.internal.scaleFactor;
@@ -16,7 +18,6 @@ function getPageHeight(doc) {
 
 function getTextLines(doc, text, font, { wordWrapEnabled, targetRectWidth }) {
     if(wordWrapEnabled) {
-        // it also splits text by '\n' automatically
         const usedFont = doc.getFont(font?.name, font?.style);
         return doc.splitTextToSize(text, targetRectWidth, {
             fontSize: font?.size || doc.getFontSize(),
@@ -24,11 +25,36 @@ function getTextLines(doc, text, font, { wordWrapEnabled, targetRectWidth }) {
             fontStyle: usedFont.fontStyle
         });
     }
-    return text.split('\n');
+
+    let textWithoutLineBreak = text.split('\n').filter(ch => ch !== '').join(' ');
+    if(getTextDimensions(doc, textWithoutLineBreak, font).w <= targetRectWidth) {
+        return [textWithoutLineBreak];
+    }
+
+    let textWidth = getTextDimensions(doc, textWithoutLineBreak + DOTS_TEXT, font).w;
+    while(textWithoutLineBreak.length > 0 && textWidth > targetRectWidth) {
+        let symbolsCountToRemove = 0;
+
+        if(textWidth >= targetRectWidth * 2) {
+            symbolsCountToRemove = textWithoutLineBreak.length / 2;
+        }
+
+        if(symbolsCountToRemove < 1) {
+            symbolsCountToRemove = 1;
+        }
+        textWithoutLineBreak = textWithoutLineBreak.substring(0, textWithoutLineBreak.length - symbolsCountToRemove);
+        textWidth = getTextDimensions(doc, textWithoutLineBreak + DOTS_TEXT, font).w;
+    }
+
+    return [textWithoutLineBreak + DOTS_TEXT];
+
 }
 
 function calculateTargetRectWidth(columnWidth, padding) {
-    return columnWidth - (padding.left + padding.right);
+    const width = columnWidth - (padding.left + padding.right);
+    return width >= 0
+        ? width
+        : 0;
 }
 
 function getTextDimensions(doc, text, font) {
@@ -62,7 +88,10 @@ function calculateRowHeight(doc, cells, columnWidths) {
         const columnWidth = columnWidths[cellIndex];
         const targetRectWidth = calculateTargetRectWidth(columnWidth, cellPadding);
         if(isDefined(cellText)) {
-            const cellHeight = calculateTextHeight(doc, cellText, font, { wordWrapEnabled, targetRectWidth }) + cellPadding.top + cellPadding.bottom;
+            const textHeight = cellText !== ''
+                ? calculateTextHeight(doc, cellText, font, { wordWrapEnabled, targetRectWidth })
+                : 0;
+            const cellHeight = textHeight + cellPadding.top + cellPadding.bottom;
             if(rowHeight < cellHeight) {
                 rowHeight = cellHeight;
             }

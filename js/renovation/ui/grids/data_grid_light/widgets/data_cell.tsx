@@ -1,17 +1,21 @@
 import {
-  Component, JSXComponent, ComponentBindings, OneWay, JSXTemplate,
+  Component, JSXComponent, ComponentBindings, OneWay, JSXTemplate, Template,
 } from '@devextreme-generator/declarations';
-import { Column, Row, RowData } from '../types';
+import { ColumnInternal, Row, RowData } from '../types';
 import { combineClasses } from '../../../../utils/combine_classes';
+
+import CLASSES from '../classes';
 
 export const viewFunction = (viewModel: DataCell): JSX.Element => {
   const {
     cellText,
-    cellTemplate: CellTemplate,
-    cellContainerTemplate: CellContainerTemplate,
     classes,
   } = viewModel;
-  const { row } = viewModel.props;
+  const {
+    row,
+    cellTemplate: CellTemplate,
+    cellContainerTemplate: CellContainerTemplate,
+  } = viewModel.props;
   const cellContentTemplate = CellTemplate
     ? <CellTemplate data={row.data} />
     : cellText;
@@ -30,9 +34,7 @@ export const viewFunction = (viewModel: DataCell): JSX.Element => {
         </td>
       )
       : (
-        <CellContainerTemplate data={row.data}>
-          {cellContentTemplate}
-        </CellContainerTemplate>
+        <CellContainerTemplate data={row.data} />
       )
   );
 };
@@ -52,7 +54,13 @@ export class DataCellProps {
   countColumn = 0;
 
   @OneWay()
-  column: Column = {};
+  column: ColumnInternal = {};
+
+  @Template()
+  cellTemplate?: JSXTemplate<{ data: RowData }, 'data'>;
+
+  @Template()
+  cellContainerTemplate?: JSXTemplate<{ data: RowData }, 'data'>;
 }
 
 @Component({
@@ -60,14 +68,6 @@ export class DataCellProps {
   view: viewFunction,
 })
 export class DataCell extends JSXComponent(DataCellProps) {
-  get cellTemplate(): JSXTemplate<{ data: RowData }, 'data'> | undefined {
-    return this.props.column.cellTemplate;
-  }
-
-  get cellContainerTemplate(): JSXTemplate<{ data: RowData }, 'data'> | undefined {
-    return this.props.column.cellContainerTemplate;
-  }
-
   get cellText(): string {
     const { dataField } = this.props.column;
     const value = dataField && this.props.row.data[dataField];
@@ -78,8 +78,8 @@ export class DataCell extends JSXComponent(DataCellProps) {
     const { columnIndex, countColumn } = this.props;
 
     const classesMap = {
-      'dx-first-child': columnIndex === 0,
-      'dx-last-child': columnIndex === countColumn - 1,
+      [CLASSES.firstChild]: columnIndex === 0,
+      [CLASSES.lastChild]: columnIndex === countColumn - 1,
     };
 
     return combineClasses(classesMap);

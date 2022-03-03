@@ -4,6 +4,7 @@ import {
 import { combineClasses } from '../../../../utils/combine_classes';
 import { createGetter, PluginsContext, Plugins } from '../../../../utils/plugin/context';
 import { Row } from '../types';
+import CLASSES from '../classes';
 
 export type RowPropertiesGetterType = (row: Row) => Record<string, unknown>;
 export const RowPropertiesGetter = createGetter<RowPropertiesGetterType>(() => ({}));
@@ -44,8 +45,8 @@ export class RowBase extends JSXComponent(RowBaseProps) {
 
   get cssClasses(): string {
     return combineClasses({
-      'dx-row': true,
-      'dx-column-lines': true,
+      [CLASSES.row]: true,
+      [CLASSES.columnLines]: true,
       ...this.additionalClasses,
     });
   }

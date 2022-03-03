@@ -21,6 +21,7 @@ const JSPdfCustomDrawCellTests = {
                     assert.deepEqual(rect, expectedRect, 'rect is correct');
 
                     assert.deepEqual(pdfCell, {
+                        _internalTextOptions: {},
                         backgroundColor: undefined,
                         borderColor: '#979797',
                         borderWidth: 0.5,

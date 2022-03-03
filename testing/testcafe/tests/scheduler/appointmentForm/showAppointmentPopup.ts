@@ -3,7 +3,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Timeline Appointments`
+fixture`Appointment Form`
   .page(url(__dirname, '../../container.html'));
 
 const showAppointmentPopup = ClientFunction(() => {
@@ -28,3 +28,35 @@ test('Invoke showAppointmentPopup method shouldn\'t raise error if value of curr
   currentDate: new Date(2021, 2, 25).toISOString(),
   height: 600,
 }, true));
+
+test('Show appointment popup if deffereRendering is false (T1069753)', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const appointment = scheduler.getAppointmentByIndex(0);
+
+  await t
+    .doubleClick(appointment.element)
+    .expect(scheduler.appointmentPopup.isVisible)
+    .ok();
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).DevExpress.ui.dxPopup.defaultOptions({
+      options: {
+        deferRendering: false,
+      },
+    });
+  })();
+
+  await createWidget('dxScheduler', {
+    dataSource: [{
+      text: 'Test',
+      startDate: new Date(2021, 2, 29, 10),
+      endDate: new Date(2021, 2, 29, 11),
+    }],
+    views: ['day'],
+    currentView: 'day',
+    currentDate: new Date(2021, 2, 29),
+    startDayHour: 9,
+    endDayHour: 12,
+    width: 400,
+  }, true);
+});

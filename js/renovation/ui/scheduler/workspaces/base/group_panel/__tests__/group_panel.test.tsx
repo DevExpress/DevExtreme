@@ -6,7 +6,6 @@ import {
 } from '../group_panel';
 import { GroupPanelVerticalLayout } from '../vertical/layout';
 import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../../../consts';
-import { GroupPanelHorizontalLayout } from '../horizontal/layout';
 
 describe('GroupPanel', () => {
   describe('Render', () => {
@@ -51,48 +50,50 @@ describe('GroupPanel', () => {
         });
     });
 
-    it('should pass ref to the root', () => {
-      const ref = React.createRef();
-      render({
-        props: {
-          elementRef: ref,
-        },
-      });
+    [
+      true,
+      false,
+    ].forEach((isVerticalLayout) => {
+      it(`should pass ref to the root if isVerticalLayout=${isVerticalLayout}`, () => {
+        const ref = React.createRef();
+        render({
+          isVerticalLayout: true,
+          props: {
+            elementRef: ref,
+          },
+        });
 
-      expect(ref.current)
-        .not.toBe(null);
+        expect(ref.current)
+          .not.toBe(null);
+      });
     });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
-      describe('layout', () => {
-        it('should return vertical layout when groupOrientation is vertical', () => {
-          const groupPanel = new GroupPanel({
-            groupOrientation: VERTICAL_GROUP_ORIENTATION,
-            groups: [{
-              name: 'groupId',
-              items: [{ id: 1 }],
-              data: [{ id: 1 }],
-            }],
+      describe('isVerticalLayout', () => {
+        [
+          {
+            orientation: VERTICAL_GROUP_ORIENTATION,
+            expected: true,
+          }, {
+            orientation: HORIZONTAL_GROUP_ORIENTATION,
+            expected: false,
+          },
+        ].forEach(({ orientation, expected }) => {
+          it(`should return correct value if ${orientation} group orientation`, () => {
+            const groupPanel = new GroupPanel({
+              groupOrientation: orientation as any,
+              groups: [{
+                name: 'groupId',
+                items: [{ id: 1 }],
+                data: [{ id: 1 }],
+              }],
+            });
+
+            expect(groupPanel.isVerticalLayout)
+              .toBe(expected);
           });
-
-          expect(groupPanel.layout)
-            .toBe(GroupPanelVerticalLayout);
-        });
-
-        it('should return horizontal layout when groupOrientation is horizontal', () => {
-          const groupPanel = new GroupPanel({
-            groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
-            groups: [{
-              name: 'groupId',
-              items: [{ id: 1 }],
-              data: [{ id: 1 }],
-            }],
-          });
-
-          expect(groupPanel.layout)
-            .toBe(GroupPanelHorizontalLayout);
         });
       });
     });
