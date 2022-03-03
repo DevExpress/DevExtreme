@@ -8,6 +8,9 @@ export default {
   afterHeaders: 'dx-datagrid-after-headers',
   scrollContainer: 'dx-datagrid-scroll-container',
 
+  noData: 'dx-datagrid-nodata',
+  empty: 'dx-empty',
+
   firstChild: 'dx-first-child',
   lastChild: 'dx-last-child',
 
