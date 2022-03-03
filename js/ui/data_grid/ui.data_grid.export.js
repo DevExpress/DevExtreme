@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Class from '../../core/class';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isFunction } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getDefaultAlignment } from '../../core/utils/position';
 import { merge } from '../../core/utils/array';
@@ -8,9 +8,6 @@ import dataGridCore from './ui.data_grid.core';
 import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { export as clientExport, excel } from '../../exporter';
 import messageLocalization from '../../localization/message';
-
-import jsPdf from 'jspdf';
-import { exportDataGrid as exportDataGridToPdf } from '../../pdf_exporter';
 
 import '../button';
 import '../drop_down_button';
@@ -606,6 +603,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
         this._headersView = this.getView('columnHeadersView');
 
         this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
+        this.createAction('onPdfExporting', { excludeValidators: ['disabled', 'readOnly'] });
         this.createAction('onExported', { excludeValidators: ['disabled', 'readOnly'] });
         this.createAction('onFileSaving', { excludeValidators: ['disabled', 'readOnly'] });
     },
@@ -647,14 +645,13 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
         }, excel.getData);
     },
     exportToPdf: function(selectedRowsOnly) {
-        const doc = new jsPdf();
-        exportDataGridToPdf({
-            jsPDFDocument: doc,
-            component: this.component,
+        const onExporting = this.getAction('onExporting');
+        const eventArgs = {
+            fileName: this.option('pdfExport.fileName'),
             selectedRowsOnly
-        }).then(() => {
-            doc.save(this.option('pdfExport.fileName'));
-        });
+        };
+
+        isFunction(onExporting) && onExporting(eventArgs);
     },
 
     publicMethods: function() {

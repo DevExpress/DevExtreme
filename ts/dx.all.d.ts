@@ -8735,6 +8735,12 @@ declare module DevExpress.ui {
       e: DevExpress.ui.dxDataGrid.FileSavingEvent<TRowData, TKey>
     ) => void;
     /**
+     * [descr:dxDataGridOptions.onPdfExporting]
+     */
+    onPdfExporting?: (
+      e: DevExpress.ui.dxDataGrid.ExportingEvent<TRowData, TKey>
+    ) => void;
+    /**
      * [descr:dxDataGridOptions.onFocusedCellChanged]
      */
     onFocusedCellChanged?: (

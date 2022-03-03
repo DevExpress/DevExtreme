@@ -3439,6 +3439,19 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 fileName:string
+     * @type_function_param1_field5 selectedRowsOnly:boolean
+     * @default null
+     * @action
+     * @public
+     */
+    onPdfExporting?: ((e: ExportingEvent<TRowData, TKey>) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cellElement:DxElement
      * @type_function_param1_field5 columnIndex:number
      * @type_function_param1_field6 rowIndex:number
