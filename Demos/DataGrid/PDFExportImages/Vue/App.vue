@@ -78,7 +78,12 @@ export default {
       exportDataGridToPdf({
         jsPDFDocument: doc,
         component: this.dataGrid,
-        margin: 10,
+        margin: {
+          top: 10,
+          right: 10,
+          bottom: 10,
+          left: 10,
+        },
         topLeft: { x: 0, y: 5 },
         columnWidths: [30, 30, 30, 30, 30, 30],
         onRowExporting: (arg) => {

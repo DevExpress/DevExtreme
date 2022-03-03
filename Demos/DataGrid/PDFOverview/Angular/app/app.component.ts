@@ -6,7 +6,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxButtonModule, DxDataGridComponent } from 'devextreme-angular';
 import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
-import { Service, Employees } from './app.service';
+import { Service, Customer } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,44 +18,22 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
   providers: [Service],
 })
-
 export class AppComponent {
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
 
-  employees: Employees[];
+  customers: Customer[];
 
-  constructor(private service: Service) {
-    this.employees = service.getEmployess();
+  constructor(service: Service) {
+    this.customers = service.getCustomers();
   }
 
-  exportGrid(e) {
+  exportGrid() {
     const doc = new jsPDF();
-
     exportDataGridToPdf({
       jsPDFDocument: doc,
       component: this.dataGrid.instance,
-      margin: {
-        top: 10,
-        right: 10,
-        bottom: 10,
-        left: 10,
-      },
-      topLeft: { x: 0, y: 5 },
-      columnWidths: [30, 30, 30, 30, 30, 30],
-      onRowExporting: (arg) => {
-        const isHeader = arg.rowCells[0].text === 'Picture';
-        if (!isHeader) {
-          arg.rowHeight = 40;
-        }
-      },
-      customDrawCell: (arg) => {
-        if (arg.gridCell.rowType === 'data' && arg.gridCell.column.dataField === 'Picture') {
-          doc.addImage(arg.gridCell.value, 'PNG', arg.rect.x, arg.rect.y, arg.rect.w, arg.rect.h);
-          arg.cancel = true;
-        }
-      },
     }).then(() => {
-      doc.save('DataGrid.pdf');
+      doc.save('Companies.pdf');
     });
   }
 }
