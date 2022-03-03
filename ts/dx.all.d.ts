@@ -6981,9 +6981,11 @@ declare module DevExpress.ui {
       EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
       ExcelCellInfo: ExcelCellInfo<TRowData, TKey>;
       Export: Export<TRowData, TKey>;
+      PDFExport: PDFExport;
       ExportedEvent: ExportedEvent<TRowData, TKey>;
       ExportingEvent: ExportingEvent<TRowData, TKey>;
       ExportTexts: ExportTexts;
+      PDFExportTexts: PDFExportTexts;
       FileSavingEvent: FileSavingEvent<TRowData, TKey>;
       FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
       FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
@@ -7608,6 +7610,34 @@ declare module DevExpress.ui {
        */
       pageSize?: number;
     }
+    export type PDFExport = {
+      /**
+       * [descr:PDFExport.allowExportSelectedData]
+       */
+      allowExportSelectedData?: boolean;
+      /**
+       * [descr:PDFExport.enabled]
+       */
+      enabled?: boolean;
+      /**
+       * [descr:PDFExport.fileName]
+       */
+      fileName?: string;
+      /**
+       * [descr:PDFExport.texts]
+       */
+      texts?: PDFExportTexts;
+    };
+    export type PDFExportTexts = {
+      /**
+       * [descr:PDFExportTexts.exportAll]
+       */
+      exportAll?: string;
+      /**
+       * [descr:PDFExportTexts.exportSelectedRows]
+       */
+      exportSelectedRows?: string;
+    };
     export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<
       TRowData,
       TKey
@@ -8616,6 +8646,10 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.export]
      */
     export?: DevExpress.ui.dxDataGrid.Export<TRowData, TKey>;
+    /**
+     * [descr:dxDataGridOptions.pdfExport]
+     */
+    pdfExport?: DevExpress.ui.dxDataGrid.PDFExport;
     /**
      * [descr:dxDataGridOptions.groupPanel]
      */

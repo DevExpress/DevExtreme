@@ -3192,6 +3192,12 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type object
      * @public
      */
+    pdfExport?: PDFExport;
+    /**
+     * @docid
+     * @type object
+     * @public
+     */
     groupPanel?: GroupPanel;
     /**
      * @docid
@@ -3757,15 +3763,39 @@ export type Export<TRowData = any, TKey = any> = {
 };
 
 /** @public */
+export type PDFExport = {
+  /**
+   * @docid
+   * @default false
+   */
+  allowExportSelectedData?: boolean;
+  /**
+   * @docid
+   * @default false
+   */
+  enabled?: boolean;
+  /**
+   * @docid
+   * @default "DataGrid"
+   */
+  fileName?: string;
+  /**
+   * @docid
+   * @type object
+   */
+  texts?: PDFExportTexts;
+};
+
+/** @public */
 export type ExportTexts = {
   /**
    * @docid dxDataGridOptions.export.texts.exportAll
-   * @default "Export all data"
+   * @default "Export all data to Excel"
    */
   exportAll?: string;
   /**
    * @docid dxDataGridOptions.export.texts.exportSelectedRows
-   * @default "Export selected rows"
+   * @default "Export selected rows to Excel"
    */
   exportSelectedRows?: string;
   /**
@@ -3773,6 +3803,20 @@ export type ExportTexts = {
    * @default "Export"
    */
   exportTo?: string;
+};
+
+/** @public */
+export type PDFExportTexts = {
+  /**
+   * @docid
+   * @default "Export all data to PDF"
+   */
+  exportAll?: string;
+  /**
+   * @docid
+   * @default "Export selected rows to PDF"
+   */
+  exportSelectedRows?: string;
 };
 
 /** @public */
@@ -4749,9 +4793,11 @@ export type ExplicitTypes<TRowData, TKey> = {
   EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
   ExcelCellInfo: ExcelCellInfo<TRowData, TKey>;
   Export: Export<TRowData, TKey>;
+  PDFExport: PDFExport;
   ExportedEvent: ExportedEvent<TRowData, TKey>;
   ExportingEvent: ExportingEvent<TRowData, TKey>;
   ExportTexts: ExportTexts;
+  PDFExportTexts: PDFExportTexts;
   FileSavingEvent: FileSavingEvent<TRowData, TKey>;
   FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
   FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
