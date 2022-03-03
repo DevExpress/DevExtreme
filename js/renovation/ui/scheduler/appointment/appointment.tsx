@@ -26,6 +26,7 @@ import { combineClasses } from '../../../utils/combine_classes';
 import type { AppointmentTemplateData } from '../../../../ui/scheduler';
 import { getAppointmentColor } from '../resources/utils';
 import { AppointmentsContext, IAppointmentContext } from '../appointments_context';
+import { EffectReturn } from '../../../utils/effect_return';
 
 export const viewFunction = ({
   text,
@@ -85,6 +86,8 @@ export class AppointmentProps {
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
   @Event() onItemClick!: (e: AppointmentClickData) => void;
+
+  @Event() onItemDoubleClick!: (e: AppointmentClickData) => void;
 }
 
 @Component({
@@ -93,7 +96,7 @@ export class AppointmentProps {
 })
 export class Appointment extends JSXComponent<
 AppointmentProps,
-'viewModel' | 'onItemClick' | 'showReducedIconTooltip' | 'hideReducedIconTooltip' | 'groups'
+'viewModel' | 'onItemClick' | 'onItemDoubleClick' | 'showReducedIconTooltip' | 'hideReducedIconTooltip' | 'groups'
 >() {
   @Consumer(AppointmentsContext)
   appointmentsContextValue!: IAppointmentContext;
@@ -173,6 +176,18 @@ AppointmentProps,
       .catch(() => '');
   }
 
+  @Effect({ run: 'once' })
+  bindDoubleClickEffect(): EffectReturn {
+    /* istanbul ignore next: Tested */
+    const onDoubleClick = (): void => this.onItemDoubleClick();
+
+    this.ref.current?.addEventListener('dblclick', onDoubleClick);
+
+    return (): void => {
+      this.ref.current?.removeEventListener('dblclick', onDoubleClick);
+    };
+  }
+
   onItemClick(): void {
     const e = {
       data: [this.props.viewModel],
@@ -181,5 +196,15 @@ AppointmentProps,
     };
 
     this.props.onItemClick(e);
+  }
+
+  onItemDoubleClick(): void {
+    const e = {
+      data: [this.props.viewModel],
+      target: this.ref.current as HTMLDivElement,
+      index: this.props.index,
+    };
+
+    this.props.onItemDoubleClick(e);
   }
 }
