@@ -565,8 +565,8 @@ const Popup = Overlay.inherit({
         });
     },
 
-    _toggleFocusClass(isFocused) {
-        this.callBase(arguments);
+    _toggleFocusClass(isFocused, $element) {
+        this.callBase(isFocused, $element);
 
         if(isFocused && !zIndexPool.isLastZIndexInStack(this._zIndex)) {
             const zIndex = zIndexPool.create(this._zIndexInitValue());
