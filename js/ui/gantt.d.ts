@@ -742,7 +742,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 scaleIndex:number
-     * @type_function_param1_field4 scaleType:Enums.GanttScaleType
+     * @type_function_param1_field4 scaleType:Enums.GanttRenderScaleType
      * @type_function_param1_field5 scaleElement:DxElement
      * @type_function_param1_field6 separatorElement:DxElement
      * @type_function_param1_field7 start:Date
