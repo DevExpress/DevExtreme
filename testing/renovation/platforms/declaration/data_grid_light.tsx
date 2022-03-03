@@ -35,6 +35,7 @@ export const viewFunction = ({
     dataSource={options.dataSource}
     columns={options.columns}
     keyExpr={options.keyExpr}
+    noDataTemplate={options.noDataTemplate}
   >
     {paging.enabled && (
     <Paging

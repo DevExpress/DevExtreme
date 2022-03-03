@@ -409,7 +409,8 @@ export default gridCore.Controller.inherit((function() {
 
             if((options.storeLoadOptions.filter && !options.remoteOperations.filtering) || (options.storeLoadOptions.sort && !options.remoteOperations.sorting)) {
                 options.remoteOperations = {
-                    filtering: options.remoteOperations.filtering
+                    filtering: options.remoteOperations.filtering,
+                    summary: options.remoteOperations.summary,
                 };
             }
 

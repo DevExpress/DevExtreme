@@ -39,11 +39,11 @@ function getLineHeightShift(doc) {
     return (doc.getLineHeightFactor() - DEFAULT_LINE_HEIGHT) * doc.getFontSize();
 }
 
-function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign) {
+function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, jsPDFTextOptions) {
     const textArray = text.split('\n');
     const linesCount = textArray.length;
 
-    const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont(), { wordWrapEnabled: false });
+    const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont(), { wordWrapEnabled: false, targetRectWidth: 1000000000 });
 
     const vAlign = verticalAlign ?? 'middle';
     const hAlign = horizontalAlign ?? 'left';
@@ -58,7 +58,8 @@ function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign) {
     const x = rect.x
         + (rect.w * horizontalAlignMap[hAlign]);
 
-    doc.text(textArray.join('\n'), roundToThreeDecimals(x), roundToThreeDecimals(y), { baseline: vAlign, align: hAlign });
+    const textOptions = extend({ baseline: vAlign, align: hAlign }, jsPDFTextOptions);
+    doc.text(textArray.join('\n'), roundToThreeDecimals(x), roundToThreeDecimals(y), textOptions);
 }
 
 function drawCellBackground(doc, cell) {
@@ -86,7 +87,7 @@ function drawCellText(doc, cell, docStyles) {
             doc.saveGraphicsState(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#saveGraphicsState
             clipOutsideRectContent(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h);
         }
-        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign);
+        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign, cell._internalTextOptions);
         if(isDefined(cell._textLeftOffset) || isDefined(cell._textTopOffset)) {
             doc.restoreGraphicsState(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#restoreGraphicsState
         }

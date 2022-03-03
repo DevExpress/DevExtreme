@@ -132,6 +132,29 @@ export const dataControllerModule = {
                     this._items = [];
                     this._refreshDataSource();
                 },
+                _handleDataSourceChange(args) {
+                    if(args.value === args.previousValue || (
+                        this.option('columns') &&
+                        Array.isArray(args.value) &&
+                        Array.isArray(args.previousValue)
+                    )) {
+                        const isValueChanged = args.value !== args.previousValue;
+                        if(isValueChanged) {
+                            const store = this.store();
+                            if(store) {
+                                store._array = args.value;
+                            }
+                        }
+
+                        const isParasiteChange = Array.isArray(args.value) && !isValueChanged && this._dataSource?.isLoading();
+                        if(!isParasiteChange) {
+                            this.refresh(this.option('repaintChangesOnly'));
+                        }
+                        return true;
+                    }
+
+                    return false;
+                },
                 optionChanged: function(args) {
                     const that = this;
                     let dataSource;
@@ -140,20 +163,10 @@ export const dataControllerModule = {
                         args.handled = true;
                     }
 
-                    if(args.name === 'dataSource' && args.name === args.fullName && (args.value === args.previousValue || (that.option('columns') && Array.isArray(args.value) && Array.isArray(args.previousValue)))) {
-                        const isValueChanged = args.value !== args.previousValue;
-                        if(isValueChanged) {
-                            const store = that.store();
-                            if(store) {
-                                store._array = args.value;
-                            }
-                        }
-
+                    if(args.name === 'dataSource'
+                        && args.name === args.fullName
+                        && this._handleDataSourceChange(args)) {
                         handled();
-                        const isParasiteChange = Array.isArray(args.value) && !isValueChanged && this._dataSource?.isLoading();
-                        if(!isParasiteChange) {
-                            that.refresh(that.option('repaintChangesOnly'));
-                        }
                         return;
                     }
 
@@ -943,11 +956,20 @@ export const dataControllerModule = {
 
                     if(dataSource) {
                         dataSource.pageIndex(0);
+                        this._isFilterApplying = true;
+
                         return this.reload().done(() => {
-                            this.pageChanged.fire();
+                            if(this._isFilterApplying) {
+                                this.pageChanged.fire();
+                            }
                         });
                     }
                 },
+
+                resetFilterApplying: function() {
+                    this._isFilterApplying = false;
+                },
+
                 filter: function(filterExpr) {
                     const dataSource = this._dataSource;
                     const filter = dataSource && dataSource.filter();

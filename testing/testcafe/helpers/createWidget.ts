@@ -1,6 +1,7 @@
 import { ClientFunction } from 'testcafe';
 
 export type WidgetName =
+'dxAccordion' |
 'dxGallery' |
 'dxButtonGroup' |
 'dxCheckBox' |
@@ -14,10 +15,12 @@ export type WidgetName =
 'dxTreeList' |
 'dxPager' |
 'dxScheduler' |
+'dxTabs' |
 'dxTagBox' |
 'dxContextMenu' |
 'dxDropDownMenu' |
 'dxChart' |
+'dxMenu' |
 'dxPopup' |
 'dxSelectBox' |
 'dxButton' |

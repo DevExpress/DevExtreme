@@ -487,7 +487,9 @@ Point.prototype = {
         const aggregationInfo = that.aggregationInfo;
         if(aggregationInfo) {
             const axis = that.series.getArgumentAxis();
-            const rangeText = axis.formatRange(aggregationInfo.intervalStart, aggregationInfo.intervalEnd, aggregationInfo.aggregationInterval);
+            const rangeText = axis.formatRange(aggregationInfo.intervalStart, aggregationInfo.intervalEnd,
+                aggregationInfo.aggregationInterval, tooltip.getOptions().argumentFormat);
+
             if(rangeText) {
                 tooltipFormatObject.valueText += `\n${rangeText}`;
             }

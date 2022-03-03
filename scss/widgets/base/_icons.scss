@@ -178,7 +178,7 @@
 }
 
 @mixin dx-font-icon($glyph) {
-  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
+  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
 
   &::before {
     content: $glyph;

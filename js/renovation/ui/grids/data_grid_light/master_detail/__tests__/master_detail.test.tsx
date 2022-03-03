@@ -5,6 +5,7 @@ import {
 } from '../plugins';
 import { generateRows } from '../../__tests__/test_data';
 import {
+  AddMasterDetailRows,
   MasterDetail, MasterDetailProps, viewFunction as MasterDetailView,
 } from '../master_detail';
 import {
@@ -23,7 +24,7 @@ describe('Master Detail', () => {
       const tree = mount(<MasterDetailView {...viewProps as any} />);
 
       expect(tree.find(GetterExtender).at(0).props()).toEqual({
-        type: VisibleRows, order: 2, func: viewProps.processVisibleRows,
+        type: VisibleRows, order: 2, value: AddMasterDetailRows,
       });
     });
   });
@@ -117,8 +118,12 @@ describe('Master Detail', () => {
             expandedRowKeys: [],
             template: () => (<div />),
           });
+          const isExpanded = masterDetail.isExpanded.bind(masterDetail);
 
-          expect(masterDetail.processVisibleRows(visibleRows)).toEqual(visibleRows);
+          expect(AddMasterDetailRows.func(
+            visibleRows,
+            isExpanded,
+          )).toEqual(visibleRows);
         });
 
         it('should return visibleRows with master detail row', () => {
@@ -126,8 +131,12 @@ describe('Master Detail', () => {
             expandedRowKeys: [1],
             template: () => (<div />),
           });
+          const isExpanded = masterDetail.isExpanded.bind(masterDetail);
 
-          expect(masterDetail.processVisibleRows(visibleRows)).toEqual([
+          expect(AddMasterDetailRows.func(
+            visibleRows,
+            isExpanded,
+          )).toEqual([
             visibleRows[0],
             visibleRows[1],
             {
@@ -143,15 +152,16 @@ describe('Master Detail', () => {
             expandedRowKeys: [],
             template: () => (<div />),
           });
+          const isExpanded = masterDetail.isExpanded.bind(masterDetail);
 
-          expect(masterDetail.processVisibleRows([
+          expect(AddMasterDetailRows.func([
             ...visibleRows,
             {
               ...visibleRows[1],
               rowType: 'detail',
               template: MasterDetailRow,
             },
-          ])).toEqual(visibleRows);
+          ], isExpanded)).toEqual(visibleRows);
         });
       });
     });

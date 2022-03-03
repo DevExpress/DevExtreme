@@ -13,6 +13,7 @@ import { Row, RowTemplateProps } from '../types';
 import { RowBase, RowClassesGetter } from '../widgets/row_base';
 import { MasterDetailTemplate } from './plugins';
 import { VisibleColumns } from '../data_grid_light';
+import CLASSES from '../classes';
 
 export const viewFunction = (viewModel: MasterDetailRow): JSX.Element => {
   const { masterDetailRowTemplate: MasterDetailRowTemplate, colSpan } = viewModel;
@@ -81,7 +82,7 @@ export class MasterDetailRow extends JSXComponent(MasterDetailRowProps) {
         if (row.rowType === 'detail') {
           return {
             ...base(row),
-            'dx-master-detail-row': true,
+            [CLASSES.masterDetailRow]: true,
           };
         }
         return base(row);

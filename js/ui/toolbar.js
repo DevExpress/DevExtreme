@@ -5,18 +5,12 @@ import { grep, deferRender } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import { merge } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
-import ActionSheetStrategy from './toolbar/ui.toolbar.strategy.action_sheet';
-import DropDownMenuStrategy from './toolbar/ui.toolbar.strategy.drop_down_menu';
+import ToolbarDropDownMenu from './toolbar/ui.toolbar.drop_down_menu';
 import ToolbarBase from './toolbar/ui.toolbar.base';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 import { toggleItemFocusableElementTabIndex } from './toolbar/ui.toolbar.utils';
 
 // STYLE toolbar
-
-const STRATEGIES = {
-    actionSheet: ActionSheetStrategy,
-    dropDownMenu: DropDownMenuStrategy
-};
 
 const TOOLBAR_AUTO_HIDE_ITEM_CLASS = 'dx-toolbar-item-auto-hide';
 const TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide';
@@ -29,16 +23,6 @@ const Toolbar = ToolbarBase.inherit({
         return extend(this.callBase(), {
 
             menuItemTemplate: 'menuItem',
-
-            /**
-            * @name dxToolbarOptions.submenuType
-            * @type string
-            * @default 'dropDownMenu'
-            * @acceptValues 'actionSheet'|'dropDownMenu'
-            * @hidden
-            */
-            submenuType: 'dropDownMenu',
-
             menuContainer: undefined,
             overflowMenuVisible: false,
 
@@ -108,7 +92,7 @@ const Toolbar = ToolbarBase.inherit({
         }
 
         this.callBase();
-        this._menuStrategy.renderMenuItems();
+        this._menu.renderMenuItems();
     },
 
     _initTemplates: function() {
@@ -127,10 +111,10 @@ const Toolbar = ToolbarBase.inherit({
 
     _postProcessRenderItems: function() {
         this._hideOverflowItems();
-        this._menuStrategy._updateMenuVisibility();
+        this._menu._updateMenuVisibility();
         this.callBase();
         deferRender(() => {
-            this._menuStrategy.renderMenuItems();
+            this._menu.renderMenuItems();
         });
     },
 
@@ -214,37 +198,14 @@ const Toolbar = ToolbarBase.inherit({
     _renderMenu: function() {
         this._renderMenuStrategy();
         deferRender(() => {
-            this._menuStrategy.render();
+            this._menu.render();
         });
     },
 
     _renderMenuStrategy: function() {
-        let strategyName = this.option('submenuType');
-
-        if(this._requireDropDownStrategy()) {
-            strategyName = 'dropDownMenu';
+        if(!this._menu) {
+            this._menu = new ToolbarDropDownMenu(this);
         }
-
-        const strategy = STRATEGIES[strategyName];
-
-        if(!(this._menuStrategy && this._menuStrategy.NAME === strategyName)) {
-            this._menuStrategy = new strategy(this);
-        }
-    },
-
-    _requireDropDownStrategy: function() {
-        const items = this.option('items') || [];
-        let result = false;
-
-        each(items, function(index, item) {
-            if(item.locateInMenu === 'auto') {
-                result = true;
-            } else if(item.locateInMenu === 'always' && item.widget) {
-                result = true;
-            }
-        });
-
-        return result;
     },
 
     _arrangeItems: function() {
@@ -270,12 +231,12 @@ const Toolbar = ToolbarBase.inherit({
 
     _itemOptionChanged: function(item, property, value) {
         if(this._isMenuItem(item)) {
-            this._menuStrategy.itemOption(item, property, value);
+            this._menu.itemOption(item, property, value);
         } else if(this._isToolbarItem(item)) {
             this.callBase(item, property, value);
         } else {
             this.callBase(item, property, value);
-            this._menuStrategy.itemOption(item, property, value);
+            this._menu.itemOption(item, property, value);
         }
 
         if(property === 'disabled' || property === 'options.disabled') {
@@ -303,9 +264,6 @@ const Toolbar = ToolbarBase.inherit({
         const { name, value } = args;
 
         switch(name) {
-            case 'submenuType':
-                this._invalidate();
-                break;
             case 'menuItemTemplate':
                 this._changeMenuOption('itemTemplate', this._getTemplate(value));
                 break;
@@ -317,7 +275,7 @@ const Toolbar = ToolbarBase.inherit({
                 this._changeMenuOption('container', value);
                 break;
             case 'overflowMenuVisible':
-                this._changeMenuOption(this._menuStrategy.NAME === 'dropDownMenu' ? 'opened' : 'visible', value);
+                this._changeMenuOption('opened', value);
                 break;
             case 'disabled':
                 this._changeMenuOption('disabled', value);
@@ -331,7 +289,7 @@ const Toolbar = ToolbarBase.inherit({
     },
 
     _changeMenuOption: function(name, value) {
-        this._menuStrategy.widgetOption(name, value);
+        this._menu.widgetOption(name, value);
     },
 
     /**

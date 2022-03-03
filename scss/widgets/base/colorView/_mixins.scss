@@ -1,4 +1,3 @@
-
 @mixin dx-base-colorview-styles($handle-color, $handle-border-color) {
   .dx-colorview-palette-handle {
     background: radial-gradient(transparent 5px, $handle-border-color 6px, $handle-color 7px, $handle-color 12px, $handle-border-color 13px);

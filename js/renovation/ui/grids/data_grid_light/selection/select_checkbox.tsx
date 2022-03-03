@@ -4,13 +4,15 @@ import {
 } from '@devextreme-generator/declarations';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
+import CLASSES from '../classes';
+
 import { CheckBox } from '../../../editors/check_box/check_box';
 import { RowData } from '../types';
 import { IsSelected, SetSelected } from './plugins';
 
 export const viewFunction = (viewModel: SelectionCheckbox): JSX.Element => (
   <CheckBox
-    className="dx-select-checkbox dx-datagrid-checkbox-size"
+    className={`${CLASSES.selectCheckbox} ${CLASSES.checkboxSize}`}
     value={viewModel.isSelected}
     valueChange={viewModel.setSelected}
   />
