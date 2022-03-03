@@ -320,9 +320,6 @@ module('Image uploading integration', {
         this.createWidget({
             value: `<img src=${WHITE_PIXEL}>`,
             imageUploading: { mode: 'url' },
-            onValueChanged: ({ value }) => {
-
-            }
         });
 
         this.instance.focus();
@@ -341,9 +338,8 @@ module('Image uploading integration', {
         const $form = $('.dx-form');
         const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
         const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
-
-        widthEditor.option('value', '50');
-        heightEditor.option('value', '40');
+        widthEditor.option('value', '70');
+        heightEditor.option('value', '65');
         this.clock.tick(TIME_TO_WAIT);
 
         $('.dx-formdialog .dx-toolbar .dx-button')
@@ -354,17 +350,14 @@ module('Image uploading integration', {
 
         const imageFormat = this.instance.getFormat();
 
-        assert.strictEqual(imageFormat.width, '50', 'width is correct');
-        assert.strictEqual(imageFormat.height, '40', 'height is correct');
+        assert.strictEqual(imageFormat.width, '70', 'width is correct');
+        assert.strictEqual(imageFormat.height, '65', 'height is correct');
     });
 
     test('check dimentions default values', function(assert) {
         this.createWidget({
             value: `<img width='50' height='40' src=${WHITE_PIXEL}>`,
             imageUploading: { mode: 'url' },
-            onValueChanged: ({ value }) => {
-
-            }
         });
 
         this.instance.focus();
@@ -521,7 +514,6 @@ module('Image uploading integration', {
         const expectedValue = '<p>t<img src="/uploadDirectory/fakefile1.jpeg">est text</p><p><br></p>';
         this.createWidget();
         this.clock.tick(TIME_TO_WAIT);
-
 
         this.xhrMock = new window.XMLHttpRequestMock();
         this._nativeXhr = XMLHttpRequest;

@@ -21,7 +21,7 @@ import FileUploader from '../../file_uploader';
 import TextBox from '../../text_box';
 // import Button from '../../button';
 
-import { getHeight, getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
+import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
 
 import { getWindow } from '../../../core/utils/window';
 
@@ -293,13 +293,6 @@ function getUpdateDialogFormData(module, formData) {
     resultFormData.src = resultFormData.imageSrc;
     delete resultFormData.imageSrc;
 
-    const imgElement = module.quill.getLeaf(module.editorInstance.getSelection().index)[0].domNode;
-
-    if(imgElement && (!resultFormData.width || !resultFormData.height)) {
-        resultFormData.width = resultFormData.width || getWidth($(imgElement));
-        resultFormData.height = resultFormData.height || getHeight($(imgElement));
-    }
-
     return resultFormData;
 }
 
@@ -444,14 +437,14 @@ function getSpecifyURLTabItems(module, imageUploadingOption) {
                     const newValue = parseInt(e.value);
                     const oldHeight = parseInt(heightEditor.option('value'));
 
+                    data.component.updateData(data.dataField, newValue);
+
                     if(keepRatio && oldHeight && e.previousValue && !preventRecalculating) {
                         preventRecalculating = true;
                         heightEditor.option('value', Math.round(newValue * oldHeight / parseInt(e.previousValue)).toString());
                     }
 
                     preventRecalculating = false;
-
-                    data.component.updateData(data.dataField, newValue);
                 }
             });
 
@@ -482,6 +475,7 @@ function getSpecifyURLTabItems(module, imageUploadingOption) {
                 onValueChanged: (e) => {
                     const newValue = parseInt(e.value);
                     const oldWidth = parseInt(widthEditor.option('value'));
+                    data.component.updateData(data.dataField, newValue);
 
                     if(keepRatio && oldWidth && e.previousValue && !preventRecalculating) {
                         preventRecalculating = true;
@@ -489,8 +483,6 @@ function getSpecifyURLTabItems(module, imageUploadingOption) {
                     }
 
                     preventRecalculating = false;
-
-                    data.component.updateData(data.dataField, newValue);
                 }
             });
 
