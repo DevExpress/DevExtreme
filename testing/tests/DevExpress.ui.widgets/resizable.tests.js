@@ -495,7 +495,7 @@ QUnit.module('drag integration', () => {
 
     QUnit.module('drag offset calculation', {
         beforeEach: function() {
-            this.$resizable = $('#resizable').dxResizable({});
+            this.$resizable = $('#resizable').dxResizable({ keepAspectRatio: false });
             this.cachedStyles = ['border', 'boxSizing', 'padding'].reduce((cache, prop) => {
                 cache[prop] = this.$resizable.css(prop);
                 return cache;
@@ -689,7 +689,7 @@ QUnit.module('drag integration', () => {
                     left: 200,
                     top: 200
                 })
-                .dxResizable();
+                .dxResizable({ keepAspectRatio: false });
             this.getRect = () => this.$resizable.get(0).getBoundingClientRect();
 
             this.initialRect = this.getRect();
