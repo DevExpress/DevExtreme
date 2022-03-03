@@ -29781,6 +29781,10 @@ declare module DevExpress.viz {
      * [descr:dxChartSeriesTypes.CommonSeries.label.visible]
      */
     visible?: boolean;
+    /**
+     * [descr:dxChartSeriesTypes.CommonSeries.label.pattern]
+     */
+    pattern?: string;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
