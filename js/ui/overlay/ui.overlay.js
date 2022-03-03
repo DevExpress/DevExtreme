@@ -1309,7 +1309,7 @@ const Overlay = Widget.inherit({
 
         this.callBase();
 
-        zIndexPool.remove(this._zIndex);
+        this.option('visible') && zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
     },
