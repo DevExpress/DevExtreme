@@ -2282,6 +2282,44 @@ QUnit.module('Export menu', {
         assert.equal($exportSelectedRows.attr('title'), 'exportSelectedRows', 'exportSelectedRows');
     });
 
+    QUnit.test('The export to pdf button is shown', function(assert) {
+        // arrange
+        this.setupModules({
+            'pdfExport': {
+                enabled: true,
+                allowExportSelectedData: true
+            }
+        }, true);
+
+        const $container = $('#container');
+        this.headerPanel.render($container);
+
+        this.headerPanel._exportController.exportToPdf = sinon.spy();
+
+        // assert
+        assert.ok(this.headerPanel.isVisible(), 'is visible');
+        assert.ok(this.headerPanel._exportController, 'export controller');
+
+        const $button = $container.find('.dx-datagrid-export-button');
+        assert.equal($button.length, 1, 'export button is contained in a DOM');
+        assert.equal($button.first().attr('title'), 'Export', 'hint of button');
+
+        // act
+        const $exportButton = $container.find('.dx-datagrid-export-button').first();
+        $exportButton.find('.dx-button').trigger('dxclick');
+
+        const $exportAllButton = $('.dx-datagrid-export-menu .dx-item:eq(0)');
+        const $exportSelectedRows = $('.dx-datagrid-export-menu .dx-item:eq(1)');
+
+        $exportAllButton.trigger('dxclick');
+        $exportSelectedRows.trigger('dxclick');
+
+        // assert
+        assert.strictEqual(this.headerPanel._exportController.exportToPdf.getCall(0).args[0], undefined, 'called with selectedOnly=false');
+        assert.strictEqual(this.headerPanel._exportController.exportToPdf.getCall(1).args[0], true, 'called with selectedOnly=true');
+    });
+
+
     QUnit.test('Search panel should be replaced after export button', function(assert) {
         this.setupModules({
             'export': {
@@ -2314,7 +2352,10 @@ QUnit.module('Export menu', {
     QUnit.test('The export button is not shown', function(assert) {
         this.setupModules({
             'export': {
-                enabled: false
+                enabled: false,
+            },
+            'pdfExport': {
+                enabled: false,
             }
         });
 
@@ -2377,7 +2418,7 @@ QUnit.module('Export menu', {
 
         const $exportButton = $container.find('.dx-datagrid-export-button');
         assert.equal($exportButton.length, 1, 'export button is contained in a DOM');
-        assert.equal($exportButton.attr('title'), 'Export all data', 'hint of button');
+        assert.equal($exportButton.attr('title'), 'Export all data to Excel', 'hint of button');
     });
 
     QUnit.test('Export menu elements doesn\'t leak', function(assert) {
@@ -2643,8 +2684,8 @@ QUnit.module('Export menu', {
         const menuItems = dropDownButton.option('items');
         dropDownButton.open();
 
-        assert.equal(menuItems[0].text, 'Export all data', '1 item');
-        assert.equal(menuItems[1].text, 'Export selected rows', '2 item text');
+        assert.equal(menuItems[0].text, 'Export all data to Excel', '1 item');
+        assert.equal(menuItems[1].text, 'Export selected rows to Excel', '2 item text');
     });
 
     // T364045: dxDataGrid - Export to Excel is not working when the Export button text is localized
