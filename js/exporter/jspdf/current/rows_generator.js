@@ -87,13 +87,14 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
         const style = getPdfCellStyle(columns[cellIndex], rowType, cellStyle);
 
         const defaultAlignment = rtlEnabled ? 'right' : 'left';
+        const paddingValue = toPdfUnit(doc, 5);
         const pdfCell = {
             text: getFormattedValue(cellData.value, cellStyle.format),
             verticalAlign: 'middle',
             horizontalAlign: style.alignment ?? defaultAlignment,
             wordWrapEnabled,
             backgroundColor,
-            padding: toPdfUnit(doc, 5),
+            padding: { top: paddingValue, right: paddingValue, bottom: paddingValue, left: paddingValue },
             _rect: {},
             _internalTextOptions: {}
         };

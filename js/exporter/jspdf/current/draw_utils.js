@@ -108,8 +108,8 @@ function drawCellsLines(doc, cellsArray, docStyles) {
         });
 }
 
-function drawGridLines(doc, rect, { borderWidth, borderColor }, docStyles) {
-    drawBorders(doc, rect, { borderWidth, borderColor }, docStyles);
+function drawGridLines(doc, rect, options, docStyles) {
+    drawBorders(doc, rect, options, docStyles);
 }
 
 function drawBorders(doc, rect, { borderWidth, borderColor, drawLeftBorder = true, drawRightBorder = true, drawTopBorder = true, drawBottomBorder = true }, docStyles) {
