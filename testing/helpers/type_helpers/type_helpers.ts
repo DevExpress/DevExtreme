@@ -6,14 +6,14 @@ export type PropertyType<T, TProp extends PropertyKey> =
       ? TValue
       : never;
 
-export type DeepPropertyType<T, TProps> =
+export type DeepPropertyType<T, TProps extends PropertyKey[]> =
   TProps extends [infer TProp]
     ? PropertyType<T, TProp & PropertyKey>
     : (TProps extends [infer TProp, ... infer Rest]
-      ? DeepPropertyType<
-      (PropertyType<T, TProp & PropertyKey>),
-      Rest
-      >
+      ? (Rest extends PropertyKey[]
+        ? DeepPropertyType<PropertyType<T, TProp & PropertyKey>, Rest>
+        : never
+      )
       : never
     );
 
