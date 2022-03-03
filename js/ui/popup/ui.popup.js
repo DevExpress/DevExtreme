@@ -685,7 +685,8 @@ const Popup = Overlay.inherit({
             },
             minHeight: 100,
             minWidth: 100,
-            area: this._positionController.$dragResizeContainer
+            area: this._positionController.$dragResizeContainer,
+            keepAspectRatio: false
         });
     },
 

@@ -538,8 +538,8 @@ QUnit.module('drag integration', () => {
         });
     });
 
-    [true, false].forEach(_keepAspectRatio => {
-        QUnit.module(`resize by non-corner handles if _keepAspectRatio=${_keepAspectRatio}`, {
+    [true, false].forEach(keepAspectRatio => {
+        QUnit.module(`resize by non-corner handles if keepAspectRatio=${keepAspectRatio}`, {
             beforeEach: function() {
                 this.$resizable = $('#resizable');
                 this.cachedStyles = ['left', 'top'].reduce((cache, prop) => {
@@ -553,7 +553,7 @@ QUnit.module('drag integration', () => {
                         top: 200
                     })
                     .dxResizable({
-                        _keepAspectRatio
+                        keepAspectRatio
                     });
                 this.resizable = this.$resizable.dxResizable('instance');
                 this.getRect = () => this.$resizable.get(0).getBoundingClientRect();
@@ -677,7 +677,7 @@ QUnit.module('drag integration', () => {
         });
     });
 
-    QUnit.module('resize by corner handles if _keepAspectRatio=false', {
+    QUnit.module('resize by corner handles if keepAspectRatio=false', {
         beforeEach: function() {
             this.$resizable = $('#resizable');
             this.cachedStyles = ['left, top'].reduce((cache, prop) => {
@@ -773,7 +773,7 @@ QUnit.module('drag integration', () => {
         });
     });
 
-    QUnit.module('resize by corner handles if _keepAspectRatio=true', {
+    QUnit.module('resize by corner handles if keepAspectRatio=true', {
         beforeEach: function() {
             this.$resizable = $('#resizable');
             this.cachedStyles = ['left', 'top', 'width', 'height', 'boxSizing'].reduce((cache, prop) => {
@@ -789,7 +789,7 @@ QUnit.module('drag integration', () => {
                     boxSizing: 'content-box'
                 })
                 .dxResizable({
-                    _keepAspectRatio: true
+                    keepAspectRatio: true
                 });
             this.resizable = this.$resizable.dxResizable('instance');
             this.getRect = () => this.$resizable.get(0).getBoundingClientRect();
@@ -1176,7 +1176,7 @@ QUnit.module('drag integration', () => {
             this.$resizable
                 .css({ width, height, left, top })
                 .dxResizable({
-                    _keepAspectRatio: true,
+                    keepAspectRatio: true,
                     area: this.$area
                 });
             const initialRect = this.getRect();
@@ -1200,7 +1200,7 @@ QUnit.module('drag integration', () => {
             this.$resizable
                 .css({ width, height, left, top })
                 .dxResizable({
-                    _keepAspectRatio: true,
+                    keepAspectRatio: true,
                     area: this.$area
                 });
             const initialRect = this.getRect();
@@ -1224,7 +1224,7 @@ QUnit.module('drag integration', () => {
             this.$resizable
                 .css({ width, height, left, top })
                 .dxResizable({
-                    _keepAspectRatio: true,
+                    keepAspectRatio: true,
                     area: this.$area
                 });
             const initialRect = this.getRect();
@@ -1248,7 +1248,7 @@ QUnit.module('drag integration', () => {
             this.$resizable
                 .css({ width, height, left, top })
                 .dxResizable({
-                    _keepAspectRatio: true,
+                    keepAspectRatio: true,
                     area: this.$area
                 });
             const initialRect = this.getRect();
@@ -1272,7 +1272,7 @@ QUnit.module('drag integration', () => {
             this.$resizable
                 .css({ width, height, left, top })
                 .dxResizable({
-                    _keepAspectRatio: true,
+                    keepAspectRatio: true,
                     area: this.$area
                 });
             const initialRect = this.getRect();
@@ -1296,7 +1296,7 @@ QUnit.module('drag integration', () => {
             this.$resizable
                 .css({ width, height, left, top })
                 .dxResizable({
-                    _keepAspectRatio: true,
+                    keepAspectRatio: true,
                     area: this.$area
                 });
             const initialRect = this.getRect();
@@ -1320,7 +1320,7 @@ QUnit.module('drag integration', () => {
             this.$resizable
                 .css({ width, height, left, top })
                 .dxResizable({
-                    _keepAspectRatio: true,
+                    keepAspectRatio: true,
                     area: this.$area
                 });
             const initialRect = this.getRect();
@@ -1344,7 +1344,7 @@ QUnit.module('drag integration', () => {
             this.$resizable
                 .css({ width, height, left, top })
                 .dxResizable({
-                    _keepAspectRatio: true,
+                    keepAspectRatio: true,
                     area: this.$area
                 });
             const initialRect = this.getRect();

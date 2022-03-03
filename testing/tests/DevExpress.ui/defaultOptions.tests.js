@@ -37,6 +37,7 @@ const Widget = require('ui/widget/ui.widget');
 const Popup = require('ui/popup');
 const Popover = require('ui/popover');
 const RadioGroup = require('ui/radio_group');
+const Resizable = require('ui/resizable');
 const Scheduler = require('ui/scheduler/ui.scheduler');
 const Scrollable = require('ui/scroll_view/ui.scrollable');
 const ScrollView = require('ui/scroll_view');
@@ -593,6 +594,11 @@ testComponentDefaults(Popover,
 testComponentDefaults(RadioGroup,
     { tablet: true },
     { layout: 'horizontal' }
+);
+
+testComponentDefaults(Resizable,
+    { },
+    { keepAspectRatio: true }
 );
 
 testComponentDefaults(Gallery,
