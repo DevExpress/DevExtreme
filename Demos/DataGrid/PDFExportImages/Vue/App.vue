@@ -36,6 +36,7 @@
       <DxToolbar>
         <DxItem location="after">
           <DxButton
+            text="Export to PDF"
             icon="exportpdf"
             @click="exportGrid()"
           />

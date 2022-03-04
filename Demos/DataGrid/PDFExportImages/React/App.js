@@ -35,6 +35,7 @@ class App extends React.Component {
           <Toolbar>
             <Item location="after">
               <Button
+                text='Export to PDF'
                 icon='exportpdf'
                 onClick={this.exportGrid}
               />

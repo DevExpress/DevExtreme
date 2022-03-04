@@ -32,6 +32,7 @@ $(() => {
           widget: 'dxButton',
           location: 'after',
           options: {
+            text: 'Export to PDF',
             icon: 'exportpdf',
             onClick() {
               const dataGrid = $('#gridContainer').dxDataGrid('instance');

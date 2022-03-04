@@ -23,7 +23,12 @@
 
   <dxo-toolbar>
     <dxi-item location="after">
-      <dx-button icon="exportpdf" (onClick)="exportGrid($event)"> </dx-button>
+      <dx-button
+        text="Export to PDF"
+        icon="exportpdf"
+        (onClick)="exportGrid($event)"
+      >
+      </dx-button>
     </dxi-item>
   </dxo-toolbar>
 </dx-data-grid>
