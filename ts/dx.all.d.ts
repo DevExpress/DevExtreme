@@ -7750,14 +7750,17 @@ declare module DevExpress.ui {
        */
       enabled?: boolean;
       /**
-       * [descr:PDFExport.fileName]
-       */
-      fileName?: string;
-      /**
        * [descr:PDFExport.texts]
        */
       texts?: PDFExportTexts;
     };
+    export type PDFExportingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+        selectedRowsOnly: boolean;
+      };
     export type PDFExportTexts = {
       /**
        * [descr:PDFExportTexts.exportAll]
@@ -8868,7 +8871,7 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.onPdfExporting]
      */
     onPdfExporting?: (
-      e: DevExpress.ui.dxDataGrid.ExportingEvent<TRowData, TKey>
+      e: DevExpress.ui.dxDataGrid.PDFExportingEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxDataGridOptions.onFocusedCellChanged]
