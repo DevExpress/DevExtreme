@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings,
-  OneWay, Effect, InternalState, Provider, Slot,
+  OneWay, Effect, InternalState, Provider, Slot, Template, JSXTemplate,
 } from '@devextreme-generator/declarations';
 
 import {
@@ -70,7 +70,11 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
 
     <div className={`${CLASSES.dataGrid} ${CLASSES.gridBaseContainer}`} role="grid" aria-label="Data grid">
       <TableHeader columns={viewModel.visibleColumns} />
-      <TableContent columns={viewModel.visibleColumns} dataSource={viewModel.visibleRows} />
+      <TableContent
+        columns={viewModel.visibleColumns}
+        dataSource={viewModel.visibleRows}
+        noDataTemplate={viewModel.props.noDataTemplate}
+      />
       <Footer />
       { viewModel.props.children }
     </div>
@@ -90,6 +94,9 @@ export class DataGridLightProps extends BaseWidgetProps {
 
   @Slot()
   children?: JSX.Element | JSX.Element[];
+
+  @Template()
+  noDataTemplate?: JSXTemplate;
 }
 
 const aria = {

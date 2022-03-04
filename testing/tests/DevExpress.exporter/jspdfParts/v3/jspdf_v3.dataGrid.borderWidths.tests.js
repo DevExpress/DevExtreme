@@ -46,7 +46,7 @@ const JSPdfBorderWidthsTests = {
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, drawTableBorder: true, tableBorderWidth: 1.5 }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, drawTableBorder: true, borderWidth: 1.5 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

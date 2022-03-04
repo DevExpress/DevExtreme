@@ -31,8 +31,19 @@ function getTextLines(doc, text, font, { wordWrapEnabled, targetRectWidth }) {
         return [textWithoutLineBreak];
     }
 
-    while(textWithoutLineBreak.length > 0 && getTextDimensions(doc, textWithoutLineBreak + DOTS_TEXT, font).w > targetRectWidth) {
-        textWithoutLineBreak = textWithoutLineBreak.substring(0, textWithoutLineBreak.length - 1);
+    let textWidth = getTextDimensions(doc, textWithoutLineBreak + DOTS_TEXT, font).w;
+    while(textWithoutLineBreak.length > 0 && textWidth > targetRectWidth) {
+        let symbolsCountToRemove = 0;
+
+        if(textWidth >= targetRectWidth * 2) {
+            symbolsCountToRemove = textWithoutLineBreak.length / 2;
+        }
+
+        if(symbolsCountToRemove < 1) {
+            symbolsCountToRemove = 1;
+        }
+        textWithoutLineBreak = textWithoutLineBreak.substring(0, textWithoutLineBreak.length - symbolsCountToRemove);
+        textWidth = getTextDimensions(doc, textWithoutLineBreak + DOTS_TEXT, font).w;
     }
 
     return [textWithoutLineBreak + DOTS_TEXT];
@@ -40,7 +51,10 @@ function getTextLines(doc, text, font, { wordWrapEnabled, targetRectWidth }) {
 }
 
 function calculateTargetRectWidth(columnWidth, padding) {
-    return columnWidth - (padding.left + padding.right);
+    const width = columnWidth - (padding.left + padding.right);
+    return width >= 0
+        ? width
+        : 0;
 }
 
 function getTextDimensions(doc, text, font) {
@@ -74,7 +88,10 @@ function calculateRowHeight(doc, cells, columnWidths) {
         const columnWidth = columnWidths[cellIndex];
         const targetRectWidth = calculateTargetRectWidth(columnWidth, cellPadding);
         if(isDefined(cellText)) {
-            const cellHeight = calculateTextHeight(doc, cellText, font, { wordWrapEnabled, targetRectWidth }) + cellPadding.top + cellPadding.bottom;
+            const textHeight = cellText !== ''
+                ? calculateTextHeight(doc, cellText, font, { wordWrapEnabled, targetRectWidth })
+                : 0;
+            const cellHeight = textHeight + cellPadding.top + cellPadding.bottom;
             if(rowHeight < cellHeight) {
                 rowHeight = cellHeight;
             }

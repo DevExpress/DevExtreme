@@ -127,6 +127,8 @@ export class GanttView extends Widget {
                 return 0;
             case 'hours':
                 return 1;
+            case 'sixHours':
+                return 2;
             case 'days':
                 return 3;
             case 'weeks':
@@ -373,8 +375,8 @@ export class GanttView extends Widget {
     getTreeListHeaderInfo(colIndex) {
         return this.callExportHelperMethod('getTreeListHeaderInfo', colIndex);
     }
-    getTreeListCellInfo(rowIndex, colIndex) {
-        return this.callExportHelperMethod('getTreeListCellInfo', rowIndex, colIndex);
+    getTreeListCellInfo(rowIndex, colIndex, key) {
+        return this.callExportHelperMethod('getTreeListCellInfo', key, colIndex);
     }
     callExportHelperMethod(methodName, ...args) {
         const helper = this.option('exportHelper');

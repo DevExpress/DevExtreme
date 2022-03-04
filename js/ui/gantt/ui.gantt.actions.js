@@ -1,3 +1,6 @@
+import $ from '../../core/renderer';
+import { getPublicElement } from '../../core/element';
+
 /* eslint-disable spellcheck/spell-checker */
 const Actions = {
     onContextMenuPreparing: 'onContextMenuPreparing',
@@ -25,7 +28,8 @@ const Actions = {
     onTaskInserting: 'onTaskInserting',
     onTaskMoving: 'onTaskMoving',
     onTaskUpdated: 'onTaskUpdated',
-    onTaskUpdating: 'onTaskUpdating'
+    onTaskUpdating: 'onTaskUpdating',
+    onScaleCellPrepared: 'onScaleCellPrepared'
 };
 
 const GANTT_TASKS = 'tasks';
@@ -613,5 +617,51 @@ export class GanttActionsManager {
         return this._taskMovingAction;
     }
 
-
+    getScaleCellPreparedAction() {
+        if(!this._scaleCellPreparedAction) {
+            this.createScaleCellPreparedAction();
+        }
+        return this._scaleCellPreparedAction;
+    }
+    createScaleCellPreparedAction() {
+        this._scaleCellPreparedAction = this._createActionByOption(Actions.onScaleCellPrepared);
+    }
+    raiseScaleCellPreparedAction(data) {
+        const action = this.getScaleCellPreparedAction();
+        if(action) {
+            const args = {
+                scaleIndex: data.scaleIndex,
+                scaleType: this._getScaleType(data.scaleType),
+                scaleElement: getPublicElement($(data.scaleElement)),
+                separatorElement: getPublicElement($(data.separatorElement)),
+                start: new Date(data.start),
+                end: new Date(data.end)
+            };
+            action(args);
+        }
+    }
+    _getScaleType(viewType) {
+        switch(viewType) {
+            case 0:
+                return 'minutes';
+            case 1:
+                return 'hours';
+            case 2:
+                return 'sixHours';
+            case 3:
+                return 'days';
+            case 4:
+                return 'weeks';
+            case 5:
+                return 'months';
+            case 6:
+                return 'quarters';
+            case 7:
+                return 'years';
+            case 8:
+                return 'fiveYears';
+            default:
+                return undefined;
+        }
+    }
 }
