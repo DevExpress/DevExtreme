@@ -574,7 +574,7 @@ export default {
                 const d = new Deferred();
                 dataSource.load({
                     ...loadOptions,
-                    filter,
+                    filter: this.combineFilters([filter, loadOptions.filter], 'and'),
                     group,
                     isExpanded: false,
                 }).done((items) => {
