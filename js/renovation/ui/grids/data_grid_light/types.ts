@@ -3,6 +3,8 @@
 
 import { JSXTemplate } from '@devextreme-generator/declarations';
 
+import type Store from '../../../../data/abstract_store';
+
 export type RowData = Record<string, unknown>;
 export type Column = string;
 export type KeyExpr = string;
@@ -37,3 +39,9 @@ export interface ColumnInternal {
 
 export type SelectionMode = 'multiple' | 'single' | 'none';
 export type SelectAllMode = 'allPages' | 'page';
+export interface DataState {
+  data: RowData[];
+  totalCount?: number;
+}
+
+export type DataSource = RowData[] | Store | undefined;
