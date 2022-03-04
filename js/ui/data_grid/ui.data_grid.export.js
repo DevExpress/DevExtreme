@@ -646,10 +646,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
     },
     exportToPdf: function(selectedRowsOnly) {
         const onExporting = this.getAction('onExporting');
-        const eventArgs = {
-            fileName: this.option('pdfExport.fileName'),
-            selectedRowsOnly
-        };
+        const eventArgs = { selectedRowsOnly };
 
         isFunction(onExporting) && onExporting(eventArgs);
     },
@@ -688,7 +685,6 @@ dataGridCore.registerModule('export', {
             'pdfExport': {
                 enabled: false,
                 allowExportSelectedData: false,
-                fileName: 'DataGrid',
                 texts: {
                     exportAll: messageLocalization.format('dxDataGrid-exportAll') + ' to PDF',
                     exportSelectedRows: messageLocalization.format('dxDataGrid-exportSelectedRows') + ' to PDF'
