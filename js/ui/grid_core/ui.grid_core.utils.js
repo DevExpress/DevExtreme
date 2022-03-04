@@ -1,6 +1,6 @@
 import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
-import { isDefined, isFunction } from '../../core/utils/type';
+import { isDefined, isFunction, isString } from '../../core/utils/type';
 import { when, Deferred } from '../../core/utils/deferred';
 import sharedFiltering from '../shared/filtering';
 import { format } from '../../core/utils/string';
@@ -566,29 +566,43 @@ export default {
     getWrappedLookupDataSource(column, dataSource, filter) {
         const lookupDataSourceOptions = this.normalizeLookupDataSource(column.lookup);
 
+        const hasLookupOptimization = column.displayField && isString(column.displayField);
+        const group = hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField;
+
         const lookupDataSource = {
             load: (loadOptions) => {
                 const d = new Deferred();
                 dataSource.load({
                     ...loadOptions,
-                    filter: this.combineFilters([filter, loadOptions.filter], 'and'),
-                    group: column.dataField || column.name
+                    filter,
+                    group,
+                    isExpanded: false,
                 }).done((items) => {
-                    const filter = this.combineFilters(
-                        items.map((data => [
-                            column.lookup.valueExpr, data.key,
-                        ])),
-                        'or'
-                    );
+                    if(hasLookupOptimization) {
+                        const lookupItems = items.map(item => ({
+                            [column.lookup.valueExpr]: item.key,
+                            [column.lookup.displayExpr]: item.items[0].key
+                        }));
 
-                    (new DataSource({
-                        ...lookupDataSourceOptions,
-                        filter: this.combineFilters([filter, lookupDataSourceOptions.filter], 'and'),
-                    }))
-                        .load(loadOptions)
-                        .done(d.resolve)
-                        .fail(d.fail);
-                });
+                        d.resolve(lookupItems);
+                    } else {
+                        const filter = this.combineFilters(
+                            items.map((data => [
+                                column.lookup.valueExpr, data.key,
+                            ])),
+                            'or'
+                        );
+
+                        (new DataSource({
+                            ...lookupDataSourceOptions,
+                            filter: this.combineFilters([filter, lookupDataSourceOptions.filter], 'and'),
+                        }))
+                            .load(loadOptions)
+                            .done(d.resolve)
+                            .fail(d.fail);
+                    }
+
+                }).fail(d.fail);
                 return d;
             },
             key: column.lookup.valueExpr,

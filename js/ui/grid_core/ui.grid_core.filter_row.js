@@ -480,9 +480,12 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             const $element = $('<div>').appendTo($editorContainer);
             const editorController = this.getController('editorFactory');
             const dataSource = this.getController('data').dataSource();
+            const filterRowController = this.getController('applyFilter');
 
             if(options.lookup && this.option('filterRow.showRelevantValues')) {
+                filterRowController.setCurrentColumnForFiltering(options);
                 const filter = this.getController('data').getCombinedFilter();
+                filterRowController.setCurrentColumnForFiltering(null);
 
                 const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSource, filter);
                 const lookupOptions = {
@@ -681,9 +684,9 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 const $cell = this._getCellElement(rowIndex, column.visibleIndex);
                 const editor = getEditorInstance($cell.find('.dx-editor-container'));
 
-                filterRowController._currentColumn = column;
+                filterRowController.setCurrentColumnForFiltering(column);
                 const filter = this.getController('data').getCombinedFilter();
-                filterRowController._currentColumn = null;
+                filterRowController.setCurrentColumnForFiltering(null);
 
                 const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
 
@@ -723,7 +726,7 @@ const DataControllerFilterRowExtender = {
         const filterRowController = this.getController('applyFilter');
 
         each(columns, function() {
-            const shouldSkip = filterRowController._currentColumn?.index === this.index;
+            const shouldSkip = filterRowController.getCurrentColumnForFiltering()?.index === this.index;
             if(this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue) && !shouldSkip) {
                 const filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');
                 filters.push(filter);
@@ -784,6 +787,14 @@ const ApplyFilterViewController = modules.ViewController.inherit({
             this._getHeaderPanel().enableApplyButton(false);
         }
     },
+
+    setCurrentColumnForFiltering: function(column) {
+        this._currentColumn = column;
+    },
+
+    getCurrentColumnForFiltering: function() {
+        return this._currentColumn;
+    }
 });
 
 export const filterRowModule = {
