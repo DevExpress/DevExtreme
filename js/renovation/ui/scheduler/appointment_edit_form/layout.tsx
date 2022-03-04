@@ -50,7 +50,6 @@ export const viewFunction = ({
     height="auto"
     fullScreen={fullScreen}
     maxWidth={maxWidth}
-    maxHeight="100%"
     showCloseButton={false}
     showTitle={false}
     toolbarItems={toolbarItems}
