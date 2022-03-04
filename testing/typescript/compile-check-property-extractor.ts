@@ -1,18 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-type-alias */
 import {
-  Equals,
-} from '../helpers/type_helpers/type_helpers';
-
-import {
   RecursivePropertyType,
 } from '../../js/core';
+
+import {
+  assertType,
+  toAssertion,
+} from './consts';
 
 type ComplexType = {
   a: {
     b?: number | {
       c: boolean;
     };
+    x: number;
   } | { e: string };
 }
 | string
@@ -23,30 +25,82 @@ type ComplexType = {
   }[];
 };
 
-type A = RecursivePropertyType<ComplexType, ['a']>;
-type AExpected = { b?: number | { c: boolean } } | { e: string };
-const a: Equals<A, AExpected> = true;
-
-type B1 = RecursivePropertyType<ComplexType, ['a', 'b']>;
-type B2 = RecursivePropertyType<A, ['b']>;
+type AExpected = {
+  b?: BExpected;
+  x: number;
+} | { e: string };
 type BExpected = number | { c: boolean };
-const b1: Equals<B1, BExpected> = true;
-const b2: Equals<B2, BExpected> = true;
-
-type C = RecursivePropertyType<ComplexType, ['a', 'b', 'c']>;
-type CExpected = boolean;
-const c: Equals<C, CExpected> = true;
-
-type D = RecursivePropertyType<ComplexType, ['d']>;
-type DExpected = boolean | string;
-const d: Equals<D, DExpected> = true;
-
-type E1 = RecursivePropertyType<ComplexType, ['a', 'e']>;
-type E2 = RecursivePropertyType<RecursivePropertyType<ComplexType, ['a']>, ['e']>;
-type EExpected = string;
-const e1: Equals<E1, EExpected> = true;
-const e2: Equals<E2, EExpected> = true;
-
-type G = RecursivePropertyType<ComplexType, ['f', 'g']>;
+type FExpected = string | { g: GExpected }[];
 type GExpected = number | Record<number, boolean>;
-const g: Equals<G, GExpected> = true;
+
+const a1: AExpected = {
+  e: 'e',
+};
+const a2: AExpected = {
+  x: 42,
+};
+const a3: AExpected = {
+  x: 42,
+  b: 1,
+};
+const a4: AExpected = {
+  x: 42,
+  b: {
+    c: false,
+  },
+};
+assertType<AExpected>(toAssertion(a1));
+assertType<RecursivePropertyType<ComplexType, ['a']>>(toAssertion(a1));
+assertType<AExpected>(toAssertion(a2));
+assertType<RecursivePropertyType<ComplexType, ['a']>>(toAssertion(a2));
+assertType<AExpected>(toAssertion(a3));
+assertType<RecursivePropertyType<ComplexType, ['a']>>(toAssertion(a3));
+assertType<AExpected>(toAssertion(a4));
+assertType<RecursivePropertyType<ComplexType, ['a']>>(toAssertion(a4));
+
+const b1: BExpected = 42;
+const b2: BExpected = { c: false };
+assertType<BExpected>(toAssertion(b1));
+assertType<RecursivePropertyType<ComplexType, ['a', 'b']>>(toAssertion(b1));
+assertType<RecursivePropertyType<RecursivePropertyType<ComplexType, ['a']>, ['b']>>(toAssertion(b1));
+assertType<BExpected>(toAssertion(b2));
+assertType<RecursivePropertyType<ComplexType, ['a', 'b']>>(toAssertion(b2));
+assertType<RecursivePropertyType<RecursivePropertyType<ComplexType, ['a']>, ['b']>>(toAssertion(b2));
+
+assertType<boolean>(toAssertion(false));
+assertType<RecursivePropertyType<ComplexType, ['a', 'b', 'c']>>(toAssertion(false));
+assertType < RecursivePropertyType<RecursivePropertyType<RecursivePropertyType<ComplexType, ['a']>, ['b']>, ['c']>>(toAssertion(false));
+assertType<boolean>(toAssertion(true));
+assertType<RecursivePropertyType<ComplexType, ['a', 'b', 'c']>>(toAssertion(true));
+assertType < RecursivePropertyType<RecursivePropertyType<RecursivePropertyType<ComplexType, ['a']>, ['b']>, ['c']>>(toAssertion(true));
+
+assertType<boolean | string>(toAssertion(true));
+assertType<RecursivePropertyType<ComplexType, ['d']>>(toAssertion(true));
+assertType<boolean | string>(toAssertion(false));
+assertType<RecursivePropertyType<ComplexType, ['d']>>(toAssertion(false));
+assertType<boolean | string>(toAssertion('some string'));
+assertType<RecursivePropertyType<ComplexType, ['d']>>(toAssertion('some string'));
+
+assertType<string>(toAssertion('some string'));
+assertType<RecursivePropertyType<ComplexType, ['a', 'e']>>(toAssertion('some string'));
+assertType<RecursivePropertyType<RecursivePropertyType<ComplexType, ['a']>, ['e']>>(toAssertion('some string'));
+
+const f1: FExpected = 'some string';
+const f2: FExpected = [{ g: 42 }];
+const f3: FExpected = [{ g: { 1: false, 2: false, 3: true } }];
+
+assertType<FExpected>(toAssertion(f1));
+assertType<RecursivePropertyType<ComplexType, ['f']>>(toAssertion(f1));
+assertType<FExpected>(toAssertion(f2));
+assertType<RecursivePropertyType<ComplexType, ['f']>>(toAssertion(f2));
+assertType<FExpected>(toAssertion(f3));
+assertType<RecursivePropertyType<ComplexType, ['f']>>(toAssertion(f3));
+
+const g1: GExpected = 42;
+const g2: GExpected = { 1: false, 2: false, 3: true };
+assertType<GExpected>(toAssertion(g1));
+assertType<RecursivePropertyType<ComplexType, ['f', 'g']>>(toAssertion(g1));
+assertType<RecursivePropertyType<RecursivePropertyType<ComplexType, ['f']>, ['g']>>(toAssertion(g1));
+assertType<GExpected>(toAssertion(g2));
+assertType<RecursivePropertyType<ComplexType, ['f', 'g']>>(toAssertion(g2));
+assertType<RecursivePropertyType<RecursivePropertyType<ComplexType, ['f']>, ['g']>>(toAssertion(g2));
