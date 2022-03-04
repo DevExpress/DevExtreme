@@ -238,6 +238,7 @@ function prepareImageHandler(module, imageUploadingOption) {
             formData: formData,
             width: 493,
             labelLocation: 'top',
+            colCount: imageUploadingOption.mode === 'both' ? 1 : 11,
             items: imageFormItems(module, imageUploadingOption)
         };
 
@@ -457,6 +458,8 @@ function getSpecifyURLTabItems(module, imageUploadingOption) {
                 }],
                 hint: 'Keep aspect ratio', // localization
                 keyExpr: 'value',
+                stylingMode: 'outlined',
+                width: 36,
                 selectionMode: 'multiple',
                 selectedItemKeys: ['keepRatio'],
                 onSelectionChanged: (e) => {

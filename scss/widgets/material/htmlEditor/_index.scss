@@ -349,6 +349,16 @@
   }
 }
 
+.dx-htmleditor-add-image-popup {
+  .dx-buttongroup {
+    margin-top: 6px;
+  }
+
+  .dx-fileuploader-input-wrapper {
+    border: 3px dashed $base-border-color;
+  }
+}
+
 .dx-mention {
   background-color: $htmleditor-mention-bg;
 }

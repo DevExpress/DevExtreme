@@ -99,12 +99,32 @@ $transparent-border: 1px solid transparent;
     padding-right: 0;
   }
 
-  .dx-multiview-wrapper .dx-field-item:not(.dx-last-col) {
+  .dx-collection .dx-field-item:not(.dx-last-col) {
     padding-right: 5px;
   }
 
-  .dx-multiview-wrapper .dx-field-item:not(.dx-first-col) {
+  .dx-collection .dx-field-item:not(.dx-first-col) {
     padding-left: 0;
+  }
+
+  .dx-fileuploader-input-wrapper {
+    padding: 40px;
+
+    .dx-fileuploader-input-label {
+      border-width: 0;
+    }
+  }
+
+  .dx-fileuploader-dragover {
+    .dx-fileuploader-input {
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    .dx-fileuploader-dragover {
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
   }
 
   .dx-fix-ratio-container {
@@ -114,8 +134,8 @@ $transparent-border: 1px solid transparent;
     }
 
     .dx-buttongroup {
-      vertical-align: top;
       margin-left: 5px;
+      vertical-align: top;
     }
   }
 }
