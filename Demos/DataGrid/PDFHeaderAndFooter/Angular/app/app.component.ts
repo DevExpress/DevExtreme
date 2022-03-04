@@ -36,6 +36,7 @@ export class AppComponent {
     exportDataGridToPdf({
       jsPDFDocument: doc,
       component: this.dataGrid.instance,
+      topLeft: { x: 1, y: 15 },
       columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
       customDrawCell({ rect }) {
         if (lastPoint.x < rect.x + rect.w) {

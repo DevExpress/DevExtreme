@@ -2,8 +2,9 @@
   <div>
     <DxDataGrid
       id="gridContainer"
-      :data-source="companies"
       key-expr="ID"
+      :ref="dataGridRef"
+      :data-source="companies"
       :show-borders="true"
     >
       <DxGroupPanel :visible="true"/>

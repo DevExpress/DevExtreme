@@ -61,6 +61,7 @@ export default function App() {
   return (
     <div>
       <DataGrid
+        ref={dataGridRef}
         id="gridContainer"
         dataSource={companies}
         keyExpr="ID"

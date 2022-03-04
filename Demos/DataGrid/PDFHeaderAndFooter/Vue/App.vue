@@ -1,8 +1,9 @@
 <template>
   <DxDataGrid
     id="grid"
-    :data-source="countries"
     key-expr="ID"
+    :ref="dataGridRef"
+    :data-source="countries"
     :show-borders="true"
     @exporting="onExporting"
   >
@@ -105,6 +106,7 @@ export default {
       exportDataGridToPdf({
         jsPDFDocument: doc,
         component: this.dataGrid,
+        topLeft: { x: 1, y: 15 },
         columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
         customDrawCell({ rect }) {
           if (lastPoint.x < rect.x + rect.w) {

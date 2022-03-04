@@ -24,6 +24,7 @@ export default function App() {
     exportDataGridToPdf({
       jsPDFDocument: doc,
       component: dataGrid,
+      topLeft: { x: 1, y: 15 },
       columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
       customDrawCell({ rect }) {
         if (lastPoint.x < rect.x + rect.w) {
@@ -52,6 +53,7 @@ export default function App() {
 
   return (
     <DataGrid
+      ref={dataGridRef}
       dataSource={countries}
       keyExpr="ID"
       showBorders={true}>
