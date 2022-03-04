@@ -1,10 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-type-alias */
 import {
-  RecursivePropertyType,
   Equals,
-} from './type_helpers';
+} from '../helpers/type_helpers/type_helpers';
+
+import {
+  RecursivePropertyType,
+} from '../../js/core';
 
 type ComplexType = {
   a: {
