@@ -72,9 +72,9 @@ $(() => {
       // eslint-disable-next-line new-cap
       const doc = new jsPDF();
 
-      let rowIndex = -1;
-      function setAlternatingRowsBackground(gridCell, pdfCell) {
-        if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
+      function setAlternatingRowsBackground(dataGrid, gridCell, pdfCell) {
+        if (gridCell.rowType === 'data') {
+          const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
           if (rowIndex % 2 === 0) {
             pdfCell.backgroundColor = '#D3D3D3';
           }
@@ -87,21 +87,18 @@ $(() => {
         topLeft: { x: 0, y: 5 },
         columnWidths: [20, 40, 40, 40],
         customizeCell: ({ gridCell, pdfCell }) => {
-          setAlternatingRowsBackground(gridCell, pdfCell);
+          setAlternatingRowsBackground(dataGrid1, gridCell, pdfCell);
         },
-        onRowExporting: () => { rowIndex += 1; },
       }).then(() => {
         doc.addPage();
-        rowIndex = -1;
         DevExpress.pdfExporter.exportDataGrid({
           jsPDFDocument: doc,
           component: dataGrid2,
           topLeft: { x: 0, y: 5 },
           columnWidths: [20, 40, 40, 40],
           customizeCell: ({ gridCell, pdfCell }) => {
-            setAlternatingRowsBackground(gridCell, pdfCell);
+            setAlternatingRowsBackground(dataGrid2, gridCell, pdfCell);
           },
-          onRowExporting: () => { rowIndex += 1; },
         }).then(() => {
           doc.save('MultipleGrids.pdf');
         });
