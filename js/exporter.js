@@ -29,7 +29,7 @@ function _export(data, options, getData) {
     const eventArgs = {
         fileName: options.fileName,
         format: options.format,
-        selectedRowsOnly: options.selectedRowsOnly,
+        selectedRowsOnly: !!options.selectedRowsOnly,
         cancel: false
     };
 

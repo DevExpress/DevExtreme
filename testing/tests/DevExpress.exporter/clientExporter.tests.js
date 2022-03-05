@@ -38,7 +38,8 @@ QUnit.test('onExporting', function(assert) {
     assert.deepEqual(exportingActionStub.getCall(0).args[0], {
         cancel: false,
         fileName: 'testFile',
-        format: 'EXCEL'
+        format: 'EXCEL',
+        selectedRowsOnly: false
     }, 'onExporting event args');
 });
 
@@ -103,7 +104,8 @@ QUnit.test('onFileSaving without cancel', function(assert) {
             fileName: 'testFile',
             data: data,
             format: 'EXCEL',
-            cancel: false
+            cancel: false,
+            selectedRowsOnly: false,
         }, 'file saving args');
         assert.equal(fileSaver.saveAs.callCount, 1, 'fileSave called');
     }).always(assert.async());

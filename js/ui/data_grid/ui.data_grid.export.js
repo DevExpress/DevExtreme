@@ -627,16 +627,16 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
 
         return new DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
     },
-    exportToExcel: function(selectionOnly) {
+    exportToExcel: function(selectedRowsOnly) {
         const that = this;
 
-        that._selectionOnly = selectionOnly;
+        that._selectionOnly = selectedRowsOnly;
 
         clientExport(that.component.getDataProvider(), {
             fileName: that.option('export.fileName'),
             proxyUrl: that.option('export.proxyUrl'),
             format: 'xlsx',
-            selectedRowsOnly: !!selectionOnly,
+            selectedRowsOnly,
             autoFilterEnabled: !!that.option('export.excelFilterEnabled'),
             rtlEnabled: that.option('rtlEnabled'),
             ignoreErrors: that.option('export.ignoreExcelErrors'),
