@@ -3,13 +3,14 @@ import { mount } from 'enzyme';
 import each from 'jest-each';
 import { DataGridNextPaging, DataGridNextPagingProps, viewFunction as PagingView } from '../paging';
 import {
-  PageIndex, PageSize, SetPageIndex, SetPageSize, PageCount, PagingEnabled, CalculateVisibleItems,
+  PageIndex, PageSize, SetPageIndex, SetPageSize, PageCount, PagingEnabled,
+  ApplyPagingToVisibleItems, AddPagingToLoadOptions,
 } from '../plugins';
 import { generateData } from '../../__tests__/test_data';
 import { Plugins } from '../../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../../utils/plugin/value_setter';
 import { GetterExtender } from '../../../../../utils/plugin/getter_extender';
-import { TotalCount, VisibleItems } from '../../data_grid_next';
+import { TotalCount, LocalVisibleItems, RemoteOperations } from '../../data_grid_next';
 
 describe('Paging', () => {
   describe('View', () => {
@@ -39,7 +40,7 @@ describe('Paging', () => {
         type: SetPageSize, value: viewProps.setPageSize,
       });
       expect(tree.find(GetterExtender).at(0).props()).toEqual({
-        type: VisibleItems, order: 1, value: CalculateVisibleItems,
+        type: LocalVisibleItems, order: 1, value: ApplyPagingToVisibleItems,
       });
     });
   });
@@ -113,7 +114,7 @@ describe('Paging', () => {
       const plugins = new Plugins();
 
       beforeEach(() => {
-        plugins.extend(VisibleItems, -1, () => dataSource);
+        plugins.extend(LocalVisibleItems, -1, () => dataSource);
         plugins.set(PagingEnabled, true);
         plugins.set(PageIndex, 0);
         plugins.set(PageSize, 20);
@@ -122,13 +123,13 @@ describe('Paging', () => {
       it('should return full dataSource if paging is not enabled', () => {
         plugins.set(PagingEnabled, false);
 
-        expect(plugins.getValue(CalculateVisibleItems)).toEqual(dataSource);
+        expect(plugins.getValue(ApplyPagingToVisibleItems)).toEqual(dataSource);
       });
 
       it('should return full dataSource if pageSize is "all"', () => {
         plugins.set(PageSize, 'all');
 
-        expect(plugins.getValue(CalculateVisibleItems)).toEqual(dataSource);
+        expect(plugins.getValue(ApplyPagingToVisibleItems)).toEqual(dataSource);
       });
 
       it('should return first page', () => {
@@ -136,7 +137,7 @@ describe('Paging', () => {
         plugins.set(PageSize, 5);
 
         expect(
-          plugins.getValue(CalculateVisibleItems),
+          plugins.getValue(ApplyPagingToVisibleItems),
         ).toEqual(
           dataSource.slice(0, 5),
         );
@@ -147,7 +148,7 @@ describe('Paging', () => {
         plugins.set(PageSize, 5);
 
         expect(
-          plugins.getValue(CalculateVisibleItems),
+          plugins.getValue(ApplyPagingToVisibleItems),
         ).toEqual(
           dataSource.slice(5, 10),
         );
@@ -158,10 +159,53 @@ describe('Paging', () => {
         plugins.set(PageSize, 15);
 
         expect(
-          plugins.getValue(CalculateVisibleItems),
+          plugins.getValue(ApplyPagingToVisibleItems),
         ).toEqual(
           dataSource.slice(15, 20),
         );
+      });
+    });
+
+    describe('AddPagingToLoadOptions', () => {
+      const plugins = new Plugins();
+
+      beforeEach(() => {
+        plugins.set(PagingEnabled, true);
+        plugins.set(PageIndex, 0);
+        plugins.set(PageSize, 20);
+      });
+
+      it('should return empty object if remoteOperations is false', () => {
+        plugins.set(RemoteOperations, false);
+
+        expect(plugins.getValue(AddPagingToLoadOptions)).toEqual({});
+      });
+
+      it('should return empty object if paging is not enabled', () => {
+        plugins.set(RemoteOperations, true);
+        plugins.set(PagingEnabled, false);
+
+        expect(plugins.getValue(AddPagingToLoadOptions)).toEqual({});
+      });
+
+      it('should return full dataSource if pageSize is "all"', () => {
+        plugins.set(RemoteOperations, true);
+        plugins.set(PageSize, 'all');
+
+        expect(plugins.getValue(AddPagingToLoadOptions)).toEqual({});
+      });
+
+      it('should return object with skip/take/requireTotalCount fields', () => {
+        plugins.set(PageIndex, 2);
+        plugins.set(PageSize, 5);
+
+        expect(
+          plugins.getValue(AddPagingToLoadOptions),
+        ).toEqual({
+          skip: 10,
+          take: 5,
+          requireTotalCount: true,
+        });
       });
     });
   });

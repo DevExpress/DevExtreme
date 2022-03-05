@@ -4,7 +4,7 @@ import type {
 } from '../types';
 import { createSelector, createValue } from '../../../../utils/plugin/context';
 import {
-  AllItems, KeyExprPlugin, VisibleColumns, VisibleItems,
+  LocalData, KeyExprPlugin, VisibleColumns, LocalVisibleItems,
 } from '../data_grid_next';
 import { createGetKey } from '../utils';
 import {
@@ -22,7 +22,7 @@ export const SelectedRowKeys = createValue<unknown[]>();
 export const SetSelectedRowKeys = createValue<(keys: unknown[]) => void>();
 
 export const SelectableItems = createSelector<RowData[]>(
-  [SelectAllModeValue, AllItems, VisibleItems],
+  [SelectAllModeValue, LocalData, LocalVisibleItems],
   (
     selectAllModeValue: SelectAllMode, allItems: RowData[], visibleItems: RowData[],
   ) => (

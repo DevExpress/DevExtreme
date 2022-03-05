@@ -19,7 +19,7 @@ import {
   ToggleSelected,
 } from '../plugins';
 import {
-  AllItems, KeyExprPlugin, VisibleColumns, VisibleItems,
+  LocalData, KeyExprPlugin, VisibleColumns, LocalVisibleItems,
 } from '../../data_grid_next';
 import { Plugins } from '../../../../../utils/plugin/context';
 import { generateData } from '../../__tests__/test_data';
@@ -137,8 +137,8 @@ describe('Selection', () => {
       ];
       const visibleItems = items.slice(2, 4);
 
-      plugins.set(AllItems, items);
-      const disposeVisibleItems = plugins.extend(VisibleItems, -1, () => visibleItems);
+      plugins.set(LocalData, items);
+      const disposeVisibleItems = plugins.extend(LocalVisibleItems, -1, () => visibleItems);
 
       afterAll(() => {
         disposeVisibleItems();
@@ -239,8 +239,8 @@ describe('Selection', () => {
       ];
       const visibleItems = items.slice(2, 4);
 
-      plugins.set(AllItems, items);
-      const disposeVisibleItems = plugins.extend(VisibleItems, -1, () => visibleItems);
+      plugins.set(LocalData, items);
+      const disposeVisibleItems = plugins.extend(LocalVisibleItems, -1, () => visibleItems);
 
       afterAll(() => {
         disposeVisibleItems();

@@ -3,7 +3,6 @@ import {
   Component, ComponentBindings, JSXComponent, InternalState, Effect,
 } from '@devextreme-generator/declarations';
 import React from 'react';
-import { DeepPartial } from '../../../../js/core';
 import { DataGridNext, DataGridNextProps } from '../../../../js/renovation/ui/grids/data_grid_next/data_grid_next';
 import { DataGridNextPager, DataGridNextPagerProps } from '../../../../js/renovation/ui/grids/data_grid_next/pager/pager';
 import { DataGridNextPaging, DataGridNextPagingProps } from '../../../../js/renovation/ui/grids/data_grid_next/paging/paging';
@@ -11,7 +10,7 @@ import { DataGridNextSelection, DataGridNextSelectionProps } from '../../../../j
 import { DataGridNextMasterDetail, DataGridNextMasterDetailProps } from '../../../../js/renovation/ui/grids/data_grid_next/master_detail/master_detail';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-export type OptionsType = DeepPartial<
+export type OptionsType = Partial<
 DataGridNextProps
 & { pager: DataGridNextPagerProps }
 & { selection: DataGridNextSelectionProps }
