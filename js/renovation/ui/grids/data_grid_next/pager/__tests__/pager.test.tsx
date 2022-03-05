@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
 import {
-  Pager, viewFunction as GridPagerView, PagerProps,
+  DataGridNextPager, viewFunction as GridPagerView, DataGridNextPagerProps,
 } from '../pager';
 import { PagerContent } from '../../../../pager/content';
 import { PlaceholderExtender } from '../../../../../utils/plugin/placeholder_extender';
@@ -22,8 +22,8 @@ describe('Pager', () => {
       });
 
       it(name, () => {
-        const props = new PagerProps();
-        const viewProps: Partial<Pager> = {
+        const props = new DataGridNextPagerProps();
+        const viewProps: Partial<DataGridNextPager> = {
           props,
         };
         const pageCount = 10;
@@ -53,13 +53,13 @@ describe('Pager', () => {
   describe('Getters', () => {
     describe('allowedPageSizes', () => {
       it('should be equal to prop if it is array', () => {
-        expect(new Pager({
+        expect(new DataGridNextPager({
           allowedPageSizes: [1, 2, 3],
         }).allowedPageSizes).toEqual([1, 2, 3]);
       });
 
       it('should be calculated when auto', () => {
-        const pager = new Pager({
+        const pager = new DataGridNextPager({
           allowedPageSizes: 'auto',
         });
 
@@ -70,7 +70,7 @@ describe('Pager', () => {
       });
 
       it('should be empty when auto and pageSize is all', () => {
-        const pager = new Pager({
+        const pager = new DataGridNextPager({
           allowedPageSizes: 'auto',
         });
 
@@ -84,7 +84,7 @@ describe('Pager', () => {
   describe('Callbacks', () => {
     describe('onPageIndexChange', () => {
       it('should update pageIndex', () => {
-        const pager = new Pager({});
+        const pager = new DataGridNextPager({});
         const setPageIndex = jest.fn();
         pager.plugins.set(SetPageIndex, setPageIndex);
 
@@ -94,7 +94,7 @@ describe('Pager', () => {
       });
 
       it('should work when paging plugin is empty', () => {
-        const pager = new Pager({});
+        const pager = new DataGridNextPager({});
 
         expect(() => pager.onPageIndexChange(10)).not.toThrow();
       });
@@ -102,7 +102,7 @@ describe('Pager', () => {
 
     describe('onPageSizeChange', () => {
       it('should update pager.pageSize', () => {
-        const pager = new Pager({});
+        const pager = new DataGridNextPager({});
         const setPageSize = jest.fn();
         pager.plugins.set(SetPageSize, setPageSize);
 
@@ -112,7 +112,7 @@ describe('Pager', () => {
       });
 
       it('should set pager.pageSize to "all" when called with zero', () => {
-        const pager = new Pager({});
+        const pager = new DataGridNextPager({});
         const setPageSize = jest.fn();
         pager.plugins.set(SetPageSize, setPageSize);
 
@@ -122,7 +122,7 @@ describe('Pager', () => {
       });
 
       it('should work when paging plugin is empty', () => {
-        const pager = new Pager({});
+        const pager = new DataGridNextPager({});
 
         expect(() => pager.onPageSizeChange(10)).not.toThrow();
       });

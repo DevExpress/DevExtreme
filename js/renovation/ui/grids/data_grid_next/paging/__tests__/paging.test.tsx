@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
-import { Paging, PagingProps, viewFunction as PagingView } from '../paging';
+import { DataGridNextPaging, DataGridNextPagingProps, viewFunction as PagingView } from '../paging';
 import {
   PageIndex, PageSize, SetPageIndex, SetPageSize, PageCount, PagingEnabled, CalculateVisibleItems,
 } from '../plugins';
@@ -9,18 +9,18 @@ import { generateData } from '../../__tests__/test_data';
 import { Plugins } from '../../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../../utils/plugin/value_setter';
 import { GetterExtender } from '../../../../../utils/plugin/getter_extender';
-import { TotalCount, VisibleItems } from '../../data_grid_light';
+import { TotalCount, VisibleItems } from '../../data_grid_next';
 
 describe('Paging', () => {
   describe('View', () => {
     it('should render ValueSetters and GetterExtender', () => {
       const viewProps = {
-        props: new PagingProps(),
+        props: new DataGridNextPagingProps(),
         pageSize: 30,
         setPageIndex: () => null,
         setPageSize: () => null,
         calculateVisibleItems: () => [],
-      } as Partial<Paging>;
+      } as Partial<DataGridNextPaging>;
 
       const tree = mount(<PagingView {...viewProps as any} />);
       expect(tree.find(ValueSetter).at(0).props()).toEqual({
@@ -47,7 +47,7 @@ describe('Paging', () => {
   describe('Getters', () => {
     describe('pageSize', () => {
       it('should be equal to "all" if prop is zero', () => {
-        const paging = new Paging({
+        const paging = new DataGridNextPaging({
           pageSize: 0,
         });
 
@@ -55,7 +55,7 @@ describe('Paging', () => {
       });
 
       it('should be equal to prop otherwise', () => {
-        const paging = new Paging({
+        const paging = new DataGridNextPaging({
           pageSize: 10,
         });
 
@@ -67,7 +67,7 @@ describe('Paging', () => {
   describe('Callbacks', () => {
     describe('setPageIndex', () => {
       it('should update props.pageIndex', () => {
-        const paging = new Paging({});
+        const paging = new DataGridNextPaging({});
         paging.setPageIndex(10);
 
         expect(paging.props.pageIndex).toEqual(10);
@@ -76,7 +76,7 @@ describe('Paging', () => {
 
     describe('setPageSize', () => {
       it('should update props.pageSize', () => {
-        const paging = new Paging({});
+        const paging = new DataGridNextPaging({});
         paging.setPageSize(10);
 
         expect(paging.props.pageSize).toEqual(10);

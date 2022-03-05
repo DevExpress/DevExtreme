@@ -5,17 +5,17 @@ import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 import { Plugins } from '../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import {
-  DataGridLight, viewFunction as DataGridView, DataGridLightProps,
+  DataGridNext, viewFunction as DataGridView, DataGridNextProps,
   AllItems, Columns, KeyExprPlugin, VisibleColumns,
   VisibleItems, VisibleRows, VisibleDataRows, TotalCount,
-} from '../data_grid_light';
+} from '../data_grid_next';
 import { Widget } from '../../../common/widget';
 import { generateData, generateRows } from './test_data';
 
 describe('DataGridLight', () => {
   describe('View', () => {
     it('default render', () => {
-      const props = new DataGridLightProps();
+      const props = new DataGridNextProps();
       props.dataSource = [];
       const viewModel = {
         props,
@@ -24,7 +24,7 @@ describe('DataGridLight', () => {
         restAttributes: { 'rest-attributes': 'true' },
         columns: [{ dataField: 'id' }],
         keyExpr: 'id',
-      } as Partial<DataGridLight>;
+      } as Partial<DataGridNext>;
       const tree = mount(<DataGridView {...viewModel as any} /> as any);
 
       expect(tree.find(Widget).first().props()).toMatchObject({
@@ -55,13 +55,13 @@ describe('DataGridLight', () => {
     });
 
     it('render with dataSource and 1 column', () => {
-      const props = new DataGridLightProps();
+      const props = new DataGridNextProps();
       props.dataSource = [{ id: 1 }, { id: 2 }];
       const viewProps = {
         props,
         visibleRows: [{ data: { id: 1 }, rowType: 'data' }, { data: { id: 2 }, rowType: 'data' }],
         visibleColumns: [{ dataField: 'id' }],
-      } as Partial<DataGridLight>;
+      } as Partial<DataGridNext>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
       expect(tree.find('tr')).toHaveLength(3);
@@ -72,7 +72,7 @@ describe('DataGridLight', () => {
     });
 
     it('render with dataSource and 2 columns', () => {
-      const props = new DataGridLightProps();
+      const props = new DataGridNextProps();
       props.dataSource = [{ id: 1, name: 'name 1' }];
       const viewProps = {
         props,
@@ -81,7 +81,7 @@ describe('DataGridLight', () => {
           { dataField: 'id' },
           { dataField: 'name' },
         ],
-      } as Partial<DataGridLight>;
+      } as Partial<DataGridNext>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
       expect(tree.find('tr')).toHaveLength(2);
@@ -96,13 +96,13 @@ describe('DataGridLight', () => {
   describe('Getters', () => {
     describe('aria', () => {
       it('should have role "presentation"', () => {
-        expect(new DataGridLight({}).aria).toEqual({ role: 'presentation' });
+        expect(new DataGridNext({}).aria).toEqual({ role: 'presentation' });
       });
     });
 
     describe('columns', () => {
       it('should handle user input', () => {
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           columns: ['id', 'name'],
         });
 
@@ -115,7 +115,7 @@ describe('DataGridLight', () => {
 
     describe('keyExpr', () => {
       it('should return keyExpr prop', () => {
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           keyExpr: 'some key',
         });
 
@@ -123,7 +123,7 @@ describe('DataGridLight', () => {
       });
 
       it('should return null if user did not specified it', () => {
-        const grid = new DataGridLight({});
+        const grid = new DataGridNext({});
 
         expect(grid.keyExpr).toEqual(null);
       });
@@ -133,7 +133,7 @@ describe('DataGridLight', () => {
   describe('Effects', () => {
     describe('updateVisibleRows', () => {
       const watchMock = jest.fn();
-      const grid = new DataGridLight({});
+      const grid = new DataGridNext({});
       grid.plugins = {
         watch: watchMock,
       } as any;
@@ -152,7 +152,7 @@ describe('DataGridLight', () => {
 
     describe('updateVisibleColumns', () => {
       const watchMock = jest.fn();
-      const grid = new DataGridLight({});
+      const grid = new DataGridNext({});
       grid.plugins = {
         watch: watchMock,
       } as any;

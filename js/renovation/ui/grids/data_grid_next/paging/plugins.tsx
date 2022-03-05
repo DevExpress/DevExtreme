@@ -1,5 +1,5 @@
 import { createValue, createSelector } from '../../../../utils/plugin/context';
-import { TotalCount, VisibleItems } from '../data_grid_light';
+import { TotalCount, VisibleItems } from '../data_grid_next';
 import type { RowData } from '../types';
 
 export const PageIndex = createValue<number>();

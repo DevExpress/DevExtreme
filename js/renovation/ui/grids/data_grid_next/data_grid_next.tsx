@@ -45,7 +45,7 @@ export const VisibleDataRows = createSelector<Row[]>(
   })),
 );
 
-export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
+export const viewFunction = (viewModel: DataGridNext): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
     accessKey={viewModel.props.accessKey}
     activeStateEnabled={viewModel.props.activeStateEnabled}
@@ -82,7 +82,7 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
 );
 
 @ComponentBindings()
-export class DataGridLightProps extends BaseWidgetProps {
+export class DataGridNextProps extends BaseWidgetProps {
   @OneWay()
   dataSource: RowData[] = [];
 
@@ -108,7 +108,7 @@ const aria = {
   jQuery: { register: true },
   view: viewFunction,
 })
-export class DataGridLight extends JSXComponent(DataGridLightProps) {
+export class DataGridNext extends JSXComponent(DataGridNextProps) {
   // eslint-disable-next-line class-methods-use-this
   get aria(): Record<string, string> {
     return aria;
