@@ -29,6 +29,7 @@ function _export(data, options, getData) {
     const eventArgs = {
         fileName: options.fileName,
         format: options.format,
+        selectedRowsOnly: options.selectedRowsOnly,
         cancel: false
     };
 
@@ -44,7 +45,7 @@ function _export(data, options, getData) {
             }
 
             if(!eventArgs.cancel) {
-                fileSaver.saveAs(eventArgs.fileName, options.format, blob, options.proxyUrl, options.forceProxy);
+                fileSaver.saveAs(eventArgs.fileName, 'EXCEL', blob, options.proxyUrl, options.forceProxy);
             }
         });
     }

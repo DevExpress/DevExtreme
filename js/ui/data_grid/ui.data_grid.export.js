@@ -603,7 +603,6 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
         this._headersView = this.getView('columnHeadersView');
 
         this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
-        this.createAction('onPdfExporting', { excludeValidators: ['disabled', 'readOnly'] });
         this.createAction('onExported', { excludeValidators: ['disabled', 'readOnly'] });
         this.createAction('onFileSaving', { excludeValidators: ['disabled', 'readOnly'] });
     },
@@ -627,15 +626,16 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
 
         return new DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
     },
-    exportToExcel: function(selectionOnly) {
+    exportToExcel: function(selectedRowsOnly) {
         const that = this;
 
-        that._selectionOnly = selectionOnly;
+        that._selectionOnly = selectedRowsOnly;
 
         clientExport(that.component.getDataProvider(), {
             fileName: that.option('export.fileName'),
             proxyUrl: that.option('export.proxyUrl'),
-            format: 'EXCEL',
+            format: 'xlsx',
+            selectedRowsOnly,
             autoFilterEnabled: !!that.option('export.excelFilterEnabled'),
             rtlEnabled: that.option('rtlEnabled'),
             ignoreErrors: that.option('export.ignoreExcelErrors'),
@@ -646,7 +646,10 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
     },
     exportToPdf: function(selectedRowsOnly) {
         const onExporting = this.getAction('onExporting');
-        const eventArgs = { selectedRowsOnly };
+        const eventArgs = {
+            selectedRowsOnly,
+            format: 'pdf',
+        };
 
         isFunction(onExporting) && onExporting(eventArgs);
     },
@@ -672,24 +675,17 @@ dataGridCore.registerModule('export', {
                 enabled: false,
                 fileName: 'DataGrid',
                 excelFilterEnabled: false,
+                formats: ['xlsx'],
                 excelWrapTextEnabled: undefined,
                 proxyUrl: undefined,
                 allowExportSelectedData: false,
                 ignoreExcelErrors: true,
                 texts: {
                     exportTo: messageLocalization.format('dxDataGrid-exportTo'),
-                    exportAll: messageLocalization.format('dxDataGrid-exportAll') + ' to Excel',
-                    exportSelectedRows: messageLocalization.format('dxDataGrid-exportSelectedRows') + ' to Excel'
+                    exportAll: messageLocalization.format('dxDataGrid-exportAll'),
+                    exportSelectedRows: messageLocalization.format('dxDataGrid-exportSelectedRows')
                 }
             },
-            'pdfExport': {
-                enabled: false,
-                allowExportSelectedData: false,
-                texts: {
-                    exportAll: messageLocalization.format('dxDataGrid-exportAll') + ' to PDF',
-                    exportSelectedRows: messageLocalization.format('dxDataGrid-exportSelectedRows') + ' to PDF'
-                }
-            }
         };
     },
     controllers: {
@@ -780,15 +776,16 @@ dataGridCore.registerModule('export', {
                 _getExportToolbarItems: function() {
                     const exportOptions = this.option('export');
                     const texts = this.option('export.texts');
+                    const formats = this.option('export.formats') ?? [];
 
-                    const pdfExportOptions = this.option('pdfExport');
-                    const pdfTexts = this.option('pdfExport.texts');
+                    const excelEnabled = exportOptions.enabled && formats.includes('xlsx');
+                    const pdfEnabled = exportOptions.enabled && formats.includes('pdf');
 
                     const items = [];
 
-                    if(exportOptions.enabled) {
+                    if(excelEnabled) {
                         items.push({
-                            text: texts.exportAll,
+                            text: texts.exportAll + 'Excel',
                             icon: DATAGRID_EXPORT_EXCEL_ICON,
                             onClick: () => {
                                 this._exportController.exportToExcel();
@@ -797,8 +794,8 @@ dataGridCore.registerModule('export', {
 
                         if(exportOptions.allowExportSelectedData) {
                             items.push({
-                                text: texts.exportSelectedRows,
-                                icon: pdfExportOptions.enabled ? DATAGRID_EXPORT_EXCEL_ICON : DATAGRID_EXPORT_SELECTED_ICON,
+                                text: texts.exportSelectedRows + 'Excel',
+                                icon: pdfEnabled ? DATAGRID_EXPORT_EXCEL_ICON : DATAGRID_EXPORT_SELECTED_ICON,
                                 onClick: () => {
                                     this._exportController.exportToExcel(true);
                                 },
@@ -806,18 +803,18 @@ dataGridCore.registerModule('export', {
                         }
                     }
 
-                    if(pdfExportOptions.enabled) {
+                    if(pdfEnabled) {
                         items.push({
-                            text: pdfTexts.exportAll,
+                            text: texts.exportAll + 'PDF',
                             icon: DATAGRID_PDF_EXPORT_ICON,
                             onClick: () => {
                                 this._exportController.exportToPdf();
                             },
                         });
 
-                        if(pdfExportOptions.allowExportSelectedData) {
+                        if(exportOptions.allowExportSelectedData) {
                             items.push({
-                                text: pdfTexts.exportSelectedRows,
+                                text: texts.exportSelectedRows + 'PDF',
                                 icon: DATAGRID_PDF_EXPORT_SELECTED_ICON,
                                 onClick: () => {
                                     this._exportController.exportToPdf(true);
