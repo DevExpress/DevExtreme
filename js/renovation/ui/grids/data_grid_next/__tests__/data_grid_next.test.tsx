@@ -12,7 +12,7 @@ import {
 import { Widget } from '../../../common/widget';
 import { generateData, generateRows } from './test_data';
 
-describe('DataGridLight', () => {
+describe('DataGridNext', () => {
   describe('View', () => {
     it('default render', () => {
       const props = new DataGridNextProps();
