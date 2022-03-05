@@ -1882,9 +1882,10 @@ QUnit.module('ExportController', {
             ignoreErrors: true,
             fileName: 'testName',
             fileSavingAction: onFileSavingStub,
-            format: 'EXCEL',
+            format: 'xlsx',
             proxyUrl: 'testProxy',
-            rtlEnabled: false
+            rtlEnabled: false,
+            selectedRowsOnly: false,
         }, 'options');
 
         assert.deepEqual(clientExporter.export.getCall(0).args[2], clientExporter.excel.getData, 'Export to excel function is correct');
@@ -1907,9 +1908,10 @@ QUnit.module('ExportController', {
             ignoreErrors: true,
             fileName: 'DataGrid',
             fileSavingAction: undefined,
-            format: 'EXCEL',
+            format: 'xlsx',
             proxyUrl: undefined,
-            rtlEnabled: false
+            rtlEnabled: false,
+            selectedRowsOnly: false,
         }, 'options');
 
         clientExporter.export.restore();
@@ -2285,7 +2287,8 @@ QUnit.module('Export menu', {
     QUnit.test('The export to pdf button is shown', function(assert) {
         // arrange
         this.setupModules({
-            'pdfExport': {
+            'export': {
+                formats: ['pdf'],
                 enabled: true,
                 allowExportSelectedData: true
             }

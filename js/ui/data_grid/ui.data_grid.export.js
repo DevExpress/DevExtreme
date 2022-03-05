@@ -7,6 +7,7 @@ import { merge } from '../../core/utils/array';
 import dataGridCore from './ui.data_grid.core';
 import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { export as clientExport, excel } from '../../exporter';
+import { format } from '../../core/utils/string';
 import messageLocalization from '../../localization/message';
 
 import '../button';
@@ -626,16 +627,16 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
 
         return new DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
     },
-    exportToExcel: function(selectedRowsOnly) {
+    exportToExcel: function(selectionOnly) {
         const that = this;
 
-        that._selectionOnly = selectedRowsOnly;
+        that._selectionOnly = selectionOnly;
 
         clientExport(that.component.getDataProvider(), {
             fileName: that.option('export.fileName'),
             proxyUrl: that.option('export.proxyUrl'),
             format: 'xlsx',
-            selectedRowsOnly,
+            selectedRowsOnly: !!selectionOnly,
             autoFilterEnabled: !!that.option('export.excelFilterEnabled'),
             rtlEnabled: that.option('rtlEnabled'),
             ignoreErrors: that.option('export.ignoreExcelErrors'),
@@ -785,7 +786,7 @@ dataGridCore.registerModule('export', {
 
                     if(excelEnabled) {
                         items.push({
-                            text: texts.exportAll + 'Excel',
+                            text: format(texts.exportAll, 'Excel'),
                             icon: DATAGRID_EXPORT_EXCEL_ICON,
                             onClick: () => {
                                 this._exportController.exportToExcel();
@@ -794,7 +795,7 @@ dataGridCore.registerModule('export', {
 
                         if(exportOptions.allowExportSelectedData) {
                             items.push({
-                                text: texts.exportSelectedRows + 'Excel',
+                                text: format(texts.exportSelectedRows, 'Excel'),
                                 icon: pdfEnabled ? DATAGRID_EXPORT_EXCEL_ICON : DATAGRID_EXPORT_SELECTED_ICON,
                                 onClick: () => {
                                     this._exportController.exportToExcel(true);
@@ -805,7 +806,7 @@ dataGridCore.registerModule('export', {
 
                     if(pdfEnabled) {
                         items.push({
-                            text: texts.exportAll + 'PDF',
+                            text: format(texts.exportAll, 'PDF'),
                             icon: DATAGRID_PDF_EXPORT_ICON,
                             onClick: () => {
                                 this._exportController.exportToPdf();
@@ -814,7 +815,7 @@ dataGridCore.registerModule('export', {
 
                         if(exportOptions.allowExportSelectedData) {
                             items.push({
-                                text: texts.exportSelectedRows + 'PDF',
+                                text: format(texts.exportSelectedRows, 'PDF'),
                                 icon: DATAGRID_PDF_EXPORT_SELECTED_ICON,
                                 onClick: () => {
                                     this._exportController.exportToPdf(true);
