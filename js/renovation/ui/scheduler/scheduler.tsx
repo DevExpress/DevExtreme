@@ -41,6 +41,7 @@ import {
   ReducedIconHoverData,
   IAppointmentFocusState,
   AppointmentKindType,
+  AppointmentData,
 } from './appointment/types';
 import { AppointmentsConfigType } from './model/types';
 import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
@@ -55,6 +56,9 @@ import { ResourceMapType } from './resources/utils';
 import { combineClasses } from '../../utils/combine_classes';
 import { AppointmentEditForm } from './appointment_edit_form/layout';
 import { getPopupSize, IAppointmentPopupSize } from './appointment_edit_form/popup_config';
+import { FormContextProvider } from './form_context_provider';
+import { IFormContext } from './form_context';
+import { createFormData } from './utils/editing/formData';
 
 export const viewFunction = ({
   restAttributes,
@@ -76,9 +80,11 @@ export const viewFunction = ({
   changeAppointmentEditFormVisible,
   workSpaceKey,
   appointmentsContextValue,
-  appointmentData,
+  formContextValue,
   appointmentPopupSize,
   classes,
+  dataAccessors,
+  appointmentFormData,
 
   props: {
     accessKey,
@@ -102,6 +108,7 @@ export const viewFunction = ({
     focusStateEnabled,
     editing: {
       allowUpdating,
+      allowTimeZoneEditing,
     },
   },
 }: Scheduler): JSX.Element => {
@@ -222,14 +229,21 @@ export const viewFunction = ({
         />
         {
           needCreateAppointmentEditForm && (
-            <AppointmentEditForm
-              visible={appointmentEditFormVisible}
-              fullScreen={appointmentPopupSize.fullScreen}
-              maxWidth={appointmentPopupSize.maxWidth}
-              appointmentData={appointmentData}
-              allowUpdating={allowUpdating}
-              onVisibleChange={changeAppointmentEditFormVisible}
-            />
+            <FormContextProvider
+              formContextValue={formContextValue}
+            >
+              <AppointmentEditForm
+                visible={appointmentEditFormVisible}
+                fullScreen={appointmentPopupSize.fullScreen}
+                maxWidth={appointmentPopupSize.maxWidth}
+                dataAccessors={dataAccessors}
+                appointmentData={appointmentFormData}
+                allowUpdating={allowUpdating}
+                firstDayOfWeek={firstDayOfWeek}
+                onVisibleChange={changeAppointmentEditFormVisible}
+                allowTimeZoneEditing={allowTimeZoneEditing}
+              />
+            </FormContextProvider>
           )
         }
       </div>
@@ -265,7 +279,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() tooltipData: AppointmentViewModel[] = [];
 
-  @InternalState() appointmentData!: AppointmentViewModel;
+  @InternalState() appointmentFormData!: AppointmentData;
 
   @InternalState() lastViewDateByEndDayHour?: Date;
 
@@ -552,6 +566,9 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     );
   }
 
+  @InternalState()
+  formContextValue?: IFormContext;
+
   get appointmentsContextValue(): IAppointmentContext {
     return {
       viewModel: this.appointmentsViewModel,
@@ -715,10 +732,14 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   showAppointmentPopupForm({ data }: AppointmentClickData): void {
-    const appointmentData = { ...data[0] };
+    const appointmentData = data[0];
+
+    this.appointmentFormData = appointmentData.appointment;
+
+    this.formContextValue = { formData: createFormData(appointmentData.appointment) };
+
     const { isRecurrent } = appointmentData.info;
     this.appointmentPopupSize = getPopupSize(isRecurrent);
-    this.appointmentData = appointmentData;
     this.needCreateAppointmentEditForm = true;
     this.hideTooltip();
     this.changeAppointmentEditFormVisible(true);
