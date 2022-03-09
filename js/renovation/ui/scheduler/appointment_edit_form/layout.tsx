@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Component,
   ComponentBindings,
@@ -17,7 +19,9 @@ import {
 } from './popup_config';
 // eslint-disable-next-line import/named
 import { dxSchedulerAppointment } from '../../../../ui/scheduler';
-import { AppointmentViewModel } from '../appointment/types';
+import { EditForm } from './edit_form/layout';
+import { DataAccessorType } from '../types';
+import { AppointmentData } from '../appointment/types';
 
 const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 const wrapperAttr = {
@@ -38,8 +42,12 @@ export const viewFunction = ({
     visible,
     fullScreen,
     maxWidth,
+    allowUpdating,
+    appointmentData,
+    dataAccessors,
+    firstDayOfWeek,
+    allowTimeZoneEditing,
     onVisibleChange,
-    formContentTemplate,
   },
 }: AppointmentEditForm): JSX.Element => (
   <Popup
@@ -54,8 +62,15 @@ export const viewFunction = ({
     showTitle={false}
     toolbarItems={toolbarItems}
     animation={defaultAnimation}
-    contentTemplate={formContentTemplate}
-  />
+  >
+    <EditForm
+      appointmentData={appointmentData}
+      dataAccessors={dataAccessors}
+      allowUpdating={allowUpdating}
+      firstDayOfWeek={firstDayOfWeek}
+      allowTimeZoneEditing={allowTimeZoneEditing}
+    />
+  </Popup>
 );
 
 @ComponentBindings()
@@ -66,11 +81,17 @@ export class AppointmentEditFormProps {
 
   @OneWay() onVisibleChange!: (value: boolean) => void;
 
-  @OneWay() appointmentData!: AppointmentViewModel;
+  @OneWay() appointmentData!: AppointmentData;
+
+  @OneWay() dataAccessors!: DataAccessorType;
 
   @OneWay() fullScreen!: boolean;
 
   @OneWay() maxWidth!: number | string;
+
+  @OneWay() firstDayOfWeek?: number;
+
+  @OneWay() allowTimeZoneEditing?: boolean;
 
   @Template() formContentTemplate?: JSXTemplate<FormTemplate>;
 }
@@ -79,7 +100,13 @@ export class AppointmentEditFormProps {
 export class AppointmentEditForm extends
   JSXComponent<
   AppointmentEditFormProps,
-  'visible' | 'allowUpdating' | 'onVisibleChange' | 'appointmentData' | 'fullScreen' | 'maxWidth'
+  'visible' |
+  'allowUpdating' |
+  'onVisibleChange' |
+  'appointmentData' |
+  'dataAccessors' |
+  'fullScreen' |
+  'maxWidth'
   >() {
   @InternalState() isFullScreen: boolean = isPopupFullScreenNeeded();
 
