@@ -18,6 +18,8 @@ export interface AppointmentData {
   allDay: boolean;
   startDate: Date;
   endDate: Date;
+  startDateTimeZone?: string;
+  endDateTimeZone?: string;
   text: string;
 }
 
