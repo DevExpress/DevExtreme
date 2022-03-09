@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, OneWay,
+  ComponentBindings, OneWay, Template,
 } from '@devextreme-generator/declarations';
 import { LabelProps } from './label_props';
 import { RequiredRule } from './required_rule_props';
@@ -35,8 +35,8 @@ export class SimpleItem {
 
   @OneWay() label?: LabelProps;
 
-  // TODO: not working yet
-  // template?: template;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Template() template?: any;
 
   @OneWay() validationRules?: (RequiredRule)[];
 }
