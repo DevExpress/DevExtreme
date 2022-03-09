@@ -23,7 +23,7 @@ function loadConfig() {
     const renovatedComponents = requireWithoutCache(fullRenovatedComponentsPath);
     fileToComponentMap = {};
     renovatedComponents.forEach((component) => {
-        if(component.inProgress && !env.BUILD_INPROGRESS_RENOVATION) {
+        if(component.inProgress && !env.BUILD_INPROGRESS_RENOVATION || !component.pathInJSFolder) {
             return;
         }
 

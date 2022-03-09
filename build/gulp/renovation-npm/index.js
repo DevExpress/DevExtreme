@@ -167,7 +167,7 @@ addCompilationTask({
     switches: {
         installPackages: true,
     },
-    components: 'Button',
+    components: ['Button', 'DataGridNext', 'DataGridNextPaging', 'DataGridNextPager', 'DataGridNextSelection', 'DataGridNextMasterDetail'],
     steps: {
         installPackages: {
             before: {

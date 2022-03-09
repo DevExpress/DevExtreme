@@ -228,6 +228,13 @@ describe('Selection', () => {
         plugins.callAction(ToggleSelected, { id: 1 });
         expect(plugins.getValue(SelectedRowKeys)).toEqual([2]);
       });
+
+      it('should not select item if mode is none', () => {
+        plugins.set(SelectionModeValue, 'none');
+        plugins.set(SelectedRowKeys, []);
+        plugins.callAction(ToggleSelected, { id: 1 });
+        expect(plugins.getValue(SelectedRowKeys)).toEqual([]);
+      });
     });
 
     describe('SelectableCount', () => {

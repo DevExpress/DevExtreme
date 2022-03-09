@@ -8,6 +8,7 @@ const ui = require('./widgets-base');
 ui.dxAccordion = require('../../../ui/accordion');
 ui.dxContextMenu = require('../../../ui/context_menu');
 ui.dxDataGrid = require('../../../ui/data_grid');
+ui.dxDataGridNext = require('../../../ui/data_grid_next');
 ui.dxTreeList = require('../../../ui/tree_list');
 ui.dxMenu = require('../../../ui/menu');
 ui.dxPivotGrid = require('../../../ui/pivot_grid');

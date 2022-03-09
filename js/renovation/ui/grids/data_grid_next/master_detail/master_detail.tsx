@@ -65,7 +65,7 @@ export class DataGridNextMasterDetailProps {
   @TwoWay()
   expandedRowKeys: Key[] = [];
 
-  @Template() template!: JSXTemplate<RowTemplateProps>;
+  @Template() template?: JSXTemplate<RowTemplateProps>;
 }
 
 @Component({
