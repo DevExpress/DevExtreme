@@ -171,9 +171,6 @@ export class AppointmentEditingProps {
 
   @OneWay()
   allowUpdating?: boolean;
-
-  @OneWay()
-  allowEditingTimeZones?: boolean;
 }
 
 @ComponentBindings()
