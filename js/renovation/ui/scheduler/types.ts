@@ -5,10 +5,23 @@ export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
+export interface IFieldExpr {
+  startDateExpr: string;
+  endDateExpr: string;
+  startDateTimeZoneExpr: string;
+  endDateTimeZoneExpr: string;
+  allDayExpr: string;
+  textExpr: string;
+  descriptionExpr: string;
+  recurrenceRuleExpr: string;
+  recurrenceExceptionExpr: string;
+  disabledExpr: string;
+}
+
 export interface DataAccessorType {
   getter: Record<string, (data: unknown) => Date | string>;
   setter: Record<string, (object: unknown, data: unknown) => Date | string>;
-  expr: Record<string, string>;
+  expr: IFieldExpr;
   resources?: DataAccessorType;
 }
 
