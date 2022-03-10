@@ -46,6 +46,9 @@ describe('Selection', () => {
         plugins.set(AllowSelectAllValue, false);
 
         expect(plugins.getValue(AddSelectionColumnToVisibleColumns)).toEqual([{
+          alignment: 'center',
+          width: 30,
+          cssClass: 'dx-editor-cell dx-editor-inline-block',
           cellTemplate: selectionCheckboxTemplate,
         }]);
       });
@@ -55,8 +58,11 @@ describe('Selection', () => {
         plugins.set(AllowSelectAllValue, true);
 
         expect(plugins.getValue(AddSelectionColumnToVisibleColumns)).toEqual([{
+          alignment: 'center',
+          width: 30,
+          cssClass: 'dx-editor-cell dx-editor-inline-block',
           cellTemplate: selectionCheckboxTemplate,
-          headerTemplate: selectAllCheckboxTemplate,
+          headerCellTemplate: selectAllCheckboxTemplate,
         }]);
       });
 

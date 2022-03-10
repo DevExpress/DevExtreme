@@ -1,8 +1,12 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings,
-  OneWay, Effect, InternalState, Provider, Slot, TwoWay, Event, Method, Template, JSXTemplate,
+  OneWay, Effect, InternalState, Provider, Slot, TwoWay, Event, Method,
+  Template, JSXTemplate,
 } from '@devextreme-generator/declarations';
+
+import { captionize } from '../../../../core/utils/inflector';
+import { combineClasses } from '../../../utils/combine_classes';
 
 import {
   createValue, createGetter, Plugins, PluginsContext, createSelector,
@@ -24,6 +28,7 @@ import { TableHeader } from './views/table_header';
 import { Footer } from './views/footer';
 
 import CLASSES from './classes';
+import { getAlignmentByDataType, getDefaultCalculateCellValue, getFormatByDataType } from './utils';
 
 export const LocalData = createValue<RowData[] | undefined>();
 export const LocalVisibleItems = createGetter<RowData[] | undefined>([]);
@@ -95,7 +100,7 @@ export const viewFunction = (viewModel: DataGridNext): JSX.Element => (
     <GetterExtender type={LocalVisibleItems} order={-1} value={LocalData} />
     <GetterExtender type={VisibleRows} order={-1} value={VisibleDataRows} />
 
-    <div className={`${CLASSES.dataGrid} ${CLASSES.gridBaseContainer}`} role="grid" aria-label="Data grid">
+    <div className={viewModel.containerClasses} role="grid" aria-label="Data grid">
       <TableHeader columns={viewModel.visibleColumns} />
       <TableContent
         columns={viewModel.visibleColumns}
@@ -126,7 +131,10 @@ export class DataGridNextProps extends BaseWidgetProps {
   keyExpr?: KeyExpr;
 
   @OneWay()
-  columns: Column[] = [];
+  columns: (Column | string)[] = [];
+
+  @OneWay()
+  showBorders = true;
 
   @Event()
   onDataErrorOccurred?: (e: { error: Error }) => void;
@@ -151,6 +159,14 @@ export class DataGridNext extends JSXComponent(DataGridNextProps) {
   // eslint-disable-next-line class-methods-use-this
   get aria(): Record<string, string> {
     return aria;
+  }
+
+  get containerClasses(): string {
+    return combineClasses({
+      [CLASSES.dataGrid]: true,
+      [CLASSES.gridBaseContainer]: true,
+      [CLASSES.borders]: this.props.showBorders,
+    });
   }
 
   get dataState(): DataState {
@@ -218,11 +234,16 @@ export class DataGridNext extends JSXComponent(DataGridNextProps) {
   }
 
   get columns(): ColumnInternal[] {
-    const userColumns = this.props.columns;
-
-    return userColumns.map((userColumn) => ({
-      dataField: userColumn,
-    }));
+    return this.props.columns
+      .map((column) => (typeof column === 'string' ? { dataField: column } : column))
+      .map((column) => ({
+        ...column,
+        caption: column.caption ?? captionize(column.dataField ?? ''),
+        format: column.format ?? getFormatByDataType(column.dataType),
+        alignment: column.alignment ?? getAlignmentByDataType(column.dataType),
+        calculateCellValue: column.calculateCellValue
+          ?? getDefaultCalculateCellValue(column.dataField, column.dataType),
+      }));
   }
 
   get localData(): RowData[] | undefined {

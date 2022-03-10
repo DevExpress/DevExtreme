@@ -5,8 +5,9 @@ import { JSXTemplate } from '@devextreme-generator/declarations';
 
 import type Store from '../../../../data/abstract_store';
 
+import type { Format } from '../../../../localization';
+
 export type RowData = Record<string, unknown>;
-export type Column = string;
 export type KeyExpr = string;
 export type KeyExprInternal = KeyExpr | null;
 export type Key = unknown;
@@ -25,14 +26,33 @@ export interface RowTemplateProps {
   rowIndex: number;
 }
 
-export interface ColumnInternal {
+export type ColumnDataType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
+export type ColumnAlignment = 'left' | 'right' | 'center';
+
+export interface Column {
   dataField?: string;
 
-  headerCssClass?: string;
+  caption?: string;
+
+  alignment?: ColumnAlignment;
+
+  format?: Format;
+
+  cssClass?: string;
+
+  width?: number | string;
+
+  dataType?: ColumnDataType;
+
+  calculateCellValue?: (data: RowData) => unknown;
 
   cellTemplate?: JSXTemplate<{ data: RowData }, 'data'>;
 
-  headerTemplate?: JSXTemplate;
+  headerCellTemplate?: JSXTemplate;
+}
+
+export interface ColumnInternal extends Column {
+  headerCssClass?: string;
 
   cellContainerTemplate?: JSXTemplate<{ data: RowData }, 'data'>;
 }

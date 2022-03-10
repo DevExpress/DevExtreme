@@ -19,7 +19,7 @@ import { combineClasses } from '../../../../utils/combine_classes';
 export const viewFunction = (viewModel: TableContent): JSX.Element => (
   <div className={viewModel.classes} role="presentation">
     <div ref={viewModel.divRef} className={CLASSES.content}>
-      <Table>
+      <Table columns={viewModel.props.columns}>
         <Fragment>
           {
           viewModel.rows.map((item) => (

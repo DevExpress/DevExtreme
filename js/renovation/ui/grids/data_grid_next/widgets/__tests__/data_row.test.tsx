@@ -38,6 +38,36 @@ describe('DataRow', () => {
       expect(tree.find('td').hasClass('myCell')).toBe(true);
       expect(tree.find('td').find('span').text()).toEqual('Some value');
     });
+
+    it('column with cssClass', () => {
+      const dataRow = new DataRow({
+        row: {
+          data: {},
+          rowType: 'data',
+        },
+        columns: [{ cssClass: 'my-class' }],
+      });
+
+      const tree = mount(<DataRowView {...dataRow as any} />, {
+        attachTo: document.createElement('tbody'),
+      });
+      expect(tree.find('td').hasClass('my-class')).toBe(true);
+    });
+
+    it('column with format', () => {
+      const dataRow = new DataRow({
+        row: {
+          data: { amount: 100 },
+          rowType: 'data',
+        },
+        columns: [{ format: '$ #0', calculateCellValue: (data) => data.amount }],
+      });
+
+      const tree = mount(<DataRowView {...dataRow as any} />, {
+        attachTo: document.createElement('tbody'),
+      });
+      expect(tree.find('td').text()).toBe('$ 100');
+    });
   });
 
   describe('Effects', () => {

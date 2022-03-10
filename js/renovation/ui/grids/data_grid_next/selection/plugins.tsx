@@ -111,10 +111,15 @@ export const AddSelectionColumnToVisibleColumns = createSelector(
     if (selectionMode === 'none') {
       return visibleColumns;
     }
-    const selectColumn: ColumnInternal = { cellTemplate: selectionCheckboxTemplate };
+    const selectColumn: ColumnInternal = {
+      alignment: 'center',
+      cellTemplate: selectionCheckboxTemplate,
+      cssClass: 'dx-editor-cell dx-editor-inline-block',
+      width: 30,
+    };
 
     if (selectionMode === 'multiple' && allowSelectAll) {
-      selectColumn.headerTemplate = selectAllCheckboxTemplate;
+      selectColumn.headerCellTemplate = selectAllCheckboxTemplate;
     }
 
     return [

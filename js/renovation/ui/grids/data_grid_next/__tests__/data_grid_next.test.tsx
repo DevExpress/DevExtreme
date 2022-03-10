@@ -71,7 +71,7 @@ describe('DataGridNext', () => {
       const viewProps = {
         props,
         visibleRows: [{ data: { id: 1 }, rowType: 'data' }, { data: { id: 2 }, rowType: 'data' }],
-        visibleColumns: [{ dataField: 'id' }],
+        visibleColumns: [{ caption: 'id', calculateCellValue: (data) => data.id }],
       } as Partial<DataGridNext>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
@@ -89,8 +89,8 @@ describe('DataGridNext', () => {
         props,
         visibleRows: [{ data: { id: 1, name: 'name 1' }, rowType: 'data' }],
         visibleColumns: [
-          { dataField: 'id' },
-          { dataField: 'name' },
+          { caption: 'id', calculateCellValue: (data) => data.id },
+          { caption: 'name', calculateCellValue: (data) => data.name },
         ],
       } as Partial<DataGridNext>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
@@ -111,15 +111,109 @@ describe('DataGridNext', () => {
       });
     });
 
+    describe('containerClasses', () => {
+      it('classes by default if showBorders is true"', () => {
+        expect(new DataGridNext({
+          showBorders: true,
+        }).containerClasses).toEqual('dx-datagrid dx-gridbase-container dx-datagrid-borders');
+      });
+
+      it('classes if showBorders is false"', () => {
+        expect(new DataGridNext({
+          showBorders: false,
+        }).containerClasses).toEqual('dx-datagrid dx-gridbase-container');
+      });
+    });
+
     describe('columns', () => {
       it('should handle user input', () => {
         const grid = new DataGridNext({
           columns: ['id', 'name'],
         });
 
-        expect(grid.columns).toEqual([
-          { dataField: 'id' },
-          { dataField: 'name' },
+        expect(grid.columns).toMatchObject([
+          {
+            dataField: 'id',
+            caption: 'Id',
+            alignment: undefined,
+            format: undefined,
+            calculateCellValue: expect.any(Function),
+          },
+          {
+            dataField: 'name',
+            caption: 'Name',
+            alignment: undefined,
+            format: undefined,
+            calculateCellValue: expect.any(Function),
+          },
+        ]);
+      });
+
+      it('should process dataType', () => {
+        const grid = new DataGridNext({
+          columns: [{
+            dataField: 'id',
+            dataType: 'number',
+          }, {
+            dataField: 'birthDate',
+            dataType: 'date',
+          }],
+        });
+
+        expect(grid.columns).toMatchObject([
+          {
+            dataField: 'id',
+            caption: 'Id',
+            alignment: 'right',
+            format: undefined,
+            calculateCellValue: expect.any(Function),
+          },
+          {
+            dataField: 'birthDate',
+            caption: 'Birth Date',
+            alignment: undefined,
+            format: 'shortDate',
+            calculateCellValue: expect.any(Function),
+          },
+        ]);
+      });
+
+      it('should process column without dataField', () => {
+        const grid = new DataGridNext({
+          columns: [{
+          }],
+        });
+
+        expect(grid.columns).toMatchObject([
+          {
+            caption: '',
+            alignment: undefined,
+            format: undefined,
+            calculateCellValue: expect.any(Function),
+          },
+        ]);
+      });
+
+      it('should pass parameters', () => {
+        const calculateCellValue = (data) => (data.id as number) * 10;
+        const grid = new DataGridNext({
+          columns: [{
+            dataField: 'id',
+            caption: '#',
+            format: '#0',
+            alignment: 'right',
+            calculateCellValue,
+          }],
+        });
+
+        expect(grid.columns).toMatchObject([
+          {
+            dataField: 'id',
+            caption: '#',
+            alignment: 'right',
+            format: '#0',
+            calculateCellValue,
+          },
         ]);
       });
     });

@@ -28,6 +28,7 @@ describe('DataGridNextFull', () => {
       expect(tree.find(DataGridNextBase).first().props()['rest-attributes']).toEqual('true');
       expect(tree.find(DataGridNextBase).first().props().cacheEnabled).toEqual(true);
       expect(tree.find(DataGridNextBase).first().props().remoteOperations).toEqual(false);
+      expect(tree.find(DataGridNextBase).first().props().showBorders).toEqual(true);
       expect(tree.find(DataGridNextBase).first().props().dataSource).toEqual(props.dataSource);
       expect(tree.find(DataGridNextBase).first().props().columns).toEqual(props.columns);
 

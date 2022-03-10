@@ -25,7 +25,7 @@ export const viewFunction = (viewModel: DataRow): JSX.Element => {
             // eslint-disable-next-line react/no-array-index-key
               key={index}
               columnIndex={index}
-              countColumn={columns.length}
+              columnCount={columns.length}
               column={column}
               cellTemplate={column.cellTemplate}
               cellContainerTemplate={column.cellContainerTemplate}

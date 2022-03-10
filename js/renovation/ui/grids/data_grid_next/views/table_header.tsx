@@ -10,7 +10,7 @@ import CLASSES from '../classes';
 export const viewFunction = (viewModel: TableHeader): JSX.Element => (
   <div className={`${CLASSES.headers} ${CLASSES.noWrap}`} role="presentation">
     <div className={`${CLASSES.content} ${CLASSES.scrollContainer}`} role="presentation">
-      <Table>
+      <Table columns={viewModel.props.columns}>
         <HeaderRow columns={viewModel.props.columns} />
       </Table>
     </div>

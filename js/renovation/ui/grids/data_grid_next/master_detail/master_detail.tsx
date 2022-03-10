@@ -89,6 +89,7 @@ export class DataGridNextMasterDetail extends JSXComponent<DataGridNextMasterDet
         const expandColumn: ColumnInternal = {
           headerCssClass: `${CLASSES.commandExpand} ${CLASSES.groupSpace}`,
           cellContainerTemplate: ExpandColumn,
+          width: 30,
         };
 
         return [

@@ -5,6 +5,7 @@ import { ColumnInternal, Row, RowData } from '../types';
 import { combineClasses } from '../../../../utils/combine_classes';
 
 import CLASSES from '../classes';
+import formatHelper from '../../../../../format_helper';
 
 export const viewFunction = (viewModel: DataCell): JSX.Element => {
   const {
@@ -13,6 +14,7 @@ export const viewFunction = (viewModel: DataCell): JSX.Element => {
   } = viewModel;
   const {
     row,
+    column,
     cellTemplate: CellTemplate,
     cellContainerTemplate: CellContainerTemplate,
   } = viewModel.props;
@@ -29,6 +31,7 @@ export const viewFunction = (viewModel: DataCell): JSX.Element => {
           aria-selected="false"
           role="gridcell"
           className={classes}
+          style={{ textAlign: column.alignment }}
         >
           {cellContentTemplate}
         </td>
@@ -42,19 +45,16 @@ export const viewFunction = (viewModel: DataCell): JSX.Element => {
 @ComponentBindings()
 export class DataCellProps {
   @OneWay()
-  row: Row = {
-    data: {},
-    rowType: 'data',
-  };
+  row!: Row;
 
   @OneWay()
   columnIndex = 0;
 
   @OneWay()
-  countColumn = 0;
+  columnCount = 0;
 
   @OneWay()
-  column: ColumnInternal = {};
+  column!: ColumnInternal;
 
   @Template()
   cellTemplate?: JSXTemplate<{ data: RowData }, 'data'>;
@@ -67,19 +67,20 @@ export class DataCellProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DataCell extends JSXComponent(DataCellProps) {
+export class DataCell extends JSXComponent<DataCellProps, 'column' | 'row'>(DataCellProps) {
   get cellText(): string {
-    const { dataField } = this.props.column;
-    const value = dataField && this.props.row.data[dataField];
-    return value !== undefined ? String(value) : '';
+    const { format, calculateCellValue } = this.props.column;
+    const value = calculateCellValue ? calculateCellValue(this.props.row.data) : undefined;
+    return formatHelper.format(value, format) || '';
   }
 
   get classes(): string {
-    const { columnIndex, countColumn } = this.props;
+    const { columnIndex, columnCount, column } = this.props;
 
     const classesMap = {
       [CLASSES.firstChild]: columnIndex === 0,
-      [CLASSES.lastChild]: columnIndex === countColumn - 1,
+      [CLASSES.lastChild]: columnIndex === columnCount - 1,
+      [column.cssClass ?? '']: true,
     };
 
     return combineClasses(classesMap);

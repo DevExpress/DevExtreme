@@ -1,6 +1,7 @@
 export default {
   dataGrid: 'dx-datagrid',
   gridBaseContainer: 'dx-gridbase-container',
+  borders: 'dx-datagrid-borders',
   rowsView: 'dx-datagrid-rowsview',
   noWrap: 'dx-datagrid-nowrap',
   content: 'dx-datagrid-content',
@@ -28,6 +29,7 @@ export default {
   columnLines: 'dx-column-lines',
   textContent: 'dx-datagrid-text-content',
   textContentAlignmentLeft: 'dx-text-content-alignment-left',
+  textContentAlignmentRight: 'dx-text-content-alignment-right',
   action: 'dx-datagrid-action',
   cellFocusDisabled: 'dx-cell-focus-disabled',
   groupSpace: 'dx-datagrid-group-space',

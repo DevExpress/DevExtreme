@@ -1,10 +1,14 @@
 import {
-  Component, JSXComponent, ComponentBindings, Slot,
+  Component, JSXComponent, ComponentBindings, Slot, OneWay,
 } from '@devextreme-generator/declarations';
 import CLASSES from '../classes';
+import type { ColumnInternal } from '../types';
 
 export const viewFunction = (viewModel: Table): JSX.Element => (
   <table className={`${CLASSES.table} ${CLASSES.fixedTable}`} role="presentation">
+    <colgroup>
+      {viewModel.props.columns.map((column) => <col style={{ width: column.width }} />)}
+    </colgroup>
     <tbody role="presentation">
       {viewModel.props.children}
     </tbody>
@@ -13,6 +17,9 @@ export const viewFunction = (viewModel: Table): JSX.Element => (
 
 @ComponentBindings()
 export class TableProps {
+  @OneWay()
+  columns!: ColumnInternal[];
+
   @Slot() children?: JSX.Element;
 }
 
@@ -20,5 +27,5 @@ export class TableProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Table extends JSXComponent(TableProps) {
+export class Table extends JSXComponent<TableProps, 'columns'>(TableProps) {
 }

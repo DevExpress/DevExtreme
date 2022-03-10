@@ -10,6 +10,7 @@ import { ColumnInternal } from '../types';
 export const viewFunction = ({
   props: { column, columnIndex, headerTemplate: HeaderTemplate },
   classes,
+  contentClasses,
 }: HeaderCell): JSX.Element => (
   <td
     aria-selected="false"
@@ -17,13 +18,14 @@ export const viewFunction = ({
     // TODO uncomment after https://trello.com/c/kVXfSWI7
     // aria-colindex={index + 1}
     id={`dx-col-${columnIndex + 1}`}
-    aria-label={`ColumnInternal ${column.dataField}`}
+    aria-label={`Column ${column.caption}`}
     className={classes}
     aria-sort="none"
     tabIndex={0}
+    style={{ textAlign: column.alignment }}
   >
-    <div className={`${CLASSES.textContent} ${CLASSES.textContentAlignmentLeft}`} role="presentation">
-      {HeaderTemplate ? <HeaderTemplate /> : column.dataField}
+    <div className={contentClasses} role="presentation">
+      {HeaderTemplate ? <HeaderTemplate /> : column.caption}
     </div>
   </td>
 );
@@ -31,13 +33,13 @@ export const viewFunction = ({
 @ComponentBindings()
 export class HeaderCellProps {
   @OneWay()
-  column: ColumnInternal = {};
+  column!: ColumnInternal;
 
   @OneWay()
   columnIndex = 0;
 
   @OneWay()
-  countColumn = 0;
+  columnCount = 0;
 
   @Template()
   headerTemplate?: JSXTemplate;
@@ -47,20 +49,30 @@ export class HeaderCellProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class HeaderCell extends JSXComponent(HeaderCellProps) {
+export class HeaderCell extends JSXComponent<HeaderCellProps, 'column'>(HeaderCellProps) {
   get classes(): string {
-    const { columnIndex, countColumn } = this.props;
+    const { columnIndex, columnCount } = this.props;
 
     const classesMap = {
       [CLASSES.action]: true,
       [CLASSES.cellFocusDisabled]: true,
       [CLASSES.firstChild]: columnIndex === 0,
-      [CLASSES.lastChild]: columnIndex === countColumn - 1,
+      [CLASSES.lastChild]: columnIndex === columnCount - 1,
+      [this.props.column.cssClass ?? '']: true,
+      [this.props.column.headerCssClass ?? '']: true,
     };
 
-    if (this.props.column.headerCssClass) {
-      classesMap[this.props.column.headerCssClass] = true;
-    }
+    return combineClasses(classesMap);
+  }
+
+  get contentClasses(): string {
+    const { alignment } = this.props.column;
+
+    const classesMap = {
+      [CLASSES.textContent]: true,
+      [CLASSES.textContentAlignmentLeft]: alignment !== 'right',
+      [CLASSES.textContentAlignmentRight]: alignment !== 'left',
+    };
 
     return combineClasses(classesMap);
   }

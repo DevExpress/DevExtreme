@@ -4,7 +4,7 @@ import {
 
 export interface FormatHelper {
   format(
-    value: number | Date | null | undefined | string,
+    value: unknown,
     format?: Format | Record<string, unknown>): string;
 }
 
