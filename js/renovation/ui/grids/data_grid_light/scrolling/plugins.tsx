@@ -42,10 +42,8 @@ export const CalculateViewportTakeValue = createSelector<number>(
     const totalItemsCount = totalCount ?? 0;
     const viewportHeight = rowsViewHeight ?? 0;
     const topScrollPosition = scrollingPosition?.top ?? 0;
-    const topIndex = calculateViewportItemIndex(topScrollPosition, rowHeight, itemHeights);
-    const viewportItemCount = calculateViewportItemIndex(topScrollPosition + viewportHeight,
+    const bottomIndex = calculateViewportItemIndex(topScrollPosition + viewportHeight,
       rowHeight, itemHeights);
-    const bottomIndex = Math.ceil(viewportItemCount) + topIndex;
     let take = Math.ceil(bottomIndex - skip);
 
     if (virtualMode) {
