@@ -1,7 +1,7 @@
 import {
   Component, JSXComponent, ComponentBindings,
   Consumer, Effect, OneWay, Fragment,
-  InternalState,
+  InternalState, Mutable,
 } from '@devextreme-generator/declarations';
 import {
   Plugins, PluginsContext,
@@ -9,7 +9,7 @@ import {
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 import { ScrollOffset } from '../../../scroll_view/common/types';
-import { SetRowsViewScrollPositionAction } from '../views/table_content';
+import { SetRowsViewScrollPositionAction, SetRowsViewContentRenderAction } from '../views/table_content';
 import {
   TotalCount, VisibleRows,
 } from '../data_grid_light';
@@ -17,20 +17,33 @@ import {
   SetPageIndex, PageSize, SetLoadPageCount,
 } from '../paging/plugins';
 import {
-  ExtendVisibleRows, CalculateVisibleRows, ViewportParamsValue,
-  CalculateViewportParams, ScrollingPositionValue,
+  ExtendVisibleRows, CalculateVisibleRows,
+  ScrollingPositionValue,
+  RowHeightValue, ItemHeightsValue,
+  ViewportSkipValue,
+  ViewportTakeValue,
+  CalculateViewportSkipValue, CalculateViewportTakeValue,
 } from './plugins';
+import CLASSES from '../classes';
 import { VirtualContent } from './virtual_content';
+import { getElementHeight } from '../utils';
+import { DEFAULT_ROW_HEIGHT, calculateRowHeight, calculateItemHeights } from './utils';
+import { Row } from '../types';
 
 export const viewFunction = ({
-  onRowsScrollPositionChange, scrollPosition,
+  onRowsScrollPositionChange, scrollPosition, onRowsViewContentRender,
+  rowHeight, itemHeights,
 }: VirtualScrolling): JSX.Element => (
   <Fragment>
     <ValueSetter type={SetRowsViewScrollPositionAction} value={onRowsScrollPositionChange} />
+    <ValueSetter type={SetRowsViewContentRenderAction} value={onRowsViewContentRender} />
     <ValueSetter type={ScrollingPositionValue} value={scrollPosition} />
+    <ValueSetter type={RowHeightValue} value={rowHeight} />
+    <ValueSetter type={ItemHeightsValue} value={itemHeights} />
+    <GetterExtender type={ViewportSkipValue} order={0} value={CalculateViewportSkipValue} />
+    <GetterExtender type={ViewportTakeValue} order={0} value={CalculateViewportTakeValue} />
     <GetterExtender type={VisibleRows} order={1} value={ExtendVisibleRows} />
     <GetterExtender type={VisibleRows} order={2} value={CalculateVisibleRows} />
-    <GetterExtender type={ViewportParamsValue} order={0} value={CalculateViewportParams} />
     <VirtualContent />
   </Fragment>
 );
@@ -52,6 +65,15 @@ export class VirtualScrolling extends JSXComponent(VirtualScrollingProps) {
   @InternalState()
   scrollPosition = { top: 0, left: 0 };
 
+  @InternalState()
+  rowHeight = DEFAULT_ROW_HEIGHT;
+
+  @InternalState()
+  itemHeights: Record<number, number> = {};
+
+  @Mutable()
+  visibleRowHeights: number[] = [];
+
   @Effect()
   watchTotalCount(): () => void {
     return this.plugins.watch(TotalCount, () => {
@@ -72,7 +94,8 @@ export class VirtualScrolling extends JSXComponent(VirtualScrollingProps) {
   loadViewport(): void {
     let pageSize = this.plugins.getValue(PageSize) ?? 0;
     pageSize = typeof pageSize !== 'number' ? 0 : pageSize;
-    const { skip = 0, take = 0 } = this.plugins.getValue(ViewportParamsValue) ?? {};
+    const skip = this.plugins.getValue(ViewportSkipValue) ?? 0;
+    const take = this.plugins.getValue(ViewportTakeValue) ?? 0;
     const pageIndex = Math.floor(pageSize > 0 ? skip / pageSize : 0);
     const pageOffset = pageIndex * pageSize;
     const skipForCurrentPage = skip - pageOffset;
@@ -80,5 +103,23 @@ export class VirtualScrolling extends JSXComponent(VirtualScrollingProps) {
 
     this.plugins.callAction(SetPageIndex, pageIndex);
     this.plugins.callAction(SetLoadPageCount, loadPageCount);
+  }
+
+  onRowsViewContentRender(element: HTMLElement): void {
+    const rowElements = Array.from(element.querySelectorAll(`tr.${CLASSES.row}:not(.${CLASSES.virtualRow})`));
+    this.visibleRowHeights = rowElements.map((el) => getElementHeight(el));
+    this.updateRowHeights();
+  }
+
+  updateRowHeights(): void {
+    const visibleRows: Row[] = this.plugins.getValue(VisibleRows) ?? [];
+    const newRowHeight = calculateRowHeight(this.visibleRowHeights, visibleRows.length);
+    const skip = this.plugins.getValue(ViewportSkipValue) ?? 0;
+    const calculatedRowHeights = calculateItemHeights(visibleRows, this.visibleRowHeights);
+
+    calculatedRowHeights.forEach((height, index) => {
+      this.itemHeights[skip + index] = height;
+    });
+    this.rowHeight = newRowHeight;
   }
 }

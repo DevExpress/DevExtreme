@@ -50,8 +50,3 @@ export type DataSource = RowData[] | Store | undefined;
 
 export type VirtualScrollingMode = 'virtual' | 'infinite';
 export type ScrollingMode = 'standard' | VirtualScrollingMode;
-
-export interface ViewportParamsProps {
-  skip: number;
-  take: number;
-}

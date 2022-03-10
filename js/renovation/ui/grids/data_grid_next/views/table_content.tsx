@@ -26,6 +26,7 @@ export const RowsViewScroll = createValue<(offset: ScrollOffset) => void>();
 export const RowsViewHeight = createValue<number>();
 export const SetRowsViewScrollPositionAction = createValue<(offset: ScrollOffset) => void>();
 export const RowsViewHeightValue = createValue<number>();
+export const SetRowsViewContentRenderAction = createValue<(element: HTMLElement) => void>();
 
 export const viewFunction = (viewModel: TableContent): JSX.Element => (
   <div ref={viewModel.rowsViewRef} className={viewModel.classes} role="presentation">
@@ -90,6 +91,12 @@ export class TableContent extends JSXComponent(TableContentProps) {
   @Effect()
   calculateRowsViewHeight(): void {
     this.plugins.set(RowsViewHeightValue, getElementHeight(this.rowsViewRef.current));
+  }
+
+  @Effect({ run: 'always' })
+  rowsViewContentReady(): void {
+    const element = this.divRef.current;
+    element && this.plugins.callAction(SetRowsViewContentRenderAction, element);
   }
 
   onRowClick(e: Event): void {

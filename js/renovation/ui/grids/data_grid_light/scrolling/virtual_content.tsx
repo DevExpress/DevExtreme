@@ -7,17 +7,30 @@ import {
 } from '../../../../utils/plugin/context';
 import { PlaceholderExtender } from '../../../../utils/plugin/placeholder_extender';
 import { TopRowPlaceholder, BottomRowPlaceholder } from '../views/table_content';
-import { ViewportParamsValue, ROW_HEIGHT } from './plugins';
-import { VirtualRow } from './virtual_row';
-import { ViewportParamsProps } from '../types';
 import {
-  VisibleColumns, TotalCount,
+  TopVirtualRowHeightValue, BottomVirtualRowHeightValue,
+  CalculateTopVirtualRowHeight, CalculateBottomVirtualRowHeight,
+} from './plugins';
+import { VirtualRow } from './virtual_row';
+import {
+  VisibleColumns,
 } from '../data_grid_light';
+import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
 export const viewFunction = ({
-  topHeight, bottomHeight, columnCount,
+  topHeight, bottomHeight, cellClasses,
 }: VirtualContent): JSX.Element => (
   <Fragment>
+    <GetterExtender
+      type={TopVirtualRowHeightValue}
+      order={0}
+      value={CalculateTopVirtualRowHeight}
+    />
+    <GetterExtender
+      type={BottomVirtualRowHeightValue}
+      order={0}
+      value={CalculateBottomVirtualRowHeight}
+    />
     { topHeight > 0 && (
       <PlaceholderExtender
         type={TopRowPlaceholder}
@@ -25,7 +38,7 @@ export const viewFunction = ({
         template={(): JSX.Element => (
           <VirtualRow
             height={topHeight}
-            columnCount={columnCount}
+            cellClasses={cellClasses}
             rowKey={-1}
           />
         )}
@@ -38,7 +51,7 @@ export const viewFunction = ({
         template={(): JSX.Element => (
           <VirtualRow
             height={bottomHeight}
-            columnCount={columnCount}
+            cellClasses={cellClasses}
             rowKey={-2}
           />
         )}
@@ -66,27 +79,26 @@ export class VirtualContent extends JSXComponent(VirtualContentProps) {
   bottomHeight = 0;
 
   @InternalState()
-  columnCount = 0;
+  cellClasses: string[] = [];
 
   @Effect()
   watchVisibleColumns(): () => void {
     return this.plugins.watch(VisibleColumns, (visibleColumns) => {
-      this.columnCount = visibleColumns.length;
+      this.cellClasses = Array(visibleColumns.length).fill('').map((_, index) => visibleColumns[index].headerCssClass ?? '');
     });
   }
 
   @Effect()
-  watchViewportParams(): () => void {
-    return this.plugins.watch(ViewportParamsValue, (viewportParams) => {
-      this.updateContent(viewportParams);
+  watchTopVirtualRowHeight(): () => void {
+    return this.plugins.watch(TopVirtualRowHeightValue, (height) => {
+      this.topHeight = height;
     });
   }
 
-  updateContent(viewportParams: ViewportParamsProps): void {
-    const { skip = 0, take = 0 } = viewportParams ?? {};
-    const totalCount = this.plugins.getValue(TotalCount) ?? 0;
-
-    this.topHeight = skip * ROW_HEIGHT;
-    this.bottomHeight = (totalCount - skip - take) * ROW_HEIGHT;
+  @Effect()
+  watchBottomVirtualRowHeight(): () => void {
+    return this.plugins.watch(BottomVirtualRowHeightValue, (height) => {
+      this.bottomHeight = height;
+    });
   }
 }

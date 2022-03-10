@@ -35,6 +35,4 @@ export const getReactRowKey = (row: Row, index: number): string => {
   return `${row.rowType}_${row.key}`;
 };
 
-export function getElementHeight(element: Element | null | undefined): number {
-  return getElementStyle('height', element);
-}
+export const getElementHeight = (element: Element | null | undefined): number => getElementStyle('height', element);

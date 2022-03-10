@@ -23,7 +23,9 @@ export const viewFunction = ({
     role="presentation"
     style={{ width: '100%' }} // remove after the fix https://github.com/DevExpress/devextreme-renovation/issues/883
   >
-    {virtualCells.map(({ height, key }) => <td key={key} style={{ height }} />)}
+    {virtualCells.map(({
+      height, key, cellClass,
+    }) => <td key={key} style={{ height }} className={cellClass} />)}
   </tr>
 );
 
@@ -33,7 +35,7 @@ export class VirtualRowProps {
   height = 0;
 
   @OneWay()
-  columnCount = 0;
+  cellClasses: string[] = [];
 
   @OneWay()
   rowKey = 0;
@@ -45,12 +47,13 @@ export class VirtualRowProps {
   view: viewFunction,
 })
 export class VirtualRow extends JSXComponent(VirtualRowProps) {
-  get virtualCells(): { key: number; height: number }[] {
-    const { height, columnCount } = this.props;
-    return Array(columnCount).fill(height).map((item, index) => (
+  get virtualCells(): { key: number; height: number; cellClass: string }[] {
+    const { height, cellClasses } = this.props;
+    return Array(cellClasses.length).fill(height).map((item, index) => (
       {
         height: item,
         key: index,
+        cellClass: cellClasses[index],
       }
     ));
   }
