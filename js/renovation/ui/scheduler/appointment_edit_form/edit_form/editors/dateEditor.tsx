@@ -6,22 +6,21 @@ import {
   JSXComponent,
   OneWay,
 } from '@devextreme-generator/declarations';
-import { DateBox } from '../../../../editors/drop_down_editors/date_box';
+import { DateBox, DateEditorType } from '../../../../editors/drop_down_editors/date_box';
 import { getFirstDayOfWeek } from '../../utils';
-import { IDateBoxEditorConfig } from '../type';
 
 export const viewFunction = ({
   date,
-  editorConfig: {
-    type,
-    calendarOptions,
-  },
+  type,
+  calendarOptions,
   props: {
     disabled,
   },
   updateDate,
 }: DateEditor): JSX.Element => (
   <DateBox
+    width="100%"
+    useMaskBehavior
     value={date}
     valueChange={updateDate}
     type={type}
@@ -60,19 +59,15 @@ DateEditorProps, 'value' | 'firstDayOfWeek' | 'isAllDay' | 'valueChange'>() {
     this.date = this.props.valueChange(date);
   }
 
-  get editorConfig(): IDateBoxEditorConfig {
-    const actualFirstDayOfWeek = getFirstDayOfWeek(this.props.firstDayOfWeek);
-    const dateType = this.props.isAllDay
+  get calendarOptions(): { firstDayOfWeek: number } {
+    return {
+      firstDayOfWeek: getFirstDayOfWeek(this.props.firstDayOfWeek),
+    };
+  }
+
+  get type(): DateEditorType {
+    return this.props.isAllDay
       ? 'date'
       : 'datetime';
-
-    return {
-      width: '100%',
-      calendarOptions: {
-        firstDayOfWeek: actualFirstDayOfWeek,
-      },
-      type: dateType,
-      useMaskBehavior: true, // TODO this option is not accessible
-    };
   }
 }
