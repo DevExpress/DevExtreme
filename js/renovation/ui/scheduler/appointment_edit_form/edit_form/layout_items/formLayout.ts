@@ -6,6 +6,8 @@ import messageLocalization from '../../../../../../localization/message';
 import { getDateBoxLayoutItemConfig } from './dateBox';
 import type { GroupItem } from '../../../../../../ui/form';
 import { getTimeZoneLayoutItemConfig } from './timeZone';
+import { getSwitchLayoutItemConfig } from './switch';
+import { getDescriptionLayoutItemConfig } from './description';
 
 const LayoutGroupNames = {
   Main: 'mainGroup',
@@ -16,6 +18,9 @@ const ItemLabels = {
   subject: messageLocalization.format('dxScheduler-editorLabelTitle'),
   startDate: messageLocalization.format('dxScheduler-editorLabelStartDate'),
   endDate: messageLocalization.format('dxScheduler-editorLabelEndDate'),
+  allDay: messageLocalization.format('dxScheduler-allDay'),
+  repeat: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
+  description: messageLocalization.format('dxScheduler-editorLabelDescription'),
 };
 
 export interface IAppointmentEditFormLayout {
@@ -79,6 +84,9 @@ const createMainItems = (
   endDateEditorTemplate: () => JSX.Element,
   startDatetimeZoneEditorTemplate: () => JSX.Element,
   endDateTimeZoneEditorTemplate: () => JSX.Element,
+  allDayEditorTemplate: () => JSX.Element,
+  repeatEditorTemplate: () => JSX.Element,
+  descriptionEditorTemplate: () => JSX.Element,
 ): (SimpleItem | GroupItem)[] => [
   {
     dataField: dataExpr.textExpr,
@@ -104,6 +112,39 @@ const createMainItems = (
       endDateTimeZoneEditorTemplate,
     }),
   },
+  {
+    itemType: 'group',
+    colCountByScreen: {
+      lg: 3,
+      xs: 3,
+    },
+    colSpan: 2,
+    items: [
+      getSwitchLayoutItemConfig(
+        allDayEditorTemplate,
+        dataExpr.allDayExpr,
+        ItemLabels.allDay,
+      ),
+      getSwitchLayoutItemConfig(
+        repeatEditorTemplate,
+        'repeat',
+        ItemLabels.repeat,
+      ),
+      {
+        itemType: 'empty',
+        colSpan: 2,
+      },
+      getDescriptionLayoutItemConfig(
+        descriptionEditorTemplate,
+        dataExpr.descriptionExpr,
+        ItemLabels.description,
+      ),
+      {
+        itemType: 'empty',
+        colSpan: 2,
+      },
+    ],
+  },
 ];
 
 const getMainLayout = (
@@ -115,6 +156,9 @@ const getMainLayout = (
   endDateEditorTemplate: () => JSX.Element,
   startDatetimeZoneEditorTemplate: () => JSX.Element,
   endDateTimeZoneEditorTemplate: () => JSX.Element,
+  allDayEditorTemplate: () => JSX.Element,
+  repeatEditorTemplate: () => JSX.Element,
+  descriptionEditorTemplate: () => JSX.Element,
 ): GroupItem[] => [{
   itemType: 'group',
   name: LayoutGroupNames.Main,
@@ -130,6 +174,9 @@ const getMainLayout = (
     endDateEditorTemplate,
     startDatetimeZoneEditorTemplate,
     endDateTimeZoneEditorTemplate,
+    allDayEditorTemplate,
+    repeatEditorTemplate,
+    descriptionEditorTemplate,
   ),
 }, {
   itemType: 'group',
@@ -148,6 +195,9 @@ export const getFormLayoutConfig = (
   endDateEditorTemplate: () => JSX.Element,
   startDatetimeZoneEditorTemplate: () => JSX.Element,
   endDateTimeZoneEditorTemplate: () => JSX.Element,
+  allDayEditorTemplate: () => JSX.Element,
+  repeatEditorTemplate: () => JSX.Element,
+  descriptionEditorTemplate: () => JSX.Element,
 ): GroupItem[] => {
   const recurrenceEditorVisibility = !!formData[fieldExpr.recurrenceRuleExpr]; // TODO
   const colSpan = recurrenceEditorVisibility ? 1 : 2;
@@ -161,5 +211,8 @@ export const getFormLayoutConfig = (
     endDateEditorTemplate,
     startDatetimeZoneEditorTemplate,
     endDateTimeZoneEditorTemplate,
+    allDayEditorTemplate,
+    repeatEditorTemplate,
+    descriptionEditorTemplate,
   );
 };
