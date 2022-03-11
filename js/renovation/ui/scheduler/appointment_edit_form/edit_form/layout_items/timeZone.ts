@@ -16,8 +16,7 @@ export const getTimeZoneLayoutItemConfig = (
   },
   visible,
   // This is WA for templates in nested components
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  template: (item: any, container: any): void => {
+  template: (item: unknown, container: unknown): void => {
     renderTemplate(
       editorTemplate,
       {
