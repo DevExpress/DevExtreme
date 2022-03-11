@@ -8,6 +8,8 @@ import { EditorProps } from '../common/editor';
 import { EditorStateProps } from '../common/editor_state_props';
 import { EditorLabelProps } from '../common/editor_label_props';
 
+export type DateEditorType = 'date' | 'datetime' | 'time';
+
 export const viewFunction = ({
   componentProps,
   restAttributes,
@@ -35,9 +37,9 @@ export class DateBoxProps extends EditorProps {
 
   @OneWay() field?: string;
 
-  @OneWay() type?: string = 'date' ;
+  @OneWay() type: DateEditorType = 'date';
 
-  @OneWay() useMaskBehavior?: boolean = false ;
+  @OneWay() useMaskBehavior = false;
 }
 
 export type DateBoxPropsType = DateBoxProps & EditorStateProps & EditorLabelProps;
