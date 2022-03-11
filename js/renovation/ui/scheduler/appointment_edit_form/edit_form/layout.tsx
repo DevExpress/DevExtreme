@@ -5,18 +5,28 @@ import {
   Template,
   OneWay,
   Consumer,
+  InternalState,
+  Effect,
 } from '@devextreme-generator/declarations';
 import { Form } from '../../../form/wrapper/form';
 import { AppointmentData } from '../../appointment/types';
 import { DataAccessorType } from '../../types';
-import { getFormLayoutConfig } from './config/formLayout';
+import { getFormLayoutConfig } from './layout_items/formLayout';
 import { FormDate } from './utils/normalizeDate';
 import type { GroupItem } from '../../../../../ui/form.d';
 import { FormContext, IFormContext } from '../../form_context';
-import { JSXEndDateEditorTemplate, JSXStartDateEditorTemplate, JSXTimeZoneEditorTemplate } from './type';
+import {
+  JSXDescriptionEditorTemplate,
+  JSXEndDateEditorTemplate,
+  JSXStartDateEditorTemplate,
+  JSXSwitchEditorTemplate,
+  JSXTimeZoneEditorTemplate,
+} from './type';
 import { StartDateEditor } from './editors/startDateEditor';
 import { EndDateEditor } from './editors/endDateEditor';
 import { TimeZoneEditor } from './editors/timeZoneEditor';
+import { SwitchEditor } from './editors/switchEditor';
+import { DescriptionEditor } from './editors/descriptionEditor';
 
 const FormColCount = { lg: 2, xs: 1 };
 export const viewFunction = ({
@@ -52,6 +62,12 @@ export class EditFormProps {
   @Template() endDateEditorTemplate: JSXEndDateEditorTemplate = EndDateEditor;
 
   @Template() timeZoneEditorTemplate: JSXTimeZoneEditorTemplate = TimeZoneEditor;
+
+  @Template() allDayEditorTemplate: JSXSwitchEditorTemplate = SwitchEditor;
+
+  @Template() repeatEditorTemplate: JSXSwitchEditorTemplate = SwitchEditor;
+
+  @Template() descriptionEditorTemplate: JSXDescriptionEditorTemplate = DescriptionEditor;
 }
 
 @Component({ view: viewFunction })
@@ -60,20 +76,44 @@ export class EditForm extends
   @Consumer(FormContext)
   formContextValue!: IFormContext;
 
+  @InternalState()
+  isAllDay?: boolean;
+
+  @Effect({ run: 'once' })
+  updateState(): void {
+    if (this.isAllDay === undefined) {
+      this.isAllDay = !!this.formContextValue.formData.allDay;
+    }
+  }
+
   startDateChange(date: Date): void {
-    this.formContextValue.formData.startDate = date;
+    this.formContextValue.formData.startDate = date; // TODO update appointment
   }
 
   endDateChange(date: Date): void {
-    this.formContextValue.formData.endDate = date;
+    this.formContextValue.formData.endDate = date; // TODO update appointment
   }
 
   startDateTimeZoneChange(timeZone: string): void {
-    this.formContextValue.formData.startDateTimeZone = timeZone;
+    this.formContextValue.formData.startDateTimeZone = timeZone; // TODO update appointment
   }
 
   endDateTimeZoneChange(timeZone: string): void {
-    this.formContextValue.formData.endDateTimeZone = timeZone;
+    this.formContextValue.formData.endDateTimeZone = timeZone; // TODO update appointment
+  }
+
+  allDayChange(value: boolean): void {
+    this.isAllDay = value;
+
+    this.formContextValue.formData.allDay = value; // TODO update appointment
+  }
+
+  repeatChange(value: boolean): void {
+    this.formContextValue.formData.repeat = value; // TODO recurrenceEditor
+  }
+
+  descriptionChange(value: string): void {
+    this.formContextValue.formData.description = value;
   }
 
   get formItems(): GroupItem[] {
@@ -81,25 +121,37 @@ export class EditForm extends
     const StartDateTemplate = this.props.startDateEditorTemplate;
     const EndDateTemplate = this.props.endDateEditorTemplate;
     const TimeZoneTemplate = this.props.timeZoneEditorTemplate;
-    const { allDay } = this.formContextValue.formData;
+    const AllDayTemplate = this.props.allDayEditorTemplate;
+    const RepeatTemplate = this.props.repeatEditorTemplate;
+    const DescriptionTemplate = this.props.descriptionEditorTemplate;
+    const { recurrenceRule } = this.formContextValue.formData;
+    const isRecurrence = !!recurrenceRule;
+
+    const { startDate } = this.props.appointmentData;
+    const {
+      startDateChange,
+    } = this;
+    const { firstDayOfWeek } = this.props;
 
     const {
       startDateTimeZone = '',
       endDateTimeZone = '',
     } = this.props.appointmentData;
 
+    const allDay = !!this.isAllDay;
+
     return getFormLayoutConfig(
       this.props.dataAccessors.expr,
       formData,
       this.props.allowTimeZoneEditing,
-      () => (
+      (): JSX.Element => (
         <StartDateTemplate
-          value={this.props.appointmentData.startDate}
-          dateChange={this.startDateChange}
+          value={startDate}
+          dateChange={startDateChange}
           startDate={formData.startDate as FormDate}
           endDate={formData.endDate as FormDate}
-          firstDayOfWeek={this.props.firstDayOfWeek}
-          isAllDay={allDay as boolean}
+          firstDayOfWeek={firstDayOfWeek}
+          isAllDay={allDay}
         />
       ),
       () => (
@@ -109,7 +161,7 @@ export class EditForm extends
           startDate={formData.startDate as FormDate}
           endDate={formData.endDate as FormDate}
           firstDayOfWeek={this.props.firstDayOfWeek}
-          isAllDay={allDay as boolean}
+          isAllDay={allDay}
         />
       ),
       () => (
@@ -124,6 +176,24 @@ export class EditForm extends
           value={endDateTimeZone}
           valueChange={this.endDateTimeZoneChange}
           date={this.props.appointmentData.endDate}
+        />
+      ),
+      () => (
+        <AllDayTemplate
+          value={allDay}
+          valueChange={this.allDayChange}
+        />
+      ),
+      () => (
+        <RepeatTemplate
+          value={isRecurrence}
+          valueChange={this.repeatChange}
+        />
+      ),
+      () => (
+        <DescriptionTemplate
+          value={this.props.appointmentData.description}
+          valueChange={this.descriptionChange}
         />
       ),
     );
