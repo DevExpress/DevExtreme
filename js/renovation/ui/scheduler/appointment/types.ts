@@ -15,12 +15,13 @@ export interface AppointmentGeometry {
 }
 
 export interface AppointmentData {
-  allDay: boolean;
+  text: string;
   startDate: Date;
   endDate: Date;
+  allDay?: boolean;
+  description?: string;
   startDateTimeZone?: string;
   endDateTimeZone?: string;
-  text: string;
 }
 
 export interface AppointmentInfo {
