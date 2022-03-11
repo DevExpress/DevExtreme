@@ -10,7 +10,7 @@ import {
   PageIndex, PageSize,
 } from '../paging/plugins';
 import { ScrollOffset } from '../../../scroll_view/common/types';
-import { calculateViewportItemIndex } from './utils';
+import { calculateViewportItemIndex, getVirtualContentOffset } from './utils';
 
 export const ScrollingModeValue = createValue<ScrollingMode>();
 export const ScrollingPositionValue = createValue<ScrollOffset>();
@@ -80,13 +80,16 @@ export const CalculateVisibleRows = createSelector<Row[]>(
   }),
 );
 export const CalculateTopVirtualRowHeight = createSelector<number>(
-  [ViewportSkipValue, RowHeightValue],
-  (skip: number, rowHeight: number) => skip * rowHeight,
+  [ViewportSkipValue, RowHeightValue, TotalCount, ItemHeightsValue],
+  (
+    skip: number, rowHeight: number,
+    totalCount: number, itemHeights: Record<number, number>,
+  ) => getVirtualContentOffset('top', skip, totalCount, itemHeights, rowHeight),
 );
 export const CalculateBottomVirtualRowHeight = createSelector<number>(
-  [ViewportSkipValue, ViewportTakeValue, TotalCount, RowHeightValue],
+  [ViewportSkipValue, ViewportTakeValue, TotalCount, RowHeightValue, ItemHeightsValue],
   (
     skip: number, take: number,
-    totalCount: number, rowHeight: number,
-  ) => (totalCount - skip - take) * rowHeight,
+    totalCount: number, rowHeight: number, itemHeights: Record<number, number>,
+  ) => getVirtualContentOffset('bottom', totalCount - skip - take, totalCount, itemHeights, rowHeight),
 );

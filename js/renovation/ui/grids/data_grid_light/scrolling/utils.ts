@@ -58,3 +58,27 @@ export const calculateViewportItemIndex = (
   }
   return Math.round(itemOffset * 50) / 50;
 };
+export const getVirtualContentOffset = (
+  type: 'top' | 'bottom',
+  itemIndex: number,
+  totalCount: number,
+  itemHeights: Record<number, number>,
+  rowHeight: number,
+): number => {
+  let itemCount = itemIndex;
+  if (!itemCount) return 0;
+  let offset = 0;
+
+  Object.keys(itemHeights).forEach((currentItemIndex) => {
+    if (!itemCount) return;
+    const isBottom = type === 'bottom';
+    const currentIndex = currentItemIndex as unknown as number;
+    if (isBottom
+      ? currentIndex >= totalCount - itemIndex
+      : currentIndex < itemIndex) {
+      offset += itemHeights[currentIndex];
+      itemCount -= 1;
+    }
+  });
+  return Math.floor(offset + itemCount * rowHeight);
+};
