@@ -13,8 +13,8 @@ import {
 import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
 import CLASSES from '../classes';
-import { combineClasses } from '../../../../utils/combine_classes';
 import { getReactRowKey, getElementHeight } from '../utils';
+import { combineClasses } from '../../../../utils/combine_classes';
 import { Placeholder } from '../../../../utils/plugin/placeholder';
 import { Scrollable } from '../../../scroll_view/scrollable';
 import { ScrollEventArgs, ScrollOffset } from '../../../scroll_view/common/types';

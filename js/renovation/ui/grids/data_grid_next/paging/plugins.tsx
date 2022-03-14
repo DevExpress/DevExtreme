@@ -24,22 +24,28 @@ export const PageCount = createSelector(
 );
 
 export const ApplyPagingToVisibleItems = createSelector(
-  [LocalVisibleItems, PagingEnabled, PageIndex, PageSize],
-  (visibleItems: RowData[] | undefined, pagingEnabled: boolean, pageIndex: number, pageSize: number | 'all') => {
+  [LocalVisibleItems, PagingEnabled, PageIndex, PageSize, LoadPageCount],
+  (
+    visibleItems: RowData[] | undefined, pagingEnabled: boolean, pageIndex: number,
+    pageSize: number | 'all', loadPageCount: number,
+  ) => {
     if (!pagingEnabled || pageSize === 'all' || visibleItems === undefined) {
       return visibleItems;
     }
 
     const start = pageIndex * pageSize;
-    const end = start + pageSize;
+    const end = start + pageSize * loadPageCount;
 
     return visibleItems.slice(start, end);
   },
 );
 
 export const AddPagingToLoadOptions = createSelector(
-  [LoadOptionsValue, PagingEnabled, PageIndex, PageSize, RemoteOperations],
-  (loadOptionsValue: LoadOptions, pagingEnabled, pageIndex, pageSize, remoteOperations) => {
+  [LoadOptionsValue, PagingEnabled, PageIndex, PageSize, LoadPageCount, RemoteOperations],
+  (
+    loadOptionsValue: LoadOptions, pagingEnabled,
+    pageIndex, pageSize, loadPageCount, remoteOperations,
+  ) => {
     if (!pagingEnabled || pageSize === 'all' || !remoteOperations) {
       return loadOptionsValue;
     }
@@ -47,7 +53,7 @@ export const AddPagingToLoadOptions = createSelector(
     return {
       ...loadOptionsValue,
       skip: pageIndex * pageSize,
-      take: pageSize,
+      take: pageSize * loadPageCount,
       requireTotalCount: true,
     };
   },
