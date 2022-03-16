@@ -105,6 +105,8 @@ export class PopupProps extends BaseWidgetProps {
 
   @OneWay() minWidth?: number | string | (() => number | string) | null = null;
 
+  @OneWay() wrapperAttr = {};
+
   @Event() onHidden?: () => void;
 
   @Event() onHiding?: () => void;
