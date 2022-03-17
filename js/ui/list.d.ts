@@ -80,7 +80,7 @@ export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
 
 /** @public */
 export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
-    cancel?: boolean | PromiseLike<void> | PromiseLike<boolean>;
+    cancel?: boolean | PromiseLike<boolean>;
 };
 
 /** @public */

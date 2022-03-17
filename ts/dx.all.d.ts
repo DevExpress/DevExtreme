@@ -13847,7 +13847,7 @@ declare module DevExpress.ui {
       ListItemInfo;
     export type ItemDeletingEvent = DevExpress.events.EventInfo<dxList> &
       ListItemInfo & {
-        cancel?: boolean | PromiseLike<void> | PromiseLike<boolean>;
+        cancel?: boolean | PromiseLike<boolean>;
       };
     export type ItemHoldEvent = DevExpress.events.NativeEventInfo<
       dxList,
