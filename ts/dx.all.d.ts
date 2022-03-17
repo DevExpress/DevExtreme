@@ -15762,7 +15762,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
       ListItemInfo<TItem> & {
-        cancel?: boolean | PromiseLike<void> | PromiseLike<boolean>;
+        cancel?: boolean | PromiseLike<boolean>;
       };
     export type ItemHoldEvent<
       TItem extends ItemLike = any,
