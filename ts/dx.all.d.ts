@@ -18796,6 +18796,10 @@ declare module DevExpress.ui {
      */
     height?: number | string | (() => number | string);
     /**
+     * [descr:dxResizableOptions.keepAspectRatio]
+     */
+    keepAspectRatio?: boolean;
+    /**
      * [descr:dxResizableOptions.maxHeight]
      */
     maxHeight?: number;
