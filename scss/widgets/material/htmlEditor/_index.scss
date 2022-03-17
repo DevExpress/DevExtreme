@@ -349,6 +349,35 @@
   }
 }
 
+.dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
+  .dx-collection .dx-field-item:not(.dx-last-col) {
+    padding-right: $material-html-editor-add-image-dialog-base-padding;
+  }
+
+  .dx-fix-ratio-container {
+    .dx-textbox {
+      width: calc(100% - 36px - $material-html-editor-add-image-dialog-base-padding);
+    }
+
+    .dx-buttongroup {
+      margin-left: $material-html-editor-add-image-dialog-base-padding;
+    }
+  }
+
+  .dx-collection .dx-field-item:not(.dx-first-col) {
+    padding-left: 0;
+  }
+
+  .dx-fileuploader-input-wrapper {
+    padding: 40px;
+
+    .dx-fileuploader-input-label {
+      border-width: 0;
+    }
+  }
+}
+
+
 .dx-htmleditor-add-image-popup {
   .dx-buttongroup {
     margin-top: 6px;
@@ -356,6 +385,17 @@
 
   .dx-fileuploader-input-wrapper {
     border: 3px dashed $base-border-color;
+  }
+
+  .dx-fileuploader-dragover {
+    .dx-fileuploader-input {
+      padding-top: 7px;
+      padding-bottom: 8px;
+    }
+
+    .dx-fileuploader-content {
+      background-color: $htmleditor-border-color;
+    }
   }
 }
 
