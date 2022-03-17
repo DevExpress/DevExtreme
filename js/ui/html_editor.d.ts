@@ -418,7 +418,7 @@ export interface dxHtmlEditorTableResizing {
    * @default 'url'
    * @public
    */
-   mode?: 'url' | 'both';
+   mode?: 'url' | 'base64' | 'both';
     /**
    * @docid
    * @default {}

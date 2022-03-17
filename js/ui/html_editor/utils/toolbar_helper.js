@@ -238,7 +238,7 @@ function prepareImageHandler(module, imageUploadingOption) {
             formData: formData,
             width: 493,
             labelLocation: 'top',
-            colCount: imageUploadingOption.mode === 'both' ? 1 : 11,
+            colCount: imageUploadingOption?.mode !== 'url' ? 1 : 11,
             items: imageFormItems(module, imageUploadingOption)
         };
 
@@ -301,7 +301,7 @@ function modifyImageUploadingDialog(module, imageUploadingOption) {
     module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
     module.editorInstance.formDialogOption('toolbarItems[0].options.text', 'Add'); // localization
     let wrapperClassString = 'dx-htmleditor-add-image-popup dx-formdialog';
-    if(imageUploadingOption?.mode === 'both') {
+    if(isDefined(imageUploadingOption) && imageUploadingOption.mode !== 'url') {
         wrapperClassString += ' dx-htmleditor-add-image-popup-with-tabs';
     }
 
@@ -365,8 +365,8 @@ function serverUpload({ formInstance, file, uploadDirectory }) {
 }
 
 function getSelectFileTabItems(module, imageUploadingOption) {
-    let useBase64 = imageUploadingOption?.mode === 'file' || !isDefined(imageUploadingOption.uploadUrl);
-    const useUrlUploading = imageUploadingOption?.mode !== 'file';
+    let useBase64 = imageUploadingOption?.mode === 'base64'/* || !isDefined(imageUploadingOption.uploadUrl)  // add warning  */;
+    // const useUrlUploading = imageUploadingOption?.mode !== 'file';
 
     const selectFileTabItems = [
         {
@@ -384,12 +384,12 @@ function getSelectFileTabItems(module, imageUploadingOption) {
                     uploadUrl: imageUploadingOption.uploadUrl,
                     uploadMode: 'instantly',
                     onValueChanged: (data) => {
-                        if(!useUrlUploading || useBase64) {
+                        if(useBase64) {
                             base64Upload(module, data);
                         }
                     },
                     onUploaded: (data) => {
-                        if(useUrlUploading && !useBase64) {
+                        if(!useBase64) {
                             const formInstance = formTemplateData.component;
                             const file = data.file;
                             const uploadDirectory = imageUploadingOption.uploadDirectory;
@@ -407,7 +407,7 @@ function getSelectFileTabItems(module, imageUploadingOption) {
             editorType: 'dxCheckBox',
             editorOptions: {
                 value: useBase64,
-                disabled: !isDefined(imageUploadingOption.uploadUrl),
+                disabled: imageUploadingOption?.mode === 'base64', // !isDefined(imageUploadingOption.uploadUrl),
                 text: 'Encode to base 64', // localization
                 onValueChanged: (e) => {
                     useBase64 = e.value;
@@ -507,7 +507,7 @@ function imageFormItems(module, imageUploadingOption) {
 
     const specifyURLTabItems = getSpecifyURLTabItems(module);
 
-    if(imageUploadingOption?.mode === 'both') {
+    if(imageUploadingOption?.mode === 'both' || imageUploadingOption?.mode === 'base64') {
         resultFormItems = [
             {
                 itemType: 'tabbed',
