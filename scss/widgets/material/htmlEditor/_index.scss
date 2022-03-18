@@ -10,6 +10,7 @@
 @use "../textEditor/colors" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
+@use "../fileUploader/sizes" as *;
 @use "../../base/htmlEditor";
 
 // adduse
@@ -371,7 +372,8 @@
   }
 
   .dx-fileuploader-input-wrapper {
-    padding: 40px;
+    padding: $material-html-editor-add-image-dialog-fileuploader-padding;
+    border: 3px dashed $base-border-color;
 
     .dx-fileuploader-input-label {
       border-width: 0;
@@ -379,16 +381,11 @@
   }
 }
 
-
 .dx-htmleditor-add-image-popup {
-  .dx-fileuploader-input-wrapper {
-    border: 3px dashed $base-border-color;
-  }
-
   .dx-fileuploader-dragover {
     .dx-fileuploader-input {
-      padding-top: 7px;
-      padding-bottom: 8px;
+      padding-top: $material-fileuploader-vertical-padding;
+      padding-bottom: $material-fileuploader-vertical-padding + 1px;
     }
 
     .dx-fileuploader-content {

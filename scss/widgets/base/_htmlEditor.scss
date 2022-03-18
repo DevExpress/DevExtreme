@@ -98,11 +98,9 @@ $transparent-border: 1px solid transparent;
     .dx-fix-ratio-container {
       .dx-textbox {
         display: inline-block;
-        width: calc(100% - 41px);
       }
 
       .dx-buttongroup {
-        margin-left: 5px;
         vertical-align: top;
       }
     }
