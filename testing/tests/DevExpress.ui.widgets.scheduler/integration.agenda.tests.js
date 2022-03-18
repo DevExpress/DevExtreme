@@ -42,6 +42,34 @@ const moduleConfig = {
 };
 
 module('Integration: Agenda', moduleConfig, () => {
+    test('startDateExpr and endDateExpr should be applied for Agenda view', function(assert) {
+        assert.expect(2);
+
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'Oil Painting for Beginners',
+                CustomStartDate: new Date(25, 9, 2020, 9, 30),
+                CustomEndDate: new Date(25, 9, 2020, 10),
+                recurrenceRule: 'FREQ=WEEKLY'
+            }],
+            views: ['agenda'],
+            currentView: 'agenda',
+            currentDate: new Date(2020, 10, 25),
+            startDayHour: 9,
+            startDateExpr: 'CustomStartDate',
+            endDateExpr: 'CustomEndDate',
+            onAppointmentClick(e) {
+                const { CustomStartDate, CustomEndDate } = e.targetedAppointmentData;
+
+                assert.equal(CustomStartDate.valueOf(), 1606627800000);
+                assert.equal(CustomEndDate.valueOf(), 1606629600000);
+            },
+            height: 600
+        });
+
+        scheduler.appointments.click();
+    });
+
     test('Scheduler should have a right agenda work space', function(assert) {
         const instance = createInstance({
             views: ['agenda'],
