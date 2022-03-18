@@ -49,6 +49,7 @@ const a4: AExpected = {
     c: false,
   },
 };
+
 assertType<AExpected>(toAssertion(a1));
 assertType<RecursivePropertyType<ComplexType, ['a']>>(toAssertion(a1));
 assertType<AExpected>(toAssertion(a2));

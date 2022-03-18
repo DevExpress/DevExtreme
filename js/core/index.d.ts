@@ -26,14 +26,28 @@ export type DeepPartial<T> = T extends object ? {
 // Omit does not exist in TS < 3.5.1
 export type Skip<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-type Property<T, P extends string> = P extends keyof T ? T[P] : never;
-
-export type RecursiveProperty<T, Props extends string[]> =
-    Props extends [infer P1] ? P1 extends keyof T ? T[P1] : never
-    : Props extends [infer P1] ? Property<T, P1 & string>
-    : Props extends [infer P1, infer P2] ? Property<Property<T, P1 & string>, P2 & string>
-    : Props extends [infer P1, infer P2, infer P3] ? Property<Property<Property<T, P1 & string>, P2 & string>, P3 & string>
-    : Props extends [infer P1, infer P2, infer P3, infer P4] ? Property<Property<Property<Property<T, P1 & string>, P2 & string>, P3 & string>, P4 & string>
-    : Props extends [infer P1, infer P2, infer P3, infer P4, infer P5] ? Property<Property<Property<Property<Property<T, P1 & string>, P2 & string>, P3 & string>, P4 & string>, P5 & string>
-    : Props extends [infer P1, infer P2, infer P3, infer P4, infer P5, infer P6] ? Property<Property<Property<Property<Property<Property<T, P1 & string>, P2 & string>, P3 & string>, P4 & string>, P5 & string>, P6 & string>
+type Property<T, P> =
+T extends (infer El)[]
+  ? P extends PropertyKey
+    ? El extends Partial<Record<P, infer TValue>> ? TValue : never
+    : never
+  : P extends PropertyKey
+    ? T extends Partial<Record<P, infer TValue>>
+      ? TValue
+      : never
     : never;
+
+export type RecursivePropertyType<T, Props extends string[]> =
+    Props extends [infer P1]
+    ? Property<T, P1>
+    : Props extends [infer P1, infer P2]
+      ? Property<Property<T, P1>, P2>
+      : Props extends [infer P1, infer P2, infer P3]
+        ? Property<Property<Property<T, P1>, P2>, P3>
+        : Props extends [infer P1, infer P2, infer P3, infer P4]
+          ? Property<Property<Property<Property<T, P1>, P2>, P3>, P4>
+          : Props extends [infer P1, infer P2, infer P3, infer P4, infer P5]
+            ? Property<Property<Property<Property<Property<T, P1>, P2>, P3>, P4>, P5>
+            : Props extends [infer P1, infer P2, infer P3, infer P4, infer P5, infer P6]
+              ? Property<Property<Property<Property<Property<Property<T, P1>, P2>, P3>, P4>, P5>, P6>
+              : never;
