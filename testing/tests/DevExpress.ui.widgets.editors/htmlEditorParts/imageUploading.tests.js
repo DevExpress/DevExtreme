@@ -51,6 +51,20 @@ module('Image uploading integration', {
 
             this.quillInstance = this.instance.getQuillInstance();
         };
+
+        this.getFormElement = (selectionArgs = [0, 1]) => {
+            this.instance.focus();
+
+            this.instance.setSelection.apply(this.instance, selectionArgs);
+
+            this.$element
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .trigger('dxclick');
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            return $('.dx-form');
+        };
     },
     afterEach: function() {
         this.instance && this.instance.dispose();
@@ -65,17 +79,8 @@ module('Image uploading integration', {
                 });
                 this.clock.tick(TIME_TO_WAIT);
 
-                this.instance.focus();
+                const $form = this.getFormElement();
 
-                this.instance.setSelection(0, 1);
-
-                this.$element
-                    .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-                    .trigger('dxclick');
-
-                this.clock.tick(TIME_TO_WAIT);
-
-                const $form = $('.dx-form');
                 const formInstance = $form.dxForm('instance');
                 const formItems = formInstance.option('items');
                 const fileUploader = $form.find('.dx-fileuploader');
@@ -93,17 +98,9 @@ module('Image uploading integration', {
             this.createWidget({ imageUploading: { mode: 'url' } });
             this.clock.tick(TIME_TO_WAIT);
 
-            this.instance.focus();
+            const $form = this.getFormElement();
 
-            this.instance.setSelection(0, 1);
-
-            this.$element
-                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-                .trigger('dxclick');
-
-            this.clock.tick(TIME_TO_WAIT);
-
-            const formInstance = $('.dx-form').dxForm('instance');
+            const formInstance = $form.dxForm('instance');
             const formItems = formInstance.option('items');
 
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
@@ -116,17 +113,9 @@ module('Image uploading integration', {
             this.createWidget({ imageUploading: null });
             this.clock.tick(TIME_TO_WAIT);
 
-            this.instance.focus();
+            const $form = this.getFormElement();
 
-            this.instance.setSelection(0, 1);
-
-            this.$element
-                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-                .trigger('dxclick');
-
-            this.clock.tick(TIME_TO_WAIT);
-
-            const formInstance = $('.dx-form').dxForm('instance');
+            const formInstance = $form.dxForm('instance');
             const formItems = formInstance.option('items');
 
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
@@ -139,17 +128,8 @@ module('Image uploading integration', {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
 
-            this.instance.focus();
+            const $form = this.getFormElement();
 
-            this.instance.setSelection(0, 1);
-
-            this.$element
-                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-                .trigger('dxclick');
-
-            this.clock.tick(TIME_TO_WAIT);
-
-            const $form = $('.dx-form');
             const $base64Editor = $form.find('.dx-checkbox');
             const base64EditorInstance = $base64Editor.dxCheckBox('instance');
 
@@ -162,17 +142,8 @@ module('Image uploading integration', {
             this.createWidget({ imageUploading: { mode: 'base64', uploadUrl: undefined } });
             this.clock.tick(TIME_TO_WAIT);
 
-            this.instance.focus();
+            const $form = this.getFormElement();
 
-            this.instance.setSelection(0, 1);
-
-            this.$element
-                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-                .trigger('dxclick');
-
-            this.clock.tick(TIME_TO_WAIT);
-
-            const $form = $('.dx-form');
             const $base64Editor = $form.find('.dx-checkbox');
             const base64EditorInstance = $base64Editor.dxCheckBox('instance');
 
@@ -187,17 +158,7 @@ module('Image uploading integration', {
 
             const uploadSpy = sinon.spy(this.quillInstance.getModule('uploader'), 'upload');
 
-            this.instance.focus();
-
-            this.instance.setSelection(1, 2);
-
-            this.$element
-                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-                .trigger('dxclick');
-
-            this.clock.tick(TIME_TO_WAIT);
-
-            const $form = $('.dx-form');
+            const $form = this.getFormElement([1, 2]);
 
             const $base64Editor = $form.find('.dx-checkbox');
             const fileUploader = $form.find('.dx-fileuploader').dxFileUploader('instance');
@@ -302,17 +263,8 @@ module('Image uploading integration', {
         this.instance.focus();
         this.clock.tick(TIME_TO_WAIT);
 
-        this.instance.focus();
+        const $form = this.getFormElement();
 
-        this.instance.setSelection(0, 1);
-
-        this.$element
-            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger('dxclick');
-
-        this.clock.tick(TIME_TO_WAIT);
-
-        const $form = $('.dx-form');
         const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
         const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
 
@@ -326,20 +278,10 @@ module('Image uploading integration', {
             imageUploading: { mode: 'url' },
         });
 
-        this.instance.focus();
         this.clock.tick(TIME_TO_WAIT);
 
-        this.instance.focus();
+        const $form = this.getFormElement();
 
-        this.instance.setSelection(0, 1);
-
-        this.$element
-            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger('dxclick');
-
-        this.clock.tick(TIME_TO_WAIT);
-
-        const $form = $('.dx-form');
         const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
         const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
         widthEditor.option('value', '70');
@@ -367,17 +309,8 @@ module('Image uploading integration', {
         this.instance.focus();
         this.clock.tick(TIME_TO_WAIT);
 
-        this.instance.focus();
+        const $form = this.getFormElement();
 
-        this.instance.setSelection(0, 1);
-
-        this.$element
-            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger('dxclick');
-
-        this.clock.tick(TIME_TO_WAIT);
-
-        const $form = $('.dx-form');
         const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
         const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
 
@@ -394,17 +327,8 @@ module('Image uploading integration', {
         this.instance.focus();
         this.clock.tick(TIME_TO_WAIT);
 
-        this.instance.focus();
+        const $form = this.getFormElement();
 
-        this.instance.setSelection(0, 1);
-
-        this.$element
-            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger('dxclick');
-
-        this.clock.tick(TIME_TO_WAIT);
-
-        const $form = $('.dx-form');
         const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
         const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
 
@@ -431,17 +355,8 @@ module('Image uploading integration', {
         this.instance.focus();
         this.clock.tick(TIME_TO_WAIT);
 
-        this.instance.focus();
+        const $form = this.getFormElement();
 
-        this.instance.setSelection(0, 1);
-
-        this.$element
-            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger('dxclick');
-
-        this.clock.tick(TIME_TO_WAIT);
-
-        const $form = $('.dx-form');
         const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
         const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
 
@@ -460,17 +375,8 @@ module('Image uploading integration', {
         this.instance.focus();
         this.clock.tick(TIME_TO_WAIT);
 
-        this.instance.focus();
+        const $form = this.getFormElement();
 
-        this.instance.setSelection(0, 1);
-
-        this.$element
-            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger('dxclick');
-
-        this.clock.tick(TIME_TO_WAIT);
-
-        const $form = $('.dx-form');
         const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
         const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
 
@@ -494,17 +400,8 @@ module('Image uploading integration', {
         this.instance.focus();
         this.clock.tick(TIME_TO_WAIT);
 
-        this.instance.focus();
+        const $form = this.getFormElement();
 
-        this.instance.setSelection(0, 1);
-
-        this.$element
-            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger('dxclick');
-
-        this.clock.tick(TIME_TO_WAIT);
-
-        const $form = $('.dx-form');
         const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
         const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
 
@@ -527,24 +424,14 @@ module('Image uploading integration', {
         this._nativeFormData = window.FormData;
         window.FormData = this.formDataMock.FormData;
 
-        this.instance.focus();
+        const $form = this.getFormElement([1, 2]);
 
-        this.instance.setSelection(1, 2);
-
-        this.$element
-            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger('dxclick');
-
-        this.clock.tick(TIME_TO_WAIT);
-
-        const $form = $('.dx-form');
         const fileUploader = $form.find('.dx-fileuploader').dxFileUploader('instance');
 
         fileUploader.option('value', [fakeFile]);
 
         fileUploader.upload(fileUploader.option('value[0]'));
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
-
 
         const request = this.xhrMock.getInstanceAt();
 
