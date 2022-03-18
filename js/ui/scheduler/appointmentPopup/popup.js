@@ -9,9 +9,7 @@ import messageLocalization from '../../../localization/message';
 import Popup from '../../popup';
 import { hide as hideLoading, show as showLoading } from '../loading';
 import { createAppointmentAdapter } from '../appointmentAdapter';
-import { each } from '../../../core/utils/iterator';
-import { isResourceMultiple } from '../resources/utils';
-import { wrapToArray } from '../../../core/utils/array';
+import { getNormalizedResources } from '../resources/utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -63,15 +61,6 @@ const createCancelButtonConfig = () => ({
     shortcut: 'cancel',
     location: isIOSPlatform() ? TOOLBAR_LOCATION.BEFORE : TOOLBAR_LOCATION.AFTER
 });
-
-const modifyResourceFields = (rawAppointment, dataAccessors, resources, returnedObject) => {
-    each(dataAccessors.resources.getter, (fieldName) => {
-        const value = dataAccessors.resources.getter[fieldName](rawAppointment);
-        const isMultiple = isResourceMultiple(resources, fieldName);
-
-        returnedObject[fieldName] = isMultiple ? wrapToArray(value) : value;
-    });
-};
 
 export const ACTION_TO_APPOINTMENT = {
     CREATE: 0,
@@ -169,15 +158,13 @@ export class AppointmentPopup {
         const appointment = this._createAppointmentAdapter(rawAppointment);
         const dataAccessors = this.scheduler.getDataAccessors();
         const resources = this.scheduler.getResources();
+        const normalizedResources = getNormalizedResources(rawAppointment, dataAccessors, resources);
 
-        const result = {
+        return {
             ...rawAppointment,
-            repeat: !!appointment.recurrenceRule
+            ...normalizedResources,
+            repeat: !!appointment.recurrenceRule,
         };
-
-        modifyResourceFields(rawAppointment, dataAccessors, resources, result);
-
-        return result;
     }
 
     _createForm() {
@@ -352,13 +339,12 @@ export class AppointmentPopup {
 
                     const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
 
-                    const resources = {};
                     const dataAccessors = this.scheduler.getDataAccessors();
                     const resourceList = this.scheduler.getResources();
 
-                    modifyResourceFields(this.state.lastEditData, dataAccessors, resourceList, resources);
+                    const normalizedResources = getNormalizedResources(this.state.lastEditData, dataAccessors, resourceList);
 
-                    this.scheduler.updateScrollPosition(startDate, resources, inAllDayRow);
+                    this.scheduler.updateScrollPosition(startDate, normalizedResources, inAllDayRow);
                     this.state.lastEditData = null;
                 }
 
