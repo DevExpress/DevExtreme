@@ -459,7 +459,6 @@ function getSpecifyURLTabItems(module, imageUploadingOption) {
                 hint: 'Keep aspect ratio', // localization
                 keyExpr: 'value',
                 stylingMode: 'outlined',
-                width: 36,
                 selectionMode: 'multiple',
                 selectedItemKeys: ['keepRatio'],
                 onSelectionChanged: (e) => {

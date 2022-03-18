@@ -356,11 +356,13 @@
 
   .dx-fix-ratio-container {
     .dx-textbox {
-      width: calc(100% - 36px - $material-html-editor-add-image-dialog-base-padding);
+      width: calc(100% - $material-button-height - $material-html-editor-add-image-dialog-base-padding);
     }
 
     .dx-buttongroup {
       margin-left: $material-html-editor-add-image-dialog-base-padding;
+      width: $material-button-height;
+      margin-top: math.div($material-base-inline-widget-height - $material-button-height, 2);
     }
   }
 
@@ -379,10 +381,6 @@
 
 
 .dx-htmleditor-add-image-popup {
-  .dx-buttongroup {
-    margin-top: 6px;
-  }
-
   .dx-fileuploader-input-wrapper {
     border: 3px dashed $base-border-color;
   }
