@@ -144,6 +144,30 @@ describe('Appointment', () => {
           });
         });
       });
+
+      describe('onItemDoubleClick', () => {
+        it('should call onItemDoubleClick prop with correct arguments', () => {
+          const mockCallback = jest.fn();
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+            index: 2021,
+            onItemDoubleClick: mockCallback,
+          } as any);
+          appointment.ref = {
+            current: 'element',
+          } as any;
+
+          appointment.onItemDoubleClick();
+
+          expect(mockCallback).toBeCalledTimes(1);
+
+          expect(mockCallback).toHaveBeenCalledWith({
+            data: [defaultViewModel],
+            target: 'element',
+            index: 2021,
+          });
+        });
+      });
     });
 
     describe('Effects', () => {
@@ -241,6 +265,57 @@ describe('Appointment', () => {
             expect(appointment.color)
               .toBe(undefined);
           });
+        });
+      });
+
+      describe('bindDoubleClickEffect', () => {
+        it('should correctly handle doubleClick events', () => {
+          const addEventListener = jest.fn();
+          const removeEventListener = jest.fn();
+          const mockCallback = jest.fn();
+
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+            onItemDoubleClick: mockCallback,
+          } as any);
+
+          appointment.ref = {
+            current: {
+              addEventListener,
+              removeEventListener,
+            },
+          } as any;
+
+          const freeResources = appointment.bindDoubleClickEffect() as any;
+
+          expect(addEventListener)
+            .toHaveBeenCalledTimes(1);
+
+          expect(addEventListener)
+            .toBeCalledWith('dblclick', expect.any(Function));
+
+          freeResources();
+
+          expect(removeEventListener)
+            .toHaveBeenCalledTimes(1);
+
+          expect(removeEventListener)
+            .toBeCalledWith('dblclick', expect.any(Function));
+        });
+
+        it('should correctly handle doubleClick events if non ref', () => {
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+          } as any);
+
+          appointment.ref = {
+            current: undefined,
+          } as any;
+
+          const freeResources = appointment.bindDoubleClickEffect() as any;
+
+          expect(freeResources())
+            .toBe(undefined);
         });
       });
     });

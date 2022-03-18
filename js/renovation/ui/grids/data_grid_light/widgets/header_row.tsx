@@ -13,6 +13,7 @@ export const viewFunction = (viewModel: HeaderRow): JSX.Element => (
         // eslint-disable-next-line react/no-array-index-key
         key={index}
         column={column}
+        headerTemplate={column.headerTemplate}
         countColumn={viewModel.props.columns.length}
         columnIndex={index}
       />

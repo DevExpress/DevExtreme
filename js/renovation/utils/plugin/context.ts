@@ -79,23 +79,28 @@ export function createValue<T>(): PluginEntity<T> {
   return new PluginEntity<T, T>();
 }
 
-// export function createSelector<A, SA, R>(
-//   deps: [PluginEntity<A, SA>],
+// export function createSelector<R, A>(
+//   deps: [PluginEntity<A, unknown>],
 //   func: (a: A) => R
 // ): PluginSelector<R>;
 
-// export function createSelector<A, B, R, SA, SB>(
-//   deps: [PluginEntity<A, SA>, PluginEntity<B, SB>],
+// export function createSelector<R, A, B>(
+//   deps: [PluginEntity<A, unknown>, PluginEntity<B, unknown>],
 //   func: (a: A, b: B) => R
 // ): PluginSelector<R>;
 
-// export function createSelector<A, B, C, R, SA, SB, SC>(
-//   deps: [PluginEntity<A, SA>, PluginEntity<B, SB>, PluginEntity<C, SC>],
+// export function createSelector<R, A, B, C>(
+//   deps: [PluginEntity<A, unknown>, PluginEntity<B, unknown>, PluginEntity<C, unknown>],
 //   func: (a: A, b: B, c: C) => R
 // ): PluginSelector<R>;
 
-// export function createSelector<A, B, C, D, R, SA, SB, SC, SD>(
-//   deps: [PluginEntity<A, SA>, PluginEntity<B, SB>, PluginEntity<C, SC>, PluginEntity<D, SD>],
+// export function createSelector<R, A, B, C, D>(
+//   deps: [
+//     PluginEntity<A, unknown>,
+//     PluginEntity<B, unknown>,
+//     PluginEntity<C, unknown>,
+//     PluginEntity<D, unknown>,
+//   ],
 //   func: (a: A, b: B, c: C, d: D) => R
 // ): PluginSelector<R>;
 
@@ -220,6 +225,10 @@ export class Plugins {
   }
 
   hasValue<T, S>(entity: PluginEntity<T, S>): boolean {
+    if (entity instanceof PluginGetter) {
+      return true;
+    }
+
     return entity.id in this.items;
   }
 
@@ -235,7 +244,7 @@ export class Plugins {
       entity.deps.forEach((childEntity) => {
         const childSubscriptions = this.getSubscriptions(childEntity);
         childSubscriptions.push(() => {
-          this.update(entity);
+          this.update(entity, true);
         });
       });
     }
@@ -271,9 +280,11 @@ export class Plugins {
     }
   }
 
-  update<T, S>(entity: PluginEntity<T, S>): void {
+  update<T, S>(entity: PluginEntity<T, S>, force = false): void {
     if (entity instanceof PluginSelector) {
-      this.updateSelector(entity);
+      if (!this.hasValue(entity) || force) {
+        this.updateSelector(entity);
+      }
     }
   }
 

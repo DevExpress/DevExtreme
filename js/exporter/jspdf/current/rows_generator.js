@@ -84,16 +84,17 @@ function generateRowCells({ doc, dataProvider, rowIndex, wordWrapEnabled, column
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
         const cellStyle = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
-        const style = getPdfCellStyle(rowType, cellStyle);
+        const style = getPdfCellStyle(columns[cellIndex], rowType, cellStyle);
 
         const defaultAlignment = rtlEnabled ? 'right' : 'left';
+        const paddingValue = toPdfUnit(doc, 5);
         const pdfCell = {
             text: getFormattedValue(cellData.value, cellStyle.format),
             verticalAlign: 'middle',
-            horizontalAlign: columns[cellIndex].alignment ?? defaultAlignment,
+            horizontalAlign: style.alignment ?? defaultAlignment,
             wordWrapEnabled,
             backgroundColor,
-            padding: toPdfUnit(doc, 5),
+            padding: { top: paddingValue, right: paddingValue, bottom: paddingValue, left: paddingValue },
             _rect: {},
             _internalTextOptions: {}
         };
@@ -148,8 +149,13 @@ function getBaseTableStyle() {
     return defaultStyles['base'];
 }
 
-function getPdfCellStyle(rowType, cellStyle) {
+function getPdfCellStyle(column, rowType, cellStyle) {
     const styles = Object.assign({}, defaultStyles['base'], defaultStyles[rowType]);
+    const alignment = rowType === 'header' ? column.alignment : cellStyle.alignment;
+
+    if(alignment) {
+        styles.alignment = alignment;
+    }
 
     if(cellStyle.bold && rowType !== 'header') {
         styles.font = Object.assign({}, styles.font, { style: 'bold' });

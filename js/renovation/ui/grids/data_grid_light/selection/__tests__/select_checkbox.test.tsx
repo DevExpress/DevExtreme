@@ -27,8 +27,7 @@ describe('SelectionCheckbox', () => {
           data: { id: 1 },
         });
 
-        const isSelected = (data: { id: number }) => data.id === 1;
-        checkbox.plugins.set(IsSelected, isSelected);
+        checkbox.plugins.set(IsSelected, (data) => data.id === 1);
         checkbox.updateIsSelected();
 
         expect(checkbox.isSelected).toEqual(true);

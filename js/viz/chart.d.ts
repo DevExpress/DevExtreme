@@ -3708,6 +3708,12 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      * @public
      */
     visible?: boolean;
+    /**
+     * @docid dxChartSeriesTypes.CommonSeries.label.pattern
+     * @default undefined
+     * @public
+     */
+    pattern?: string;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeriesPoint {

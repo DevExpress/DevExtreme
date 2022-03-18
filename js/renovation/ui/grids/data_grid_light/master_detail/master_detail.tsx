@@ -53,7 +53,7 @@ export const AddMasterDetailRows = createSelector(
 
 export const viewFunction = (): JSX.Element => (
   <Fragment>
-    <GetterExtender type={VisibleRows} order={2} selector={AddMasterDetailRows} />
+    <GetterExtender type={VisibleRows} order={2} value={AddMasterDetailRows} />
   </Fragment>
 );
 

@@ -420,6 +420,11 @@ class Gantt extends Widget {
     _getTaskKeyGetter() {
         return compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
     }
+    _findTaskByKey(key) {
+        const tasks = this._tasksOption?._getItems();
+        const keyGetter = this._getTaskKeyGetter();
+        return tasks.find(t => keyGetter(t) === key);
+    }
     _setGanttViewOption(optionName, value) {
         this._ganttView && this._ganttView.option(optionName, value);
     }
@@ -777,6 +782,9 @@ class Gantt extends Widget {
                 break;
             case 'onContextMenuPreparing':
                 this._actionsManager?.createContextMenuPreparingAction();
+                break;
+            case 'onScaleCellPrepared':
+                this._actionsManager?.createScaleCellPreparedAction();
                 break;
             case 'allowSelection':
                 this._ganttTreeList?.setOption('selection.mode', GanttHelper.getSelectionMode(args.value));

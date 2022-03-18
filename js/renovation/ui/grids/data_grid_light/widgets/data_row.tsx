@@ -27,6 +27,8 @@ export const viewFunction = (viewModel: DataRow): JSX.Element => {
               columnIndex={index}
               countColumn={columns.length}
               column={column}
+              cellTemplate={column.cellTemplate}
+              cellContainerTemplate={column.cellContainerTemplate}
               row={row}
             />
           ))}

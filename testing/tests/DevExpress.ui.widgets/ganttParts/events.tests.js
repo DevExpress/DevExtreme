@@ -97,4 +97,33 @@ QUnit.module('Events', moduleConfig, () => {
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 0, 'dialog is not shown');
     });
+
+    test('scale cell prepared', function(assert) {
+        const my_options = {
+            tasks: { dataSource: data.tasks },
+            onScaleCellPrepared: (e) => {
+                const scaleElement = $(e.scaleElement);
+                const line = $(e.separatorElement);
+                if(e.scaleIndex === 0) {
+                    line.addClass('gsb_separator');
+                    scaleElement.addClass('gsb_item');
+                } else {
+                    line.addClass('gst_separator');
+                    scaleElement.addClass('gst_item');
+                }
+            }
+        };
+        this.createInstance(my_options);
+        this.clock.tick();
+
+        const $top_item = $('body').find('.gst_item');
+        assert.ok($top_item.length > 0, 'top items customized');
+        const $top_separator = $('body').find('.gst_separator');
+        assert.ok($top_separator.length > 0, 'top separators customized');
+
+        const $bottom_item = $('body').find('.gsb_item');
+        assert.ok($bottom_item.length > 0, 'bottom items customized');
+        const $bottom_separator = $('body').find('.gsb_separator');
+        assert.ok($bottom_separator.length > 0, 'bottom separators customized');
+    });
 });

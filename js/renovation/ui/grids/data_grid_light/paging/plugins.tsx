@@ -1,6 +1,9 @@
 import { createValue, createSelector } from '../../../../utils/plugin/context';
-import { TotalCount, VisibleItems } from '../data_grid_light';
+import {
+  TotalCount, LocalVisibleItems, LoadOptionsValue, RemoteOperations,
+} from '../data_grid_light';
 import type { RowData } from '../types';
+import type { LoadOptions } from '../../../../../data';
 
 export const PageIndex = createValue<number>();
 export const SetPageIndex = createValue<(pageIndex: number) => void>();
@@ -18,16 +21,32 @@ export const PageCount = createSelector(
   },
 );
 
-export const CalculateVisibleItems = createSelector(
-  [VisibleItems, PagingEnabled, PageIndex, PageSize],
-  (visibleItems: RowData[], pagingEnabled, pageIndex, pageSize) => {
-    if (!pagingEnabled || pageSize === 'all') {
+export const ApplyPagingToVisibleItems = createSelector(
+  [LocalVisibleItems, PagingEnabled, PageIndex, PageSize],
+  (visibleItems: RowData[] | undefined, pagingEnabled: boolean, pageIndex: number, pageSize: number | 'all') => {
+    if (!pagingEnabled || pageSize === 'all' || visibleItems === undefined) {
       return visibleItems;
     }
 
-    const start = (pageIndex as number) * (pageSize as number);
-    const end = start + (pageSize as number);
+    const start = pageIndex * pageSize;
+    const end = start + pageSize;
 
     return visibleItems.slice(start, end);
+  },
+);
+
+export const AddPagingToLoadOptions = createSelector(
+  [LoadOptionsValue, PagingEnabled, PageIndex, PageSize, RemoteOperations],
+  (loadOptionsValue: LoadOptions, pagingEnabled, pageIndex, pageSize, remoteOperations) => {
+    if (!pagingEnabled || pageSize === 'all' || !remoteOperations) {
+      return loadOptionsValue;
+    }
+
+    return {
+      ...loadOptionsValue,
+      skip: pageIndex * pageSize,
+      take: pageSize,
+      requireTotalCount: true,
+    };
   },
 );

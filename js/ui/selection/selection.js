@@ -113,7 +113,15 @@ export default Class.inherit({
         const items = this.options.plainItems();
         const item = items[itemIndex];
         let deferred;
-        const focusedItemNotInLoadedRange = this.options.allowLoadByRange?.() && !items.filter(it => it.loadIndex === this._focusedItemIndex).length;
+        const allowLoadByRange = this.options.allowLoadByRange?.();
+        let indexOffset;
+        let focusedItemNotInLoadedRange = false;
+
+        if(allowLoadByRange) {
+            indexOffset = item.loadIndex - itemIndex;
+            itemIndex = item.loadIndex;
+            focusedItemNotInLoadedRange = this._focusedItemIndex >= 0 && !items.filter(it => it.loadIndex === this._focusedItemIndex).length;
+        }
 
         if(!this.isSelectable() || !this.isDataItem(item)) {
             return false;
@@ -126,13 +134,13 @@ export default Class.inherit({
 
         if(keys.shift && this.options.mode === 'multiple' && this._focusedItemIndex >= 0) {
             if(focusedItemNotInLoadedRange) {
-                isSelectedItemsChanged = item.loadIndex !== this._shiftFocusedItemIndex || this._focusedItemIndex !== this._shiftFocusedItemIndex;
+                isSelectedItemsChanged = itemIndex !== this._shiftFocusedItemIndex || this._focusedItemIndex !== this._shiftFocusedItemIndex;
 
                 if(isSelectedItemsChanged) {
-                    deferred = this.changeItemSelectionWhenShiftKeyInVirtualPaging(item.loadIndex);
+                    deferred = this.changeItemSelectionWhenShiftKeyInVirtualPaging(itemIndex);
                 }
             } else {
-                isSelectedItemsChanged = this.changeItemSelectionWhenShiftKeyPressed(itemIndex, items);
+                isSelectedItemsChanged = this.changeItemSelectionWhenShiftKeyPressed(itemIndex, items, indexOffset);
             }
         } else if(keys.control) {
             this._resetItemSelectionWhenShiftKeyPressed();
@@ -157,7 +165,7 @@ export default Class.inherit({
 
         if(isSelectedItemsChanged) {
             when(deferred).done(() => {
-                this._focusedItemIndex = focusedItemNotInLoadedRange ? item.loadIndex : itemIndex;
+                this._focusedItemIndex = itemIndex;
                 this.onSelectionChanged();
             });
             return true;

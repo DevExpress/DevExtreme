@@ -43,7 +43,7 @@ function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, jsPDFTe
     const textArray = text.split('\n');
     const linesCount = textArray.length;
 
-    const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont(), { wordWrapEnabled: false });
+    const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont(), { wordWrapEnabled: false, targetRectWidth: 1000000000 });
 
     const vAlign = verticalAlign ?? 'middle';
     const hAlign = horizontalAlign ?? 'left';
@@ -108,8 +108,8 @@ function drawCellsLines(doc, cellsArray, docStyles) {
         });
 }
 
-function drawGridLines(doc, rect, { borderWidth, borderColor }, docStyles) {
-    drawBorders(doc, rect, { borderWidth, borderColor }, docStyles);
+function drawGridLines(doc, rect, options, docStyles) {
+    drawBorders(doc, rect, options, docStyles);
 }
 
 function drawBorders(doc, rect, { borderWidth, borderColor, drawLeftBorder = true, drawRightBorder = true, drawTopBorder = true, drawBottomBorder = true }, docStyles) {
