@@ -5,5 +5,6 @@ export class FunctionTemplate {
     container: unknown;
     model?: object;
     transclude?: boolean;
+    renovated?: boolean;
   }): DxElement;
 }

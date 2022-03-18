@@ -21,6 +21,7 @@ interface TemplateWrapperProps {
   template: FunctionTemplate;
   model?: TemplateModel;
   transclude?: boolean;
+  renovated?: boolean;
 }
 
 export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
@@ -51,6 +52,7 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
     const $result = $(this.props.template.render({
       container: getPublicElement($parent),
       transclude: this.props.transclude,
+      renovated: this.props.renovated,
       ...!this.props.transclude ? { model: data } : {},
       ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
     }));

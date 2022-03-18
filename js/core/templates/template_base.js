@@ -15,7 +15,7 @@ export class TemplateBase {
         delete options.onRendered;
 
         let $result;
-        if(options.transclude && this._element && options.renovated) {
+        if(options.renovated && options.transclude && this._element) {
             $result = $('<div>').append(this._element).contents();
         } else {
             $result = this._renderCore(options);
