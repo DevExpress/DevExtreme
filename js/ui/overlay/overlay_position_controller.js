@@ -1,10 +1,10 @@
 import $ from '../../core/renderer';
-import { isDefined, isString, isEvent, isWindow } from '../../core/utils/type';
+import { isDefined, isString, isWindow, isEvent } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import positionUtils from '../../animation/position';
 import { resetPosition, move, locate } from '../../animation/translator';
 import { getWindow } from '../../core/utils/window';
-import { value as viewPort } from '../../core/utils/view_port';
+import swatch from '../widget/swatch_container';
 
 const window = getWindow();
 
@@ -23,7 +23,7 @@ const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 
 class OverlayPositionController {
     constructor({
-        position, container,
+        position, container, visualContainer,
         $root, $content, $wrapper,
         onPositioned, onVisualPositionChanged,
         restorePosition,
@@ -32,6 +32,7 @@ class OverlayPositionController {
         this._props = {
             position,
             container,
+            visualContainer,
             restorePosition,
             onPositioned,
             onVisualPositionChanged,
@@ -43,7 +44,7 @@ class OverlayPositionController {
         this._$wrapper = $wrapper;
 
         this._$markupContainer = undefined;
-        this._$wrapperCoveredElement = undefined;
+        this._$visualContainer = undefined;
 
         this._shouldRenderContentInitialPosition = true;
         this._visualPosition = undefined;
@@ -52,10 +53,17 @@ class OverlayPositionController {
 
         this.updateContainer(container);
         this.updatePosition(position);
+        this.updateVisualContainer(visualContainer);
     }
 
     get $container() {
+        this.updateContainer(); // NOTE: swatch classes can be updated runtime
+
         return this._$markupContainer;
+    }
+
+    get $visualContainer() {
+        return this._$visualContainer;
     }
 
     get position() {
@@ -87,23 +95,23 @@ class OverlayPositionController {
         this._props.position = positionProp;
         this._position = this._normalizePosition(positionProp);
 
-        this._updateWrapperCoveredElement();
+        this.updateVisualContainer();
     }
 
-    updateContainer(containerProp) {
+    updateContainer(containerProp = this._props.container) {
         this._props.container = containerProp;
 
-        const container = containerProp ?? viewPort();
+        this._$markupContainer = containerProp
+            ? $(containerProp)
+            : swatch.getSwatchContainer(this._$root);
 
-        let $container = this._$root.closest(container);
+        this.updateVisualContainer(this._props.visualContainer);
+    }
 
-        if(!$container.length) {
-            $container = $(container).first();
-        }
+    updateVisualContainer(visualContainer = this._props.visualContainer) {
+        this._props.visualContainer = visualContainer;
 
-        this._$markupContainer = $container.length ? $container : this._$root.parent();
-
-        this._updateWrapperCoveredElement();
+        this._$visualContainer = this._getVisualContainer();
     }
 
     detectVisualPositionChange(event) {
@@ -121,17 +129,13 @@ class OverlayPositionController {
     }
 
     positionWrapper() {
-        if(this._$wrapperCoveredElement) {
-            positionUtils.setup(this._$wrapper, { my: 'top left', at: 'top left', of: this._$wrapperCoveredElement });
+        if(this._$visualContainer) {
+            positionUtils.setup(this._$wrapper, { my: 'top left', at: 'top left', of: this._$visualContainer });
         }
     }
 
-    isAllWindowCoveredByWrapper() {
-        return !this._$wrapperCoveredElement || isWindow(this._$wrapperCoveredElement.get(0));
-    }
-
     styleWrapperPosition() {
-        const useFixed = this.isAllWindowCoveredByWrapper() || this._props._fixWrapperPosition;
+        const useFixed = isWindow(this.$visualContainer.get(0)) || this._props._fixWrapperPosition;
 
         const positionStyle = useFixed ? 'fixed' : 'absolute';
         this._$wrapper.css('position', positionStyle);
@@ -173,25 +177,28 @@ class OverlayPositionController {
         });
     }
 
-    _updateWrapperCoveredElement() {
-        this._$wrapperCoveredElement = this._getWrapperCoveredElement();
-    }
-
     _renderBoundaryOffset() {
         const boundaryOffset = this._position ?? { boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET };
 
         this._$content.css('margin', `${boundaryOffset.v}px ${boundaryOffset.h}px`);
     }
 
-    _getWrapperCoveredElement() {
+    _getVisualContainer() {
         const containerProp = this._props.container;
+        const visualContainerProp = this._props.visualContainer;
+        const positionOf = isEvent(this._props.position?.of) ? this._props.position.of.target : this._props.position?.of;
 
+        if(visualContainerProp) {
+            return $(visualContainerProp);
+        }
         if(containerProp) {
             return $(containerProp);
         }
-        if(this._position) {
-            return $(isEvent(this._position.of) ? window : (this._position.of || window));
+        if(positionOf) {
+            return $(positionOf);
         }
+
+        return $(window);
     }
 
     _normalizePosition(positionProp) {

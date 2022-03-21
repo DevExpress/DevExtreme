@@ -1,46 +1,55 @@
 import {
-  Component, JSXComponent, ComponentBindings, OneWay, Effect, InternalState, Consumer,
+  Component, JSXComponent, ComponentBindings, OneWay, Effect, Consumer, JSXTemplate,
 } from '@devextreme-generator/declarations';
-import { combineClasses } from '../../../../utils/combine_classes';
-import { createGetter, Plugins, PluginsContext } from '../../../../utils/plugin/context';
-import { Column, RowData } from '../types';
+import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
+import { ColumnInternal, Row, RowTemplateProps } from '../types';
 import { DataCell } from './data_cell';
+import { RowBase, RowClassesGetter } from './row_base';
+import CLASSES from '../classes';
 
-export type DataRowPropertiesGetterType = (data: RowData) => Record<string, unknown>;
-export const DataRowPropertiesGetter = createGetter<DataRowPropertiesGetterType>(() => ({}));
-export type DataRowClassesGetterType = (data: RowData) => Record<string, boolean>;
-export const DataRowClassesGetter = createGetter<DataRowClassesGetterType>(() => ({}));
+export const viewFunction = (viewModel: DataRow): JSX.Element => {
+  const { rowTemplate: RowTemplate } = viewModel;
+  const { row, columns, rowIndex } = viewModel.props;
 
-export const viewFunction = (viewModel: DataRow): JSX.Element => (
-  <tr
-    className={viewModel.cssClasses}
-    role="row"
-    aria-selected="false"
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.additionalParams}
-  >
-    {viewModel.props.columns.map((column, index) => (
-      <DataCell
-        // eslint-disable-next-line react/no-array-index-key
-        key={index}
-        columnIndex={index}
-        column={column}
-        data={viewModel.props.data}
-      />
-    ))}
-  </tr>
-);
+  return (
+    RowTemplate
+      ? (
+        <RowTemplate
+          row={row}
+          rowIndex={rowIndex}
+        />
+      ) : (
+        <RowBase row={row}>
+          {columns.map((column, index) => (
+            <DataCell
+            // eslint-disable-next-line react/no-array-index-key
+              key={index}
+              columnIndex={index}
+              countColumn={columns.length}
+              column={column}
+              cellTemplate={column.cellTemplate}
+              cellContainerTemplate={column.cellContainerTemplate}
+              row={row}
+            />
+          ))}
+        </RowBase>
+      )
+  );
+};
 
 @ComponentBindings()
 export class DataRowProps {
   @OneWay()
-  data: RowData = {};
+  row: Row = {
+    data: {},
+    rowType: 'data',
+  };
 
   @OneWay()
   rowIndex = 0;
 
   @OneWay()
-  columns: Column[] = [];
+  columns: ColumnInternal[] = [];
 }
 
 @Component({
@@ -51,32 +60,23 @@ export class DataRow extends JSXComponent(DataRowProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
 
-  get cssClasses(): string {
-    return combineClasses({
-      'dx-row': true,
-      'dx-data-row': true,
-      'dx-column-lines': true,
-      ...this.additionalClasses,
-    });
-  }
-
-  @InternalState()
-  additionalParams: Record<string, unknown> = {};
-
-  @InternalState()
-  additionalClasses: Record<string, boolean> = {};
-
-  @Effect()
-  watchAdditionalParams(): () => void {
-    return this.plugins.watch(DataRowPropertiesGetter, (getter) => {
-      this.additionalParams = getter(this.props.data);
-    });
+  get rowTemplate(): JSXTemplate<RowTemplateProps> | undefined {
+    return this.props.row.template;
   }
 
   @Effect()
-  watchAdditionalClasses(): () => void {
-    return this.plugins.watch(DataRowClassesGetter, (getter) => {
-      this.additionalClasses = getter(this.props.data);
-    });
+  extendDataRowClasses(): () => void {
+    return this.plugins.extend(
+      RowClassesGetter, 1,
+      (base) => (row): Record<string, boolean> => {
+        if (row.rowType === 'data') {
+          return {
+            ...base(row),
+            [CLASSES.dataRow]: true,
+          };
+        }
+        return base(row);
+      },
+    );
   }
 }

@@ -28,7 +28,7 @@ export class ValidationMessageProps extends BaseWidgetProps {
 
   @OneWay() boundary?: string | Element | null;
 
-  @OneWay() container?: string | Element | null;
+  @OneWay() visualContainer?: string | Element | null;
 
   @OneWay() target?: string | Element | null;
 

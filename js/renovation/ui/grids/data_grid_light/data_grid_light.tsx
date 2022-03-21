@@ -1,28 +1,71 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings,
-  OneWay, Effect, InternalState, Provider, Slot,
+  OneWay, Effect, InternalState, Provider, Slot, TwoWay, Event, Method, Template, JSXTemplate,
 } from '@devextreme-generator/declarations';
 
 import {
-  createValue, createGetter, Plugins, PluginsContext,
+  createValue, createGetter, Plugins, PluginsContext, createSelector,
 } from '../../../utils/plugin/context';
+import { ValueSetter } from '../../../utils/plugin/value_setter';
+import { GetterExtender } from '../../../utils/plugin/getter_extender';
+
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
 import type {
-  Column, ColumnUserConfig, KeyExpr, RowData,
+  ColumnInternal, Column, KeyExprInternal, RowData, Row, KeyExpr, DataState, DataSource,
 } from './types';
+import type Store from '../../../../data/abstract_store';
+import type { LoadOptions } from '../../../../data';
 
 import { TableContent } from './views/table_content';
 import { TableHeader } from './views/table_header';
 import { Footer } from './views/footer';
 
-export const VisibleItems = createGetter<RowData[]>([]);
-export const VisibleColumns = createGetter<Column[]>([]);
-export const DataSource = createValue<RowData[]>();
-export const KeyExprPlugin = createValue<KeyExpr>();
-export const TotalCount = createValue<number>();
+import CLASSES from './classes';
+
+export const LocalData = createValue<RowData[] | undefined>();
+export const LocalVisibleItems = createGetter<RowData[] | undefined>([]);
+export const VisibleRows = createGetter<Row[]>([]);
+export const RemoteOperations = createValue<boolean>();
+
+export const LoadOptionsValue = createGetter<LoadOptions>({});
+export const DataStateValue = createValue<DataState>();
+
+export const Columns = createValue<ColumnInternal[]>();
+export const VisibleColumns = createGetter<ColumnInternal[]>([]);
+
+export const KeyExprPlugin = createValue<KeyExprInternal>();
+export const TotalCount = createSelector<number>(
+  [DataStateValue],
+  (dataState: DataState) => dataState.totalCount ?? dataState.data.length,
+);
+
+export const VisibleDataRows = createSelector<Row[]>(
+  [
+    DataStateValue, KeyExprPlugin,
+  ],
+  (
+    dataStateValue: DataState, keyExpr: KeyExprInternal,
+  ): Row[] => dataStateValue.data.map((data) => ({
+    key: keyExpr ? data[keyExpr] : data,
+    data,
+    rowType: 'data',
+  })),
+);
+
+export const LocalDataState = createSelector(
+  [LocalVisibleItems, LocalData],
+  (visibleItems, localData): DataState | undefined => (Array.isArray(localData) ? {
+    data: visibleItems ?? [],
+    totalCount: localData.length,
+  } : undefined),
+);
+
+function isStore(dataSource: DataSource): dataSource is Store {
+  return dataSource !== undefined && !Array.isArray(dataSource);
+}
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -40,9 +83,22 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
     width={viewModel.props.width}
     {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
-    <div className="dx-datagrid dx-gridbase-container" role="grid" aria-label="Data grid">
+    <ValueSetter type={LocalData} value={viewModel.localData} />
+    <ValueSetter type={Columns} value={viewModel.columns} />
+    <ValueSetter type={KeyExprPlugin} value={viewModel.keyExpr} />
+    <ValueSetter type={RemoteOperations} value={viewModel.props.remoteOperations} />
+    <ValueSetter type={DataStateValue} value={viewModel.props.dataState} />
+    <GetterExtender type={VisibleColumns} order={-1} value={Columns} />
+    <GetterExtender type={LocalVisibleItems} order={-1} value={LocalData} />
+    <GetterExtender type={VisibleRows} order={-1} value={VisibleDataRows} />
+
+    <div className={`${CLASSES.dataGrid} ${CLASSES.gridBaseContainer}`} role="grid" aria-label="Data grid">
       <TableHeader columns={viewModel.visibleColumns} />
-      <TableContent columns={viewModel.visibleColumns} dataSource={viewModel.visibleItems} />
+      <TableContent
+        columns={viewModel.visibleColumns}
+        dataSource={viewModel.visibleRows}
+        noDataTemplate={viewModel.props.noDataTemplate}
+      />
       <Footer />
       { viewModel.props.children }
     </div>
@@ -52,16 +108,31 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
 @ComponentBindings()
 export class DataGridLightProps extends BaseWidgetProps {
   @OneWay()
-  dataSource: RowData[] = [];
+  dataSource?: DataSource;
+
+  @OneWay()
+  remoteOperations = false;
+
+  @OneWay()
+  cacheEnabled = true;
+
+  @TwoWay()
+  dataState: DataState = { data: [], totalCount: 0 };
 
   @OneWay()
   keyExpr?: KeyExpr;
 
   @OneWay()
-  columns: ColumnUserConfig[] = [];
+  columns: Column[] = [];
+
+  @Event()
+  onDataErrorOccurred?: (e: { error: Error }) => void;
 
   @Slot()
   children?: JSX.Element | JSX.Element[];
+
+  @Template()
+  noDataTemplate?: JSXTemplate;
 }
 
 const aria = {
@@ -83,28 +154,19 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   plugins = new Plugins();
 
   @InternalState()
-  visibleItems: RowData[] = [];
+  visibleRows: Row[] = [];
 
   @InternalState()
-  visibleColumns: Column[] = [];
+  visibleColumns: ColumnInternal[] = [];
+
+  @InternalState()
+  loadedData?: RowData[];
 
   @Effect()
-  updateTotalCount(): void {
-    this.plugins.set(TotalCount, this.props.dataSource.length);
-  }
-
-  @Effect()
-  updateVisibleItems(): () => void {
-    return this.plugins.watch(VisibleItems, (items) => {
-      this.visibleItems = items;
+  updateVisibleRows(): () => void {
+    return this.plugins.watch(VisibleRows, (visibleRows) => {
+      this.visibleRows = visibleRows;
     });
-  }
-
-  @Effect()
-  setDataSourceToVisibleItems(): () => void {
-    return this.plugins.extend(
-      VisibleItems, -1, () => this.props.dataSource,
-    );
   }
 
   @Effect()
@@ -115,27 +177,74 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   }
 
   @Effect()
-  setInitialColumnsToVisibleColumns(): () => void {
-    return this.plugins.extend(
-      VisibleColumns, -1, () => this.columns,
-    );
+  updateDataStateFromLocal(): () => void {
+    return this.plugins.watch(LocalDataState, (dataState) => {
+      if (dataState !== undefined) {
+        this.props.dataState = dataState;
+      }
+    });
   }
 
   @Effect()
-  updateKeyExpr(): void {
-    this.plugins.set(KeyExprPlugin, this.props.keyExpr);
+  loadDataSource(): () => void {
+    const { dataSource, cacheEnabled } = this.props;
+    let prevLoadOptions: LoadOptions | undefined = undefined;
+    return this.plugins.watch(LoadOptionsValue, (loadOptions) => {
+      if (!cacheEnabled || JSON.stringify(loadOptions) !== JSON.stringify(prevLoadOptions)) {
+        prevLoadOptions = loadOptions;
+        this.loadDataSourceIfNeed(dataSource, loadOptions);
+      }
+    });
   }
 
-  @Effect()
-  updateDataSource(): void {
-    this.plugins.set(DataSource, this.props.dataSource);
+  @Method()
+  refresh(): void {
+    const loadOptions = this.plugins.getValue(LoadOptionsValue) ?? {};
+
+    this.loadDataSourceIfNeed(this.props.dataSource, loadOptions);
   }
 
-  get columns(): Column[] {
+  get keyExpr(): KeyExprInternal {
+    const { dataSource } = this.props;
+    const storeKey = isStore(dataSource) ? (dataSource.key() as string) : null;
+    return this.props.keyExpr ?? storeKey ?? null;
+  }
+
+  get columns(): ColumnInternal[] {
     const userColumns = this.props.columns;
 
     return userColumns.map((userColumn) => ({
       dataField: userColumn,
     }));
+  }
+
+  get localData(): RowData[] | undefined {
+    const { dataSource } = this.props;
+    return Array.isArray(dataSource) ? dataSource : this.loadedData;
+  }
+
+  loadDataSourceIfNeed(dataSource: DataSource, loadOptions: LoadOptions): void {
+    if (isStore(dataSource)) {
+      this.loadStore(dataSource, loadOptions);
+    }
+  }
+
+  loadStore(store: Store, loadOptions: LoadOptions): void {
+    store.load(loadOptions).then((data, extra) => {
+      if (this.props.remoteOperations) {
+        if (Array.isArray(data)) {
+          this.props.dataState = {
+            data,
+            ...extra,
+          };
+        } else {
+          this.props.dataState = data;
+        }
+      } else {
+        this.loadedData = data;
+      }
+    }, (error) => {
+      this.props.onDataErrorOccurred?.({ error });
+    });
   }
 }

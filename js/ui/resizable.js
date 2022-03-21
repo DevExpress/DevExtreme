@@ -12,7 +12,7 @@ import { isPlainObject, isFunction, isWindow } from '../core/utils/type';
 import { hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../events/drag';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { triggerResizeEvent } from '../events/visibility_change';
 
 const RESIZABLE = 'dxResizable';
@@ -74,7 +74,7 @@ const Resizable = DOMComponent.inherit({
 
             roundStepValue: true,
 
-            _keepAspectRatio: false
+            keepAspectRatio: true
         });
     },
 
@@ -314,7 +314,7 @@ const Resizable = DOMComponent.inherit({
 
     _getDeltaByOffset: function(offset) {
         const sides = this._movingSides;
-        const shouldKeepAspectRatio = this._isCornerHandler(sides) && this.option('_keepAspectRatio');
+        const shouldKeepAspectRatio = this._isCornerHandler(sides) && this.option('keepAspectRatio');
 
         let delta = {
             x: offset.x * (sides.left ? -1 : 1),
@@ -616,7 +616,7 @@ const Resizable = DOMComponent.inherit({
             case 'stepPrecision':
             case 'step':
             case 'roundStepValue':
-            case '_keepAspectRatio':
+            case 'keepAspectRatio':
                 break;
             default:
                 this.callBase(args);

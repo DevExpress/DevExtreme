@@ -113,7 +113,6 @@ const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
-const OVERLAY_MODAL_CLASS = 'dx-overlay-modal';
 const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
 
 const HOVER_STATE_CLASS = 'dx-state-hover';
@@ -842,14 +841,10 @@ testModule('position', moduleConfig, () => {
         assert.notEqual(position.top, 0);
     });
 
-    test('position of overlay is absolute when position.of is not window', function(assert) {
+    test('position of overlay is absolute when visualContainer is not window', function(assert) {
         $('#overlay').dxOverlay({
             visible: true,
-            position: {
-                my: 'center',
-                at: 'center',
-                of: viewport()
-            }
+            visualContainer: viewPort()
         });
 
         const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
@@ -2273,23 +2268,6 @@ testModule('container', moduleConfig, () => {
         });
     });
 
-    test('content should not be moved if overlay in container', function(assert) {
-        const overlay = $('#overlayInTargetContainer').dxOverlay().dxOverlay('instance');
-
-        overlay.show();
-        assert.strictEqual(viewport().children(toSelector(OVERLAY_CLASS)).children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
-    });
-
-    test('content should be moved to parent overlay element if container equals \'null\'', function(assert) {
-        const overlay = $('#overlay').dxOverlay({
-            container: false
-        }).dxOverlay('instance');
-
-        overlay.show();
-        assert.strictEqual($('#overlay').children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
-        assert.strictEqual($(toSelector(VIEWPORT_CLASS)).children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 0);
-    });
-
     test('css classes from overlay should be duplicated to wrapper if "copyRootClassesToWrapper" is true', function(assert) {
         const instance = $('#overlayWithClass').dxOverlay({
             visible: true,
@@ -2396,8 +2374,8 @@ testModule('container', moduleConfig, () => {
             const wrapperRect = $overlayWrapper.get(0).getBoundingClientRect();
             const targetRect = $targetContainer.get(0).getBoundingClientRect();
 
-            assert.roughEqual(wrapperRect.left, targetRect.left, 0.5, 'left coordinates are equal');
-            assert.roughEqual(wrapperRect.top, targetRect.top, 0.5, 'top coordinates are equal');
+            assert.roughEqual(wrapperRect.left, targetRect.left, 0.51, 'left coordinates are equal');
+            assert.roughEqual(wrapperRect.top, targetRect.top, 0.51, 'top coordinates are equal');
             assert.strictEqual(wrapperRect.width, targetRect.width, 'width coordinates are equal');
             assert.strictEqual(wrapperRect.height, targetRect.height, 'height coordinates are equal');
             assert.strictEqual(wrapperRect.height, 300, 'wrapper height is ok');
@@ -2427,28 +2405,6 @@ testModule('container', moduleConfig, () => {
         const $content = $container.find(toSelector(OVERLAY_CONTENT_CLASS));
         assert.strictEqual(getHeight($content), getHeight($container) * 0.5, 'overlay height is correct');
         assert.strictEqual(getWidth($content), getWidth($container) * 0.5, 'overlay width is correct');
-    });
-
-    test('wrong position targeted container (B236074)', function(assert) {
-        const $overlappedDiv = $('<div>').css({ width: 200, height: 150 });
-        $overlappedDiv.appendTo('#qunit-fixture');
-
-        try {
-            const instance = $('<div>')
-                .appendTo('#qunit-fixture')
-                .dxOverlay({
-                    container: $overlappedDiv,
-                    shading: true,
-                    visible: true
-                }).dxOverlay('instance');
-
-            assert.ok(!$(instance.$wrapper()).hasClass(OVERLAY_MODAL_CLASS));
-
-            instance.option('container', null);
-            assert.ok($(instance.$wrapper()).hasClass(OVERLAY_MODAL_CLASS));
-        } finally {
-            $overlappedDiv.remove();
-        }
     });
 
     test('widget should react on viewport change', function(assert) {
@@ -2487,12 +2443,12 @@ testModule('container', moduleConfig, () => {
         }
     });
 
-    test('widget should react on viewport change with correct container', function(assert) {
+    test('widget should not react on viewport change with correct container', function(assert) {
         const origViewport = viewPort();
 
         try {
             $('#overlay').dxOverlay({
-                container: false,
+                container: $('#container'),
                 visible: true
             });
 
@@ -3336,10 +3292,24 @@ testModule('overlay utils', moduleConfig, () => {
         assert.strictEqual(zIndex.create(), 1502, 'new zindex is larger than overlay\'s');
     });
 
-    test('overlay should remove its zindex from the stack on dispose', function(assert) {
+    test('overlay should remove its zindex from the stack on dispose if overlay is visible', function(assert) {
         const instance = new Overlay('#overlay', { visible: true });
         instance.dispose();
         assert.strictEqual(zIndex.create(), 1501, 'zindex has been removed');
+    });
+
+    test('overlay should not try to remove its zindex from the stack on dispose if overlay is not visible (T1070941)', function(assert) {
+        const instance = new Overlay('#overlay');
+
+        instance.show();
+        instance.hide();
+
+        const rememberedZIndex = 1501;
+        zIndex.create();
+
+        instance.dispose();
+
+        assert.strictEqual(zIndex.create(), rememberedZIndex + 1, 'remembered zIndex was not removed on dispose');
     });
 
     test('overlay should create new zindex only at first showing', function(assert) {
@@ -3593,18 +3563,18 @@ QUnit.module('prevent safari scrolling on ios devices', {
         assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "shading" is enabled');
     });
 
-    QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be toggled on "position.of" option change', function(assert) {
+    QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be toggled on "visualContainer" option change', function(assert) {
         if(!IS_SAFARI) {
             assert.expect(0);
             return;
         }
 
         this.instance.show();
-        this.instance.option('position.of', 'body');
+        this.instance.option('visualContainer', 'body');
 
         assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed when "container" is not window');
 
-        this.instance.option('position.of', window);
+        this.instance.option('visualContainer', window);
         assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "container" is window');
     });
 
@@ -3621,5 +3591,83 @@ QUnit.module('prevent safari scrolling on ios devices', {
 
         this.instance.option('container', undefined);
         assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "container" is window');
+    });
+});
+
+// visualContainer -> container -> position.of -> window
+QUnit.module('wrapper covered element choice', () => {
+    QUnit.test('wrapper covers container element if visualPosition is not specified', function(assert) {
+        const $container = $('#container');
+        const overlay = $('#overlay').dxOverlay({
+            container: $container,
+            visible: true
+        }).dxOverlay('instance');
+
+        const $wrapper = overlay.$wrapper();
+
+        assert.strictEqual(getWidth($wrapper), getWidth($container), 'wrapper has container width');
+        assert.strictEqual(getHeight($wrapper), getHeight($container), 'wrapper has container height');
+
+        const wrapperLocation = $wrapper.position();
+        const containerLocation = $container.position();
+        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.51, 'wrapper is left positioned by container');
+        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by container');
+    });
+
+    QUnit.test('wrapper covers visualContainer element if it is specified', function(assert) {
+        const $container = $('#container');
+        const overlay = $('#overlay').dxOverlay({
+            visualContainer: $container,
+            container: viewport(),
+            visible: true
+        }).dxOverlay('instance');
+
+        const $wrapper = overlay.$wrapper();
+
+        assert.strictEqual(getWidth($wrapper), getWidth($container), 'wrapper has visual container width');
+        assert.strictEqual(getHeight($wrapper), getHeight($container), 'wrapper has visual container height');
+
+        const wrapperLocation = $wrapper.position();
+        const containerLocation = $container.position();
+        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.51, 'wrapper is left positioned by visual container');
+        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by visual container');
+    });
+
+    QUnit.test('wrapper position and dimensions should be updated after visualContainer change', function(assert) {
+        const $container = $('#container');
+        const overlay = $('#overlay').dxOverlay({
+            container: viewport(),
+            visible: true
+        }).dxOverlay('instance');
+
+        overlay.option('visualContainer', '#container');
+
+        const $wrapper = overlay.$wrapper();
+
+        assert.strictEqual(getWidth($wrapper), getWidth($container), 'wrapper has visual container width');
+        assert.strictEqual(getHeight($wrapper), getHeight($container), 'wrapper has visual container height');
+
+        const wrapperLocation = $wrapper.position();
+        const containerLocation = $container.position();
+        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.51, 'wrapper is left positioned by visual container');
+        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by visual container');
+    });
+
+    QUnit.test('wrapper covers element specified in position.of if container and visualContainer are not specified', function(assert) {
+        const $positionOf = $('#container');
+        const overlay = $('#overlay').dxOverlay({
+            position: { of: $positionOf },
+            visible: true
+        }).dxOverlay('instance');
+
+        const $wrapper = overlay.$wrapper();
+
+        assert.strictEqual(getWidth($wrapper), getWidth($positionOf), 'wrapper has width equal to position.of width');
+        assert.strictEqual(getHeight($wrapper), getHeight($positionOf), 'wrapper has height equal to position.of height');
+
+        const wrapperLocation = $wrapper.position();
+        const containerLocation = $positionOf.position();
+        assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.51, 'wrapper is left positioned by position.of');
+        assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by position.of');
     });
 });

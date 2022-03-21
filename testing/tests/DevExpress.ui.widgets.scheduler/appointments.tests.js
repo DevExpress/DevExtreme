@@ -6,7 +6,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 import VerticalAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_vertical';
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
@@ -24,6 +23,7 @@ import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { Deferred } from 'core/utils/deferred';
 import { createExpressions } from 'ui/scheduler/resources/utils';
 import { AppointmentDataProvider } from 'ui/scheduler/appointments/dataProvider/appointmentDataProvider.js';
+import { createTimeZoneCalculator } from 'renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
@@ -77,10 +77,8 @@ ExpressionUtils.setField = (_, field, obj, value) => {
 
 const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     createAppointmentSettings: () => coordinates,
-    getTimeZoneCalculator: () => {
-        return {
-            createDate: date => date
-        };
+    timeZoneCalculator: {
+        createDate: date => date
     },
     getEndViewDate: () => {
         return new Date(2150, 1, 1);
@@ -124,14 +122,10 @@ const createInstance = (options, subscribesConfig) => {
         }
     };
 
-    const key = createFactoryInstances({
-        getIsVirtualScrolling: () => false,
-    });
-
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
-        key,
         observer,
         ...options,
+        timeZoneCalculator: createTimeZoneCalculator(),
         getResources: () => [],
         getAgendaResourceProcessor: () => ({}),
         getAppointmentColor: () => new Deferred(),
@@ -567,16 +561,7 @@ QUnit.module('Appointments', moduleOptions, () => {
     });
 
     QUnit.test('Delta time for resizable appointment should be 0 if appointment isn\'t resized', function(assert) {
-        const key = createFactoryInstances({
-            model: {
-                adaptivityEnabled: false
-            },
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => dataAccessors
-        });
-
         const strategy = new HorizontalMonthAppointmentsStrategy({
-            key,
             instance: {
                 notifyObserver: commonUtils.noop,
                 option: commonUtils.noop,
@@ -590,16 +575,7 @@ QUnit.module('Appointments', moduleOptions, () => {
     });
 
     QUnit.test('Delta time for resizable appointment should decreased correctly in vertical strategy', function(assert) {
-        const key = createFactoryInstances({
-            model: {
-                adaptivityEnabled: false
-            },
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => dataAccessors
-        });
-
         const strategy = new VerticalAppointmentsStrategy({
-            key,
             appointmentDataProvider: {
                 appointmentTakesAllDay: commonUtils.noop
             },

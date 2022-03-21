@@ -4153,7 +4153,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     // T722161
-    QUnit.test('add row after scrolling if rowRendringMode is virtual', function(assert) {
+    QUnit.test('add row after scrolling if rowRenderingMode is virtual', function(assert) {
         const array = [];
         for(let i = 1; i <= 20; i++) {
             array.push({ id: i, text: 'text' + i });
@@ -4212,6 +4212,40 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // assert
         assert.equal($('#dataGrid').find(TEXTEDITOR_INPUT_SELECTOR).length, 1);
         assert.equal($('#dataGrid').find('.dx-datagrid-rowsview').find('tbody > tr').length, 3, 'inserting row + data row + freespace row');
+    });
+
+    QUnit.test('Second add row should work if dataSource is changed via angular binding and validationRules are defined (T1064325)', function(assert) {
+        // arrange, act
+        const items = [{ id: 1, text: 'text 1' }];
+        const dataGrid = createDataGrid({
+            keyExpr: 'id',
+            dataSource: items,
+            columns: [{
+                dataField: 'text',
+                validationRules: [{ type: 'required' }]
+            }],
+            editing: {
+                mode: 'cell',
+                allowAdding: true
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.addRow();
+        dataGrid.cellValue(0, 0, 'new');
+        dataGrid.addRow();
+
+        dataGrid.option('dataSource', items); // angular binding
+        this.clock.tick();
+
+        // assert
+        const visibleRows = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRows.length, 3, 'visible rows');
+        assert.strictEqual(visibleRows[0].isNewRow, true, 'first row is new');
+        assert.deepEqual(visibleRows[0].data, {}, 'first row data is empty');
+        assert.deepEqual(visibleRows[2].data.text, 'new', 'previosly added row is saved');
     });
 
     QUnit.test('The row should be added after the \'addRow\' method was called in the \'onRowInserted\' event (T650889)', function(assert) {
@@ -6219,6 +6253,56 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             // assert
             assert.equal(dataGrid.option('editing.changes')[0].pageIndex, undefined, 'no pageIndex');
         });
+    });
+
+    QUnit.test('dataSource change should reset changes if dataSource is array and keys are changed (T1065721)', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{ id: 1, field: '111' }],
+            keyExpr: 'id',
+            editing: {
+                allowUpdating: true,
+                mode: 'cell'
+            },
+            columns: ['id', 'field'],
+            loadingTimeout: null
+        }).dxDataGrid('instance');
+
+
+        dataGrid.editCell(0, 1);
+        dataGrid.cellValue(0, 1, 'test');
+
+        // act
+        dataGrid.option('dataSource', [{ id: 2, field: '222' }]);
+
+        // assert
+        assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+        assert.deepEqual(dataGrid.option('editing.editRowKey'), null, 'editRowKey is empty');
+    });
+
+
+    QUnit.test('dataSource change should not reset insert changes if dataSource is array (T1065721)', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{ id: 1, field: '111' }],
+            keyExpr: 'id',
+            editing: {
+                allowUpdating: true,
+                mode: 'cell'
+            },
+            columns: ['id', 'field'],
+            loadingTimeout: null
+        }).dxDataGrid('instance');
+
+
+        dataGrid.addRow();
+
+        // act
+        dataGrid.option('dataSource', [{ id: 2, field: '222' }]);
+
+        // assert
+        assert.deepEqual(dataGrid.option('editing.changes').length, 1, 'changes are not reseted');
+        assert.ok(dataGrid.option('editing.editRowKey'), 'editRowKey is not reseted');
     });
 
     ['Row', 'Form', 'Popup', 'Cell', 'Batch'].forEach(editMode => {

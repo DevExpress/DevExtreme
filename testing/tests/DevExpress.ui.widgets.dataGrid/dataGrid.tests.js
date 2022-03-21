@@ -1539,6 +1539,29 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getController('data').items()[0].data, { field1: 3, field2: 4 });
     });
 
+    QUnit.test('dataSource change should render content once if scrolling mode is virtual', function(assert) {
+        const dataChangedSpy = sinon.spy();
+        const dataGrid = createDataGrid({
+            height: 200,
+            dataSource: [],
+            keyExpr: 'id',
+            columns: ['id'],
+            scrolling: {
+                mode: 'virtual'
+            },
+        });
+
+        this.clock.tick(1000);
+        dataGrid.getController('data').changed.add(dataChangedSpy);
+
+        // act
+        dataGrid.option('dataSource', [{ id: 1 }]);
+        this.clock.tick(1000);
+
+        // assert
+        assert.equal(dataChangedSpy.callCount, 1, 'content is rendered once');
+    });
+
     // T531189
     QUnit.test('noData should be hidden after assign dataSource and height', function(assert) {
         // arrange, act
@@ -3980,6 +4003,34 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(d.state(), 'resolved', 'row is navigated');
+    });
+
+    // T1031120
+    QUnit.test('The repaint method of the grid should repaint the pager', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: 30,
+            pager: {
+                visible: true,
+                showInfo: true
+            },
+            dataSource: {
+                pageSize: 2,
+                store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
+            }
+        });
+
+        $(dataGrid.element()).find('.dx-datagrid-pager').removeClass('dx-pager');
+        this.clock.tick(100);
+
+        const pageIndexes = $(dataGrid.element()).find('.dx-datagrid-pager .dx-pages .dx-info').get(0);
+
+        // act
+        $(dataGrid.element()).find('.dx-datagrid-pager').addClass('dx-pager');
+        dataGrid.repaint();
+
+        // assert
+        assert.notStrictEqual($(dataGrid.element()).find('.dx-datagrid-pager .dx-pages .dx-info').get(0), pageIndexes, 'pager has repainted');
     });
 });
 

@@ -59,23 +59,24 @@ describe('Pager', () => {
       });
 
       it('should be calculated when auto', () => {
-        const grid = new Pager({
+        const pager = new Pager({
           allowedPageSizes: 'auto',
         });
 
-        grid.plugins.set(PageSize, 20);
+        pager.plugins.set(PageSize, 20);
+        pager.updatePageSize();
 
-        expect(grid.allowedPageSizes).toEqual([10, 20, 40]);
+        expect(pager.allowedPageSizes).toEqual([10, 20, 40]);
       });
 
       it('should be empty when auto and pageSize is all', () => {
-        const grid = new Pager({
+        const pager = new Pager({
           allowedPageSizes: 'auto',
         });
 
-        grid.plugins.set(PageSize, 'all');
+        pager.plugins.set(PageSize, 'all');
 
-        expect(grid.allowedPageSizes).toEqual([]);
+        expect(pager.allowedPageSizes).toEqual([]);
       });
     });
   });

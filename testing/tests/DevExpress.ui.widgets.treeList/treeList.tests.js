@@ -1845,6 +1845,92 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         assert.ok($firstCellInAddedRow.hasClass('dx-editor-cell'), 'editor is rendered');
         assert.ok($firstCellInAddedRow.hasClass('dx-focused'), 'editor is focused');
     });
+
+    [true, false].forEach(withColumns => {
+        QUnit.testInActiveWindow(`Row should be focused correctly when dataSource and focusedRowKey are changed simultaneously ${withColumns ? 'with columns' : 'without columns'} (T1062545)`, function(assert) {
+            // arrange
+            const focusedRowIndices = [];
+            const config = {
+                dataSource: [
+                    {
+                        id: 1,
+                        name: 'name 1',
+                        hasChildren: true,
+                        children: []
+                    },
+                    {
+                        id: 3,
+                        name: 'name 3',
+                        hasChildren: false,
+                        children: []
+                    }
+                ],
+                keyExpr: 'id',
+                dataStructure: 'tree',
+                rootValue: null,
+                itemsExpr: 'children',
+                focusedRowEnabled: true,
+                repaintChangesOnly: true,
+                hasItemsExpr: 'hasChildren',
+                focusedRowKey: 1,
+                onFocusedRowChanged: function(e) {
+                    focusedRowIndices.push(e.rowIndex);
+                }
+            };
+            if(withColumns) {
+                config.columns = [
+                    {
+                        dataField: 'name'
+                    }
+                ];
+            }
+            const treeList = createTreeList(config);
+            this.clock.tick(300);
+
+            // assert
+            assert.deepEqual(focusedRowIndices, [0], 'initial focused row indices');
+
+            // act
+            treeList.expandRow(1);
+            this.clock.tick(300);
+
+            // assert
+            assert.equal($(treeList.element()).find('.dx-treelist-expanded').length, 1, 'one expanded row');
+
+            // act
+            treeList.option('dataSource', [
+                {
+                    id: 1,
+                    name: 'name 1',
+                    hasChildren: true,
+                    children: [
+                        {
+
+                            id: 2,
+                            name: 'name 2',
+                            hasChildren: false,
+                            children: []
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: 'name 3',
+                    hasChildren: false,
+                    children: []
+                }
+
+            ]);
+            treeList.option('focusedRowKey', 2);
+            this.clock.tick(300);
+            const $focusedRowElement = $(treeList.element()).find('.dx-row-focused');
+
+            // assert
+            assert.deepEqual(focusedRowIndices, [0, 1], 'focused row indices');
+            assert.equal($focusedRowElement.length, 1, 'one row is marked as focused');
+            assert.strictEqual($focusedRowElement.attr('aria-rowindex'), '2', 'aria-rowindex');
+        });
+    });
 });
 
 QUnit.module('Scroll', defaultModuleConfig, () => {
@@ -2298,6 +2384,56 @@ QUnit.module('Selection', defaultModuleConfig, () => {
             assert.deepEqual(treeList.getSelectedRowKeys(), [], 'selected row keys');
             assert.deepEqual(treeList.option('selectedRowKeys'), [], 'selected row keys');
         });
+    });
+
+    QUnit.test('Rows should be selected correctly with Shift', function(assert) {
+        // arrange
+        const items = [{
+            id: 1,
+            parentId: 0,
+            name: 'Name 1'
+        }, {
+            id: 2,
+            parentId: 1,
+            name: 'Name 2'
+        }, {
+            id: 3,
+            parentId: 1,
+            name: 'Name 3'
+        }, {
+            id: 4,
+            parentId: 1,
+            name: 'Name 4'
+        }, {
+            id: 5,
+            parentId: 4,
+            name: 'Name 5'
+        }];
+
+        const treeList = createTreeList({
+            dataSource: items,
+            selection: {
+                mode: 'multiple'
+            },
+            columns: ['name'],
+            autoExpandAll: true
+        });
+
+        this.clock.tick(300);
+
+        // act
+        $(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(1)').trigger('dxclick');
+
+        // assert
+        assert.deepEqual(treeList.getSelectedRowKeys(), [2], 'selected key');
+
+        // act
+        const pointer = pointerMock($(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(4)'));
+        pointer.start({ shiftKey: true }).down().up();
+        this.clock.tick(300);
+
+        // assert
+        assert.deepEqual(treeList.getSelectedRowKeys(), [2, 5, 4, 3], 'selected keys with Shift');
     });
 });
 

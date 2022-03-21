@@ -1,16 +1,20 @@
 import {
   Component, JSXComponent, ComponentBindings, OneWay,
 } from '@devextreme-generator/declarations';
-import { Column } from '../types';
+import { ColumnInternal } from '../types';
 import { HeaderCell } from './header_cell';
 
+import CLASSES from '../classes';
+
 export const viewFunction = (viewModel: HeaderRow): JSX.Element => (
-  <tr className="dx-row dx-column-lines dx-header-row" role="row">
+  <tr className={`${CLASSES.row} ${CLASSES.columnLines} ${CLASSES.headerRow}`} role="row">
     {viewModel.props.columns.map((column, index) => (
       <HeaderCell
         // eslint-disable-next-line react/no-array-index-key
         key={index}
         column={column}
+        headerTemplate={column.headerTemplate}
+        countColumn={viewModel.props.columns.length}
         columnIndex={index}
       />
     ))}
@@ -20,7 +24,7 @@ export const viewFunction = (viewModel: HeaderRow): JSX.Element => (
 @ComponentBindings()
 export class HeaderRowProps {
   @OneWay()
-  columns: Column[] = [];
+  columns: ColumnInternal[] = [];
 }
 
 @Component({

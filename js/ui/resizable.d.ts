@@ -61,6 +61,12 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     height?: number | string | (() => number | string);
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    keepAspectRatio?: boolean;
+    /**
+     * @docid
      * @default Infinity
      * @public
      */

@@ -69,7 +69,7 @@ export class GanttView extends Widget {
         this._ganttViewCore.changeTaskExpanded(id, value);
     }
     updateView() {
-        this._ganttViewCore.updateView();
+        this._ganttViewCore?.updateView();
     }
     updateBarItemsState() {
         this._ganttViewCore.barManager.updateItemsState([]);
@@ -127,6 +127,8 @@ export class GanttView extends Widget {
                 return 0;
             case 'hours':
                 return 1;
+            case 'sixHours':
+                return 2;
             case 'days':
                 return 3;
             case 'weeks':
@@ -356,6 +358,13 @@ export class GanttView extends Widget {
     destroyTemplate(container) {
         $(container).empty();
     }
+    onTaskAreaSizeChanged(info) {
+        const scrollView = this._taskAreaContainer._scrollView;
+        if(isDefined(info?.height)) {
+            const direction = info?.height > this._taskAreaContainer.getHeight() ? 'both' : 'horizontal';
+            scrollView.option('direction', direction);
+        }
+    }
     // export
     getTreeListTableStyle() {
         return this.callExportHelperMethod('getTreeListTableStyle');
@@ -366,8 +375,8 @@ export class GanttView extends Widget {
     getTreeListHeaderInfo(colIndex) {
         return this.callExportHelperMethod('getTreeListHeaderInfo', colIndex);
     }
-    getTreeListCellInfo(rowIndex, colIndex) {
-        return this.callExportHelperMethod('getTreeListCellInfo', rowIndex, colIndex);
+    getTreeListCellInfo(rowIndex, colIndex, key) {
+        return this.callExportHelperMethod('getTreeListCellInfo', key, colIndex);
     }
     callExportHelperMethod(methodName, ...args) {
         const helper = this.option('exportHelper');

@@ -46,6 +46,7 @@ import {
     GanttContextMenuItem,
     GanttScaleType,
     GanttSortingMode,
+    GanttRenderScaleType,
 } from '../types/enums';
 
 /** @public */
@@ -218,6 +219,15 @@ export type TaskUpdatingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly newValues: any;
     readonly values: any;
     readonly key: any;
+};
+/** @public */
+export type ScaleCellPreparedEvent = InitializedEventInfo<dxGantt> & {
+    readonly scaleIndex: number;
+    readonly scaleType: GanttRenderScaleType;
+    readonly scaleElement: DxElement;
+    readonly separatorElement: DxElement;
+    readonly start: Date;
+    readonly end: Date;
 };
 
 /** @public */
@@ -739,6 +749,23 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxGantt
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 scaleIndex:number
+     * @type_function_param1_field4 scaleType:Enums.GanttRenderScaleType
+     * @type_function_param1_field5 scaleElement:DxElement
+     * @type_function_param1_field6 separatorElement:DxElement
+     * @type_function_param1_field7 start:Date
+     * @type_function_param1_field7 end:Date
+     * @action
+     * @public
+     */
+    onScaleCellPrepared?: ((e: ScaleCellPreparedEvent) => void);
+
+    /**
+     * @docid
+     * @default null
      * @public
      */
     resourceAssignments?: {
@@ -808,13 +835,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
          * @type Enums.GanttScaleType
          * @default "minutes"
          */
-        min?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        min?: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
         /**
          * @docid
          * @type Enums.GanttScaleType
          * @default "years"
          */
-        max?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        max?: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
     };
     /**
      * @docid

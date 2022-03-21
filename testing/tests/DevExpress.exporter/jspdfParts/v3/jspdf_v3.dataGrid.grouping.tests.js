@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfGroupingTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -34,30 +34,106 @@ const JSPdfGroupingTests = {
                 };
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}',
-                    'text,F3,100,23,{baseline:middle}',
-                    'text,F1: f1,10,41,{baseline:middle}',
-                    'text,f1_2,20,63,{baseline:middle}',
-                    'text,f1_3,100,63,{baseline:middle}',
-                    'text,f2_2,20,90,{baseline:middle}',
-                    'text,f2_3,100,90,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,16',
-                    'setLineWidth,1',
-                    'rect,100,15,80,16',
-                    'setLineWidth,1',
-                    'rect,10,31,170,20',
-                    'setLineWidth,1',
-                    'rect,20,51,80,24',
-                    'setLineWidth,1',
-                    'rect,100,51,80,24',
-                    'setLineWidth,1',
-                    'rect,20,75,80,30',
-                    'setLineWidth,1',
-                    'rect,100,75,80,30'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,63,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,63,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,81,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,103,{baseline:middle}',
+                    'text,f1_3,145,103,{baseline:middle}',
+                    'text,f2_2,55,130,{baseline:middle}',
+                    'text,f2_3,145,130,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,16',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,16',
+                    'setDrawColor,#979797',
+                    'rect,50,71,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,91,90,24',
+                    'setDrawColor,#979797',
+                    'rect,140,91,80,24',
+                    'setDrawColor,#979797',
+                    'rect,50,115,90,30',
+                    'setDrawColor,#979797',
+                    'rect,140,115,80,30',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 level - 1 group - [{f1, groupIndex: 0}, f2, f3], selectedRowKeys: [ds[1]]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const ds = [
+                    { f1: 'f1', f2: 'f1_2', f3: 'f1_3' },
+                    { f1: 'f1', f2: 'f2_2', f3: 'f2_3' },
+                ];
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: ds,
+                    selectedRowKeys: [ds[1]],
+                });
+
+                const onRowExporting = (e) => {
+                    const notEmptyCell = e.rowCells.filter((cell) => cell.text)[0];
+                    if(notEmptyCell.text === 'F2') {
+                        e.rowHeight = 16;
+                    } else if(notEmptyCell.text === 'F1: f1') {
+                        e.rowHeight = 20;
+                    } else if(notEmptyCell.text === 'f1_2') {
+                        e.rowHeight = 24;
+                    } else if(notEmptyCell.text === 'f2_2') {
+                        e.rowHeight = 30;
+                    }
+                };
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,63,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,63,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,81,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2,55,106,{baseline:middle}',
+                    'text,f2_3,145,106,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,16',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,16',
+                    'setDrawColor,#979797',
+                    'rect,50,71,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,91,90,30',
+                    'setDrawColor,#979797',
+                    'rect,140,91,80,30',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -81,30 +157,40 @@ const JSPdfGroupingTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,100,24.2,{baseline:middle}',
-                    'text,F1: f1,10,42.6,{baseline:middle}',
-                    'text,f1_2,20,61,{baseline:middle}',
-                    'text,f1_3,100,61,{baseline:middle}',
-                    'text,f2_2,20,79.4,{baseline:middle}',
-                    'text,f2_3,100,79.4,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,18.4',
-                    'setLineWidth,1',
-                    'rect,20,51.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,100,51.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,20,70.2,80,18.4',
-                    'setLineWidth,1',
-                    'rect,100,70.2,80,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,108.75,{baseline:middle}',
+                    'text,f1_3,145,108.75,{baseline:middle}',
+                    'text,f2_2,55,130.25,{baseline:middle}',
+                    'text,f2_3,145,130.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,119.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -134,30 +220,40 @@ const JSPdfGroupingTests = {
                 };
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,100,24.2,{baseline:middle}',
-                    'text,F1: f1,15,47.6,{baseline:middle}',
-                    'text,f1_2,20,71,{baseline:middle}',
-                    'text,f1_3,100,71,{baseline:middle}',
-                    'text,f2_2,20,89.4,{baseline:middle}',
-                    'text,f2_3,100,89.4,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,28.4',
-                    'setLineWidth,1',
-                    'rect,20,61.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,100,61.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,20,80.2,80,18.4',
-                    'setLineWidth,1',
-                    'rect,100,80.2,80,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,108.75,{baseline:middle}',
+                    'text,f1_3,145,108.75,{baseline:middle}',
+                    'text,f2_2,55,130.25,{baseline:middle}',
+                    'text,f2_3,145,130.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,119.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -196,33 +292,113 @@ const JSPdfGroupingTests = {
                 };
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}',
-                    'text,F3,100,23,{baseline:middle}',
-                    'text,F1: f1_1,10,41,{baseline:middle}',
-                    'text,f1_2,20,63,{baseline:middle}',
-                    'text,f1_3,100,63,{baseline:middle}',
-                    'text,F1: f2_1,10,85,{baseline:middle}',
-                    'text,f2_2,20,107,{baseline:middle}',
-                    'text,f2_3,100,107,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,16',
-                    'setLineWidth,1',
-                    'rect,100,15,80,16',
-                    'setLineWidth,1',
-                    'rect,10,31,170,20',
-                    'setLineWidth,1',
-                    'rect,20,51,80,24',
-                    'setLineWidth,1',
-                    'rect,100,51,80,24',
-                    'setLineWidth,1',
-                    'rect,10,75,170,20',
-                    'setLineWidth,1',
-                    'rect,20,95,80,24',
-                    'setLineWidth,1',
-                    'rect,100,95,80,24'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,63,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,63,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1,55,81,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,103,{baseline:middle}',
+                    'text,f1_3,145,103,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f2_1,55,125,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2,55,147,{baseline:middle}',
+                    'text,f2_3,145,147,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,16',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,16',
+                    'setDrawColor,#979797',
+                    'rect,50,71,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,91,90,24',
+                    'setDrawColor,#979797',
+                    'rect,140,91,80,24',
+                    'setDrawColor,#979797',
+                    'rect,50,115,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,135,90,24',
+                    'setDrawColor,#979797',
+                    'rect,140,135,80,24',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 level - 2 group - [{f1, groupIndex: 0}, f2, f3], selectedRowKeys: [ds[1]]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const ds = [
+                    { f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' },
+                    { f1: 'f2_1', f2: 'f2_2', f3: 'f2_3' },
+                ];
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: ds,
+                    selectedRowKeys: [ds[1]],
+                });
+
+                const onRowExporting = (e) => {
+                    const notEmptyCell = e.rowCells.filter((cell) => cell.text)[0];
+                    if(notEmptyCell.text === 'F2') {
+                        e.rowHeight = 16;
+                    } else if(notEmptyCell.text === 'F1: f1_1') {
+                        e.rowHeight = 20;
+                    } else if(notEmptyCell.text === 'F1: f2_1') {
+                        e.rowHeight = 20;
+                    } else if(notEmptyCell.text === 'f1_2') {
+                        e.rowHeight = 24;
+                    } else if(notEmptyCell.text === 'f2_2') {
+                        e.rowHeight = 24;
+                    }
+                };
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,63,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,63,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f2_1,55,81,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2,55,103,{baseline:middle}',
+                    'text,f2_3,145,103,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,16',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,16',
+                    'setDrawColor,#979797',
+                    'rect,50,71,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,91,90,24',
+                    'setDrawColor,#979797',
+                    'rect,140,91,80,24',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -246,33 +422,45 @@ const JSPdfGroupingTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,100,24.2,{baseline:middle}',
-                    'text,F1: f1_1,10,42.6,{baseline:middle}',
-                    'text,f1_2,20,61,{baseline:middle}',
-                    'text,f1_3,100,61,{baseline:middle}',
-                    'text,F1: f2_1,10,79.4,{baseline:middle}',
-                    'text,f2_2,20,97.8,{baseline:middle}',
-                    'text,f2_3,100,97.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,18.4',
-                    'setLineWidth,1',
-                    'rect,20,51.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,100,51.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,70.2,170,18.4',
-                    'setLineWidth,1',
-                    'rect,20,88.6,80,18.4',
-                    'setLineWidth,1',
-                    'rect,100,88.6,80,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1,55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,108.75,{baseline:middle}',
+                    'text,f1_3,145,108.75,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f2_1,55,130.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2,55,151.75,{baseline:middle}',
+                    'text,f2_3,145,151.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,141,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,141,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -302,33 +490,45 @@ const JSPdfGroupingTests = {
                 };
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,100,24.2,{baseline:middle}',
-                    'text,F1: f1_1,15,47.6,{baseline:middle}',
-                    'text,f1_2,20,71,{baseline:middle}',
-                    'text,f1_3,100,71,{baseline:middle}',
-                    'text,F1: f2_1,15,94.4,{baseline:middle}',
-                    'text,f2_2,20,117.8,{baseline:middle}',
-                    'text,f2_3,100,117.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,28.4',
-                    'setLineWidth,1',
-                    'rect,20,61.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,100,61.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,80.2,170,28.4',
-                    'setLineWidth,1',
-                    'rect,20,108.6,80,18.4',
-                    'setLineWidth,1',
-                    'rect,100,108.6,80,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1,55,87.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,108.75,{baseline:middle}',
+                    'text,f1_3,145,108.75,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f2_1,55,130.25,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2,55,151.75,{baseline:middle}',
+                    'text,f2_3,145,151.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,141,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,141,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -368,33 +568,115 @@ const JSPdfGroupingTests = {
                 };
 
                 const expectedLog = [
-                    'text,F3,10,23,{baseline:middle}',
-                    'text,F4,100,23,{baseline:middle}',
-                    'text,F1: f1,10,41,{baseline:middle}',
-                    'text,F2: f2,20,61,{baseline:middle}',
-                    'text,f1_3,30,83,{baseline:middle}',
-                    'text,f1_4,100,83,{baseline:middle}',
-                    'text,f2_3,30,110,{baseline:middle}',
-                    'text,f2_4,100,110,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,16',
-                    'setLineWidth,1',
-                    'rect,100,15,80,16',
-                    'setLineWidth,1',
-                    'rect,10,31,170,20',
-                    'setLineWidth,1',
-                    'rect,20,51,160,20',
-                    'setLineWidth,1',
-                    'rect,30,71,70,24',
-                    'setLineWidth,1',
-                    'rect,100,71,80,24',
-                    'setLineWidth,1',
-                    'rect,30,95,70,30',
-                    'setLineWidth,1',
-                    'rect,100,95,80,30'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,63,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,145,63,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,81,{baseline:middle}',
+                    'text,F2: f2,55,101,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_3,55,123,{baseline:middle}',
+                    'text,f1_4,145,123,{baseline:middle}',
+                    'text,f2_3,55,150,{baseline:middle}',
+                    'text,f2_4,145,150,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,16',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,16',
+                    'setDrawColor,#979797',
+                    'rect,50,71,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,91,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,111,90,24',
+                    'setDrawColor,#979797',
+                    'rect,140,111,80,24',
+                    'setDrawColor,#979797',
+                    'rect,50,135,90,30',
+                    'setDrawColor,#979797',
+                    'rect,140,135,80,30',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 level - 1 group - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], selectedRowKeys: [ds[1]]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const ds = [
+                    { f1: 'f1', f2: 'f2', f3: 'f1_3', f4: 'f1_4' },
+                    { f1: 'f1', f2: 'f2', f3: 'f2_3', f4: 'f2_4' },
+                ];
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                    ],
+                    dataSource: ds,
+                    selectedRowKeys: [ds[1]],
+                });
+
+                const onRowExporting = (e) => {
+                    const notEmptyCell = e.rowCells.filter((cell) => cell.text)[0];
+                    if(notEmptyCell.text === 'F3') {
+                        e.rowHeight = 16;
+                    } else if(notEmptyCell.text === 'F1: f1') {
+                        e.rowHeight = 20;
+                    } else if(notEmptyCell.text === 'F2: f2') {
+                        e.rowHeight = 20;
+                    } else if(notEmptyCell.text === 'f1_3') {
+                        e.rowHeight = 24;
+                    } else if(notEmptyCell.text === 'f2_3') {
+                        e.rowHeight = 30;
+                    }
+                };
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,63,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,145,63,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,81,{baseline:middle}',
+                    'text,F2: f2,55,101,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_3,55,126,{baseline:middle}',
+                    'text,f2_4,145,126,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,16',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,16',
+                    'setDrawColor,#979797',
+                    'rect,50,71,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,91,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,111,90,30',
+                    'setDrawColor,#979797',
+                    'rect,140,111,80,30',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -419,33 +701,43 @@ const JSPdfGroupingTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,24.2,{baseline:middle}',
-                    'text,F4,100,24.2,{baseline:middle}',
-                    'text,F1: f1,10,42.6,{baseline:middle}',
-                    'text,F2: f2,20,61,{baseline:middle}',
-                    'text,f1_3,30,79.4,{baseline:middle}',
-                    'text,f1_4,100,79.4,{baseline:middle}',
-                    'text,f2_3,30,97.8,{baseline:middle}',
-                    'text,f2_4,100,97.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,18.4',
-                    'setLineWidth,1',
-                    'rect,20,51.8,160,18.4',
-                    'setLineWidth,1',
-                    'rect,30,70.2,70,18.4',
-                    'setLineWidth,1',
-                    'rect,100,70.2,80,18.4',
-                    'setLineWidth,1',
-                    'rect,30,88.6,70,18.4',
-                    'setLineWidth,1',
-                    'rect,100,88.6,80,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,{baseline:middle}',
+                    'text,F2: f2,55,108.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_3,55,130.25,{baseline:middle}',
+                    'text,f1_4,145,130.25,{baseline:middle}',
+                    'text,f2_3,55,151.75,{baseline:middle}',
+                    'text,f2_4,145,151.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,119.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,141,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,141,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -476,33 +768,43 @@ const JSPdfGroupingTests = {
                 };
 
                 const expectedLog = [
-                    'text,F3,10,24.2,{baseline:middle}',
-                    'text,F4,100,24.2,{baseline:middle}',
-                    'text,F1: f1,15,47.6,{baseline:middle}',
-                    'text,F2: f2,25,76,{baseline:middle}',
-                    'text,f1_3,30,99.4,{baseline:middle}',
-                    'text,f1_4,100,99.4,{baseline:middle}',
-                    'text,f2_3,30,117.8,{baseline:middle}',
-                    'text,f2_4,100,117.8,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,28.4',
-                    'setLineWidth,1',
-                    'rect,20,61.8,160,28.4',
-                    'setLineWidth,1',
-                    'rect,30,90.2,70,18.4',
-                    'setLineWidth,1',
-                    'rect,100,90.2,80,18.4',
-                    'setLineWidth,1',
-                    'rect,30,108.6,70,18.4',
-                    'setLineWidth,1',
-                    'rect,100,108.6,80,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,{baseline:middle}',
+                    'text,F2: f2,55,108.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_3,55,130.25,{baseline:middle}',
+                    'text,f1_4,145,130.25,{baseline:middle}',
+                    'text,f2_3,55,151.75,{baseline:middle}',
+                    'text,f2_4,145,151.75,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,119.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,141,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,141,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -544,36 +846,122 @@ const JSPdfGroupingTests = {
                 };
 
                 const expectedLog = [
-                    'text,F3,10,23,{baseline:middle}',
-                    'text,F4,100,23,{baseline:middle}',
-                    'text,F1: f1,10,41,{baseline:middle}',
-                    'text,F2: f1_2,20,61,{baseline:middle}',
-                    'text,f1_3,30,83,{baseline:middle}',
-                    'text,f1_4,100,83,{baseline:middle}',
-                    'text,F2: f2_2,20,105,{baseline:middle}',
-                    'text,f2_3,30,127,{baseline:middle}',
-                    'text,f2_4,100,127,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,16',
-                    'setLineWidth,1',
-                    'rect,100,15,80,16',
-                    'setLineWidth,1',
-                    'rect,10,31,170,20',
-                    'setLineWidth,1',
-                    'rect,20,51,160,20',
-                    'setLineWidth,1',
-                    'rect,30,71,70,24',
-                    'setLineWidth,1',
-                    'rect,100,71,80,24',
-                    'setLineWidth,1',
-                    'rect,20,95,160,20',
-                    'setLineWidth,1',
-                    'rect,30,115,70,24',
-                    'setLineWidth,1',
-                    'rect,100,115,80,24'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,63,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,145,63,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,81,{baseline:middle}',
+                    'text,F2: f1_2,55,101,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_3,55,123,{baseline:middle}',
+                    'text,f1_4,145,123,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,F2: f2_2,55,145,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_3,55,167,{baseline:middle}',
+                    'text,f2_4,145,167,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,16',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,16',
+                    'setDrawColor,#979797',
+                    'rect,50,71,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,91,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,111,90,24',
+                    'setDrawColor,#979797',
+                    'rect,140,111,80,24',
+                    'setDrawColor,#979797',
+                    'rect,50,135,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,155,90,24',
+                    'setDrawColor,#979797',
+                    'rect,140,155,80,24',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 level - 2 groups - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], selectedRowKeys: [ds[1]]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const ds = [
+                    { f1: 'f1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' },
+                    { f1: 'f1', f2: 'f2_2', f3: 'f2_3', f4: 'f2_4' },
+                ];
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                    ],
+                    dataSource: ds,
+                    selectedRowKeys: [ds[1]],
+                });
+
+                const onRowExporting = (e) => {
+                    const notEmptyCell = e.rowCells.filter((cell) => cell.text)[0];
+                    if(notEmptyCell.text === 'F3') {
+                        e.rowHeight = 16;
+                    } else if(notEmptyCell.text === 'F1: f1') {
+                        e.rowHeight = 20;
+                    } else if(notEmptyCell.text === 'F2: f1_2') {
+                        e.rowHeight = 20;
+                    } else if(notEmptyCell.text === 'F2: f2_2') {
+                        e.rowHeight = 20;
+                    } else if(notEmptyCell.text === 'f1_3') {
+                        e.rowHeight = 24;
+                    } else if(notEmptyCell.text === 'f2_3') {
+                        e.rowHeight = 24;
+                    }
+                };
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,63,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,145,63,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,81,{baseline:middle}',
+                    'text,F2: f2_2,55,101,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_3,55,123,{baseline:middle}',
+                    'text,f2_4,145,123,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,16',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,16',
+                    'setDrawColor,#979797',
+                    'rect,50,71,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,91,170,20',
+                    'setDrawColor,#979797',
+                    'rect,50,111,90,24',
+                    'setDrawColor,#979797',
+                    'rect,140,111,80,24',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, selectedRowsOnly: true }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -598,36 +986,48 @@ const JSPdfGroupingTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,24.2,{baseline:middle}',
-                    'text,F4,100,24.2,{baseline:middle}',
-                    'text,F1: f1,10,42.6,{baseline:middle}',
-                    'text,F2: f1_2,20,61,{baseline:middle}',
-                    'text,f1_3,30,79.4,{baseline:middle}',
-                    'text,f1_4,100,79.4,{baseline:middle}',
-                    'text,F2: f2_2,20,97.8,{baseline:middle}',
-                    'text,f2_3,30,116.2,{baseline:middle}',
-                    'text,f2_4,100,116.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,18.4',
-                    'setLineWidth,1',
-                    'rect,20,51.8,160,18.4',
-                    'setLineWidth,1',
-                    'rect,30,70.2,70,18.4',
-                    'setLineWidth,1',
-                    'rect,100,70.2,80,18.4',
-                    'setLineWidth,1',
-                    'rect,20,88.6,160,18.4',
-                    'setLineWidth,1',
-                    'rect,30,107,70,18.4',
-                    'setLineWidth,1',
-                    'rect,100,107,80,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,{baseline:middle}',
+                    'text,F2: f1_2,55,108.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_3,55,130.25,{baseline:middle}',
+                    'text,f1_4,145,130.25,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,F2: f2_2,55,151.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_3,55,173.25,{baseline:middle}',
+                    'text,f2_4,145,173.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,119.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,141,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,162.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,162.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting: () => {} }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -658,36 +1058,48 @@ const JSPdfGroupingTests = {
                 };
 
                 const expectedLog = [
-                    'text,F3,10,24.2,{baseline:middle}',
-                    'text,F4,100,24.2,{baseline:middle}',
-                    'text,F1: f1,15,47.6,{baseline:middle}',
-                    'text,F2: f1_2,25,76,{baseline:middle}',
-                    'text,f1_3,30,99.4,{baseline:middle}',
-                    'text,f1_4,100,99.4,{baseline:middle}',
-                    'text,F2: f2_2,25,122.8,{baseline:middle}',
-                    'text,f2_3,30,146.2,{baseline:middle}',
-                    'text,f2_4,100,146.2,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,170,28.4',
-                    'setLineWidth,1',
-                    'rect,20,61.8,160,28.4',
-                    'setLineWidth,1',
-                    'rect,30,90.2,70,18.4',
-                    'setLineWidth,1',
-                    'rect,100,90.2,80,18.4',
-                    'setLineWidth,1',
-                    'rect,20,108.6,160,28.4',
-                    'setLineWidth,1',
-                    'rect,30,137,70,18.4',
-                    'setLineWidth,1',
-                    'rect,100,137,80,18.4'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,{baseline:middle}',
+                    'text,F2: f1_2,55,108.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f1_3,55,130.25,{baseline:middle}',
+                    'text,f1_4,145,130.25,{baseline:middle}',
+                    'setFont,helvetica,bold,',
+                    'text,F2: f2_2,55,151.75,{baseline:middle}',
+                    'setFont,helvetica,normal,',
+                    'text,f2_3,55,173.25,{baseline:middle}',
+                    'text,f2_4,145,173.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,119.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,141,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,162.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,162.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

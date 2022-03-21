@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfBorderColorsTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -31,29 +31,36 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,#dddd00',
-                    'rect,100,15,80,18.4',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -83,29 +90,36 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,128',
-                    'rect,100,15,80,18.4',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -135,29 +149,36 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,0,255,0',
-                    'rect,100,15,80,18.4',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -187,29 +208,36 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,0,0,1,0',
-                    'rect,100,15,80,18.4',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -239,29 +267,34 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,15,90,18.4',
+                    'rect,50,55,90,21.5',
+                    'rect,140,55,80,21.5',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -291,31 +324,36 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
                     'setDrawColor,128',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,128',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'rect,140,55,80,21.5',
                     'setDrawColor,128',
-                    'rect,180,15,90,18.4',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -345,31 +383,36 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
                     'setDrawColor,0,255,0',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,0,255,0',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'rect,140,55,80,21.5',
                     'setDrawColor,0,255,0',
-                    'rect,180,15,90,18.4',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -399,31 +442,36 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
                     'setDrawColor,0,0,1,0',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,0,0,1,0',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'rect,140,55,80,21.5',
                     'setDrawColor,0,0,1,0',
-                    'rect,180,15,90,18.4',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -454,31 +502,36 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
                     'setDrawColor,#ff0000',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,#00ff00',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'rect,140,55,80,21.5',
                     'setDrawColor,#0000ff',
-                    'rect,180,15,90,18.4',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -509,31 +562,36 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
                     'setDrawColor,80',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,128',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'rect,140,55,80,21.5',
                     'setDrawColor,255',
-                    'rect,180,15,90,18.4',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -564,31 +622,36 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
                     'setDrawColor,255,0,0',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,0,255,0',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'rect,140,55,80,21.5',
                     'setDrawColor,0,0,255',
-                    'rect,180,15,90,18.4',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -619,31 +682,36 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'setLineWidth,0.5',
                     'setDrawColor,1,0,0,0',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,0,1,0,0',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'rect,140,55,80,21.5',
                     'setDrawColor,0,0,1,0',
-                    'rect,180,15,90,18.4',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -674,38 +742,45 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'text,f2_1,10,61,',
-                    'text,f2_2,100,61,',
-                    'text,f2_3,180,61,',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,10,51.8,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,51.8,80,18.4',
-                    'setLineWidth,1',
-                    'rect,180,51.8,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'text,f2_1,55,108.75,',
+                    'text,f2_2,145,108.75,',
+                    'text,f2_3,225,108.75,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
                     'setDrawColor,#dddd00',
-                    'rect,100,33.4,80,18.4',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,98,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -736,38 +811,45 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'text,f2_1,10,61,',
-                    'text,f2_2,100,61,',
-                    'text,f2_3,180,61,',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,10,51.8,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,51.8,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'text,f2_1,55,108.75,',
+                    'text,f2_2,145,108.75,',
+                    'text,f2_3,225,108.75,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,#dddd00',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
-                    'rect,100,51.8,80,18.4',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
+                    'setDrawColor,#dddd00',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#dddd00',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,98,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -801,40 +883,45 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,F3,180,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'text,f1_3,180,42.6,',
-                    'text,f2_1,10,61,',
-                    'text,f2_2,100,61,',
-                    'text,f2_3,180,61,',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,10,51.8,90,18.4',
-                    'setLineWidth,1',
-                    'rect,180,51.8,90,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,225,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'text,f1_3,225,87.25,',
+                    'text,f2_1,55,108.75,',
+                    'text,f2_2,145,108.75,',
+                    'text,f2_3,225,108.75,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
                     'setDrawColor,#ff0000',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,90,21.5',
                     'setDrawColor,#00ff00',
-                    'rect,100,33.4,80,18.4',
-                    'setLineWidth,1',
+                    'rect,140,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,76.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
                     'setDrawColor,#0000ff',
-                    'rect,100,51.8,80,18.4',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,98,90,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -868,23 +955,28 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'setLineWidth,1',
-                    'line,10,33.4,100,33.4',
-                    'setLineWidth,1',
-                    'line,100,33.4,180,33.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
+                    'rect,50,55,90,21.5',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'line,50,76.5,140,76.5',
+                    'setDrawColor,#979797',
+                    'line,140,76.5,220,76.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -915,27 +1007,32 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'setLineWidth,1',
-                    'line,10,33.4,100,33.4',
-                    'line,10,51.8,100,51.8',
-                    'setLineWidth,1',
-                    'line,100,33.4,180,33.4',
-                    'line,100,51.8,180,51.8',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
-                    'line,10,15,100,15',
-                    'line,10,33.4,100,33.4',
-                    'setLineWidth,1',
-                    'line,100,15,180,15',
-                    'line,100,33.4,180,33.4',
+                    'line,50,55,140,55',
+                    'line,50,76.5,140,76.5',
+                    'line,140,55,220,55',
+                    'line,140,76.5,220,76.5',
+                    'setDrawColor,#979797',
+                    'line,50,76.5,140,76.5',
+                    'line,50,98,140,98',
+                    'setDrawColor,#979797',
+                    'line,140,76.5,220,76.5',
+                    'line,140,98,220,98',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -966,27 +1063,32 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'setLineWidth,1',
-                    'line,10,33.4,10,51.8',
-                    'line,100,33.4,100,51.8',
-                    'setLineWidth,1',
-                    'line,100,33.4,100,51.8',
-                    'line,180,33.4,180,51.8',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setLineWidth,0.5',
                     'setDrawColor,#dddd00',
-                    'line,10,15,10,33.4',
-                    'line,100,15,100,33.4',
-                    'setLineWidth,1',
-                    'line,100,15,100,33.4',
-                    'line,180,15,180,33.4',
+                    'line,50,55,50,76.5',
+                    'line,140,55,140,76.5',
+                    'line,140,55,140,76.5',
+                    'line,220,55,220,76.5',
+                    'setDrawColor,#979797',
+                    'line,50,76.5,50,98',
+                    'line,140,76.5,140,98',
+                    'setDrawColor,#979797',
+                    'line,140,76.5,140,98',
+                    'line,220,76.5,220,98',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1015,23 +1117,28 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
                     'setDrawColor,#dddd00',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,33.4,80,18.4',
+                    'rect,50,76.5,90,21.5',
+                    'rect,140,76.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1060,24 +1167,29 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
                     'setDrawColor,128',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'rect,50,76.5,90,21.5',
                     'setDrawColor,128',
-                    'rect,100,33.4,80,18.4',
+                    'rect,140,76.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1106,24 +1218,29 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
                     'setDrawColor,0,255,0',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'rect,50,76.5,90,21.5',
                     'setDrawColor,0,255,0',
-                    'rect,100,33.4,80,18.4',
+                    'rect,140,76.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1152,24 +1269,29 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'setLineWidth,1',
-                    'rect,10,15,90,18.4',
-                    'setLineWidth,1',
-                    'rect,100,15,80,18.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
                     'setDrawColor,0,1,0,0',
-                    'rect,10,33.4,90,18.4',
-                    'setLineWidth,1',
+                    'rect,50,76.5,90,21.5',
                     'setDrawColor,0,1,0,0',
-                    'rect,100,33.4,80,18.4',
+                    'rect,140,76.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1200,27 +1322,32 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'setLineWidth,1',
-                    'line,10,15,100,15',
-                    'line,10,33.4,100,33.4',
-                    'setLineWidth,1',
-                    'line,100,15,180,15',
-                    'line,100,33.4,180,33.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'line,50,55,140,55',
+                    'line,50,76.5,140,76.5',
+                    'setDrawColor,#979797',
+                    'line,140,55,220,55',
+                    'line,140,76.5,220,76.5',
                     'setDrawColor,#dddd00',
-                    'line,10,33.4,100,33.4',
-                    'line,10,51.8,100,51.8',
-                    'setLineWidth,1',
-                    'line,100,33.4,180,33.4',
-                    'line,100,51.8,180,51.8',
+                    'line,50,76.5,140,76.5',
+                    'line,50,98,140,98',
+                    'line,140,76.5,220,76.5',
+                    'line,140,98,220,98',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1251,27 +1378,32 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,',
-                    'setLineWidth,1',
-                    'line,10,15,10,33.4',
-                    'line,100,15,100,33.4',
-                    'setLineWidth,1',
-                    'line,100,15,100,33.4',
-                    'line,180,15,180,33.4',
-                    'setLineWidth,1',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'line,50,55,50,76.5',
+                    'line,140,55,140,76.5',
+                    'setDrawColor,#979797',
+                    'line,140,55,140,76.5',
+                    'line,220,55,220,76.5',
                     'setDrawColor,#dddd00',
-                    'line,10,33.4,10,51.8',
-                    'line,100,33.4,100,51.8',
-                    'setLineWidth,1',
-                    'line,100,33.4,100,51.8',
-                    'line,180,33.4,180,51.8',
+                    'line,50,76.5,50,98',
+                    'line,140,76.5,140,98',
+                    'line,140,76.5,140,98',
+                    'line,220,76.5,220,98',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1302,25 +1434,45 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F2,10,24.2,',
-                    'text,F3,100,24.2,',
-                    'text,F1: f1_1,10,42.6,',
-                    'text,f1_2,20,61,',
-                    'text,f1_3,100,61,',
-                    'text,F1: f2_1,10,79.4,',
-                    'text,f2_2,20,97.8,',
-                    'text,f2_3,100,97.8,',
-                    'setLineWidth,1', 'rect,10,15,90,18.4',
-                    'setLineWidth,1', 'rect,100,15,80,18.4',
-                    'setLineWidth,1', 'rect,20,51.8,80,18.4',
-                    'setLineWidth,1', 'rect,100,51.8,80,18.4',
-                    'setLineWidth,1', 'rect,20,88.6,80,18.4',
-                    'setLineWidth,1', 'rect,100,88.6,80,18.4',
-                    'setLineWidth,1', 'setDrawColor,#dddd00', 'rect,10,33.4,170,18.4',
-                    'setLineWidth,1', 'rect,10,70.2,170,18.4', 'setDrawColor,#000000'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1,55,87.25,',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,108.75,',
+                    'text,f1_3,145,108.75,',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f2_1,55,130.25,',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2,55,151.75,',
+                    'text,f2_3,145,151.75,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#dddd00',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#dddd00',
+                    'rect,50,119.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,141,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,141,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1353,26 +1505,45 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F2,10,24.2,',
-                    'text,F3,100,24.2,',
-                    'text,F1: f1_1,10,42.6,',
-                    'text,f1_2,20,61,',
-                    'text,f1_3,100,61,',
-                    'text,F1: f2_1,10,79.4,',
-                    'text,f2_2,20,97.8,',
-                    'text,f2_3,100,97.8,',
-                    'setLineWidth,1', 'rect,10,15,90,18.4',
-                    'setLineWidth,1', 'rect,100,15,80,18.4',
-                    'setLineWidth,1', 'rect,100,51.8,80,18.4',
-                    'setLineWidth,1', 'rect,100,88.6,80,18.4',
-                    'setLineWidth,1', 'setDrawColor,100', 'rect,10,33.4,170,18.4',
-                    'setLineWidth,1', 'setDrawColor,0,0,221', 'rect,20,51.8,80,18.4',
-                    'setLineWidth,1', 'setDrawColor,100', 'rect,10,70.2,170,18.4',
-                    'setLineWidth,1', 'setDrawColor,0,0,221', 'rect,20,88.6,80,18.4',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1,55,87.25,',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,108.75,',
+                    'text,f1_3,145,108.75,',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f2_1,55,130.25,',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2,55,151.75,',
+                    'text,f2_3,145,151.75,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,100',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,0,0,221',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,100',
+                    'rect,50,119.5,170,21.5',
+                    'setDrawColor,0,0,221',
+                    'rect,50,141,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,141,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1407,26 +1578,53 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F2,10,24.2,',
-                    'text,F3,100,24.2,',
-                    'text,F1: f1_1,10,42.6,',
-                    'text,f1_2,20,61,',
-                    'text,f1_3,100,61,',
-                    'text,F1: f2_1,10,79.4,',
-                    'text,f2_2,20,97.8,',
-                    'text,f2_3,100,97.8,',
-                    'setLineWidth,1', 'rect,10,15,90,18.4',
-                    'setLineWidth,1', 'rect,100,15,80,18.4',
-                    'setLineWidth,1', 'setDrawColor,#dddd00', 'rect,10,33.4,170,18.4',
-                    'setLineWidth,1', 'setDrawColor,0,0,221', 'line,20,51.8,100,51.8', 'line,20,51.8,20,70.2', 'line,20,70.2,100,70.2',
-                    'setLineWidth,1', 'setDrawColor,0,0,221', 'line,100,51.8,180,51.8', 'line,180,51.8,180,70.2', 'line,100,70.2,180,70.2',
-                    'setLineWidth,1', 'setDrawColor,#dddd00', 'rect,10,70.2,170,18.4',
-                    'setLineWidth,1', 'setDrawColor,0,0,221', 'line,20,88.6,100,88.6', 'line,20,88.6,20,107', 'line,20,107,100,107',
-                    'setLineWidth,1', 'setDrawColor,0,0,221', 'line,100,88.6,180,88.6', 'line,180,88.6,180,107', 'line,100,107,180,107',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1_1,55,87.25,',
+                    'setFont,helvetica,normal,',
+                    'text,f1_2,55,108.75,',
+                    'text,f1_3,145,108.75,',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f2_1,55,130.25,',
+                    'setFont,helvetica,normal,',
+                    'text,f2_2,55,151.75,',
+                    'text,f2_3,145,151.75,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#dddd00',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,0,0,221',
+                    'line,50,98,140,98',
+                    'line,50,98,50,119.5',
+                    'line,50,119.5,140,119.5',
+                    'setDrawColor,0,0,221',
+                    'line,140,98,220,98',
+                    'line,220,98,220,119.5',
+                    'line,140,119.5,220,119.5',
+                    'setDrawColor,#dddd00',
+                    'rect,50,119.5,170,21.5',
+                    'setDrawColor,0,0,221',
+                    'line,50,141,140,141',
+                    'line,50,141,50,162.5',
+                    'line,50,162.5,140,162.5',
+                    'setDrawColor,0,0,221',
+                    'line,140,141,220,141',
+                    'line,220,141,220,162.5',
+                    'line,140,162.5,220,162.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1458,27 +1656,48 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F3,10,24.2,',
-                    'text,F4,100,24.2,',
-                    'text,F1: f1,10,42.6,',
-                    'text,F2: f1_2,20,61,',
-                    'text,f1_3,30,79.4,',
-                    'text,f1_4,100,79.4,',
-                    'text,F2: f2_2,20,97.8,',
-                    'text,f2_3,30,116.2,',
-                    'text,f2_4,100,116.2,',
-                    'setLineWidth,1', 'rect,10,15,90,18.4',
-                    'setLineWidth,1', 'rect,100,15,80,18.4',
-                    'setLineWidth,1', 'rect,30,70.2,70,18.4',
-                    'setLineWidth,1', 'rect,100,70.2,80,18.4',
-                    'setLineWidth,1', 'rect,30,107,70,18.4',
-                    'setLineWidth,1', 'rect,100,107,80,18.4',
-                    'setLineWidth,1', 'setDrawColor,#dddd00', 'rect,10,33.4,170,18.4',
-                    'setLineWidth,1', 'setDrawColor,#00dddd', 'rect,20,51.8,160,18.4',
-                    'setLineWidth,1', 'rect,20,88.6,160,18.4', 'setDrawColor,#000000'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F4,145,65.75,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,',
+                    'text,F2: f1_2,55,108.75,',
+                    'setFont,helvetica,normal,',
+                    'text,f1_3,55,130.25,',
+                    'text,f1_4,145,130.25,',
+                    'setFont,helvetica,bold,',
+                    'text,F2: f2_2,55,151.75,',
+                    'setFont,helvetica,normal,',
+                    'text,f2_3,55,173.25,',
+                    'text,f2_4,145,173.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#dddd00',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#00dddd',
+                    'rect,50,98,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,119.5,80,21.5',
+                    'setDrawColor,#00dddd',
+                    'rect,50,141,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,162.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,162.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1510,27 +1729,48 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F2,10,24.2,',
-                    'text,F3,90,24.2,',
-                    'text,F4,180,24.2,',
-                    'text,F1: f1,10,42.6,',
-                    'text,f2,20,61,',
-                    'text,f3,90,61,',
-                    'text,f4,180,61,',
-                    'text,Max: f4,180,79.4,',
-                    'setLineWidth,1', 'rect,10,15,80,18.4',
-                    'setLineWidth,1', 'rect,90,15,90,18.4',
-                    'setLineWidth,1', 'rect,180,15,80,18.4',
-                    'setLineWidth,1', 'rect,10,33.4,250,18.4',
-                    'setLineWidth,1', 'rect,20,51.8,70,18.4',
-                    'setLineWidth,1', 'rect,90,51.8,90,18.4',
-                    'setLineWidth,1', 'rect,180,51.8,80,18.4',
-                    'setLineWidth,1', 'setDrawColor,#dddd00', 'rect,20,70.2,70,18.4',
-                    'setLineWidth,1', 'rect,90,70.2,90,18.4',
-                    'setLineWidth,1', 'rect,180,70.2,80,18.4', 'setDrawColor,#000000'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,135,65.75,',
+                    'setTextColor,#979797',
+                    'text,F4,225,65.75,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,',
+                    'setFont,helvetica,normal,',
+                    'text,f2,55,108.75,',
+                    'text,f3,135,108.75,',
+                    'text,f4,225,108.75,',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f4,225,130.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,130,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,250,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,130,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,220,98,80,21.5',
+                    'setDrawColor,#dddd00',
+                    'rect,50,119.5,80,21.5',
+                    'rect,130,119.5,90,21.5',
+                    'rect,220,119.5,80,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1567,27 +1807,48 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F3,10,24.2,',
-                    'text,F4,260,24.2,',
-                    'text,F1: f1 (Max: f1),10,42.6,',
-                    'text,F2: f2 (Max of F1 is f1),20,61,',
-                    'text,f3,30,79.4,',
-                    'text,f4,260,79.4,',
-                    'text,Max: f4,260,97.8,',
-                    'text,Max: f4,260,116.2,',
-                    'setLineWidth,1', 'rect,10,15,250,18.4',
-                    'setLineWidth,1', 'rect,260,15,100,18.4',
-                    'setLineWidth,1', 'rect,10,33.4,350,18.4',
-                    'setLineWidth,1', 'rect,20,51.8,340,18.4',
-                    'setLineWidth,1', 'rect,30,70.2,230,18.4',
-                    'setLineWidth,1', 'rect,260,70.2,100,18.4',
-                    'setLineWidth,1', 'setDrawColor,221,221,0', 'rect,30,88.6,230,18.4',
-                    'setLineWidth,1', 'setDrawColor,221,221,0', 'rect,260,88.6,100,18.4',
-                    'setLineWidth,1', 'setDrawColor,#00dddd', 'rect,20,107,240,18.4',
-                    'setLineWidth,1', 'rect,260,107,100,18.4', 'setDrawColor,#000000'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F3,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F4,305,65.75,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1 (Max: f1),55,87.25,',
+                    'text,F2: f2 (Max of F1 is f1),55,108.75,',
+                    'setFont,helvetica,normal,',
+                    'text,f3,55,130.25,',
+                    'text,f4,305,130.25,',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f4,305,151.75,',
+                    'text,Max: f4,305,173.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,250,21.5',
+                    'setDrawColor,#979797',
+                    'rect,300,55,100,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,350,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,350,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,250,21.5',
+                    'setDrawColor,#979797',
+                    'rect,300,119.5,100,21.5',
+                    'setDrawColor,221,221,0',
+                    'rect,50,141,250,21.5',
+                    'setDrawColor,221,221,0',
+                    'rect,300,141,100,21.5',
+                    'setDrawColor,#00dddd',
+                    'rect,50,162.5,250,21.5',
+                    'rect,300,162.5,100,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1619,20 +1880,35 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,90,24.2,',
-                    'text,f1,10,42.6,',
-                    'text,f2,90,42.6,',
-                    'text,Max: f1,10,61,',
-                    'setLineWidth,1', 'rect,10,15,80,18.4',
-                    'setLineWidth,1', 'rect,90,15,90,18.4',
-                    'setLineWidth,1', 'rect,10,33.4,80,18.4',
-                    'setLineWidth,1', 'rect,90,33.4,90,18.4',
-                    'setLineWidth,1', 'setDrawColor,#dddd00', 'rect,10,51.8,80,18.4',
-                    'setLineWidth,1', 'rect,90,51.8,90,18.4', 'setDrawColor,#000000'
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,135,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1,55,87.25,',
+                    'text,f2,135,87.25,',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f1,55,108.75,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,130,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,130,76.5,90,21.5',
+                    'setDrawColor,#dddd00',
+                    'rect,50,98,80,21.5',
+                    'rect,130,98,90,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1665,23 +1941,41 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F2,10,24.2,',
-                    'text,F3,90,24.2,',
-                    'text,F1: f1,10,42.6,',
-                    'text,f2,20,61,',
-                    'text,f3,90,61,',
-                    'text,Max: f2,10,79.4,',
-                    'setLineWidth,1', 'rect,10,15,80,18.4',
-                    'setLineWidth,1', 'rect,90,15,90,18.4',
-                    'setLineWidth,1', 'rect,10,33.4,170,18.4',
-                    'setLineWidth,1', 'rect,20,51.8,70,18.4',
-                    'setLineWidth,1', 'rect,90,51.8,90,18.4',
-                    'setLineWidth,1', 'setDrawColor,221,221,0', 'rect,10,70.2,80,18.4',
-                    'setLineWidth,1', 'setDrawColor,221,221,0', 'rect,90,70.2,90,18.4',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F3,135,65.75,',
+                    'setTextColor,#000000',
+                    'setFont,helvetica,bold,',
+                    'text,F1: f1,55,87.25,',
+                    'setFont,helvetica,normal,',
+                    'text,f2,55,108.75,',
+                    'text,f3,135,108.75,',
+                    'setFont,helvetica,bold,',
+                    'text,Max: f2,55,130.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,130,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,130,98,90,21.5',
+                    'setDrawColor,221,221,0',
+                    'rect,50,119.5,80,21.5',
+                    'setDrawColor,221,221,0',
+                    'rect,130,119.5,90,21.5',
+                    'setFont,helvetica,normal,',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1707,20 +2001,33 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,',
-                    'text,F1,10,42.6,',
-                    'text,F2,80,42.6,',
-                    'text,f1_1,10,61,',
-                    'text,f2_1,80,61,',
-                    'setLineWidth,1', 'rect,10,33.4,70,18.4',
-                    'setLineWidth,1', 'rect,80,33.4,70,18.4',
-                    'setLineWidth,1', 'rect,10,51.8,70,18.4',
-                    'setLineWidth,1', 'rect,80,51.8,70,18.4',
-                    'setLineWidth,1', 'setDrawColor,#ffff00', 'rect,10,15,140,18.4',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F1,55,87.25,',
+                    'setTextColor,#979797',
+                    'text,F2,125,87.25,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,108.75,',
+                    'text,f2_1,125,108.75,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#ffff00',
+                    'rect,50,55,140,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,70,21.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,70,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,70,21.5',
+                    'setDrawColor,#979797',
+                    'rect,120,98,70,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1754,22 +2061,37 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,',
-                    'text,Band1_1,10,42.6,',
-                    'text,F2,80,51.8,',
-                    'text,F1,10,61,',
-                    'text,f1_1_1,10,79.4,',
-                    'text,f2_1,80,79.4,',
-                    'setLineWidth,1', 'rect,80,33.4,80,36.8',
-                    'setLineWidth,1', 'rect,10,51.8,70,18.4',
-                    'setLineWidth,1', 'rect,10,70.2,70,18.4',
-                    'setLineWidth,1', 'rect,80,70.2,80,18.4',
-                    'setLineWidth,1', 'setDrawColor,221,221,0', 'rect,10,15,150,18.4',
-                    'setLineWidth,1', 'setDrawColor,#ffff00', 'rect,10,33.4,70,18.4',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,Band1_1,55,87.25,',
+                    'setTextColor,#979797',
+                    'text,F2,125,98,',
+                    'setTextColor,#979797',
+                    'text,F1,55,108.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1_1,55,130.25,',
+                    'text,f2_1,125,130.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,221,221,0',
+                    'rect,50,55,150,21.5',
+                    'setDrawColor,#ffff00',
+                    'rect,50,76.5,70,21.5',
+                    'setDrawColor,#979797',
+                    'rect,120,76.5,80,43',
+                    'setDrawColor,#979797',
+                    'rect,50,98,70,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,70,21.5',
+                    'setDrawColor,#979797',
+                    'rect,120,119.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1804,22 +2126,37 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,',
-                    'text,F1,10,51.8,',
-                    'text,Band1_2,70,42.6,',
-                    'text,F2,70,61,',
-                    'text,f1_1,10,79.4,',
-                    'text,f2_1_1,70,79.4,',
-                    'setLineWidth,1', 'rect,10,33.4,60,36.8',
-                    'setLineWidth,1', 'rect,70,51.8,70,18.4',
-                    'setLineWidth,1', 'rect,10,70.2,60,18.4',
-                    'setLineWidth,1', 'rect,70,70.2,70,18.4',
-                    'setLineWidth,1', 'setDrawColor,221,221,0', 'rect,10,15,130,18.4',
-                    'setLineWidth,1', 'setDrawColor,#ffff00', 'rect,70,33.4,70,18.4',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F1,55,98,',
+                    'setTextColor,#979797',
+                    'text,Band1_2,115,87.25,',
+                    'setTextColor,#979797',
+                    'text,F2,115,108.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,130.25,',
+                    'text,f2_1_1,115,130.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,221,221,0',
+                    'rect,50,55,130,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,60,43',
+                    'setDrawColor,#ffff00',
+                    'rect,110,76.5,70,21.5',
+                    'setDrawColor,#979797',
+                    'rect,110,98,70,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,60,21.5',
+                    'setDrawColor,#979797',
+                    'rect,110,119.5,70,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1855,22 +2192,39 @@ const JSPdfBorderColorsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,',
-                    'text,F1,10,51.8,',
-                    'text,Band1_2,70,42.6,',
-                    'text,F2,70,61,',
-                    'text,f1_1,10,79.4,',
-                    'text,f2_1_1,70,79.4,',
-                    'setLineWidth,1', 'rect,10,33.4,60,36.8',
-                    'setLineWidth,1', 'rect,70,51.8,70,18.4',
-                    'setLineWidth,1', 'rect,10,70.2,60,18.4',
-                    'setLineWidth,1', 'rect,70,70.2,70,18.4',
-                    'setLineWidth,1', 'setDrawColor,221,221,0', 'rect,10,15,130,18.4',
-                    'setLineWidth,1', 'setDrawColor,#ffff00', 'line,70,33.4,70,51.8', 'line,140,33.4,140,51.8', 'line,70,51.8,140,51.8',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,Band1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F1,55,98,',
+                    'setTextColor,#979797',
+                    'text,Band1_2,115,87.25,',
+                    'setTextColor,#979797',
+                    'text,F2,115,108.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,130.25,',
+                    'text,f2_1_1,115,130.25,',
+                    'setLineWidth,0.5',
+                    'setDrawColor,221,221,0',
+                    'rect,50,55,130,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,60,43',
+                    'setDrawColor,#ffff00',
+                    'line,110,76.5,110,98',
+                    'line,180,76.5,180,98',
+                    'line,110,98,180,98',
+                    'setDrawColor,#979797',
+                    'rect,110,98,70,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,60,21.5',
+                    'setDrawColor,#979797',
+                    'rect,110,119.5,70,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
                     'setDrawColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

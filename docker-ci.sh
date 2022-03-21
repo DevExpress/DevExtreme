@@ -19,6 +19,20 @@ function run_ts {
 }
 
 function run_test {
+    iteration=0
+
+    while [ $iteration -ne 3 ]
+    do
+        iteration=$(($iteration+1))
+        if run_test_impl; then
+            exit 0
+        fi
+    done
+
+    exit 1
+}
+
+function run_test_impl {
     local port=`node -e "console.log(require('./ports.json').qunit)"`
     local url="http://localhost:$port/run?notimers=true"
     local runner_pid
@@ -54,14 +68,14 @@ function run_test {
         for i in {15..0}; do
             if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
                 echo "Runner exited unexpectedly"
-                exit 1
+                return 1
             fi
 
             httping -qsc1 "$url" && break
 
             if [ $i -eq 0 ]; then
                 echo "Runner not reached"
-                exit 1
+                return 1
             fi
 
             sleep 1
@@ -74,6 +88,8 @@ function run_test {
     case "$BROWSER" in
 
         "firefox")
+            kill -9 $(ps -x | grep firefox | awk '{print $1}')
+
             local firefox_args="$url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
@@ -128,7 +144,7 @@ function run_test {
                 elif [ "$MOBILE_UA" == "android6" ]; then
                     user_agent="Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Mobile Safari/537.36"
                 else
-                    exit 1
+                    return 1
                 fi
 
                 echo "Mobile user agent: $MOBILE_UA"
@@ -158,7 +174,7 @@ function run_test {
 
     start_runner_watchdog $runner_pid
     wait $runner_pid || runner_result=1
-    exit $runner_result
+    return $runner_result
 }
 
 function run_test_jest {
@@ -173,7 +189,7 @@ function start_runner_watchdog {
     local last_suite_time=unknown
 
     while true; do
-        sleep 600
+        sleep 180
 
         if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
             echo "Runner stalled"

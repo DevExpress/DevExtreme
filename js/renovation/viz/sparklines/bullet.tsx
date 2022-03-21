@@ -40,8 +40,6 @@ import {
   ArgumentAxisRange, ValueAxisRange, BulletScaleProps,
 } from './types';
 
-import Number from '../../../core/polyfills/number';
-
 const TARGET_MIN_Y = 0.02;
 const TARGET_MAX_Y = 0.98;
 const BAR_VALUE_MIN_Y = 0.1;

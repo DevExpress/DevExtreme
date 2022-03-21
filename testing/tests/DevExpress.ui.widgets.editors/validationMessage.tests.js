@@ -77,7 +77,7 @@ QUnit.module('options', moduleSetup, () => {
             this._validationMessage.option('target', $target);
             const targetRect = $target.get(0).getBoundingClientRect();
 
-            const messagePositionLeft = this._validationMessage.$wrapper().get(0).getBoundingClientRect().left;
+            const messagePositionLeft = this._validationMessage.$content().get(0).getBoundingClientRect().left;
             assert.strictEqual(messagePositionLeft, targetRect.left, 'position is recalculated');
         } finally {
             $target.remove();

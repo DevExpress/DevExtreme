@@ -263,7 +263,7 @@ const FocusController = core.ViewController.inherit((function() {
                 };
                 that.component.on('contentReady', triggerUpdateFocusedRow);
 
-                scrollable.scrollTo({ y: offset });
+                this.getView('rowsView').scrollTopPosition(offset);
             } else {
                 deferred.resolve(-1);
             }
@@ -553,6 +553,8 @@ export const focusModule = {
                             this.processUpdateFocusedRow(e);
                         } else if(e.changeType === 'append' || e.changeType === 'prepend') {
                             this._updatePageIndexes();
+                        } else if(e.changeType === 'update' && e.repaintChangesOnly) {
+                            this.processUpdateFocusedRow(e);
                         }
                     }
                 },
@@ -863,13 +865,13 @@ export const focusModule = {
                     if(scrollable && $row.length) {
                         const position = scrollable.getScrollElementPosition($row, 'vertical');
 
-                        return this._scrollTopPosition(position);
+                        return this.scrollTopPosition(position);
                     }
 
                     return (new Deferred()).resolve();
                 },
 
-                _scrollTopPosition: function(scrollTop) {
+                scrollTopPosition: function(scrollTop) {
                     const d = new Deferred();
                     const scrollable = this.getScrollable();
 
@@ -882,6 +884,7 @@ export const focusModule = {
 
                         if(scrollTop !== currentScrollTop) {
                             scrollable.on('scroll', scrollHandler);
+                            this._dataController.resetFilterApplying();
                             scrollable.scrollTo({ top: scrollTop });
 
                             return d.promise();

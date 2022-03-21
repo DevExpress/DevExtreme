@@ -1,7 +1,6 @@
 import { getOuterHeight } from '../core/utils/size';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
-import Promise from '../core/polyfills/promise';
 import $ from '../core/renderer';
 import { Deferred } from '../core/utils/deferred';
 import { parseHTML } from '../core/utils/html_parser';

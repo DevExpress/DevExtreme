@@ -3625,6 +3625,7 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type_function_param2_field9 groupIndex:number
      * @type_function_param2_field10 isExpanded:boolean
      * @public
+     * @deprecated dxDataGridOptions.dataRowTemplate
      */
     rowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData<TRowData, TKey>) => any);
         /**

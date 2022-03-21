@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 
 const JSPdfStylesTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -34,16 +34,21 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -67,20 +72,25 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,128',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
                 const _rowOptions = {
                     headerStyles: { backgroundColor: 128 },
                 };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions: _rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions: _rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -104,20 +114,25 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128,128,128',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,128,128,128',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
                 const _rowOptions = {
                     headerStyles: { backgroundColor: { ch1: 128, ch2: 128, ch3: 128 } },
                 };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions: _rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions: _rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -141,20 +156,25 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,0,0,1,0',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,0,0,1,0',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
                 const _rowOptions = {
                     headerStyles: { backgroundColor: { ch1: 0, ch2: 0, ch3: 1, ch4: 0 } },
                 };
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions: _rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions: _rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -185,16 +205,21 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#ffff00',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -225,16 +250,21 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -265,16 +295,21 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,128,128,128',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -305,16 +340,21 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,0,0,1,0',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -345,18 +385,23 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setFillColor,#ffff00',
-                    'rect,10,33.4,90,18.4,F',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,50,76.5,90,21.5,F',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -387,18 +432,23 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setFillColor,128',
-                    'rect,10,33.4,90,18.4,F',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,50,76.5,90,21.5,F',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -429,18 +479,23 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setFillColor,255,255,0',
-                    'rect,10,33.4,90,18.4,F',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,50,76.5,90,21.5,F',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -471,18 +526,23 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080',
-                    'rect,10,15,90,18.4,F',
-                    'text,F1,10,24.2,',
+                    'rect,50,55,90,21.5,F',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setFillColor,#808080',
-                    'rect,100,15,80,18.4,F',
-                    'text,F2,100,24.2,',
+                    'rect,140,55,80,21.5,F',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setFillColor,0,0,1,0',
-                    'rect,10,33.4,90,18.4,F',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'rect,50,76.5,90,21.5,F',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -517,14 +577,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,#0000ff',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -555,14 +618,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,128',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -593,14 +659,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,0,0,255',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -631,14 +700,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,0,0,1,0',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -668,15 +740,20 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,#0000ff',
-                    'text,f1_2,100,42.6,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -706,15 +783,20 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,128',
-                    'text,f1_2,100,42.6,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -744,15 +826,20 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,0,0,255',
-                    'text,f1_2,100,42.6,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -782,15 +869,20 @@ const JSPdfStylesTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,24.2,',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
+                    'setTextColor,#000000',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,0,0,1,0',
-                    'text,f1_2,100,42.6,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -824,16 +916,19 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,128',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
+                    'setTextColor,#979797',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,F2,100,24.2,',
-                    'text,f1_1,10,42.6,',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,0,0,255',
-                    'text,f1_2,100,42.6,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -864,15 +959,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,128',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setTextColor,0,0,255',
-                    'text,F2,100,24.2,',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -908,15 +1005,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,#ff0000',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setTextColor,#0000ff',
-                    'text,F2,100,24.2,',
+                    'text,F2,145,65.75,',
                     'setTextColor,#000000',
-                    'text,f1_1,10,42.6,',
-                    'text,f1_2,100,42.6,'
+                    'text,f1_1,55,87.25,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -949,17 +1048,19 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setTextColor,128',
-                    'text,F1,10,24.2,',
+                    'setFontSize,10',
+                    'text,F1,55,65.75,',
                     'setTextColor,0,0,255',
-                    'text,F2,100,24.2,',
+                    'text,F2,145,65.75,',
                     'setTextColor,128',
-                    'text,f1_1,10,42.6,',
+                    'text,f1_1,55,87.25,',
                     'setTextColor,0,0,255',
-                    'text,f1_2,100,42.6,',
+                    'text,f1_2,145,87.25,',
+                    'setFontSize,16',
                     'setTextColor,#000000'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -980,15 +1081,20 @@ const JSPdfStylesTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
+                    'text,line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1005,15 +1111,20 @@ const JSPdfStylesTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
+                    'text,line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1030,17 +1141,112 @@ const JSPdfStylesTests = {
                 });
 
                 const expectedLog = [
+                    'setTextColor,#979797',
                     'setFontSize,20',
-                    'text,line,10,26.5,{baseline:middle}',
-                    'setLineWidth,1',
-                    'rect,10,15,100,23',
+                    'text,line,55,71.5,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,33',
                     'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
                 ];
 
                 const customizeCell = ({ pdfCell }) => { pdfCell.font = { size: 10 }; };
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 col - 1 text line. customizeCell.set bold style', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: false,
+                    columns: [{ caption: 'line' }]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFont,helvetica,bold,',
+                    'text,line,55,69.2,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,100,28.4',
+                    'setFont,helvetica,normal,',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000',
+                    'setTextColor,#000000'
+                ];
+
+                const customizeCell = ({ pdfCell }) => { pdfCell.font = { style: 'bold' }; };
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 col - 1 text line. customizeCell undo bold style', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        { f1: 'f1', f2: 'f1_2', f3: 'f1_3' },
+                        { f1: 'f1', f2: 'f2_2', f3: 'f2_3' },
+                    ],
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F2,55,65.75,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,145,65.75,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,F1: f1,55,87.25,{baseline:middle}',
+                    'text,f1_2,55,108.75,{baseline:middle}',
+                    'text,f1_3,145,108.75,{baseline:middle}',
+                    'text,f2_2,55,130.25,{baseline:middle}',
+                    'text,f2_3,145,130.25,{baseline:middle}',
+                    'setLineWidth,0.5',
+                    'setDrawColor,#979797',
+                    'rect,50,55,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,55,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,76.5,170,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,98,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,98,80,21.5',
+                    'setDrawColor,#979797',
+                    'rect,50,119.5,90,21.5',
+                    'setDrawColor,#979797',
+                    'rect,140,119.5,80,21.5',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                const customizeCell = ({ pdfCell }) => {
+                    if(pdfCell.font.style === 'bold') {
+                        pdfCell.font.style = 'normal';
+                    }
+                };
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });

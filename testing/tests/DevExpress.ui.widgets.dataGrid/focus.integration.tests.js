@@ -1759,6 +1759,56 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             assert.equal(dataGrid.option('focusedRowKey'), 80, 'focused row key');
             assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'focused row is rendered');
         });
+
+        // T1062536
+        QUnit.testInActiveWindow(`autoNavigateToFocusedRow should work after resetting the filter when scrolling.mode == "${scrollingMode}"`, function(assert) {
+            // arrange
+            const items = [];
+
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+
+            const dataGrid = createDataGrid({
+                dataSource: items,
+                keyExpr: 'id',
+                height: 500,
+                scrolling: {
+                    mode: scrollingMode,
+                    useNative: false
+                },
+                paging: {
+                    pageSize: 20
+                },
+                focusedRowEnabled: true,
+                autoNavigateToFocusedRow: true
+            });
+
+            this.clock.tick(100);
+
+            dataGrid.columnOption(1, 'filterValue', 'Name 17');
+            this.clock.tick(100);
+
+            // act
+            $(dataGrid.getCellElement(0, 0)).trigger('dxpointerdown').trigger('dxclick');
+            this.clock.tick(500);
+
+            // assert
+            assert.equal(dataGrid.option('focusedRowKey'), 17, 'focused row key');
+
+            // act
+            dataGrid.columnOption(1, 'filterValue', '');
+            this.clock.tick(100);
+            $(dataGrid.getScrollable().container()).trigger('scroll');
+            this.clock.tick(500);
+
+            // assert
+            assert.equal(dataGrid.option('focusedRowKey'), 17, 'focused row key');
+            assert.notEqual(dataGrid.getScrollable().scrollTop(), 0, 'scrollTop > 0');
+        });
     });
 
     ['virtual', 'infinite'].forEach(mode => {
@@ -1781,6 +1831,9 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
                 keyExpr: 'ID',
                 remoteOperations: true,
                 height: 300,
+                editing: {
+                    mode: 'batch'
+                },
                 scrolling: {
                     mode: mode,
                     rowRenderingMode: 'virtual',
@@ -3974,6 +4027,66 @@ QUnit.module('View\'s focus', {
             // assert
             assert.ok($(this.dataGrid.getCellElement(getVisibleRowIndex(rowIndex), 0)).hasClass('dx-focused'), `Cell[${rowIndex}, 0] is focused`);
         }
+    });
+
+    QUnit.test('First cell should have tabindex when repaintChangesOnly is enabled', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [{ id: 1, name: 'name 1' }],
+            keyExpr: 'id',
+            repaintChangesOnly: true
+        });
+        this.clock.tick(300);
+
+        // assert
+        assert.strictEqual($(this.dataGrid.getCellElement(0, 0)).attr('tabindex'), '0', 'tabindex is applied');
+    });
+
+    [true, false].forEach(withColumns => {
+        QUnit.testInActiveWindow(`Row should be focused correctly when dataSource and focusedRowKey are changed simultaneously ${withColumns ? 'with columns' : 'without columns'} (T1062545)`, function(assert) {
+            // arrange
+            const focusedRowIndices = [];
+            const config = {
+                dataSource: [
+                    { id: 1, name: 'name 1' },
+                    { id: 3, name: 'name 3' }
+                ],
+                keyExpr: 'id',
+                repaintChangesOnly: true,
+                focusedRowEnabled: true,
+                focusedRowKey: 1,
+                onFocusedRowChanged: function(e) {
+                    focusedRowIndices.push(e.rowIndex);
+                }
+            };
+            if(withColumns) {
+                config.columns = [
+                    {
+                        dataField: 'name'
+                    }
+                ];
+            }
+            this.dataGrid.option(config);
+            this.clock.tick(300);
+
+            // assert
+            assert.deepEqual(focusedRowIndices, [0], 'initial focused row indices');
+
+            // act
+            this.dataGrid.option('dataSource', [
+                { id: 1, name: 'name 1' },
+                { id: 2, name: 'name 2' },
+                { id: 3, name: 'name 3' }
+            ]);
+            this.dataGrid.option('focusedRowKey', 2);
+            this.clock.tick(300);
+            const $focusedRowElement = $(this.dataGrid.element()).find('.dx-row-focused');
+
+            // assert
+            assert.deepEqual(focusedRowIndices, [0, 1], 'focused row indices');
+            assert.equal($focusedRowElement.length, 1, 'one row is marked as focused');
+            assert.strictEqual($focusedRowElement.attr('aria-rowindex'), '2', 'aria-rowindex');
+        });
     });
 });
 

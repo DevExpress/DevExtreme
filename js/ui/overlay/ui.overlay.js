@@ -13,7 +13,7 @@ import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isFunction, isObject } from '../../core/utils/type';
+import { isFunction, isObject, isWindow } from '../../core/utils/type';
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import errors from '../../core/errors';
@@ -27,7 +27,6 @@ import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../event
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import { tabbable } from '../widget/selectors';
-import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
@@ -40,7 +39,6 @@ const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
-const OVERLAY_MODAL_CLASS = 'dx-overlay-modal';
 const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
@@ -149,6 +147,8 @@ const Overlay = Widget.inherit({
             restorePosition: true,
 
             container: undefined,
+
+            visualContainer: undefined,
 
             // NOTE: private options
             hideTopOverlayHandler: () => { this.hide(); },
@@ -642,7 +642,6 @@ const Overlay = Widget.inherit({
     },
 
     _toggleShading: function(visible) {
-        this._$wrapper.toggleClass(OVERLAY_MODAL_CLASS, this.option('shading') && !this.option('container'));
         this._$wrapper.toggleClass(OVERLAY_SHADER_CLASS, visible && this.option('shading'));
 
         this._$wrapper.css('backgroundColor', this.option('shading') ? this.option('shadingColor') : '');
@@ -848,11 +847,12 @@ const Overlay = Widget.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { container, _fixWrapperPosition, restorePosition } = this.option();
+        const { container, visualContainer, _fixWrapperPosition, restorePosition } = this.option();
         // NOTE: position is passed to controller in renderGeometry to prevent window field using in server side mode
 
         return {
             container,
+            visualContainer,
             $root: this.$element(),
             $content: this._$content,
             $wrapper: this._$wrapper,
@@ -913,21 +913,8 @@ const Overlay = Widget.inherit({
     },
 
     _moveToContainer: function() {
-        this._attachWrapperToContainer();
-
+        this._$wrapper.appendTo(this._positionController.$container);
         this._$content.appendTo(this._$wrapper);
-    },
-
-    _attachWrapperToContainer: function() {
-        const $element = this.$element();
-        const containerDefined = this.option('container') !== undefined;
-        let renderContainer = containerDefined ? this._positionController.$container : swatch.getSwatchContainer($element);
-
-        if(renderContainer && renderContainer[0] === $element.parent()[0]) {
-            renderContainer = $element;
-        }
-
-        this._$wrapper.appendTo(renderContainer);
     },
 
     _renderGeometry: function(options) {
@@ -951,7 +938,7 @@ const Overlay = Widget.inherit({
     },
 
     _isAllWindowCovered: function() {
-        return this._positionController.isAllWindowCoveredByWrapper() && this.option('shading');
+        return isWindow(this._positionController.$visualContainer.get(0)) && this.option('shading');
     },
 
     _toggleSafariScrolling: function() {
@@ -986,18 +973,12 @@ const Overlay = Widget.inherit({
     },
 
     _renderWrapperDimensions: function() {
-        let wrapperWidth;
-        let wrapperHeight;
-        const $container = this._positionController._$wrapperCoveredElement;
-
-        if(!$container) {
-            return;
-        }
-
-        const isWindow = this._positionController.isAllWindowCoveredByWrapper();
+        const $visualContainer = this._positionController.$visualContainer;
         const documentElement = domAdapter.getDocumentElement();
-        wrapperWidth = isWindow ? documentElement.clientWidth : getOuterWidth($container),
-        wrapperHeight = isWindow ? window.innerHeight : getOuterHeight($container);
+        const isVisualContainerWindow = isWindow($visualContainer.get(0));
+
+        const wrapperWidth = isVisualContainerWindow ? documentElement.clientWidth : getOuterWidth($visualContainer);
+        const wrapperHeight = isVisualContainerWindow ? window.innerHeight : getOuterHeight($visualContainer);
 
         this._$wrapper.css({
             width: wrapperWidth,
@@ -1092,7 +1073,7 @@ const Overlay = Widget.inherit({
         this.callBase();
 
         this._toggleSafariScrolling();
-        zIndexPool.remove(this._zIndex);
+        this.option('visible') && zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
     },
@@ -1147,6 +1128,11 @@ const Overlay = Widget.inherit({
             case 'container':
                 this._positionController.updateContainer(value);
                 this._invalidate();
+                this._toggleSafariScrolling();
+                break;
+            case 'visualContainer':
+                this._positionController.updateVisualContainer(value);
+                this._renderWrapper();
                 this._toggleSafariScrolling();
                 break;
             case 'innerOverlay':

@@ -22,6 +22,7 @@ export const viewFunction = ({
     showReducedIconTooltip,
     hideReducedIconTooltip,
     onAppointmentClick,
+    onAppointmentDoubleClick,
     overflowIndicatorTemplate,
   },
 }: AppointmentLayout): JSX.Element => (
@@ -35,6 +36,7 @@ export const viewFunction = ({
           key={item.key}
           groups={groups}
           onItemClick={onAppointmentClick}
+          onItemDoubleClick={onAppointmentDoubleClick}
           showReducedIconTooltip={showReducedIconTooltip}
           hideReducedIconTooltip={hideReducedIconTooltip}
         />
@@ -44,6 +46,7 @@ export const viewFunction = ({
       overflowIndicators.map((item) => (
         <OverflowIndicator
           viewModel={item}
+          groups={groups}
           overflowIndicatorTemplate={overflowIndicatorTemplate}
           key={item.key}
         />

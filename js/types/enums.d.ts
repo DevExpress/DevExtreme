@@ -470,7 +470,9 @@ export type GanttToolbarItem = 'separator' | 'undo' | 'redo' | 'expandAll' | 'co
 
 export type GanttContextMenuItem = 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails';
 
-export type GanttScaleType = 'auto' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+export type GanttScaleType = 'auto' | 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+
+export type GanttRenderScaleType = 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years' | 'fiveYears';
 
 export type GanttSortingMode = 'multiple' | 'none' | 'single';
 

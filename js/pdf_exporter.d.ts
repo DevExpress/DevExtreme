@@ -57,6 +57,84 @@ export interface PdfDataGridCell {
     value?: any;
 }
 
+export interface PdfCell {
+  /**
+   * @docid
+   * @default '#FFFFFF'
+   * @public
+   */
+  backgroundColor?: string;
+  /**
+   * @docid
+   * @public
+   */
+  font?: {
+    /**
+     * @docid
+     * @default 10
+     */
+    size?: number;
+    /**
+     * @docid
+     */
+    name?: string;
+    /**
+     * @docid
+     * @default 'normal'
+     */
+    style?: 'normal' | 'bold' | 'italic';
+  };
+  /**
+   * @docid
+   * @public
+   */
+  horizontalAlign?: 'left' | 'center' | 'right';
+  /**
+   * @docid
+   * @public
+   */
+  padding?: {
+    /**
+     * @docid
+     */
+    top?: number;
+    /**
+     * @docid
+     */
+    left?: number;
+    /**
+      * @docid
+      */
+    right?: number;
+    /**
+      * @docid
+      */
+    bottom?: number;
+  };
+  /**
+   * @docid
+   * @public
+   */
+  text?: string;
+  /**
+   * @docid
+   * @default '#000000'
+   * @public
+   */
+  textColor?: string;
+  /**
+   * @docid
+   * @default 'middle'
+   * @public
+   */
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  /**
+   * @docid
+   * @public
+   */
+  wordWrapEnabled?: boolean;
+}
+
 /**
  * @docid
  * @namespace DevExpress.pdfExporter
@@ -73,13 +151,75 @@ export interface PdfExportDataGridProps {
      * @default undefined
      * @public
      */
-    autoTableOptions?: object;
+    component?: dxDataGrid;
+    /**
+     * @docid
+     * @public
+     */
+    topLeft?: {
+      /**
+       * @docid
+       * @default 0
+       */
+      x?: number;
+      /**
+       * @docid
+       * @default 0
+       */
+      y?: number;
+    };
+    /**
+     * @docid
+     * @default '#979797'
+     * @public
+     */
+    borderColor?: string;
+    /**
+     * @docid
+     * @default 0.5
+     * @public
+     */
+    borderWidth?: number;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    component?: dxDataGrid;
+    columnWidths?: Array<number>;
+    /**
+     * @docid
+     * @default 0
+     * @public
+     */
+    indent?: number;
+    /**
+     * @docid
+     * @public
+     */
+    margin?: {
+      /**
+       * @docid
+       */
+      top?: number;
+      /**
+       * @docid
+       */
+      left?: number;
+      /**
+        * @docid
+        */
+      right?: number;
+      /**
+        * @docid
+        */
+      bottom?: number;
+    };
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    repeatHeaders?: boolean;
     /**
      * @docid
      * @default false
@@ -87,18 +227,32 @@ export interface PdfExportDataGridProps {
      */
     selectedRowsOnly?: boolean;
     /**
-     * @docid
-     * @default true
-     * @public
-     */
-    keepColumnWidths?: boolean;
+      * @docid
+      * @type_function_param1 options:Object
+      * @type_function_param1_field1 gridCell:PdfDataGridCell
+      * @type_function_param1_field2 pdfCell:PdfCell
+      * @type_function_param1_field3 doc:object
+      * @type_function_param1_field4 rect:object
+      * @type_function_param1_field5 cancel:boolean
+      * @public
+      */
+    customDrawCell?: ((options: { gridCell?: PdfDataGridCell; pdfCell?: PdfCell; doc?: any; rect?: { x: number; y: number; h: number; w: number }; cancel?: boolean }) => void);
     /**
      * @docid
      * @type_function_param1 options:Object
-     * @type_function_param1_field2 pdfCell:Object
+     * @type_function_param1_field1 gridCell:PdfDataGridCell
+     * @type_function_param1_field2 pdfCell:PdfCell
      * @public
      */
-    customizeCell?: ((options: { gridCell?: PdfDataGridCell; pdfCell?: any }) => void);
+    customizeCell?: ((options: { gridCell?: PdfDataGridCell; pdfCell?: PdfCell }) => void);
+    /**
+     * @docid
+     * @type_function_param1 options:Object
+     * @type_function_param1_field1 rowCells:Array<PdfCell>
+     * @type_function_param1_field2 rowHeight:number
+     * @public
+     */
+    onRowExporting?: ((options: { rowCells?: Array<PdfCell>; rowHeight?: number }) => void);
     /**
      * @docid
      * @public
@@ -197,12 +351,14 @@ export interface PdfExportGanttFont {
   /**
   * @docid
   * @default 'normal'
+  * @acceptValues "bold" | "normal" | "italic"
   * @public
   */
   style?: string;
   /**
   * @docid
   * @default undefined
+  * @acceptValues  "normal" | "bold" | 400 | 700
   * @public
   */
   weight?: string | number;

@@ -3,12 +3,14 @@ import { mount } from 'enzyme';
 import each from 'jest-each';
 import { Paging, PagingProps, viewFunction as PagingView } from '../paging';
 import {
-  PageIndex, PageSize, SetPageIndex, SetPageSize, PageCount,
+  PageIndex, PageSize, SetPageIndex, SetPageSize, PageCount, PagingEnabled,
+  ApplyPagingToVisibleItems, AddPagingToLoadOptions,
 } from '../plugins';
 import { generateData } from '../../__tests__/test_data';
 import { Plugins } from '../../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../../utils/plugin/value_setter';
-import { TotalCount, VisibleItems } from '../../data_grid_light';
+import { GetterExtender } from '../../../../../utils/plugin/getter_extender';
+import { TotalCount, LocalVisibleItems, RemoteOperations } from '../../data_grid_light';
 
 describe('Paging', () => {
   describe('View', () => {
@@ -28,76 +30,17 @@ describe('Paging', () => {
       expect(tree.find(ValueSetter).at(1).props()).toEqual({
         type: PageSize, value: viewProps.pageSize,
       });
-      // expect(tree.find(ValueSetter).at(2).props()).toEqual({
-      //   type: SetPageIndex, value: viewProps.setPageIndex,
-      // });
-      // expect(tree.find(GetterExtender).at(0).props()).toEqual({
-      //   type: VisibleItems, order: 1, func: viewProps.calculateVisibleItems,
-      // });
-    });
-  });
-
-  describe('Methods', () => {
-    describe('calculateVisibleItems', () => {
-      const dataSource = generateData(20);
-
-      it('should return full dataSource if paging is not enabled', () => {
-        const paging = new Paging({
-          enabled: false,
-        });
-
-        expect(paging.calculateVisibleItems(dataSource)).toEqual(dataSource);
+      expect(tree.find(ValueSetter).at(2).props()).toEqual({
+        type: PagingEnabled, value: true,
       });
-
-      it('should return full dataSource if pageSize is "all"', () => {
-        const paging = new Paging({
-          enabled: true,
-          pageSize: 'all',
-        });
-
-        expect(paging.calculateVisibleItems(dataSource)).toEqual(dataSource);
+      expect(tree.find(ValueSetter).at(3).props()).toEqual({
+        type: SetPageIndex, value: viewProps.setPageIndex,
       });
-
-      it('should return first page', () => {
-        const paging = new Paging({
-          enabled: true,
-          pageSize: 5,
-          pageIndex: 0,
-        });
-
-        expect(
-          paging.calculateVisibleItems(dataSource),
-        ).toEqual(
-          dataSource.slice(0, 5),
-        );
+      expect(tree.find(ValueSetter).at(4).props()).toEqual({
+        type: SetPageSize, value: viewProps.setPageSize,
       });
-
-      it('should return second page', () => {
-        const paging = new Paging({
-          enabled: true,
-          pageSize: 5,
-          pageIndex: 1,
-        });
-
-        expect(
-          paging.calculateVisibleItems(dataSource),
-        ).toEqual(
-          dataSource.slice(5, 10),
-        );
-      });
-
-      it('should return last page if it is not full', () => {
-        const paging = new Paging({
-          enabled: true,
-          pageSize: 15,
-          pageIndex: 1,
-        });
-
-        expect(
-          paging.calculateVisibleItems(dataSource),
-        ).toEqual(
-          dataSource.slice(15, 20),
-        );
+      expect(tree.find(GetterExtender).at(0).props()).toEqual({
+        type: LocalVisibleItems, order: 1, value: ApplyPagingToVisibleItems,
       });
     });
   });
@@ -142,45 +85,6 @@ describe('Paging', () => {
     });
   });
 
-  describe('Effects', () => {
-    it('updateVisibleItems', () => {
-      const paging = new Paging({
-        enabled: true,
-        pageIndex: 1,
-        pageSize: 2,
-      });
-      paging.plugins = new Plugins();
-      paging.plugins.extend(VisibleItems, -1, () => [
-        { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 },
-      ]);
-      paging.updateVisibleItems();
-
-      expect(paging.plugins.getValue(VisibleItems)).toEqual([{ id: 3 }, { id: 4 }]);
-    });
-
-    it('updatePageIndexSetter', () => {
-      const paging = new Paging({
-        pageIndex: 0,
-      });
-      paging.plugins = new Plugins();
-      paging.updatePageIndexSetter();
-      paging.plugins.callAction(SetPageIndex, 3);
-
-      expect(paging.props.pageIndex).toBe(3);
-    });
-
-    it('updatePageSizeSetter', () => {
-      const paging = new Paging({
-        pageSize: 10,
-      });
-      paging.plugins = new Plugins();
-      paging.updatePageSizeSetter();
-      paging.plugins.callAction(SetPageSize, 20);
-
-      expect(paging.props.pageSize).toBe(20);
-    });
-  });
-
   describe('Selectors', () => {
     each`
         totalCount    | pageSize    | pageCount  
@@ -203,5 +107,106 @@ describe('Paging', () => {
           expect(plugins.getValue(PageCount)).toEqual(pageCount);
         });
       });
+
+    describe('calculateVisibleItems', () => {
+      const dataSource = generateData(20);
+
+      const plugins = new Plugins();
+
+      beforeEach(() => {
+        plugins.extend(LocalVisibleItems, -1, () => dataSource);
+        plugins.set(PagingEnabled, true);
+        plugins.set(PageIndex, 0);
+        plugins.set(PageSize, 20);
+      });
+
+      it('should return full dataSource if paging is not enabled', () => {
+        plugins.set(PagingEnabled, false);
+
+        expect(plugins.getValue(ApplyPagingToVisibleItems)).toEqual(dataSource);
+      });
+
+      it('should return full dataSource if pageSize is "all"', () => {
+        plugins.set(PageSize, 'all');
+
+        expect(plugins.getValue(ApplyPagingToVisibleItems)).toEqual(dataSource);
+      });
+
+      it('should return first page', () => {
+        plugins.set(PageIndex, 0);
+        plugins.set(PageSize, 5);
+
+        expect(
+          plugins.getValue(ApplyPagingToVisibleItems),
+        ).toEqual(
+          dataSource.slice(0, 5),
+        );
+      });
+
+      it('should return second page', () => {
+        plugins.set(PageIndex, 1);
+        plugins.set(PageSize, 5);
+
+        expect(
+          plugins.getValue(ApplyPagingToVisibleItems),
+        ).toEqual(
+          dataSource.slice(5, 10),
+        );
+      });
+
+      it('should return last page if it is not full', () => {
+        plugins.set(PageIndex, 1);
+        plugins.set(PageSize, 15);
+
+        expect(
+          plugins.getValue(ApplyPagingToVisibleItems),
+        ).toEqual(
+          dataSource.slice(15, 20),
+        );
+      });
+    });
+
+    describe('AddPagingToLoadOptions', () => {
+      const plugins = new Plugins();
+
+      beforeEach(() => {
+        plugins.set(PagingEnabled, true);
+        plugins.set(PageIndex, 0);
+        plugins.set(PageSize, 20);
+      });
+
+      it('should return empty object if remoteOperations is false', () => {
+        plugins.set(RemoteOperations, false);
+
+        expect(plugins.getValue(AddPagingToLoadOptions)).toEqual({});
+      });
+
+      it('should return empty object if paging is not enabled', () => {
+        plugins.set(RemoteOperations, true);
+        plugins.set(PagingEnabled, false);
+
+        expect(plugins.getValue(AddPagingToLoadOptions)).toEqual({});
+      });
+
+      it('should return full dataSource if pageSize is "all"', () => {
+        plugins.set(RemoteOperations, true);
+        plugins.set(PageSize, 'all');
+
+        expect(plugins.getValue(AddPagingToLoadOptions)).toEqual({});
+      });
+
+      it('should return object with skip/take/requireTotalCount fields', () => {
+        plugins.set(PageIndex, 2);
+        plugins.set(PageSize, 5);
+
+        expect(
+          plugins.getValue(AddPagingToLoadOptions),
+        ).toEqual({
+          skip: 10,
+          take: 5,
+          requireTotalCount: true,
+        });
+      });
+    });
   });
 });

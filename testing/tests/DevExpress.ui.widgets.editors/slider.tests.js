@@ -1706,3 +1706,39 @@ module('tooltip integration', {
         });
     });
 });
+
+module('if only the single value is possible', moduleOptions, () => {
+    test('click on slider should not change value either handle position', function(assert) {
+        const value = 1;
+        const $slider = $('#slider').dxSlider({
+            min: value,
+            max: value,
+            value
+        });
+        const slider = $slider.dxSlider('instance');
+        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
+        const handleX = $handle.offset().left;
+
+        pointerMock($slider).down();
+
+        assert.strictEqual($handle.offset().left, handleX, 'handle position was not changed');
+        assert.strictEqual(slider.option('value'), value, 'value was not changed');
+    });
+
+    test('handle move should not change value either handle position', function(assert) {
+        const value = 3;
+        const $slider = $('#slider').dxSlider({
+            min: value,
+            max: value,
+            value
+        });
+        const slider = $slider.dxSlider('instance');
+        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
+        const handleX = $handle.offset().left;
+
+        pointerMock($handle).start().down().move(-100).up();
+
+        assert.strictEqual($handle.offset().left, handleX, 'handle position was not changed');
+        assert.strictEqual(slider.option('value'), value, 'value was not changed');
+    });
+});

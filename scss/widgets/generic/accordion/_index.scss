@@ -83,7 +83,7 @@ $generic-accordion-disabled-opacity: 0.5;
     font-weight: normal;
     color: $accordion-icon-color;
     content: "\f016";
-    font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
+    font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
     font-size: $generic-base-icon-size;
     margin-left: math.div($generic-base-icon-size, 2);
     margin-right: 0;
