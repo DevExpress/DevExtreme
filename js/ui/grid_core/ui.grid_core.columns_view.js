@@ -30,6 +30,7 @@ const TABLE_FIXED_CLASS = 'table-fixed';
 const CONTENT_FIXED_CLASS = 'content-fixed';
 const ROW_CLASS = 'dx-row';
 const GROUP_ROW_CLASS = 'dx-group-row';
+const GROUP_CELL_CLASS = 'dx-group-cell';
 const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FILTER_ROW_CLASS = 'filter-row';
 const ERROR_ROW_CLASS = 'dx-error-row';
@@ -951,9 +952,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                             let cell;
                             const visibleIndex = this.getVisibleColumnIndex(i, rowIndex);
                             if(row.classList.contains(GROUP_ROW_CLASS)) {
-                                if(visibleIndex !== 1) {
-                                    cell = row.querySelector(`td[aria-colindex='${visibleIndex + 1}']`);
-                                }
+                                cell = row.querySelector(`td[aria-colindex='${visibleIndex + 1}']:not(.${GROUP_CELL_CLASS})`);
                             } else {
                                 cell = row.cells[visibleIndex];
                             }
