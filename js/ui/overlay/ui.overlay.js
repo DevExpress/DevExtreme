@@ -250,7 +250,7 @@ const Overlay = Widget.inherit({
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
         this._parentsScrollSubscriptionInfo = {
-            handler: e => { this._targetParentsScrollHandler(e); }
+            handler: e => { this._hideOnParentsScrollHandler(e); }
         };
 
         this._updateResizeCallbackSkipCondition();
@@ -800,7 +800,7 @@ const Overlay = Widget.inherit({
     _toggleSubscriptions: function(enabled) {
         if(hasWindow()) {
             this._toggleHideTopOverlayCallback(enabled);
-            this._toggleParentsScrollSubscription(enabled);
+            this._toggleHideOnParentsScrollSubscription(enabled);
         }
     },
 
@@ -816,7 +816,7 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _toggleParentsScrollSubscription: function(needSubscribe) {
+    _toggleHideOnParentsScrollSubscription: function(needSubscribe) {
         const scrollEvent = addNamespace('scroll', this.NAME);
         const { prevTargets, handler } = this._parentsScrollSubscriptionInfo ?? {};
 
@@ -824,7 +824,7 @@ const Overlay = Widget.inherit({
 
         const closeOnScroll = this.option('hideOnParentScroll');
         if(needSubscribe && closeOnScroll) {
-            let $parents = this._$wrapper.parents();
+            let $parents = this._hideOnParentScrollTarget().parents();
             if(devices.real().deviceType === 'desktop') {
                 $parents = $parents.add(window);
             }
@@ -833,7 +833,7 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _targetParentsScrollHandler: function(e) {
+    _hideOnParentsScrollHandler: function(e) {
         let closeHandled = false;
         const closeOnScroll = this.option('hideOnParentScroll');
         if(isFunction(closeOnScroll)) {
@@ -843,6 +843,10 @@ const Overlay = Widget.inherit({
         if(!closeHandled && !this._showAnimationProcessing) {
             this.hide();
         }
+    },
+
+    _hideOnParentScrollTarget: function() {
+        return this._$wrapper;
     },
 
     _render: function() {
@@ -1351,7 +1355,7 @@ const Overlay = Widget.inherit({
                 this._toggleHideTopOverlayCallback(this.option('visible'));
                 break;
             case 'hideOnParentScroll':
-                this._toggleParentsScrollSubscription(this.option('visible'));
+                this._toggleHideOnParentsScrollSubscription(this.option('visible'));
                 break;
             case 'closeOnOutsideClick':
             case 'propagateOutsideClick':
