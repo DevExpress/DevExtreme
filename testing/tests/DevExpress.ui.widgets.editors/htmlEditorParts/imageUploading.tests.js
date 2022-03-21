@@ -8,6 +8,13 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
 const ADD_IMAGE_DIALOG_CLASS = 'dx-htmleditor-add-image-popup';
 const ADD_IMAGE_DIALOG_WIT_TABS_CLASS = 'dx-htmleditor-add-image-popup-with-tabs';
+const FILE_UPLOADER_CLASS = 'dx-fileuploader';
+const CHECKBOX_CLASS = 'dx-checkbox';
+const TEXTBOX_CLASS = 'dx-textbox';
+const FORM_CLASS = 'dx-form';
+
+const DIALOG_OK_BUTTON_SELECTOR = '.dx-formdialog .dx-toolbar .dx-button';
+const ASPECT_RATIO_BUTTON_SELECTOR = '.dx-buttongroup .dx-button';
 
 const WHITE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4////fwAJ+wP93BEhJAAAAABJRU5ErkJggg==';
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgYmL6DwABFgEGpP/tHAAAAABJRU5ErkJggg==';
@@ -63,7 +70,31 @@ module('Image uploading integration', {
 
             this.clock.tick(TIME_TO_WAIT);
 
-            return $('.dx-form');
+            return $(`.${FORM_CLASS}`);
+        };
+
+        this.getSizeEditors = ($form) => {
+            const widthEditor = $form.find(`.${TEXTBOX_CLASS}`).eq(1).dxTextBox('instance');
+            const heightEditor = $form.find(`.${TEXTBOX_CLASS}`).eq(2).dxTextBox('instance');
+
+            return {
+                widthEditor, heightEditor
+            };
+        };
+
+        this.getBase64EditorElement = ($form) => {
+            return $form.find(`.${CHECKBOX_CLASS}`);
+        };
+
+        this.clickAspectRatioButton = ($form) => {
+            const $aspectRatioButton = $form.find(ASPECT_RATIO_BUTTON_SELECTOR);
+            $aspectRatioButton.trigger('dxclick');
+        };
+
+        this.clickDialogOkButton = () => {
+            $(DIALOG_OK_BUTTON_SELECTOR)
+                .first()
+                .trigger('dxclick');
         };
     },
     afterEach: function() {
@@ -80,10 +111,9 @@ module('Image uploading integration', {
                 this.clock.tick(TIME_TO_WAIT);
 
                 const $form = this.getFormElement();
-
                 const formInstance = $form.dxForm('instance');
                 const formItems = formInstance.option('items');
-                const fileUploader = $form.find('.dx-fileuploader');
+                const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`);
 
                 assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
                 assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WIT_TABS_CLASS}`).length, 1, 'has add image dialog with tabs class');
@@ -99,7 +129,6 @@ module('Image uploading integration', {
             this.clock.tick(TIME_TO_WAIT);
 
             const $form = this.getFormElement();
-
             const formInstance = $form.dxForm('instance');
             const formItems = formInstance.option('items');
 
@@ -114,7 +143,6 @@ module('Image uploading integration', {
             this.clock.tick(TIME_TO_WAIT);
 
             const $form = this.getFormElement();
-
             const formInstance = $form.dxForm('instance');
             const formItems = formInstance.option('items');
 
@@ -129,10 +157,8 @@ module('Image uploading integration', {
             this.clock.tick(TIME_TO_WAIT);
 
             const $form = this.getFormElement();
-
-            const $base64Editor = $form.find('.dx-checkbox');
+            const $base64Editor = this.getBase64EditorElement($form);
             const base64EditorInstance = $base64Editor.dxCheckBox('instance');
-
 
             assert.strictEqual(base64EditorInstance.option('value'), false, 'base64 checkbox default value is false');
             assert.strictEqual(base64EditorInstance.option('disabled'), false, 'base64 checkbox is not disabled');
@@ -144,7 +170,7 @@ module('Image uploading integration', {
 
             const $form = this.getFormElement();
 
-            const $base64Editor = $form.find('.dx-checkbox');
+            const $base64Editor = this.getBase64EditorElement($form);
             const base64EditorInstance = $base64Editor.dxCheckBox('instance');
 
             assert.strictEqual(base64EditorInstance.option('value'), true, 'base64 checkbox default value is true');
@@ -155,13 +181,10 @@ module('Image uploading integration', {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
 
-
             const uploadSpy = sinon.spy(this.quillInstance.getModule('uploader'), 'upload');
-
             const $form = this.getFormElement([1, 2]);
-
-            const $base64Editor = $form.find('.dx-checkbox');
-            const fileUploader = $form.find('.dx-fileuploader').dxFileUploader('instance');
+            const $base64Editor = this.getBase64EditorElement($form);
+            const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
             const base64EditorInstance = $base64Editor.dxCheckBox('instance');
 
             base64EditorInstance.option('value', true);
@@ -264,12 +287,10 @@ module('Image uploading integration', {
         this.clock.tick(TIME_TO_WAIT);
 
         const $form = this.getFormElement();
+        const sizeEditors = this.getSizeEditors($form);
 
-        const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
-        const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
-
-        assert.strictEqual(heightEditor.option('value'), undefined, 'height value is empty');
-        assert.strictEqual(widthEditor.option('value'), undefined, 'width value is empty');
+        assert.strictEqual(sizeEditors.heightEditor.option('value'), undefined, 'height value is empty');
+        assert.strictEqual(sizeEditors.widthEditor.option('value'), undefined, 'width value is empty');
     });
 
     test('check file uploading by url with dimentions', function(assert) {
@@ -281,16 +302,13 @@ module('Image uploading integration', {
         this.clock.tick(TIME_TO_WAIT);
 
         const $form = this.getFormElement();
+        const sizeEditors = this.getSizeEditors($form);
 
-        const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
-        const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
-        widthEditor.option('value', '70');
-        heightEditor.option('value', '65');
+        sizeEditors.widthEditor.option('value', '70');
+        sizeEditors.heightEditor.option('value', '65');
         this.clock.tick(TIME_TO_WAIT);
 
-        $('.dx-formdialog .dx-toolbar .dx-button')
-            .first()
-            .trigger('dxclick');
+        this.clickDialogOkButton();
 
         this.clock.tick(TIME_TO_WAIT);
 
@@ -310,12 +328,10 @@ module('Image uploading integration', {
         this.clock.tick(TIME_TO_WAIT);
 
         const $form = this.getFormElement();
+        const sizeEditors = this.getSizeEditors($form);
 
-        const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
-        const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
-
-        assert.strictEqual(heightEditor.option('value'), '40', 'height value is recalculated');
-        assert.strictEqual(widthEditor.option('value'), '50', 'width value is recalculated');
+        assert.strictEqual(sizeEditors.heightEditor.option('value'), '40', 'height value is recalculated');
+        assert.strictEqual(sizeEditors.widthEditor.option('value'), '50', 'width value is recalculated');
     });
 
     test('check aspect ratio base', function(assert) {
@@ -328,22 +344,20 @@ module('Image uploading integration', {
         this.clock.tick(TIME_TO_WAIT);
 
         const $form = this.getFormElement();
+        const sizeEditors = this.getSizeEditors($form);
 
-        const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
-        const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
-
-        widthEditor.option('value', '50');
-        heightEditor.option('value', '25');
+        sizeEditors.widthEditor.option('value', '50');
+        sizeEditors.heightEditor.option('value', '25');
         this.clock.tick(TIME_TO_WAIT);
-        widthEditor.option('value', '100');
+        sizeEditors.widthEditor.option('value', '100');
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.strictEqual(heightEditor.option('value'), '50', 'height value is recalculated');
+        assert.strictEqual(sizeEditors.heightEditor.option('value'), '50', 'height value is recalculated');
         this.clock.tick(TIME_TO_WAIT);
 
-        heightEditor.option('value', '60');
+        sizeEditors.heightEditor.option('value', '60');
 
-        assert.strictEqual(widthEditor.option('value'), '120', 'width value is recalculated');
+        assert.strictEqual(sizeEditors.widthEditor.option('value'), '120', 'width value is recalculated');
     });
 
     test('check aspect ratio with default values', function(assert) {
@@ -356,14 +370,12 @@ module('Image uploading integration', {
         this.clock.tick(TIME_TO_WAIT);
 
         const $form = this.getFormElement();
+        const sizeEditors = this.getSizeEditors($form);
 
-        const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
-        const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
+        sizeEditors.heightEditor.option('value', '80');
 
-        heightEditor.option('value', '80');
-
-        assert.strictEqual(heightEditor.option('value'), '80', 'height value is recalculated');
-        assert.strictEqual(widthEditor.option('value'), '100', 'width value is recalculated');
+        assert.strictEqual(sizeEditors.heightEditor.option('value'), '80', 'height value is recalculated');
+        assert.strictEqual(sizeEditors.widthEditor.option('value'), '100', 'width value is recalculated');
     });
 
     test('check aspect ratio disabling', function(assert) {
@@ -376,19 +388,16 @@ module('Image uploading integration', {
         this.clock.tick(TIME_TO_WAIT);
 
         const $form = this.getFormElement();
+        const sizeEditors = this.getSizeEditors($form);
 
-        const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
-        const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
+        this.clickAspectRatioButton($form);
 
-        const $aspectRatioButton = $form.find('.dx-buttongroup .dx-button');
-        $aspectRatioButton.trigger('dxclick');
+        sizeEditors.widthEditor.option('value', '50');
+        sizeEditors.heightEditor.option('value', '25');
+        sizeEditors.widthEditor.option('value', '100');
 
-        widthEditor.option('value', '50');
-        heightEditor.option('value', '25');
-        widthEditor.option('value', '100');
-
-        assert.strictEqual(heightEditor.option('value'), '25', 'height value is recalculated');
-        assert.strictEqual(widthEditor.option('value'), '100', 'width value is recalculated');
+        assert.strictEqual(sizeEditors.heightEditor.option('value'), '25', 'height value is recalculated');
+        assert.strictEqual(sizeEditors.widthEditor.option('value'), '100', 'width value is recalculated');
     });
 
     test('check aspect ratio when only one size is defined', function(assert) {
@@ -401,14 +410,12 @@ module('Image uploading integration', {
         this.clock.tick(TIME_TO_WAIT);
 
         const $form = this.getFormElement();
+        const sizeEditors = this.getSizeEditors($form);
 
-        const widthEditor = $form.find('.dx-textbox').eq(1).dxTextBox('instance');
-        const heightEditor = $form.find('.dx-textbox').eq(2).dxTextBox('instance');
+        sizeEditors.widthEditor.option('value', '50');
 
-        widthEditor.option('value', '50');
-
-        assert.strictEqual(heightEditor.option('value'), undefined, 'height value is recalculated');
-        assert.strictEqual(widthEditor.option('value'), '50', 'width value is recalculated');
+        assert.strictEqual(sizeEditors.heightEditor.option('value'), undefined, 'height value is recalculated');
+        assert.strictEqual(sizeEditors.widthEditor.option('value'), '50', 'width value is recalculated');
     });
 
     test('check file uploading to the server', function(assert) {
@@ -426,7 +433,7 @@ module('Image uploading integration', {
 
         const $form = this.getFormElement([1, 2]);
 
-        const fileUploader = $form.find('.dx-fileuploader').dxFileUploader('instance');
+        const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
 
         fileUploader.option('value', [fakeFile]);
 
@@ -435,9 +442,7 @@ module('Image uploading integration', {
 
         const request = this.xhrMock.getInstanceAt();
 
-        $('.dx-formdialog .dx-toolbar .dx-button')
-            .first()
-            .trigger('dxclick');
+        this.clickDialogOkButton();
 
         this.clock.tick(TIME_TO_WAIT);
 
