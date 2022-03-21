@@ -67,7 +67,7 @@ function getFormatHandlers(module) {
             }
         },
         link: prepareLinkHandler(module),
-        image: prepareImageHandler(module, module.editorInstance.option('imageUploading')),
+        image: prepareImageHandler(module, module.editorInstance.option('imageUpload')),
         color: prepareColorClickHandler(module, 'color'),
         background: prepareColorClickHandler(module, 'background'),
         orderedList: prepareShortcutHandler(module, 'list', 'ordered'),
@@ -217,7 +217,7 @@ function prepareLinkHandler(module) {
     };
 }
 
-function prepareImageHandler(module, imageUploadingOption) {
+function prepareImageHandler(module, imageUploadOption) {
     return () => {
         let formData = module.quill.getFormat();
         const isUpdateDialog = Object.prototype.hasOwnProperty.call(formData, 'imageSrc');
@@ -233,13 +233,13 @@ function prepareImageHandler(module, imageUploadingOption) {
             }
         }
 
-        modifyImageUploadingDialog(module, imageUploadingOption);
+        modifyImageUploadDialog(module, imageUploadOption);
         const formDialogOptions = {
             formData: formData,
             width: 493,
             labelLocation: 'top',
-            colCount: imageUploadingOption?.mode !== 'url' ? 1 : 11,
-            items: imageFormItems(module, imageUploadingOption)
+            colCount: imageUploadOption?.mode !== 'url' ? 1 : 11,
+            items: imageFormItems(module, imageUploadOption)
         };
 
         const promise = module.editorInstance.showFormDialog(formDialogOptions);
@@ -251,7 +251,7 @@ function prepareImageHandler(module, imageUploadingOption) {
                 dialogResultHandler(module, { formData, event, defaultIndex, formatIndex, isUpdateDialog });
             })
             .always(() => {
-                cancelImageUploadingDialogModification(module);
+                cancelImageUploadDialogModification(module);
                 module.quill.focus();
             });
     };
@@ -297,18 +297,18 @@ function getUpdateDialogFormData(module, formData) {
     return resultFormData;
 }
 
-function modifyImageUploadingDialog(module, imageUploadingOption) {
+function modifyImageUploadDialog(module, imageUploadOption) {
     module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
     module.editorInstance.formDialogOption('toolbarItems[0].options.text', 'Add'); // localization
     let wrapperClassString = 'dx-htmleditor-add-image-popup dx-formdialog';
-    if(isDefined(imageUploadingOption) && imageUploadingOption.mode !== 'url') {
+    if(isDefined(imageUploadOption) && imageUploadOption.mode !== 'url') {
         wrapperClassString += ' dx-htmleditor-add-image-popup-with-tabs';
     }
 
     module.editorInstance.formDialogOption('wrapperAttr', { class: wrapperClassString });
 }
 
-function cancelImageUploadingDialogModification(module) {
+function cancelImageUploadDialogModification(module) {
     module.editorInstance.formDialogOption('toolbarItems[0].options.text', localizationMessage.format('OK'));
     module.editorInstance.formDialogOption('wrapperAttr', { class: 'dx-formdialog' });
 }
@@ -364,8 +364,8 @@ function serverUpload({ formInstance, file, uploadDirectory }) {
     formInstance.updateData('useUrl', true);
 }
 
-function getSelectFileTabItems(module, imageUploadingOption) {
-    let useBase64 = imageUploadingOption?.mode === 'base64';
+function getSelectFileTabItems(module, imageUploadOption) {
+    let useBase64 = imageUploadOption?.mode === 'base64';
 
     const selectFileTabItems = [
         {
@@ -380,7 +380,7 @@ function getSelectFileTabItems(module, imageUploadingOption) {
                     value: [],
                     name: 'photo',
                     accept: 'image/*',
-                    uploadUrl: imageUploadingOption.uploadUrl,
+                    uploadUrl: imageUploadOption.uploadUrl,
                     uploadMode: 'instantly',
                     onValueChanged: (data) => {
                         if(useBase64) {
@@ -391,7 +391,7 @@ function getSelectFileTabItems(module, imageUploadingOption) {
                         if(!useBase64) {
                             const formInstance = formTemplateData.component;
                             const file = data.file;
-                            const uploadDirectory = imageUploadingOption.uploadDirectory;
+                            const uploadDirectory = imageUploadOption.uploadDirectory;
                             serverUpload({ formInstance, file, uploadDirectory });
                         }
                     }
@@ -406,7 +406,7 @@ function getSelectFileTabItems(module, imageUploadingOption) {
             editorType: 'dxCheckBox',
             editorOptions: {
                 value: useBase64,
-                disabled: imageUploadingOption?.mode === 'base64',
+                disabled: imageUploadOption?.mode === 'base64',
                 text: 'Encode to base 64', // localization
                 onValueChanged: (e) => {
                     useBase64 = e.value;
@@ -491,17 +491,17 @@ function getSpecifyURLTabItems(module) {
     return specifyURLTabItems;
 }
 
-function imageFormItems(module, imageUploadingOption) {
+function imageFormItems(module, imageUploadOption) {
 
     let resultFormItems;
 
-    imageUploadingOption = imageUploadingOption || {};
+    imageUploadOption = imageUploadOption || {};
 
-    const selectFileTabItems = getSelectFileTabItems(module, imageUploadingOption);
+    const selectFileTabItems = getSelectFileTabItems(module, imageUploadOption);
 
     const specifyURLTabItems = getSpecifyURLTabItems(module);
 
-    if(imageUploadingOption?.mode === 'both' || imageUploadingOption?.mode === 'base64') {
+    if(imageUploadOption?.mode === 'both' || imageUploadOption?.mode === 'base64') {
         resultFormItems = [
             {
                 itemType: 'tabbed',
@@ -516,7 +516,7 @@ function imageFormItems(module, imageUploadingOption) {
                 }]
             }
         ];
-    } else if(imageUploadingOption?.mode === 'file') {
+    } else if(imageUploadOption?.mode === 'file') {
         resultFormItems = selectFileTabItems;
     } else {
         resultFormItems = specifyURLTabItems;

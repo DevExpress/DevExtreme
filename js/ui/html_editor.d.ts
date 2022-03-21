@@ -109,7 +109,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default null
      * @public
      */
-    imageUploading?: dxHtmlEditorImageUploading;
+    imageUpload?: dxHtmlEditorImageUpload;
     /**
      * @docid
      * @hidden false
@@ -400,7 +400,7 @@ export interface dxHtmlEditorTableResizing {
  * @type object
  * @namespace DevExpress.ui
  */
- export interface dxHtmlEditorImageUploading {
+ export interface dxHtmlEditorImageUpload {
   /**
    * @docid
    * @default undefined

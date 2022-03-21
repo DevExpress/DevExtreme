@@ -42,7 +42,7 @@ module('Image uploading integration', {
         this.$element = $('#htmlEditor');
         this.options = {
             toolbar: { items: ['image'] },
-            imageUploading: {
+            imageUpload: {
                 mode: 'both',
                 uploadUrl: '/',
                 uploadDirectory: '/uploadDirectory/'
@@ -106,7 +106,7 @@ module('Image uploading integration', {
         ['both', 'base64'].forEach((mode) => {
             test(`the form popup is correctly rendered for mode="${mode}"`, function(assert) {
                 this.createWidget({
-                    imageUploading: { mode }
+                    imageUpload: { mode }
                 });
                 this.clock.tick(TIME_TO_WAIT);
 
@@ -125,7 +125,7 @@ module('Image uploading integration', {
         });
 
         test('the popup and form is correctly rendered for mode="url"', function(assert) {
-            this.createWidget({ imageUploading: { mode: 'url' } });
+            this.createWidget({ imageUpload: { mode: 'url' } });
             this.clock.tick(TIME_TO_WAIT);
 
             const $form = this.getFormElement();
@@ -138,8 +138,8 @@ module('Image uploading integration', {
             assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
         });
 
-        test('the popup and form is correctly rendered if imageUploading is undefined', function(assert) {
-            this.createWidget({ imageUploading: null });
+        test('the popup and form is correctly rendered if imageUpload is undefined', function(assert) {
+            this.createWidget({ imageUpload: null });
             this.clock.tick(TIME_TO_WAIT);
 
             const $form = this.getFormElement();
@@ -165,7 +165,7 @@ module('Image uploading integration', {
         });
 
         test('check file uploading form base64 checkbox if mode = "base64"', function(assert) {
-            this.createWidget({ imageUploading: { mode: 'base64', uploadUrl: undefined } });
+            this.createWidget({ imageUpload: { mode: 'base64', uploadUrl: undefined } });
             this.clock.tick(TIME_TO_WAIT);
 
             const $form = this.getFormElement();
@@ -202,7 +202,7 @@ module('Image uploading integration', {
                 const done = assert.async();
                 this.createWidget({
                     value: `<img src=${WHITE_PIXEL}>`,
-                    imageUploading: { mode: 'url' },
+                    imageUpload: { mode: 'url' },
                     onValueChanged: ({ value }) => {
                         assert.ok(value.indexOf(WHITE_PIXEL) === -1, 'There is no white pixel');
                         assert.ok(value.indexOf(BLACK_PIXEL) !== -1, 'There is a black pixel');
@@ -280,7 +280,7 @@ module('Image uploading integration', {
     test('check file uploading by url dimention editors default value', function(assert) {
         this.createWidget({
             value: markup,
-            imageUploading: { mode: 'url' },
+            imageUpload: { mode: 'url' },
         });
 
         this.instance.focus();
@@ -296,7 +296,7 @@ module('Image uploading integration', {
     test('check file uploading by url with dimentions', function(assert) {
         this.createWidget({
             value: `<img src=${WHITE_PIXEL}>`,
-            imageUploading: { mode: 'url' },
+            imageUpload: { mode: 'url' },
         });
 
         this.clock.tick(TIME_TO_WAIT);
@@ -321,7 +321,7 @@ module('Image uploading integration', {
     test('check dimentions default values', function(assert) {
         this.createWidget({
             value: `<img width='50' height='40' src=${WHITE_PIXEL}>`,
-            imageUploading: { mode: 'url' },
+            imageUpload: { mode: 'url' },
         });
 
         this.instance.focus();
@@ -337,7 +337,7 @@ module('Image uploading integration', {
     test('check aspect ratio base', function(assert) {
         this.createWidget({
             value: `<img src=${WHITE_PIXEL}>`,
-            imageUploading: { mode: 'url' }
+            imageUpload: { mode: 'url' }
         });
 
         this.instance.focus();
@@ -363,7 +363,7 @@ module('Image uploading integration', {
     test('check aspect ratio with default values', function(assert) {
         this.createWidget({
             value: `<img width='50' height='40' src=${WHITE_PIXEL}>`,
-            imageUploading: { mode: 'url' }
+            imageUpload: { mode: 'url' }
         });
 
         this.instance.focus();
@@ -381,7 +381,7 @@ module('Image uploading integration', {
     test('check aspect ratio disabling', function(assert) {
         this.createWidget({
             value: `<img src=${WHITE_PIXEL}>`,
-            imageUploading: { mode: 'url' }
+            imageUpload: { mode: 'url' }
         });
 
         this.instance.focus();
@@ -403,7 +403,7 @@ module('Image uploading integration', {
     test('check aspect ratio when only one size is defined', function(assert) {
         this.createWidget({
             value: markup,
-            imageUploading: { mode: 'url' }
+            imageUpload: { mode: 'url' }
         });
 
         this.instance.focus();
