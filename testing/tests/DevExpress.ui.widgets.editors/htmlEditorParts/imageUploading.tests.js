@@ -135,21 +135,31 @@ module('Image uploading integration', {
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WIT_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
             assert.strictEqual(formItems.length, 4, 'has correct form items count');
+            assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form items count');
             assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
         });
 
-        test('the popup and form is correctly rendered if imageUpload is undefined', function(assert) {
-            this.createWidget({ imageUpload: null });
-            this.clock.tick(TIME_TO_WAIT);
+        [undefined, null].forEach((imageUploadValue) => {
+            test(`the popup and form is correctly rendered if imageUpload is ${imageUploadValue}`, function(assert) {
+                this.instance = this.$element
+                    .dxHtmlEditor({
+                        toolbar: { items: ['image'] },
+                        imageUpload: imageUploadValue,
+                        value: markup
+                    }).dxHtmlEditor('instance');
 
-            const $form = this.getFormElement();
-            const formInstance = $form.dxForm('instance');
-            const formItems = formInstance.option('items');
+                this.clock.tick(TIME_TO_WAIT);
 
-            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
-            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WIT_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
-            assert.strictEqual(formItems.length, 4, 'has correct form items count');
-            assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
+                const $form = this.getFormElement();
+                const formInstance = $form.dxForm('instance');
+                const formItems = formInstance.option('items');
+
+                assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
+                assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WIT_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
+                assert.strictEqual(formItems.length, 4, 'has correct form items count');
+                assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form items count');
+                assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
+            });
         });
 
         test('check file uploading form base64 checkbox', function(assert) {

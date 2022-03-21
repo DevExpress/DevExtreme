@@ -238,12 +238,11 @@ function prepareImageHandler(module, imageUploadOption) {
             formData: formData,
             width: 493,
             labelLocation: 'top',
-            colCount: imageUploadOption?.mode !== 'url' ? 1 : 11,
+            colCount: (imageUploadOption?.mode === 'base64' || imageUploadOption?.mode === 'both') ? 1 : 11,
             items: imageFormItems(module, imageUploadOption)
         };
 
         const promise = module.editorInstance.showFormDialog(formDialogOptions);
-
         const formatIndex = embedFormatIndex(module);
 
         promise
@@ -516,8 +515,6 @@ function imageFormItems(module, imageUploadOption) {
                 }]
             }
         ];
-    } else if(imageUploadOption?.mode === 'file') {
-        resultFormItems = selectFileTabItems;
     } else {
         resultFormItems = specifyURLTabItems;
     }
