@@ -89,7 +89,6 @@ const WIDGET_SMALL_WIDTH = 400;
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
 const UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
 
-const DEFAULT_AGENDA_DURATION = 7;
 const DEFAULT_APPOINTMENT_TEMPLATE_NAME = 'item';
 const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
 const DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME = 'dropDownAppointment';
@@ -536,7 +535,7 @@ class Scheduler extends Widget {
 
                 this._postponeResourceLoading().done((resources) => {
                     this._refreshWorkSpace(resources);
-                    this._updateHeader();
+                    this._header?.option(this._headerConfig());
                     this._filterAppointmentsByDate();
                     this._appointments.option('allowAllDayResize', value !== 'day');
                 });
@@ -744,20 +743,6 @@ class Scheduler extends Widget {
             default:
                 super._optionChanged(args);
         }
-    }
-
-    _updateHeader() {
-        this._header?.option(
-            {
-                'intervalCount': this._getViewCountConfig().intervalCount,
-                'startViewDate': this.getStartViewDate(),
-                'min': this._dateOption('min'),
-                'max': this._dateOption('max'),
-                'currentDate': this._dateOption('currentDate'),
-                'firstDayOfWeek': this.getFirstDayOfWeek(),
-                'currentView': this.currentView,
-            }
-        );
     }
 
     _dateOption(optionName) {
@@ -1418,7 +1403,6 @@ class Scheduler extends Widget {
             rtlEnabled: this.option('rtlEnabled'),
             useDropDownViewSwitcher: this.option('useDropDownViewSwitcher'),
             customizeDateNavigatorText: this.option('customizeDateNavigatorText'),
-            agendaDuration: this.option('agendaDuration') || DEFAULT_AGENDA_DURATION,
         }, currentViewOptions);
 
         result.intervalCount = countConfig.intervalCount;
