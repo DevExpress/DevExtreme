@@ -374,7 +374,7 @@ const Popover = Popup.inherit({
     },
 
     _hideOnParentScrollTarget: function() {
-        return $(this._positionController._position.of || $());
+        return $(this._positionController._position.of || this.callBase());
     },
 
     _getSideByLocation: function(location) {
