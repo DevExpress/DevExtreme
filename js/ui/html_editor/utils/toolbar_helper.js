@@ -299,7 +299,7 @@ function getUpdateDialogFormData(module, formData) {
 
 function modifyImageUploadDialog(module, imageUploadOption) {
     module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
-    module.editorInstance.formDialogOption('toolbarItems[0].options.text', 'Add'); // localization
+    module.editorInstance.formDialogOption('toolbarItems[0].options.text', 'Add');
     let wrapperClassString = 'dx-htmleditor-add-image-popup dx-formdialog';
     if(isDefined(imageUploadOption) && imageUploadOption.mode !== 'url') {
         wrapperClassString += ' dx-htmleditor-add-image-popup-with-tabs';
@@ -372,7 +372,7 @@ function getSelectFileTabItems(module, imageUploadOption) {
             itemType: 'simple',
             dataField: 'files',
             colSpan: 11,
-            label: { visible: false }, // localization
+            label: { visible: false },
             template: (formTemplateData) => {
                 const $content = $('<div>');
                 module.editorInstance._createComponent($content, FileUploader, {
@@ -407,7 +407,7 @@ function getSelectFileTabItems(module, imageUploadOption) {
             editorOptions: {
                 value: useBase64,
                 disabled: imageUploadOption?.mode === 'base64',
-                text: 'Encode to base 64', // localization
+                text: 'Encode to base 64',
                 onValueChanged: (e) => {
                     useBase64 = e.value;
                 },
@@ -460,7 +460,7 @@ function getSpecifyURLTabItems(module) {
                     icon: 'link',
                     value: 'keepRatio',
                 }],
-                hint: 'Keep aspect ratio', // localization
+                hint: 'Keep aspect ratio',
                 keyExpr: 'value',
                 stylingMode: 'outlined',
                 selectionMode: 'multiple',
@@ -506,11 +506,11 @@ function imageFormItems(module, imageUploadOption) {
             {
                 itemType: 'tabbed',
                 tabs: [{
-                    title: 'Select file', // localization
+                    title: 'Select file',
                     colCount: 11,
                     items: selectFileTabItems
                 }, {
-                    title: 'Specify URL', // localization
+                    title: 'Specify URL',
                     colCount: 11,
                     items: specifyURLTabItems
                 }]
