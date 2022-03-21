@@ -418,14 +418,18 @@ function getSelectFileTabItems(module, imageUploadingOption) {
     return selectFileTabItems;
 }
 
-function getSpecifyURLTabItems(module, imageUploadingOption) {
+function getSpecifyURLTabItems(module) {
     let keepRatio = true;
     let widthEditor;
     let heightEditor;
     let preventRecalculating = false;
 
-    function keepAspectRatio({ dependentEditor, newValue, previousValue }) {
+    function keepAspectRatio(data, { dependentEditor, e }) {
+        const newValue = parseInt(e.value);
+        const previousValue = parseInt(e.previousValue);
         const previousDependentEditorValue = parseInt(dependentEditor.option('value'));
+
+        data.component.updateData(data.dataField, newValue);
 
         if(keepRatio && previousDependentEditorValue && previousValue && !preventRecalculating) {
             preventRecalculating = true;
@@ -445,12 +449,7 @@ function getSpecifyURLTabItems(module, imageUploadingOption) {
                 value: data.component.option('formData')[data.dataField],
                 onEnterKey: data.component.option('onEditorEnterKey').bind(module.editorInstance._formDialog, data),
                 onValueChanged: (e) => {
-                    const newValue = parseInt(e.value);
-                    const previousValue = parseInt(e.previousValue);
-
-                    data.component.updateData(data.dataField, newValue);
-
-                    keepAspectRatio({ dependentEditor: heightEditor, newValue, previousValue });
+                    keepAspectRatio(data, { dependentEditor: heightEditor, e });
                 }
             });
 
@@ -480,12 +479,7 @@ function getSpecifyURLTabItems(module, imageUploadingOption) {
                 value: data.component.option('formData')[data.dataField],
                 onEnterKey: data.component.option('onEditorEnterKey').bind(module.editorInstance._formDialog, data),
                 onValueChanged: (e) => {
-                    const newValue = parseInt(e.value);
-                    const previousValue = parseInt(e.previousValue);
-
-                    data.component.updateData(data.dataField, newValue);
-
-                    keepAspectRatio({ dependentEditor: widthEditor, newValue, previousValue });
+                    keepAspectRatio(data, { dependentEditor: widthEditor, e });
                 }
             });
 
