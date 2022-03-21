@@ -251,7 +251,7 @@ function prepareImageHandler(module, imageUploadingOption) {
                 dialogResultHandler(module, { formData, event, defaultIndex, formatIndex, isUpdateDialog });
             })
             .always(() => {
-                revertImageUploadingDialog(module);
+                cancelImageUploadingDialogModification(module);
                 module.quill.focus();
             });
     };
@@ -308,7 +308,7 @@ function modifyImageUploadingDialog(module, imageUploadingOption) {
     module.editorInstance.formDialogOption('wrapperAttr', { class: wrapperClassString });
 }
 
-function revertImageUploadingDialog(module) {
+function cancelImageUploadingDialogModification(module) {
     module.editorInstance.formDialogOption('toolbarItems[0].options.text', localizationMessage.format('OK'));
     module.editorInstance.formDialogOption('wrapperAttr', { class: 'dx-formdialog' });
 }
@@ -365,8 +365,7 @@ function serverUpload({ formInstance, file, uploadDirectory }) {
 }
 
 function getSelectFileTabItems(module, imageUploadingOption) {
-    let useBase64 = imageUploadingOption?.mode === 'base64'/* || !isDefined(imageUploadingOption.uploadUrl)  // add warning  */;
-    // const useUrlUploading = imageUploadingOption?.mode !== 'file';
+    let useBase64 = imageUploadingOption?.mode === 'base64';
 
     const selectFileTabItems = [
         {
@@ -407,7 +406,7 @@ function getSelectFileTabItems(module, imageUploadingOption) {
             editorType: 'dxCheckBox',
             editorOptions: {
                 value: useBase64,
-                disabled: imageUploadingOption?.mode === 'base64', // !isDefined(imageUploadingOption.uploadUrl),
+                disabled: imageUploadingOption?.mode === 'base64',
                 text: 'Encode to base 64', // localization
                 onValueChanged: (e) => {
                     useBase64 = e.value;
@@ -425,6 +424,17 @@ function getSpecifyURLTabItems(module, imageUploadingOption) {
     let heightEditor;
     let preventRecalculating = false;
 
+    function keepAspectRatio({ dependentEditor, newValue, previousValue }) {
+        const previousDependentEditorValue = parseInt(dependentEditor.option('value'));
+
+        if(keepRatio && previousDependentEditorValue && previousValue && !preventRecalculating) {
+            preventRecalculating = true;
+            dependentEditor.option('value', Math.round(newValue * previousDependentEditorValue / parseInt(previousValue)).toString());
+        }
+
+        preventRecalculating = false;
+    }
+
     const specifyURLTabItems = [
         { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
         { dataField: 'width', colSpan: 6, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) }, template: (data) => {
@@ -436,16 +446,11 @@ function getSpecifyURLTabItems(module, imageUploadingOption) {
                 onEnterKey: data.component.option('onEditorEnterKey').bind(module.editorInstance._formDialog, data),
                 onValueChanged: (e) => {
                     const newValue = parseInt(e.value);
-                    const oldHeight = parseInt(heightEditor.option('value'));
+                    const previousValue = parseInt(e.previousValue);
 
                     data.component.updateData(data.dataField, newValue);
 
-                    if(keepRatio && oldHeight && e.previousValue && !preventRecalculating) {
-                        preventRecalculating = true;
-                        heightEditor.option('value', Math.round(newValue * oldHeight / parseInt(e.previousValue)).toString());
-                    }
-
-                    preventRecalculating = false;
+                    keepAspectRatio({ dependentEditor: heightEditor, newValue, previousValue });
                 }
             });
 
@@ -476,15 +481,11 @@ function getSpecifyURLTabItems(module, imageUploadingOption) {
                 onEnterKey: data.component.option('onEditorEnterKey').bind(module.editorInstance._formDialog, data),
                 onValueChanged: (e) => {
                     const newValue = parseInt(e.value);
-                    const oldWidth = parseInt(widthEditor.option('value'));
+                    const previousValue = parseInt(e.previousValue);
+
                     data.component.updateData(data.dataField, newValue);
 
-                    if(keepRatio && oldWidth && e.previousValue && !preventRecalculating) {
-                        preventRecalculating = true;
-                        widthEditor.option('value', Math.round(newValue * oldWidth / parseInt(e.previousValue)).toString());
-                    }
-
-                    preventRecalculating = false;
+                    keepAspectRatio({ dependentEditor: widthEditor, newValue, previousValue });
                 }
             });
 
