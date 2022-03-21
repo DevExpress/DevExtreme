@@ -1528,7 +1528,6 @@ declare module DevExpress.core {
       container: unknown;
       model?: object;
       transclude?: boolean;
-      renovated?: boolean;
     }): DxElement;
   }
 
