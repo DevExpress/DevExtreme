@@ -79,6 +79,7 @@ import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZone
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
+const DEFAULT_AGENDA_DURATION = 7;
 
 const WIDGET_CLASS = 'dx-scheduler';
 const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
@@ -1403,6 +1404,7 @@ class Scheduler extends Widget {
             rtlEnabled: this.option('rtlEnabled'),
             useDropDownViewSwitcher: this.option('useDropDownViewSwitcher'),
             customizeDateNavigatorText: this.option('customizeDateNavigatorText'),
+            agendaDuration: currentViewOptions['agendaDuration'] || DEFAULT_AGENDA_DURATION
         }, currentViewOptions);
 
         result.intervalCount = countConfig.intervalCount;
