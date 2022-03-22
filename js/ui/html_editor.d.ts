@@ -28,6 +28,8 @@ import {
     Item as dxToolbarItem,
 } from './toolbar';
 
+import dxFileUploaderOptions from './file_uploader';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
 
@@ -417,6 +419,13 @@ export interface dxHtmlEditorTableResizing {
    * @public
    */
    mode?: 'url' | 'base64' | 'both';
+    /**
+   * @docid
+   * @default {}
+   * @public
+   * @type dxFileUploaderOptions
+   */
+    fileUploaderOptions?: dxFileUploaderOptions;
  }
 
 /**
