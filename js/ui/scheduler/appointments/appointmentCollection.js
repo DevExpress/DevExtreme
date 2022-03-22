@@ -476,6 +476,7 @@ class SchedulerAppointments extends CollectionWidget {
             const setting = item.settings[i];
             this._currentAppointmentSettings = setting;
             const $item = super._renderItem(index, itemData, container);
+
             $item.data(APPOINTMENT_SETTINGS_KEY, setting);
 
             $items.push($item);
@@ -781,8 +782,8 @@ class SchedulerAppointments extends CollectionWidget {
         if(result > maxDate.getTime() || result <= minDate.getTime()) {
             const tailOfCurrentDay = maxDate.getTime() - endDate.getTime();
             const tailOfPrevDays = deltaTime - tailOfCurrentDay;
-
-            const lastDay = new Date(endDate.setDate(endDate.getDate() + daysCount));
+            const correctedEndDate = new Date(endDate).setDate(endDate.getDate() + daysCount);
+            const lastDay = new Date(correctedEndDate);
             lastDay.setHours(startDayHour, 0, 0, 0);
 
             result = lastDay.getTime() + tailOfPrevDays - visibleDayDuration * (daysCount - 1);
