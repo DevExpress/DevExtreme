@@ -42,3 +42,63 @@
     margin-right: 0;
   }
 }
+
+.dx-toast-container {
+  position: absolute;
+  display: flex;
+  overflow: hidden;
+  gap: 3px;
+  align-items: center;
+
+  .dx-toast-wrapper {
+    transform: translate(0) !important; // stylelint-disable-line declaration-no-important
+    position: static !important; // stylelint-disable-line declaration-no-important
+    height: auto !important; // stylelint-disable-line declaration-no-important
+    width: auto !important; // stylelint-disable-line declaration-no-important
+
+    .dx-toast-content {
+      transform: translate(0) !important; // stylelint-disable-line declaration-no-important
+      position: static !important; // stylelint-disable-line declaration-no-important
+    }
+  }
+}
+
+.dx-toast-container-down-direction {
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+}
+
+.dx-toast-container-up-direction {
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.dx-toast-container-left-direction {
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.dx-toast-container-right-direction {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.dx-toast-container-down-reverse-direction {
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.dx-toast-container-up-reverse-direction {
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+}
+
+.dx-toast-container-left-reverse-direction {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+.dx-toast-container-right-reverse-direction {
+  flex-direction: row;
+  justify-content: flex-start;
+}
