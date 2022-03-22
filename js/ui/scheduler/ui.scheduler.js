@@ -1413,8 +1413,11 @@ class Scheduler extends Widget {
         result.max = new Date(this._dateOption('max'));
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
         result.onCurrentViewChange = (name) => this.option('currentView', name);
-        result.onCurrentDateChange = (date) => this.option('currentDate', date);
+        result.onCurrentDateChange = (date) => {
+            this.option('currentDate', date);
+        };
         result.items = this.option('toolbar');
+        result.startViewDate = this.getStartViewDate();
 
         result.todayDate = () => {
             const result = this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
@@ -2164,7 +2167,7 @@ class Scheduler extends Widget {
     }
 
     getStartViewDate() {
-        return this._workSpace.getStartViewDate();
+        return this._workSpace?.getStartViewDate();
     }
 
     getEndViewDate() {
