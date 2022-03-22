@@ -3400,8 +3400,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Refresh with changesOnly and summary in group row', function(assert) {
-        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
-
         // arrange
         const dataSource = new DataSource({
             store: {
