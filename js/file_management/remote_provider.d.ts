@@ -12,7 +12,6 @@ export type Options = RemoteFileSystemProviderOptions;
 export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
     /**
      * @docid
-     * @type_function_param1 options: object
      * @type_function_param1_field1 headers:object
      * @type_function_param1_field2 xhrFields:object
      * @type_function_param1_field3 formData:object
@@ -21,7 +20,6 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
     beforeAjaxSend?: ((options: { headers?: any; xhrFields?: any; formData?: any }) => void);
     /**
      * @docid
-     * @type_function_param1 options: object
      * @type_function_param1_field1 formData:object
      * @public
      */

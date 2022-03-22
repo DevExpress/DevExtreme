@@ -45,7 +45,6 @@ export interface AsyncRule {
      * @docid
      * @type_function_return Promise<any>
      * @type_function_param1 options:object
-     * @type_function_param1_field1 value:string|number
      * @type_function_param1_field2 rule:object
      * @type_function_param1_field3 validator:object
      * @type_function_param1_field4 data:object
@@ -130,7 +129,6 @@ export interface CustomRule {
     /**
      * @docid
      * @type_function_param1 options:object
-     * @type_function_param1_field1 value:string|number
      * @type_function_param1_field2 rule:object
      * @type_function_param1_field3 validator:object
      * @type_function_param1_field4 data:object
@@ -216,7 +214,6 @@ export interface PatternRule {
     message?: string;
     /**
      * @docid
-     * @type regexp|string
      * @public
      */
     pattern?: RegExp | string;

@@ -182,7 +182,6 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
     autoFilterEnabled?: boolean;
     /**
      * @docid
-     * @type_function_param1 options:Object
      * @type_function_param1_field1 gridCell:ExcelDataGridCell
      * @type_function_param1_field2 excelCell:Object
      * @public
@@ -216,7 +215,6 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
     mergeColumnFieldValues?: boolean;
     /**
      * @docid
-     * @type_function_param1 options:Object
      * @type_function_param1_field1 pivotCell:ExcelPivotGridCell
      * @type_function_param1_field2 excelCell:Object
      * @public

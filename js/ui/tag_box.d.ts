@@ -136,13 +136,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 multiTagElement:DxElement
-     * @type_function_param1_field5 selectedItems:Array<string,number,Object>
-     * @type_function_param1_field6 text:string
-     * @type_function_param1_field7 cancel:boolean
-     * @type_function_param1_field1 component:dxTagBox
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field6 selectedItems:Array<string,number,Object>
      * @action
      * @public
      */
@@ -151,10 +145,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:boolean
      * @type_function_param1_field1 component:dxTagBox
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -166,8 +157,6 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
      * @type_function_param1_field4 addedItems:Array<string,number,Object>
      * @type_function_param1_field5 removedItems:Array<string,number,Object>
      * @type_function_param1_field1 component:dxTagBox
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */

@@ -146,7 +146,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
       };
       /**
        * @docid
-       * @type_function_param1 itemInfo: dxSankeyNode
        * @notUsedInTheme
        */
       customizeText?: ((itemInfo: dxSankeyNode) => string);
@@ -428,10 +427,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 target:dxSankeyLink
      * @notUsedInTheme
      * @action
      * @public
@@ -442,9 +438,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 target:dxSankeyLink
      * @notUsedInTheme
      * @action
      * @public
@@ -456,10 +449,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 target:dxSankeyNode
      * @notUsedInTheme
      * @action
      * @public
@@ -470,9 +460,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 target:dxSankeyNode
      * @notUsedInTheme
      * @action
      * @public
@@ -528,7 +515,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * @docid  dxSankeyOptions.tooltip.customizeLinkTooltip
      * @default undefined
-     * @type_function_param1_field3 weight:Number
      * @type_function_return object
      * @public
      */
@@ -537,8 +523,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @docid  dxSankeyOptions.tooltip.customizeNodeTooltip
      * @default undefined
      * @type_function_param1_field1 title:string:deprecated(label)
-     * @type_function_param1_field3 weightIn:Number
-     * @type_function_param1_field4 weightOut:Number
      * @type_function_return object
      * @public
      */
@@ -551,7 +535,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     enabled?: boolean;
     /**
      * @docid dxSankeyOptions.tooltip.linkTooltipTemplate
-     * @type_function_param1_field3 weight:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -559,8 +542,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     linkTooltipTemplate?: template | ((info: { source?: string; target?: string; weight?: number }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
-     * @type_function_param1_field2 weightIn:Number
-     * @type_function_param1_field3 weightOut:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public

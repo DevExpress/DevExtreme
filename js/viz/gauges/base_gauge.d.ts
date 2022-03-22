@@ -56,8 +56,6 @@ export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action
@@ -69,8 +67,6 @@ export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action
@@ -319,7 +315,6 @@ export interface BaseGaugeScale {
 export interface BaseGaugeScaleLabel {
     /**
      * @docid BaseGaugeOptions.scale.label.customizeText
-     * @type_function_param1_field1 value:Number
      * @notUsedInTheme
      * @public
      */
@@ -360,7 +355,6 @@ export interface BaseGaugeScaleLabel {
 export interface BaseGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseGaugeOptions.tooltip.contentTemplate
-     * @type_function_param1_field1 value:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -369,7 +363,6 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseGaugeOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1_field1 value:Number
      * @type_function_return object
      * @public
      */
@@ -535,7 +528,6 @@ export interface CommonIndicator {
     text?: {
       /**
        * @docid
-       * @type_function_param1_field1 value:Number
        * @notUsedInTheme
        * @default undefined
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud

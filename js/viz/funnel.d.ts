@@ -357,8 +357,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       /**
        * @docid
        * @type_function_param1_field1 item:dxFunnelItem
-       * @type_function_param1_field2 value:Number
-       * @type_function_param1_field4 percent:Number
        * @notUsedInTheme
        */
       customizeText?: ((itemInfo: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }) => string);
@@ -436,8 +434,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
      * @action
@@ -450,8 +446,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
@@ -465,8 +459,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
@@ -479,8 +471,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
      * @action
@@ -576,8 +566,6 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxFunnelOptions.tooltip.contentTemplate
      * @type_function_param1_field1 item:dxFunnelItem
-     * @type_function_param1_field2 value:Number
-     * @type_function_param1_field4 percent:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -587,8 +575,6 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
      * @type_function_param1_field1 item:dxFunnelItem
-     * @type_function_param1_field2 value:Number
-     * @type_function_param1_field4 percent:Number
      * @type_function_return object
      * @public
      */

@@ -60,7 +60,6 @@ export interface DataSourceOptions<
     map?: ((dataItem: TStoreItem) => TMappedItem);
     /**
      * @docid
-     * @type_function_param1 e:Object
      * @type_function_param1_field1 changes:Array<any>
      * @action
      * @public
@@ -68,7 +67,6 @@ export interface DataSourceOptions<
     onChanged?: ((e: { readonly changes?: Array<TMappedItem> }) => void);
     /**
      * @docid
-     * @type_function_param1 error:Object
      * @action
      * @public
      */
@@ -311,14 +309,12 @@ export default class DataSource<
     /**
      * @docid
      * @publicName paginate()
-     * @return Boolean
      * @public
      */
     paginate(): boolean;
     /**
      * @docid
      * @publicName paginate(value)
-     * @param1 value:Boolean
      * @public
      */
     paginate(value: boolean): void;

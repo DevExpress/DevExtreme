@@ -147,8 +147,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 name:String
      * @action
      * @public
      */
@@ -157,7 +155,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @docid
      * @type_function_param1 container:dxSVGElement
      * @type_function_param2 data:object
-     * @type_function_param2_field1 item:dxDiagramShape
      * @type_function_return void
      * @public
      */
@@ -166,7 +163,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @docid
      * @type_function_param1 container:dxSVGElement
      * @type_function_param2 data:object
-     * @type_function_param2_field1 item:dxDiagramShape
      * @type_function_return void
      * @public
      */
@@ -291,7 +287,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @type_function_param1 container:dxSVGElement
        * @type_function_param2 data:object
-       * @type_function_param2_field1 item:dxDiagramShape
        * @type_function_return void
        */
       template?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any);
@@ -335,7 +330,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @type_function_param1 container:dxSVGElement
        * @type_function_param2 data:object
-       * @type_function_param2_field1 item:dxDiagramShape
        * @type_function_return void
        */
       toolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any);
@@ -710,8 +704,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
      * @public
@@ -722,8 +714,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
      * @public
@@ -734,8 +724,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 items:Array<dxDiagramItem>
      * @action
      * @public
@@ -746,12 +734,8 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 operation:Enums.DiagramModelOperation
-     * @type_function_param1_field5 args:dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs
      * @type_function_param1_field6 reason:Enums.DiagramRequestEditOperationReason
-     * @type_function_param1_field7 allowed:boolean
      * @action
      * @public
      */
@@ -761,10 +745,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 changes:Array<any>
-     * @type_function_param1_field5 allowed:boolean
      * @action
      * @public
      */
@@ -1062,7 +1043,6 @@ export default class dxDiagram extends Widget<dxDiagramOptions> {
     /**
      * @docid
      * @publicName getItemById(id)
-     * @param1 id:String
      * @return dxDiagramItem
      * @public
      */
@@ -1280,7 +1260,6 @@ export interface dxDiagramShape extends Item {
     attachedConnectorIds?: Array<String>;
     /**
      * @docid dxDiagramShape.containerId
-     * @type String
      * @public
      */
     containerId?: string;
@@ -1291,7 +1270,6 @@ export interface dxDiagramShape extends Item {
     containerChildItemIds?: Array<String>;
     /**
      * @docid dxDiagramShape.containerExpanded
-     * @type Boolean
      * @public
      */
     containerExpanded?: boolean;

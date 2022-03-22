@@ -66,7 +66,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @docid
      * @deprecated dxToastOptions.hideOnOutsideClick
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @default true &for(Android)
      * @public
      */
@@ -88,7 +87,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @docid
      * @type boolean | function
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @default true &for(Android)
      * @public
      */

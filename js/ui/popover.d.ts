@@ -71,7 +71,6 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @docid
      * @deprecated dxPopoverOptions.hideOnOutsideClick
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @default true
      * @public
      */
@@ -103,7 +102,6 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @docid
      * @type boolean | function
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @default true
      * @public
      */
