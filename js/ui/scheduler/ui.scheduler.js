@@ -623,6 +623,7 @@ class Scheduler extends Widget {
                 break;
             case 'cellDuration':
                 this._validateCellDuration();
+                this._updateOption('workSpace', name, value);
                 this._appointments.option('items', []);
                 if(this._readyToRenderAppointments) {
                     this._updateOption('workSpace', 'hoursInterval', value / 60);
