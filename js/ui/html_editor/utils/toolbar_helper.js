@@ -306,7 +306,7 @@ function getUpdateDialogFormData(module, formData) {
 function modifyImageUploadDialog(module, imageUploadOption) {
     module.editorInstance.formDialogOption({
         title: localizationMessage.format(DIALOG_IMAGE_CAPTION),
-        'toolbarItems[0].options.text': 'Add'
+        'toolbarItems[0].options.text': 'Add' // localization
     });
     let wrapperClassString = `${DIALOG_IMAGE_POPUP_CLASS} ${FORM_DIALOG_CLASS}`;
     if(isDefined(imageUploadOption) && imageUploadOption.mode !== 'url') {
@@ -387,7 +387,7 @@ function getSelectFileTabItems(module, imageUploadOption) {
             itemType: 'simple',
             dataField: 'files',
             colSpan: 11,
-            label: { visible: false },
+            label: { visible: false }, // localization
             template: (formTemplateData) => {
                 const $content = $('<div>');
                 module.editorInstance._createComponent($content, FileUploader, {
@@ -422,7 +422,7 @@ function getSelectFileTabItems(module, imageUploadOption) {
             editorOptions: {
                 value: useBase64,
                 disabled: imageUploadOption?.mode === 'base64',
-                text: 'Encode to base 64',
+                text: 'Encode to base 64', // localization
                 onValueChanged: (e) => {
                     useBase64 = e.value;
                 },
@@ -475,7 +475,7 @@ function getSpecifyURLTabItems(module) {
                     icon: 'link',
                     value: 'keepRatio',
                 }],
-                hint: 'Keep aspect ratio',
+                hint: 'Keep aspect ratio', // localization
                 keyExpr: 'value',
                 stylingMode: 'outlined',
                 selectionMode: 'multiple',
@@ -519,11 +519,11 @@ function imageFormItems(module, imageUploadOption) {
             {
                 itemType: 'tabbed',
                 tabs: [{
-                    title: 'Select file',
+                    title: 'Select file', // localization
                     colCount: 11,
                     items: selectFileTabItems
                 }, {
-                    title: 'Specify URL',
+                    title: 'Specify URL', // localization
                     colCount: 11,
                     items: specifyURLTabItems
                 }]
