@@ -14,6 +14,8 @@ import { isDefined, isBoolean } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 import { isMaterial } from '../../themes';
 
+import { extend } from '../../../core/utils/extend';
+
 import Form from '../../form';
 import ButtonGroup from '../../button_group';
 import ColorBox from '../../color_box';
@@ -382,6 +384,32 @@ function serverUpload({ formInstance, file, uploadDirectory }) {
 function getSelectFileTabItems(module, imageUploadOption) {
     let useBase64 = imageUploadOption?.mode === 'base64';
 
+    function getFileUploaderOptions(formTemplateData) {
+        const baseFileUploaderOptions = {
+            multiple: false,
+            value: [],
+            name: 'photo',
+            accept: 'image/*',
+            uploadUrl: imageUploadOption.uploadUrl,
+            uploadMode: 'instantly',
+            onValueChanged: (data) => {
+                if(useBase64) {
+                    base64Upload(module, data);
+                }
+            },
+            onUploaded: (data) => {
+                if(!useBase64) {
+                    const formInstance = formTemplateData.component;
+                    const file = data.file;
+                    const uploadDirectory = imageUploadOption.uploadDirectory;
+                    serverUpload({ formInstance, file, uploadDirectory });
+                }
+            }
+        };
+
+        return extend({}, baseFileUploaderOptions, imageUploadOption.fileUploaderOptions);
+    }
+
     const selectFileTabItems = [
         {
             itemType: 'simple',
@@ -390,27 +418,7 @@ function getSelectFileTabItems(module, imageUploadOption) {
             label: { visible: false }, // localization
             template: (formTemplateData) => {
                 const $content = $('<div>');
-                module.editorInstance._createComponent($content, FileUploader, {
-                    multiple: false,
-                    value: [],
-                    name: 'photo',
-                    accept: 'image/*',
-                    uploadUrl: imageUploadOption.uploadUrl,
-                    uploadMode: 'instantly',
-                    onValueChanged: (data) => {
-                        if(useBase64) {
-                            base64Upload(module, data);
-                        }
-                    },
-                    onUploaded: (data) => {
-                        if(!useBase64) {
-                            const formInstance = formTemplateData.component;
-                            const file = data.file;
-                            const uploadDirectory = imageUploadOption.uploadDirectory;
-                            serverUpload({ formInstance, file, uploadDirectory });
-                        }
-                    }
-                });
+                module.editorInstance._createComponent($content, FileUploader, getFileUploaderOptions(formTemplateData));
                 return $content;
             }
         }, {

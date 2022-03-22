@@ -506,4 +506,15 @@ module('Image uploading integration', {
         delete this.formDataMock;
     });
 
+    test('check fileUploaderOption', function(assert) {
+        this.createWidget({ imageUpload: { mode: 'both', fileUploaderOptions: { width: 155 } } });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $form = this.getFormElement([1, 2]);
+
+        const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+
+        assert.strictEqual(fileUploader.option('width'), 155, 'value is correct');
+    });
+
 });
