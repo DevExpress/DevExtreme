@@ -80,7 +80,7 @@ export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
 
 /** @public */
 export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
-    cancel?: boolean | PromiseLike<void>;
+    cancel?: boolean | PromiseLike<boolean> | PromiseLike<void>;
 };
 
 /** @public */
@@ -314,7 +314,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 cancel:boolean | Promise<void>
+     * @type_function_param1_field7 cancel:boolean | Promise<boolean> | Promise<void>
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
