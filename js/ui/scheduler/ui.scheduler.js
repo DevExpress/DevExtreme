@@ -1765,8 +1765,8 @@ class Scheduler extends Widget {
         if(this._isAgenda() && adapter.isRecurrent) {
             const agendaSettings = settings.agendaSettings;
 
-            targetedAdapter.startDate = agendaSettings.startDate;
-            targetedAdapter.endDate = agendaSettings.endDate;
+            targetedAdapter.startDate = this.fire('getField', 'startDate', agendaSettings);
+            targetedAdapter.endDate = this.fire('getField', 'endDate', agendaSettings);
 
         } else if(settings) {
             targetedAdapter.startDate = info ? info.sourceAppointment.startDate : adapter.startDate; // TODO: in agenda we havn't info field
