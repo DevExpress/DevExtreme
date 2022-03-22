@@ -61,7 +61,6 @@ module('Image uploading integration', {
 
         this.getFormElement = (selectionArgs = [0, 1]) => {
             this.instance.focus();
-
             this.instance.setSelection.apply(this.instance, selectionArgs);
 
             this.$element

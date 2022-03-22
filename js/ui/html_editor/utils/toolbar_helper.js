@@ -52,7 +52,6 @@ const DIALOG_IMAGE_POPUP_WITH_TABS_CLASS = 'dx-htmleditor-add-image-popup-with-t
 
 const FORM_DIALOG_CLASS = 'dx-formdialog';
 
-
 const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
 const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
 
@@ -239,6 +238,7 @@ function prepareImageHandler(module, imageUploadOption) {
         }
 
         modifyImageUploadDialog(module, imageUploadOption);
+
         const formDialogOptions = {
             formData: formData,
             width: 493,
@@ -291,9 +291,7 @@ function dialogResultHandler(module, { formData, event, defaultIndex, formatInde
     }
 
     formData = updateFormDataDimensions(formData);
-
     module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
-
     module.quill.setSelection(index + 1, 0, USER_ACTION);
 }
 
@@ -509,13 +507,11 @@ function getSpecifyURLTabItems(module) {
 }
 
 function imageFormItems(module, imageUploadOption) {
-
     let resultFormItems;
 
     imageUploadOption = imageUploadOption || {};
 
     const selectFileTabItems = getSelectFileTabItems(module, imageUploadOption);
-
     const specifyURLTabItems = getSpecifyURLTabItems(module);
 
     if(imageUploadOption?.mode === 'both' || imageUploadOption?.mode === 'base64') {
