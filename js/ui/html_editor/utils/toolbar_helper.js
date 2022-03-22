@@ -12,6 +12,7 @@ import {
 } from './table_helper';
 import { isDefined, isBoolean } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
+import { isMaterial } from '../../themes';
 
 import Form from '../../form';
 import ButtonGroup from '../../button_group';
@@ -19,7 +20,6 @@ import ColorBox from '../../color_box';
 import ScrollView from '../../scroll_view';
 import FileUploader from '../../file_uploader';
 import TextBox from '../../text_box';
-// import Button from '../../button';
 
 import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
 
@@ -46,6 +46,11 @@ const DIALOG_IMAGE_FIELD_URL = 'dxHtmlEditor-dialogImageUrlField';
 const DIALOG_IMAGE_FIELD_ALT = 'dxHtmlEditor-dialogImageAltField';
 const DIALOG_IMAGE_FIELD_WIDTH = 'dxHtmlEditor-dialogImageWidthField';
 const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
+
+const DIALOG_IMAGE_POPUP_CLASS = 'dx-htmleditor-add-image-popup';
+const DIALOG_IMAGE_POPUP_WITH_TABS_CLASS = 'dx-htmleditor-add-image-popup-with-tabs';
+
+const FORM_DIALOG_CLASS = 'dx-formdialog';
 
 
 const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
@@ -238,7 +243,7 @@ function prepareImageHandler(module, imageUploadOption) {
             formData: formData,
             width: 493,
             labelLocation: 'top',
-            colCount: (imageUploadOption?.mode === 'base64' || imageUploadOption?.mode === 'both') ? 1 : 11,
+            colCount: hasTabbedItems(imageUploadOption) ? 1 : 11,
             items: imageFormItems(module, imageUploadOption)
         };
 
@@ -254,6 +259,10 @@ function prepareImageHandler(module, imageUploadOption) {
                 module.quill.focus();
             });
     };
+}
+
+function hasTabbedItems(imageUploadOption) {
+    return imageUploadOption?.mode === 'base64' || imageUploadOption?.mode === 'both';
 }
 
 function updateFormDataDimensions(formData) {
@@ -297,19 +306,28 @@ function getUpdateDialogFormData(module, formData) {
 }
 
 function modifyImageUploadDialog(module, imageUploadOption) {
-    module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
-    module.editorInstance.formDialogOption('toolbarItems[0].options.text', 'Add');
-    let wrapperClassString = 'dx-htmleditor-add-image-popup dx-formdialog';
+    module.editorInstance.formDialogOption({
+        title: localizationMessage.format(DIALOG_IMAGE_CAPTION),
+        'toolbarItems[0].options.text': 'Add'
+    });
+    let wrapperClassString = `${DIALOG_IMAGE_POPUP_CLASS} ${FORM_DIALOG_CLASS}`;
     if(isDefined(imageUploadOption) && imageUploadOption.mode !== 'url') {
-        wrapperClassString += ' dx-htmleditor-add-image-popup-with-tabs';
+        wrapperClassString += ` ${DIALOG_IMAGE_POPUP_WITH_TABS_CLASS}`;
     }
 
     module.editorInstance.formDialogOption('wrapperAttr', { class: wrapperClassString });
 }
 
 function cancelImageUploadDialogModification(module) {
-    module.editorInstance.formDialogOption('toolbarItems[0].options.text', localizationMessage.format('OK'));
-    module.editorInstance.formDialogOption('wrapperAttr', { class: 'dx-formdialog' });
+    module.editorInstance.formDialogOption({
+        'toolbarItems[0].options.text': localizationMessage.format('OK'),
+        wrapperAttr: { class: FORM_DIALOG_CLASS }
+    });
+    module.editorInstance._formDialog?.formOption({
+        colCount: 1,
+        width: 'auto',
+        labelLocation: isMaterial() ? 'top' : 'left'
+    });
 }
 
 function getLinkFormItems(module, selection) {

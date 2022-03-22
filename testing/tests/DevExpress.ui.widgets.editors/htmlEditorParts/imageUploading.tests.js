@@ -121,6 +121,9 @@ module('Image uploading integration', {
                 assert.strictEqual(formItems[0].tabs[0].items.length, 2, 'has items for the first tab');
                 assert.strictEqual(formItems[0].tabs[1].items.length, 4, 'has items for the second tab');
                 assert.strictEqual(fileUploader.length, 1, 'file uploader is exists on the form');
+                assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form callCount');
+                assert.strictEqual($('.dx-popup-title').text(), 'Add Image', 'dialog title is modified');
+                assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
             });
         });
 
@@ -135,8 +138,10 @@ module('Image uploading integration', {
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WIT_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
             assert.strictEqual(formItems.length, 4, 'has correct form items count');
-            assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form items count');
+            assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form callCount');
             assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
+            assert.strictEqual($('.dx-popup-title').text(), 'Add Image', 'dialog title is modified');
+            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
         });
 
         [undefined, null].forEach((imageUploadValue) => {
@@ -157,10 +162,45 @@ module('Image uploading integration', {
                 assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
                 assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WIT_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
                 assert.strictEqual(formItems.length, 4, 'has correct form items count');
-                assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form items count');
+                assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form callCount');
                 assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
             });
         });
+
+        test('The popup has correct title, button texts and form options after it is closed and other type dialog is opened', function(assert) {
+            this.createWidget({
+                imageUpload: { mode: 'url' },
+                toolbar: { items: ['image', 'link'] }
+            });
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.$element
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .eq(0)
+                .trigger('dxclick');
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.clickDialogOkButton();
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.$element
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .eq(1)
+                .trigger('dxclick');
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $form = $(`.${FORM_CLASS}`);
+            const formInstance = $form.dxForm('instance');
+
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 0, 'has add image dialog class');
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WIT_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
+            assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form callCount');
+            assert.strictEqual(formInstance.option('labelLocation'), 'left', 'has correct form labelLocation');
+            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'OK', 'dialog ok button text is reverted');
+        });
+
 
         test('check file uploading form base64 checkbox', function(assert) {
             this.createWidget();

@@ -127,6 +127,10 @@ class FormDialog {
             .attr('aria-label', label);
     }
 
+    formOption(optionName, optionValue) {
+        return this._form.option.apply(this._form, arguments);
+    }
+
     show(formUserConfig) {
         if(this._popup.option('visible')) {
             return;
