@@ -520,11 +520,11 @@ const SelectBox = DropDownList.inherit({
         }
 
         this._loadItemDeferred && this._loadItemDeferred.always((function() {
-            const initialSelectedItem = this.option('selectedItem');
+            const { selectedItem: initialSelectedItem, value } = this.option();
 
             if(this.option('acceptCustomValue')) {
                 if(!saveEditingValue) {
-                    this._updateField(initialSelectedItem);
+                    this._updateField(initialSelectedItem ?? this._createCustomItem(value));
                     this._clearFilter();
                 }
                 return;
