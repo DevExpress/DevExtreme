@@ -38,6 +38,7 @@ System.config({
         'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.js',
         'devextreme': '../../artifacts/angular',
         '@devextreme/runtime/angular': '../../node_modules/@devextreme/runtime/cjs/angular',
+        '@devextreme/runtime/common': '../../node_modules/@devextreme/runtime/cjs/common',
         'rrule': 'npm:rrule@2.6.8/dist/es5/rrule.js'
     },
     packages: {
