@@ -554,7 +554,7 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-appointment-collector-compact {
     .dx-scheduler-appointment-collector-content,
     .dx-button-content {
-      span:last-child {
+      span:last-of-type {
         padding-left: 0;
       }
     }
