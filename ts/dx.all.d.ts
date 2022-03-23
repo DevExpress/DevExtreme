@@ -18790,7 +18790,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResizableOptions.handles]
      */
-    handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
+    handles?: string;
     /**
      * [descr:dxResizableOptions.height]
      */

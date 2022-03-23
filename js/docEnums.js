@@ -145,11 +145,6 @@
  */
 
 /**
- * @typedef {string} Enums.ResizeHandle
- * @enum {'bottom'|'left'|'right'|'top'|'all'}
- */
-
-/**
  * @typedef {string} Enums.BoxDirection
  * @enum {'col'|'row'}
  */
