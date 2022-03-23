@@ -1,0 +1,97 @@
+.widget-container {
+  margin-right: 320px;
+  position: absolute;
+  z-index: 1501;
+}
+
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 260px;
+}
+
+.caption {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.option {
+  margin-top: 10px;
+}
+
+#gridContainer {
+  padding: 10px;
+  height: 300px;
+}
+
+#grid {
+  border: 1px solid black;
+}
+
+.dx-resizable-handle-right {
+  border-right: 1px dotted #337ab7;
+}
+
+.dx-resizable-handle-top {
+  border-top: 1px dotted #337ab7;
+}
+
+.dx-resizable-handle-left {
+  border-left: 1px dotted #337ab7;
+}
+
+.dx-resizable-handle-bottom {
+  border-bottom: 1px dotted #337ab7;
+}
+
+.dx-resizable-handle::after {
+  content: "";
+  background-color: #337ab7;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #337ab7;
+  top: calc(50% - 7px);
+}
+
+.dx-resizable-handle-right::after {
+  right: -7px;
+}
+
+.dx-resizable-handle-left::after {
+  left: -7px;
+}
+
+.dx-resizable-handle-corner-top-left::after {
+  left: -7px;
+  top: -7px;
+}
+
+.dx-resizable-handle-corner-top-right::after {
+  right: -7px;
+  top: -7px;
+}
+
+.dx-resizable-handle-corner-bottom-left::after {
+  left: -7px;
+  top: -2px;
+}
+
+.dx-resizable-handle-corner-bottom-right::after {
+  right: -7px;
+  top: -2px;
+}
+
+.dx-resizable-handle-top::after {
+  left: calc(50% - 7px);
+  top: -7px;
+}
+
+.dx-resizable-handle-bottom::after {
+  left: calc(50% - 7px);
+  top: -2px;
+}

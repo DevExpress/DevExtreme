@@ -1,0 +1,1 @@
+The Resizable is a UI component that enables its content to be resizable in the UI.

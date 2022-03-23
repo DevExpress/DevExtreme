@@ -5349,6 +5349,25 @@
             "Widget": "TileView"
           }
         ]
+      },
+      {
+        "Name": "Resizable",
+        "Breadcrumb": false,
+        "Equivalents": "dxResizable, dx-resizable",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Badge": "New",
+            "DocUrl": "",
+            "Widget": "Resizable",
+            "MvcAdditionalFiles": [
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
       }
     ]
   },
