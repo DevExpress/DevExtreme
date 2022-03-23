@@ -311,6 +311,7 @@ const HtmlEditor = Editor.inherit({
             resizing: this._getModuleConfigByOption('mediaResizing'),
             tableResizing: this._getModuleConfigByOption('tableResizing'),
             tableContextMenu: this._getModuleConfigByOption('tableContextMenu'),
+            imageUpload: this._getModuleConfigByOption('imageUpload'),
             mentions: this._getModuleConfigByOption('mentions'),
             uploader: {
                 onDrop: (e) => this._saveValueChangeEvent(dxEvent(e)),
