@@ -51,6 +51,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @docid
      * @type string
      * @default "all"
+     * @acceptValues 'bottom'|'left'|'right'|'top'|'all'
      * @public
      */
     handles?: string;
