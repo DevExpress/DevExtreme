@@ -45,11 +45,11 @@ export type ResizeEndEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEven
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid
-     * @type Enums.ResizeHandle | string
+     * @type string
      * @default "all"
      * @public
      */
-    handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
+    handles?: string;
     /**
      * @docid
      * @fires dxResizableOptions.onResize
