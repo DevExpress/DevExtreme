@@ -336,7 +336,7 @@ $scheduler-month-date-text-padding: 6px;
 .dx-scheduler-work-space-day,
 .dx-scheduler-work-space-work-week,
 .dx-scheduler-work-space-week .dx-scheduler-date-table {
-  .dx-scheduler-date-table-row:first-child .dx-scheduler-date-table-cell {
+  .dx-scheduler-date-table-row:first-of-type .dx-scheduler-date-table-cell {
     border-top: none;
   }
 }
@@ -346,7 +346,7 @@ $scheduler-month-date-text-padding: 6px;
 .dx-scheduler-header-panel-cell {
   border-left: $scheduler-base-border;
 
-  &:first-child {
+  &:first-of-type {
     border-left: none;
   }
 }
@@ -387,7 +387,7 @@ $scheduler-month-date-text-padding: 6px;
   .dx-scheduler-header-panel-cell,
   .dx-scheduler-date-table-cell,
   .dx-scheduler-all-day-table-cell {
-    &:nth-child(7n) {
+    &:nth-of-type(7n) {
       border-right: none;
 
       .dx-rtl & {
@@ -401,7 +401,7 @@ $scheduler-month-date-text-padding: 6px;
   .dx-scheduler-header-panel-cell,
   .dx-scheduler-date-table-cell,
   .dx-scheduler-all-day-table-cell {
-    &:nth-child(5n) {
+    &:nth-of-type(5n) {
       border-right: none;
 
       .dx-rtl & {
@@ -413,14 +413,16 @@ $scheduler-month-date-text-padding: 6px;
 
 .dx-scheduler-work-space-count {
   &.dx-scheduler-work-space-week {
-    .dx-scheduler-header-panel-cell,
-    .dx-scheduler-date-table-cell,
-    .dx-scheduler-all-day-table-cell {
-      &:nth-child(7n) {
-        border-right: $scheduler-accent-border;
+    td {
+      &.dx-scheduler-header-panel-cell,
+      &.dx-scheduler-date-table-cell,
+      &.dx-scheduler-all-day-table-cell {
+        &:nth-of-type(7n) {
+          border-right: $scheduler-accent-border;
 
-        .dx-rtl & {
-          border-left: $scheduler-accent-border;
+          .dx-rtl & {
+            border-left: $scheduler-accent-border;
+          }
         }
       }
     }
@@ -430,7 +432,7 @@ $scheduler-month-date-text-padding: 6px;
     .dx-scheduler-header-panel-cell,
     .dx-scheduler-date-table-cell,
     .dx-scheduler-all-day-table-cell {
-      &:nth-child(5n) {
+      &:nth-of-type(5n) {
         border-right: $scheduler-accent-border;
 
         .dx-rtl & {
