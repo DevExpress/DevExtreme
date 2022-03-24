@@ -19,7 +19,7 @@ import { EventCallback } from './event_callback';
 import { DisposeEffectReturn } from '../../utils/effect_return';
 import { getUpdatedOptions } from './utils/get_updated_options';
 
-interface ComponentProps {
+export interface ComponentProps {
   className?: string;
   itemTemplate?: string | (() => string | HTMLElement);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
