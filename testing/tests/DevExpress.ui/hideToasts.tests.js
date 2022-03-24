@@ -4,8 +4,7 @@ import fx from 'animation/fx';
 import hideToasts from 'ui/toast/hide_toasts';
 
 QUnit.testStart(function() {
-    const markup =
-        '<div id="container"></div>';
+    const markup = '<div id="container"></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -14,16 +13,19 @@ QUnit.module('hideToasts', {
     beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
+        this.getToastCount = () => $('.dx-toast').length;
+        this.containerSelector = '#container';
+        const displayTime = 100;
 
         notify({
             container: '#container',
             position: 'bottom left',
-            displayTime: 100,
+            displayTime,
         });
 
         notify({
             position: 'bottom right',
-            displayTime: 100,
+            displayTime,
         });
 
     },
@@ -35,42 +37,42 @@ QUnit.module('hideToasts', {
     }
 }, () => {
     QUnit.test('without argument hides all Toasts', function(assert) {
-        assert.equal($('.dx-toast').length, 2);
+        assert.equal(this.getToastCount(), 2);
 
         hideToasts();
 
-        assert.equal($('.dx-toast').length, 0);
+        assert.equal(this.getToastCount(), 0);
     });
 
-    QUnit.test('with argument defined as string hides Toasts with corresponding container', function(assert) {
-        assert.equal($('.dx-toast').length, 2);
+    QUnit.test('with string parameter hides Toasts with corresponding container', function(assert) {
+        assert.equal(this.getToastCount(), 2);
 
-        hideToasts('#container');
+        hideToasts(this.containerSelector);
 
-        assert.equal($('.dx-toast').length, 1);
+        assert.equal(this.getToastCount(), 1);
     });
 
-    QUnit.test('with argument defined as jQuery element hides Toasts with corresponding container', function(assert) {
-        assert.equal($('.dx-toast').length, 2);
+    QUnit.test('with jQuery element parameter hides Toasts with corresponding container', function(assert) {
+        assert.equal(this.getToastCount(), 2);
 
-        hideToasts($('#container'));
+        hideToasts($(this.containerSelector));
 
-        assert.equal($('.dx-toast').length, 1);
+        assert.equal(this.getToastCount(), 1);
     });
 
-    QUnit.test('with argument defined as html element hides Toasts with corresponding container', function(assert) {
-        assert.equal($('.dx-toast').length, 2);
+    QUnit.test('with html element parameter hides Toasts with corresponding container', function(assert) {
+        assert.equal(this.getToastCount(), 2);
 
-        hideToasts($('#container').get(0));
+        hideToasts($(this.containerSelector).get(0));
 
-        assert.equal($('.dx-toast').length, 1);
+        assert.equal(this.getToastCount(), 1);
     });
 
-    QUnit.test('with argument defined as unexisted element hides nothing', function(assert) {
-        assert.equal($('.dx-toast').length, 2);
+    QUnit.test('with unexisted element parameter hides nothing', function(assert) {
+        assert.equal(this.getToastCount(), 2);
 
         hideToasts($('#containerr').get(0));
 
-        assert.equal($('.dx-toast').length, 2);
+        assert.equal(this.getToastCount(), 2);
     });
 });

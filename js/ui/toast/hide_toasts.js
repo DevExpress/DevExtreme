@@ -1,18 +1,25 @@
 import $ from '../../core/renderer';
 
-function hideToasts(container) {
-    const containerElement = $(container).get(0);
-    const toasts = ($('.dx-toast')).toArray();
+const TOAST_CLASS = 'dx-toast';
 
-    toasts.forEach((toast) => {
-        const toastInstance = $(toast).dxToast('instance');
-        if(arguments.length) {
-            const toastContainerElement = $(toastInstance.option('container')).get(0);
-            containerElement && containerElement === toastContainerElement && toastInstance.hide();
-        } else {
-            toastInstance.hide();
-        }
-    });
+function hideAllToasts(container) {
+    const toasts = $(`.${TOAST_CLASS}`).toArray();
+    if(!arguments.length) {
+        toasts.forEach(toast => { $(toast).dxToast('hide'); });
+        return;
+    }
+
+    const containerElement = $(container).get(0);
+
+    toasts
+        .map(toast => $(toast).dxToast('instance'))
+        .filter(instance => {
+            const toastContainerElement = $(instance.option('container')).get(0);
+            return containerElement === toastContainerElement && containerElement;
+        })
+        .forEach(instance => {
+            instance.hide();
+        });
 }
 
-export default hideToasts;
+export default hideAllToasts;
