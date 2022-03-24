@@ -1404,6 +1404,7 @@ export const columnsControllerModule = {
                     const firstGroupColumn = expandColumns.filter((column) => column.groupIndex === 0)[0];
                     const isFixedFirstGroupColumn = firstGroupColumn && firstGroupColumn.fixed;
                     const isColumnFixing = this._isColumnFixing();
+                    const rtlEnabled = this.option('rtlEnabled');
 
                     if(expandColumns.length) {
                         expandColumn = this.columnOption('command:expand');
@@ -1416,6 +1417,7 @@ export const columnsControllerModule = {
                             cellTemplate: !isDefined(column.groupIndex) ? column.cellTemplate : null,
                             headerCellTemplate: null,
                             fixed: !isDefined(column.groupIndex) || !isFixedFirstGroupColumn ? isColumnFixing : true,
+                            fixedPosition: rtlEnabled ? 'right' : 'left',
                         }, expandColumn, {
                             index: column.index,
                             type: column.type || GROUP_COMMAND_COLUMN_NAME
