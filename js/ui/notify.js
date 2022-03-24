@@ -1,11 +1,10 @@
 import $ from '../core/renderer';
 import Action from '../core/action';
-import { value } from '../core/utils/view_port';
+import { value as viewPort } from '../core/utils/view_port';
 import { extend } from '../core/utils/extend';
 import { isPlainObject } from '../core/utils/type';
-import Toast from './toast';
 import { getWindow } from '../core/utils/window';
-import domAdapter from '../core/dom_adapter';
+import Toast from './toast';
 
 const window = getWindow();
 let $notify = null;
@@ -16,11 +15,11 @@ const notify = function(message, /* optional */ type, displayTime, stackOptions)
     const { enabled = true, containerId = 'stackContainer', direction = 'up', position = 'bottom center' } = stackOptions || {};
 
     if(enabled) {
-        const container = getStackContainer(containerId);
-        setContainerClasses(container, direction);
+        const $container = getStackContainer(containerId);
+        setContainerClasses($container, direction);
 
-        options.container = container;
-        options.onShowing = () => setContainerStyles(container, direction, position);
+        options.container = $container;
+        options.onShowing = () => setContainerStyles($container, direction, position);
     }
 
     extend(options, {
@@ -35,104 +34,107 @@ const notify = function(message, /* optional */ type, displayTime, stackOptions)
         }
     });
 
-    $notify = $('<div>').appendTo(value());
+    $notify = $('<div>').appendTo(viewPort());
     new Toast($notify, options).show();
 };
 
 const createStackContainer = (id) => {
-    const newContainer = $('<div>').appendTo($(domAdapter.getBody()));
-    newContainer.attr('id', id);
-
-    return newContainer;
+    return $('<div>')
+        .attr({ id })
+        .appendTo(viewPort());
 };
 
 const getStackContainer = (id) => {
-    if($(`#${id}`).length) {
-        return $(`#${id}`);
-    } else {
-        return createStackContainer(id);
-    }
+    const $container = $(`#${id}`);
+    return $container.length ? $container : createStackContainer(id);
 };
 
-
 const setContainerClasses = (container, direction) => {
-    container.removeClass();
-    container.addClass('dx-toast-container').addClass(`dx-toast-container-${direction}-direction`);
+    container
+        .removeClass()
+        .addClass('dx-toast-container')
+        .addClass(`dx-toast-container-${direction}-direction`);
 };
 
 const setContainerStyles = (container, direction, position) => {
+    const dimensions = {
+        toastWidth: container.children().first()[0].offsetWidth,
+        toastHeight: container.children().first()[0].offsetHeight,
+        windowHeight: window.innerHeight,
+        windowWidth: window.innerWidth,
+    };
+
     const styles = typeof position === 'string'
-        ? getPositionStylesByAlias(container, direction, position)
-        : getPositionStylesByCoordinates(container, direction, position);
+        ? getPositionStylesByAlias(direction, position, dimensions)
+        : getPositionStylesByCoordinates(direction, position, dimensions);
 
     container.css(styles);
 };
 
-const getPositionStylesByAlias = (container, direction, position) => {
-    const toastWidth = container.children().first()[0].offsetWidth;
-    const toastHeight = container.children().first()[0].offsetHeight;
-    const windowHeight = window.innerHeight;
-    const windowWidth = window.innerWidth;
-
-    switch(position) {
+const getCoordinatesByAlias = (alias, { toastWidth, toastHeight, windowHeight, windowWidth }) => {
+    switch(alias) {
         case 'top left':
-            return getPositionStylesByCoordinates(container, direction, { top: 10, left: 10 });
+            return { top: 10, left: 10 };
         case 'top right':
-            return getPositionStylesByCoordinates(container, direction, { top: 10, right: 10 });
+            return { top: 10, right: 10 };
         case 'bottom left':
-            return getPositionStylesByCoordinates(container, direction, { bottom: 10, left: 10 });
+            return { bottom: 10, left: 10 };
         case 'bottom right':
-            return getPositionStylesByCoordinates(container, direction, { bottom: 10, right: 10 });
+            return { bottom: 10, right: 10 };
         case 'top center':
-            return getPositionStylesByCoordinates(container, direction, { top: 10, left: Math.round(windowWidth / 2 - toastWidth / 2) });
+            return { top: 10, left: Math.round(windowWidth / 2 - toastWidth / 2) };
         case 'left center':
-            return getPositionStylesByCoordinates(container, direction, { top: Math.round(windowHeight / 2 - toastHeight / 2), left: 10 });
+            return { top: Math.round(windowHeight / 2 - toastHeight / 2), left: 10 };
         case 'right center':
-            return getPositionStylesByCoordinates(container, direction, { top: Math.round(windowHeight / 2 - toastHeight / 2), right: 10 });
+            return { top: Math.round(windowHeight / 2 - toastHeight / 2), right: 10 };
         case 'center':
-            return getPositionStylesByCoordinates(container, direction, {
+            return {
                 top: Math.round(windowHeight / 2 - toastHeight / 2),
                 left: Math.round(windowWidth / 2 - toastWidth / 2)
-            });
+            };
         case 'bottom center':
         default:
-            return getPositionStylesByCoordinates(container, direction, { bottom: 10, left: Math.round(windowWidth / 2 - toastWidth / 2) });
+            return { bottom: 10, left: Math.round(windowWidth / 2 - toastWidth / 2) };
     }
 };
 
-const getPositionStylesByCoordinates = (container, direction, position) => {
-    const styles = {};
-    const toastWidth = container.children().first()[0].offsetWidth;
-    const toastHeight = container.children().first()[0].offsetHeight;
+const getPositionStylesByAlias = (direction, position, dimensions) => {
+    return getPositionStylesByCoordinates(direction, getCoordinatesByAlias(position, dimensions), dimensions);
+};
+
+const getPositionStylesByCoordinates = (direction, position, dimensions) => {
+    const { toastWidth, toastHeight, windowHeight, windowWidth } = dimensions;
 
     switch(direction.replace('-reverse', '')) {
         case 'up':
-            styles.bottom = position.bottom ? position.bottom : `calc(100vh - ${toastHeight}px - ${position.top}px)`;
-            styles.top = '';
-            styles.left = position.left ? `${position.left}px` : '';
-            styles.right = position.right ? `${position.right}px` : '';
-            break;
+            return {
+                bottom: position.bottom ?? windowHeight - toastHeight - position.top,
+                top: '',
+                left: position.left ?? '',
+                right: position.right ?? '',
+            };
         case 'down':
-            styles.top = position.top ? position.top : `calc(100vh - ${toastHeight}px - ${position.bottom}px)`;
-            styles.bottom = '';
-            styles.left = position.left ? `${position.left}px` : '';
-            styles.right = position.right ? `${position.right}px` : '';
-            break;
+            return {
+                top: position.top ?? windowHeight - toastHeight - position.bottom,
+                bottom: '',
+                left: position.left ?? '',
+                right: position.right ?? '',
+            };
         case 'left':
-            styles.right = position.right ? position.right : `calc(100vw - (100vw - 100%) - ${toastWidth}px - ${position.left}px)`;
-            styles.left = '';
-            styles.top = position.top ? `${position.top}px` : '';
-            styles.bottom = position.bottom ? `${position.bottom}px` : '';
-            break;
+            return {
+                right: position.right ?? windowWidth - toastWidth - position.left,
+                left: '',
+                top: position.top ?? '',
+                bottom: position.bottom ?? '',
+            };
         case 'right':
-            styles.left = position.left ? position.left : `calc(100vw - (100vw - 100%) - ${toastWidth}px - ${position.right}px)`;
-            styles.right = '';
-            styles.top = position.top ? `${position.top}px` : '';
-            styles.bottom = position.bottom ? `${position.bottom}px` : '';
-            break;
+            return {
+                left: position.left ?? windowWidth - toastWidth - position.right,
+                right: '',
+                top: position.top ?? '',
+                bottom: position.bottom ?? '',
+            };
     }
-
-    return styles;
 };
 
 export default notify;

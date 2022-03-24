@@ -50,17 +50,19 @@
   gap: 3px;
   align-items: center;
 
+  /* stylelint-disable declaration-no-important */
   .dx-toast-wrapper {
-    transform: translate(0) !important; // stylelint-disable-line declaration-no-important
-    position: static !important; // stylelint-disable-line declaration-no-important
-    height: auto !important; // stylelint-disable-line declaration-no-important
-    width: auto !important; // stylelint-disable-line declaration-no-important
+    transform: translate(0) !important;
+    position: static !important;
+    height: auto !important;
+    width: auto !important;
 
     .dx-toast-content {
-      transform: translate(0) !important; // stylelint-disable-line declaration-no-important
-      position: static !important; // stylelint-disable-line declaration-no-important
+      transform: translate(0) !important;
+      position: static !important;
     }
   }
+  /* stylelint-enable declaration-no-important */
 }
 
 .dx-toast-container-down-direction {
