@@ -350,7 +350,7 @@ const FocusController = core.ViewController.inherit((function() {
                 }
             });
 
-            rowsView.scrollToElementVertically($mainRow);
+            $mainRow && rowsView.scrollToElementVertically($mainRow);
         },
         _clearPreviousFocusedRow: function($tableElement, focusedRowIndex) {
             const isNotMasterDetailFocusedRow = (_, focusedRow) => {
