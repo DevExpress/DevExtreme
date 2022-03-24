@@ -3,16 +3,18 @@ import {
 } from '@devextreme-generator/declarations';
 import LegacySwitch from '../../../ui/switch';
 import { EventCallback } from '../common/event_callback';
-import { Editor, EditorProps } from './editor_wrapper';
+import { EditorProps } from './editor_props';
+import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import messageLocalization from '../../../localization/message';
 
 export const viewFunction = ({
   componentProps,
   restAttributes,
 }: Switch): JSX.Element => (
-  <Editor
+  <DomComponentWrapper
     componentType={LegacySwitch}
     componentProps={componentProps}
+    templateNames={[]}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />

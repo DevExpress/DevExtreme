@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import LegacySelectBox from '../../../../../ui/select_box';
 import { viewFunction as SelectBoxView, SelectBoxProps, SelectBox } from '../select_box';
-import { Editor } from '../../editor_wrapper';
+import { DomComponentWrapper } from '../../../common/dom_component_wrapper';
 
 jest.mock('../../../../../ui/select_box', () => jest.fn());
 
@@ -16,7 +16,7 @@ describe('Selectbox', () => {
     } as Partial<SelectBox>;
     const tree = shallow(<SelectBoxView {...props as any} /> as any);
 
-    expect(tree.find(Editor).props()).toMatchObject({
+    expect(tree.find(DomComponentWrapper).props()).toMatchObject({
       componentProps,
       componentType: LegacySelectBox,
       'rest-attributes': 'true',

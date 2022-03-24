@@ -2,14 +2,15 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, TwoWay, Event,
 } from '@devextreme-generator/declarations';
 import LegacyDateBox from '../../../../ui/date_box';
-import { Editor, EditorProps } from '../editor_wrapper';
+import { EditorProps } from '../editor_props';
+import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import { EventCallback } from '../../common/event_callback';
 
 export const viewFunction = ({
   componentProps,
   restAttributes,
 }: DateBox): JSX.Element => (
-  <Editor
+  <DomComponentWrapper
     componentType={LegacyDateBox}
     componentProps={componentProps}
     templateNames={[]}

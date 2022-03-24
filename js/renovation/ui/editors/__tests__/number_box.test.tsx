@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { NumberBox, NumberBoxProps, viewFunction as NumberBoxView } from '../number_box';
-import { Editor } from '../editor_wrapper';
+import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacyNumberBox from '../../../../ui/number_box';
 
 jest.mock('../../../../ui/number_box', () => jest.fn());
@@ -16,7 +16,7 @@ describe('NumberBox', () => {
       } as Partial<NumberBox>;
       const tree = shallow(<NumberBoxView {...props as any} /> as any);
 
-      expect(tree.find(Editor).props()).toMatchObject({
+      expect(tree.find(DomComponentWrapper).props()).toMatchObject({
         componentProps,
         componentType: LegacyNumberBox,
         'rest-attributes': 'true',

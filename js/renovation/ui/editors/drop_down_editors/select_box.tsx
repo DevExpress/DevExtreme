@@ -6,14 +6,15 @@ import {
 import DataSource, { Options as DataSourceOptions } from '../../../../data/data_source';
 import Store from '../../../../data/abstract_store';
 import LegacySelectBox from '../../../../ui/select_box';
-import { Editor, EditorProps } from '../editor_wrapper';
+import { EditorProps } from '../editor_props';
+import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import { EventCallback } from '../../common/event_callback';
 
 export const viewFunction = ({
   componentProps,
   restAttributes,
 }: SelectBox): JSX.Element => (
-  <Editor
+  <DomComponentWrapper
     componentType={LegacySelectBox}
     componentProps={componentProps}
     templateNames={[
