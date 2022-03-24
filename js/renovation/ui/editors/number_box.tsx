@@ -1,8 +1,9 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, TwoWay, React,
+  Component, ComponentBindings, JSXComponent, OneWay, TwoWay, React, Event,
 } from '@devextreme-generator/declarations';
 import LegacyNumberBox from '../../../ui/number_box';
 import { Editor, EditorProps } from './editor_wrapper';
+import { EventCallback } from '../common/event_callback';
 
 const DEFAULT_VALUE = 0;
 
@@ -35,6 +36,8 @@ export class NumberBoxProps extends EditorProps {
   @OneWay() useLargeSpinButtons?: boolean;
 
   @TwoWay() value: number | null = DEFAULT_VALUE;
+
+  @Event() valueChange?: EventCallback<number | null>;
 }
 
 @Component({

@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, TwoWay,
+  Component, ComponentBindings, JSXComponent, OneWay, TwoWay, Event,
 } from '@devextreme-generator/declarations';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
@@ -7,6 +7,7 @@ import DataSource, { Options as DataSourceOptions } from '../../../../data/data_
 import Store from '../../../../data/abstract_store';
 import LegacySelectBox from '../../../../ui/select_box';
 import { Editor, EditorProps } from '../editor_wrapper';
+import { EventCallback } from '../../common/event_callback';
 
 export const viewFunction = ({
   componentProps,
@@ -36,6 +37,9 @@ export class SelectBoxProps extends EditorProps {
   @TwoWay() value?: any = null;
 
   @OneWay() valueExpr?: string;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Event() valueChange?: EventCallback<any>;
 }
 @Component({
   defaultOptionRules: null,

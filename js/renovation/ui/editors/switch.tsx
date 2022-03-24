@@ -1,7 +1,8 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, TwoWay, React,
+  Component, ComponentBindings, JSXComponent, OneWay, TwoWay, React, Event,
 } from '@devextreme-generator/declarations';
 import LegacySwitch from '../../../ui/switch';
+import { EventCallback } from '../common/event_callback';
 import { Editor, EditorProps } from './editor_wrapper';
 import messageLocalization from '../../../localization/message';
 
@@ -24,6 +25,8 @@ export class SwitchProps extends EditorProps {
   @OneWay() switchedOffText?: string = messageLocalization.format('dxSwitch-switchedOffText');
 
   @TwoWay() value = false;
+
+  @Event() valueChange?: EventCallback<boolean>;
 }
 
 @Component({

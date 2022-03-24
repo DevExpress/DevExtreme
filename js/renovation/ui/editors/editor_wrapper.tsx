@@ -1,8 +1,7 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Event, React,
+  Component, ComponentBindings, JSXComponent, OneWay, React,
 } from '@devextreme-generator/declarations';
 import { DomComponentWrapper, ComponentProps } from '../common/dom_component_wrapper';
-import { EventCallback } from '../common/event_callback';
 import { EditorProps as NativeEditorProps } from './internal/editor';
 import devices from '../../../core/devices';
 import { ComponentClass } from '../../../core/dom_component'; // eslint-disable-line import/named
@@ -28,8 +27,6 @@ export class EditorProps extends NativeEditorProps {
   @OneWay() activeStateEnabled = true;
 
   @OneWay() focusStateEnabled = devices.real().deviceType === 'desktop' && !devices.isSimulator();
-
-  @Event() valueChange?: EventCallback<unknown>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() componentType?: ComponentClass<Record<string, any>>;
