@@ -5,20 +5,20 @@ import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 import { Plugins } from '../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import {
-  DataGridLight, viewFunction as DataGridView, DataGridLightProps,
+  DataGridNext, viewFunction as DataGridView, DataGridNextProps,
   LocalData, Columns, KeyExprPlugin, VisibleColumns,
   LocalVisibleItems, VisibleRows, VisibleDataRows, TotalCount, DataStateValue, RemoteOperations,
   LocalDataState,
   LoadOptionsValue,
-} from '../data_grid_light';
+} from '../data_grid_next';
 import { Widget } from '../../../common/widget';
 import CustomStore from '../../../../../data/custom_store';
 import { generateData, generateRows } from './test_data';
 
-describe('DataGridLight', () => {
+describe('DataGridNext', () => {
   describe('View', () => {
     it('default render', () => {
-      const props = new DataGridLightProps();
+      const props = new DataGridNextProps();
       const viewModel = {
         props,
         aria: { role: 'presentation' },
@@ -28,7 +28,7 @@ describe('DataGridLight', () => {
         keyExpr: 'id',
         localData: [],
         setDataState: () => {},
-      } as Partial<DataGridLight>;
+      } as Partial<DataGridNext>;
       const tree = mount(<DataGridView {...viewModel as any} /> as any);
 
       expect(tree.find(Widget).first().props()).toMatchObject({
@@ -65,13 +65,13 @@ describe('DataGridLight', () => {
     });
 
     it('render with dataSource and 1 column', () => {
-      const props = new DataGridLightProps();
+      const props = new DataGridNextProps();
       props.dataSource = [{ id: 1 }, { id: 2 }];
       const viewProps = {
         props,
         visibleRows: [{ data: { id: 1 }, rowType: 'data' }, { data: { id: 2 }, rowType: 'data' }],
         visibleColumns: [{ dataField: 'id' }],
-      } as Partial<DataGridLight>;
+      } as Partial<DataGridNext>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
       expect(tree.find('tr')).toHaveLength(3);
@@ -82,7 +82,7 @@ describe('DataGridLight', () => {
     });
 
     it('render with dataSource and 2 columns', () => {
-      const props = new DataGridLightProps();
+      const props = new DataGridNextProps();
       props.dataSource = [{ id: 1, name: 'name 1' }];
       const viewProps = {
         props,
@@ -91,7 +91,7 @@ describe('DataGridLight', () => {
           { dataField: 'id' },
           { dataField: 'name' },
         ],
-      } as Partial<DataGridLight>;
+      } as Partial<DataGridNext>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
       expect(tree.find('tr')).toHaveLength(2);
@@ -106,13 +106,13 @@ describe('DataGridLight', () => {
   describe('Getters', () => {
     describe('aria', () => {
       it('should have role "presentation"', () => {
-        expect(new DataGridLight({}).aria).toEqual({ role: 'presentation' });
+        expect(new DataGridNext({}).aria).toEqual({ role: 'presentation' });
       });
     });
 
     describe('columns', () => {
       it('should handle user input', () => {
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           columns: ['id', 'name'],
         });
 
@@ -125,7 +125,7 @@ describe('DataGridLight', () => {
 
     describe('keyExpr', () => {
       it('should return keyExpr prop', () => {
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           keyExpr: 'some key',
         });
 
@@ -133,7 +133,7 @@ describe('DataGridLight', () => {
       });
 
       it('should return key from Store', () => {
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           dataSource: new CustomStore({
             key: 'my_key',
             load: () => [],
@@ -144,7 +144,7 @@ describe('DataGridLight', () => {
       });
 
       it('should return null if user did not specified it', () => {
-        const grid = new DataGridLight({});
+        const grid = new DataGridNext({});
 
         expect(grid.keyExpr).toEqual(null);
       });
@@ -153,7 +153,7 @@ describe('DataGridLight', () => {
     describe('localData', () => {
       it('should return dataSource prop if it is array', () => {
         const dataSource = [{ id: 1 }];
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           dataSource,
         });
 
@@ -161,7 +161,7 @@ describe('DataGridLight', () => {
       });
 
       it('should return loaded data if dataSource is not array', () => {
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           dataSource: new CustomStore(),
         });
         grid.loadedData = [{ id: 1 }];
@@ -174,7 +174,7 @@ describe('DataGridLight', () => {
   describe('Effects', () => {
     describe('updateVisibleRows', () => {
       const watchMock = jest.fn();
-      const grid = new DataGridLight({});
+      const grid = new DataGridNext({});
       grid.plugins = {
         watch: watchMock,
       } as any;
@@ -193,7 +193,7 @@ describe('DataGridLight', () => {
 
     describe('updateVisibleColumns', () => {
       const watchMock = jest.fn();
-      const grid = new DataGridLight({});
+      const grid = new DataGridNext({});
       grid.plugins = {
         watch: watchMock,
       } as any;
@@ -212,8 +212,8 @@ describe('DataGridLight', () => {
 
     describe('updateDataStateFromLocal', () => {
       it('should not update dataState if LocalData is undefined', () => {
-        const grid = new DataGridLight({});
-        grid.props = new DataGridLightProps();
+        const grid = new DataGridNext({});
+        grid.props = new DataGridNextProps();
         grid.plugins = new Plugins();
         grid.plugins.set(LocalData, undefined);
 
@@ -227,8 +227,8 @@ describe('DataGridLight', () => {
 
       it('should update dataState', () => {
         const data = generateData(5);
-        const grid = new DataGridLight({});
-        grid.props = new DataGridLightProps();
+        const grid = new DataGridNext({});
+        grid.props = new DataGridNextProps();
         grid.plugins = new Plugins();
         grid.plugins.set(LocalData, data);
         grid.plugins.extend(LocalVisibleItems, -1, () => data.slice(0, 2));
@@ -245,7 +245,7 @@ describe('DataGridLight', () => {
     describe('updateDataSource', () => {
       it('should not load data if array is assigned to dataSource', () => {
         const data = [{ id: 1 }];
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           dataSource: data,
         });
         grid.plugins = new Plugins();
@@ -257,7 +257,7 @@ describe('DataGridLight', () => {
 
       it('should load data and assign to loadedData if remoteOperations is false', () => {
         const data = [{ id: 1 }];
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           remoteOperations: false,
           dataSource: new CustomStore({
             load: () => data,
@@ -272,7 +272,7 @@ describe('DataGridLight', () => {
 
       it('should load data on loadOptions change if cacheEnabled is false', () => {
         const loadMock = jest.fn(() => []);
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           cacheEnabled: false,
           dataSource: new CustomStore({
             load: loadMock,
@@ -289,7 +289,7 @@ describe('DataGridLight', () => {
 
       it('should not load data on loadOptions change if cacheEnabled is true', () => {
         const loadMock = jest.fn(() => []);
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           cacheEnabled: true,
           dataSource: new CustomStore({
             load: loadMock,
@@ -307,7 +307,7 @@ describe('DataGridLight', () => {
       it('should load data and assign to dataState if remoteOperations is true and promise resolves array', async () => {
         const data = [{ id: 1 }];
 
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           remoteOperations: true,
           dataSource: new CustomStore({
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -332,7 +332,7 @@ describe('DataGridLight', () => {
         };
         const loadOptions = { skip: 0, take: 1 };
 
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           remoteOperations: true,
           dataSource: new CustomStore({
             load: () => Promise.resolve(dataState),
@@ -353,7 +353,7 @@ describe('DataGridLight', () => {
 
         const loadMock = jest.fn(() => []);
 
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           dataSource: new CustomStore({
             load: loadMock,
           }),
@@ -370,7 +370,7 @@ describe('DataGridLight', () => {
         const onDataErrorOccurredMock = jest.fn();
         const error = new Error('My error');
 
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           onDataErrorOccurred: onDataErrorOccurredMock,
           dataSource: new CustomStore({
             load: () => Promise.reject(error),
@@ -390,7 +390,7 @@ describe('DataGridLight', () => {
       it('should not cause errors if load data rejects result', async () => {
         const error = new Error('My error');
 
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           dataSource: new CustomStore({
             load: () => Promise.reject(error),
           }),
@@ -410,7 +410,7 @@ describe('DataGridLight', () => {
     describe('refresh', () => {
       const createDataGridLightWithStore = () => {
         const loadMock = jest.fn(() => []);
-        const grid = new DataGridLight({
+        const grid = new DataGridNext({
           dataSource: new CustomStore({
             load: loadMock,
           }),

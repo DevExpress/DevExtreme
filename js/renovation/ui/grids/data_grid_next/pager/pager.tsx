@@ -11,7 +11,7 @@ import { PagerContent } from '../../../pager/content';
 import {
   PageIndex, PageSize, PageCount, SetPageIndex, SetPageSize,
 } from '../paging/plugins';
-import { TotalCount } from '../data_grid_light';
+import { TotalCount } from '../data_grid_next';
 import { FooterPlaceholder } from '../views/footer';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
@@ -22,7 +22,7 @@ export const viewFunction = ({
   props: {
     displayMode, infoText, showInfo, showNavigationButtons, showPageSizeSelector, visible,
   },
-}: Pager): JSX.Element => (
+}: DataGridNextPager): JSX.Element => (
   <PlaceholderExtender
     type={FooterPlaceholder}
     order={1}
@@ -55,7 +55,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class PagerProps {
+export class DataGridNextPagerProps {
   @OneWay()
   allowedPageSizes: (number | 'all')[] | 'auto' = 'auto';
 
@@ -83,7 +83,7 @@ export class PagerProps {
   jQuery: { register: true },
   view: viewFunction,
 })
-export class Pager extends JSXComponent(PagerProps) {
+export class DataGridNextPager extends JSXComponent(DataGridNextPagerProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
 

@@ -8,14 +8,14 @@ import {
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
-import { LoadOptionsValue, LocalVisibleItems } from '../data_grid_light';
+import { LoadOptionsValue, LocalVisibleItems } from '../data_grid_next';
 
 import {
   PageIndex, PageSize, SetPageIndex, SetPageSize, PagingEnabled,
   ApplyPagingToVisibleItems, AddPagingToLoadOptions,
 } from './plugins';
 
-export const viewFunction = (viewModel: Paging): JSX.Element => (
+export const viewFunction = (viewModel: DataGridNextPaging): JSX.Element => (
   <Fragment>
     <ValueSetter type={PageIndex} value={viewModel.props.pageIndex} />
     <ValueSetter type={PageSize} value={viewModel.pageSize} />
@@ -28,7 +28,7 @@ export const viewFunction = (viewModel: Paging): JSX.Element => (
 );
 
 @ComponentBindings()
-export class PagingProps {
+export class DataGridNextPagingProps {
   @TwoWay()
   pageSize: number | 'all' = 20;
 
@@ -46,7 +46,7 @@ export class PagingProps {
   },
   view: viewFunction,
 })
-export class Paging extends JSXComponent(PagingProps) {
+export class DataGridNextPaging extends JSXComponent(DataGridNextPagingProps) {
   get pageSize(): number | 'all' {
     if (this.props.pageSize === 0) {
       return 'all';

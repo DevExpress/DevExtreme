@@ -4,7 +4,7 @@ import {
   MasterDetailRow, MasterDetailRowProps, viewFunction as MasterDetailRowView,
 } from '../master_detail_row';
 import { RowClassesGetter } from '../../widgets/row_base';
-import { VisibleColumns } from '../../data_grid_light';
+import { VisibleColumns } from '../../data_grid_next';
 import { Row } from '../../types';
 import { MasterDetailTemplate } from '../plugins';
 

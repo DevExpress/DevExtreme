@@ -16,7 +16,7 @@ import { Plugins, PluginsContext, createSelector } from '../../../../utils/plugi
 
 import {
   VisibleRows, VisibleColumns,
-} from '../data_grid_light';
+} from '../data_grid_next';
 import {
   Row, Key, ColumnInternal, RowTemplateProps,
 } from '../types';
@@ -58,7 +58,7 @@ export const viewFunction = (): JSX.Element => (
 );
 
 @ComponentBindings()
-export class MasterDetailProps {
+export class DataGridNextMasterDetailProps {
   @OneWay()
   enabled = true;
 
@@ -73,7 +73,7 @@ export class MasterDetailProps {
   view: viewFunction,
 })
 
-export class MasterDetail extends JSXComponent<MasterDetailProps, 'template'>(MasterDetailProps) {
+export class DataGridNextMasterDetail extends JSXComponent<DataGridNextMasterDetailProps, 'template'>(DataGridNextMasterDetailProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
 

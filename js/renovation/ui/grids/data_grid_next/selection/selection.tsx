@@ -20,7 +20,7 @@ import { SelectAllCheckbox } from './select_all_checkbox';
 
 import {
   VisibleColumns,
-} from '../data_grid_light';
+} from '../data_grid_next';
 
 import {
   RowClassesGetter, RowPropertiesGetter,
@@ -37,7 +37,7 @@ import {
   AddSelectionToRowProperties,
 } from './plugins';
 
-export const viewFunction = (viewModel: Selection): JSX.Element => (
+export const viewFunction = (viewModel: DataGridNextSelection): JSX.Element => (
   <Fragment>
     <ValueSetter type={SelectedRowKeys} value={viewModel.props.selectedRowKeys} />
     <ValueSetter type={SetSelectedRowKeys} value={viewModel.setSelectedRowKeys} />
@@ -60,7 +60,7 @@ export const viewFunction = (viewModel: Selection): JSX.Element => (
 );
 
 @ComponentBindings()
-export class SelectionProps {
+export class DataGridNextSelectionProps {
   @TwoWay()
   selectedRowKeys: Key[] = [];
 
@@ -81,7 +81,7 @@ export class SelectionProps {
     innerComponent: false,
   },
 })
-export class Selection extends JSXComponent(SelectionProps) {
+export class DataGridNextSelection extends JSXComponent(DataGridNextSelectionProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
 

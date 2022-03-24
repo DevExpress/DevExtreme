@@ -8,7 +8,7 @@ import { Key, KeyExprInternal, RowData } from '../types';
 import { IsExpanded, SetExpanded } from './plugins';
 import eventsEngine from '../../../../../events/core/events_engine';
 import { name as clickEvent } from '../../../../../events/click';
-import { KeyExprPlugin } from '../data_grid_light';
+import { KeyExprPlugin } from '../data_grid_next';
 import { createGetKey } from '../utils';
 
 import CLASSES from '../classes';

@@ -5,7 +5,7 @@ import {
   ClearSelection, SelectAll, ToggleSelected,
 } from '../plugins';
 import {
-  Selection, SelectionProps, viewFunction as SelectionView,
+  DataGridNextSelection, DataGridNextSelectionProps, viewFunction as SelectionView,
 } from '../selection';
 import { SelectionCheckbox } from '../select_checkbox';
 import { GetterExtender } from '../../../../../utils/plugin/getter_extender';
@@ -18,8 +18,8 @@ describe('Selection', () => {
   describe('View', () => {
     it('should contain plugins', () => {
       const viewProps = {
-        props: new SelectionProps(),
-      } as Partial<Selection>;
+        props: new DataGridNextSelectionProps(),
+      } as Partial<DataGridNextSelection>;
       const tree = mount(<SelectionView {...viewProps as any} />);
 
       expect(tree.find(GetterExtender)).toHaveLength(3);
@@ -29,8 +29,8 @@ describe('Selection', () => {
 
     it('TemplateSetter should contain SelectionCheckbox inside template', () => {
       const viewProps = {
-        props: new SelectionProps(),
-      } as Partial<Selection>;
+        props: new DataGridNextSelectionProps(),
+      } as Partial<DataGridNextSelection>;
       const data = {};
       const tree = mount(<SelectionView {...viewProps as any} />);
       const {
@@ -48,7 +48,7 @@ describe('Selection', () => {
   describe('Effects', () => {
     describe('setRowClickEvent', () => {
       it('should call ToggleSelected on click', () => {
-        const selection = new Selection(new SelectionProps());
+        const selection = new DataGridNextSelection(new DataGridNextSelectionProps());
         const toggleSelectedMock = jest.fn();
         const testRow = generateRows(1)[0];
         selection.plugins = new Plugins();
@@ -67,7 +67,7 @@ describe('Selection', () => {
   describe('Methods', () => {
     describe('clearSelection', () => {
       it('should call ClearSelection action', () => {
-        const selection = new Selection({});
+        const selection = new DataGridNextSelection({});
         const clearSelectionMock = jest.fn();
 
         selection.plugins = new Plugins();
@@ -81,7 +81,7 @@ describe('Selection', () => {
 
     describe('selectAll', () => {
       it('should call SelectAll action', () => {
-        const selection = new Selection({});
+        const selection = new DataGridNextSelection({});
         const selectAllMock = jest.fn();
 
         selection.plugins = new Plugins();
@@ -95,7 +95,7 @@ describe('Selection', () => {
 
     describe('setSelectedRoeKeys', () => {
       it('should set selectedRowKeys', () => {
-        const selection = new Selection({});
+        const selection = new DataGridNextSelection({});
         const keys = [1, 2, 3];
 
         selection.setSelectedRowKeys(keys);

@@ -1,7 +1,7 @@
 import { createValue, createSelector } from '../../../../utils/plugin/context';
 import {
   TotalCount, LocalVisibleItems, LoadOptionsValue, RemoteOperations,
-} from '../data_grid_light';
+} from '../data_grid_next';
 import type { RowData } from '../types';
 import type { LoadOptions } from '../../../../../data';
 

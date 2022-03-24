@@ -6,11 +6,11 @@ import {
 import { generateRows } from '../../__tests__/test_data';
 import {
   AddMasterDetailRows,
-  MasterDetail, MasterDetailProps, viewFunction as MasterDetailView,
+  DataGridNextMasterDetail, DataGridNextMasterDetailProps, viewFunction as MasterDetailView,
 } from '../master_detail';
 import {
   VisibleColumns, VisibleRows,
-} from '../../data_grid_light';
+} from '../../data_grid_next';
 import { GetterExtender } from '../../../../../utils/plugin/getter_extender';
 import { MasterDetailRow } from '../master_detail_row';
 
@@ -18,9 +18,9 @@ describe('Master Detail', () => {
   describe('View', () => {
     it('should render GetterExtender', () => {
       const viewProps = {
-        props: new MasterDetailProps(),
+        props: new DataGridNextMasterDetailProps(),
         processVisibleRows: () => [],
-      } as Partial<MasterDetail>;
+      } as Partial<DataGridNextMasterDetail>;
       const tree = mount(<MasterDetailView {...viewProps as any} />);
 
       expect(tree.find(GetterExtender).at(0).props()).toEqual({
@@ -33,7 +33,7 @@ describe('Master Detail', () => {
     describe('setMasterDetailTemplate', () => {
       it('should set the master detail template', () => {
         const masterDetailTemplate = () => <div>Some value</div>;
-        const masterDetail = new MasterDetail({
+        const masterDetail = new DataGridNextMasterDetail({
           template: masterDetailTemplate,
         });
         masterDetail.setMasterDetailTemplate();
@@ -44,7 +44,7 @@ describe('Master Detail', () => {
 
     describe('addVisibleColumnsHandler', () => {
       it('should add expand column', () => {
-        const masterDetail = new MasterDetail({
+        const masterDetail = new DataGridNextMasterDetail({
           enabled: true,
           template: () => (<div />),
         });
@@ -58,7 +58,7 @@ describe('Master Detail', () => {
       });
 
       it('should not add expand column when enabled property is false', () => {
-        const masterDetail = new MasterDetail({
+        const masterDetail = new DataGridNextMasterDetail({
           enabled: false,
           template: () => (<div />),
         });
@@ -71,7 +71,7 @@ describe('Master Detail', () => {
 
     describe('addPluginMethods', () => {
       it('should set methods', () => {
-        const masterDetail = new MasterDetail({ template: () => (<div />) });
+        const masterDetail = new DataGridNextMasterDetail({ template: () => (<div />) });
         masterDetail.addPluginMethods();
 
         expect(masterDetail.plugins.getValue(SetExpanded)).toBe(masterDetail.setExpanded);
@@ -83,7 +83,7 @@ describe('Master Detail', () => {
   describe('Methods', () => {
     describe('isExpanded', () => {
       it('should work', () => {
-        const masterDetail = new MasterDetail({
+        const masterDetail = new DataGridNextMasterDetail({
           expandedRowKeys: [2, 3],
           template: () => (<div />),
         });
@@ -97,7 +97,7 @@ describe('Master Detail', () => {
 
     describe('setExpanded', () => {
       it('should work', () => {
-        const masterDetail = new MasterDetail({
+        const masterDetail = new DataGridNextMasterDetail({
           expandedRowKeys: [],
           template: () => (<div />),
         });
@@ -114,7 +114,7 @@ describe('Master Detail', () => {
         const visibleRows = generateRows(2);
 
         it('should return original visibleRows', () => {
-          const masterDetail = new MasterDetail({
+          const masterDetail = new DataGridNextMasterDetail({
             expandedRowKeys: [],
             template: () => (<div />),
           });
@@ -127,7 +127,7 @@ describe('Master Detail', () => {
         });
 
         it('should return visibleRows with master detail row', () => {
-          const masterDetail = new MasterDetail({
+          const masterDetail = new DataGridNextMasterDetail({
             expandedRowKeys: [1],
             template: () => (<div />),
           });
@@ -148,7 +148,7 @@ describe('Master Detail', () => {
         });
 
         it('should return visibleRows without master detail row', () => {
-          const masterDetail = new MasterDetail({
+          const masterDetail = new DataGridNextMasterDetail({
             expandedRowKeys: [],
             template: () => (<div />),
           });
