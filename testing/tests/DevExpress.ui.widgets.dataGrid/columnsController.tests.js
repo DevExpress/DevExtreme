@@ -6534,6 +6534,17 @@ QUnit.module('Sorting/Grouping', { beforeEach: setupModule, afterEach: teardownM
         assert.strictEqual(expandColumns[0].groupIndex, 0);
         assert.strictEqual(expandColumns[0].headerCellTemplate, null);
     });
+
+    // T1075560
+    QUnit.test('Expand columns should not have fixedPosition right', function(assert) {
+        // arrange
+        this.applyOptions({ columns: [{ dataField: 'field', groupIndex: 0, fixed: true, fixedPosition: 'right' }] });
+
+        // act, assert
+        const expandColumns = this.columnsController.getExpandColumns();
+        assert.strictEqual(expandColumns.length, 1, 'count expand column');
+        assert.strictEqual(expandColumns[0].fixedPosition, 'left');
+    });
 });
 
 QUnit.module('ParseValue', { beforeEach: setupModule, afterEach: teardownModule }, () => {
