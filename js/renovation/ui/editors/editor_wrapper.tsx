@@ -10,12 +10,12 @@ import { ComponentClass } from '../../../core/dom_component'; // eslint-disable-
 export const viewFunction = ({
   componentProps,
   restAttributes,
-  props: { componentType },
+  props: { componentType, templateNames },
 }: Editor): JSX.Element => (
   <DomComponentWrapper
     componentType={componentType}
     componentProps={componentProps}
-    templateNames={[]}
+    templateNames={templateNames}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
@@ -35,6 +35,8 @@ export class EditorProps extends NativeEditorProps {
   @OneWay() componentType?: ComponentClass<Record<string, any>>;
 
   @OneWay() componentProps?: ComponentProps;
+
+  @OneWay() templateNames?: string[];
 }
 
 @Component({
