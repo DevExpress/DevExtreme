@@ -3,6 +3,7 @@ import {
 } from '@devextreme-generator/declarations';
 import LegacySwitch from '../../../ui/switch';
 import { EventCallback } from '../common/event_callback';
+import { EditorProps } from './internal/editor';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import messageLocalization from '../../../localization/message';
 import devices from '../../../core/devices';

@@ -9,6 +9,7 @@ import LegacySelectBox from '../../../../ui/select_box';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import { EventCallback } from '../../common/event_callback';
 import devices from '../../../../core/devices';
+import { EditorProps } from '../internal/editor';
 
 export const viewFunction = ({
   componentProps,
