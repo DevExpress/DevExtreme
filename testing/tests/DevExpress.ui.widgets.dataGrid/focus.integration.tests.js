@@ -4115,11 +4115,13 @@ QUnit.module('View\'s focus', {
         this.clock.tick(300);
 
         // act
-        this.dataGrid.option('focusedRowIndex', 3);
+        let rowIndex = this.dataGrid.getRowIndexByKey(4);
+        this.dataGrid.option('focusedRowIndex', rowIndex);
         this.clock.tick(100);
 
         // assert
-        const row = this.dataGrid.getVisibleRows()[1];
+        rowIndex = this.dataGrid.getRowIndexByKey(4);
+        const row = this.dataGrid.getVisibleRows()[rowIndex];
         assert.strictEqual(row.cells.length, 2);
 
         row.cells.forEach((cell) => {
