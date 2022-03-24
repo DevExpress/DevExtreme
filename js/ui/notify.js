@@ -64,9 +64,9 @@ const setContainerStyles = (container, direction, position) => {
         windowWidth: window.innerWidth,
     };
 
-    const styles = typeof position === 'string'
-        ? getPositionStylesByAlias(direction, position, dimensions)
-        : getPositionStylesByCoordinates(direction, position, dimensions);
+    const coordinates = typeof position === 'string' ? getCoordinatesByAlias(position, dimensions) : position;
+
+    const styles = getPositionStylesByCoordinates(direction, coordinates, dimensions);
 
     container.css(styles);
 };
@@ -98,41 +98,37 @@ const getCoordinatesByAlias = (alias, { toastWidth, toastHeight, windowHeight, w
     }
 };
 
-const getPositionStylesByAlias = (direction, position, dimensions) => {
-    return getPositionStylesByCoordinates(direction, getCoordinatesByAlias(position, dimensions), dimensions);
-};
-
-const getPositionStylesByCoordinates = (direction, position, dimensions) => {
+const getPositionStylesByCoordinates = (direction, coordinates, dimensions) => {
     const { toastWidth, toastHeight, windowHeight, windowWidth } = dimensions;
 
     switch(direction.replace('-reverse', '')) {
         case 'up':
             return {
-                bottom: position.bottom ?? windowHeight - toastHeight - position.top,
+                bottom: coordinates.bottom ?? windowHeight - toastHeight - coordinates.top,
                 top: '',
-                left: position.left ?? '',
-                right: position.right ?? '',
+                left: coordinates.left ?? '',
+                right: coordinates.right ?? '',
             };
         case 'down':
             return {
-                top: position.top ?? windowHeight - toastHeight - position.bottom,
+                top: coordinates.top ?? windowHeight - toastHeight - coordinates.bottom,
                 bottom: '',
-                left: position.left ?? '',
-                right: position.right ?? '',
+                left: coordinates.left ?? '',
+                right: coordinates.right ?? '',
             };
         case 'left':
             return {
-                right: position.right ?? windowWidth - toastWidth - position.left,
+                right: coordinates.right ?? windowWidth - toastWidth - coordinates.left,
                 left: '',
-                top: position.top ?? '',
-                bottom: position.bottom ?? '',
+                top: coordinates.top ?? '',
+                bottom: coordinates.bottom ?? '',
             };
         case 'right':
             return {
-                left: position.left ?? windowWidth - toastWidth - position.right,
+                left: coordinates.left ?? windowWidth - toastWidth - coordinates.right,
                 right: '',
-                top: position.top ?? '',
-                bottom: position.bottom ?? '',
+                top: coordinates.top ?? '',
+                bottom: coordinates.bottom ?? '',
             };
     }
 };
