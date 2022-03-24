@@ -3,9 +3,9 @@ import {
 } from '@devextreme-generator/declarations';
 import LegacySwitch from '../../../ui/switch';
 import { EventCallback } from '../common/event_callback';
-import { EditorProps } from './editor_props';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import messageLocalization from '../../../localization/message';
+import devices from '../../../core/devices';
 
 export const viewFunction = ({
   componentProps,
@@ -29,6 +29,12 @@ export class SwitchProps extends EditorProps {
   @TwoWay() value = false;
 
   @Event() valueChange?: EventCallback<boolean>;
+
+  @OneWay() hoverStateEnabled = true;
+
+  @OneWay() activeStateEnabled = true;
+
+  @OneWay() focusStateEnabled = devices.real().deviceType === 'desktop' && !devices.isSimulator();
 }
 
 @Component({
