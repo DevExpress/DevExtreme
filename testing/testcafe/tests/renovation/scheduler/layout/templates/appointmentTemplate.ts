@@ -42,7 +42,7 @@ fixture('Layout:Templates:appointmentTemplate');
           </div>
         `;
       })
-      : 'TestTemplate';
+      : 'ModularTemplate';
 
     await createWidget(platform, 'dxScheduler', {
       dataSource: [{

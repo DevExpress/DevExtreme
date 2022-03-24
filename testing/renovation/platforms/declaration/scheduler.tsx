@@ -181,7 +181,7 @@ export class App extends JSXComponent<AppProps>() {
 
   get appointmentTemplate() {
     const { appointmentTemplate } = this.componentProps;
-    return (appointmentTemplate as never) === 'TestTemplate'
+    return (appointmentTemplate as never) === 'ModularTemplate'
       ? defaultAppointmentTemplate
       : appointmentTemplate;
   }
