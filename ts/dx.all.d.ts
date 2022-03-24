@@ -24958,9 +24958,9 @@ declare module DevExpress.ui {
    */
   export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**
-   * [descr:ui.hideAllToasts(container)]
+   * [descr:ui.hideToasts(container)]
    */
-  export function hideAllToasts(
+  export function hideToasts(
     container?: string | DevExpress.core.UserDefinedElement
   ): void;
   /**
