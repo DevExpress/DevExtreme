@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 
-function hideAllToasts(container) {
+function hideToasts(container) {
     const containerElement = $(container).get(0);
     const toasts = ($('.dx-toast')).toArray();
 
@@ -15,4 +15,4 @@ function hideAllToasts(container) {
     });
 }
 
-export default hideAllToasts;
+export default hideToasts;

@@ -476,9 +476,9 @@
     }
   },
   {
-    "name": "ui/toast/hide_all_toasts",
+    "name": "ui/toast/hide_toasts",
     "exports": {
-      "default": { "path": "ui.hideAllToasts" }
+      "default": { "path": "ui.hideToasts" }
     }
   },
   {
