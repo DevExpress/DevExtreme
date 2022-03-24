@@ -1427,6 +1427,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(contentReadyCallCount, 1, 'one contentReady on start');
     });
 
+    // T1072812
     QUnit.test('getCombinedFilter returns actual value when called in onOptionChanged', function(assert) {
         let filterChangedCount = 0;
 
