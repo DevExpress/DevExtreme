@@ -736,13 +736,6 @@ export const columnsControllerModule = {
                         that._checkColumns();
                     }
 
-                    fullOptionName && fireOptionChanged(that, {
-                        fullOptionName: fullOptionName,
-                        optionName: optionName,
-                        value: value,
-                        prevValue: prevValue
-                    });
-
                     if(!isDefined(prevValue) && !isDefined(value) && optionName.indexOf('buffer') !== 0) {
                         notFireEvent = true;
                     }
@@ -763,6 +756,13 @@ export const columnsControllerModule = {
                     } else {
                         resetColumnsCache(that);
                     }
+
+                    fullOptionName && fireOptionChanged(that, {
+                        fullOptionName: fullOptionName,
+                        optionName: optionName,
+                        value: value,
+                        prevValue: prevValue
+                    });
                 }
             };
 
