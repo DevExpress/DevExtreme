@@ -537,6 +537,26 @@ QUnit.module('Mentions module', moduleConfig, () => {
         });
     });
 
+    APPLY_VALUE_KEYS.forEach(({ key, code }) => {
+        test(`trigger '${key}' key should close list if it is empty`, function(assert) {
+            const mention = new Mentions(this.quillMock, this.options);
+
+            mention.savePosition(0);
+            mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
+            this.clock.tick();
+
+            mention.onTextChange(INSERT_TEXT_DELTA, {}, 'user');
+            this.clock.tick(POPUP_HIDING_TIMEOUT);
+
+            const $list = $(`.${SUGGESTION_LIST_CLASS}`);
+
+            this.$element.trigger($.Event('keydown', { key, which: code }));
+            this.clock.tick(POPUP_HIDING_TIMEOUT);
+
+            assert.notOk($list.is(':visible'));
+        });
+    });
+
     test('trigger \'escape\' should close list', function(assert) {
         const mention = new Mentions(this.quillMock, this.options);
 
