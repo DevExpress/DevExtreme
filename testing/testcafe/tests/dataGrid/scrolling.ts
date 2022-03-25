@@ -833,3 +833,93 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
     },
   });
 });
+
+test('New mode. Rows should be rendered properly when rowRenderingMode is virtual and max height (T1054920)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  let visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows.length)
+    .eql(10);
+
+  // act
+  await t
+    .click(dataGrid.getPager().getPageSize(1).element)
+    .wait(1000);
+
+  visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows.length > 0)
+    .ok();
+
+  await dataGrid.scrollTo({ top: 2000 });
+
+  // act
+  await t
+    .expect(dataGrid.isVirtualRowIntersectViewport())
+    .notOk();
+
+  visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows.length)
+    .eql(18);
+
+  // act
+  await t
+    .click(dataGrid.getPager().getPageSize(0).element);
+
+  // act
+  await t
+    .expect(dataGrid.isVirtualRowIntersectViewport())
+    .notOk();
+
+  visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows.length)
+    .eql(10);
+}).before(async () => {
+  const setMaxHeight = ClientFunction(() => {
+    $('#container').css('max-height', '600px');
+  });
+
+  const getItems = (): any[] => {
+    const items: any[] = [];
+    for (let i = 0; i < 100; i += 1) {
+      items.push({
+        id: i + 1,
+        name: `Name ${i + 1}`,
+      });
+    }
+
+    return items;
+  };
+
+  await setMaxHeight();
+
+  return createWidget('dxDataGrid', {
+    dataSource: getItems(),
+    keyExpr: 'id',
+    showBorders: true,
+    remoteOperations: true,
+    scrolling: {
+      rowRenderingMode: 'virtual',
+      useNative: false,
+    },
+    paging: {
+      pageSize: 10,
+    },
+    pager: {
+      visible: true,
+      allowedPageSizes: [10, 'all'],
+      showPageSizeSelector: true,
+    },
+  });
+});
