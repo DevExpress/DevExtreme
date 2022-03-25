@@ -606,7 +606,7 @@ QUnit.module('Keyboard keys', {
     });
 
     // T1069664
-    ['A', 'F', 'del', 'backspace'].forEach((keyName) => {
+    ['A', 'F', 'del', 'backspace', 'space'].forEach((keyName) => {
         QUnit.testInActiveWindow(`The ${keyName} key do not work in masterDetail row`, function(assert) {
             // assert
             this.columns = [
