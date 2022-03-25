@@ -690,6 +690,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @type Enums.VizWordWrap
        */
       wordWrap?: WordWrapType;
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.pattern
+       * @default undefined
+       * @public
+       */
+      pattern?: string;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount

@@ -1921,6 +1921,12 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @public
      */
     visible?: boolean;
+    /**
+     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.pattern
+     * @default undefined
+     * @public
+     */
+     pattern?: string;
 }
 /** @namespace DevExpress.viz */
 export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
