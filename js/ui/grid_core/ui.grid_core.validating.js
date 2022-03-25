@@ -1247,9 +1247,16 @@ export const validatingModule = {
                             }
                         }
 
-                        const showValidationMessage = validationResult && validationResult.status === VALIDATION_STATUS.invalid;
+                        const showValidationMessage =
+                            validationResult &&
+                            validationResult.status === VALIDATION_STATUS.invalid &&
+                            $cell &&
+                            validationResult &&
+                            validationResult.brokenRules &&
+                            validationResult.brokenRules.some(rule => rule.message);
 
-                        if(showValidationMessage && $cell && column && validationResult && validationResult.brokenRules) {
+
+                        if(showValidationMessage) {
                             const errorMessages = [];
                             validationResult.brokenRules.forEach(function(rule) {
                                 errorMessages.push(rule.message);
