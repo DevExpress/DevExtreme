@@ -1,7 +1,7 @@
 name: TS Declarations
 
 concurrency:
-  wf-${{github.event.pull_request.number && github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  group: wf-${{github.event.pull_request.number && github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
