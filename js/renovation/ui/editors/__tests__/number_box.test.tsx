@@ -3,13 +3,14 @@ import { shallow } from 'enzyme';
 import { NumberBox, NumberBoxProps, viewFunction as NumberBoxView } from '../number_box';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacyNumberBox from '../../../../ui/number_box';
+import { EditorStateProps } from '../internal/editor_state_props';
 
 jest.mock('../../../../ui/number_box', () => jest.fn());
 
 describe('NumberBox', () => {
   describe('View', () => {
     it('default render', () => {
-      const componentProps = new NumberBoxProps();
+      const componentProps = { ...new NumberBoxProps(), ...new EditorStateProps() };
       const props = {
         componentProps,
         restAttributes: { 'rest-attributes': 'true' },

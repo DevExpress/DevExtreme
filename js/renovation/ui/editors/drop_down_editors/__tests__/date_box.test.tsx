@@ -3,13 +3,14 @@ import { shallow } from 'enzyme';
 import LegacyDateBox from '../../../../../ui/date_box';
 import { viewFunction as DateBoxView, DateBoxProps, DateBox } from '../date_box';
 import { DomComponentWrapper } from '../../../common/dom_component_wrapper';
+import { EditorStateProps } from '../../internal/editor_state_props';
 
 jest.mock('../../../../../ui/date_box', () => jest.fn());
 
 describe('DateBox', () => {
   describe('View', () => {
     it('View render', () => {
-      const componentProps = new DateBoxProps();
+      const componentProps = { ...new DateBoxProps(), ...new EditorStateProps() };
       const props = {
         componentProps,
         restAttributes: { 'rest-attributes': 'true' },
