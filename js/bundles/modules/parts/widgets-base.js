@@ -16,6 +16,7 @@ ui.setTemplateEngine = require('../../../core/templates/template_engine_registry
 ui.dialog = require('../../../ui/dialog');
 ui.notify = require('../../../ui/notify');
 ui.repaintFloatingActionButton = require('../../../ui/speed_dial_action/repaint_floating_action_button');
+ui.hideToasts = require('../../../ui/toast/hide_toasts');
 
 /* Base widgets (dx.module-widgets-base.js) */
 
