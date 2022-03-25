@@ -4,8 +4,8 @@ import {
 import LegacyDateBox from '../../../../ui/date_box';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import { EventCallback } from '../../common/event_callback';
-import { EditorProps } from '../internal/editor';
-import { EditorStateProps } from '../internal/editor_state_props';
+import { EditorProps } from '../common/editor';
+import { EditorStateProps } from '../common/editor_state_props';
 
 export const viewFunction = ({
   componentProps,
