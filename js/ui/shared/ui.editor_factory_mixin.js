@@ -266,6 +266,11 @@ const EditorFactoryMixin = (function() {
                         defaultEnterKeyHandler(e);
                     }
 
+                    if(dateBox.option('useMaskBehavior')) {
+                        dateBox.blur();
+                        dateBox.focus();
+                    }
+
                     return true;
                 });
             }
