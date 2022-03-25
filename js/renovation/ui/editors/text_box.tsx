@@ -6,6 +6,7 @@ import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { EventCallback } from '../common/event_callback';
 import { EditorProps } from './internal/editor';
 import { EditorStateProps } from './internal/editor_state_props';
+import { EditorLabelProps } from './internal/editor_label_props';
 import { isMaterial, current } from '../../../ui/themes';
 
 export const viewFunction = ({
@@ -26,10 +27,6 @@ export class TextBoxProps extends EditorProps {
   @OneWay() buttons?: unknown[];
 
   @OneWay() inputAttr?: unknown;
-
-  @OneWay() label?: string = '';
-
-  @OneWay() labelMode?: 'static' | 'floating' | 'hidden' = isMaterial(current()) ? 'floating' : 'static';
 
   @OneWay() mask?: string = '';
 
@@ -59,7 +56,7 @@ export class TextBoxProps extends EditorProps {
   @Event() valueChange?: EventCallback<string>;
 }
 
-export type TextBoxPropsType = TextBoxProps & EditorStateProps;
+export type TextBoxPropsType = TextBoxProps & EditorStateProps & EditorLabelProps;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
