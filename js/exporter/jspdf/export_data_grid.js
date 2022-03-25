@@ -20,12 +20,12 @@ function _getFullOptions(options) {
     return Export.getFullOptions(options);
 }
 
-//#DEBUG
-exportDataGrid.__internals = { _getFullOptions };
-//#ENDDEBUG
-
 function exportDataGrid(options) {
     return Export.export(_getFullOptions(options));
 }
+
+//#DEBUG
+exportDataGrid.__internals = { _getFullOptions };
+//#ENDDEBUG
 
 export { exportDataGrid };
