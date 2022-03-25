@@ -4,8 +4,8 @@ import {
 import LegacyDateBox from '../../../../ui/date_box';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import { EventCallback } from '../../common/event_callback';
-import devices from '../../../../core/devices';
 import { EditorProps } from '../internal/editor';
+import { EditorStateProps } from '../internal/editor_state_props';
 
 export const viewFunction = ({
   componentProps,
@@ -35,19 +35,15 @@ export class DateBoxProps extends EditorProps {
   @OneWay() field?: string;
 
   @OneWay() type?: string ;
-
-  @OneWay() hoverStateEnabled = true;
-
-  @OneWay() activeStateEnabled = true;
-
-  @OneWay() focusStateEnabled = devices.real().deviceType === 'desktop' && !devices.isSimulator();
 }
+
+export type DateBoxPropsType = DateBoxProps & EditorStateProps;
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateBox extends JSXComponent<DateBoxProps>() {
+export class DateBox extends JSXComponent<DateBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
   get componentProps(): DateBoxProps {
     return this.props;

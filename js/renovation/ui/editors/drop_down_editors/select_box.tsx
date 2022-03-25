@@ -8,8 +8,8 @@ import Store from '../../../../data/abstract_store';
 import LegacySelectBox from '../../../../ui/select_box';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import { EventCallback } from '../../common/event_callback';
-import devices from '../../../../core/devices';
 import { EditorProps } from '../internal/editor';
+import { EditorStateProps } from '../internal/editor_state_props';
 
 export const viewFunction = ({
   componentProps,
@@ -42,18 +42,15 @@ export class SelectBoxProps extends EditorProps {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Event() valueChange?: EventCallback<any>;
-
-  @OneWay() hoverStateEnabled = true;
-
-  @OneWay() activeStateEnabled = true;
-
-  @OneWay() focusStateEnabled = devices.real().deviceType === 'desktop' && !devices.isSimulator();
 }
+
+export type SelectBoxPropsType = SelectBoxProps & EditorStateProps;
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class SelectBox extends JSXComponent(SelectBoxProps) {
+export class SelectBox extends JSXComponent<SelectBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
   get componentProps(): SelectBoxProps {
     return this.props;

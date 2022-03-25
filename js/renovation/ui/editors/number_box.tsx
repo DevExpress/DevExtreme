@@ -4,8 +4,8 @@ import {
 import LegacyNumberBox from '../../../ui/number_box';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { EventCallback } from '../common/event_callback';
-import devices from '../../../core/devices';
 import { EditorProps } from './internal/editor';
+import { EditorStateProps } from './internal/editor_state_props';
 
 const DEFAULT_VALUE = 0;
 
@@ -41,19 +41,14 @@ export class NumberBoxProps extends EditorProps {
   @TwoWay() value: number | null = DEFAULT_VALUE;
 
   @Event() valueChange?: EventCallback<number | null>;
-
-  @OneWay() hoverStateEnabled = true;
-
-  @OneWay() activeStateEnabled = true;
-
-  @OneWay() focusStateEnabled = devices.real().deviceType === 'desktop' && !devices.isSimulator();
 }
 
+export type NumberBoxPropsType = NumberBoxProps & EditorStateProps;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class NumberBox extends JSXComponent(NumberBoxProps) {
+export class NumberBox extends JSXComponent<NumberBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
   get componentProps(): NumberBoxProps {
     return this.props;
