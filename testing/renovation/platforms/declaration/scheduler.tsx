@@ -36,6 +36,7 @@ export const viewFunction = ({
   appointmentTemplate,
 }: App): JSX.Element => (
   <Scheduler
+    id="container"
     adaptivityEnabled={componentProps.adaptivityEnabled}
     appointmentDragging={componentProps.appointmentDragging}
     crossScrollingEnabled={componentProps.crossScrollingEnabled}
