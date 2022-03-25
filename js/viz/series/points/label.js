@@ -360,7 +360,7 @@ Label.prototype = {
         const renderer = that._renderer;
         const container = that._container;
         const options = that._options || {};
-        const text = that._textContent = formatText(that._data, that._options) || null;
+        const text = that._textContent = formatText(that._data, options) || null;
 
         if(text) {
             if(!that._group) {
