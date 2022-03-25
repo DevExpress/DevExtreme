@@ -332,6 +332,8 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _renderTemplatedField: function(fieldTemplate, data) {
+        this._fieldRenderQueueLength = (this._fieldRenderQueueLength ?? 0) + 1;
+
         const isFocused = focused(this._input());
         const $container = this._$container;
 
@@ -347,6 +349,11 @@ const DropDownEditor = TextBox.inherit({
             model: data,
             container: getPublicElement($templateWrapper),
             onRendered: () => {
+                this._fieldRenderQueueLength--;
+                if(this._fieldRenderQueueLength !== 0) {
+                    return;
+                }
+
                 const $input = this._input();
 
                 if(!$input.length) {
