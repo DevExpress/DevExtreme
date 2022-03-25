@@ -234,7 +234,16 @@ export default {
         operation = operation || 'and';
 
         for(let i = 0; i < filters.length; i++) {
-            if(!filters[i]) continue;
+            if(!filters[i]) {
+                continue;
+            }
+            if(filters[i]?.length === 1 && filters[i][0] === '!') {
+                if(operation === 'and') {
+                    return ['!'];
+                } else if(operation === 'or') {
+                    continue;
+                }
+            }
             if(resultFilter.length) {
                 resultFilter.push(operation);
             }
@@ -514,9 +523,9 @@ export default {
 
         if(that.option(LEGACY_SCROLLING_MODE) === false && (isVirtualMode || isAppendMode)) {
             return true;
-        } else {
-            return rowRenderingMode === SCROLLING_MODE_VIRTUAL;
         }
+
+        return rowRenderingMode === SCROLLING_MODE_VIRTUAL;
     },
 
     getPixelRatio: function(window) {

@@ -384,3 +384,8 @@ export const formatViews = (views) => {
         return { text, name, view: { text, type, name } };
     });
 };
+
+export const isOneView = (views, selectedView) => {
+    return views.length === 1
+        && views[0].name === selectedView;
+};

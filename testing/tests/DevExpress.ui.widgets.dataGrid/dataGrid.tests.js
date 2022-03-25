@@ -1539,6 +1539,29 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getController('data').items()[0].data, { field1: 3, field2: 4 });
     });
 
+    QUnit.test('dataSource change should render content once if scrolling mode is virtual', function(assert) {
+        const dataChangedSpy = sinon.spy();
+        const dataGrid = createDataGrid({
+            height: 200,
+            dataSource: [],
+            keyExpr: 'id',
+            columns: ['id'],
+            scrolling: {
+                mode: 'virtual'
+            },
+        });
+
+        this.clock.tick(1000);
+        dataGrid.getController('data').changed.add(dataChangedSpy);
+
+        // act
+        dataGrid.option('dataSource', [{ id: 1 }]);
+        this.clock.tick(1000);
+
+        // assert
+        assert.equal(dataChangedSpy.callCount, 1, 'content is rendered once');
+    });
+
     // T531189
     QUnit.test('noData should be hidden after assign dataSource and height', function(assert) {
         // arrange, act
@@ -3376,6 +3399,43 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), 'test5', 'cell value is updated');
     });
 
+    QUnit.test('Refresh with changesOnly and summary in group row', function(assert) {
+        // arrange
+        const dataSource = new DataSource({
+            store: {
+                type: 'array',
+                key: 'id',
+                data: [
+                    { id: 1, fieldGroup: 'testGroup', field1: 'test1', field2: 2, field3: 'test3', field4: 'test4' },
+                ]
+            }
+        });
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: dataSource,
+            columns: [
+                'id', 'field1', 'field2', 'field3', 'field4',
+                { dataField: 'fieldGroup', groupIndex: 0 },
+            ],
+            summary: {
+                groupItems: [
+                    { column: 'field2', alignByColumn: true, summaryType: 'sum' },
+                    { column: 'field4', alignByColumn: true, summaryType: 'sum' },
+                ]
+            }
+        });
+
+        dataSource.store().update(1, { field2: 3 });
+
+        // act
+        dataGrid.refresh(true);
+
+        // assert
+        // should be 5 cells without duplicates:
+        // expand, group cell, first summary, empty, second summary
+        assert.strictEqual(dataGrid.getVisibleRows()[0].cells.length, 5);
+    });
+
     QUnit.test('Refresh with highlighting and check oldValue', function(assert) {
         // arrange
         const dataSource = new DataSource({
@@ -3980,6 +4040,34 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(d.state(), 'resolved', 'row is navigated');
+    });
+
+    // T1031120
+    QUnit.test('The repaint method of the grid should repaint the pager', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: 30,
+            pager: {
+                visible: true,
+                showInfo: true
+            },
+            dataSource: {
+                pageSize: 2,
+                store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
+            }
+        });
+
+        $(dataGrid.element()).find('.dx-datagrid-pager').removeClass('dx-pager');
+        this.clock.tick(100);
+
+        const pageIndexes = $(dataGrid.element()).find('.dx-datagrid-pager .dx-pages .dx-info').get(0);
+
+        // act
+        $(dataGrid.element()).find('.dx-datagrid-pager').addClass('dx-pager');
+        dataGrid.repaint();
+
+        // assert
+        assert.notStrictEqual($(dataGrid.element()).find('.dx-datagrid-pager .dx-pages .dx-info').get(0), pageIndexes, 'pager has repainted');
     });
 });
 

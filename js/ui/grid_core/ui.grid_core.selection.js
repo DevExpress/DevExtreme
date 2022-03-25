@@ -121,8 +121,13 @@ const SelectionController = gridCore.Controller.inherit((function() {
 
         _getSelectionConfig: function() {
             const dataController = this._dataController;
+            const columnsController = this.getController('columns');
             const selectionOptions = this.option('selection') || {};
             const deferred = selectionOptions.deferred;
+            const scrollingMode = this.option('scrolling.mode');
+            const virtualPaging = scrollingMode === 'virtual' || scrollingMode === 'infinite';
+            const allowSelectAll = this.option('selection.allowSelectAll');
+            const legacyScrollingMode = this.option('scrolling.legacyMode');
 
             return {
                 selectedKeys: this.option('selectedRowKeys'),
@@ -131,6 +136,10 @@ const SelectionController = gridCore.Controller.inherit((function() {
                 maxFilterLengthInRequest: selectionOptions.maxFilterLengthInRequest,
                 selectionFilter: this.option('selectionFilter'),
                 ignoreDisabledItems: true,
+                allowLoadByRange: function() {
+                    const hasGroupColumns = columnsController.getGroupColumns().length > 0;
+                    return virtualPaging && !legacyScrollingMode && !hasGroupColumns && allowSelectAll && !deferred;
+                },
                 key: function() {
                     return dataController?.key();
                 },
@@ -160,6 +169,25 @@ const SelectionController = gridCore.Controller.inherit((function() {
                 },
                 totalCount: () => {
                     return dataController.totalCount();
+                },
+                getLoadOptions: function(loadItemIndex, focusedItemIndex, shiftItemIndex) {
+                    const { sort, filter } = dataController.dataSource()?.lastLoadOptions() ?? {};
+                    let minIndex = Math.min(loadItemIndex, focusedItemIndex);
+                    let maxIndex = Math.max(loadItemIndex, focusedItemIndex);
+
+                    if(isDefined(shiftItemIndex)) {
+                        minIndex = Math.min(shiftItemIndex, minIndex);
+                        maxIndex = Math.max(shiftItemIndex, maxIndex);
+                    }
+
+                    const take = maxIndex - minIndex + 1;
+
+                    return {
+                        skip: minIndex,
+                        take,
+                        filter,
+                        sort
+                    };
                 },
                 onSelectionChanged: this._updateSelectedItems.bind(this)
             };

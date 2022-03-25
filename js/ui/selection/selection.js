@@ -4,7 +4,7 @@ import standardStrategy from './selection.strategy.standard';
 import { extend } from '../../core/utils/extend';
 import { noop } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
-import { Deferred } from '../../core/utils/deferred';
+import { Deferred, when } from '../../core/utils/deferred';
 
 export default Class.inherit({
     ctor: function(options) {
@@ -112,6 +112,16 @@ export default Class.inherit({
         let isSelectedItemsChanged;
         const items = this.options.plainItems();
         const item = items[itemIndex];
+        let deferred;
+        const allowLoadByRange = this.options.allowLoadByRange?.();
+        let indexOffset;
+        let focusedItemNotInLoadedRange = false;
+
+        if(allowLoadByRange) {
+            indexOffset = item.loadIndex - itemIndex;
+            itemIndex = item.loadIndex;
+            focusedItemNotInLoadedRange = this._focusedItemIndex >= 0 && !items.filter(it => it.loadIndex === this._focusedItemIndex).length;
+        }
 
         if(!this.isSelectable() || !this.isDataItem(item)) {
             return false;
@@ -123,7 +133,15 @@ export default Class.inherit({
         keys = keys || {};
 
         if(keys.shift && this.options.mode === 'multiple' && this._focusedItemIndex >= 0) {
-            isSelectedItemsChanged = this.changeItemSelectionWhenShiftKeyPressed(itemIndex, items);
+            if(focusedItemNotInLoadedRange) {
+                isSelectedItemsChanged = itemIndex !== this._shiftFocusedItemIndex || this._focusedItemIndex !== this._shiftFocusedItemIndex;
+
+                if(isSelectedItemsChanged) {
+                    deferred = this.changeItemSelectionWhenShiftKeyInVirtualPaging(itemIndex);
+                }
+            } else {
+                isSelectedItemsChanged = this.changeItemSelectionWhenShiftKeyPressed(itemIndex, items, indexOffset);
+            }
         } else if(keys.control) {
             this._resetItemSelectionWhenShiftKeyPressed();
             const isSelected = this._selectionStrategy.isItemDataSelected(itemData);
@@ -146,8 +164,10 @@ export default Class.inherit({
         }
 
         if(isSelectedItemsChanged) {
-            this._focusedItemIndex = itemIndex;
-            this.onSelectionChanged();
+            when(deferred).done(() => {
+                this._focusedItemIndex = itemIndex;
+                this.onSelectionChanged();
+            });
             return true;
         }
     },
@@ -176,12 +196,27 @@ export default Class.inherit({
         this._focusedItemIndex = -1;
     },
 
-    changeItemSelectionWhenShiftKeyPressed: function(itemIndex, items) {
+    changeItemSelectionWhenShiftKeyInVirtualPaging: function(loadIndex) {
+        const loadOptions = this.options.getLoadOptions(loadIndex, this._focusedItemIndex, this._shiftFocusedItemIndex);
+        const deferred = new Deferred();
+        const indexOffset = loadOptions.skip;
+
+        this.options.load(loadOptions).done((items) => {
+            this.changeItemSelectionWhenShiftKeyPressed(loadIndex, items, indexOffset);
+
+            deferred.resolve();
+        });
+
+        return deferred.promise();
+    },
+
+    changeItemSelectionWhenShiftKeyPressed: function(itemIndex, items, indexOffset) {
         let isSelectedItemsChanged = false;
         let itemIndexStep;
-        let index;
+        const indexOffsetDefined = isDefined(indexOffset);
+        let index = indexOffsetDefined ? this._focusedItemIndex - indexOffset : this._focusedItemIndex;
         const keyOf = this.options.keyOf;
-        const focusedItem = items[this._focusedItemIndex];
+        const focusedItem = items[index];
         const focusedData = this.options.getItemData(focusedItem);
         const focusedKey = keyOf(focusedData);
         const isFocusedItemSelected = focusedItem && this.isItemDataSelected(focusedData);
@@ -192,11 +227,15 @@ export default Class.inherit({
 
         let data;
         let itemKey;
+        let startIndex;
+        let endIndex;
 
         if(this._shiftFocusedItemIndex !== this._focusedItemIndex) {
             itemIndexStep = this._focusedItemIndex < this._shiftFocusedItemIndex ? 1 : -1;
-            for(index = this._focusedItemIndex; index !== this._shiftFocusedItemIndex; index += itemIndexStep) {
-                if(this.isDataItem(items[index])) {
+            startIndex = indexOffsetDefined ? this._focusedItemIndex - indexOffset : this._focusedItemIndex;
+            endIndex = indexOffsetDefined ? this._shiftFocusedItemIndex - indexOffset : this._shiftFocusedItemIndex;
+            for(index = startIndex; index !== endIndex; index += itemIndexStep) {
+                if(indexOffsetDefined || this.isDataItem(items[index])) {
                     itemKey = keyOf(this.options.getItemData(items[index]));
                     this._removeSelectedItem(itemKey);
                     isSelectedItemsChanged = true;
@@ -206,8 +245,10 @@ export default Class.inherit({
 
         if(itemIndex !== this._shiftFocusedItemIndex) {
             itemIndexStep = itemIndex < this._shiftFocusedItemIndex ? 1 : -1;
-            for(index = itemIndex; index !== this._shiftFocusedItemIndex; index += itemIndexStep) {
-                if(this.isDataItem(items[index])) {
+            startIndex = indexOffsetDefined ? itemIndex - indexOffset : itemIndex;
+            endIndex = indexOffsetDefined ? this._shiftFocusedItemIndex - indexOffset : this._shiftFocusedItemIndex;
+            for(index = startIndex; index !== endIndex; index += itemIndexStep) {
+                if(indexOffsetDefined || this.isDataItem(items[index])) {
                     data = this.options.getItemData(items[index]);
                     itemKey = keyOf(data);
 
@@ -217,7 +258,7 @@ export default Class.inherit({
             }
         }
 
-        if(this.isDataItem(focusedItem) && !isFocusedItemSelected) {
+        if((indexOffsetDefined || this.isDataItem(focusedItem)) && !isFocusedItemSelected) {
             this._addSelectedItem(focusedData, focusedKey);
             isSelectedItemsChanged = true;
         }

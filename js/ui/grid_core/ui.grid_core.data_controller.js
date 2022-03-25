@@ -132,6 +132,29 @@ export const dataControllerModule = {
                     this._items = [];
                     this._refreshDataSource();
                 },
+                _handleDataSourceChange(args) {
+                    if(args.value === args.previousValue || (
+                        this.option('columns') &&
+                        Array.isArray(args.value) &&
+                        Array.isArray(args.previousValue)
+                    )) {
+                        const isValueChanged = args.value !== args.previousValue;
+                        if(isValueChanged) {
+                            const store = this.store();
+                            if(store) {
+                                store._array = args.value;
+                            }
+                        }
+
+                        const isParasiteChange = Array.isArray(args.value) && !isValueChanged && this._dataSource?.isLoading();
+                        if(!isParasiteChange) {
+                            this.refresh(this.option('repaintChangesOnly'));
+                        }
+                        return true;
+                    }
+
+                    return false;
+                },
                 optionChanged: function(args) {
                     const that = this;
                     let dataSource;
@@ -140,15 +163,10 @@ export const dataControllerModule = {
                         args.handled = true;
                     }
 
-                    if(args.name === 'dataSource' && args.name === args.fullName && (args.value === args.previousValue || (that.option('columns') && Array.isArray(args.value) && Array.isArray(args.previousValue)))) {
-                        if(args.value !== args.previousValue) {
-                            const store = that.store();
-                            if(store) {
-                                store._array = args.value;
-                            }
-                        }
+                    if(args.name === 'dataSource'
+                        && args.name === args.fullName
+                        && this._handleDataSourceChange(args)) {
                         handled();
-                        that.refresh(that.option('repaintChangesOnly'));
                         return;
                     }
 
@@ -251,6 +269,12 @@ export const dataControllerModule = {
                     }
 
                     storeLoadOptions.filter = this.combinedFilter(storeLoadOptions.filter);
+
+                    if(storeLoadOptions.filter?.length === 1 && storeLoadOptions.filter[0] === '!') {
+                        e.data = [];
+                        e.extra = e.extra || {};
+                        e.extra.totalCount = 0;
+                    }
 
                     if(!columnsController.isDataSourceApplied()) {
                         columnsController.updateColumnDataTypes(dataSource);
@@ -879,7 +903,7 @@ export const dataControllerModule = {
                     const that = this;
 
                     if(that._repaintChangesOnly !== undefined) {
-                        change.repaintChangesOnly = that._repaintChangesOnly;
+                        change.repaintChangesOnly = change.repaintChangesOnly || that._repaintChangesOnly;
                         change.needUpdateDimensions = change.needUpdateDimensions || that._needUpdateDimensions;
                     } else if(change.changes) {
                         change.repaintChangesOnly = that.option('repaintChangesOnly');
@@ -928,15 +952,24 @@ export const dataControllerModule = {
                     return null;
                 },
                 _applyFilter: function() {
-                    const that = this;
-                    const dataSource = that._dataSource;
+                    const dataSource = this._dataSource;
 
                     if(dataSource) {
                         dataSource.pageIndex(0);
+                        this._isFilterApplying = true;
 
-                        return that.reload().done(that.pageChanged.fire.bind(that.pageChanged));
+                        return this.reload().done(() => {
+                            if(this._isFilterApplying) {
+                                this.pageChanged.fire();
+                            }
+                        });
                     }
                 },
+
+                resetFilterApplying: function() {
+                    this._isFilterApplying = false;
+                },
+
                 filter: function(filterExpr) {
                     const dataSource = this._dataSource;
                     const filter = dataSource && dataSource.filter();

@@ -154,6 +154,13 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.findCellPositionInMap(cellInfo);
     }
 
+    hasAllDayPanel() {
+        const { viewData } = this.viewDataMap;
+        const { allDayPanel } = viewData.groupedData[0];
+
+        return !viewData.isGroupedAllDayPanel && allDayPanel?.length > 0;
+    }
+
     getCellsGroup(groupIndex) {
         return this._groupedDataMapProvider.getCellsGroup(groupIndex);
     }
@@ -174,13 +181,16 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getRowCountInGroup(groupIndex);
     }
 
-    getCellData(rowIndex, columnIndex, isAllDay) {
-        if(isAllDay && !this._options.isVerticalGrouping) {
-            return this.viewDataMap.allDayPanelMap[columnIndex].cellData;
-        }
+    getCellData(rowIndex, columnIndex, isAllDay, rtlEnabled) {
+        const row = isAllDay && !this._options.isVerticalGrouping
+            ? this.viewDataMap.allDayPanelMap
+            : this.viewDataMap.dateTableMap[rowIndex];
 
-        const { dateTableMap } = this.viewDataMap;
-        const { cellData } = dateTableMap[rowIndex][columnIndex];
+        const actualColumnIndex = !rtlEnabled
+            ? columnIndex
+            : (row.length - 1 - columnIndex);
+
+        const { cellData } = row[actualColumnIndex];
 
         return cellData;
     }

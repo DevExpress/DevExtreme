@@ -1115,6 +1115,96 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(visibleRows[0].data, { text: 'text', num: 1 }, 'visible row\'s data');
     });
 
+    QUnit.test('Should not display all rows when no search results and lookup is used (T1059631)', function(assert) {
+        // arrange
+        let loadingTimes = 0;
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: {
+                load(e) {
+                    loadingTimes += 1;
+                    return [{ text: 'text', num: 1 }, { text: 'text', num: 2 }];
+                }
+            },
+            searchPanel: {
+                visible: true
+            },
+            columns: [{
+                dataField: 'num',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, name: 'one' }, { id: 2, name: 'two' }],
+                    valueExpr: 'id',
+                    displayExpr: 'name'
+                }
+            }]
+        });
+
+        // act
+        this.clock.tick();
+
+        // assert
+        const visibleRowsBeforeSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsBeforeSearch.length, 2, 'two visible rows');
+
+        // act
+        dataGrid.option('searchPanel.text', 'three');
+        this.clock.tick();
+
+        // assert
+        const visibleRowsAfterSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsAfterSearch.length, 0, 'no visible rows');
+        assert.strictEqual(loadingTimes, 1, 'doesn\'t load items if no search results');
+    });
+
+    QUnit.test('Should not display all rows when no search results and lookup is used (remoteOperations: true, additionalFilter is used) (T1059631)', function(assert) {
+        // arrange
+        let loadingTimes = 0;
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: {
+                load() {
+                    loadingTimes += 1;
+                    return $.Deferred().resolve({
+                        data: [{ text: 'text', num: 1 }, { text: 'text', num: 2 }],
+                        totalCount: 2,
+                    });
+                }
+            },
+            filterValue: ['num', '<=', '2'],
+            searchPanel: {
+                visible: true
+            },
+            remoteOperations: true,
+            columns: [{
+                dataField: 'num',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, name: 'one' }, { id: 2, name: 'two' }],
+                    valueExpr: 'id',
+                    displayExpr: 'name'
+                }
+            }]
+        });
+
+        // act
+        this.clock.tick();
+
+        // assert
+        const visibleRowsBeforeSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsBeforeSearch.length, 2, 'two visible rows');
+        assert.strictEqual(loadingTimes, 2, 'loads before search request');
+
+        // act
+        dataGrid.option('searchPanel.text', 'three');
+        this.clock.tick();
+
+        // assert
+        const visibleRowsAfterSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsAfterSearch.length, 0, 'no visible rows');
+        assert.strictEqual(loadingTimes, 2, 'doesn\'t load items if no search results');
+    });
+
     QUnit.test('Correct number parsing in search', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
@@ -1360,5 +1450,33 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(dataGrid);
         assert.equal(loadCallCount, 1, 'one load count on start');
         assert.equal(contentReadyCallCount, 1, 'one contentReady on start');
+    });
+
+    // T1072812
+    QUnit.test('getCombinedFilter returns actual value when called in onOptionChanged', function(assert) {
+        let filterChangedCount = 0;
+
+        const dataGrid = createDataGrid({
+            columns: [{ dataField: 'column1' }],
+            dataSource: [],
+            loadingTimeout: null,
+            filterRow: {
+                visible: true,
+            },
+            onOptionChanged: (e) => {
+                const filter = e.component.getCombinedFilter();
+
+                if(filterChangedCount === 0) {
+                    assert.strictEqual(filter[2], 35);
+                } else if(filterChangedCount === 1) {
+                    assert.strictEqual(filter, undefined);
+                }
+
+                filterChangedCount++;
+            },
+        });
+
+        dataGrid.columnOption(0, 'filterValue', 35);
+        dataGrid.columnOption(0, 'filterValue', null);
     });
 });

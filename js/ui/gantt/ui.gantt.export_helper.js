@@ -4,7 +4,6 @@ import { isDate, isDefined, isNumeric } from '../../core/utils/type';
 import dateLocalization from '../../localization/date';
 import numberLocalization from '../../localization/number';
 
-
 const window = getWindow();
 const TREELIST_EMPTY_SPACE = 'dx-treelist-empty-space';
 const TREELIST_TABLE = 'dx-treelist-table';
@@ -59,9 +58,10 @@ export class GanttExportHelper {
         };
     }
 
-    getTreeListCellInfo(rowIndex, colIndex) {
-        const cell = this._getDataCell(rowIndex, colIndex);
-        const node = this._getNodeByRowIndex(rowIndex);
+    getTreeListCellInfo(key, colIndex) {
+        const node = this._treeList.getNodeByKey(key);
+        const visibleRowIndex = this._treeList.getRowIndexByKey(key);
+        const cell = visibleRowIndex > -1 ? this._getDataCell(visibleRowIndex, colIndex) : null;
         const style = cell ? window.getComputedStyle(cell) : this._getColumnCellStyle(colIndex);
         const styleForExport = {
             color: style.color,
@@ -77,7 +77,7 @@ export class GanttExportHelper {
         }
 
         return {
-            content: cell?.textContent ?? this._getDisplayText(rowIndex, colIndex),
+            content: cell?.textContent ?? this._getDisplayText(key, colIndex),
             styles: styleForExport
         };
     }
@@ -111,6 +111,14 @@ export class GanttExportHelper {
             this._cache['columnStyles'][colIndex] = window.getComputedStyle(cell);
         }
     }
+    _getTask(key) {
+        this._ensureTaskCache(key);
+        return this._cache['tasks'][key];
+    }
+    _ensureTaskCache(key) {
+        this._cache['tasks'] ??= { };
+        this._cache['tasks'][key] ??= this._gantt._findTaskByKey(key);
+    }
     _getTreeListTable() {
         return this._getTreeListElement(TREELIST_TABLE);
     }
@@ -128,23 +136,8 @@ export class GanttExportHelper {
     _getHeaderView() {
         return this._treeList._views.columnHeadersView;
     }
-    _getNodeByRowIndex(rowIndex) {
-        const treeList = this._treeList;
-        const nodeKey = treeList.getKeyByRowIndex(rowIndex) ?? this._findTaskKeyByRowIndex(rowIndex);
-        return treeList.getNodeByKey(nodeKey);
-    }
-    _findTaskKeyByRowIndex(rowIndex) {
-        const tasks = this._getGanttTasks();
-        const keyGetter = this._gantt._getTaskKeyGetter();
-        const task = tasks[rowIndex];
-        return keyGetter(task);
-    }
-    _getGanttTasks() {
-        return this._gantt._tasksOption?._getItems();
-    }
-    _getDisplayText(rowIndex, colIndex) {
-        const tasks = this._getGanttTasks();
-        const task = tasks[rowIndex];
+    _getDisplayText(key, colIndex) {
+        const task = this._getTask(key);
         return task && this._getGridDisplayText(colIndex, task);
     }
     _getGridDisplayText(colIndex, data) {

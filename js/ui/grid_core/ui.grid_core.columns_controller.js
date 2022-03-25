@@ -735,13 +735,6 @@ export const columnsControllerModule = {
                         that._checkColumns();
                     }
 
-                    fullOptionName && fireOptionChanged(that, {
-                        fullOptionName: fullOptionName,
-                        optionName: optionName,
-                        value: value,
-                        prevValue: prevValue
-                    });
-
                     if(!isDefined(prevValue) && !isDefined(value) && optionName.indexOf('buffer') !== 0) {
                         notFireEvent = true;
                     }
@@ -762,6 +755,13 @@ export const columnsControllerModule = {
                     } else {
                         resetColumnsCache(that);
                     }
+
+                    fullOptionName && fireOptionChanged(that, {
+                        fullOptionName: fullOptionName,
+                        optionName: optionName,
+                        value: value,
+                        prevValue: prevValue
+                    });
                 }
             };
 
@@ -1848,7 +1848,7 @@ export const columnsControllerModule = {
                             setFilterOperationsAsDefaultValues(column);
                         }
                         column.defaultFilterOperation = column.filterOperations && column.filterOperations[0] || '=';
-                        column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : (dataType === 'boolean' && !column.cellTemplate);
+                        column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : (dataType === 'boolean' && !column.cellTemplate && !column.lookup);
                     }
                 },
                 updateColumnDataTypes: function(dataSource) {

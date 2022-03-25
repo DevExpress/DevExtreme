@@ -9,6 +9,7 @@ import messageLocalization from '../../../localization/message';
 import Popup from '../../popup';
 import { hide as hideLoading, show as showLoading } from '../loading';
 import { createAppointmentAdapter } from '../appointmentAdapter';
+import { getNormalizedResources } from '../resources/utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -83,10 +84,6 @@ export class AppointmentPopup {
         };
     }
 
-    get key() {
-        return this.scheduler.getKey();
-    }
-
     get visible() {
         return this.popup ? this.popup.option('visible') : false;
     }
@@ -159,11 +156,13 @@ export class AppointmentPopup {
 
     _createFormData(rawAppointment) {
         const appointment = this._createAppointmentAdapter(rawAppointment);
-        const resources = this.scheduler.getResourcesFromItem(rawAppointment);
+        const dataAccessors = this.scheduler.getDataAccessors();
+        const resources = this.scheduler.getResources();
+        const normalizedResources = getNormalizedResources(rawAppointment, dataAccessors, resources);
 
         return {
             ...rawAppointment,
-            ...resources,
+            ...normalizedResources,
             repeat: !!appointment.recurrenceRule,
         };
     }
@@ -231,7 +230,9 @@ export class AppointmentPopup {
     }
 
     triggerResize() {
-        this.popup && triggerResizeEvent(this.popup.$element());
+        if(this.popup) {
+            triggerResizeEvent(this.popup.$element());
+        }
     }
 
     _getMaxWidth(isRecurrence) {
@@ -242,11 +243,15 @@ export class AppointmentPopup {
     }
 
     changeSize(isRecurrence) {
-        const fullScreen = this._isPopupFullScreenNeeded();
-        this.popup.option({
-            fullScreen,
-            maxWidth: fullScreen ? '100%' : this._getMaxWidth(isRecurrence),
-        });
+        if(this.popup) {
+            const fullScreen = this._isPopupFullScreenNeeded();
+            this.popup.option({
+                fullScreen,
+                maxWidth: fullScreen
+                    ? '100%'
+                    : this._getMaxWidth(isRecurrence),
+            });
+        }
     }
 
     updatePopupFullScreenMode() {
@@ -333,9 +338,13 @@ export class AppointmentPopup {
                     const endTime = endDate.getTime();
 
                     const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
-                    const resources = this.scheduler.getResourcesFromItem(this.state.lastEditData);
 
-                    this.scheduler.updateScrollPosition(startDate, resources, inAllDayRow);
+                    const dataAccessors = this.scheduler.getDataAccessors();
+                    const resourceList = this.scheduler.getResources();
+
+                    const normalizedResources = getNormalizedResources(this.state.lastEditData, dataAccessors, resourceList);
+
+                    this.scheduler.updateScrollPosition(startDate, normalizedResources, inAllDayRow);
                     this.state.lastEditData = null;
                 }
 

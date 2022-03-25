@@ -55,29 +55,7 @@ const generatedTs = [
 
 const bundlesSrc = ['js/bundles/**/*.js'];
 
-const sideEffectModulesSet = new Set([
-    path.join(srcDir, '/localization/globalize/currency'),
-    path.join(srcDir, '/localization/globalize/date'),
-    path.join(srcDir, '/localization/globalize/message'),
-    path.join(srcDir, '/localization/globalize/number')
-]);
-
-const searchSideEffectModules = (filePath, modules) => {
-    const content = fs.readFileSync(filePath);
-    const lines = content.toString().split('\n');
-
-    lines.forEach(line => {
-        const sideEffectModuleRelativePath = line.match(/^import '(\..*)';/)?.[1];
-        if (sideEffectModuleRelativePath) {
-            const dirPath = path.parse(filePath).dir;
-            const sideEffectModulePath = path.join(dirPath, sideEffectModuleRelativePath);
-            modules.add(sideEffectModulePath);
-        }
-    });
-};
-
 const createModuleConfig = (name, dir, filePath) => {
-    const isSideEffectModule = sideEffectModulesSet.has(filePath.replace(/\.js$/, ''));
     const isIndex = name === 'index.js';
     const relative = path.join('./', dir.replace(srcDir, ''), name);
     const currentPath = isIndex ? path.join(relative, '../') : relative;
@@ -88,7 +66,7 @@ const createModuleConfig = (name, dir, filePath) => {
     const hasDTS = hasRealDTS || hasGeneratedDTS;
 
     const result = {
-        sideEffects: isSideEffectModule,
+        sideEffects: false,
         main: normalize(cjsFile),
         module: normalize(esmFile)
     };
@@ -158,14 +136,7 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
         removeDebug(),
         babelCjs(),
     ]),
-    () => gulp
-        .src(esmTranspileSrc)
-        .pipe(through2.obj((chunk, enc, callback) => {
-            if (chunk.isNull())
-                return callback(null, chunk);
-            searchSideEffectModules(chunk.path, sideEffectModulesSet); 
-            callback();
-        })),
+
     () => gulp
         .src(esmTranspileSrc)
         .pipe(flatMap((stream, file) => {
