@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, React,
 } from '@devextreme-generator/declarations';
-import LegacyTextBox from '../../../ui/text_box';
+import LegacyTextArea from '../../../ui/text_area';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { EditorProps } from './internal/editor';
 import { EditorStateProps } from './internal/editor_state_props';
@@ -11,9 +11,9 @@ import { TextEditorProps } from './internal/text_editor_props';
 export const viewFunction = ({
   componentProps,
   restAttributes,
-}: TextBox): JSX.Element => (
+}: TextArea): JSX.Element => (
   <DomComponentWrapper
-    componentType={LegacyTextBox}
+    componentType={LegacyTextArea}
     componentProps={componentProps}
     templateNames={[]}
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -22,35 +22,20 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class TextBoxProps extends EditorProps {
-  @OneWay() buttons?: unknown[];
-
-  @OneWay() mask?: string = '';
-
-  @OneWay() maskChar?: string = '_';
-
-  @OneWay() maskInvalidMessage?: string = 'Value is invalid';
-
-  @OneWay() maskRules?: unknown = {};
-
-  @OneWay() mode?: 'email' | 'password' | 'search' | 'tel' | 'text' | 'url' = 'text';
-
-  @OneWay() showClearButton?: boolean = false;
-
-  @OneWay() showMaskMode?: 'always' | 'onFocus' = 'always';
-
-  @OneWay() useMaskedValue?: boolean = false;
+export class TextAreaProps extends EditorProps {
+  @OneWay() autoResizeEnabled?: boolean = false;
 }
 
-export type TextBoxPropsType = TextBoxProps
+export type TextAreaPropsType = TextAreaProps
 & EditorStateProps & EditorLabelProps & TextEditorProps;
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class TextBox extends JSXComponent<TextBoxPropsType>() {
+export class TextArea extends JSXComponent<TextAreaPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): TextBoxProps {
+  get componentProps(): TextAreaProps {
     return this.props;
   }
 }
