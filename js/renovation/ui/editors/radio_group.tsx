@@ -50,7 +50,7 @@ export type RadioGroupPropsType = RadioGroupProps & EditorStateProps;
 })
 export class RadioGroup extends JSXComponent<RadioGroupPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): RadioGroupProps {
+  get componentProps(): RadioGroupPropsType {
     return this.props;
   }
 }

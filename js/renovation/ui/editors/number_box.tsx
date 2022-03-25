@@ -51,7 +51,7 @@ export type NumberBoxPropsType = NumberBoxProps & EditorStateProps & EditorLabel
 })
 export class NumberBox extends JSXComponent<NumberBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): NumberBoxProps {
+  get componentProps(): NumberBoxPropsType {
     return this.props;
   }
 }

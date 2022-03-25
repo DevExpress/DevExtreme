@@ -53,7 +53,7 @@ export type SelectBoxPropsType = SelectBoxProps & EditorStateProps & EditorLabel
 })
 export class SelectBox extends JSXComponent<SelectBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): SelectBoxProps {
+  get componentProps(): SelectBoxPropsType {
     return this.props;
   }
 }

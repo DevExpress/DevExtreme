@@ -50,7 +50,7 @@ export type TextBoxPropsType = TextBoxProps
 })
 export class TextBox extends JSXComponent<TextBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): TextBoxProps {
+  get componentProps(): TextBoxPropsType {
     return this.props;
   }
 }

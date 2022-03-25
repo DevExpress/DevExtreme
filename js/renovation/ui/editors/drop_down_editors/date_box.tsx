@@ -48,7 +48,7 @@ export type DateBoxPropsType = DateBoxProps & EditorStateProps & EditorLabelProp
 })
 export class DateBox extends JSXComponent<DateBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): DateBoxProps {
+  get componentProps(): DateBoxPropsType {
     return this.props;
   }
 }

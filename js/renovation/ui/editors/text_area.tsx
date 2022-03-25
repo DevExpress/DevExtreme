@@ -35,7 +35,7 @@ export type TextAreaPropsType = TextAreaProps
 })
 export class TextArea extends JSXComponent<TextAreaPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): TextAreaProps {
+  get componentProps(): TextAreaPropsType {
     return this.props;
   }
 }
