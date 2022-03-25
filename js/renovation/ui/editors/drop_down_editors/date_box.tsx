@@ -34,7 +34,9 @@ export class DateBoxProps extends EditorProps {
 
   @OneWay() field?: string;
 
-  @OneWay() type?: string ;
+  @OneWay() type?: string = 'date' ;
+
+  @OneWay() useMaskBehavior?: boolean = false ;
 }
 
 export type DateBoxPropsType = DateBoxProps & EditorStateProps;
