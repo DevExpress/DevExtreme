@@ -4,13 +4,18 @@ import { NumberBox, NumberBoxProps, viewFunction as NumberBoxView } from '../num
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacyNumberBox from '../../../../ui/number_box';
 import { EditorStateProps } from '../internal/editor_state_props';
+import { EditorLabelProps } from '../internal/editor_label_props';
 
 jest.mock('../../../../ui/number_box', () => jest.fn());
 
 describe('NumberBox', () => {
   describe('View', () => {
     it('default render', () => {
-      const componentProps = { ...new NumberBoxProps(), ...new EditorStateProps() };
+      const componentProps = {
+        ...new NumberBoxProps(),
+        ...new EditorStateProps(),
+        ...new EditorLabelProps(),
+      };
       const props = {
         componentProps,
         restAttributes: { 'rest-attributes': 'true' },
