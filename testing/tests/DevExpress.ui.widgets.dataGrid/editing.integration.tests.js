@@ -4347,6 +4347,57 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(enterKeyHandler(), true, 'dateBox enter key handler is replaced');
     });
 
+    QUnit.testInActiveWindow('Datebox changed value should be saved on enter key if useMaskBehaviour is true (T1070850)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+            return;
+        }
+
+        // arrange
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+        const dataGrid = createDataGrid({
+            dataSource: [{
+                ID: 1,
+                BirthDate: new Date('1964-03-16'),
+            }],
+            keyExpr: 'ID',
+            editing: {
+                mode: 'row',
+                allowUpdating: true,
+            },
+            columns: [{
+                dataField: 'BirthDate',
+                dataType: 'date',
+                editorOptions: {
+                    useMaskBehavior: true
+                },
+            }],
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        const $input = $('.dx-texteditor-input');
+        const editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+        const dateBox = editor.getElement().dxDateBox('instance');
+        const newValue = new Date('1964-05-16');
+
+        dateBox.blur = () => {
+            // emulate browser behaviour
+            dateBox.option('value', newValue);
+        };
+
+        // act
+        const event = $.Event('keydown', { key: 'enter' });
+        $input.trigger(event);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.cellValue(0, 'BirthDate'), newValue, 'value is changed');
+    });
+
     // T848039, T988258
     ['date', 'datetime'].forEach(dataType => {
         [true, false].forEach(useMaskBehavior => {
