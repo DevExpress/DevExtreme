@@ -228,6 +228,7 @@ QUnit.module('Aggregation methods', {
     beforeEach: function() {
         const that = this;
 
+        this.argAxisOptions = { type: 'continuous' };
         this.getBusinessRange = function() {
             return {
                 min: 0,
@@ -254,9 +255,7 @@ QUnit.module('Aggregation methods', {
                 return 1;
             },
             getOptions() {
-                return {
-                    type: 'continuous'
-                };
+                return that.argAxisOptions;
             },
             getVisualRangeCenter({ minVisible, maxVisible }) {
                 return (minVisible + maxVisible) / 2;
@@ -332,6 +331,13 @@ QUnit.test('Avg', function(assert) {
     assert.equal(points[0].value, 500);
 });
 
+QUnit.test('Aggregation with forceOldBehavior', function(assert) {
+    this.argAxisOptions.forceOldBehavior = true;
+    const points = this.aggregateData('avg', this.data);
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 500);
+});
 QUnit.test('Sum', function(assert) {
     const points = this.aggregateData('sum', this.data);
     assert.equal(points.length, 1);

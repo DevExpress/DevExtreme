@@ -79,7 +79,7 @@ const environment = {
     afterEach: function() {
         this.createPoint.restore();
     },
-    createAxisWithTranslator: function() {
+    createAxisWithTranslator: function({ argumentAxisOptions }) {
         const valAxis = new MockAxis({ renderer: this.renderer });
         const argAxis = new MockAxis({ renderer: this.renderer });
 
@@ -93,6 +93,8 @@ const environment = {
                 translate: { 'First': 10, 'Second': 20, 'Third': 30, 'Fourth': 40, 'canvas_position_default': 'defaultX' }
             });
         });
+
+        argumentAxisOptions && argAxis.updateOptions(argumentAxisOptions);
 
         return {
             argAxis: argAxis,
@@ -1156,24 +1158,48 @@ QUnit.module('getMarginOptions', {
 });
 
 QUnit.test('bar series', function(assert) {
-    const series = createSeries({
-        type: 'bar'
+    const series = this.createSeries({
+        type: 'bar',
+        argumentAxisOptions: {
+            forceOldBehavior: false
+        }
     });
 
     assert.deepEqual(series.getMarginOptions(), {
         checkInterval: true,
-        percentStick: false
+        percentStick: false,
+        forceOldBehavior: false
     });
 });
 
 QUnit.test('bar series (useAggregation)', function(assert) {
-    const series = createSeries({
+    const series = this.createSeries({
         type: 'bar',
-        aggregation: { enabled: true }
+        aggregation: { enabled: true },
+        argumentAxisOptions: {
+            forceOldBehavior: false
+        }
     });
 
     assert.deepEqual(series.getMarginOptions(), {
         checkInterval: false,
-        percentStick: false
+        percentStick: false,
+        forceOldBehavior: false
+    });
+});
+
+QUnit.test('bar series (useAggregation). forceOldBehavior = true', function(assert) {
+    const series = this.createSeries({
+        type: 'bar',
+        aggregation: { enabled: true },
+        argumentAxisOptions: {
+            forceOldBehavior: true
+        }
+    });
+
+    assert.deepEqual(series.getMarginOptions(), {
+        checkInterval: true,
+        percentStick: false,
+        forceOldBehavior: true
     });
 });

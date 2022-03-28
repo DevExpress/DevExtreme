@@ -187,7 +187,8 @@ const checkGroups = function(assert, series) {
         assert.deepEqual(series.getMarginOptions(), {
             size: 14,
             percentStick: false,
-            sizePointNormalState: 10
+            sizePointNormalState: 10,
+            forceOldBehavior: undefined
         });
     });
 

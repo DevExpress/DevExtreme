@@ -1225,6 +1225,7 @@ Series.prototype = {
 
     getMarginOptions: function() {
         return this._patchMarginOptions({
+            forceOldBehavior: this.getArgumentAxis()?.getOptions().forceOldBehavior,
             percentStick: this.isFullStackedSeries()
         });
     },

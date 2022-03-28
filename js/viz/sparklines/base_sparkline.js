@@ -84,6 +84,9 @@ function createAxis(isHorizontal) {
         calculateInterval: _noop,
         getMarginOptions() {
             return {};
+        },
+        getOptions() {
+            return {};
         }
     };
 }

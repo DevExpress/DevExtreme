@@ -2840,7 +2840,8 @@ QUnit.test('Return point size', function(assert) {
     assert.deepEqual(series.getMarginOptions(), {
         size: 6,
         percentStick: false,
-        sizePointNormalState: 6
+        sizePointNormalState: 6,
+        forceOldBehavior: undefined
     });
 });
 
@@ -2856,7 +2857,8 @@ QUnit.test('getMarginOptions when point is invisible', function(assert) {
     assert.deepEqual(series.getMarginOptions(), {
         size: 0,
         percentStick: false,
-        sizePointNormalState: 2
+        sizePointNormalState: 2,
+        forceOldBehavior: undefined
     });
 });
 
@@ -2888,7 +2890,8 @@ QUnit.test('Add max border width', function(assert) {
     assert.deepEqual(series.getMarginOptions(), {
         size: 30,
         percentStick: false,
-        sizePointNormalState: 26
+        sizePointNormalState: 26,
+        forceOldBehavior: undefined
     });
 });
 
@@ -2904,6 +2907,7 @@ QUnit.test('Polar point. getMarginOptions returns point size', function(assert) 
     assert.deepEqual(series.getMarginOptions(), {
         size: 6,
         percentStick: false,
-        sizePointNormalState: 6
+        sizePointNormalState: 6,
+        forceOldBehavior: undefined
     });
 });

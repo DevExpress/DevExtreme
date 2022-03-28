@@ -133,11 +133,19 @@ QUnit.test('Creation with errorBars', function(assert) {
 });
 
 QUnit.test('getMarginOptions', function(assert) {
-    const series = createSeries({ type: 'bubble' });
+    const argAxis = new MockAxis({ renderer: this.renderer });
+
+    argAxis.updateOptions({ forceOldBehavior: false });
+    const series = createSeries({
+        type: 'bubble',
+    }, {
+        argumentAxis: argAxis
+    });
 
     assert.deepEqual(series.getMarginOptions(), {
         processBubbleSize: true,
-        percentStick: false
+        percentStick: false,
+        forceOldBehavior: false
     });
 });
 

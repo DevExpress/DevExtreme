@@ -14,7 +14,7 @@ function getOriginalData(data) {
     });
 }
 
-const createSeries = function(options, renderSettings, widgetType) {
+const createSeries = function(options, renderSettings, widgetType, axisOptions) {
     renderSettings = renderSettings || {};
     renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
     renderSettings.argumentAxis = renderSettings.argumentAxis || {
@@ -29,7 +29,7 @@ const createSeries = function(options, renderSettings, widgetType) {
             };
         },
         getOptions() {
-            return {
+            return axisOptions || {
                 logarithmBase: 10,
                 type: 'continuous'
             };
@@ -2379,7 +2379,8 @@ QUnit.module('Zooming range data. Simple', {
             calculateInterval: function(a, b) {
                 return a - b;
             },
-            getMarginOptions() { return {}; }
+            getMarginOptions() { return {}; },
+            getOptions() { return {}; }
         };
         this.defaultOptions = {
             type: 'line',
@@ -3114,4 +3115,27 @@ QUnit.test('Calculate range data when aggregation enabled. Do not inculde data r
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
     assert.strictEqual(rangeData.arg.max, 20, 'Max arg should be correct');
     assert.strictEqual(rangeData.arg.interval, 5, 'Min interval arg should be correct');
+});
+
+QUnit.test('Calculate interval in range data when aggregation is enabled. forceOldBehavior = true', function(assert) {
+    const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
+    const series = createSeries({
+        type: 'scatter',
+        argumentAxisType: 'continuous',
+        aggregation: { enabled: true }
+    }, undefined, undefined, {
+        logarithmBase: 10,
+        type: 'continuous',
+        forceOldBehavior: true
+    });
+
+    series.updateData(data);
+    series.createPoints();
+
+    const rangeData = series.getRangeData();
+
+    assert.ok(rangeData, 'Range data should be created');
+    assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
+    assert.strictEqual(rangeData.arg.max, 20, 'Max arg should be correct');
+    assert.strictEqual(rangeData.arg.interval, 3, 'Min interval arg should be correct');
 });
