@@ -803,10 +803,10 @@ export const virtualScrollingModule = {
                     },
                     reload: function() {
                         const rowsScrollController = this._rowsScrollController || this._dataSource;
-                        const itemIndex = rowsScrollController && rowsScrollController.getItemIndexByPosition();
                         const result = this.callBase.apply(this, arguments);
                         return result && result.done(() => {
                             if(isVirtualMode(this) || isVirtualRowRendering(this)) {
+                                const itemIndex = rowsScrollController && rowsScrollController.getItemIndexByPosition();
                                 const rowIndexOffset = this.getRowIndexOffset();
                                 const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
                                 const component = this.component;
