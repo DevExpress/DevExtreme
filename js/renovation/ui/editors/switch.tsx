@@ -40,7 +40,7 @@ export type SwitchPropsType = SwitchProps & EditorStateProps;
 })
 export class Switch extends JSXComponent<SwitchPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): SwitchProps {
+  get componentProps(): SwitchPropsType {
     return this.props;
   }
 }

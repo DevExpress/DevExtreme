@@ -10,6 +10,7 @@ import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import { EventCallback } from '../../common/event_callback';
 import { EditorProps } from '../internal/editor';
 import { EditorStateProps } from '../internal/editor_state_props';
+import { EditorLabelProps } from '../internal/editor_label_props';
 
 export const viewFunction = ({
   componentProps,
@@ -44,7 +45,7 @@ export class SelectBoxProps extends EditorProps {
   @Event() valueChange?: EventCallback<any>;
 }
 
-export type SelectBoxPropsType = SelectBoxProps & EditorStateProps;
+export type SelectBoxPropsType = SelectBoxProps & EditorStateProps & EditorLabelProps;
 
 @Component({
   defaultOptionRules: null,
@@ -52,7 +53,7 @@ export type SelectBoxPropsType = SelectBoxProps & EditorStateProps;
 })
 export class SelectBox extends JSXComponent<SelectBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): SelectBoxProps {
+  get componentProps(): SelectBoxPropsType {
     return this.props;
   }
 }

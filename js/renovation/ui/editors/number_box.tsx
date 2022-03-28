@@ -6,6 +6,7 @@ import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { EventCallback } from '../common/event_callback';
 import { EditorProps } from './internal/editor';
 import { EditorStateProps } from './internal/editor_state_props';
+import { EditorLabelProps } from './internal/editor_label_props';
 
 const DEFAULT_VALUE = 0;
 
@@ -43,14 +44,14 @@ export class NumberBoxProps extends EditorProps {
   @Event() valueChange?: EventCallback<number | null>;
 }
 
-export type NumberBoxPropsType = NumberBoxProps & EditorStateProps;
+export type NumberBoxPropsType = NumberBoxProps & EditorStateProps & EditorLabelProps;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
 export class NumberBox extends JSXComponent<NumberBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): NumberBoxProps {
+  get componentProps(): NumberBoxPropsType {
     return this.props;
   }
 }
