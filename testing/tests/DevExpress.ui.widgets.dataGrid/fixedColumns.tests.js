@@ -2026,40 +2026,42 @@ QUnit.module('Fixed columns', {
         assert.notStrictEqual($fixedTable.position().top, positionTop, 'scroll top of the fixed table is changed');
     });
 
+    if(devices.real().ios) {
     // T722330
-    QUnit.test('Elastic scrolling should be applied for fixed table', function(assert) {
+        QUnit.test('Elastic scrolling should be applied for fixed table', function(assert) {
         // arrange
-        const that = this;
+            const that = this;
 
-        that.setupDataGrid();
-        that.rowsView.render(that.gridContainer);
-        that.rowsView.resize();
-        that.rowsView.height(50);
+            that.setupDataGrid();
+            that.rowsView.render(that.gridContainer);
+            that.rowsView.resize();
+            that.rowsView.height(50);
 
-        // act
-        that.rowsView._handleScroll({
-            component: that.rowsView.getScrollable(),
-            scrollOffset: {
-                top: 350
-            },
-            reachedBottom: true
+            // act
+            that.rowsView._handleScroll({
+                component: that.rowsView.getScrollable(),
+                scrollOffset: {
+                    top: 350
+                },
+                reachedBottom: true
+            });
+
+            // assert
+            const $fixedTable = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
+            assert.roughEqual(translator.getTranslate($fixedTable).y, -330, 10);
+
+            // act
+            that.rowsView._handleScroll({
+                component: that.rowsView.getScrollable(),
+                scrollOffset: {
+                    top: 10
+                }
+            });
+
+            // assert
+            assert.ok(!$fixedTable[0].style.transform);
         });
-
-        // assert
-        const $fixedTable = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
-        assert.roughEqual(translator.getTranslate($fixedTable).y, -330, 10);
-
-        // act
-        that.rowsView._handleScroll({
-            component: that.rowsView.getScrollable(),
-            scrollOffset: {
-                top: 10
-            }
-        });
-
-        // assert
-        assert.ok(!$fixedTable[0].style.transform);
-    });
+    }
 
     QUnit.test('The context menu should not contain items related to fixed columns when columnFixing is not enabled (T964011)', function(assert) {
         // arrange
