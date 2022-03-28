@@ -315,8 +315,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     break;
 
                 case 'space':
-                    this._spaceKeyHandler(e, isEditing);
-                    isHandled = true;
+                    isHandled = this._spaceKeyHandler(e, isEditing);
                     break;
 
                 case 'A':
@@ -463,6 +462,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _spaceKeyHandler: function(eventArgs, isEditing) {
         const rowIndex = this.getVisibleRowIndex();
         const $target = $(eventArgs.originalEvent && eventArgs.originalEvent.target);
+
         if(this.option('selection') && this.option('selection').mode !== 'none' && !isEditing) {
             const isFocusedRowElement = this._getElementType($target) === 'row' && this.isRowFocusType() && isDataRow($target);
             const isFocusedSelectionCell = $target.hasClass(COMMAND_SELECT_CLASS);
@@ -475,9 +475,13 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     control: eventArgs.ctrl
                 });
                 eventArgs.originalEvent.preventDefault();
+
+                return true;
             }
+
+            return false;
         } else {
-            this._beginFastEditing(eventArgs.originalEvent);
+            return this._beginFastEditing(eventArgs.originalEvent);
         }
     },
     _ctrlAKeyHandler: function(eventArgs, isEditing) {
