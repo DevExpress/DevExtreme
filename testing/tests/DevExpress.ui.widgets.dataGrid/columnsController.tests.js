@@ -1203,6 +1203,18 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         assert.deepEqual(column.calculateFilterExpression(12, '>='), ['TestField', '>=', 12]);
     });
 
+    QUnit.test('calculateFilterExpression for column with object dataField (T1065008)', function(assert) {
+        this.applyOptions({
+            columns: [{ dataField: 'TestField', dataType: 'object' }]
+        });
+
+        const column = this.columnsController.getColumns()[0];
+        assert.ok(column);
+        assert.ok(column.calculateFilterExpression);
+        assert.deepEqual(column.calculateFilterExpression('test'), ['TestField', '=', 'test']);
+        assert.deepEqual(column.calculateFilterExpression('test', '>='), ['TestField', '>=', 'test']);
+    });
+
     QUnit.test('calculateFilterExpression for column with lookup and string dataField', function(assert) {
         this.applyOptions({
             columns: [{ dataField: 'TestField', dataType: 'string', lookup: {} }]
