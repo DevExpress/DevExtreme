@@ -80,17 +80,14 @@ const HeaderPanel = ColumnsView.inherit({
         });
 
         const normalizedItems = userItems.map(button => {
-            let needHideButton = false;
-
             if(isString(button)) {
                 button = { name: button };
-                needHideButton = true;
             }
 
             if(isDefined(button.name)) {
                 if(isDefined(defaultButtonsByNames[button.name])) {
                     button = extend(true, {}, defaultButtonsByNames[button.name], button);
-                } else if(needHideButton) {
+                } else {
                     button.visible = false;
                 }
             }
