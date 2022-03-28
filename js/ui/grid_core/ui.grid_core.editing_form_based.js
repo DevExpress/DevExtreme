@@ -136,6 +136,7 @@ export const editingFormBasedModule = {
                     if(this.isPopupEditMode()) {
                         if(this.option('repaintChangesOnly')) {
                             row.update?.(row);
+                            this._rowsView.renderDelayedTemplates();
                         } else if(editForm) {
                             this._updateEditFormDeferred = new Deferred().done(() => editForm.repaint());
                             if(!this._updateLockCount) {
@@ -423,6 +424,7 @@ export const editingFormBasedModule = {
                         }
 
                         this._editForm.on('contentReady', () => {
+                            this._rowsView.renderDelayedTemplates();
                             this._editPopup?.repaint();
                         });
                     };
