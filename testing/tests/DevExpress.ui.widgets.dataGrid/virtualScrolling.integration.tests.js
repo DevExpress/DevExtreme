@@ -1662,6 +1662,76 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok(dataGrid.getScrollable().scrollTop() > 0, 'content is scrolled');
     });
 
+    // T1072837
+    QUnit.test('Navigating to next row after editing should be correct if editing last row', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1 },
+                { id: 2 },
+                { id: 3 },
+                { id: 4 },
+                { id: 5 },
+                { id: 6 },
+                { id: 7 },
+                { id: 8 },
+                { id: 9 },
+                { id: 10 },
+                { id: 11 },
+                { id: 12 },
+                { id: 13 },
+                { id: 14 },
+                { id: 15 },
+                { id: 16 },
+            ],
+            columns: [
+                'id'
+            ],
+            keyExpr: 'id',
+            paging: false,
+            scrolling: {
+                mode: 'standard',
+                rowRenderingMode: 'virtual',
+                showScrollbar: 'always',
+                useNative: true,
+            },
+            height: 470,
+            showBorders: true,
+            focusedRowEnabled: true,
+            editing: {
+                mode: 'batch',
+                allowUpdating: true,
+            },
+            keyboardNavigation: {
+                enterKeyAction: 'moveFocus',
+                enterKeyDirection: 'column',
+                editOnKeyPress: true,
+            },
+            summary: {
+                recalculateWhileEditing: true,
+                totalItems: [{
+                    column: 'Freight',
+                    summaryType: 'sum',
+                }],
+            },
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.navigateToRow(12);
+        const rowIndex = dataGrid.getRowIndexByKey(12);
+
+        $(dataGrid.getCellElement(rowIndex, 'id')).trigger('dxclick');
+        $(dataGrid.getCellElement(rowIndex, 'id')).find('.dx-texteditor-input').val('100');
+        $(dataGrid.getCellElement(rowIndex, 'id')).find('.dx-texteditor-input').trigger($.Event('keydown', { key: 'Enter' }));
+        $(dataGrid.getScrollable().container()).trigger('scroll');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.getScrollable().scrollTop(), 56, 'scrollTop');
+    });
+
     QUnit.test('scroll to next page several times should works correctly if virtual scrolling is enabled', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
