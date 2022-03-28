@@ -44,7 +44,7 @@ test('The rows in the fixed column are not aligned when the grid is encapsulated
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('Grid with scrollable encapsulated inside td element, useNative=false.png', Selector('#grid')))
+    .expect(await takeScreenshot('Grid with scrollable encapsulated inside td element, useNative=true.png', Selector('#grid')))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
