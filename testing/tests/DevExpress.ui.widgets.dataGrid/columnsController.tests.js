@@ -6534,6 +6534,28 @@ QUnit.module('Sorting/Grouping', { beforeEach: setupModule, afterEach: teardownM
         assert.strictEqual(expandColumns[0].groupIndex, 0);
         assert.strictEqual(expandColumns[0].headerCellTemplate, null);
     });
+
+    // T1075560
+    QUnit.test('Fixed position of expand columns should be identical to RTL', function(assert) {
+        [true, false].forEach((rtlEnabled) => {
+            ['left', 'right'].forEach((initialFixedPosition) => {
+                this.applyOptions({
+                    columns: [{
+                        dataField: 'field', groupIndex: 0, fixed: true, fixedPosition: initialFixedPosition
+                    }],
+                    rtlEnabled,
+                });
+
+                // assert
+                const expandColumns = this.columnsController.getExpandColumns();
+                const properFixedPosition = rtlEnabled ? 'right' : 'left';
+
+                assert.strictEqual(expandColumns.length, 1, 'count expand column');
+                assert.strictEqual(expandColumns[0].fixedPosition, properFixedPosition, `rtl: ${rtlEnabled}, initialFixedPosition: ${initialFixedPosition}`);
+            });
+        });
+
+    });
 });
 
 QUnit.module('ParseValue', { beforeEach: setupModule, afterEach: teardownModule }, () => {
