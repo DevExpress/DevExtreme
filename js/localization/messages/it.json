@@ -67,9 +67,9 @@
         "dxFileUploader-readyToUpload": "Pronto per caricare",
         "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Caricamento fallito",
-        "dxFileUploader-invalidFileExtension": "",
-        "dxFileUploader-invalidMaxFileSize": "",
-        "dxFileUploader-invalidMinFileSize": "",
+        "dxFileUploader-invalidFileExtension": "TODO",
+        "dxFileUploader-invalidMaxFileSize": "TODO",
+        "dxFileUploader-invalidMinFileSize": "TODO",
 
         "dxRangeSlider-ariaFrom": "Da",
         "dxRangeSlider-ariaTill": "fino a",
