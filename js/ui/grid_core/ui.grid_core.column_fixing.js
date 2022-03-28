@@ -11,6 +11,7 @@ import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
 import { move } from '../../animation/translator';
 import Scrollable from '../scroll_view/ui.scrollable';
+import devices from '../../core/devices';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -851,7 +852,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
         if(e.scrollOffset.top < 0) {
             elasticScrollTop = -e.scrollOffset.top;
-        } else if(e.reachedBottom) {
+        } else if(e.reachedBottom && devices.real().ios) {
             const scrollableContent = this._findContentElement();
             const $scrollableContainer = $(e.component.container());
             const maxScrollTop = Math.max(getHeight(scrollableContent) + scrollbarWidth - getHeight($scrollableContainer), 0);

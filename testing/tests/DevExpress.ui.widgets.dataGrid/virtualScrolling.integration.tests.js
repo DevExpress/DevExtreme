@@ -5374,6 +5374,49 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(loadSpy.args[1][0].skip, 0, 'skip in the second call');
         assert.equal(loadSpy.args[1][0].take, 15, 'take in the second call');
     });
+
+    QUnit.test('Rows in fixed table should not have the offset when the content is scrolled to the bottom (T1072358)', function(assert) {
+        if(devices.real().ios) {
+            assert.ok(true);
+            return;
+        }
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 1000000; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 500,
+            columns: [
+                { dataField: 'id', fixed: true },
+                { dataField: 'name' }
+            ],
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            }
+        });
+
+        this.clock.tick(300);
+
+        for(let i = 0; i < 5; i++) {
+            dataGrid.getScrollable().scrollTo({ top: 16000000 });
+            this.clock.tick();
+        }
+        const visibleRows = dataGrid.getVisibleRows();
+        // assert
+        assert.ok(visibleRows[visibleRows.length - 1].key > 999993, 'bottom row key');
+        assert.strictEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-content-fixed .dx-datagrid-table-fixed').css('transform'), 'none', 'no offset');
+    });
 });
 
 
