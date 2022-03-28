@@ -17,10 +17,10 @@ test('The rows in the fixed column are not aligned when the grid is encapsulated
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await appendElementTo('#container', 'table', 'outerTable');
-  await appendElementTo('#outerTable', 'tr', 'outerTableTR');
-  await appendElementTo('#outerTableTR', 'td', 'outerTableTD');
-  await appendElementTo('#outerTableTR', 'div', 'grid');
+  await appendElementTo('#container', 'table', 'outerTable', {});
+  await appendElementTo('#outerTable', 'tr', 'outerTableTR', {});
+  await appendElementTo('#outerTableTR', 'td', 'outerTableTD', {});
+  await appendElementTo('#outerTableTR', 'div', 'grid', {});
 
   return createWidget('dxDataGrid', {
     dataSource: [
@@ -49,10 +49,10 @@ test('The rows in the fixed column are not aligned when the grid is encapsulated
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await appendElementTo('#container', 'table', 'outerTable');
-  await appendElementTo('#outerTable', 'tr', 'outerTableTR');
-  await appendElementTo('#outerTableTR', 'td', 'outerTableTD');
-  await appendElementTo('#outerTableTR', 'div', 'grid');
+  await appendElementTo('#container', 'table', 'outerTable', {});
+  await appendElementTo('#outerTable', 'tr', 'outerTableTR', {});
+  await appendElementTo('#outerTableTR', 'td', 'outerTableTD', {});
+  await appendElementTo('#outerTableTR', 'div', 'grid', {});
 
   return createWidget('dxDataGrid', {
     dataSource: [
