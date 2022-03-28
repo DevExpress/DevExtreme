@@ -6,10 +6,10 @@ import { PlatformType } from '../../../../../../helpers/multi-platform-test/plat
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery', 'react'],
+  platforms: [/* 'jquery', */'react'], // TODO unskip jQuery after fix children in Inferno
 });
 
-fixture.skip('Scheduler: Generic theme layout'); // TODO unskip after fixing tooltip
+fixture('Scheduler: Generic theme layout');
 
 const createScheduler = async (
   platform: PlatformType,
