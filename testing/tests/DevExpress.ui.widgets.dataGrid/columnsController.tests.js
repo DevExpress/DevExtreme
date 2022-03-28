@@ -6536,14 +6536,25 @@ QUnit.module('Sorting/Grouping', { beforeEach: setupModule, afterEach: teardownM
     });
 
     // T1075560
-    QUnit.test('Expand columns should not have fixedPosition right', function(assert) {
-        // arrange
-        this.applyOptions({ columns: [{ dataField: 'field', groupIndex: 0, fixed: true, fixedPosition: 'right' }] });
+    QUnit.test('Fixed position of expand columns should be identical to RTL', function(assert) {
+        [true, false].forEach((rtlEnabled) => {
+            ['left', 'right'].forEach((initialFixedPosition) => {
+                this.applyOptions({
+                    columns: [{
+                        dataField: 'field', groupIndex: 0, fixed: true, fixedPosition: initialFixedPosition
+                    }],
+                    rtlEnabled,
+                });
 
-        // act, assert
-        const expandColumns = this.columnsController.getExpandColumns();
-        assert.strictEqual(expandColumns.length, 1, 'count expand column');
-        assert.strictEqual(expandColumns[0].fixedPosition, 'left');
+                // assert
+                const expandColumns = this.columnsController.getExpandColumns();
+                const properFixedPosition = rtlEnabled ? 'right' : 'left';
+
+                assert.strictEqual(expandColumns.length, 1, 'count expand column');
+                assert.strictEqual(expandColumns[0].fixedPosition, properFixedPosition, `rtl: ${rtlEnabled}, initialFixedPosition: ${initialFixedPosition}`);
+            });
+        });
+
     });
 });
 
