@@ -47,14 +47,24 @@ const resources = [{
     test(`Base views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`,
       async (t, { screenshotComparerOptions }) => {
         const scheduler = new Scheduler('#container');
+        const appointment = scheduler.getAppointment('1 appointment', 0);
+        const { appointmentTooltip } = scheduler;
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
-        await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
+        await t
+          .expect(appointment.element.exists)
+          .ok()
+          .expect(appointmentTooltip.wrapper.exists)
+          .notOk()
+          .click(appointment.element, { speed: 0.5 })
+          .expect(appointmentTooltip.wrapper.exists)
+          .ok();
 
-        await t.expect(await takeScreenshot(`generic-resource(view=${view}-resource=${!!resourcesValue}).png`, scheduler.workSpace, screenshotComparerOptions)).ok();
-
-        await t.expect(compareResults.isValid())
+        await t
+          .expect(await takeScreenshot(`generic-resource(view=${view}-resource=${!!resourcesValue}).png`,
+            scheduler.workSpace, screenshotComparerOptions))
+          .ok()
+          .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       }).before(async (_, { platform }) => createScheduler(platform, view, resourcesValue));
   });
@@ -65,14 +75,24 @@ const resources = [{
     test(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`,
       async (t, { screenshotComparerOptions }) => {
         const scheduler = new Scheduler('#container');
+        const appointment = scheduler.getAppointment('1 appointment', 0);
+        const { appointmentTooltip } = scheduler;
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
-        await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
+        await t
+          .expect(appointment.element.exists)
+          .ok()
+          .expect(appointmentTooltip.wrapper.exists)
+          .notOk()
+          .click(appointment.element, { speed: 0.5 })
+          .expect(appointmentTooltip.wrapper.exists)
+          .ok();
 
-        await t.expect(await takeScreenshot(`generic-resource(view=${view}-resource=${!!resourcesValue}).png`, scheduler.workSpace, screenshotComparerOptions)).ok();
-
-        await t.expect(compareResults.isValid())
+        await t
+          .expect(await takeScreenshot(`generic-resource(view=${view}-resource=${!!resourcesValue}).png`,
+            scheduler.workSpace, screenshotComparerOptions))
+          .ok()
+          .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       }).before(async (_, { platform }) => createScheduler(platform, view, resourcesValue));
   });
