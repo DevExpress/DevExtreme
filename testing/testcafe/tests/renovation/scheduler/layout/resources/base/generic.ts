@@ -62,7 +62,8 @@ const resources = [{
 
         await t
           .expect(await takeScreenshot(`generic-resource(view=${view}-resource=${!!resourcesValue}).png`,
-            scheduler.workSpace, screenshotComparerOptions))
+            scheduler.workSpace,
+            screenshotComparerOptions))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
@@ -90,7 +91,8 @@ const resources = [{
 
         await t
           .expect(await takeScreenshot(`generic-resource(view=${view}-resource=${!!resourcesValue}).png`,
-            scheduler.workSpace, screenshotComparerOptions))
+            scheduler.workSpace,
+            screenshotComparerOptions))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
