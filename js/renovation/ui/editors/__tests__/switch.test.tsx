@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Switch, SwitchProps, viewFunction as SwitchView } from '../switch';
-import { EditorStateProps } from '../internal/editor_state_props';
+import { EditorStateProps } from '../common/editor_state_props';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacySwitch from '../../../../ui/switch';
 

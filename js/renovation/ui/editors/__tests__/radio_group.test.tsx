@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { RadioGroup, RadioGroupProps, viewFunction as RadioGroupView } from '../radio_group';
-import { EditorStateProps } from '../internal/editor_state_props';
+import { EditorStateProps } from '../common/editor_state_props';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacyRadioGroup from '../../../../ui/radio_group';
 import devices from '../../../../core/devices';

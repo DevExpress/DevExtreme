@@ -3,8 +3,8 @@ import {
 } from '@devextreme-generator/declarations';
 import LegacyRadioGroup from '../../../ui/radio_group';
 import { EventCallback } from '../common/event_callback';
-import { EditorProps } from './internal/editor';
-import { EditorStateProps } from './internal/editor_state_props';
+import { EditorProps } from './common/editor';
+import { EditorStateProps } from './common/editor_state_props';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 // eslint-disable-next-line import/named
 import DataSource, { Options as DataSourceOptions } from '../../../data/data_source';

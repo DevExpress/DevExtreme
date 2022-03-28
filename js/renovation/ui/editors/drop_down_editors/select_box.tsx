@@ -8,9 +8,9 @@ import Store from '../../../../data/abstract_store';
 import LegacySelectBox from '../../../../ui/select_box';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import { EventCallback } from '../../common/event_callback';
-import { EditorProps } from '../internal/editor';
-import { EditorStateProps } from '../internal/editor_state_props';
-import { EditorLabelProps } from '../internal/editor_label_props';
+import { EditorProps } from '../common/editor';
+import { EditorStateProps } from '../common/editor_state_props';
+import { EditorLabelProps } from '../common/editor_label_props';
 
 export const viewFunction = ({
   componentProps,

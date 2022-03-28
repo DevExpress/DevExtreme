@@ -4,8 +4,8 @@ import { shallow } from 'enzyme';
 import LegacySelectBox from '../../../../../ui/select_box';
 import { viewFunction as SelectBoxView, SelectBoxProps, SelectBox } from '../select_box';
 import { DomComponentWrapper } from '../../../common/dom_component_wrapper';
-import { EditorStateProps } from '../../internal/editor_state_props';
-import { EditorLabelProps } from '../../internal/editor_label_props';
+import { EditorStateProps } from '../../common/editor_state_props';
+import { EditorLabelProps } from '../../common/editor_label_props';
 
 jest.mock('../../../../../ui/select_box', () => jest.fn());
 

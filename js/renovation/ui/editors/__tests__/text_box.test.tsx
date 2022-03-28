@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { TextBox, TextBoxProps, viewFunction as TextBoxView } from '../text_box';
-import { EditorStateProps } from '../internal/editor_state_props';
-import { EditorLabelProps } from '../internal/editor_label_props';
-import { TextEditorProps } from '../internal/text_editor_props';
+import { EditorStateProps } from '../common/editor_state_props';
+import { EditorLabelProps } from '../common/editor_label_props';
+import { TextEditorProps } from '../common/text_editor_props';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacyTextBox from '../../../../ui/text_box';
 import { current } from '../../../../ui/themes';

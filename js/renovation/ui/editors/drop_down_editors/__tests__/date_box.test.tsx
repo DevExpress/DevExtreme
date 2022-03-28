@@ -3,8 +3,8 @@ import { shallow } from 'enzyme';
 import LegacyDateBox from '../../../../../ui/date_box';
 import { viewFunction as DateBoxView, DateBoxProps, DateBox } from '../date_box';
 import { DomComponentWrapper } from '../../../common/dom_component_wrapper';
-import { EditorStateProps } from '../../internal/editor_state_props';
-import { EditorLabelProps } from '../../internal/editor_label_props';
+import { EditorStateProps } from '../../common/editor_state_props';
+import { EditorLabelProps } from '../../common/editor_label_props';
 
 jest.mock('../../../../../ui/date_box', () => jest.fn());
 
