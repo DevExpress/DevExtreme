@@ -67,9 +67,9 @@
         "dxFileUploader-readyToUpload": "Připraveno k nahrání",
         "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Nahrávání selhalo",
-        "dxFileUploader-invalidFileExtension": "",
-        "dxFileUploader-invalidMaxFileSize": "",
-        "dxFileUploader-invalidMinFileSize": "",
+        "dxFileUploader-invalidFileExtension": "TODO",
+        "dxFileUploader-invalidMaxFileSize": "TODO",
+        "dxFileUploader-invalidMinFileSize": "TODO",
 
         "dxRangeSlider-ariaFrom": "Od",
         "dxRangeSlider-ariaTill": "Do",

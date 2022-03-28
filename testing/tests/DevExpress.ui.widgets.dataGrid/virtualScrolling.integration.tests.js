@@ -2705,6 +2705,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         dataGrid.columnOption('group', 'groupIndex', 0);
         this.clock.tick();
+        $(dataGrid.getScrollable().container()).trigger('scroll');
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();

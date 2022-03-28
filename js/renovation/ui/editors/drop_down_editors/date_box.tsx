@@ -6,6 +6,7 @@ import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import { EventCallback } from '../../common/event_callback';
 import { EditorProps } from '../common/editor';
 import { EditorStateProps } from '../common/editor_state_props';
+import { EditorLabelProps } from '../common/editor_label_props';
 
 export const viewFunction = ({
   componentProps,
@@ -34,10 +35,12 @@ export class DateBoxProps extends EditorProps {
 
   @OneWay() field?: string;
 
-  @OneWay() type?: string ;
+  @OneWay() type?: string = 'date' ;
+
+  @OneWay() useMaskBehavior?: boolean = false ;
 }
 
-export type DateBoxPropsType = DateBoxProps & EditorStateProps;
+export type DateBoxPropsType = DateBoxProps & EditorStateProps & EditorLabelProps;
 
 @Component({
   defaultOptionRules: null,
@@ -45,7 +48,7 @@ export type DateBoxPropsType = DateBoxProps & EditorStateProps;
 })
 export class DateBox extends JSXComponent<DateBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): DateBoxProps {
+  get componentProps(): DateBoxPropsType {
     return this.props;
   }
 }
