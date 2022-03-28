@@ -1326,6 +1326,10 @@ class FileUploader extends Editor {
                 this._updateReadOnlyState();
                 super._optionChanged(args);
                 break;
+            case 'disabled':
+                this._updateInputLabelText();
+                super._optionChanged(args);
+                break;
             case 'selectButtonText':
                 this._selectButton.option('text', value);
                 break;
