@@ -67,9 +67,9 @@
         "dxFileUploader-readyToUpload": "Klar att ladda upp",
         "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Uppladdning misslyckades",
-        "dxFileUploader-invalidFileExtension": "",
-        "dxFileUploader-invalidMaxFileSize": "",
-        "dxFileUploader-invalidMinFileSize": "",
+        "dxFileUploader-invalidFileExtension": "TODO",
+        "dxFileUploader-invalidMaxFileSize": "TODO",
+        "dxFileUploader-invalidMinFileSize": "TODO",
 
         "dxRangeSlider-ariaFrom": "Från",
         "dxRangeSlider-ariaTill": "Till",
