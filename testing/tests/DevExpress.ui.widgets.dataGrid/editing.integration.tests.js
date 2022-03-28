@@ -2250,6 +2250,49 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.ok($(grid.element()).find('.dx-invalid-message .dx-overlay-content').is(':visible'), 'error message is visible');
     });
 
+    // T1074411
+    QUnit.testInActiveWindow('The validation message should not be visible when a message is empty', function(assert) {
+        // arrange
+        const rowsView = dataGridWrapper.rowsView;
+
+        const gridConfig = {
+            dataSource: [{
+                a: 'a',
+                b: 'b'
+            }],
+            editing: {
+                mode: 'cell',
+                allowAdding: true,
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'a',
+                    validationRules: [{
+                        type: 'required',
+                        message: '',
+                    }]
+                }, 'b'
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+        let $firstCell = $(grid.getCellElement(0, 0));
+        $firstCell.trigger(pointerEvents.down).trigger('dxclick');
+
+        const $inputElement = rowsView.getCell(0, 0).getEditor().getInputElement();
+        $inputElement.val('');
+        $inputElement.trigger('change');
+        this.clock.tick();
+        $firstCell = $(grid.getCellElement(0, 0));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell is invalid');
+        assert.ok($(grid.element()).find('.dx-datagrid-revert-tooltip .dx-overlay-content').is(':visible'), 'revert button is visible');
+        assert.notOk($(grid.element()).find('.dx-invalid-message .dx-overlay-content').is(':visible'), 'error message is not visible');
+    });
+
     QUnit.testInActiveWindow('Batch mode - Cell should be invalid when a user clicks outside the cell (T869854)', function(assert) {
         // arrange
         const rowsView = dataGridWrapper.rowsView;
@@ -3951,7 +3994,6 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.strictEqual($('#dataGrid').find('.dx-datagrid-rowsview').find('.dx-virtual-row').length, 0, 'no virtual rows');
     });
 });
-
 
 QUnit.module('Assign options', baseModuleConfig, () => {
     // T582855
