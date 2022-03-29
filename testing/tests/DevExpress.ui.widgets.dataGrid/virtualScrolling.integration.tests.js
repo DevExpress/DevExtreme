@@ -1729,7 +1729,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.strictEqual(dataGrid.getScrollable().scrollTop(), 56, 'scrollTop');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 55, 2, 'scrollTop');
     });
 
     QUnit.test('scroll to next page several times should works correctly if virtual scrolling is enabled', function(assert) {
