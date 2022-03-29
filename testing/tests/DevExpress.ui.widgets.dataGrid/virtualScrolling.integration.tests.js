@@ -8,6 +8,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
+import translator from 'animation/translator';
 
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
@@ -5376,10 +5377,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     });
 
     QUnit.test('Rows in fixed table should not have the offset when the content is scrolled to the bottom (T1072358)', function(assert) {
-        if(devices.real().ios) {
-            assert.ok(true);
-            return;
-        }
         // arrange
         const getData = function() {
             const items = [];
@@ -5413,9 +5410,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             this.clock.tick();
         }
         const visibleRows = dataGrid.getVisibleRows();
+        const $fixedTable = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-content-fixed .dx-datagrid-table-fixed');
+
         // assert
         assert.ok(visibleRows[visibleRows.length - 1].key > 999993, 'bottom row key');
-        assert.strictEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-content-fixed .dx-datagrid-table-fixed').css('transform'), 'none', 'no offset');
+        assert.strictEqual(translator.getTranslate($fixedTable).y, 0, 'no offset');
     });
 });
 
