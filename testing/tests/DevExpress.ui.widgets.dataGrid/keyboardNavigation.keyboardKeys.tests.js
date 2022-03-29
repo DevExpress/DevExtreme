@@ -28,7 +28,8 @@ import {
     triggerKeyDown,
     focusCell,
     callViewsRenderCompleted,
-    dataGridWrapper } from '../../helpers/grid/keyboardNavigationHelper.js';
+    dataGridWrapper
+} from '../../helpers/grid/keyboardNavigationHelper.js';
 
 const device = devices.real();
 
@@ -378,7 +379,7 @@ QUnit.module('Keyboard keys', {
             columnIndex: 0
         };
 
-        this.keyboardNavigationController._focusGroupRow = function() {};
+        this.keyboardNavigationController._focusGroupRow = function() { };
 
         this.triggerKeyDown('downArrow');
 
@@ -2759,7 +2760,8 @@ QUnit.module('Keyboard keys', {
                         .text('link2')
                         .appendTo(container);
 
-                } },
+                }
+            },
             { caption: 'Column 3', visible: true, dataField: 'Column3' },
         ];
 
@@ -3420,11 +3422,13 @@ QUnit.module('Keyboard keys', {
 
     QUnit.testInActiveWindow('Enter on expand cell of row with masterDetail', function(assert) {
         // arrange
-        this.options = { columns: [
-            { caption: 'Column 1', visible: true, dataField: 'Column1' },
-            { caption: 'Column 2', visible: true, dataField: 'Column2' },
-            { caption: 'Column 3', visible: true, dataField: 'Column3' }
-        ] };
+        this.options = {
+            columns: [
+                { caption: 'Column 1', visible: true, dataField: 'Column1' },
+                { caption: 'Column 2', visible: true, dataField: 'Column2' },
+                { caption: 'Column 3', visible: true, dataField: 'Column3' }
+            ]
+        };
 
         this.dataControllerOptions = {
             pageCount: 10,
@@ -4102,7 +4106,7 @@ QUnit.module('Keyboard keys', {
         // assert
         assert.ok($firstGroupRow.hasClass('dx-focused'), 'the first group row is marked as focused');
         assert.equal($(':focus').get(0), $firstGroupRow.get(0), 'the first group row is focused');
-        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { });
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {});
 
         // act
         this.triggerKeyDown('enter', false, false, $firstGroupRow.get(0));
@@ -4156,6 +4160,29 @@ QUnit.module('Keyboard keys', {
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
             rowIndex: 1,
             columnIndex: 1
+        });
+    });
+
+    QUnit.testInActiveWindow('Focused cell position should not be updated when a functional key is pressed (T1072240)', function(assert) {
+        // arrange
+        this.options = {
+            dataSource: [{ id: 1, name: 'test' }],
+            keyExpr: 'id'
+        };
+        setupModules(this);
+
+        // act
+        this.gridView.render($('#container'));
+
+        const $firstCell = this.rowsView.element().find('.dx-row').find('td').eq(0);
+        const setFocusedCellPositionSpy = sinon.spy(this.keyboardNavigationController, 'setFocusedCellPosition');
+
+        ['shift', 'control', 'alt'].forEach(key => {
+            // act
+            this.triggerKeyDown(key, false, false, $firstCell);
+
+            // assert
+            assert.notOk(setFocusedCellPositionSpy.called, 'shift not called');
         });
     });
 });

@@ -53,6 +53,7 @@ const FOCUS_TYPE_ROW = 'row';
 const FOCUS_TYPE_CELL = 'cell';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
+const FUNCTIONAL_KEYS = ['shift', 'control', 'alt'];
 
 
 function isGroupRow($row) {
@@ -287,7 +288,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._isNeedFocus = true;
         this._isNeedScroll = true;
 
-        this._updateFocusedCellPositionByTarget(originalEvent.target);
+        FUNCTIONAL_KEYS.indexOf(e.keyName) < 0 && this._updateFocusedCellPositionByTarget(originalEvent.target);
 
         if(!isHandled) {
             switch(e.keyName) {
