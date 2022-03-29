@@ -28,11 +28,11 @@ function App() {
           <Resizable
             id='gridContainer'
             minWidth={400}
-            maxWidth={1050}
             minHeight={150}
             maxHeight={370}
             keepAspectRatio={keepAspectRatio}
             handles={handles.join(' ')}
+            area='.widget-container .dx-field'
           >
             <DataGrid
               id='grid'

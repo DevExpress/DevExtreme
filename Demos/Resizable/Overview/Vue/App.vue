@@ -7,11 +7,11 @@
           <DxResizable
             id="gridContainer"
             :min-width="400"
-            :max-width="1050"
             :min-height="150"
             :max-height="370"
             :keep-aspect-ratio="keepAspectRatio"
             :handles="handles.join(' ')"
+            area=".widget-container .dx-field"
           >
             <DxDataGrid
               id="grid"

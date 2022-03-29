@@ -33,9 +33,9 @@ $(() => {
 
   const resizable = $('#gridContainer').dxResizable({
     minWidth: 400,
-    maxWidth: 1050,
     minHeight: 150,
     maxHeight: 370,
+    area: '.widget-container .dx-field',
   }).dxResizable('instance');
 
   $('#keepAspectRatio').dxCheckBox({
