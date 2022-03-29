@@ -13,6 +13,8 @@ const TOOLBAR_BUTTON_CLASS = 'toolbar-button';
 
 const TOOLBAR_ARIA_LABEL = '-ariaToolbar';
 
+const DEFAULT_TOOLBAR_ITEM_NAMES = ['addRowButton', 'applyFilterButton', 'columnChooserButton', 'exportButton', 'groupPanel', 'revertButton', 'saveButton', 'searchPanel'];
+
 const HeaderPanel = ColumnsView.inherit({
     _getToolbarItems: function() {
         return [];
@@ -60,6 +62,12 @@ const HeaderPanel = ColumnsView.inherit({
     },
 
     _normalizeToolbarItems(defaultItems, userItems) {
+        defaultItems.forEach(button => {
+            if(!DEFAULT_TOOLBAR_ITEM_NAMES.includes(button.name)) {
+                throw new Error(`Default toolbar item '${button.name}' is not added to DEFAULT_TOOLBAR_ITEM_NAMES`);
+            }
+        });
+
         const defaultProps = {
             location: 'after',
         };
@@ -87,7 +95,7 @@ const HeaderPanel = ColumnsView.inherit({
             if(isDefined(button.name)) {
                 if(isDefined(defaultButtonsByNames[button.name])) {
                     button = extend(true, {}, defaultButtonsByNames[button.name], button);
-                } else {
+                } else if(DEFAULT_TOOLBAR_ITEM_NAMES.includes(button.name)) {
                     button.visible = false;
                 }
             }

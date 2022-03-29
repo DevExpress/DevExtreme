@@ -624,7 +624,7 @@ QUnit.module('Draw buttons in header panel', {
                     },
                     showText: 'inMenu',
                     location: 'after',
-                    name: 'columnChooser',
+                    name: 'columnChooserButton',
                     locateInMenu: 'auto'
                 }
             ];
@@ -907,5 +907,47 @@ QUnit.module('Draw buttons in header panel', {
         $.each($toolbarItemElements, (_, toolbarItemElement) => {
             assert.ok($(toolbarItemElement).hasClass('dx-state-invisible'), 'button is hidden');
         });
+    });
+
+    QUnit.test('Toolbar item with custom name should be visible', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.toolbar = {
+            items: [{
+                name: 'myItem',
+                cssClass: 'my-item',
+                widget: 'dxButton',
+                options: {
+                    text: 'My Button'
+                }
+            }]
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $customToolbarItem = $testElement.find('.my-item');
+
+        // assert
+        assert.strictEqual($customToolbarItem.length, 1, 'item is rendered');
+        assert.ok($customToolbarItem.is(':visible'), 'item is visible');
+    });
+
+    QUnit.test('The error should be raised if new default toolbar item is not added to DEFAULT_TOOLBAR_ITEM_NAMES', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        // act
+        headerPanel._getToolbarItems = () => [{ name: 'new' }];
+
+        assert.throws(function() {
+            headerPanel.init();
+            headerPanel.render($testElement);
+        }, function(e) {
+            return e.message === 'Default toolbar item \'new\' is not added to DEFAULT_TOOLBAR_ITEM_NAMES';
+        }, 'exception');
     });
 });
