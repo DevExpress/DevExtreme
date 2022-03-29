@@ -751,7 +751,7 @@ module('Integration: Agenda', moduleConfig, () => {
         assert.equal($container.children().get(0), $groupTable.get(0), 'Group table was rendered in right place');
     });
 
-    test('Row count should be correct if appt ends at 0h 0m 0sec(T378182)', function(assert) {
+    test('Row count should be correct if appt ends at 0h 0m 0sec (T378182)', function(assert) {
         const instance = createInstance({
             dataSource: [{
                 clubId: 1,
