@@ -18790,7 +18790,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResizableOptions.area]
      */
-    area?: string | UserDefinedElement;
+    area?: string | DevExpress.core.UserDefinedElement;
     /**
      * [descr:dxResizableOptions.handles]
      */
