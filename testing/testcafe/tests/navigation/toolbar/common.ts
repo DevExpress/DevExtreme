@@ -69,7 +69,7 @@ fixture`Toolbar_common`
           $('.dx-toolbar .dx-dropdownmenu-button').click();
         }, { dependencies: { } })();
 
-        targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+        targetContainerSelector = '.dx-dropdownmenu-popup .dx-popup-content';
       }
 
       await ClientFunction(() => {
