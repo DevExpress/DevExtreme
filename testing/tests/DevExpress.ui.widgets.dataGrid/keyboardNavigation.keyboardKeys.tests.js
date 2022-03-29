@@ -4172,7 +4172,7 @@ QUnit.module('Keyboard keys', {
             this.triggerKeyDown(key, false, false, $firstCell);
 
             // assert
-            assert.notOk(setFocusedCellPositionSpy.called, 'shift not called');
+            assert.notOk(setFocusedCellPositionSpy.called, `${key} not called`);
         });
     });
 });
