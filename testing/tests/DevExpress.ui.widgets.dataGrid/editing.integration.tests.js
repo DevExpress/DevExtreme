@@ -3342,7 +3342,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             // assert
             const editor2 = $(dataGrid.getCellElement(0, 1)).find('.dx-textbox').dxTextBox('instance');
 
-            assert.ok(editor2, 'second editor exisrs');
+            assert.ok(editor2, 'second editor exists');
             assert.equal(editor2.option('value'), 'test', 'second editor is updated');
         });
     });
