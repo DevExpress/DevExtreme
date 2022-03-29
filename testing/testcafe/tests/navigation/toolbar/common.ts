@@ -10,7 +10,7 @@ import { appendElementTo } from '../helpers/domUtils';
 fixture`Toolbar_common`
   .page(url(__dirname, '../../container.html'));
 
-['generic.light', 'generic.dark', 'generic.light.compact'/* , 'material.blue.light', 'material.blue.light.compact' */].forEach((theme) => {
+['generic.light', 'generic.dark', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
   const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
   (['always', 'never'] as any[]).forEach((locateInMenu) => {
@@ -69,7 +69,7 @@ fixture`Toolbar_common`
           $('.dx-toolbar .dx-dropdownmenu-button').click();
         }, { dependencies: { } })();
 
-        targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+        targetContainerSelector = '.dx-dropdownmenu-popup .dx-popup-content';
       }
 
       await ClientFunction(() => {
