@@ -1236,9 +1236,6 @@ export const virtualScrollingModule = {
                         return dataSource?.setContentItemSizes(sizes);
                     },
                     getPreloadedRowCount: function() {
-                        if(!isVirtualPaging(this)) {
-                            return 0;
-                        }
                         const preloadCount = this.option('scrolling.preloadedRowCount');
                         const preloadEnabled = this.option('scrolling.preloadEnabled');
 
