@@ -4391,6 +4391,39 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.deepEqual(requestState, ['begin', 'end', 'begin', 'end', 'begin', 'end'], 'requests order after scrolling to the top');
     });
 
+    QUnit.test('New mode. Only one page should be loaded if rowRenderingMode is virtual, mode is standart and stateStoring is enabled (T1072176)', function(assert) {
+        const dataGrid = createDataGrid({
+            height: 50,
+            dataSource: [
+                { id: 1 },
+                { id: 2 },
+                { id: 3 },
+                { id: 4 },
+            ],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad() {
+                    return {
+                        pageIndex: 0,
+                        pageSize: 2,
+                    };
+                }
+            },
+            paging: {
+                pageSize: 2
+            },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            }
+        });
+
+        // act
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 2, 'only first page items are visible');
+    });
 
     // T996914
     QUnit.test('The scrollLeft of the footer view should be restored immediately when scrolling vertically', function(assert) {
