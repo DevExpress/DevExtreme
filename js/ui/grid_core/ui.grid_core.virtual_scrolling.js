@@ -810,7 +810,7 @@ export const virtualScrollingModule = {
                                 const scrollable = component.getScrollable && component.getScrollable();
                                 const isSortingOperation = this.dataSource().operationTypes().sorting;
 
-                                if(scrollable && !isSortingOperation) {
+                                if(scrollable && !isSortingOperation && rowIndex >= 0) {
                                     const rowElement = component.getRowElement(rowIndex);
                                     const $rowElement = rowElement && rowElement[0] && $(rowElement[0]);
                                     let top = $rowElement && $rowElement.position().top;
