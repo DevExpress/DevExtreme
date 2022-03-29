@@ -377,7 +377,7 @@ class BaseFileUploadStrategy extends BaseUploadStrategy {
     shouldClosePopupAfterUpload() {}
 
     closeDialogPopup(editorInstance, data) {
-        editorInstance._formDialog.hide({ file: data.value[0] }, data.event);
+        editorInstance._formDialog.hide({ file: data.value ? data.value[0] : data.file }, data.event);
     }
 
     // serverUpload(module, data) {
@@ -535,11 +535,11 @@ class MixedUploadStrategy extends BaseFileUploadStrategy {
     }
 
     serverUploadImpl(data) {
-        if(this.shouldUseBase64()) {
-            const imageUrl = this.config.uploadDirectory + '/' + data.value[0].name;
+        if(!this.shouldUseBase64()) {
+            const imageUrl = this.config.uploadDirectory + '/' + data.file.name;
             const index = this.defaultPasteIndex(module);
 
-            urlUpload(module.quill, index, { src: imageUrl });
+            urlUpload(this.module.quill, index, { src: imageUrl });
             this.closeDialogPopup(this.module.editorInstance, data);
         }
     }
