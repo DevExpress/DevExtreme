@@ -18788,6 +18788,10 @@ declare module DevExpress.ui {
    */
   export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
+     * [descr:dxResizableOptions.area]
+     */
+    area?: string | UserDefinedElement;
+    /**
      * [descr:dxResizableOptions.handles]
      */
     handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
