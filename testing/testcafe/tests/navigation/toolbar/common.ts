@@ -69,12 +69,14 @@ fixture`Toolbar_common`
           $('.dx-toolbar .dx-dropdownmenu-button').click();
         }, { dependencies: { } })();
 
-        targetContainerSelector = '.dx-dropdownmenu-popup .dx-popup-content';
+        targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
       }
 
       await ClientFunction(() => {
         $(targetContainerSelector).css({ backgroundColor: 'gold' });
       }, { dependencies: { targetContainerSelector } })();
+
+      await t.wait(1000);
 
       await t
         .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
@@ -290,6 +292,113 @@ fixture`Toolbar_common`
     await createWidget('dxToolbar', { items: [{ locateInMenu: 'always', text: 'text' }] }, false, '#toolbar5');
   }).after(async (t) => {
     await restoreBrowserSize(t);
+    await changeTheme('generic.light');
+  });
+
+  test(`Default nested widgets render,theme=${theme},items[].locateInMenu=auto`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    let targetContainerSelector = '#container';
+
+    await ClientFunction(() => {
+      $('.dx-toolbar .dx-dropdownmenu-button').click();
+    }, { dependencies: { } })();
+
+    targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+
+    await ClientFunction(() => {
+      $(targetContainerSelector).css({ backgroundColor: 'gold' });
+    }, { dependencies: { targetContainerSelector } })();
+
+    await t
+      .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=always.png`, Selector(targetContainerSelector)))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+
+    const toolbarItems = [] as Item[];
+    (supportedWidgets as any[]).forEach((widgetName) => {
+      toolbarItems.push({
+        location: 'before',
+        locateInMenu: 'auto',
+        widget: widgetName,
+        options: {
+          text: 1,
+          items: [{ text: 1 }],
+        },
+      });
+    });
+
+    return createWidget('dxToolbar', {
+      items: toolbarItems,
+      width: 100,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
+  test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=auto`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await ClientFunction(() => {
+      $('.dx-toolbar .dx-dropdownmenu-button').click();
+    }, { dependencies: { } })();
+
+    const targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+
+    await t
+      .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=always.png`, Selector(targetContainerSelector)))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+
+    const toolbarItems = [
+      {
+        location: 'before',
+        locateInMenu: 'auto',
+        widget: 'dxDropDownButton',
+        options: {
+          text: 'default',
+        },
+      },
+      {
+        location: 'before',
+        locateInMenu: 'auto',
+        widget: 'dxDropDownButton',
+        options: {
+          stylingMode: 'text',
+          text: 'opts.stylingMode: text',
+        },
+      },
+      {
+        location: 'before',
+        locateInMenu: 'auto',
+        widget: 'dxDropDownButton',
+        options: {
+          stylingMode: 'outlined',
+          text: 'opts.stylingMode: outlined',
+        },
+      },
+      {
+        location: 'before',
+        locateInMenu: 'auto',
+        widget: 'dxDropDownButton',
+        options: {
+          stylingMode: 'contained',
+          text: 'opts.stylingMode: contained',
+        },
+      },
+    ] as Item[];
+
+    return createWidget('dxToolbar', {
+      width: 200,
+      items: toolbarItems,
+    });
+  }).after(async () => {
     await changeTheme('generic.light');
   });
 });
