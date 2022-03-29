@@ -304,6 +304,7 @@ export const dataControllerModule = {
                     const updateItemsHandler = function() {
                         that._columnsController.columnsChanged.remove(updateItemsHandler);
                         that.updateItems({
+                            repaintChangesOnly: false,
                             virtualColumnsScrolling: e.changeTypes.virtualColumnsScrolling
                         });
                     };
@@ -903,7 +904,7 @@ export const dataControllerModule = {
                     const that = this;
 
                     if(that._repaintChangesOnly !== undefined) {
-                        change.repaintChangesOnly = change.repaintChangesOnly || that._repaintChangesOnly;
+                        change.repaintChangesOnly = change.repaintChangesOnly ?? that._repaintChangesOnly;
                         change.needUpdateDimensions = change.needUpdateDimensions || that._needUpdateDimensions;
                     } else if(change.changes) {
                         change.repaintChangesOnly = that.option('repaintChangesOnly');

@@ -14216,7 +14216,7 @@ QUnit.module('Refresh changesOnly', {
         const items = this.dataController.items();
         assert.deepEqual(items[0].values, [1, 'Alex']);
         assert.strictEqual(changedArgs.changeType, 'refresh');
-        assert.strictEqual(changedArgs.repaintChangesOnly, undefined, 'full repaint');
+        assert.strictEqual(changedArgs.repaintChangesOnly, false, 'full repaint');
     });
 
     QUnit.test('update one cell when summary values are changed', function(assert) {
