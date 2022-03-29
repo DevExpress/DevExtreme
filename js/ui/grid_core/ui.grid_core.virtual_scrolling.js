@@ -784,7 +784,7 @@ export const virtualScrollingModule = {
                         return baseResult;
                     },
                     _loadDataSource: function() {
-                        if(this._rowsScrollController) {
+                        if(this._rowsScrollController && isVirtualPaging(this)) {
                             const { loadPageCount } = this.getLoadPageParams() ?? {};
 
                             loadPageCount >= 1 && this._dataSource?.loadPageCount(loadPageCount);
@@ -1236,6 +1236,9 @@ export const virtualScrollingModule = {
                         return dataSource?.setContentItemSizes(sizes);
                     },
                     getPreloadedRowCount: function() {
+                        if(!isVirtualPaging(this)) {
+                            return 0;
+                        }
                         const preloadCount = this.option('scrolling.preloadedRowCount');
                         const preloadEnabled = this.option('scrolling.preloadEnabled');
 
