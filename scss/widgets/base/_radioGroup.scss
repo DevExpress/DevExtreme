@@ -24,6 +24,7 @@
 .dx-radiogroup-horizontal {
   .dx-collection {
     display: flex;
+    flex-wrap: wrap;
   }
 
   .dx-radiobutton:last-of-type {
