@@ -80,7 +80,9 @@ export class DataGridNextPagerProps {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
+  angular: {
+    innerComponent: false,
+  },
   view: viewFunction,
 })
 export class DataGridNextPager extends JSXComponent(DataGridNextPagerProps) {

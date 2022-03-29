@@ -20,6 +20,7 @@ export const viewFunction = (viewModel: DataGridNext): JSX.Element => (
     noDataTemplate={viewModel.props.noDataTemplate}
     onDataErrorOccurred={viewModel.props.onDataErrorOccurred}
     activeStateEnabled={viewModel.props.activeStateEnabled}
+    className={viewModel.props.className}
     disabled={viewModel.props.disabled}
     focusStateEnabled={viewModel.props.focusStateEnabled}
     height={viewModel.props.height}
