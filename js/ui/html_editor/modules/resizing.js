@@ -149,7 +149,6 @@ export default class ResizingModule extends BaseModule {
         });
 
         this.resizable = this.editorInstance._createComponent(this._$resizeFrame, Resizable, {
-            _keepAspectRatio: true,
             onResize: (e) => {
                 if(!this._$target) {
                     return;

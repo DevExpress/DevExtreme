@@ -887,6 +887,39 @@ QUnit.module('Templates', () => {
         assert.strictEqual($placeholder.closest('.dx-textbox').length, 1, 'is textbox\'s placeholder');
     });
 
+    QUnit.test('should not raise error if template finished its render after new template starts render (T1059261)', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            fieldTemplate: 'field',
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    field: {
+                        render: function({ container, onRendered }) {
+                            const $input = $('<div>').appendTo(container);
+
+                            setTimeout(() => {
+                                $input.dxTextBox();
+                                onRendered();
+                            });
+                        }
+                    }
+                }
+            },
+        }).dxDropDownEditor('instance');
+
+        try {
+            dropDownEditor.repaint();
+            clock.tick();
+        } catch(e) {
+            assert.ok(false, `error is raised: ${e.message}`);
+        } finally {
+            clock.tick();
+            clock.restore();
+            assert.ok(true);
+        }
+    });
+
     QUnit.test('onValueChanged should be fired for each change by keyboard when fieldTemplate is used', function(assert) {
         const valueChangedSpy = sinon.spy();
 

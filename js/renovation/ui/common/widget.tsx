@@ -62,7 +62,6 @@ export const viewFunction = (viewModel: Widget): JSX.Element => {
       {...viewModel.attributes} // eslint-disable-line react/jsx-props-no-spreading
       tabIndex={viewModel.tabIndex}
       title={viewModel.props.hint}
-      hidden={!viewModel.props.visible}
       className={viewModel.cssClasses}
       style={viewModel.styles}
     >

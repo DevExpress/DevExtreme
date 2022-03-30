@@ -961,6 +961,24 @@ QUnit.test('T111893. Customize point and empty customize label result', function
     });
 });
 
+QUnit.test('displayFormat option. Passing to point', function(assert) {
+    const series = createSeries({
+        type: 'line',
+        label: {
+            visible: true,
+            displayFormat: '_{argument}_'
+        }
+    });
+    const data = [{ arg: 1, val: 3 }, { arg: 2, val: 4 }];
+
+    series.updateData(data);
+    series.createPoints();
+
+    series.getAllPoints().forEach(point => {
+        assert.equal(point.getOptions().label.displayFormat, '_{argument}_');
+    });
+});
+
 QUnit.test('Update data with null values for argument', function(assert) {
     const series = createSeries({ type: 'line', label: { visible: false } });
 

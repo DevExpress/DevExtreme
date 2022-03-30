@@ -1,7 +1,7 @@
 name: TS Declarations
 
 concurrency:
-  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
@@ -42,6 +42,7 @@ jobs:
         if ! diff $target.current $target -U 5 > $target.diff; then
             echo "FAIL: $target is outdated:"
             cat $target.diff | sed "1,2d"
+            echo "Execute 'npm run update-ts' to update dx.all.d.ts"
             exit 1
         else
             echo "TS is up-to-date"

@@ -138,7 +138,7 @@ module('Resizing integration', {
     });
 
 
-    test('integrated resizable should have _keepAspectRatio=true (T1049676)', function(assert) {
+    test('integrated resizable should have keepAspectRatio=true (T1049676)', function(assert) {
         this.options.mediaResizing = { enabled: true };
 
         this.createWidget();
@@ -148,7 +148,7 @@ module('Resizing integration', {
 
         const resizable = $(`.${RESIZABLE_CLASS}`).dxResizable('instance');
 
-        assert.strictEqual(resizable.option('_keepAspectRatio'), true, 'aspect ratio keeping is enabled');
+        assert.strictEqual(resizable.option('keepAspectRatio'), true, 'aspect ratio keeping is enabled');
     });
 
     test('check frame position for list item with nested image', function(assert) {

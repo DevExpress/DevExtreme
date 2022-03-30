@@ -1,3 +1,4 @@
+import { UserDefinedElement } from '../core/element';
 import DOMComponent, {
     DOMComponentOptions,
 } from '../core/dom_component';
@@ -45,6 +46,12 @@ export type ResizeEndEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEven
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid
+     * @default undefined
+     * @public
+     */
+    area?: string | UserDefinedElement;
+    /**
+     * @docid
      * @type Enums.ResizeHandle | string
      * @default "all"
      * @public
@@ -56,6 +63,12 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @public
      */
     height?: number | string | (() => number | string);
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    keepAspectRatio?: boolean;
     /**
      * @docid
      * @default Infinity
