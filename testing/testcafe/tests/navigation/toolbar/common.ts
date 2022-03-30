@@ -7,26 +7,10 @@ import { changeTheme } from '../../../helpers/changeTheme';
 import { Item } from '../../../../../js/ui/toolbar.d';
 import { appendElementTo } from '../helpers/domUtils';
 
-['generic.light', 'generic.dark', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
-  fixture`Toolbar_common`
-    .page(url(__dirname, '../../container.html'))
-    .beforeEach(async (): Promise<void> => {
-      await ClientFunction(
-        async () => {
-          if (theme !== 'generic.light') {
-            await changeTheme(theme);
-          }
-        },
-        { dependencies: { changeTheme, theme } },
-      )();
-    })
-    .afterEach(async (): Promise<void> => {
-      await ClientFunction(
-        async () => { await changeTheme('generic.light'); },
-        { dependencies: { changeTheme } },
-      )();
-    });
+fixture`Toolbar_common`
+  .page(url(__dirname, '../../container.html'));
 
+['generic.light', 'generic.dark', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
   const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', /* 'dxTabs', */ 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
   (['always', 'never'] as any[]).forEach((locateInMenu) => {
@@ -53,6 +37,8 @@ import { appendElementTo } from '../helpers/domUtils';
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
+      await changeTheme(theme);
+
       const toolbarItems = [] as Item[];
       (supportedWidgets as any[]).forEach((widgetName) => {
         toolbarItems.push({
@@ -72,6 +58,8 @@ import { appendElementTo } from '../helpers/domUtils';
       return createWidget('dxToolbar', {
         items: toolbarItems,
       });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
 
     test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=${locateInMenu}`, async (t) => {
@@ -93,6 +81,8 @@ import { appendElementTo } from '../helpers/domUtils';
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
+      await changeTheme(theme);
+
       const toolbarItems = [
         {
           location: 'before',
@@ -134,6 +124,8 @@ import { appendElementTo } from '../helpers/domUtils';
       return createWidget('dxToolbar', {
         items: toolbarItems,
       });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
 
     test(`Toolbar with different types of buttons,theme=${theme},items[].locateInMenu=${locateInMenu}`, async (t) => {
@@ -155,6 +147,8 @@ import { appendElementTo } from '../helpers/domUtils';
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
+      await changeTheme(theme);
+
       const toolbarItems = [
         {
           location: 'before',
@@ -211,6 +205,8 @@ import { appendElementTo } from '../helpers/domUtils';
       return createWidget('dxToolbar', {
         items: toolbarItems,
       });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
   });
 
@@ -239,6 +235,7 @@ import { appendElementTo } from '../helpers/domUtils';
       .ok(compareResults.errorMessages());
   }).before(async (t) => {
     await t.resizeWindow(910, 800);
+    await changeTheme(theme);
 
     const toolbarItems = [
       {
@@ -292,6 +289,7 @@ import { appendElementTo } from '../helpers/domUtils';
     await createWidget('dxToolbar', { items: [{ locateInMenu: 'always', text: 'text' }] }, false, '#toolbar5');
   }).after(async (t) => {
     await restoreBrowserSize(t);
+    await changeTheme('generic.light');
   });
 
   test(`Default nested widgets render,theme=${theme},items[].locateInMenu=auto`, async (t) => {
@@ -315,6 +313,8 @@ import { appendElementTo } from '../helpers/domUtils';
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await changeTheme(theme);
+
     const toolbarItems = [] as Item[];
     (supportedWidgets as any[]).forEach((widgetName) => {
       toolbarItems.push({
@@ -335,6 +335,8 @@ import { appendElementTo } from '../helpers/domUtils';
       items: toolbarItems,
       width: 100,
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=auto`, async (t) => {
@@ -352,6 +354,8 @@ import { appendElementTo } from '../helpers/domUtils';
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await changeTheme(theme);
+
     const toolbarItems = [
       {
         location: 'before',
@@ -391,8 +395,10 @@ import { appendElementTo } from '../helpers/domUtils';
     ] as Item[];
 
     return createWidget('dxToolbar', {
-      width: 50,
+      width: 200,
       items: toolbarItems,
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 });
