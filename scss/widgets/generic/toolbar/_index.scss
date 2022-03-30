@@ -64,19 +64,17 @@
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
 
-  .dx-toolbar-hidden-button,
-  .dx-toolbar-item-auto-hide {
-    .dx-button-content {
-      padding: 0;
+  .dx-list-item {
+    .dx-list-item-content {
+      padding: $generic-toolbar-item-spacing $generic-toolbar-item-spacing * 2;
+
+      > .dx-button,
+      .dx-toolbar-item-auto-hide > .dx-button {
+        .dx-button-content {
+          padding: 0;
+        }
+      }
     }
-  }
-
-  .dx-button-content {
-    padding: 4px;
-  }
-
-  .dx-toolbar-item-auto-hide {
-    padding: $generic-toolbar-item-spacing $generic-toolbar-item-spacing * 2;
   }
 
   .dx-toolbar-hidden-button {

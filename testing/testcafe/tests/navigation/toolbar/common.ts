@@ -11,7 +11,7 @@ fixture`Toolbar_common`
   .page(url(__dirname, '../../container.html'));
 
 ['generic.light', 'generic.dark', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
-  const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
+  const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', /* 'dxTabs', */ 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
   (['always', 'never'] as any[]).forEach((locateInMenu) => {
     test(`Default nested widgets render,theme=${theme},items[].locateInMenu=${locateInMenu}`, async (t) => {
@@ -46,8 +46,11 @@ fixture`Toolbar_common`
           locateInMenu,
           widget: widgetName,
           options: {
+            value: new Date(2021, 9, 17),
+            stylingMode: 'contained',
             text: 1,
-            items: [{ text: 1 }],
+            items: [{ text: 1 }, { text: 2 }],
+            showClearButton: true,
           },
         });
       });
@@ -325,8 +328,11 @@ fixture`Toolbar_common`
         locateInMenu: 'auto',
         widget: widgetName,
         options: {
+          value: new Date(2021, 9, 17),
+          stylingMode: 'contained',
           text: 1,
-          items: [{ text: 1 }],
+          items: [{ text: 1 }, { text: 2 }],
+          showClearButton: true,
         },
       });
     });
