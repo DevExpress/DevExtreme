@@ -5365,7 +5365,8 @@
               "/Models/Order.cs",
               "/Models/SampleData/Orders.cs"
             ],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "WideDemo": true
           }
         ]
       }
