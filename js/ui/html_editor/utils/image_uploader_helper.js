@@ -98,7 +98,7 @@ export class ImageUploader {
         }
 
         this.config.tabs.forEach((tabName) => {
-            const newTab = tabName === 'url' ? new UrlImageUploadTab(this.module, this.config, formData) : new FileImageUploadTab(this.module, this.config);
+            const newTab = tabName === 'url' ? new UrlTab(this.module, this.config, formData) : new FileTab(this.module, this.config);
 
             result.push(newTab);
         });
@@ -202,7 +202,7 @@ export class ImageUploader {
 //     }
 // }
 
-class BaseUploadTab {
+class BaseTab {
     constructor(module, config) {
         this.module = module;
         this.config = config;
@@ -214,7 +214,7 @@ class BaseUploadTab {
     }
 }
 
-class UrlImageUploadTab extends BaseUploadTab {
+class UrlTab extends BaseTab {
     constructor(module, config, formData) {
 
         super(module, config);
@@ -236,7 +236,7 @@ class UrlImageUploadTab extends BaseUploadTab {
     }
 
     getStrategy() {
-        return this.isImageUpdating() ? new updateImageByUrlStrategy(this.module, this.config, this.formData) : new addImageByUrlStrategy(this.module, this.config);
+        return this.isImageUpdating() ? new UpdateUrlStrategy(this.module, this.config, this.formData) : new AddUrlStrategy(this.module, this.config);
     }
 
     urlUpload() {
@@ -247,7 +247,7 @@ class UrlImageUploadTab extends BaseUploadTab {
 
 }
 
-class FileImageUploadTab extends BaseUploadTab {
+class FileTab extends BaseTab {
     constructor(module, config) {
         super(module, config);
 
@@ -263,13 +263,13 @@ class FileImageUploadTab extends BaseUploadTab {
 
         switch(this.config.fileUploadMode) {
             case 'both':
-                strategy = MixedUploadStrategy;
+                strategy = MixedFileStrategy;
                 break;
             case 'server':
-                strategy = ServerUploadStrategy;
+                strategy = ServerFileStrategy;
                 break;
             default:
-                strategy = Base64UploadStrategy;
+                strategy = Base64FileStrategy;
                 break;
         }
 
@@ -279,14 +279,14 @@ class FileImageUploadTab extends BaseUploadTab {
 }
 
 
-// class UrlImageUploadStrategy extends BaseUploadStrategy {
+// class UrlImageUploadStrategy extends BaseStrategy {
 
 // }
 
 // class UrlImageUpdateStrategy {
 
 // }
-class BaseUploadStrategy {
+class BaseStrategy {
     constructor(module, config) {
         this.module = module;
         this.config = config;
@@ -304,7 +304,7 @@ class BaseUploadStrategy {
     }
 }
 
-class BaseUrlStrategy extends BaseUploadStrategy {
+class BaseUrlStrategy extends BaseStrategy {
     constructor(module, config) {
         super(module, config);
         // this.config = config;
@@ -390,7 +390,7 @@ class BaseUrlStrategy extends BaseUploadStrategy {
 
 }
 
-class updateImageByUrlStrategy extends BaseUrlStrategy {
+class UpdateUrlStrategy extends BaseUrlStrategy {
     constructor(module, config, formData) {
         super(module, config);
         // this.config = config;
@@ -433,13 +433,13 @@ class updateImageByUrlStrategy extends BaseUrlStrategy {
 }
 
 
-class addImageByUrlStrategy extends BaseUrlStrategy {
+class AddUrlStrategy extends BaseUrlStrategy {
     // constructor(module, config) {
     //     super(module, config);
     // }
 }
 
-class BaseFileUploadStrategy extends BaseUploadStrategy {
+class BaseFileStrategy extends BaseStrategy {
     constructor(module, config) {
         super(module, config);
 
@@ -542,7 +542,7 @@ class BaseFileUploadStrategy extends BaseUploadStrategy {
 
 }
 
-class Base64UploadStrategy extends BaseFileUploadStrategy {
+class Base64FileStrategy extends BaseFileStrategy {
     constructor(module, config) {
         super(module, config);
     }
@@ -574,7 +574,7 @@ class Base64UploadStrategy extends BaseFileUploadStrategy {
 
 }
 
-class ServerUploadStrategy extends BaseFileUploadStrategy {
+class ServerFileStrategy extends BaseFileStrategy {
 
     shouldUseBase64() {
         return false;
@@ -589,7 +589,7 @@ class ServerUploadStrategy extends BaseFileUploadStrategy {
 
 }
 
-class MixedUploadStrategy extends BaseFileUploadStrategy {
+class MixedFileStrategy extends BaseFileStrategy {
     constructor(module, config) {
         super(module, config);
         this.useBase64 = false;
