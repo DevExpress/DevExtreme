@@ -395,7 +395,7 @@ fixture`Toolbar_common`
     ] as Item[];
 
     return createWidget('dxToolbar', {
-      width: 200,
+      width: 50,
       items: toolbarItems,
     });
   }).after(async () => {
