@@ -43,8 +43,8 @@
   }
 }
 
-.dx-toast-container {
-  position: absolute;
+.dx-toast-stack {
+  position: fixed;
   display: flex;
   overflow: hidden;
   gap: 3px;
@@ -65,42 +65,42 @@
   /* stylelint-enable declaration-no-important */
 }
 
-.dx-toast-container-down-direction {
+.dx-toast-stack-down-direction {
   flex-direction: column-reverse;
   justify-content: flex-end;
 }
 
-.dx-toast-container-up-direction {
+.dx-toast-stack-up-direction {
   flex-direction: column;
   justify-content: flex-end;
 }
 
-.dx-toast-container-left-direction {
+.dx-toast-stack-left-direction {
   flex-direction: row;
   justify-content: flex-end;
 }
 
-.dx-toast-container-right-direction {
+.dx-toast-stack-right-direction {
   flex-direction: row-reverse;
   justify-content: flex-end;
 }
 
-.dx-toast-container-down-reverse-direction {
+.dx-toast-stack-down-reverse-direction {
   flex-direction: column;
   justify-content: flex-start;
 }
 
-.dx-toast-container-up-reverse-direction {
+.dx-toast-stack-up-reverse-direction {
   flex-direction: column-reverse;
   justify-content: flex-start;
 }
 
-.dx-toast-container-left-reverse-direction {
+.dx-toast-stack-left-reverse-direction {
   flex-direction: row-reverse;
   justify-content: flex-start;
 }
 
-.dx-toast-container-right-reverse-direction {
+.dx-toast-stack-right-reverse-direction {
   flex-direction: row;
   justify-content: flex-start;
 }
