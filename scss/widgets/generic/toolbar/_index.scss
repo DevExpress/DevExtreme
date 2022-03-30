@@ -66,7 +66,7 @@
 
   .dx-list-item-content,
   .dx-toolbar-item-auto-hide {
-    padding: $generic-toolbar-item-spacing * 2;
+    padding: $generic-list-item-vertical-padding;
 
     > .dx-button {
       .dx-button-content {
@@ -76,6 +76,10 @@
   }
 
   .dx-toolbar-hidden-button {
+    .dx-button {
+      padding: $generic-list-item-vertical-padding;
+    }
+
     .dx-button-default,
     .dx-button-success,
     .dx-button-danger {
@@ -121,7 +125,7 @@
   .dx-buttongroup-wrapper {
     .dx-buttongroup-item.dx-button {
       .dx-button-content {
-        padding: 2 * $generic-toolbar-item-spacing;
+        padding: $generic-list-item-vertical-padding;
       }
     }
   }
