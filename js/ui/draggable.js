@@ -106,10 +106,8 @@ class ScrollHelper {
     }
 
     isScrollable($element) {
-        const that = this;
-
-        return ($element.css(that._overFlowAttr) === 'auto' || $element.hasClass('dx-scrollable-container'))
-            && $element.prop(that._scrollSizeProp) > $element[that._sizeAttr]();
+        return ($element.css(this._overFlowAttr) === 'auto' || $element.hasClass('dx-scrollable-container'))
+            && $element.prop(this._scrollSizeProp) > Math.ceil($element[this._sizeAttr]());
     }
 
     _trySetScrollable(element, mousePosition) {
