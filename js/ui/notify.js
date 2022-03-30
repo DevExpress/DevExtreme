@@ -8,18 +8,35 @@ import Toast from './toast';
 
 const window = getWindow();
 let $notify = null;
+const $containers = {};
 
-const notify = function(message, /* optional */ type, displayTime, stackOptions) {
+const notify = function(message, /* optional */ typeOrStackOptions, displayTime) {
     const options = isPlainObject(message) ? message : { message: message };
+    const stackOptions = isPlainObject(typeOrStackOptions) ? typeOrStackOptions : undefined;
+    const type = isPlainObject(typeOrStackOptions) ? undefined : typeOrStackOptions;
+
     const userHiddenAction = options.onHidden;
-    const { enabled = true, containerId = 'stackContainer', direction = 'up', position = 'bottom center' } = stackOptions || {};
 
-    if(enabled) {
-        const $container = getStackContainer(containerId);
+    if(stackOptions && stackOptions.position) {
+        const { position } = stackOptions;
+        const direction = stackOptions.direction || getDefaultDirection(position);
+        let containerKey = typeof position === 'string'
+            ? position
+            : JSON.stringify(position).replaceAll(/[{}"]/g, '').replaceAll(/[:,]/g, '-');
+        containerKey = `${containerKey.split(' ').join('-')}-toast-stack`;
+
+        const $container = getStackContainer(containerKey);
         setContainerClasses($container, direction);
-
         options.container = $container;
-        options.onShowing = () => setContainerStyles($container, direction, position);
+
+        const userShowingAction = options.onShowing;
+        options.onShowing = function(args) {
+            setContainerStyles($container, direction, position);
+
+            new Action(userShowingAction, {
+                context: args.model
+            }).execute(arguments);
+        };
     }
 
     extend(options, {
@@ -38,22 +55,28 @@ const notify = function(message, /* optional */ type, displayTime, stackOptions)
     new Toast($notify, options).show();
 };
 
-const createStackContainer = (id) => {
-    return $('<div>')
-        .attr({ id })
-        .appendTo(viewPort());
+const getDefaultDirection = (position) => {
+    return typeof position === 'string' && position.includes('top') ? 'down' : 'up';
 };
 
-const getStackContainer = (id) => {
-    const $container = $(`#${id}`);
-    return $container.length ? $container : createStackContainer(id);
+const createStackContainer = (key) => {
+    const $container = $('<div>').appendTo(viewPort());
+    $containers[key] = $container;
+
+    return $container;
+};
+
+const getStackContainer = (key) => {
+    const $container = $containers[key];
+
+    return $container ? $container : createStackContainer(key);
 };
 
 const setContainerClasses = (container, direction) => {
     container
         .removeClass()
-        .addClass('dx-toast-container')
-        .addClass(`dx-toast-container-${direction}-direction`);
+        .addClass('dx-toast-stack')
+        .addClass(`dx-toast-stack-${direction}-direction`);
 };
 
 const setContainerStyles = (container, direction, position) => {
@@ -132,5 +155,13 @@ const getPositionStylesByCoordinates = (direction, coordinates, dimensions) => {
             };
     }
 };
+
+///#DEBUG
+const _resetContainers = () => {
+    Object.keys($containers).forEach(key => delete $containers[key]);
+};
+
+export { _resetContainers, notify };
+///#ENDDEBUG
 
 export default notify;
