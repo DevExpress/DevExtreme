@@ -1072,7 +1072,7 @@ QUnit.module('Handle', $.extend({}, moduleConfig, {
             return items;
         };
         const done = assert.async();
-        const $testElement = $('#container').height(366);
+        const $testElement = $('#container').height(200);
         this.options = {
             dataSource: getData(),
             keyExpr: 'id',
@@ -1094,8 +1094,8 @@ QUnit.module('Handle', $.extend({}, moduleConfig, {
         rowsView.render($testElement);
 
         // act
-        pointerMock(rowsView.getCellElement(0, 0)).start().down(5, 5).move(0, 150);
-        pointerMock(rowsView.getCellElement(0, 0)).start().down(5, 5).move(0, 310);
+        pointerMock(rowsView.getCellElement(0, 0)).start().down(5, 5).move(0, 100);
+        pointerMock(rowsView.getCellElement(0, 0)).start().down(5, 5).move(0, 180);
 
         setTimeout(() => {
             // assert
