@@ -18,7 +18,7 @@ const defaultOptions = {
     allowSelectAll: true,
     mode: 'single',
     selectAllMode: 'page',
-    selectedRowKeys: [],
+    // selectedRowKeys: [],
   },
 };
 
