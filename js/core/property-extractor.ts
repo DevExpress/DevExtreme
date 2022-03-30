@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/no-type-alias */
 import {
   RecursivePropertyType,
-} from '../../js/core';
+} from '.';
 
 import {
   assertType,
   toAssertion,
-} from './consts';
+} from '../../testing/typescript/consts';
 
 type ComplexType = {
   a: {
