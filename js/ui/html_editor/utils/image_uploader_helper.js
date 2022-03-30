@@ -29,6 +29,8 @@ export class ImageUploader {
     constructor(module, config) {
         this.module = module;
         this.config = config ?? {};
+
+        this.tabPanelIndex = 0;
         // this.updateStrategy = new ImageUpdateStrategy(this);
         // this.addStrategy = this.getImageAddStrategy(config.mode);
         // this.renderTabs();
@@ -75,7 +77,7 @@ export class ImageUploader {
     // }
 
     getActiveTabIndex() {
-        return 0;
+        return this.tabPanelIndex;
     }
 
     getFormData() {
@@ -84,7 +86,7 @@ export class ImageUploader {
 
     getUpdateDialogFormData(formData) {
         const resultFormData = formData;
-        resultFormData.src = resultFormData.imageSrc;
+        resultFormData.src = resultFormData.imageSrc ?? resultFormData.src;
         delete resultFormData.imageSrc;
 
         return resultFormData;
@@ -164,6 +166,11 @@ export class ImageUploader {
 
             config = [{
                 itemType: 'tabbed',
+                tabPanelOptions: {
+                    onSelectionChanged: (e) => {
+                        this.tabPanelIndex = e.component.option('selectedIndex');
+                    }
+                },
                 tabs: tabsConfig
             }];
         } else {
@@ -290,13 +297,19 @@ class BaseStrategy {
     constructor(module, config) {
         this.module = module;
         this.config = config;
-        this.selection = this.defaultPasteIndex();
+        this.selection = this.getQuillSelection();
     }
 
-    defaultPasteIndex() {
+    // defaultPasteIndex() {
+    //     const selection = this.module.quill.getSelection();
+    //     // console.log('defaultPasteIndex = ' + selection?.index ?? this.module.quill.getLength());
+    //     return { index: selection?.index ?? this.module.quill.getLength(), length: };
+    // }
+
+    getQuillSelection() {
         const selection = this.module.quill.getSelection();
         // console.log('defaultPasteIndex = ' + selection?.index ?? this.module.quill.getLength());
-        return selection?.index ?? this.module.quill.getLength();
+        return { index: selection?.index ?? this.module.quill.getLength(), length: selection?.length || 0 };
     }
 
     pasteImage() {
@@ -317,7 +330,7 @@ class BaseUrlStrategy extends BaseStrategy {
 
     pasteImage(formData, event) {
         this.module.saveValueChangeEvent(event);
-        urlUpload(this.module.quill, this.selection, formData);
+        urlUpload(this.module.quill, this.selection.index, formData);
     }
 
     modifyFormData() {}
@@ -395,11 +408,29 @@ class UpdateUrlStrategy extends BaseUrlStrategy {
         super(module, config);
         // this.config = config;
         this.formData = formData;
+        // this.modifySelectionData();
         this.modifyFormData();
         this.shouldKeepAspectRatio = true;
     }
 
+    //     if(!imageSrc || defaultIndex === 0) {
+    //         module.quill.setSelection(defaultIndex + 1, 0, SILENT_ACTION);
+    //     }
+
+    // modifyQuillSelection() {
+    //     const selection = this.module.quill.getSelection();
+    //     // console.log('defaultPasteIndex = ' + selection?.index ?? this.module.quill.getLength());
+    //     return { index: selection?.index ?? this.module.quill.getLength(), length: selection?.length || 0 };
+    // }
+
     modifyFormData() {
+        // const { imageSrc } = this.module.quill.getFormat(this.selection.index - 1, 1);
+
+        // this.formData = this.getUpdateDialogFormData();
+
+        // if(!imageSrc || this.selection.index === 0) {
+        //     this.module.quill.setSelection(this.selection.index + 1, 0, SILENT_ACTION);
+        // }
         // const index = this.defaultPasteIndex();
         // const { imageSrc } = this.module.quill.getFormat(index - 1, 1);
 
@@ -408,6 +439,14 @@ class UpdateUrlStrategy extends BaseUrlStrategy {
 
 
         // this.formData = getUpdateDialogFormData(module, this.formData);
+    }
+
+    getUpdateDialogFormData() {
+        const resultFormData = this.formData;
+        resultFormData.src = resultFormData.imageSrc;
+        delete resultFormData.imageSrc;
+
+        return resultFormData;
     }
 
     pasteImage(formData, event) {
@@ -610,12 +649,18 @@ class MixedFileStrategy extends BaseFileStrategy {
         }
     }
 
+    pasteImage(formData, event) {
+        if(this.shouldUseBase64()) {
+            super.pasteImage(formData, event);
+        }
+    }
+
     serverUploadImpl(data) {
         if(!this.shouldUseBase64()) {
-            const imageUrl = this.config.uploadDirectory + '/' + data.file.name;
+            const imageUrl = this.config.uploadDirectory + data.file.name;
             // const index = this.defaultPasteIndex(this.module);
 
-            urlUpload(this.module.quill, this.selection, { src: imageUrl });
+            urlUpload(this.module.quill, this.selection.index, { src: imageUrl });
             this.closeDialogPopup(this.module.editorInstance, data);
         }
     }
@@ -647,12 +692,11 @@ export function serverUpload(fileUploader, file) {
 //     return formData;
 // }
 
-export function urlUpload(quill, index, { src, width, height }) {
-
+export function urlUpload(quill, index, attributes) {
     // const index = defaultPasteIndex(module);
 
     // formData = updateFormDataDimensions(formData);
-    quill.insertEmbed(index, 'extendedImage', { src, width, height }, USER_ACTION);
+    quill.insertEmbed(index, 'extendedImage', attributes, USER_ACTION);
     quill.setSelection(index + 1, 0, USER_ACTION);
     // const range = quill.getSelection();
     // quill.getModule('uploader').upload(range, files);
