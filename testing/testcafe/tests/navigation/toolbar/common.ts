@@ -79,10 +79,6 @@ import { appendElementTo } from '../helpers/domUtils';
         targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
       }
 
-      await ClientFunction(() => {
-        $(targetContainerSelector).css({ backgroundColor: 'gold' });
-      }, { dependencies: { targetContainerSelector } })();
-
       await t
         .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
         .ok()
@@ -343,7 +339,7 @@ import { appendElementTo } from '../helpers/domUtils';
     const targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
 
     await t
-      .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=always.png`, Selector(targetContainerSelector)))
+      .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=auto.png`, Selector(targetContainerSelector)))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -387,7 +383,7 @@ import { appendElementTo } from '../helpers/domUtils';
     ] as Item[];
 
     return createWidget('dxToolbar', {
-      width: 100,
+      width: 50,
       items: toolbarItems,
     });
   });
