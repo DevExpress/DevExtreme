@@ -17,6 +17,7 @@ const DIALOG_IMAGE_FIX_RATIO_CONTAINER = 'dx-fix-ratio-container';
 const FORM_DIALOG_CLASS = 'dx-formdialog';
 
 const USER_ACTION = 'user';
+const SILENT_ACTION = 'silent';
 
 
 import ButtonGroup from '../../button_group';
@@ -41,9 +42,9 @@ export class ImageUploader {
     render() {
         // const strategy = this.isUpdating ? this.updateStrategy : this.addStrategy;
 
-        this.tabs = this.createTabs();
-
         this.formData = this.getFormData();
+
+        this.tabs = this.createTabs(this.formData);
 
         // const dialogConfig();
 
@@ -56,7 +57,7 @@ export class ImageUploader {
             .showDialog(formConfig)
             .done((formData, event) => {
                 this.tabs[this.getActiveTabIndex()].strategy.pasteImage(formData, event);
-
+                // this.tabs
                 // strategy.pasteImage(formData, event);
             })
             .always(() => {
@@ -89,11 +90,15 @@ export class ImageUploader {
         return resultFormData;
     }
 
-    createTabs() {
+    createTabs(formData) {
         const result = [];
 
+        if(!this.config.tabs) {
+            this.config.tabs = ['url'];
+        }
+
         this.config.tabs.forEach((tabName) => {
-            const newTab = tabName === 'url' ? new UrlImageUploadTab(this.module, this.config) : new FileImageUploadTab(this.module, this.config);
+            const newTab = tabName === 'url' ? new UrlImageUploadTab(this.module, this.config, formData) : new FileImageUploadTab(this.module, this.config);
 
             result.push(newTab);
         });
@@ -201,7 +206,7 @@ class BaseUploadTab {
     constructor(module, config) {
         this.module = module;
         this.config = config;
-        this.strategy = this.getStrategy();
+
     }
 
     getItemsConfig() {
@@ -210,10 +215,15 @@ class BaseUploadTab {
 }
 
 class UrlImageUploadTab extends BaseUploadTab {
-    constructor(module, config) {
+    constructor(module, config, formData) {
+
         super(module, config);
-        // this.config = config;
+        this.formData = formData;
         this.shouldKeepAspectRatio = true;
+
+        this.strategy = this.getStrategy();
+        // this.config = config;
+
 
     }
 
@@ -221,8 +231,12 @@ class UrlImageUploadTab extends BaseUploadTab {
         return 'Specify Url';
     }
 
+    isImageUpdating() {
+        return Object.prototype.hasOwnProperty.call(this.module.quill.getFormat() ?? {}, 'imageSrc');
+    }
+
     getStrategy() {
-        return new addImageByUrlStrategy(this.module, this.config);
+        return this.isImageUpdating() ? new updateImageByUrlStrategy(this.module, this.config, this.formData) : new addImageByUrlStrategy(this.module, this.config);
     }
 
     urlUpload() {
@@ -231,10 +245,15 @@ class UrlImageUploadTab extends BaseUploadTab {
         // module.quill.setSelection(index + 1, 0, USER_ACTION);
     }
 
-
 }
 
 class FileImageUploadTab extends BaseUploadTab {
+    constructor(module, config) {
+        super(module, config);
+
+        this.strategy = this.getStrategy();
+    }
+
     getTabName() {
         return 'Select File';
     }
@@ -271,10 +290,12 @@ class BaseUploadStrategy {
     constructor(module, config) {
         this.module = module;
         this.config = config;
+        this.selection = this.defaultPasteIndex();
     }
 
     defaultPasteIndex() {
         const selection = this.module.quill.getSelection();
+        // console.log('defaultPasteIndex = ' + selection?.index ?? this.module.quill.getLength());
         return selection?.index ?? this.module.quill.getLength();
     }
 
@@ -283,13 +304,23 @@ class BaseUploadStrategy {
     }
 }
 
-class addImageByUrlStrategy extends BaseUploadStrategy {
+class BaseUrlStrategy extends BaseUploadStrategy {
     constructor(module, config) {
         super(module, config);
         // this.config = config;
         this.shouldKeepAspectRatio = true;
 
+
+        // this.modifyFormData();
+
     }
+
+    pasteImage(formData, event) {
+        this.module.saveValueChangeEvent(event);
+        urlUpload(this.module.quill, this.selection, formData);
+    }
+
+    modifyFormData() {}
 
     keepAspectRatio(data, { dependentEditor, e }) {
         const newValue = parseInt(e.value);
@@ -357,10 +388,55 @@ class addImageByUrlStrategy extends BaseUploadStrategy {
         ];
     }
 
-    pasteImage(formData, event) {
-        this.module.saveValueChangeEvent(event);
-        urlUpload(this.module.quill, this.defaultPasteIndex(), formData);
+}
+
+class updateImageByUrlStrategy extends BaseUrlStrategy {
+    constructor(module, config, formData) {
+        super(module, config);
+        // this.config = config;
+        this.formData = formData;
+        this.modifyFormData();
+        this.shouldKeepAspectRatio = true;
     }
+
+    modifyFormData() {
+        // const index = this.defaultPasteIndex();
+        // const { imageSrc } = this.module.quill.getFormat(index - 1, 1);
+
+        // this.formData.src = this.formData.imageSrc;
+        // delete this.formData.imageSrc;
+
+
+        // this.formData = getUpdateDialogFormData(module, this.formData);
+    }
+
+    pasteImage(formData, event) {
+        this.module.quill.deleteText(this.embedFormatIndex(), 1, SILENT_ACTION);
+        super.pasteImage(formData, event);
+    }
+    //         index = formatIndex;
+    //         module.quill.deleteText(index, 1, SILENT_ACTION);
+
+    embedFormatIndex() {
+        const selection = this.selection ?? this.module.quill.getSelection();
+
+        if(selection) {
+            if(selection.length) {
+                return selection.index;
+            } else {
+                return selection.index - 1;
+            }
+        } else {
+            return this.module.quill.getLength();
+        }
+    }
+}
+
+
+class addImageByUrlStrategy extends BaseUrlStrategy {
+    // constructor(module, config) {
+    //     super(module, config);
+    // }
 }
 
 class BaseFileUploadStrategy extends BaseUploadStrategy {
@@ -537,9 +613,9 @@ class MixedUploadStrategy extends BaseFileUploadStrategy {
     serverUploadImpl(data) {
         if(!this.shouldUseBase64()) {
             const imageUrl = this.config.uploadDirectory + '/' + data.file.name;
-            const index = this.defaultPasteIndex(module);
+            // const index = this.defaultPasteIndex(this.module);
 
-            urlUpload(this.module.quill, index, { src: imageUrl });
+            urlUpload(this.module.quill, this.selection, { src: imageUrl });
             this.closeDialogPopup(this.module.editorInstance, data);
         }
     }
@@ -574,7 +650,6 @@ export function serverUpload(fileUploader, file) {
 export function urlUpload(quill, index, { src, width, height }) {
 
     // const index = defaultPasteIndex(module);
-
 
     // formData = updateFormDataDimensions(formData);
     quill.insertEmbed(index, 'extendedImage', { src, width, height }, USER_ACTION);

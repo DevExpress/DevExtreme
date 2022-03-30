@@ -43,7 +43,8 @@ module('Image uploading integration', {
         this.options = {
             toolbar: { items: ['image'] },
             imageUpload: {
-                mode: 'both',
+                fileUploadMode: 'both',
+                tabs: ['url', 'file'],
                 uploadUrl: '/',
                 uploadDirectory: '/uploadDirectory/'
             },
