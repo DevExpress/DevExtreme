@@ -784,7 +784,7 @@ export const virtualScrollingModule = {
                         return baseResult;
                     },
                     _loadDataSource: function() {
-                        if(this._rowsScrollController) {
+                        if(this._rowsScrollController && isVirtualPaging(this)) {
                             const { loadPageCount } = this.getLoadPageParams() ?? {};
 
                             loadPageCount >= 1 && this._dataSource?.loadPageCount(loadPageCount);
