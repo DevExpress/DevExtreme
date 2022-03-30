@@ -29950,9 +29950,9 @@ declare module DevExpress.viz {
      */
     visible?: boolean;
     /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.pattern]
+     * [descr:dxChartSeriesTypes.CommonSeries.label.displayFormat]
      */
-    pattern?: string;
+    displayFormat?: string;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -32589,9 +32589,9 @@ declare module DevExpress.viz {
        */
       wordWrap?: DevExpress.viz.BaseWidget.WordWrapType;
       /**
-       * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.pattern]
+       * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.displayFormat]
        */
-      pattern?: string;
+      displayFormat?: string;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount]
@@ -33910,9 +33910,9 @@ declare module DevExpress.viz {
      */
     visible?: boolean;
     /**
-     * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.pattern]
+     * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.displayFormat]
      */
-    pattern?: string;
+    displayFormat?: string;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.

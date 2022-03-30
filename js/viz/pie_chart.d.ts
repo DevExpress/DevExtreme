@@ -691,11 +691,11 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        */
       wordWrap?: WordWrapType;
       /**
-       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.pattern
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.displayFormat
        * @default undefined
        * @public
        */
-      pattern?: string;
+       displayFormat?: string;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount

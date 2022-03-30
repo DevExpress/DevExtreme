@@ -22,8 +22,8 @@ function getValueByPlaceHolder(placeHolder, pointInfo) {
     return formatValue(pointInfo[placeHolder], customFormat);
 }
 
-export function processPatternWithInfo(pattern, pointInfo) {
-    let actualText = pattern;
+export function processDisplayFormat(displayFormat, pointInfo) {
+    let actualText = displayFormat;
     let continueProcess = true;
 
     while(continueProcess) {
