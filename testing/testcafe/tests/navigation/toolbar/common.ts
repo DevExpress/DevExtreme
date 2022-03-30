@@ -339,7 +339,7 @@ import { appendElementTo } from '../helpers/domUtils';
     const targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
 
     await t
-      .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=auto.png`, Selector(targetContainerSelector)))
+      .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=always.png`, Selector(targetContainerSelector)))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
