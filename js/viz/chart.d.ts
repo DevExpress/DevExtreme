@@ -3709,11 +3709,11 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      */
     visible?: boolean;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.pattern
+     * @docid dxChartSeriesTypes.CommonSeries.label.displayFormat
      * @default undefined
      * @public
      */
-    pattern?: string;
+     displayFormat?: string;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeriesPoint {

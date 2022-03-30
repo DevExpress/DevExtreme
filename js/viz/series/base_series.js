@@ -108,7 +108,7 @@ function getLabelOptions(labelOptions, defaultColor) {
         wordWrap: opt.wordWrap,
         textOverflow: opt.textOverflow,
         cssClass: opt.cssClass,
-        pattern: opt.pattern
+        displayFormat: opt.displayFormat
     };
 }
 
