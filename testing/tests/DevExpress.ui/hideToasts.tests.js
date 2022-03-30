@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import notify from 'ui/notify';
+import { notify } from 'ui/notify';
 import fx from 'animation/fx';
 import hideToasts from 'ui/toast/hide_toasts';
 
