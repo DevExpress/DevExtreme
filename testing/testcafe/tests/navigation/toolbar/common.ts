@@ -10,13 +10,21 @@ import { appendElementTo } from '../helpers/domUtils';
 ['generic.light', 'generic.dark', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
   fixture`Toolbar_common`
     .page(url(__dirname, '../../container.html'))
-    .before(async () => {
-      if (theme !== 'generic.light') {
-        await changeTheme(theme);
-      }
+    .beforeEach(async (): Promise<void> => {
+      await ClientFunction(
+        async () => {
+          if (theme !== 'generic.light') {
+            await changeTheme(theme);
+          }
+        },
+        { dependencies: { changeTheme, theme } },
+      )();
     })
-    .after(async () => {
-      await changeTheme('generic.light');
+    .afterEach(async (): Promise<void> => {
+      await ClientFunction(
+        async () => { await changeTheme('generic.light'); },
+        { dependencies: { changeTheme } },
+      )();
     });
 
   const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', /* 'dxTabs', */ 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
