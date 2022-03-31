@@ -447,7 +447,8 @@ export default {
                     }
                 },
 
-                _refreshCore: function(isPageChanged) {
+                _refreshCore: function(params) {
+                    const { isPageChanged } = params ?? {};
                     const needResetIndexes = this.isBatchEditMode() || isPageChanged && this.option('scrolling.mode') !== 'virtual';
 
                     if(this.isCellOrBatchEditMode()) {
