@@ -25042,117 +25042,11 @@ declare module DevExpress.ui {
   /**
    * [descr:ui.notify(message,stackOptions)]
    */
-  export function notify(
-    message: string,
-    stackOptions?: {
-      /**
-       * @docid
-       * @type Enums.NotifyStackPosition|object
-       */
-      position?:
-        | 'top left'
-        | 'top right'
-        | 'bottom left'
-        | 'bottom right'
-        | 'top center'
-        | 'bottom center'
-        | 'left center'
-        | 'right center'
-        | 'center'
-        | {
-            /**
-             * @docid
-             * @type number
-             */
-            top?: number;
-            /**
-             * @docid
-             * @type number
-             */
-            left?: number;
-            /**
-             * @docid
-             * @type number
-             */
-            bottom?: number;
-            /**
-             * @docid
-             * @type number
-             */
-            right?: number;
-          };
-      /**
-       * @docid
-       * @type Enums.NotifyStackDirection
-       */
-      direction?:
-        | 'down'
-        | 'up'
-        | 'left'
-        | 'right'
-        | 'down-reverse'
-        | 'up-reverse'
-        | 'left-reverse'
-        | 'right-reverse';
-    }
-  ): void;
+  export function notify(message: string, stackOptions?: StackOptions): void;
   /**
    * [descr:ui.notify(options,stackOptions)]
    */
-  export function notify(
-    options: any,
-    stackOptions?: {
-      /**
-       * @docid
-       * @type Enums.NotifyStackPosition|object
-       */
-      position?:
-        | 'top left'
-        | 'top right'
-        | 'bottom left'
-        | 'bottom right'
-        | 'top center'
-        | 'bottom center'
-        | 'left center'
-        | 'right center'
-        | 'center'
-        | {
-            /**
-             * @docid
-             * @type number
-             */
-            top?: number;
-            /**
-             * @docid
-             * @type number
-             */
-            left?: number;
-            /**
-             * @docid
-             * @type number
-             */
-            bottom?: number;
-            /**
-             * @docid
-             * @type number
-             */
-            right?: number;
-          };
-      /**
-       * @docid
-       * @type Enums.NotifyStackDirection
-       */
-      direction?:
-        | 'down'
-        | 'up'
-        | 'left'
-        | 'right'
-        | 'down-reverse'
-        | 'up-reverse'
-        | 'left-reverse'
-        | 'right-reverse';
-    }
-  ): void;
+  export function notify(options: any, stackOptions?: StackOptions): void;
   /**
    * [descr:NumericRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25280,6 +25174,54 @@ declare module DevExpress.ui {
      * [descr:SearchBoxMixinOptions.searchValue]
      */
     searchValue?: string;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  interface StackOptions {
+    /**
+     * [descr:StackOptions.position]
+     */
+    position?:
+      | 'top left'
+      | 'top right'
+      | 'bottom left'
+      | 'bottom right'
+      | 'top center'
+      | 'bottom center'
+      | 'left center'
+      | 'right center'
+      | 'center'
+      | {
+          /**
+           * [descr:StackOptions.position.top]
+           */
+          top?: number;
+          /**
+           * [descr:StackOptions.position.left]
+           */
+          left?: number;
+          /**
+           * [descr:StackOptions.position.bottom]
+           */
+          bottom?: number;
+          /**
+           * [descr:StackOptions.position.right]
+           */
+          right?: number;
+        };
+    /**
+     * [descr:StackOptions.direction]
+     */
+    direction?:
+      | 'down'
+      | 'up'
+      | 'left'
+      | 'right'
+      | 'down-reverse'
+      | 'up-reverse'
+      | 'left-reverse'
+      | 'right-reverse';
   }
   /**
    * [descr:StringLengthRule]
