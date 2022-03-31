@@ -773,49 +773,31 @@ class BaseRenderingStrategy {
         return false;
     }
 
-    getAppointmentDurationInMs(startDate, endDate, allDay) {
-        const appointmentDuration = endDate.getTime() - startDate.getTime();
+    getAppointmentDurationInMs(apptStartDate, apptEndDate, allDay) {
         const dayDuration = toMs('day');
         const visibleDayDuration = this.visibleDayDuration;
-        let result = 0;
+        const trimmedStartDate = dateUtils.trimTime(apptStartDate);
+        const trimmedEndDate = dateUtils.trimTime(apptEndDate);
+
+        const deltaDate = trimmedEndDate - trimmedStartDate;
+        const quantityOfDays = deltaDate / dayDuration + 1;
 
         if(allDay) {
-            const ceilQuantityOfDays = Math.ceil(appointmentDuration / dayDuration);
-
-            result = ceilQuantityOfDays * visibleDayDuration;
-        } else {
-            const isDifferentDates = !timeZoneUtils.isSameAppointmentDates(startDate, endDate);
-            const floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration);
-            let tailDuration;
-
-            if(isDifferentDates) {
-                const startDateEndHour = new Date(new Date(startDate).setHours(this.endDayHour, 0, 0));
-                const hiddenDayDuration = dayDuration - visibleDayDuration - (startDate.getTime() > startDateEndHour.getTime() ? startDate.getTime() - startDateEndHour.getTime() : 0);
-
-                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
-
-                const startDayTime = this.startDayHour * toMs('hour');
-                const endPartDuration = endDate - dateUtils.trimTime(endDate);
-
-                if(endPartDuration < startDayTime) {
-                    if(floorQuantityOfDays) {
-                        tailDuration -= hiddenDayDuration;
-                    }
-
-                    tailDuration += startDayTime - endPartDuration;
-                }
-            } else {
-                tailDuration = appointmentDuration % dayDuration;
-            }
-
-            if(tailDuration > visibleDayDuration) {
-                tailDuration = visibleDayDuration;
-            }
-
-            result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
+            return quantityOfDays * visibleDayDuration;
         }
 
-        return result;
+        const dayVisibleHours = this.endDayHour - this.startDayHour;
+        const appointmentDayHours = dayVisibleHours * quantityOfDays;
+
+        const startHours = (apptStartDate - trimmedStartDate) / toMs('hour');
+        const apptStartDelta = Math.max(0, startHours - this.startDayHour);
+
+        const endHours = Math.max(0, ((apptEndDate - trimmedEndDate) / toMs('hour') - this.startDayHour));
+        const apptEndDelta = Math.max(0, dayVisibleHours - endHours);
+
+        const tailDuration = (appointmentDayHours - (apptStartDelta + apptEndDelta)) * toMs('hour');
+
+        return tailDuration;
     }
 
     getPositionShift(timeShift, isAllDay) {
