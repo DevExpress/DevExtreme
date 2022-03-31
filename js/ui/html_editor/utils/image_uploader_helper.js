@@ -83,15 +83,15 @@ export class ImageUploader {
     }
 
     modifyDialogPopupOptions() {
-        let wrapperClassString = `${DIALOG_IMAGE_POPUP_CLASS} ${FORM_DIALOG_CLASS}`;
+        let wrapperClasses = `${DIALOG_IMAGE_POPUP_CLASS} ${FORM_DIALOG_CLASS}`;
         if(this.useTabbedItems()) {
-            wrapperClassString += ` ${DIALOG_IMAGE_POPUP_WITH_TABS_CLASS}`;
+            wrapperClasses += ` ${DIALOG_IMAGE_POPUP_WITH_TABS_CLASS}`;
         }
 
         this.module.editorInstance.formDialogOption({
             title: localizationMessage.format(DIALOG_IMAGE_CAPTION),
             'toolbarItems[0].options.text': 'Add',
-            'wrapperAttr': { class: wrapperClassString }
+            'wrapperAttr': { class: wrapperClasses }
         });
     }
 
@@ -249,6 +249,16 @@ class AddUrlStrategy extends BaseStrategy {
         this.preventRecalculating = false;
     }
 
+    createKeepAspectRatioEditor($container, data, dependentEditorDataField) {
+        return this.module.editorInstance._createComponent($container, TextBox, {
+            value: data.component.option('formData')[data.dataField],
+            onEnterKey: data.component.option('onEditorEnterKey').bind(this.module.editorInstance._formDialog, data),
+            onValueChanged: (e) => {
+                this.keepAspectRatio(data, { dependentEditor: this[dependentEditorDataField + 'Editor'], e });
+            }
+        });
+    }
+
     getItemsConfig() {
         return [
             { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
@@ -256,13 +266,7 @@ class AddUrlStrategy extends BaseStrategy {
                 const $content = $('<div>').addClass(DIALOG_IMAGE_FIX_RATIO_CONTAINER);
                 const $widthEditor = $('<div>').appendTo($content);
 
-                this.widthEditor = this.module.editorInstance._createComponent($widthEditor, TextBox, {
-                    value: data.component.option('formData')[data.dataField],
-                    onEnterKey: data.component.option('onEditorEnterKey').bind(this.module.editorInstance._formDialog, data),
-                    onValueChanged: (e) => {
-                        this.keepAspectRatio(data, { dependentEditor: this.heightEditor, e });
-                    }
-                });
+                this.widthEditor = this.createKeepAspectRatioEditor($widthEditor, data, 'height');
 
                 const $ratioEditor = $('<div>').appendTo($content);
 
@@ -286,13 +290,7 @@ class AddUrlStrategy extends BaseStrategy {
             { dataField: 'height', colSpan: 5, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) }, template: (data) => {
                 const $content = $('<div>');
 
-                this.heightEditor = this.module.editorInstance._createComponent($content, TextBox, {
-                    value: data.component.option('formData')[data.dataField],
-                    onEnterKey: data.component.option('onEditorEnterKey').bind(this.module.editorInstance._formDialog, data),
-                    onValueChanged: (e) => {
-                        this.keepAspectRatio(data, { dependentEditor: this.widthEditor, e });
-                    }
-                });
+                this.heightEditor = this.createKeepAspectRatioEditor($content, data, 'width');
 
                 return $content;
             } },
