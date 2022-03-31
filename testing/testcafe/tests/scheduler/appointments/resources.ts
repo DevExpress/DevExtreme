@@ -1,6 +1,7 @@
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
+import TagBox from '../../../model/tagBox';
 
 const dataSource = [{
   text: 'test-appt-1',
@@ -63,5 +64,51 @@ test('Resource color should be correct if group is set in "views"', async (t) =>
       id: 2,
       color: '#679ec5',
     }],
+  }],
+}));
+
+test('Resource with allowMultiple should be set correctly for new the appointment (T1075028)', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const cell = scheduler.getDateTableCell(2, 0);
+  const popup = scheduler.appointmentPopup;
+
+  await t
+    .doubleClick(cell)
+    .expect(popup.element.exists)
+    .ok();
+
+  const resourceTagBox = new TagBox('.dx-tagbox');
+  await t
+    .expect(resourceTagBox.element.exists)
+    .ok()
+    .click(resourceTagBox.element);
+
+  const resourceTagBoxPopup = resourceTagBox.getPopup();
+  const resourceTagBoxList = resourceTagBox.getList();
+  await t
+    .expect((await resourceTagBoxPopup).exists)
+    .ok()
+    .click((await resourceTagBoxList).getItem(0).element)
+    .expect(resourceTagBox.tags.exists)
+    .ok()
+    .expect(resourceTagBox.tags.count)
+    .eql(1);
+}).before(async () => createWidget('dxScheduler', {
+  views: ['day'],
+  currentView: 'day',
+  currentDate: new Date(2021, 3, 27),
+  startDayHour: 9,
+  endDayHour: 14,
+  resources: [{
+    fieldExpr: 'test_Id',
+    allowMultiple: true,
+    dataSource: [{
+      text: 'Test-0',
+      id: 1,
+    }, {
+      text: 'Test-1',
+      id: 2,
+    }],
+    label: 'MultipleResource',
   }],
 }));

@@ -70,9 +70,17 @@ const createScheduler = async (
       const scheduler = new Scheduler('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await t.expect(
-        await takeScreenshot(`custom-time-panel-in-${view}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element, screenshotComparerOptions),
-      ).ok();
+      await t
+        .expect(scheduler.getAppointmentCount())
+        .eql(8)
+        .expect(
+          await takeScreenshot(
+            `custom-time-panel-in-${view}-cross-scrolling=${crossScrollingEnabled}.png`,
+            scheduler.element,
+            screenshotComparerOptions,
+          ),
+        )
+        .ok();
 
       await t.expect(compareResults.isValid())
         .ok(compareResults.errorMessages());

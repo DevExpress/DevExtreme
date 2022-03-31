@@ -11,7 +11,7 @@ export type WidgetName =
 'dxScrollable' |
 'dxScrollView' |
 'dxDataGrid' |
-'dxDataGridLight' |
+'dxDataGridNext' |
 'dxTreeList' |
 'dxPager' |
 'dxScheduler' |

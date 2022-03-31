@@ -12,11 +12,11 @@ const defaultOptions = {
 
 const prepareDataGrid = (options = {}) => async (t, { platform }) => {
   await t.resizeWindow(800, 600);
-  await createWidget(platform, 'dxDataGridLight', defaultOptions);
+  await createWidget(platform, 'dxDataGridNext', defaultOptions);
   await updateComponentOptions(platform, options);
 };
 
-fixture('DataGridLight with Master Detail');
+fixture('DataGridNext with Master Detail');
 
 test('Default template', async (t, { screenshotComparerOptions }) => {
   await t
