@@ -3438,6 +3438,8 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 assert.notOk($(dataGrid.getRowElement(1)).hasClass('dx-datagrid-edit-form'), 'edit form not in the second row');
             }
             assert.strictEqual(dataGrid.cellValue(1, 0), 'test11', 'cell is not modified');
+            assert.equal(dataGrid.option('editing.changes').length, 1, 'one change');
+            assert.strictEqual(dataGrid.option('editing.changes')[0].type, 'insert', 'insert type');
         });
     });
 });
