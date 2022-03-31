@@ -424,13 +424,14 @@ class UpdateUrlStrategy extends BaseUrlStrategy {
     // }
 
     modifyFormData() {
-        // const { imageSrc } = this.module.quill.getFormat(this.selection.index - 1, 1);
+        const { imageSrc } = this.module.quill.getFormat(this.selection.index - 1, 1);
 
         // this.formData = this.getUpdateDialogFormData();
 
-        // if(!imageSrc || this.selection.index === 0) {
-        //     this.module.quill.setSelection(this.selection.index + 1, 0, SILENT_ACTION);
-        // }
+        if(!imageSrc || this.selection.index === 0) {
+            this.selection.index += 1;
+            this.module.quill.setSelection(this.selection.index, 0, SILENT_ACTION);
+        }
         // const index = this.defaultPasteIndex();
         // const { imageSrc } = this.module.quill.getFormat(index - 1, 1);
 
@@ -441,13 +442,13 @@ class UpdateUrlStrategy extends BaseUrlStrategy {
         // this.formData = getUpdateDialogFormData(module, this.formData);
     }
 
-    getUpdateDialogFormData() {
-        const resultFormData = this.formData;
-        resultFormData.src = resultFormData.imageSrc;
-        delete resultFormData.imageSrc;
+    // getUpdateDialogFormData() {
+    //     const resultFormData = this.formData;
+    //     resultFormData.src = resultFormData.imageSrc;
+    //     delete resultFormData.imageSrc;
 
-        return resultFormData;
-    }
+    //     return resultFormData;
+    // }
 
     pasteImage(formData, event) {
         this.module.quill.deleteText(this.embedFormatIndex(), 1, SILENT_ACTION);
