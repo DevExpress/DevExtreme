@@ -23,7 +23,7 @@ const SILENT_ACTION = 'silent';
 import ButtonGroup from '../../button_group';
 import FileUploader from '../../file_uploader';
 import TextBox from '../../text_box';
-// import { extend } from 'jquery';
+
 
 export class ImageUploader {
     constructor(module, config) {
@@ -31,50 +31,24 @@ export class ImageUploader {
         this.config = config ?? {};
 
         this.tabPanelIndex = 0;
-        // this.updateStrategy = new ImageUpdateStrategy(this);
-        // this.addStrategy = this.getImageAddStrategy(config.mode);
-        // this.renderTabs();
-
-        // this.tabs = this.getTabsConfig();
-
-
-        // this.tabs = this.getFormConfig();
     }
 
     render() {
-        // const strategy = this.isUpdating ? this.updateStrategy : this.addStrategy;
-
         this.formData = this.getFormData();
-
         this.tabs = this.createTabs(this.formData);
-
-        // const dialogConfig();
-
-
         const formConfig = this.getFormConfig();
 
-        // strategy.updateSelectionBefore();
+        this.modifyDialogPopupOptions();
 
-        this
-            .showDialog(formConfig)
+        this.module.editorInstance.showFormDialog(formConfig)
             .done((formData, event) => {
                 this.tabs[this.getActiveTabIndex()].strategy.pasteImage(formData, event);
-                // this.tabs
-                // strategy.pasteImage(formData, event);
             })
             .always(() => {
                 this.cancelDialogPopupOptions();
                 this.module.quill.focus();
             });
     }
-
-    // getTabsConfig() {
-    //     if(this.config.tabs) {
-    //         this.config.tabs.forEach
-
-
-    //     }
-    // }
 
     getActiveTabIndex() {
         return this.tabPanelIndex;
@@ -109,16 +83,16 @@ export class ImageUploader {
     }
 
     modifyDialogPopupOptions() {
-        this.module.editorInstance.formDialogOption({
-            title: localizationMessage.format(DIALOG_IMAGE_CAPTION),
-            'toolbarItems[0].options.text': 'Add'
-        });
         let wrapperClassString = `${DIALOG_IMAGE_POPUP_CLASS} ${FORM_DIALOG_CLASS}`;
         if(this.useTabbedItems()) {
             wrapperClassString += ` ${DIALOG_IMAGE_POPUP_WITH_TABS_CLASS}`;
         }
 
-        this.module.editorInstance.formDialogOption('wrapperAttr', { class: wrapperClassString });
+        this.module.editorInstance.formDialogOption({
+            title: localizationMessage.format(DIALOG_IMAGE_CAPTION),
+            'toolbarItems[0].options.text': 'Add',
+            'wrapperAttr': { class: wrapperClassString }
+        });
     }
 
     cancelDialogPopupOptions() {
@@ -126,23 +100,6 @@ export class ImageUploader {
             'toolbarItems[0].options.text': localizationMessage.format('OK'),
             wrapperAttr: { class: FORM_DIALOG_CLASS }
         });
-    }
-
-    serverUpload() {
-
-    }
-
-    base64Upload() {
-
-    }
-
-    urlUpload() {
-
-    }
-
-    showDialog(formConfig) {
-        this.modifyDialogPopupOptions();
-        return this.module.editorInstance.showFormDialog(formConfig);
     }
 
     useTabbedItems() {
@@ -186,41 +143,12 @@ export class ImageUploader {
 
         return config;
     }
-
-    getTabConfig(tab) {
-        // tabName = tabName || this.config.tabs[0];
-
-        // this.strategy = this.getStrategy(tabName);
-        // return;
-        return tab.getFormConfig();
-
-    }
-
 }
-
-// class ImageUploadTab {
-//     constructor() {
-
-//     }
-
-//     getFormConfig() {
-
-//     }
-
-//     getFormItems() {
-
-//     }
-
-//     render() {
-
-//     }
-// }
 
 class BaseTab {
     constructor(module, config) {
         this.module = module;
         this.config = config;
-
     }
 
     getItemsConfig() {
@@ -230,15 +158,9 @@ class BaseTab {
 
 class UrlTab extends BaseTab {
     constructor(module, config, formData) {
-
         super(module, config);
         this.formData = formData;
-        this.shouldKeepAspectRatio = true;
-
         this.strategy = this.getStrategy();
-        // this.config = config;
-
-
     }
 
     getTabName() {
@@ -252,13 +174,6 @@ class UrlTab extends BaseTab {
     getStrategy() {
         return this.isImageUpdating() ? new UpdateUrlStrategy(this.module, this.config, this.formData) : new AddUrlStrategy(this.module, this.config);
     }
-
-    urlUpload() {
-        // formData = updateFormDataDimensions(formData);
-        // module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
-        // module.quill.setSelection(index + 1, 0, USER_ACTION);
-    }
-
 }
 
 class FileTab extends BaseTab {
@@ -292,14 +207,6 @@ class FileTab extends BaseTab {
 
 }
 
-
-// class UrlImageUploadStrategy extends BaseStrategy {
-
-// }
-
-// class UrlImageUpdateStrategy {
-
-// }
 class BaseStrategy {
     constructor(module, config) {
         this.module = module;
@@ -307,40 +214,25 @@ class BaseStrategy {
         this.selection = this.getQuillSelection();
     }
 
-    // defaultPasteIndex() {
-    //     const selection = this.module.quill.getSelection();
-    //     // console.log('defaultPasteIndex = ' + selection?.index ?? this.module.quill.getLength());
-    //     return { index: selection?.index ?? this.module.quill.getLength(), length: };
-    // }
-
     getQuillSelection() {
         const selection = this.module.quill.getSelection();
-        // console.log('defaultPasteIndex = ' + selection?.index ?? this.module.quill.getLength());
+
         return { index: selection?.index ?? this.module.quill.getLength(), length: selection?.length || 0 };
     }
 
-    pasteImage() {
-
-    }
+    pasteImage() {}
 }
-
-class BaseUrlStrategy extends BaseStrategy {
+class AddUrlStrategy extends BaseStrategy {
     constructor(module, config) {
         super(module, config);
-        // this.config = config;
+
         this.shouldKeepAspectRatio = true;
-
-
-        // this.modifyFormData();
-
     }
 
     pasteImage(formData, event) {
         this.module.saveValueChangeEvent(event);
         urlUpload(this.module.quill, this.selection.index, formData);
     }
-
-    modifyFormData() {}
 
     keepAspectRatio(data, { dependentEditor, e }) {
         const newValue = parseInt(e.value);
@@ -410,30 +302,15 @@ class BaseUrlStrategy extends BaseStrategy {
 
 }
 
-class UpdateUrlStrategy extends BaseUrlStrategy {
+class UpdateUrlStrategy extends AddUrlStrategy {
     constructor(module, config, formData) {
         super(module, config);
-        // this.config = config;
         this.formData = formData;
-        // this.modifySelectionData();
         this.modifyFormData();
-        this.shouldKeepAspectRatio = true;
     }
-
-    //     if(!imageSrc || defaultIndex === 0) {
-    //         module.quill.setSelection(defaultIndex + 1, 0, SILENT_ACTION);
-    //     }
-
-    // modifyQuillSelection() {
-    //     const selection = this.module.quill.getSelection();
-    //     // console.log('defaultPasteIndex = ' + selection?.index ?? this.module.quill.getLength());
-    //     return { index: selection?.index ?? this.module.quill.getLength(), length: selection?.length || 0 };
-    // }
 
     modifyFormData() {
         const { imageSrc } = this.module.quill.getFormat(this.selection.index - 1, 1);
-
-        // this.formData = this.getUpdateDialogFormData();
 
         if(!imageSrc || this.selection.index === 0) {
             this.selection = {
@@ -442,31 +319,13 @@ class UpdateUrlStrategy extends BaseUrlStrategy {
             };
             this.module.quill.setSelection(this.selection.index, this.selection.length, SILENT_ACTION);
         }
-        // const index = this.defaultPasteIndex();
-        // const { imageSrc } = this.module.quill.getFormat(index - 1, 1);
-
-        // this.formData.src = this.formData.imageSrc;
-        // delete this.formData.imageSrc;
-
-
-        // this.formData = getUpdateDialogFormData(module, this.formData);
     }
-
-    // getUpdateDialogFormData() {
-    //     const resultFormData = this.formData;
-    //     resultFormData.src = resultFormData.imageSrc;
-    //     delete resultFormData.imageSrc;
-
-    //     return resultFormData;
-    // }
 
     pasteImage(formData, event) {
         this.module.quill.deleteText(this.embedFormatIndex(), 1, SILENT_ACTION);
         this.selection.index -= 1;
         super.pasteImage(formData, event);
     }
-    //         index = formatIndex;
-    //         module.quill.deleteText(index, 1, SILENT_ACTION);
 
     embedFormatIndex() {
         const selection = this.selection ?? this.module.quill.getSelection();
@@ -481,13 +340,6 @@ class UpdateUrlStrategy extends BaseUrlStrategy {
             return this.module.quill.getLength();
         }
     }
-}
-
-
-class AddUrlStrategy extends BaseUrlStrategy {
-    // constructor(module, config) {
-    //     super(module, config);
-    // }
 }
 
 class BaseFileStrategy extends BaseStrategy {
