@@ -15,7 +15,6 @@ export const viewFunction = (viewModel: SelectionCheckbox): JSX.Element => (
     className={`${CLASSES.selectCheckbox} ${CLASSES.checkboxSize}`}
     value={viewModel.isSelected}
     valueChange={viewModel.setSelected}
-    saveValueChangeEvent={viewModel.saveValueChangeEvent}
   />
 );
 
@@ -46,10 +45,5 @@ export class SelectionCheckbox extends JSXComponent<SelectionCheckboxProps, 'dat
 
   setSelected(isSelected: boolean): void {
     this.plugins.callAction(SetSelected, this.props.data, isSelected);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  saveValueChangeEvent(e: Event): void {
-    e.stopPropagation();
   }
 }

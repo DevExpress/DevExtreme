@@ -57,9 +57,24 @@ describe('Selection', () => {
         selection.setRowClickEvent();
         const rowClickHandler = selection.plugins.getValue(RowClick)!;
 
-        rowClickHandler(testRow);
+        rowClickHandler(testRow, { target: { closest: () => null } } as unknown as Event);
 
         expect(toggleSelectedMock).toHaveBeenCalledWith(testRow.data);
+      });
+
+      it('should not call ToggleSelected on click to select-checkbox', () => {
+        const selection = new DataGridNextSelection(new DataGridNextSelectionProps());
+        const toggleSelectedMock = jest.fn();
+        const testRow = generateRows(1)[0];
+        selection.plugins = new Plugins();
+        selection.plugins.set(ToggleSelected, toggleSelectedMock);
+
+        selection.setRowClickEvent();
+        const rowClickHandler = selection.plugins.getValue(RowClick)!;
+
+        rowClickHandler(testRow, { target: { closest: (query) => query === '.dx-select-checkbox' } } as unknown as Event);
+
+        expect(toggleSelectedMock).not.toHaveBeenCalled();
       });
     });
   });
