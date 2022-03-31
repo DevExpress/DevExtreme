@@ -1,9 +1,15 @@
 {
     "extends": "./node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json",
+    "angularCompilerOptions": {
+          "enableIvy": true,
+          "annotateForClosureCompiler": true,
+          "fullTemplateTypeCheck": true,
+    },
     "compilerOptions": {
         "typeRoots": [
             "./node_modules/@types",
             "../../node_modules/@types"
         ]
-    }
+    },
+    "files": [],
 }

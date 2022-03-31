@@ -1,4 +1,4 @@
-import { QueryList, ElementRef, Renderer2, EventEmitter } from '@angular/core';
+import { Component, QueryList, ElementRef, Renderer2, EventEmitter } from '@angular/core';
 
 import { DX_TEMPLATE_WRAPPER_CLASS } from './template';
 import { getElement } from './utils';
@@ -21,6 +21,9 @@ export interface INestedOptionContainer {
 
 export interface IOptionPathGetter { (): string; }
 
+@Component({
+    template: ''
+})
 export abstract class BaseNestedOption implements INestedOptionContainer, ICollectionNestedOptionContainer {
     protected _host: INestedOptionContainer;
     protected _hostOptionPath: IOptionPathGetter;
@@ -170,6 +173,9 @@ export class CollectionNestedOptionContainerImpl implements ICollectionNestedOpt
     }
 }
 
+@Component({
+    template: ''
+})
 export abstract class NestedOption extends BaseNestedOption {
     setHost(host: INestedOptionContainer, optionPath: IOptionPathGetter) {
         super.setHost(host, optionPath);
@@ -187,6 +193,9 @@ export interface ICollectionNestedOption {
     _value: Object;
 }
 
+@Component({
+    template: ''
+})
 export abstract class CollectionNestedOption extends BaseNestedOption implements ICollectionNestedOption {
     _index: number;
 

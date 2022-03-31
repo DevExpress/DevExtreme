@@ -27,8 +27,8 @@ readyCallbacks.inject({
 });
 
 let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
-    if (Number(VERSION.major) < 7) {
-        console.warn(`Your version of Angular is not supported (https://supportcenter.devexpress.com/ticket/details/t879496). Please update your project to version 7 or later. Please refer to the Angular Update Guide for more information: https://update.angular.io`);
+    if (Number(VERSION.major) < 12) {
+        console.warn(`Your version of Angular is not supported. Please update your project to version 12 or later. Please refer to the Angular Update Guide for more information: https://update.angular.io`);
     }
 
     domAdapter.inject({

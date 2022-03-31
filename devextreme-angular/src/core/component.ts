@@ -1,4 +1,5 @@
 import {
+    Component,
     ElementRef,
     NgZone,
     QueryList,
@@ -40,6 +41,9 @@ export const getServerStateKey = () => {
   return serverStateKey;
 };
 
+@Component({
+    template: ''
+})
 export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit,
     INestedOptionContainer, ICollectionNestedOptionContainer, IDxTemplateHost {
     private _initialOptions: any = {};
@@ -261,6 +265,9 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     }
 }
 
+@Component({
+    template: ''
+})
 export abstract class DxComponentExtension extends DxComponent implements OnInit, AfterViewInit {
     createInstance(element: any) {
         this._createWidget(element);

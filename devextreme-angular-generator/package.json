@@ -43,6 +43,6 @@
     "gulp-sourcemaps": "^2.0.0-alpha",
     "gulp-typescript": "^3.0.1",
     "jasmine-reporters": "2.2.0",
-    "typescript": "~3.2.2"
+    "typescript": "~4.2.3"
   }
 }
