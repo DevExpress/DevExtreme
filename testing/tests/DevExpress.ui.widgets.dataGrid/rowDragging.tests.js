@@ -1092,5 +1092,50 @@ QUnit.module('Handle', $.extend({}, moduleConfig, {
         assert.strictEqual($commandDragCell.length, 1, 'group footer has a drag cell');
         assert.strictEqual($(rowsView.getRowElement(2)).find('.dx-command-drag').html(), '&nbsp;', 'group footer does not have a drag icon');
     });
+
+    QUnit.test('Autoscroll should work when a row has a fractional height (T1072185)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 20; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const done = assert.async();
+        const $testElement = $('#container').height(200);
+        this.options = {
+            dataSource: getData(),
+            keyExpr: 'id',
+            rowDragging: {
+                allowReordering: true
+            },
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            columnAutoWidth: true,
+            onRowPrepared: function(e) {
+                if(e.rowType === 'data') {
+                    $(e.rowElement).css('height', 34.6);
+                }
+            }
+        };
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+
+        // act
+        pointerMock(rowsView.getCellElement(0, 0)).start().down(5, 5).move(0, 100);
+        pointerMock(rowsView.getCellElement(0, 0)).start().down(5, 5).move(0, 180);
+
+        setTimeout(() => {
+            // assert
+            assert.ok(rowsView.getScrollable().scrollTop() > 0, 'content is scrolled');
+            done();
+        }, 50);
+    });
 });
 
