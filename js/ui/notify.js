@@ -10,7 +10,7 @@ const window = getWindow();
 let $notify = null;
 const $containers = {};
 
-const notify = function(message, /* optional */ typeOrStackOptions, displayTime) {
+function notify(message, /* optional */ typeOrStackOptions, displayTime) {
     const options = isPlainObject(message) ? message : { message: message };
     const stackOptions = isPlainObject(typeOrStackOptions) ? typeOrStackOptions : undefined;
     const type = isPlainObject(typeOrStackOptions) ? undefined : typeOrStackOptions;
@@ -53,7 +53,7 @@ const notify = function(message, /* optional */ typeOrStackOptions, displayTime)
 
     $notify = $('<div>').appendTo(viewPort());
     new Toast($notify, options).show();
-};
+}
 
 const getDefaultDirection = (position) => {
     return typeof position === 'string' && position.includes('top') ? 'down' : 'up';
@@ -157,11 +157,11 @@ const getPositionStylesByCoordinates = (direction, coordinates, dimensions) => {
 };
 
 ///#DEBUG
-const _resetContainers = () => {
-    Object.keys($containers).forEach(key => delete $containers[key]);
-};
-
-export { _resetContainers, notify };
+Object.setPrototypeOf(notify, {
+    _resetContainers: function() {
+        Object.keys($containers).forEach(key => delete $containers[key]);
+    }
+});
 ///#ENDDEBUG
 
 export default notify;

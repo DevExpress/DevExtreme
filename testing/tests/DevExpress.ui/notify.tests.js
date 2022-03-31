@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { notify, _resetContainers } from 'ui/notify';
+import notify from 'ui/notify';
 import fx from 'animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
 
@@ -74,7 +74,7 @@ QUnit.module('notify', {
 
         afterEach: function() {
             this.clock.tick(100);
-            _resetContainers();
+            notify._resetContainers();
         }
     }, () => {
         QUnit.test('do not create toast-stack if stackOptions do not have position field', function(assert) {
