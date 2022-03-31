@@ -191,6 +191,7 @@ export const editingFormBasedModule = {
                     const row = this.component.getVisibleRows()[rowIndex];
                     const templateOptions = {
                         row: row,
+                        values: row.values,
                         rowType: row.rowType,
                         key: row.key,
                         rowIndex
