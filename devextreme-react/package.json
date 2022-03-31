@@ -23,8 +23,8 @@
   "license": "MIT",
   "peerDependencies": {
     "devextreme": "22.1-next",
-    "react": "^16.2.0 || ^17.0.0",
-    "react-dom": "^16.2.0 || ^17.0.0"
+    "react": "^16.2.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.2.0 || ^17.0.0 || ^18.0.0"
   },
   "dependencies": {
     "devextreme-internal-tools": "^7.6.0",
