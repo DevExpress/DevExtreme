@@ -687,7 +687,7 @@ module('Subscribes', {
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
     });
 
-    test('\'getAppointmentDurationInMs\' should return visible appointment duration considering startDayHour and endDayHour for stricly allDay appointment without allDay field', function(assert) {
+    test('"getAppointmentDurationInMs" should return visible appointment duration considering startDayHour and endDayHour for stricly allDay appointment without allDay field', function(assert) {
         this.createInstance();
 
         this.instance.option({
@@ -700,7 +700,7 @@ module('Subscribes', {
             new Date(2015, 2, 2, 8),
             new Date(2015, 2, 3, 0)
         );
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
+        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '"getAppointmentDurationInMs" works fine');
     });
 
     test('\'getAppointmentDurationInMs\' should return visible appointment duration considering hours of startDate and endDate', function(assert) {
@@ -735,7 +735,7 @@ module('Subscribes', {
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 31, '\'getAppointmentDurationInMs\' works fine');
     });
 
-    test('\'getAppointmentDurationInMs\' should return visible appointment duration considering hours of ultraboundary startDate and endDate', function(assert) {
+    test('"getAppointmentDurationInMs" should return visible appointment duration considering hours of ultraboundary startDate and endDate', function(assert) {
         this.createInstance();
 
         this.instance.option({
@@ -748,7 +748,7 @@ module('Subscribes', {
             new Date(2015, 2, 2, 7),
             new Date(2015, 2, 4, 21),
         );
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
+        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '"getAppointmentDurationInMs" works fine');
     });
 
     test('\'getAppointmentDurationInMs\' should return visible allDay appointment duration', function(assert) {
