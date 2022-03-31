@@ -26,7 +26,6 @@ QUnit.module('notify', {
 
         assert.equal($(`.${TOAST_CLASS}`).length, 0);
         notify({
-            message: 'Hello world',
             displayTime: 100,
             onHidden: function() {
                 assert.equal($(`.${TOAST_CLASS}`).length, 0);
