@@ -104,7 +104,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     tableContextMenu?: dxHtmlEditorTableContextMenu;
     /**
      * @docid
-     * @default null
+     * @default { tabs: ["url"], fileUploadMode: 'base64', uploadUrl: undefined, uploadDirectory: undefined }
      * @public
      */
     imageUpload?: dxHtmlEditorImageUpload;
@@ -413,10 +413,18 @@ export interface dxHtmlEditorTableResizing {
   uploadDirectory?: string;
   /**
    * @docid
-   * @default 'url'
+   * @default 'base64'
+   * @type Enums.HtmlEditorImageUploadFileUploadMode
    * @public
    */
-   mode?: 'url' | 'base64' | 'both';
+   fileUploadMode?: 'base64' | 'server' | 'both';
+     /**
+   * @docid
+   * @default ["url"]
+   * @type Array<Enums.HtmlEditorImageUploadTab>
+   * @public
+   */
+    tabs?: Array<'url' | 'file'>;
  }
 
 /**
