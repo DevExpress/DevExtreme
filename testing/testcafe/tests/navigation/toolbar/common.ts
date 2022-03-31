@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction, Selector } from 'testcafe';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
@@ -11,7 +10,7 @@ import { appendElementTo } from '../helpers/domUtils';
 fixture`Toolbar_common`
   .page(url(__dirname, '../../container.html'));
 
-['generic.light', 'generic.dark', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
+['generic.light'].forEach((theme) => {
   const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', /* 'dxTabs', */ 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
   (['always', 'never'] as any[]).forEach((locateInMenu) => {
@@ -22,13 +21,11 @@ fixture`Toolbar_common`
 
       if (locateInMenu === 'always') {
         await ClientFunction(() => {
-          $('.dx-toolbar .dx-dropdownmenu-button').click();
-        })();
-        await ClientFunction(() => {
-          $('.dx-toolbar .dx-dropdownmenu-button').click();
-        })();
-        await ClientFunction(() => {
-          $('.dx-toolbar .dx-dropdownmenu-button').click();
+          ($('.dx-toolbar .dx-dropdownmenu-button') as any)
+            .dxDropDownMenu('instance')
+            .open()
+            .close()
+            .open();
         })();
 
         targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
@@ -348,68 +345,68 @@ fixture`Toolbar_common`
     await changeTheme('generic.light');
   });
 
-  // test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=auto`, async (t) => {
-  //   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=auto`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  //   await ClientFunction(() => {
-  //     $('.dx-toolbar .dx-dropdownmenu-button').click();
-  //   })();
+    await ClientFunction(() => {
+      $('.dx-toolbar .dx-dropdownmenu-button').click();
+    })();
 
-  //   const targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+    const targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
 
-  //   await t.wait(500);
+    await t.wait(500);
 
-  //   await t
-  //     .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=always.png`, Selector(targetContainerSelector)))
-  //     .ok()
-  //     .expect(compareResults.isValid())
-  //     .ok(compareResults.errorMessages());
-  // }).before(async () => {
-  //   await changeTheme(theme);
+    await t
+      .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=always.png`, Selector(targetContainerSelector)))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
 
-  //   const toolbarItems = [
-  //     {
-  //       location: 'before',
-  //       locateInMenu: 'auto',
-  //       widget: 'dxDropDownButton',
-  //       options: {
-  //         text: 'default',
-  //       },
-  //     },
-  //     {
-  //       location: 'before',
-  //       locateInMenu: 'auto',
-  //       widget: 'dxDropDownButton',
-  //       options: {
-  //         stylingMode: 'text',
-  //         text: 'opts.stylingMode: text',
-  //       },
-  //     },
-  //     {
-  //       location: 'before',
-  //       locateInMenu: 'auto',
-  //       widget: 'dxDropDownButton',
-  //       options: {
-  //         stylingMode: 'outlined',
-  //         text: 'opts.stylingMode: outlined',
-  //       },
-  //     },
-  //     {
-  //       location: 'before',
-  //       locateInMenu: 'auto',
-  //       widget: 'dxDropDownButton',
-  //       options: {
-  //         stylingMode: 'contained',
-  //         text: 'opts.stylingMode: contained',
-  //       },
-  //     },
-  //   ] as Item[];
+    const toolbarItems = [
+      {
+        location: 'before',
+        locateInMenu: 'auto',
+        widget: 'dxDropDownButton',
+        options: {
+          text: 'default',
+        },
+      },
+      {
+        location: 'before',
+        locateInMenu: 'auto',
+        widget: 'dxDropDownButton',
+        options: {
+          stylingMode: 'text',
+          text: 'opts.stylingMode: text',
+        },
+      },
+      {
+        location: 'before',
+        locateInMenu: 'auto',
+        widget: 'dxDropDownButton',
+        options: {
+          stylingMode: 'outlined',
+          text: 'opts.stylingMode: outlined',
+        },
+      },
+      {
+        location: 'before',
+        locateInMenu: 'auto',
+        widget: 'dxDropDownButton',
+        options: {
+          stylingMode: 'contained',
+          text: 'opts.stylingMode: contained',
+        },
+      },
+    ] as Item[];
 
-  //   return createWidget('dxToolbar', {
-  //     width: 50,
-  //     items: toolbarItems,
-  //   });
-  // }).after(async () => {
-  //   await changeTheme('generic.light');
-  // });
+    return createWidget('dxToolbar', {
+      width: 50,
+      items: toolbarItems,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
 });
