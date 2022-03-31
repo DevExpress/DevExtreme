@@ -21,11 +21,7 @@ fixture`Toolbar_common`
 
       if (locateInMenu === 'always') {
         await ClientFunction(() => {
-          ($('.dx-toolbar .dx-dropdownmenu-button') as any)
-            .dxDropDownMenu('instance')
-            .open()
-            .close()
-            .open();
+          $('.dx-toolbar .dx-dropdownmenu-button').click();
         })();
 
         targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
@@ -314,7 +310,7 @@ fixture`Toolbar_common`
     }, { dependencies: { targetContainerSelector } })();
 
     await t
-      .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=always.png`, Selector(targetContainerSelector)))
+      .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=auto.png`, Selector(targetContainerSelector)))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
