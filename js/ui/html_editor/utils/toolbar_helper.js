@@ -12,14 +12,11 @@ import {
 } from './table_helper';
 import { isDefined, isBoolean } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
-// import { isMaterial } from '../../themes';
 
 import Form from '../../form';
 import ButtonGroup from '../../button_group';
 import ColorBox from '../../color_box';
 import ScrollView from '../../scroll_view';
-// import FileUploader from '../../file_uploader';
-// import TextBox from '../../text_box';
 
 import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
 
@@ -36,23 +33,12 @@ const SILENT_ACTION = 'silent';
 const DIALOG_COLOR_CAPTION = 'dxHtmlEditor-dialogColorCaption';
 const DIALOG_BACKGROUND_CAPTION = 'dxHtmlEditor-dialogBackgroundCaption';
 const DIALOG_LINK_CAPTION = 'dxHtmlEditor-dialogLinkCaption';
-// const DIALOG_IMAGE_CAPTION = 'dxHtmlEditor-dialogImageCaption';
 const DIALOG_TABLE_CAPTION = 'dxHtmlEditor-dialogInsertTableCaption';
 
 const DIALOG_LINK_FIELD_URL = 'dxHtmlEditor-dialogLinkUrlField';
 const DIALOG_LINK_FIELD_TEXT = 'dxHtmlEditor-dialogLinkTextField';
 const DIALOG_LINK_FIELD_TARGET = 'dxHtmlEditor-dialogLinkTargetField';
 const DIALOG_LINK_FIELD_TARGET_CLASS = 'dx-formdialog-field-target';
-
-// const DIALOG_IMAGE_FIELD_URL = 'dxHtmlEditor-dialogImageUrlField';
-// const DIALOG_IMAGE_FIELD_ALT = 'dxHtmlEditor-dialogImageAltField';
-// const DIALOG_IMAGE_FIELD_WIDTH = 'dxHtmlEditor-dialogImageWidthField';
-// const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
-
-// const DIALOG_IMAGE_POPUP_CLASS = 'dx-htmleditor-add-image-popup';
-// const DIALOG_IMAGE_POPUP_WITH_TABS_CLASS = 'dx-htmleditor-add-image-popup-with-tabs';
-
-// const FORM_DIALOG_CLASS = 'dx-formdialog';
 
 const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
 const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';

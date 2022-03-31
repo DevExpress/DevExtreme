@@ -1,6 +1,4 @@
 import $ from 'jquery';
-
-
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import '../../../helpers/xmlHttpRequestMock.js';
 
@@ -177,7 +175,6 @@ module('Image uploading integration', {
             this.checkFileTabConfigs(assert, { formItems, formInstance });
         });
 
-
         test('the popup and form is correctly rendered for two reordered tab', function(assert) {
             this.createWidget({ imageUpload: { tabs: ['url', 'file'] } });
             this.clock.tick(TIME_TO_WAIT);
@@ -230,7 +227,6 @@ module('Image uploading integration', {
 
             this.checkBothTabsConfigs(assert, { formItems, formInstance, fileUploader });
         });
-
 
         [undefined, null].forEach((imageUploadValue) => {
             test(`the popup and form is correctly rendered if imageUpload is ${imageUploadValue}`, function(assert) {
@@ -288,7 +284,6 @@ module('Image uploading integration', {
             assert.strictEqual(formInstance.option('labelLocation'), 'left', 'has correct form labelLocation');
             assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'OK', 'dialog ok button text is reverted');
         });
-
 
         test('check file uploading form base64 checkbox', function(assert) {
             this.createWidget();
@@ -595,5 +590,4 @@ module('Image uploading integration', {
         delete this.xhrMock;
         delete this.formDataMock;
     });
-
 });

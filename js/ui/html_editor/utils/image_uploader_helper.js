@@ -3,27 +3,21 @@ import localizationMessage from '../../../localization/message';
 import { map } from '../../../core/utils/iterator';
 
 const DIALOG_IMAGE_CAPTION = 'dxHtmlEditor-dialogImageCaption';
-
 const DIALOG_IMAGE_FIELD_URL = 'dxHtmlEditor-dialogImageUrlField';
 const DIALOG_IMAGE_FIELD_ALT = 'dxHtmlEditor-dialogImageAltField';
 const DIALOG_IMAGE_FIELD_WIDTH = 'dxHtmlEditor-dialogImageWidthField';
 const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
-
 const DIALOG_IMAGE_POPUP_CLASS = 'dx-htmleditor-add-image-popup';
 const DIALOG_IMAGE_POPUP_WITH_TABS_CLASS = 'dx-htmleditor-add-image-popup-with-tabs';
-
 const DIALOG_IMAGE_FIX_RATIO_CONTAINER = 'dx-fix-ratio-container';
-
 const FORM_DIALOG_CLASS = 'dx-formdialog';
 
 const USER_ACTION = 'user';
 const SILENT_ACTION = 'silent';
 
-
 import ButtonGroup from '../../button_group';
 import FileUploader from '../../file_uploader';
 import TextBox from '../../text_box';
-
 
 export class ImageUploader {
     constructor(module, config) {
@@ -204,7 +198,6 @@ class FileTab extends BaseTab {
 
         return new strategy(this.module, this.config);
     }
-
 }
 
 class BaseStrategy {
