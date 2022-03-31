@@ -13,6 +13,7 @@ const FILE_UPLOADER_CLASS = 'dx-fileuploader';
 const CHECKBOX_CLASS = 'dx-checkbox';
 const TEXTBOX_CLASS = 'dx-textbox';
 const FORM_CLASS = 'dx-form';
+const POPUP_TITLE_CLASS = 'dx-popup-title';
 
 const DIALOG_OK_BUTTON_SELECTOR = '.dx-formdialog .dx-toolbar .dx-button';
 const ASPECT_RATIO_BUTTON_SELECTOR = '.dx-buttongroup .dx-button';
@@ -103,6 +104,28 @@ module('Image uploading integration', {
                 .eq(1)
                 .trigger('dxclick');
         };
+
+        this.checkBothTabsConfigs = (assert, { formItems, formInstance, fileUploader }) => {
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 1, 'has add image dialog with tabs class');
+            assert.strictEqual(formItems[0].itemType, 'tabbed', 'has tabbed items');
+            assert.strictEqual(formItems[0].tabs[0].items.length, 2, 'has items for the first tab');
+            assert.strictEqual(formItems[0].tabs[1].items.length, 4, 'has items for the second tab');
+            assert.strictEqual(fileUploader.length, 1, 'file uploader is exists on the form');
+            assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form colCount');
+            assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
+            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+        };
+
+        this.checkFileTabConfigs = (assert, { formItems, formInstance }) => {
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
+            assert.strictEqual(formItems.length, 2, 'has correct form items count');
+            assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form callCount');
+            assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
+            assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
+            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+        };
     },
     afterEach: function() {
         this.instance && this.instance.dispose();
@@ -122,15 +145,7 @@ module('Image uploading integration', {
                 const formItems = formInstance.option('items');
                 const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`);
 
-                assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
-                assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 1, 'has add image dialog with tabs class');
-                assert.strictEqual(formItems[0].itemType, 'tabbed', 'has tabbed items');
-                assert.strictEqual(formItems[0].tabs[0].items.length, 2, 'has items for the first tab');
-                assert.strictEqual(formItems[0].tabs[1].items.length, 4, 'has items for the second tab');
-                assert.strictEqual(fileUploader.length, 1, 'file uploader is exists on the form');
-                assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form callCount');
-                assert.strictEqual($('.dx-popup-title').text(), 'Add Image', 'dialog title is modified');
-                assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+                this.checkBothTabsConfigs(assert, { formItems, formInstance, fileUploader });
             });
         });
 
@@ -147,7 +162,7 @@ module('Image uploading integration', {
             assert.strictEqual(formItems.length, 4, 'has correct form items count');
             assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form callCount');
             assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
-            assert.strictEqual($('.dx-popup-title').text(), 'Add Image', 'dialog title is modified');
+            assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
             assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
         });
 
@@ -159,13 +174,7 @@ module('Image uploading integration', {
             const formInstance = $form.dxForm('instance');
             const formItems = formInstance.option('items');
 
-            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
-            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
-            assert.strictEqual(formItems.length, 2, 'has correct form items count');
-            assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form callCount');
-            assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
-            assert.strictEqual($('.dx-popup-title').text(), 'Add Image', 'dialog title is modified');
-            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+            this.checkFileTabConfigs(assert, { formItems, formInstance });
         });
 
 
@@ -183,7 +192,7 @@ module('Image uploading integration', {
             assert.strictEqual(formItems[0].tabs[0].items.length, 4, 'has items for the first tab');
             assert.strictEqual(formItems[0].tabs[1].items.length, 2, 'has items for the second tab');
             assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form callCount');
-            assert.strictEqual($('.dx-popup-title').text(), 'Add Image', 'dialog title is modified');
+            assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
             assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
         });
 
@@ -201,13 +210,7 @@ module('Image uploading integration', {
             const formInstance = $form.dxForm('instance');
             const formItems = formInstance.option('items');
 
-            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
-            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
-            assert.strictEqual(formItems.length, 2, 'has correct form items count');
-            assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form colCount');
-            assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
-            assert.strictEqual($('.dx-popup-title').text(), 'Add Image', 'dialog title is modified');
-            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+            this.checkFileTabConfigs(assert, { formItems, formInstance });
         });
 
         test('the popup and form is correctly rendered for both tabs if imageUpload option was changed', function(assert) {
@@ -225,15 +228,7 @@ module('Image uploading integration', {
             const formItems = formInstance.option('items');
             const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`);
 
-            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
-            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 1, 'has add image dialog with tabs class');
-            assert.strictEqual(formItems[0].itemType, 'tabbed', 'has tabbed items');
-            assert.strictEqual(formItems[0].tabs[0].items.length, 2, 'has items for the first tab');
-            assert.strictEqual(formItems[0].tabs[1].items.length, 4, 'has items for the second tab');
-            assert.strictEqual(fileUploader.length, 1, 'file uploader is exists on the form');
-            assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form colCount');
-            assert.strictEqual($('.dx-popup-title').text(), 'Add Image', 'dialog title is modified');
-            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+            this.checkBothTabsConfigs(assert, { formItems, formInstance, fileUploader });
         });
 
 
