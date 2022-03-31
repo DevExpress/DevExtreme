@@ -63,7 +63,7 @@ export class ImageUploader {
                 // strategy.pasteImage(formData, event);
             })
             .always(() => {
-                // ...
+                this.cancelDialogPopupOptions();
                 this.module.quill.focus();
             });
     }
@@ -119,6 +119,13 @@ export class ImageUploader {
         }
 
         this.module.editorInstance.formDialogOption('wrapperAttr', { class: wrapperClassString });
+    }
+
+    cancelDialogPopupOptions() {
+        this.module.editorInstance.formDialogOption({
+            'toolbarItems[0].options.text': localizationMessage.format('OK'),
+            wrapperAttr: { class: FORM_DIALOG_CLASS }
+        });
     }
 
     serverUpload() {
@@ -429,8 +436,11 @@ class UpdateUrlStrategy extends BaseUrlStrategy {
         // this.formData = this.getUpdateDialogFormData();
 
         if(!imageSrc || this.selection.index === 0) {
-            this.selection.index += 1;
-            this.module.quill.setSelection(this.selection.index, 0, SILENT_ACTION);
+            this.selection = {
+                index: this.selection.index + 1,
+                length: 0
+            };
+            this.module.quill.setSelection(this.selection.index, this.selection.length, SILENT_ACTION);
         }
         // const index = this.defaultPasteIndex();
         // const { imageSrc } = this.module.quill.getFormat(index - 1, 1);
@@ -452,6 +462,7 @@ class UpdateUrlStrategy extends BaseUrlStrategy {
 
     pasteImage(formData, event) {
         this.module.quill.deleteText(this.embedFormatIndex(), 1, SILENT_ACTION);
+        this.selection.index -= 1;
         super.pasteImage(formData, event);
     }
     //         index = formatIndex;
