@@ -2,7 +2,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../helpers/multi-platform-test';
 
-const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['react'] });
+const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['jquery', 'react'] });
 
 const defaultOptions = {
   columns: ['id', 'text'],
@@ -17,6 +17,9 @@ const defaultOptions = {
   masterDetail: {
     enabled: true,
     template: () => 'Test',
+  },
+  pager: {
+    visible: false,
   },
 };
 

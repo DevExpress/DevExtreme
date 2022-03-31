@@ -8,6 +8,9 @@ const testReactOnly = multiPlatformTest({ page: 'declaration/data_grid_light', p
 const defaultOptions = {
   columns: ['id', 'text'],
   dataSource: [],
+  pager: {
+    visible: false,
+  },
 };
 
 const prepareDataGrid = (options = {}) => async (t, { platform }) => {
