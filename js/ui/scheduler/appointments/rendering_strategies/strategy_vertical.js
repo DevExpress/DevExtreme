@@ -175,7 +175,6 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getAppointmentParts(appointmentGeometry, appointmentSettings) {
-        let tailHeight = this._getTailHeight(appointmentGeometry, appointmentSettings);
         const width = appointmentGeometry.width;
         const result = [];
         let currentPartTop = Math.max(0, this.positionHelper.getGroupTop({
@@ -187,32 +186,43 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             ? this.groupCount
             : 1;
         const offset = this.cellWidth * cellsDiff;
-        const left = appointmentSettings.left + offset;
 
-        if(tailHeight > 0) {
-            const minHeight = this.getAppointmentMinSize();
+        const allDayPanelOffset = this.positionHelper.getOffsetByAllDayPanel({
+            groupIndex: appointmentSettings.groupIndex,
+            supportAllDayRow: this.allDaySupported(),
+            showAllDayPanel: this.showAllDayPanel
+        });
 
+        currentPartTop += allDayPanelOffset;
+
+        const minHeight = this.getAppointmentMinSize();
+        const {
+            vMax,
+            hMax
+        } = appointmentSettings;
+
+        let left = Math.round(appointmentSettings.left + offset);
+        let tailHeight = this._getTailHeight(appointmentGeometry, appointmentSettings);
+        while(tailHeight > 0 && left < hMax) {
             if(tailHeight < minHeight) {
                 tailHeight = minHeight;
             }
 
-            const allDayPanelOffset = this.positionHelper.getOffsetByAllDayPanel({
-                groupIndex: appointmentSettings.groupIndex,
-                supportAllDayRow: this.allDaySupported(),
-                showAllDayPanel: this.showAllDayPanel
-            });
-
-            currentPartTop += allDayPanelOffset;
+            const height = Math.min(tailHeight, vMax);
+            const columnIndex = appointmentSettings.columnIndex + cellsDiff;
 
             result.push(extend(true, {}, appointmentSettings, {
                 top: currentPartTop,
-                left: left,
-                height: tailHeight,
-                width: width,
+                left,
+                height,
+                width,
                 appointmentReduced: 'tail',
                 rowIndex: 0,
-                columnIndex: appointmentSettings.columnIndex + cellsDiff,
+                columnIndex,
             }));
+
+            left += offset;
+            tailHeight -= vMax;
         }
 
         return result;
