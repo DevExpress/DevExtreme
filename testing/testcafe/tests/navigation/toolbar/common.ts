@@ -24,6 +24,12 @@ fixture`Toolbar_common`
         await ClientFunction(() => {
           $('.dx-toolbar .dx-dropdownmenu-button').click();
         })();
+        await ClientFunction(() => {
+          $('.dx-toolbar .dx-dropdownmenu-button').click();
+        })();
+        await ClientFunction(() => {
+          $('.dx-toolbar .dx-dropdownmenu-button').click();
+        })();
 
         targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
       }
