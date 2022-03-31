@@ -25,10 +25,10 @@ declare function notify(options: any, type?: string, displayTime?: number): void
  * @static
  * @publicName notify(message,stackOptions)
  * @param1 message:string
- * @param2 stackOptions:object
+ * @param2 stackOptions:StackOptions
  * @public
  */
- declare function notify(message: string, stackOptions?: StackOptions): void;
+declare function notify(message: string, stackOptions?: StackOptions): void;
 
 /**
  * @docid ui.notify
@@ -38,7 +38,7 @@ declare function notify(options: any, type?: string, displayTime?: number): void
  * @param2 stackOptions:StackOptions
  * @public
  */
- declare function notify(options: any, stackOptions?: StackOptions): void;
+declare function notify(options: any, stackOptions?: StackOptions): void;
 
 interface StackOptions {
     /**

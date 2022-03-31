@@ -25042,11 +25042,11 @@ declare module DevExpress.ui {
   /**
    * [descr:ui.notify(message,stackOptions)]
    */
-  declare function notify(message: string, stackOptions?: StackOptions): void;
+  export function notify(message: string, stackOptions?: StackOptions): void;
   /**
    * [descr:ui.notify(options,stackOptions)]
    */
-  declare function notify(options: any, stackOptions?: StackOptions): void;
+  export function notify(options: any, stackOptions?: StackOptions): void;
   /**
    * [descr:NumericRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
