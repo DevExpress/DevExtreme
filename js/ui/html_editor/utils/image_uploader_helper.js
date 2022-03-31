@@ -349,47 +349,26 @@ class BaseFileStrategy extends BaseStrategy {
         this.useBase64 = this.shouldUseBase64();
     }
 
-    pasteImage() {}
-
-    shouldUseBase64() {}
-
-    shouldClosePopupAfterUpload() {}
-
     closeDialogPopup(editorInstance, data) {
         editorInstance._formDialog.hide({ file: data.value ? data.value[0] : data.file }, data.event);
     }
 
-    // serverUpload(module, data) {
+    serverUpload() {}
 
-    // }
-
-    uploadToServer(fileUploader, file) {
-        // serverUpload(fileUploader, file);
-    }
-
-    base64UploadImpl() {}
-
-    serverUploadImpl() {}
-
-    isMixedUploadMode() {
+    isBase64Editable() {
         return false;
     }
 
-    getUploadMode() {
-        // return this.shouldUseBase64() ? 'useButtons' : 'instantly';
-        return 'instantly';
-    }
+    shouldUseBase64() {}
 
     getItemsConfig() {
-        // let useBase64 = this.shouldUseBase64();
-
         return [
             {
                 itemType: 'simple',
                 dataField: 'files',
                 colSpan: 11,
                 label: { visible: false },
-                template: (formTemplateData) => {
+                template: () => {
                     const $content = $('<div>');
                     this.module.editorInstance._createComponent($content, FileUploader, {
                         multiple: false,
@@ -397,102 +376,59 @@ class BaseFileStrategy extends BaseStrategy {
                         name: 'photo',
                         accept: 'image/*',
                         uploadUrl: this.config.uploadUrl,
-                        uploadMode: this.getUploadMode(),
+                        uploadMode: 'instantly',
                         onValueChanged: (data) => {
-                            // if(this.shouldUseBase64()) {
-                            //     this.base64UploadImpl(this.module, data.value);
-                            // } else {
-                            //     this.uploadToServer(data.component, data.value[0]);
-                            //     this.serverUpload(this.module, data);
-                            // }
-
-                            this.base64UploadImpl(data);
-
-
-                            // console.log('value changed');
+                            if(this.shouldUseBase64()) {
+                                base64Upload(this.module.quill, data.value);
+                                this.closeDialogPopup(this.module.editorInstance, data);
+                            }
                         },
                         onUploaded: (data) => {
-                            this.serverUploadImpl(data);
-                            // console.log('on uploaded');
-                            // if(!useBase64) {
-                            //     const formInstance = formTemplateData.component;
-                            //     const file = data.file;
-                            //     const uploadDirectory = this.config.uploadDirectory;
-                            //     this.serverUpload({ formInstance, file, uploadDirectory });
-                            // }
-
+                            this.serverUpload(data);
                         }
                     });
                     return $content;
                 }
             }, {
                 itemType: 'simple',
-                // dataField: 'useBase64',
                 colSpan: 11,
                 label: { visible: false },
                 editorType: 'dxCheckBox',
                 editorOptions: {
                     value: this.useBase64,
-                    disabled: !this.isMixedUploadMode(),
+                    disabled: !this.isBase64Editable(),
                     text: 'Encode to base 64',
                     onValueChanged: (e) => {
                         this.useBase64 = e.value;
-                    },
+                    }
                 }
             }
         ];
     }
-
 }
 
 class Base64FileStrategy extends BaseFileStrategy {
-    constructor(module, config) {
-        super(module, config);
-    }
-
     shouldUseBase64() {
         return true;
     }
-
-    base64UploadImpl(data) {
-        base64Upload(this.module.quill, data.value);
-        this.closeDialogPopup(this.module.editorInstance, data);
-    }
-
-    shouldClosePopupAfterUpload() {
-        return true;
-    }
-
-    // base64UploadImpl(module, data) {
-    //     super.base64UploadImpl(module, data);
-    //     if(this.shouldClosePopupAfterUpload()) {
-    //         this.closeDialogPopup(module.editorInstance, data);
-    //     }
-    // }
-
-    // base64Upload(module, data) {
-    //     this.base64Upload(module, data);
-    // }
-
-
 }
 
 class ServerFileStrategy extends BaseFileStrategy {
-
     shouldUseBase64() {
         return false;
     }
 
-    shouldClosePopupAfterUpload() {
-        return true;
-    }
-    // constructor(module, config) {
-    //     super(module, config);
-    // }
+    serverUpload(data) {
+        if(!this.shouldUseBase64()) {
+            const imageUrl = this.config.uploadDirectory + data.file.name;
 
+            urlUpload(this.module.quill, this.selection.index, { src: imageUrl });
+            this.closeDialogPopup(this.module.editorInstance, data);
+        }
+    }
 }
 
-class MixedFileStrategy extends BaseFileStrategy {
+class MixedFileStrategy extends ServerFileStrategy {
     constructor(module, config) {
         super(module, config);
         this.useBase64 = false;
@@ -502,30 +438,13 @@ class MixedFileStrategy extends BaseFileStrategy {
         return this.useBase64;
     }
 
-    isMixedUploadMode() {
+    isBase64Editable() {
         return true;
-    }
-
-    base64UploadImpl(data) {
-        if(this.shouldUseBase64()) {
-            base64Upload(this.module.quill, data.value);
-            this.closeDialogPopup(this.module.editorInstance, data);
-        }
     }
 
     pasteImage(formData, event) {
         if(this.shouldUseBase64()) {
             super.pasteImage(formData, event);
-        }
-    }
-
-    serverUploadImpl(data) {
-        if(!this.shouldUseBase64()) {
-            const imageUrl = this.config.uploadDirectory + data.file.name;
-            // const index = this.defaultPasteIndex(this.module);
-
-            urlUpload(this.module.quill, this.selection.index, { src: imageUrl });
-            this.closeDialogPopup(this.module.editorInstance, data);
         }
     }
 }
@@ -535,33 +454,7 @@ export function base64Upload(quill, files) {
     quill.getModule('uploader').upload(range, files);
 }
 
-export function serverUpload(fileUploader, file) {
-    fileUploader.upload(file);
-    // const range = quill.getSelection();
-    // quill.getModule('uploader').upload(range, files);
-}
-
-// function updateFormDataDimensions(formData) {
-//     formData = normalizeFormDataDimension(formData, 'width');
-//     formData = normalizeFormDataDimension(formData, 'height');
-
-//     return formData;
-// }
-
-// function normalizeFormDataDimension(formData, name) {
-//     if(isDefined(formData[name])) {
-//         formData[name] = formData[name].toString();
-//     }
-
-//     return formData;
-// }
-
 export function urlUpload(quill, index, attributes) {
-    // const index = defaultPasteIndex(module);
-
-    // formData = updateFormDataDimensions(formData);
     quill.insertEmbed(index, 'extendedImage', attributes, USER_ACTION);
     quill.setSelection(index + 1, 0, USER_ACTION);
-    // const range = quill.getSelection();
-    // quill.getModule('uploader').upload(range, files);
 }
