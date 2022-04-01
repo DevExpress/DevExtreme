@@ -774,30 +774,31 @@ class BaseRenderingStrategy {
     }
 
     getAppointmentDurationInMs(apptStartDate, apptEndDate, allDay) {
-        const dayDuration = toMs('day');
-        const visibleDayDuration = this.visibleDayDuration;
+        if(allDay) {
+            const appointmentDuration = apptEndDate.getTime() - apptStartDate.getTime();
+            const ceilQuantityOfDays = Math.ceil(appointmentDuration / toMs('day'));
+
+            return ceilQuantityOfDays * this.visibleDayDuration;
+        }
+
+        const msInHour = toMs('hour');
         const trimmedStartDate = dateUtils.trimTime(apptStartDate);
         const trimmedEndDate = dateUtils.trimTime(apptEndDate);
 
         const deltaDate = trimmedEndDate - trimmedStartDate;
-        const quantityOfDays = deltaDate / dayDuration + 1;
-
-        if(allDay) {
-            return quantityOfDays * visibleDayDuration;
-        }
-
+        const quantityOfDays = deltaDate / toMs('day') + 1;
         const dayVisibleHours = this.endDayHour - this.startDayHour;
         const appointmentDayHours = dayVisibleHours * quantityOfDays;
 
-        const startHours = (apptStartDate - trimmedStartDate) / toMs('hour');
+        const startHours = (apptStartDate - trimmedStartDate) / msInHour;
         const apptStartDelta = Math.max(0, startHours - this.startDayHour);
 
-        const endHours = Math.max(0, ((apptEndDate - trimmedEndDate) / toMs('hour') - this.startDayHour));
+        const endHours = Math.max(0, ((apptEndDate - trimmedEndDate) / msInHour - this.startDayHour));
         const apptEndDelta = Math.max(0, dayVisibleHours - endHours);
 
-        const tailDuration = (appointmentDayHours - (apptStartDelta + apptEndDelta)) * toMs('hour');
+        const result = (appointmentDayHours - (apptStartDelta + apptEndDelta)) * msInHour;
 
-        return tailDuration;
+        return result;
     }
 
     getPositionShift(timeShift, isAllDay) {
