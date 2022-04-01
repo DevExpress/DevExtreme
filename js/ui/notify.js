@@ -17,13 +17,12 @@ function notify(message, /* optional */ typeOrStackOptions, displayTime) {
 
     const userHiddenAction = options.onHidden;
 
-    if(stackOptions && stackOptions.position) {
+    if(stackOptions?.position) {
         const { position } = stackOptions;
         const direction = stackOptions.direction || getDefaultDirection(position);
-        let containerKey = typeof position === 'string'
+        const containerKey = typeof position === 'string'
             ? position
-            : JSON.stringify(position).replaceAll(/[{}"]/g, '').replaceAll(/[:,]/g, '-');
-        containerKey = containerKey.split(' ').join('-');
+            : `${position.top}-${position.left}-${position.bottom}-${position.right}`;
 
         const $container = getStackContainer(containerKey);
         setContainerClasses($container, direction);
