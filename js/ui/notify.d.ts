@@ -4,7 +4,7 @@ type NotifyStackDirection = 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 
 interface StackOptions {
     /**
      * @docid
-     * @type string|object
+     * @type Enums.NotifyStackPosition|object
      */
     position?: NotifyStackPosition | {
         /**
@@ -30,7 +30,7 @@ interface StackOptions {
     };
     /**
      * @docid
-     * @type string
+     * @type Enums.NotifyStackDirection
      */
     direction?: NotifyStackDirection;
 }
