@@ -1113,14 +1113,15 @@ const EditingController = modules.ViewController.inherit((function() {
             const rowIndices = [oldRowIndex, rowIndex];
 
             this._beforeUpdateItems(rowIndices, rowIndex, oldRowIndex);
-            this._editRowFromOptionChangedCore(rowIndices, rowIndex, oldRowIndex);
+            this._editRowFromOptionChangedCore(rowIndices, rowIndex);
         },
 
-        _editRowFromOptionChangedCore: function(rowIndices, rowIndex, oldRowIndex) {
+        _editRowFromOptionChangedCore: function(rowIndices, rowIndex, preventRendering) {
             this._needFocusEditor = true;
             this._dataController.updateItems({
                 changeType: 'update',
-                rowIndices: rowIndices
+                rowIndices: rowIndices,
+                cancel: preventRendering
             });
         },
 
