@@ -23,7 +23,7 @@ function notify(message, /* optional */ typeOrStackOptions, displayTime) {
         let containerKey = typeof position === 'string'
             ? position
             : JSON.stringify(position).replaceAll(/[{}"]/g, '').replaceAll(/[:,]/g, '-');
-        containerKey = `${containerKey.split(' ').join('-')}-toast-stack`;
+        containerKey = containerKey.split(' ').join('-');
 
         const $container = getStackContainer(containerKey);
         setContainerClasses($container, direction);
