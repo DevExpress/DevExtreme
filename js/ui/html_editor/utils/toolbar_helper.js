@@ -210,8 +210,8 @@ function prepareLinkHandler(module) {
 }
 
 function prepareImageHandler(module, imageUploadOption) {
+    const imageUploader = new ImageUploader(module, imageUploadOption);
     return () => {
-        const imageUploader = new ImageUploader(module, imageUploadOption);
         imageUploader.render();
     };
 }

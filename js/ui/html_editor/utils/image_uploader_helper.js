@@ -55,11 +55,11 @@ export class ImageUploader {
     }
 
     getUpdateDialogFormData(formData) {
-        const resultFormData = formData;
-        resultFormData.src = resultFormData.imageSrc ?? resultFormData.src;
-        delete resultFormData.imageSrc;
-
-        return resultFormData;
+        const { imageSrc, src, ...props } = formData;
+        return {
+            src: imageSrc ?? src,
+            ...props
+        };
     }
 
     createTabs(formData) {
@@ -70,7 +70,9 @@ export class ImageUploader {
         }
 
         this.config.tabs.forEach((tabName) => {
-            const newTab = tabName === 'url' ? new UrlTab(this.module, this.config, formData) : new FileTab(this.module, this.config);
+            const newTab = tabName === 'url'
+                ? new UrlTab(this.module, this.config, formData)
+                : new FileTab(this.module, this.config);
 
             result.push(newTab);
         });
@@ -216,7 +218,7 @@ class BaseStrategy {
     getQuillSelection() {
         const selection = this.module.quill.getSelection();
 
-        return { index: selection?.index ?? this.module.quill.getLength(), length: selection?.length || 0 };
+        return selection ?? { index: this.module.quill.getLength(), length: 0 };
     }
 
     pasteImage() {}
