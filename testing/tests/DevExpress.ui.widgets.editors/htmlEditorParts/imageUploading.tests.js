@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import '../../../helpers/xmlHttpRequestMock.js';
+import devices from 'core/devices';
 
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -111,6 +112,7 @@ module('Image uploading integration', {
             assert.strictEqual(formItems[0].tabs[1].items.length, 4, 'has items for the second tab');
             assert.strictEqual(fileUploader.length, 1, 'file uploader is exists on the form');
             assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form colCount');
+            assert.strictEqual(formInstance.option('width'), devices.current().deviceType === 'phone' ? '100%' : 493, 'has correct form width');
             assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
             assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
         };
@@ -120,6 +122,7 @@ module('Image uploading integration', {
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
             assert.strictEqual(formItems.length, 2, 'has correct form items count');
             assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form callCount');
+            assert.strictEqual(formInstance.option('width'), devices.current().deviceType === 'phone' ? '100%' : 493, 'has correct form width');
             assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
             assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
             assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');

@@ -1,6 +1,8 @@
 import $ from '../../../core/renderer';
 import localizationMessage from '../../../localization/message';
 import { map } from '../../../core/utils/iterator';
+import devices from '../../../core/devices';
+const isMobile = devices.current().deviceType === 'phone';
 
 const DIALOG_IMAGE_CAPTION = 'dxHtmlEditor-dialogImageCaption';
 const DIALOG_IMAGE_FIELD_URL = 'dxHtmlEditor-dialogImageUrlField';
@@ -100,10 +102,14 @@ export class ImageUploader {
         return this.config.tabs.length > 1;
     }
 
+    getFormWidth() {
+        return isMobile ? '100%' : 493;
+    }
+
     getFormConfig() {
         return {
             formData: this.formData,
-            width: 493,
+            width: this.getFormWidth(),
             labelLocation: 'top',
             colCount: this.useTabbedItems() ? 1 : 11,
             items: this.getItemsConfig()
