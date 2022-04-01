@@ -25048,6 +25048,31 @@ declare module DevExpress.ui {
    */
   export function notify(options: any, stackOptions?: StackOptions): void;
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  type NotifyStackDirection =
+    | 'down'
+    | 'up'
+    | 'left'
+    | 'right'
+    | 'down-reverse'
+    | 'up-reverse'
+    | 'left-reverse'
+    | 'right-reverse';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  type NotifyStackPosition =
+    | 'top left'
+    | 'top right'
+    | 'bottom left'
+    | 'bottom right'
+    | 'top center'
+    | 'bottom center'
+    | 'left center'
+    | 'right center'
+    | 'center';
+  /**
    * [descr:NumericRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -25183,15 +25208,7 @@ declare module DevExpress.ui {
      * [descr:StackOptions.position]
      */
     position?:
-      | 'top left'
-      | 'top right'
-      | 'bottom left'
-      | 'bottom right'
-      | 'top center'
-      | 'bottom center'
-      | 'left center'
-      | 'right center'
-      | 'center'
+      | NotifyStackPosition
       | {
           /**
            * [descr:StackOptions.position.top]
@@ -25213,15 +25230,7 @@ declare module DevExpress.ui {
     /**
      * [descr:StackOptions.direction]
      */
-    direction?:
-      | 'down'
-      | 'up'
-      | 'left'
-      | 'right'
-      | 'down-reverse'
-      | 'up-reverse'
-      | 'left-reverse'
-      | 'right-reverse';
+    direction?: NotifyStackDirection;
   }
   /**
    * [descr:StringLengthRule]

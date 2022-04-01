@@ -1262,13 +1262,3 @@
  * @typedef {string} Enums.TreeListToolbarItem
  * @enum {'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel'}
  */
-
-/**
- * @typedef {string} Enums.NotifyStackPosition
- * @enum {'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center'}
- */
-
-/**
- * @typedef {string} Enums.NotifyStackDirection
- * @enum {'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse'}
- */

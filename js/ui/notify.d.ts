@@ -1,9 +1,12 @@
+type NotifyStackPosition = 'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center';
+type NotifyStackDirection = 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse';
+
 interface StackOptions {
     /**
      * @docid
-     * @type Enums.NotifyStackPosition|object
+     * @type string|object
      */
-    position?: 'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center' | {
+    position?: NotifyStackPosition | {
         /**
          * @docid
          * @type number
@@ -27,9 +30,9 @@ interface StackOptions {
     };
     /**
      * @docid
-     * @type Enums.NotifyStackDirection
+     * @type string
      */
-    direction?: 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse';
+    direction?: NotifyStackDirection;
 }
 
 /**
