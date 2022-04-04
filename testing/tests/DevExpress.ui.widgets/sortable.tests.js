@@ -2724,7 +2724,8 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
                     generateItemElements($('#itemsWithScroll'), 11);
 
                     scrollView = $('#scroll').dxScrollView({
-                        useNative: false
+                        useNative: false,
+                        scrollByContent: false
                     }).dxScrollView('instance');
 
                     this.createSortable({
@@ -2776,7 +2777,8 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
                     generateItemElements($('#itemsWithScroll'), 11);
 
                     scrollView = $('#scroll').dxScrollView({
-                        useNative: false
+                        useNative: false,
+                        scrollByContent: false
                     }).dxScrollView('instance');
 
                     this.createSortable({
