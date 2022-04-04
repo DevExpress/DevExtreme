@@ -1604,7 +1604,7 @@ QUnit.module('Table', moduleConfig, () => {
         dataGrid.columnOption('f1', 'visible', true);
 
         exportDataGrid({ jsPDFDocument: doc, component: dataGrid }).then(() => {
-            doc.save(assert.test.testName + '.pdf');
+            // doc.save(assert.test.testName + '.pdf');
             assert.deepEqual(doc.__log, expectedLog);
             done();
         }).then(() => {
@@ -1682,7 +1682,7 @@ QUnit.module('Table', moduleConfig, () => {
         dataGrid.columnOption('f4', 'visible', true);
 
         exportDataGrid({ jsPDFDocument: doc, component: dataGrid }).then(() => {
-            doc.save(assert.test.testName + '.pdf');
+            // doc.save(assert.test.testName + '.pdf');
             assert.deepEqual(doc.__log, expectedLog);
             done();
         }).then(() => {
