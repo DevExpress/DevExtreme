@@ -7,6 +7,7 @@ import { generateData } from './data.js';
 
 const displayModes = [{ text: 'Display Mode \'full\'', value: 'full' }, { text: 'Display Mode \'compact\'', value: 'compact' }];
 const allowedPageSizes = [5, 10, 'all'];
+const data = generateData(100000);
 class App extends React.Component {
   displayModeChange = (value) => {
     this.setState({ ...this.state, displayMode: value });
@@ -47,7 +48,7 @@ class App extends React.Component {
       <div>
         <DataGrid
           id='gridContainer'
-          dataSource={generateData(100000)}
+          dataSource={data}
           keyExpr="id"
           showBorders={true}
           customizeColumns={this.customizeColumns}
