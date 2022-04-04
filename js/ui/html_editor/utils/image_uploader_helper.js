@@ -148,9 +148,11 @@ export class ImageUploader {
 }
 
 class BaseTab {
-    constructor(module, config) {
+    constructor(module, config, formData) {
         this.module = module;
         this.config = config;
+        this.formData = formData;
+        this.strategy = this.getStrategy();
     }
 
     getItemsConfig() {
@@ -159,12 +161,6 @@ class BaseTab {
 }
 
 class UrlTab extends BaseTab {
-    constructor(module, config, formData) {
-        super(module, config);
-        this.formData = formData;
-        this.strategy = this.getStrategy();
-    }
-
     getTabName() {
         return 'Specify Url';
     }
@@ -174,17 +170,13 @@ class UrlTab extends BaseTab {
     }
 
     getStrategy() {
-        return this.isImageUpdating() ? new UpdateUrlStrategy(this.module, this.config, this.formData) : new AddUrlStrategy(this.module, this.config);
+        return this.isImageUpdating()
+            ? new UpdateUrlStrategy(this.module, this.config, this.formData)
+            : new AddUrlStrategy(this.module, this.config);
     }
 }
 
 class FileTab extends BaseTab {
-    constructor(module, config) {
-        super(module, config);
-
-        this.strategy = this.getStrategy();
-    }
-
     getTabName() {
         return 'Select File';
     }
@@ -342,6 +334,18 @@ class UpdateUrlStrategy extends AddUrlStrategy {
 }
 
 class BaseFileStrategy extends BaseStrategy {
+    constructor(module, config) {
+        super(module, config);
+
+        this.base64 = false;
+        Object.defineProperty(this, 'useBase64', {
+            get: () => this.base64,
+            set: (value) => {
+                this.base64 = value;
+            }
+        });
+    }
+
     closeDialogPopup(editorInstance, data) {
         editorInstance._formDialog.hide({ file: data.value ? data.value[0] : data.file }, data.event);
     }
@@ -350,14 +354,6 @@ class BaseFileStrategy extends BaseStrategy {
 
     isBase64Editable() {
         return false;
-    }
-
-    getUseBase64() {
-        return this.useBase64;
-    }
-
-    setUseBase64(value) {
-        this.useBase64 = value;
     }
 
     getItemsConfig() {
@@ -377,7 +373,7 @@ class BaseFileStrategy extends BaseStrategy {
                         uploadUrl: this.config.uploadUrl,
                         uploadMode: 'instantly',
                         onValueChanged: (data) => {
-                            if(this.getUseBase64()) {
+                            if(this.useBase64) {
                                 base64Upload(this.module.quill, data.value);
                                 this.closeDialogPopup(this.module.editorInstance, data);
                             }
@@ -399,7 +395,7 @@ class BaseFileStrategy extends BaseStrategy {
                     text: 'Encode to base 64',
                     onValueChanged: (e) => {
                         if(this.isBase64Editable()) {
-                            this.setUseBase64(e.value);
+                            this.useBase64 = e.value;
                         }
                     }
                 }
@@ -411,18 +407,18 @@ class BaseFileStrategy extends BaseStrategy {
 class Base64FileStrategy extends BaseFileStrategy {
     constructor(module, config) {
         super(module, config);
-        this.setUseBase64(true);
+        this.useBase64 = true;
     }
 }
 
 class ServerFileStrategy extends BaseFileStrategy {
     constructor(module, config) {
         super(module, config);
-        this.setUseBase64(false);
+        this.useBase64 = false;
     }
 
     serverUpload(data) {
-        if(!this.getUseBase64()) {
+        if(!this.useBase64) {
             const imageUrl = this.config.uploadDirectory + data.file.name;
 
             urlUpload(this.module.quill, this.selection.index, { src: imageUrl });
@@ -442,7 +438,7 @@ class MixedFileStrategy extends ServerFileStrategy {
     }
 
     pasteImage(formData, event) {
-        if(this.getUseBase64()) {
+        if(this.useBase64) {
             super.pasteImage(formData, event);
         }
     }
