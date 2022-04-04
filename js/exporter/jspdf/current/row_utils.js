@@ -1,10 +1,18 @@
 import { isDefined } from '../../../core/utils/type';
-import { calculateRowHeight, getPageWidth } from './pdf_utils';
+import { calculateRowHeight, getPageWidth, toPdfUnit } from './pdf_utils';
 
 function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
+    const DEFAULT_COLUMN_WIDTH = 150;
+
     const columnsWidths = dataProvider.getColumnsWidths();
     if(!columnsWidths.length) {
         return [];
+    }
+
+    for(let i = 0; i < columnsWidths.length; i++) {
+        if(columnsWidths[i] === undefined) {
+            columnsWidths[i] = toPdfUnit(doc, DEFAULT_COLUMN_WIDTH);
+        }
     }
 
     const summaryGridWidth = columnsWidths
