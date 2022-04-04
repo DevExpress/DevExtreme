@@ -222,7 +222,7 @@ export default {
             if(series.argumentAxisType === DISCRETE) {
                 range.arg = argumentRange;
             } else {
-                const viewport = series.getArgumentAxis().getViewport();
+                const viewport = argumentAxis.getViewport();
                 if(isDefined(viewport.startValue) || isDefined(viewport.length)) {
                     argumentCalculator(range.arg, argumentRange.min, argumentRange.min);
                 }
