@@ -5636,9 +5636,9 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
 
                     setTimeout(() => {
                         if(searchValue || filter) {
-                            deferred.resolve([1]);
+                            deferred.resolve({ data: [1], totalCount: 1 });
                         } else {
-                            deferred.resolve([1, 2, 3]);
+                            deferred.resolve({ data: [1, 2, 3], totalCount: 3 });
                         }
                     }, loadTimeout);
 
