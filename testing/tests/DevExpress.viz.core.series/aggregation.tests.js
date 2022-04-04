@@ -331,8 +331,8 @@ QUnit.test('Avg', function(assert) {
     assert.equal(points[0].value, 500);
 });
 
-QUnit.test('Aggregation with forceOldBehavior', function(assert) {
-    this.argAxisOptions.forceOldBehavior = true;
+QUnit.test('Aggregation with aggregatedPointsPosition', function(assert) {
+    this.argAxisOptions.aggregatedPointsPosition = 'crossTicks';
     const points = this.aggregateData('avg', this.data);
     assert.equal(points.length, 1);
     assert.equal(points[0].argument, 0);

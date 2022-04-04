@@ -97,7 +97,7 @@ const baseBarSeriesMethods = {
     getValueRangeInitialValue: areaSeries.getValueRangeInitialValue,
 
     _patchMarginOptions: function(options) {
-        options.checkInterval = options.forceOldBehavior || !this.useAggregation();
+        options.checkInterval = options.aggregatedPointsPosition === 'crossTicks' || !this.useAggregation();
         return options;
     },
 

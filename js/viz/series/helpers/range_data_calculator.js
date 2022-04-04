@@ -212,7 +212,7 @@ export default {
             }
             return range;
         }, {
-            arg: getInitialRange(series.argumentAxisType, series.argumentType, argumentAxis?.getOptions().forceOldBehavior ? undefined : series.getArgumentRangeInitialValue()),
+            arg: getInitialRange(series.argumentAxisType, series.argumentType, argumentAxis?.getOptions().aggregatedPointsPosition === 'crossTicks' ? undefined : series.getArgumentRangeInitialValue()),
             val: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined),
             viewport: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined)
         });

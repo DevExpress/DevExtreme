@@ -1161,14 +1161,14 @@ QUnit.test('bar series', function(assert) {
     const series = this.createSeries({
         type: 'bar',
         argumentAxisOptions: {
-            forceOldBehavior: false
+            aggregatedPointsPosition: 'betweenTicks'
         }
     });
 
     assert.deepEqual(series.getMarginOptions(), {
         checkInterval: true,
         percentStick: false,
-        forceOldBehavior: false
+        aggregatedPointsPosition: 'betweenTicks'
     });
 });
 
@@ -1177,29 +1177,29 @@ QUnit.test('bar series (useAggregation)', function(assert) {
         type: 'bar',
         aggregation: { enabled: true },
         argumentAxisOptions: {
-            forceOldBehavior: false
+            aggregatedPointsPosition: 'betweenTicks'
         }
     });
 
     assert.deepEqual(series.getMarginOptions(), {
         checkInterval: false,
         percentStick: false,
-        forceOldBehavior: false
+        aggregatedPointsPosition: 'betweenTicks'
     });
 });
 
-QUnit.test('bar series (useAggregation). forceOldBehavior = true', function(assert) {
+QUnit.test('bar series (useAggregation). aggregatedPointsPosition = crossTicks', function(assert) {
     const series = this.createSeries({
         type: 'bar',
         aggregation: { enabled: true },
         argumentAxisOptions: {
-            forceOldBehavior: true
+            aggregatedPointsPosition: 'crossTicks'
         }
     });
 
     assert.deepEqual(series.getMarginOptions(), {
         checkInterval: true,
         percentStick: false,
-        forceOldBehavior: true
+        aggregatedPointsPosition: 'crossTicks'
     });
 });

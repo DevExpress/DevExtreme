@@ -3117,7 +3117,7 @@ QUnit.test('Calculate range data when aggregation enabled. Do not inculde data r
     assert.strictEqual(rangeData.arg.interval, 5, 'Min interval arg should be correct');
 });
 
-QUnit.test('Calculate interval in range data when aggregation is enabled. forceOldBehavior = true', function(assert) {
+QUnit.test('Calculate interval in range data when aggregation is enabled. aggregatedPointsPosition = crossTicks', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
     const series = createSeries({
         type: 'scatter',
@@ -3126,7 +3126,7 @@ QUnit.test('Calculate interval in range data when aggregation is enabled. forceO
     }, undefined, undefined, {
         logarithmBase: 10,
         type: 'continuous',
-        forceOldBehavior: true
+        aggregatedPointsPosition: 'crossTicks'
     });
 
     series.updateData(data);

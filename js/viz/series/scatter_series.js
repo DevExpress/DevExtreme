@@ -401,7 +401,7 @@ const baseScatterMethods = {
         const argAxis = this.getArgumentAxis();
         const axisOptions = argAxis.getOptions();
 
-        if(axisOptions.forceOldBehavior) {
+        if(axisOptions.aggregatedPointsPosition === 'crossTicks') {
             return intervalStart;
         }
 

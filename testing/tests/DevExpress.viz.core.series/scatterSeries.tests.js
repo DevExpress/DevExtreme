@@ -2841,7 +2841,7 @@ QUnit.test('Return point size', function(assert) {
         size: 6,
         percentStick: false,
         sizePointNormalState: 6,
-        forceOldBehavior: undefined
+        aggregatedPointsPosition: undefined
     });
 });
 
@@ -2858,7 +2858,7 @@ QUnit.test('getMarginOptions when point is invisible', function(assert) {
         size: 0,
         percentStick: false,
         sizePointNormalState: 2,
-        forceOldBehavior: undefined
+        aggregatedPointsPosition: undefined
     });
 });
 
@@ -2891,7 +2891,7 @@ QUnit.test('Add max border width', function(assert) {
         size: 30,
         percentStick: false,
         sizePointNormalState: 26,
-        forceOldBehavior: undefined
+        aggregatedPointsPosition: undefined
     });
 });
 
@@ -2908,6 +2908,6 @@ QUnit.test('Polar point. getMarginOptions returns point size', function(assert) 
         size: 6,
         percentStick: false,
         sizePointNormalState: 6,
-        forceOldBehavior: undefined
+        aggregatedPointsPosition: undefined
     });
 });

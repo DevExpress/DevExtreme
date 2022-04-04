@@ -188,7 +188,7 @@ const checkGroups = function(assert, series) {
             size: 14,
             percentStick: false,
             sizePointNormalState: 10,
-            forceOldBehavior: undefined
+            aggregatedPointsPosition: undefined
         });
     });
 

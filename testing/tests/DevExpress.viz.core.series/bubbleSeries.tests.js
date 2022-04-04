@@ -135,7 +135,7 @@ QUnit.test('Creation with errorBars', function(assert) {
 QUnit.test('getMarginOptions', function(assert) {
     const argAxis = new MockAxis({ renderer: this.renderer });
 
-    argAxis.updateOptions({ forceOldBehavior: false });
+    argAxis.updateOptions({ aggregatedPointsPosition: false });
     const series = createSeries({
         type: 'bubble',
     }, {
@@ -145,7 +145,7 @@ QUnit.test('getMarginOptions', function(assert) {
     assert.deepEqual(series.getMarginOptions(), {
         processBubbleSize: true,
         percentStick: false,
-        forceOldBehavior: false
+        aggregatedPointsPosition: false
     });
 });
 
