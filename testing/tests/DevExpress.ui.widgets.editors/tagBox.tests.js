@@ -5664,7 +5664,6 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
 
         $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
         this.clock.tick(loadTimeout);
-        this.clock.tick(1);
 
         assert.deepEqual(this.instance.option('selectedItems'), [1], 'selected items are correct');
     });
