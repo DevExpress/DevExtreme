@@ -9,6 +9,7 @@ import { JSPdfMeasureUnitsTests } from './jspdfParts/v3/jspdf_v3.dataGrid.measur
 import { JSPdfColumnDataTypesTests } from './jspdfParts/v3/jspdf_v3.dataGrid.columnDataTypes.tests.js';
 import { JSPdfColumnDataFormatsTests } from './jspdfParts/v3/jspdf_v3.dataGrid.columnDataFormats.tests.js';
 import { JSPdfLoadPanelTests } from './jspdfParts/v3/jspdf_v3.dataGrid.loadPanel.tests.js';
+import { JSPdfOptionsTests } from './jspdfParts/v3/jspdf_v3.dataGrid.options.tests.js';
 
 import 'generic_light.css!';
 
@@ -23,4 +24,4 @@ JSPdfMeasureUnitsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfColumnDataTypesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfColumnDataFormatsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfLoadPanelTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
-
+JSPdfOptionsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

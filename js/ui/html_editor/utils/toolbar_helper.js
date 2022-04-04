@@ -12,18 +12,15 @@ import {
 } from './table_helper';
 import { isDefined, isBoolean } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
-import { isMaterial } from '../../themes';
-
-import { extend } from '../../../core/utils/extend';
 
 import Form from '../../form';
 import ButtonGroup from '../../button_group';
 import ColorBox from '../../color_box';
 import ScrollView from '../../scroll_view';
-import FileUploader from '../../file_uploader';
-import TextBox from '../../text_box';
 
 import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
+
+import { ImageUploader } from './image_uploader_helper';
 
 import { getWindow } from '../../../core/utils/window';
 
@@ -36,23 +33,12 @@ const SILENT_ACTION = 'silent';
 const DIALOG_COLOR_CAPTION = 'dxHtmlEditor-dialogColorCaption';
 const DIALOG_BACKGROUND_CAPTION = 'dxHtmlEditor-dialogBackgroundCaption';
 const DIALOG_LINK_CAPTION = 'dxHtmlEditor-dialogLinkCaption';
-const DIALOG_IMAGE_CAPTION = 'dxHtmlEditor-dialogImageCaption';
 const DIALOG_TABLE_CAPTION = 'dxHtmlEditor-dialogInsertTableCaption';
 
 const DIALOG_LINK_FIELD_URL = 'dxHtmlEditor-dialogLinkUrlField';
 const DIALOG_LINK_FIELD_TEXT = 'dxHtmlEditor-dialogLinkTextField';
 const DIALOG_LINK_FIELD_TARGET = 'dxHtmlEditor-dialogLinkTargetField';
 const DIALOG_LINK_FIELD_TARGET_CLASS = 'dx-formdialog-field-target';
-
-const DIALOG_IMAGE_FIELD_URL = 'dxHtmlEditor-dialogImageUrlField';
-const DIALOG_IMAGE_FIELD_ALT = 'dxHtmlEditor-dialogImageAltField';
-const DIALOG_IMAGE_FIELD_WIDTH = 'dxHtmlEditor-dialogImageWidthField';
-const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
-
-const DIALOG_IMAGE_POPUP_CLASS = 'dx-htmleditor-add-image-popup';
-const DIALOG_IMAGE_POPUP_WITH_TABS_CLASS = 'dx-htmleditor-add-image-popup-with-tabs';
-
-const FORM_DIALOG_CLASS = 'dx-formdialog';
 
 const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
 const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
@@ -224,110 +210,10 @@ function prepareLinkHandler(module) {
 }
 
 function prepareImageHandler(module, imageUploadOption) {
+    const imageUploader = new ImageUploader(module, imageUploadOption);
     return () => {
-        let formData = module.quill.getFormat();
-        const isUpdateDialog = Object.prototype.hasOwnProperty.call(formData, 'imageSrc');
-        const defaultIndex = defaultPasteIndex(module);
-
-        if(isUpdateDialog) {
-            const { imageSrc } = module.quill.getFormat(defaultIndex - 1, 1);
-
-            formData = getUpdateDialogFormData(module, formData);
-
-            if(!imageSrc || defaultIndex === 0) {
-                module.quill.setSelection(defaultIndex + 1, 0, SILENT_ACTION);
-            }
-        }
-
-        modifyImageUploadDialog(module, imageUploadOption);
-
-        const formDialogOptions = {
-            formData: formData,
-            width: 493,
-            labelLocation: 'top',
-            colCount: hasTabbedItems(imageUploadOption) ? 1 : 11,
-            items: imageFormItems(module, imageUploadOption)
-        };
-
-        const promise = module.editorInstance.showFormDialog(formDialogOptions);
-        const formatIndex = embedFormatIndex(module);
-
-        promise
-            .done((formData, event) => {
-                dialogResultHandler(module, { formData, event, defaultIndex, formatIndex, isUpdateDialog });
-            })
-            .always(() => {
-                cancelImageUploadDialogModification(module);
-                module.quill.focus();
-            });
+        imageUploader.render();
     };
-}
-
-function hasTabbedItems(imageUploadOption) {
-    return imageUploadOption?.mode === 'base64' || imageUploadOption?.mode === 'both';
-}
-
-function updateFormDataDimensions(formData) {
-    formData = normalizeFormDataDimension(formData, 'width');
-    formData = normalizeFormDataDimension(formData, 'height');
-
-    return formData;
-}
-
-function normalizeFormDataDimension(formData, name) {
-    if(isDefined(formData[name])) {
-        formData[name] = formData[name].toString();
-    }
-
-    return formData;
-}
-
-function dialogResultHandler(module, { formData, event, defaultIndex, formatIndex, isUpdateDialog }) {
-    let index = defaultIndex;
-
-    module.saveValueChangeEvent(event);
-
-    if(isUpdateDialog) {
-        index = formatIndex;
-        module.quill.deleteText(index, 1, SILENT_ACTION);
-    }
-
-    formData = updateFormDataDimensions(formData);
-    module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
-    module.quill.setSelection(index + 1, 0, USER_ACTION);
-}
-
-function getUpdateDialogFormData(module, formData) {
-    const resultFormData = formData;
-    resultFormData.src = resultFormData.imageSrc;
-    delete resultFormData.imageSrc;
-
-    return resultFormData;
-}
-
-function modifyImageUploadDialog(module, imageUploadOption) {
-    module.editorInstance.formDialogOption({
-        title: localizationMessage.format(DIALOG_IMAGE_CAPTION),
-        'toolbarItems[0].options.text': 'Add' // localization
-    });
-    let wrapperClassString = `${DIALOG_IMAGE_POPUP_CLASS} ${FORM_DIALOG_CLASS}`;
-    if(isDefined(imageUploadOption) && imageUploadOption.mode !== 'url') {
-        wrapperClassString += ` ${DIALOG_IMAGE_POPUP_WITH_TABS_CLASS}`;
-    }
-
-    module.editorInstance.formDialogOption('wrapperAttr', { class: wrapperClassString });
-}
-
-function cancelImageUploadDialogModification(module) {
-    module.editorInstance.formDialogOption({
-        'toolbarItems[0].options.text': localizationMessage.format('OK'),
-        wrapperAttr: { class: FORM_DIALOG_CLASS }
-    });
-    module.editorInstance._formDialog?.formOption({
-        colCount: 1,
-        width: 'auto',
-        labelLocation: isMaterial() ? 'top' : 'left'
-    });
 }
 
 function getLinkFormItems(module, selection) {
@@ -348,200 +234,6 @@ function getLinkFormItems(module, selection) {
             label: { visible: false }
         }
     ];
-}
-
-function embedFormatIndex(module) {
-    const selection = module.quill.getSelection();
-
-    if(selection) {
-        if(selection.length) {
-            return selection.index;
-        } else {
-            return selection.index - 1;
-        }
-    } else {
-        return module.quill.getLength();
-    }
-}
-
-function defaultPasteIndex(module) {
-    const selection = module.quill.getSelection();
-    return selection?.index ?? module.quill.getLength();
-}
-
-function base64Upload(module, data) {
-    const range = module.quill.getSelection();
-    module.quill.getModule('uploader').upload(range, data.value);
-    module.editorInstance._formDialog.hide({ file: data.value[0] }, data.event);
-}
-
-function serverUpload({ formInstance, file, uploadDirectory }) {
-    const imageUrl = uploadDirectory + file.name;
-    formInstance.updateData('src', imageUrl);
-    formInstance.updateData('useUrl', true);
-}
-
-function getSelectFileTabItems(module, imageUploadOption) {
-    let useBase64 = imageUploadOption?.mode === 'base64';
-
-    function getFileUploaderOptions(formTemplateData) {
-        const baseFileUploaderOptions = {
-            multiple: false,
-            value: [],
-            name: 'photo',
-            accept: 'image/*',
-            uploadUrl: imageUploadOption.uploadUrl,
-            uploadMode: 'instantly',
-            onValueChanged: (data) => {
-                if(useBase64) {
-                    base64Upload(module, data);
-                }
-            },
-            onUploaded: (data) => {
-                if(!useBase64) {
-                    const formInstance = formTemplateData.component;
-                    const file = data.file;
-                    const uploadDirectory = imageUploadOption.uploadDirectory;
-                    serverUpload({ formInstance, file, uploadDirectory });
-                }
-            }
-        };
-
-        return extend({}, baseFileUploaderOptions, imageUploadOption.fileUploaderOptions);
-    }
-
-    const selectFileTabItems = [
-        {
-            itemType: 'simple',
-            dataField: 'files',
-            colSpan: 11,
-            label: { visible: false }, // localization
-            template: (formTemplateData) => {
-                const $content = $('<div>');
-                module.editorInstance._createComponent($content, FileUploader, getFileUploaderOptions(formTemplateData));
-                return $content;
-            }
-        }, {
-            itemType: 'simple',
-            dataField: 'useBase64',
-            colSpan: 11,
-            label: { visible: false },
-            editorType: 'dxCheckBox',
-            editorOptions: {
-                value: useBase64,
-                disabled: imageUploadOption?.mode === 'base64',
-                text: 'Encode to base 64', // localization
-                onValueChanged: (e) => {
-                    useBase64 = e.value;
-                },
-            }
-        }
-    ];
-
-    return selectFileTabItems;
-}
-
-function getSpecifyURLTabItems(module) {
-    let keepRatio = true;
-    let widthEditor;
-    let heightEditor;
-    let preventRecalculating = false;
-
-    function keepAspectRatio(data, { dependentEditor, e }) {
-        const newValue = parseInt(e.value);
-        const previousValue = parseInt(e.previousValue);
-        const previousDependentEditorValue = parseInt(dependentEditor.option('value'));
-
-        data.component.updateData(data.dataField, newValue);
-
-        if(keepRatio && previousDependentEditorValue && previousValue && !preventRecalculating) {
-            preventRecalculating = true;
-            dependentEditor.option('value', Math.round(newValue * previousDependentEditorValue / parseInt(previousValue)).toString());
-        }
-
-        preventRecalculating = false;
-    }
-
-    const specifyURLTabItems = [
-        { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
-        { dataField: 'width', colSpan: 6, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) }, template: (data) => {
-            const $content = $('<div>').addClass('dx-fix-ratio-container');
-            const $widthEditor = $('<div>').appendTo($content);
-
-            widthEditor = module.editorInstance._createComponent($widthEditor, TextBox, {
-                value: data.component.option('formData')[data.dataField],
-                onEnterKey: data.component.option('onEditorEnterKey').bind(module.editorInstance._formDialog, data),
-                onValueChanged: (e) => {
-                    keepAspectRatio(data, { dependentEditor: heightEditor, e });
-                }
-            });
-
-            const $ratioEditor = $('<div>').appendTo($content);
-
-            module.editorInstance._createComponent($ratioEditor, ButtonGroup, {
-                items: [{
-                    icon: 'link',
-                    value: 'keepRatio',
-                }],
-                hint: 'Keep aspect ratio', // localization
-                keyExpr: 'value',
-                stylingMode: 'outlined',
-                selectionMode: 'multiple',
-                selectedItemKeys: ['keepRatio'],
-                onSelectionChanged: (e) => {
-                    keepRatio = !!e.component.option('selectedItems').length;
-                }
-            });
-
-            return $content;
-        } },
-        { dataField: 'height', colSpan: 5, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) }, template: (data) => {
-            const $content = $('<div>');
-
-            heightEditor = module.editorInstance._createComponent($content, TextBox, {
-                value: data.component.option('formData')[data.dataField],
-                onEnterKey: data.component.option('onEditorEnterKey').bind(module.editorInstance._formDialog, data),
-                onValueChanged: (e) => {
-                    keepAspectRatio(data, { dependentEditor: widthEditor, e });
-                }
-            });
-
-            return $content;
-        } },
-        { dataField: 'alt', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
-    ];
-
-    return specifyURLTabItems;
-}
-
-function imageFormItems(module, imageUploadOption) {
-    let resultFormItems;
-
-    imageUploadOption = imageUploadOption || {};
-
-    const selectFileTabItems = getSelectFileTabItems(module, imageUploadOption);
-    const specifyURLTabItems = getSpecifyURLTabItems(module);
-
-    if(imageUploadOption?.mode === 'both' || imageUploadOption?.mode === 'base64') {
-        resultFormItems = [
-            {
-                itemType: 'tabbed',
-                tabs: [{
-                    title: 'Select file', // localization
-                    colCount: 11,
-                    items: selectFileTabItems
-                }, {
-                    title: 'Specify URL', // localization
-                    colCount: 11,
-                    items: specifyURLTabItems
-                }]
-            }
-        ];
-    } else {
-        resultFormItems = specifyURLTabItems;
-    }
-
-    return resultFormItems;
 }
 
 function prepareColorClickHandler(module, name) {

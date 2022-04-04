@@ -15128,13 +15128,17 @@ declare module DevExpress.ui {
      */
     uploadDirectory?: string;
     /**
-     * [descr:dxHtmlEditorImageUpload.mode]
+     * [descr:dxHtmlEditorImageUpload.fileUploadMode]
      */
-    mode?: 'url' | 'base64' | 'both';
+     fileUploadMode?: 'url' | 'base64' | 'both';
     /**
      * [descr:dxHtmlEditorImageUpload.fileUploaderOptions]
      */
     fileUploaderOptions?: dxFileUploader;
+    /**
+     * [descr:dxHtmlEditorImageUpload.tabs]
+     */
+    tabs?: Array<'url' | 'file'>;
   }
   /**
    * [descr:dxHtmlEditorMediaResizing]
@@ -15788,7 +15792,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
       ListItemInfo<TItem> & {
-        cancel?: boolean | PromiseLike<void>;
+        cancel?: boolean | PromiseLike<boolean> | PromiseLike<void>;
       };
     export type ItemHoldEvent<
       TItem extends ItemLike = any,
@@ -18813,6 +18817,10 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
+    /**
+     * [descr:dxResizableOptions.area]
+     */
+    area?: string | DevExpress.core.UserDefinedElement;
     /**
      * [descr:dxResizableOptions.handles]
      */
@@ -24984,6 +24992,12 @@ declare module DevExpress.ui {
    */
   export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**
+   * [descr:ui.hideToasts(container)]
+   */
+  export function hideToasts(
+    container?: string | DevExpress.core.UserDefinedElement
+  ): void;
+  /**
    * [descr:HierarchicalCollectionWidget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -29970,9 +29984,9 @@ declare module DevExpress.viz {
      */
     visible?: boolean;
     /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.pattern]
+     * [descr:dxChartSeriesTypes.CommonSeries.label.displayFormat]
      */
-    pattern?: string;
+    displayFormat?: string;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -32608,6 +32622,10 @@ declare module DevExpress.viz {
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap]
        */
       wordWrap?: DevExpress.viz.BaseWidget.WordWrapType;
+      /**
+       * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.displayFormat]
+       */
+      displayFormat?: string;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount]
@@ -33925,6 +33943,10 @@ declare module DevExpress.viz {
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.visible]
      */
     visible?: boolean;
+    /**
+     * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.displayFormat]
+     */
+    displayFormat?: string;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.

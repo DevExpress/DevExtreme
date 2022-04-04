@@ -1,17 +1,18 @@
 import $ from 'jquery';
-
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import '../../../helpers/xmlHttpRequestMock.js';
+import devices from 'core/devices';
 
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
 const ADD_IMAGE_DIALOG_CLASS = 'dx-htmleditor-add-image-popup';
-const ADD_IMAGE_DIALOG_WIT_TABS_CLASS = 'dx-htmleditor-add-image-popup-with-tabs';
+const ADD_IMAGE_DIALOG_WITH_TABS_CLASS = 'dx-htmleditor-add-image-popup-with-tabs';
 const FILE_UPLOADER_CLASS = 'dx-fileuploader';
 const CHECKBOX_CLASS = 'dx-checkbox';
 const TEXTBOX_CLASS = 'dx-textbox';
 const FORM_CLASS = 'dx-form';
+const POPUP_TITLE_CLASS = 'dx-popup-title';
 
 const DIALOG_OK_BUTTON_SELECTOR = '.dx-formdialog .dx-toolbar .dx-button';
 const ASPECT_RATIO_BUTTON_SELECTOR = '.dx-buttongroup .dx-button';
@@ -43,7 +44,8 @@ module('Image uploading integration', {
         this.options = {
             toolbar: { items: ['image'] },
             imageUpload: {
-                mode: 'both',
+                fileUploadMode: 'both',
+                tabs: ['file', 'url'],
                 uploadUrl: '/',
                 uploadDirectory: '/uploadDirectory/'
             },
@@ -95,6 +97,36 @@ module('Image uploading integration', {
                 .first()
                 .trigger('dxclick');
         };
+
+        this.clickCancelDialogButton = () => {
+            $(DIALOG_OK_BUTTON_SELECTOR)
+                .eq(1)
+                .trigger('dxclick');
+        };
+
+        this.checkBothTabsConfigs = (assert, { formItems, formInstance, fileUploader }) => {
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 1, 'has add image dialog with tabs class');
+            assert.strictEqual(formItems[0].itemType, 'tabbed', 'has tabbed items');
+            assert.strictEqual(formItems[0].tabs[0].items.length, 2, 'has items for the first tab');
+            assert.strictEqual(formItems[0].tabs[1].items.length, 4, 'has items for the second tab');
+            assert.strictEqual(fileUploader.length, 1, 'file uploader is exists on the form');
+            assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form colCount');
+            assert.strictEqual(formInstance.option('width'), devices.current().deviceType === 'phone' ? '100%' : 493, 'has correct form width');
+            assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
+            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+        };
+
+        this.checkFileTabConfigs = (assert, { formItems, formInstance }) => {
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
+            assert.strictEqual(formItems.length, 2, 'has correct form items count');
+            assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form callCount');
+            assert.strictEqual(formInstance.option('width'), devices.current().deviceType === 'phone' ? '100%' : 493, 'has correct form width');
+            assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
+            assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
+            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+        };
     },
     afterEach: function() {
         this.instance && this.instance.dispose();
@@ -102,10 +134,10 @@ module('Image uploading integration', {
     }
 }, () => {
     module('resizing frames initialization', {}, () => {
-        ['both', 'base64'].forEach((mode) => {
-            test(`the form popup is correctly rendered for mode="${mode}"`, function(assert) {
+        ['both', 'base64', 'server'].forEach((fileUploadMode) => {
+            test(`the form popup is correctly rendered for two tabs and fileUploadMode="${fileUploadMode}"`, function(assert) {
                 this.createWidget({
-                    imageUpload: { mode }
+                    imageUpload: { tabs: ['file', 'url'], fileUploadMode }
                 });
                 this.clock.tick(TIME_TO_WAIT);
 
@@ -114,20 +146,12 @@ module('Image uploading integration', {
                 const formItems = formInstance.option('items');
                 const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`);
 
-                assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
-                assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WIT_TABS_CLASS}`).length, 1, 'has add image dialog with tabs class');
-                assert.strictEqual(formItems[0].itemType, 'tabbed', 'has tabbed items');
-                assert.strictEqual(formItems[0].tabs[0].items.length, 2, 'has items for the first tab');
-                assert.strictEqual(formItems[0].tabs[1].items.length, 4, 'has items for the second tab');
-                assert.strictEqual(fileUploader.length, 1, 'file uploader is exists on the form');
-                assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form callCount');
-                assert.strictEqual($('.dx-popup-title').text(), 'Add Image', 'dialog title is modified');
-                assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+                this.checkBothTabsConfigs(assert, { formItems, formInstance, fileUploader });
             });
         });
 
-        test('the popup and form is correctly rendered for mode="url"', function(assert) {
-            this.createWidget({ imageUpload: { mode: 'url' } });
+        test('the popup and form is correctly rendered for url tab', function(assert) {
+            this.createWidget({ imageUpload: { tabs: ['url'] } });
             this.clock.tick(TIME_TO_WAIT);
 
             const $form = this.getFormElement();
@@ -135,12 +159,76 @@ module('Image uploading integration', {
             const formItems = formInstance.option('items');
 
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
-            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WIT_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
             assert.strictEqual(formItems.length, 4, 'has correct form items count');
             assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form callCount');
             assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
-            assert.strictEqual($('.dx-popup-title').text(), 'Add Image', 'dialog title is modified');
+            assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
             assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+        });
+
+        test('the popup and form is correctly rendered for file tab', function(assert) {
+            this.createWidget({ imageUpload: { tabs: ['file'] } });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $form = this.getFormElement();
+            const formInstance = $form.dxForm('instance');
+            const formItems = formInstance.option('items');
+
+            this.checkFileTabConfigs(assert, { formItems, formInstance });
+        });
+
+        test('the popup and form is correctly rendered for two reordered tab', function(assert) {
+            this.createWidget({ imageUpload: { tabs: ['url', 'file'] } });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $form = this.getFormElement();
+            const formInstance = $form.dxForm('instance');
+            const formItems = formInstance.option('items');
+
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 1, 'has add image dialog with tabs class');
+            assert.strictEqual(formItems[0].itemType, 'tabbed', 'has tabbed items');
+            assert.strictEqual(formItems[0].tabs[0].items.length, 4, 'has items for the first tab');
+            assert.strictEqual(formItems[0].tabs[1].items.length, 2, 'has items for the second tab');
+            assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form callCount');
+            assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
+            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+        });
+
+        test('the popup and form is correctly rendered for file tab if imageUpload option was changed', function(assert) {
+            this.createWidget({ imageUpload: { tabs: ['url'] } });
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.getFormElement();
+
+            this.clickCancelDialogButton();
+
+            this.instance.option({ imageUpload: { tabs: ['file'] } });
+
+            const $form = this.getFormElement();
+            const formInstance = $form.dxForm('instance');
+            const formItems = formInstance.option('items');
+
+            this.checkFileTabConfigs(assert, { formItems, formInstance });
+        });
+
+        test('the popup and form is correctly rendered for both tabs if imageUpload option was changed', function(assert) {
+            this.createWidget({ imageUpload: { tabs: ['file'] } });
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.getFormElement();
+
+            this.instance.option({ imageUpload: { tabs: ['file', 'url'] } });
+
+            this.clickCancelDialogButton();
+
+            const $form = this.getFormElement();
+            const formInstance = $form.dxForm('instance');
+            const formItems = formInstance.option('items');
+            const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`);
+
+            this.checkBothTabsConfigs(assert, { formItems, formInstance, fileUploader });
         });
 
         [undefined, null].forEach((imageUploadValue) => {
@@ -159,7 +247,7 @@ module('Image uploading integration', {
                 const formItems = formInstance.option('items');
 
                 assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
-                assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WIT_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
+                assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
                 assert.strictEqual(formItems.length, 4, 'has correct form items count');
                 assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form callCount');
                 assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
@@ -193,13 +281,12 @@ module('Image uploading integration', {
             const $form = $(`.${FORM_CLASS}`);
             const formInstance = $form.dxForm('instance');
 
-            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 0, 'has add image dialog class');
-            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WIT_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 0, 'has no add image dialog class');
+            assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
             assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form callCount');
             assert.strictEqual(formInstance.option('labelLocation'), 'left', 'has correct form labelLocation');
             assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'OK', 'dialog ok button text is reverted');
         });
-
 
         test('check file uploading form base64 checkbox', function(assert) {
             this.createWidget();
@@ -214,7 +301,7 @@ module('Image uploading integration', {
         });
 
         test('check file uploading form base64 checkbox if mode = "base64"', function(assert) {
-            this.createWidget({ imageUpload: { mode: 'base64', uploadUrl: undefined } });
+            this.createWidget({ imageUpload: { fileUploadMode: 'base64', tabs: ['file'], uploadUrl: undefined } });
             this.clock.tick(TIME_TO_WAIT);
 
             const $form = this.getFormElement();
@@ -251,7 +338,7 @@ module('Image uploading integration', {
                 const done = assert.async();
                 this.createWidget({
                     value: `<img src=${WHITE_PIXEL}>`,
-                    imageUpload: { mode: 'url' },
+                    imageUpload: { fileUploadMode: 'url', tabs: ['url'] },
                     onValueChanged: ({ value }) => {
                         assert.ok(value.indexOf(WHITE_PIXEL) === -1, 'There is no white pixel');
                         assert.ok(value.indexOf(BLACK_PIXEL) !== -1, 'There is a black pixel');
@@ -479,6 +566,7 @@ module('Image uploading integration', {
         this.formDataMock = new window.FormDataMock();
         this._nativeFormData = window.FormData;
         window.FormData = this.formDataMock.FormData;
+
 
         const $form = this.getFormElement([1, 2]);
 

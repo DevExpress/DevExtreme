@@ -81,10 +81,12 @@ const EditorFactoryMixin = (function() {
             onValueChanged: function(args) {
                 options.setValue(args.value);
             },
-            onKeyDown: function(e) {
-                if(checkEnterBug() && normalizeKeyName(e.event) === 'enter') {
-                    e.component.blur();
-                    e.component.focus();
+            onKeyDown: function({ component, event }) {
+                const useMaskBehavior = component.option('useMaskBehavior');
+
+                if((checkEnterBug() || useMaskBehavior) && normalizeKeyName(event) === 'enter') {
+                    component.blur();
+                    component.focus();
                 }
             },
             displayFormat: options.format,

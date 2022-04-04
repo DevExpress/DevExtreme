@@ -725,13 +725,13 @@ class ContextMenu extends MenuBase {
             return;
         }
 
+        this._updateSelectedItemOnClick(actionArgs);
+
         // T238943. Give the workaround with e.cancel and remove this hack
         const notCloseMenuOnItemClick = itemData && itemData.closeMenuOnClick === false;
         if(!itemData || itemData.disabled || notCloseMenuOnItemClick) {
             return;
         }
-
-        this._updateSelectedItemOnClick(actionArgs);
 
         if($submenu.length === 0) {
             const $prevSubmenu = $($itemElement.parents(`.${DX_SUBMENU_CLASS}`)[0]);

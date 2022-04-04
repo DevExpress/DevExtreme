@@ -4,7 +4,9 @@ import {
 import LegacyDateBox from '../../../../ui/date_box';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import { EventCallback } from '../../common/event_callback';
-import { BaseWidgetProps } from '../../common/base_props';
+import { EditorProps } from '../common/editor';
+import { EditorStateProps } from '../common/editor_state_props';
+import { EditorLabelProps } from '../common/editor_label_props';
 
 export const viewFunction = ({
   componentProps,
@@ -20,7 +22,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class DateBoxProps extends BaseWidgetProps {
+export class DateBoxProps extends EditorProps {
   @TwoWay() value?: Date | number | string | null = null;
 
   @Event() valueChange?: EventCallback<Date | number | string>;
@@ -33,16 +35,20 @@ export class DateBoxProps extends BaseWidgetProps {
 
   @OneWay() field?: string;
 
-  @OneWay() type?: string ;
+  @OneWay() type?: string = 'date' ;
+
+  @OneWay() useMaskBehavior?: boolean = false ;
 }
+
+export type DateBoxPropsType = DateBoxProps & EditorStateProps & EditorLabelProps;
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateBox extends JSXComponent<DateBoxProps>() {
+export class DateBox extends JSXComponent<DateBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): DateBoxProps {
+  get componentProps(): DateBoxPropsType {
     return this.props;
   }
 }

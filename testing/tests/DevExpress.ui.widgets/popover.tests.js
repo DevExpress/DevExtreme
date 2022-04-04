@@ -1531,6 +1531,26 @@ QUnit.module('behavior', () => {
         }
     });
 
+    QUnit.test('popover should be hidden on position.of parents scroll', function(assert) {
+        fixtures.collisionTopLeft.create();
+
+        try {
+            const positionOfElement = $('<div>').appendTo('#where');
+            const popover = $('#what').dxPopover({
+                hideOnParentScroll: true,
+                visible: true,
+                animation: null,
+                'position.of': positionOfElement,
+            }).dxPopover('instance');
+
+            $('#where').triggerHandler('scroll');
+
+            assert.strictEqual(popover.option('visible'), false, 'popover was hidden');
+        } finally {
+            fixtures.collisionTopLeft.drop();
+        }
+    });
+
     QUnit.test('popover should be visible on start when visible and deferRendering is false', function(assert) {
         fixtures.collisionTopLeft.create();
 

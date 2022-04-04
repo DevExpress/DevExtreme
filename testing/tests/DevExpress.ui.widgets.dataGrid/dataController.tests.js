@@ -1329,6 +1329,32 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(foundRowCount, 8, 'Found row count');
     });
 
+    QUnit.test('Get row index if group by one column and data item contains key field (T1078374)', function(assert) {
+        const done = assert.async();
+        // arrange
+        const dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', key: 1 },
+            { team: 'internal', name: 'Bob', key: 2 }
+        ],
+        { key: 'name' },
+        { group: 'team', sort: 'name', pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        );
+
+        this.applyOptions({
+            commonColumnSettings: { autoExpandGroup: true },
+            dataSource: dataSource
+        });
+
+        const dataController = this.dataController;
+        dataController._refreshDataSource();
+
+        // act
+        dataController.getGlobalRowIndexByKey('Bob').done(function(globalRowIndex) {
+            assert.equal(globalRowIndex, 2, 'Bob');
+            done();
+        });
+    });
+
     ['string', 'number', 'date', 'boolean'].forEach(dataField => {
         [true, false].forEach(desc => {
             QUnit.test(`Get row index if sort by column with null values (dataType = ${dataField}, desc = ${desc})`, function(assert) {
@@ -14216,7 +14242,7 @@ QUnit.module('Refresh changesOnly', {
         const items = this.dataController.items();
         assert.deepEqual(items[0].values, [1, 'Alex']);
         assert.strictEqual(changedArgs.changeType, 'refresh');
-        assert.strictEqual(changedArgs.repaintChangesOnly, undefined, 'full repaint');
+        assert.strictEqual(changedArgs.repaintChangesOnly, false, 'full repaint');
     });
 
     QUnit.test('update one cell when summary values are changed', function(assert) {

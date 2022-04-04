@@ -64,22 +64,22 @@
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
 
-  .dx-toolbar-hidden-button,
+  .dx-list-item-content,
   .dx-toolbar-item-auto-hide {
-    .dx-button-content {
-      padding: 0;
+    padding: $generic-list-item-vertical-padding;
+
+    > .dx-button {
+      .dx-button-content {
+        padding: 0;
+      }
     }
   }
 
-  .dx-button-content {
-    padding: 4px;
-  }
-
-  .dx-toolbar-item-auto-hide {
-    padding: $generic-toolbar-item-spacing $generic-toolbar-item-spacing * 2;
-  }
-
   .dx-toolbar-hidden-button {
+    .dx-button {
+      padding: $generic-list-item-vertical-padding;
+    }
+
     .dx-button-default,
     .dx-button-success,
     .dx-button-danger {
@@ -125,7 +125,7 @@
   .dx-buttongroup-wrapper {
     .dx-buttongroup-item.dx-button {
       .dx-button-content {
-        padding: $generic-toolbar-item-spacing 2 * $generic-toolbar-item-spacing;
+        padding: $generic-list-item-vertical-padding;
       }
     }
   }
