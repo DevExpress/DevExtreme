@@ -1,6 +1,7 @@
 import $ from '../../../core/renderer';
 import localizationMessage from '../../../localization/message';
 import { map } from '../../../core/utils/iterator';
+import { extend } from '../../../core/utils/extend';
 import devices from '../../../core/devices';
 const isMobile = devices.current().deviceType === 'phone';
 
@@ -356,6 +357,28 @@ class FileStrategy extends BaseStrategy {
         return this.config.fileUploadMode === 'both';
     }
 
+    getFileUploaderOptions() {
+        const baseFileUploaderOptions = {
+            multiple: false,
+            value: [],
+            name: 'photo',
+            accept: 'image/*',
+            uploadUrl: this.config.uploadUrl,
+            uploadMode: 'instantly',
+            onValueChanged: (data) => {
+                if(this.useBase64) {
+                    base64Upload(this.module.quill, data.value);
+                    this.closeDialogPopup(this.module.editorInstance, data);
+                }
+            },
+            onUploaded: (data) => {
+                this.serverUpload(data);
+            }
+        };
+
+        return extend({}, baseFileUploaderOptions, this.config.fileUploaderOptions);
+    }
+
     getItemsConfig() {
         return [
             {
@@ -365,23 +388,7 @@ class FileStrategy extends BaseStrategy {
                 label: { visible: false },
                 template: () => {
                     const $content = $('<div>');
-                    this.module.editorInstance._createComponent($content, FileUploader, {
-                        multiple: false,
-                        value: [],
-                        name: 'photo',
-                        accept: 'image/*',
-                        uploadUrl: this.config.uploadUrl,
-                        uploadMode: 'instantly',
-                        onValueChanged: (data) => {
-                            if(this.useBase64) {
-                                base64Upload(this.module.quill, data.value);
-                                this.closeDialogPopup(this.module.editorInstance, data);
-                            }
-                        },
-                        onUploaded: (data) => {
-                            this.serverUpload(data);
-                        }
-                    });
+                    this.module.editorInstance._createComponent($content, FileUploader, this.getFileUploaderOptions());
                     return $content;
                 }
             }, {

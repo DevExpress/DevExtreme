@@ -595,7 +595,7 @@ module('Image uploading integration', {
     });
 
     test('check fileUploaderOption', function(assert) {
-        this.createWidget({ imageUpload: { mode: 'both', fileUploaderOptions: { width: 155 } } });
+        this.createWidget({ imageUpload: { tabs: ['file'], fileUploadMode: 'both', fileUploaderOptions: { width: 155 } } });
         this.clock.tick(TIME_TO_WAIT);
 
         const $form = this.getFormElement([1, 2]);

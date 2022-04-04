@@ -19,14 +19,14 @@ if(Quill) {
         constructor(quill, options) {
 
             super(quill, options);
-            this.enabled = !!options.enabled;
+
             this._quillContainer = this.editorInstance._getQuillContainer();
 
             this.addCleanCallback(this.prepareCleanCallback());
             // this._formatHandlers = getFormatHandlers(this);
             // this._tableFormats = getTableFormats(quill);
 
-            const useServerUpload = options.mode === 'both';
+            const useServerUpload = options.fileUploadMode !== 'base64';
 
             if(useServerUpload) {
                 this._enableDragAndDropUploading(quill);
@@ -47,7 +47,6 @@ if(Quill) {
 
             const fileUploaderOptions = {};
 
-            // $element.
             this.editorInstance._createComponent($container, FileUploader, fileUploaderOptions);
 
 
