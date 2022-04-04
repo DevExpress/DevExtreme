@@ -9,14 +9,8 @@ function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
         return [];
     }
 
-    for(let i = 0; i < columnsWidths.length; i++) {
-        if(columnsWidths[i] === undefined) {
-            columnsWidths[i] = toPdfUnit(doc, DEFAULT_COLUMN_WIDTH);
-        }
-    }
-
     const summaryGridWidth = columnsWidths
-        .reduce((accumulator, width) => accumulator + width);
+        .reduce((accumulator, width) => accumulator + (width ?? toPdfUnit(doc, DEFAULT_COLUMN_WIDTH)));
 
     const availablePageWidth = getPageWidth(doc) - (topLeft?.x ?? 0)
         - margin.left - margin.right;
