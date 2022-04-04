@@ -961,12 +961,12 @@ QUnit.test('T111893. Customize point and empty customize label result', function
     });
 });
 
-QUnit.test('Pattern option. Passing to point', function(assert) {
+QUnit.test('displayFormat option. Passing to point', function(assert) {
     const series = createSeries({
         type: 'line',
         label: {
             visible: true,
-            pattern: '_{argument}_'
+            displayFormat: '_{argument}_'
         }
     });
     const data = [{ arg: 1, val: 3 }, { arg: 2, val: 4 }];
@@ -975,7 +975,7 @@ QUnit.test('Pattern option. Passing to point', function(assert) {
     series.createPoints();
 
     series.getAllPoints().forEach(point => {
-        assert.equal(point.getOptions().label.pattern, '_{argument}_');
+        assert.equal(point.getOptions().label.displayFormat, '_{argument}_');
     });
 });
 

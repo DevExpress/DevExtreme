@@ -54,6 +54,7 @@ const FOCUS_TYPE_ROW = 'row';
 const FOCUS_TYPE_CELL = 'cell';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
+const FUNCTIONAL_KEYS = ['shift', 'control', 'alt'];
 
 
 function isGroupRow($row) {
@@ -288,7 +289,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._isNeedFocus = true;
         this._isNeedScroll = true;
 
-        this._updateFocusedCellPositionByTarget(originalEvent.target);
+        FUNCTIONAL_KEYS.indexOf(e.keyName) < 0 && this._updateFocusedCellPositionByTarget(originalEvent.target);
 
         if(!isHandled) {
             switch(e.keyName) {
@@ -425,8 +426,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const $event = eventArgs.originalEvent;
         const isUpArrow = eventArgs.keyName === 'upArrow';
         const dataSource = this._dataController.dataSource();
+        const isRowEditingInCurrentRow = this._editingController?.isEditRow(visibleRowIndex);
         const isEditingNavigationMode = this._isFastEditingStarted();
-        const allowNavigate = (!isEditing || isEditingNavigationMode) && $row && !isDetailRow($row);
+        const allowNavigate = (!isRowEditingInCurrentRow || !isEditing || isEditingNavigationMode) && $row && !isDetailRow($row);
 
         if(allowNavigate) {
             isEditingNavigationMode && this._closeEditCell();

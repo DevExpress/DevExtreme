@@ -7,7 +7,7 @@ import {
 } from '../../core/utils';
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
-import { processPatternWithInfo } from '../helpers/pattern_parser';
+import { processDisplayFormat } from '../helpers/display_format_parser';
 
 const _format = formatHelper.format;
 const _math = Math;
@@ -279,7 +279,7 @@ function formatText(data, options) {
         data.reductionValueText = _format(data.reductionValue, format);
     }
 
-    return options.customizeText ? options.customizeText.call(data, data) : options.pattern ? processPatternWithInfo(options.pattern, data) : data.valueText;
+    return options.customizeText ? options.customizeText.call(data, data) : options.displayFormat ? processDisplayFormat(options.displayFormat, data) : data.valueText;
 }
 
 export function Label(renderSettings) {
