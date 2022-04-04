@@ -13927,8 +13927,8 @@ declare module DevExpress.ui {
           | 'fiveYears';
         readonly scaleElement: DevExpress.core.DxElement;
         readonly separatorElement: DevExpress.core.DxElement;
-        readonly start: Date;
-        readonly end: Date;
+        readonly startDate: Date;
+        readonly endDate: Date;
       };
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxGantt> & {
       readonly selectedRowKey?: any;
