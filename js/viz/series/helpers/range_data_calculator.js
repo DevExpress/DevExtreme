@@ -196,7 +196,7 @@ export default {
         const points = series.getPoints();
         const useAggregation = series.useAggregation();
         const argumentAxis = series.getArgumentAxis();
-        const argumentCalculator = getRangeCalculator(series.argumentAxisType, points.length > 1 && argumentAxis, createGetLogFunction(series.argumentAxisType, series.getArgumentAxis()));
+        const argumentCalculator = getRangeCalculator(series.argumentAxisType, points.length > 1 && argumentAxis, createGetLogFunction(series.argumentAxisType, argumentAxis));
         const valueRangeCalculator = getRangeCalculator(series.valueAxisType, null, createGetLogFunction(series.valueAxisType, series.getValueAxis()));
         const viewportReducer = getViewportReducer(series);
         const range = points.reduce(function(range, point, index, points) {

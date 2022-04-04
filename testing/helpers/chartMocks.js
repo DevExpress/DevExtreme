@@ -1112,7 +1112,7 @@ export const MockAxis = function(renderOptions) {
         setRenderedState: sinon.spy(),
         isRendered: sinon.spy(),
         getTemplatesGroups: sinon.stub().returns([]),
-        aggregatedPointBetweenTicks: sinon.stub()
+        aggregatedPointBetweenTicks: sinon.stub().returns(false)
     };
 };
 
