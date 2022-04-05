@@ -2212,7 +2212,8 @@ export const keyboardNavigationModule = {
                     const virtualItemsCount = this.virtualItemsCount();
 
                     if(virtualItemsCount) {
-                        result += (virtualItemsCount.begin + virtualItemsCount.end);
+                        const rowIndexOffset = this.getRowIndexOffset();
+                        result += (rowIndexOffset + virtualItemsCount.end);
                     }
 
                     return result;
