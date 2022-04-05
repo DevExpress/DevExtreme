@@ -634,8 +634,8 @@ export class GanttActionsManager {
                 scaleType: this._getScaleType(data.scaleType),
                 scaleElement: getPublicElement($(data.scaleElement)),
                 separatorElement: getPublicElement($(data.separatorElement)),
-                start: new Date(data.start),
-                end: new Date(data.end)
+                startDate: new Date(data.start),
+                endDate: new Date(data.end)
             };
             action(args);
         }

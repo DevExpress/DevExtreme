@@ -266,6 +266,7 @@ export default [{
             placeholderSize: null,
             logarithmBase: 10,
             discreteAxisDivisionMode: 'betweenLabels',
+            aggregatedPointsPosition: 'betweenTicks',
             width: 1,
             label: {
                 visible: true
