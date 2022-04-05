@@ -782,6 +782,7 @@ Axis.prototype = {
         this._tickOffset = +(discreteAxisDivisionMode !== 'crossLabels' || !discreteAxisDivisionMode);
     },
 
+    // T1068023,T948359
     aggregatedPointBetweenTicks() {
         return this._options.aggregatedPointsPosition === 'crossTicks';
     },
