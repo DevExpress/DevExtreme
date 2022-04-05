@@ -101,11 +101,7 @@
   }
 
   .dx-toolbar-item-auto-hide {
-    padding: 0 $material-list-item-horizontal-padding;
-
-    .dx-checkbox {
-      padding: math.div($material-list-item-height - $material-checkbox-size, 2) 0;
-    }
+    padding: $material-list-item-vertical-padding $material-list-item-horizontal-padding $material-list-item-vertical-padding - 1px;
   }
 }
 

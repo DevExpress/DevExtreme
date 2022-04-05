@@ -9,7 +9,6 @@ import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import ValidationGroup from 'ui/validation_group';
 import eventsEngine from 'events/core/events_engine';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
 import Scheduler from 'ui/scheduler';
 
 import 'generic_light.css!';
@@ -33,7 +32,6 @@ import Button from 'ui/button';
 import '../../helpers/ignoreAngularTimers.js';
 
 const FILTERING_TIMEOUT = 700;
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 const isRenovatedScheduler = !!Scheduler.IS_RENOVATED_WIDGET;
 
 fx.off = true;
@@ -334,12 +332,6 @@ QUnit.test('dxDataGrid - row template should rendered correctly with grouping', 
 });
 
 QUnit.test('dxTabs - navigation buttons should show/hide after showing/hiding items (T343231)', function(assert) {
-    if(isRenovatedScrollable) {
-        // TODO: remove test skip
-        // skip the test for the reason /c/bDD3PLoT/
-        assert.ok(true);
-        return;
-    }
     const $markup = $('<div dx-tabs=\'tabSettings\'></div>');
 
     const controller = function($scope) {

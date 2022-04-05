@@ -458,6 +458,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       return renderer.createElement(TemplateWrapper, {
         template: this._getTemplate(this._templateManager.anonymousTemplateName),
         transclude: true,
+        renovated: true,
       });
     }
     return null;

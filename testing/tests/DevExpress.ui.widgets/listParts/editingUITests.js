@@ -2376,27 +2376,6 @@ QUnit.test('selectAll checkbox is selected when all items selected (ds with tota
     assert.strictEqual($checkbox.dxCheckBox('option', 'value'), true, 'selectAll checkbox checked');
 });
 
-QUnit.test('', function(assert) {
-    const ds = new DataSource({
-        store: [1, 2, 3, 4],
-        pageSize: 2,
-        paginate: true
-    });
-    const $list = $('#list').dxList({
-        dataSource: ds,
-        showSelectionControls: true,
-        selectionMode: 'all',
-        onSelectAllValueChanged: (args) => {
-            return false;
-        }
-    });
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
-
-    $checkbox.trigger('dxclick');
-
-    assert.deepEqual($list.dxList('option', 'selectedItems'), [], 'no items was selected');
-});
-
 QUnit.test('selectAll checkbox has indeterminate state when not all items selected', function(assert) {
     const $list = $('#list').dxList({
         items: [0, 1],
