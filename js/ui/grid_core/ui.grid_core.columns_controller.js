@@ -1191,6 +1191,7 @@ export const columnsControllerModule = {
                             return that.updateColumns(dataSource, forceApplying);
                         } else {
                             that._dataSourceApplied = false;
+                            updateIndexes(that);
                         }
                     } else if(isDataSourceLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSource)) {
                         updateColumnChanges(that, 'columns');

@@ -3322,7 +3322,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.equal(idCallCount, 200, 'key call count after paging');
     });
 
-    QUnit.test('Popup should render editor if columns[].renderAsync option is true)', function(assert) {
+    QUnit.test('Popup should render editor if columns[].renderAsync option is true', function(assert) {
         createDataGrid({
             dataSource: [
                 { id: 1, field1: 'test11', field2: 'test12' },
@@ -3347,6 +3347,49 @@ QUnit.module('Editing', baseModuleConfig, () => {
         const $textBox = $('.dx-textbox');
         assert.equal($textBox.length, 1);
     });
+
+    [false, true].forEach((repaintChangesOnly) => {
+        QUnit.test(`Popup should rerender cascade editor if columns[].renderAsync option is true and repaintChangesOnly is ${repaintChangesOnly} (T1073423)`, function(assert) {
+            const dataGrid = createDataGrid({
+                repaintChangesOnly,
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'test2' },
+                ],
+                columns: [{
+                    dataField: 'field1',
+                    setCellValue(newData, value) {
+                        newData.field1 = value;
+                        newData.field2 = value;
+                    }
+                }, {
+                    dataField: 'field2',
+                    renderAsync: true,
+                }],
+                editing: {
+                    mode: 'popup',
+                    allowUpdating: true,
+                },
+            });
+            this.clock.tick();
+
+            dataGrid.editRow(0);
+            this.clock.tick();
+
+            const editor1 = $(dataGrid.getCellElement(0, 0)).find('.dx-textbox').dxTextBox('instance');
+
+            // act
+            editor1.option('value', 'test');
+            this.clock.tick();
+
+
+            // assert
+            const editor2 = $(dataGrid.getCellElement(0, 1)).find('.dx-textbox').dxTextBox('instance');
+
+            assert.ok(editor2, 'second editor exists');
+            assert.equal(editor2.option('value'), 'test', 'second editor is updated');
+        });
+    });
+
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
@@ -4511,6 +4554,57 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const dateBox = editor.getElement().dxDateBox('instance');
         const enterKeyHandler = dateBox._supportedKeys().enter;
         assert.strictEqual(enterKeyHandler(), true, 'dateBox enter key handler is replaced');
+    });
+
+    QUnit.testInActiveWindow('Datebox changed value should be saved on enter key if useMaskBehaviour is true (T1070850)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+            return;
+        }
+
+        // arrange
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+        const dataGrid = createDataGrid({
+            dataSource: [{
+                ID: 1,
+                BirthDate: new Date('1964-03-16'),
+            }],
+            keyExpr: 'ID',
+            editing: {
+                mode: 'row',
+                allowUpdating: true,
+            },
+            columns: [{
+                dataField: 'BirthDate',
+                dataType: 'date',
+                editorOptions: {
+                    useMaskBehavior: true
+                },
+            }],
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        const $input = $('.dx-texteditor-input');
+        const editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+        const dateBox = editor.getElement().dxDateBox('instance');
+        const newValue = new Date('1964-05-16');
+
+        dateBox.blur = () => {
+            // emulate browser behaviour
+            dateBox.option('value', newValue);
+        };
+
+        // act
+        const event = $.Event('keydown', { key: 'enter' });
+        $input.trigger(event);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.cellValue(0, 'BirthDate'), newValue, 'value is changed');
     });
 
     // T848039, T988258
