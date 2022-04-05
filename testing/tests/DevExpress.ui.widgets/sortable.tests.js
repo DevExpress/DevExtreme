@@ -2711,7 +2711,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
     };
 
 
-    [0.8, 1, 1.25].forEach((zoom) => {
+    [1, 1.25].forEach((zoom) => {
         ['push', 'indicate'].forEach((dropFeedbackMode) => {
             QUnit.test(`The item position should be changed after scrolling the list to the bottom and dragging an item to the first position (zoom=${zoom}, dropFeedbackMode=${dropFeedbackMode})`, function(assert) {
                 // arrange
