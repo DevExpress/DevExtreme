@@ -3872,6 +3872,190 @@ QUnit.module('Remote group paging', {
         ], 'loaded items');
     });
 
+    // T1077558
+    QUnit.test('The grouped data should be correct after changing page from 1 to 0', function(assert) {
+        // arrange
+        const array = [
+            { field1: 1, field2: 2, id: 1 },
+            { field1: 1, field2: 2, id: 2 },
+            { field1: 1, field2: 2, id: 3 },
+            { field1: 1, field2: 2, id: 4 },
+            { field1: 1, field2: 2, id: 5 },
+            { field1: 1, field2: 3, id: 6 },
+            { field1: 1, field2: 3, id: 7 },
+            { field1: 1, field2: 3, id: 8 },
+            { field1: 1, field2: 3, id: 9 },
+            { field1: 1, field2: 3, id: 10 }
+        ];
+
+        const dataSource = this.createDataSource({
+            store: array,
+            group: ['field1', 'field2'],
+            pageSize: 10
+        });
+
+        dataSource.load();
+
+        // act
+        dataSource.changeRowExpand([1]);
+        dataSource.load();
+
+        dataSource.changeRowExpand([1, 2]);
+        dataSource.load();
+
+        dataSource.changeRowExpand([1, 3]);
+        dataSource.load();
+
+        // assert
+        assert.deepEqual(dataSource.items()[0].items, [{
+            key: 2,
+            items: [array[0], array[1], array[2], array[3], array[4]]
+        }, {
+            key: 3,
+            isContinuationOnNextPage: true,
+            items: [array[5], array[6]]
+        }], 'items');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.load();
+
+        // assert
+        assert.deepEqual(dataSource.items()[0].items, [{
+            key: 3,
+            isContinuation: true,
+            items: [array[7], array[8], array[9]]
+        }], 'items');
+
+        // act
+        dataSource.pageIndex(0);
+        dataSource.load();
+
+        // assert
+        assert.deepEqual(dataSource.items()[0].items, [{
+            key: 2,
+            items: [array[0], array[1], array[2], array[3], array[4]]
+        }, {
+            key: 3,
+            isContinuationOnNextPage: true,
+            items: [array[5], array[6]]
+        }], 'items');
+    });
+
+    // T1077558
+    QUnit.test('The grouped data should be correct after changing page from 0 to 1', function(assert) {
+        // arrange
+        const array = [
+            { field1: 1, field2: 2, id: 1 },
+            { field1: 1, field2: 3, id: 2 },
+            { field1: 1, field2: 4, id: 3 },
+            { field1: 1, field2: 4, id: 4 },
+            { field1: 1, field2: 4, id: 5 },
+            { field1: 1, field2: 5, id: 6 },
+            { field1: 1, field2: 5, id: 7 },
+            { field1: 1, field2: 5, id: 8 },
+            { field1: 1, field2: 5, id: 9 }
+        ];
+
+        const dataSource = this.createDataSource({
+            store: array,
+            group: ['field1', 'field2'],
+            pageSize: 6
+        });
+
+        dataSource.load();
+
+        // act
+        dataSource.changeRowExpand([1]);
+        dataSource.load();
+
+        // assert
+        assert.deepEqual(dataSource.items()[0].items, [{
+            key: 2,
+            items: null
+        }, {
+            key: 3,
+            items: null
+        }, {
+            key: 4,
+            items: null
+        }, {
+            key: 5,
+            items: null
+        }], 'first page - items after expand first group');
+
+        // act
+        dataSource.changeRowExpand([1, 4]);
+        dataSource.load();
+
+        // assert
+        assert.deepEqual(dataSource.items()[0].items, [{
+            key: 2,
+            items: null
+        }, {
+            key: 3,
+            items: null
+        }, {
+            key: 4,
+            isContinuationOnNextPage: true,
+            items: [array[2], array[3]]
+        }], 'first page - items after expand fourth group');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.load();
+
+        // assert
+        assert.deepEqual(dataSource.items()[0].items, [{
+            key: 4,
+            isContinuation: true,
+            items: [array[4]]
+        }, {
+            key: 5,
+            items: null
+        }], 'second page - items');
+
+        // act
+        dataSource.changeRowExpand([1, 5]);
+        dataSource.load();
+
+        // assert
+        assert.deepEqual(dataSource.items()[0].items, [{
+            key: 4,
+            isContinuation: true,
+            items: [array[4]]
+        }, {
+            key: 5,
+            isContinuationOnNextPage: true,
+            items: [array[5], array[6]]
+        }], 'second page - items after expand fifth group');
+
+        // act
+        dataSource.pageIndex(2);
+        dataSource.load();
+
+        // assert
+        assert.deepEqual(dataSource.items()[0].items, [{
+            key: 5,
+            isContinuation: true,
+            items: [array[7], array[8]]
+        }], 'third page - items');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.load();
+
+        // assert
+        assert.deepEqual(dataSource.items()[0].items, [{
+            key: 4,
+            isContinuation: true,
+            items: [array[4]]
+        }, {
+            key: 5,
+            isContinuationOnNextPage: true,
+            items: [array[5], array[6]]
+        }], 'second page - items');
+    });
 
     $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', 'Grouping with remoteOperations and with remote groupPaging'], function(moduleIndex, moduleName) {
 
