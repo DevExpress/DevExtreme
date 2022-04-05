@@ -132,10 +132,10 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:this
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
      * @action
      * @public
      */
@@ -144,10 +144,10 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 cancel:Boolean
+     * @type_function_param1_field1 cancel:Boolean
+     * @type_function_param1_field2 component:this
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
      * @action
      * @public
      */
