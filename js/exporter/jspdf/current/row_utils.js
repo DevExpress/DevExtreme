@@ -2,15 +2,18 @@ import { isDefined } from '../../../core/utils/type';
 import { calculateRowHeight, getPageWidth, toPdfUnit } from './pdf_utils';
 
 function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
-    const DEFAULT_COLUMN_WIDTH = 150;
+    const DEFAULT_WIDTH = toPdfUnit(doc, 150);
 
-    const columnsWidths = dataProvider.getColumnsWidths();
+    const columnsWidths = dataProvider
+        .getColumnsWidths()
+        .map(width => width ?? DEFAULT_WIDTH);
+
     if(!columnsWidths.length) {
         return [];
     }
 
     const summaryGridWidth = columnsWidths
-        .reduce((accumulator, width) => accumulator + (width ?? toPdfUnit(doc, DEFAULT_COLUMN_WIDTH)));
+        .reduce((accumulator, width) => accumulator + width);
 
     const availablePageWidth = getPageWidth(doc) - (topLeft?.x ?? 0)
         - margin.left - margin.right;
