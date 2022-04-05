@@ -27866,6 +27866,10 @@ declare module DevExpress.viz {
      */
     discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
     /**
+     * [descr:dxChartOptions.commonAxisSettings.aggregatedPointsPosition]
+     */
+    aggregatedPointsPosition?: 'betweenTicks' | 'crossTicks';
+    /**
      * [descr:dxChartOptions.commonAxisSettings.endOnTick]
      */
     endOnTick?: boolean;
@@ -34162,6 +34166,10 @@ declare module DevExpress.viz {
        * [descr:dxRangeSelectorOptions.scale.aggregationInterval]
        */
       aggregationInterval?: VizTimeInterval;
+      /**
+       * [descr:dxRangeSelectorOptions.scale.discreteAxisDivisionMode]
+       */
+      discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
       /**
        * [descr:dxRangeSelectorOptions.scale.allowDecimals]
        */
