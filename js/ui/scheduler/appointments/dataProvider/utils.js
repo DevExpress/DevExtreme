@@ -66,33 +66,12 @@ export const compareDateWithEndDayHour = (options) => {
     return result;
 };
 
-export const _getAppointmentDurationInHours = (startDate, endDate) => {
-    return (endDate.getTime() - startDate.getTime()) / toMs('hour');
-};
-
 export const getAppointmentTakesSeveralDays = (adapter) => {
     return !dateUtils.sameDate(adapter.startDate, adapter.endDate);
 };
 
-export const _appointmentHasShortDayDuration = (startDate, endDate, startDayHour, endDayHour) => {
-    const appointmentDurationInHours = _getAppointmentDurationInHours(startDate, endDate);
-    const shortDayDurationInHours = endDayHour - startDayHour;
-
-    return (appointmentDurationInHours >= shortDayDurationInHours && startDate.getHours() === startDayHour && endDate.getHours() === endDayHour);
-};
-
 export const _isEndDateWrong = (startDate, endDate) => {
     return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
-};
-
-export const _appointmentHasAllDayDuration = (startDate, endDate, startDayHour, endDayHour) => {
-    startDate = new Date(startDate);
-    endDate = new Date(endDate);
-
-    const dayDuration = 24;
-    const appointmentDurationInHours = _getAppointmentDurationInHours(startDate, endDate);
-
-    return (appointmentDurationInHours >= dayDuration) || _appointmentHasShortDayDuration(startDate, endDate, startDayHour, endDayHour);
 };
 
 export const _appointmentPartInInterval = (startDate, endDate, startDayHour, endDayHour) => {
@@ -146,10 +125,6 @@ export const _convertRecurrenceException = (exceptionString, startDate, timeZone
     exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
 
     return exceptionString;
-};
-
-export const getAppointmentTakesAllDay = (appointment, startDayHour, endDayHour) => {
-    return appointment.allDay || _appointmentHasAllDayDuration(appointment.startDate, appointment.endDate, startDayHour, endDayHour);
 };
 
 export const replaceWrongEndDate = (appointment, startDate, endDate, appointmentDuration, dataAccessors) => {

@@ -17,9 +17,9 @@ import {
     getAppointmentTakesSeveralDays,
     _appointmentPartInInterval,
     getRecurrenceException,
-    getAppointmentTakesAllDay
 } from './utils';
 import getDatesWithoutTime from '../../../../renovation/ui/scheduler/utils/filtering/getDatesWithoutTime';
+import { getAppointmentTakesAllDay } from '../../../../renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
 
 const toMs = dateUtils.dateToMilliseconds;
 
