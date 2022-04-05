@@ -7,6 +7,8 @@
 @use "../button/colors" as *;
 @use "../buttonGroup/colors" as *;
 @use "../textEditor/colors" as *;
+@use "../fileUploader/index" as *;
+@use "../fileUploader/sizes" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
 @use "../../base/htmlEditor";
@@ -297,6 +299,67 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
   .dx-resizable-handle-bottom {
     &::after {
       background-color: $htmleditor-resize-handle-bg;
+    }
+  }
+}
+
+.dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
+  .dx-tab:first-child {
+    box-shadow: inset 0 1px $htmleditor-border-color, inset -1px 0 $htmleditor-border-color, inset 0 0 $htmleditor-border-color, inset 0 0 $htmleditor-border-color;
+  }
+
+  .dx-tabpanel {
+    &.dx-state-focused {
+      .dx-tab.dx-tab-selected:first-child {
+        box-shadow: inset 0 1px $base-accent, inset -1px 0 $base-accent, inset 0 0 $base-accent;
+      }
+
+      .dx-tab:first-child {
+        box-shadow: inset 0 1px $htmleditor-border-color, inset 0 0 $htmleditor-border-color, inset 0 -1px $base-accent, inset 0 0 $htmleditor-border-color;
+      }
+    }
+  }
+
+  .dx-collection .dx-field-item:not(.dx-last-col) {
+    padding-right: $generic-html-editor-add-image-dialog-base-padding;
+  }
+
+  .dx-collection .dx-field-item:not(.dx-first-col) {
+    padding-left: 0;
+  }
+
+  .dx-fileuploader-input-wrapper {
+    padding: $generic-html-editor-add-image-dialog-fileuploader-padding;
+    border: $generic-fileuploader-file-wrapper-border-size dashed $base-border-color;
+
+    .dx-fileuploader-input-label {
+      border-width: 0;
+    }
+  }
+
+  .dx-fileuploader-dragover {
+    .dx-fileuploader-input {
+      padding-top: $generic-fileuploader-vertical-padding;
+      padding-bottom: $generic-fileuploader-vertical-padding + 1px;
+    }
+
+    .dx-fileuploader-input-label {
+      padding-top: $generic-fileuploader-vertical-padding + 1px;
+    }
+
+    .dx-fileuploader-content {
+      background-color: $htmleditor-border-color;
+    }
+  }
+
+  .dx-fix-ratio-container {
+    .dx-textbox {
+      width: calc(100% - ($generic-html-editor-add-image-dialog-base-padding + $generic-base-inline-widget-height));
+    }
+
+    .dx-buttongroup {
+      margin-left: $generic-html-editor-add-image-dialog-base-padding;
+      width: $generic-base-inline-widget-height;
     }
   }
 }

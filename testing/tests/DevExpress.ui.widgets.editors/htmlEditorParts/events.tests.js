@@ -363,7 +363,7 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
                 .type('100')
                 .change();
 
-            $('.dx-formdialog .dx-button')
+            $('.dx-formdialog .dx-toolbar .dx-button')
                 .first()
                 .trigger('dxclick');
         });
@@ -398,7 +398,7 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
             .type('http://testdomain.test')
             .change();
 
-        $('.dx-formdialog .dx-button')
+        $('.dx-formdialog .dx-toolbar .dx-button')
             .first()
             .trigger('dxclick');
     });
@@ -431,8 +431,7 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
         keyboardMock($('.dx-texteditor-input').first())
             .type(ORANGE_PIXEL)
             .change();
-
-        $('.dx-formdialog .dx-button')
+        $('.dx-formdialog .dx-toolbar .dx-button')
             .first()
             .trigger('dxclick');
     });

@@ -45,6 +45,14 @@ QUnit.module('FormDialog', moduleConfig, () => {
         assert.equal(formDialog.popupOption('width'), 155, 'Custom width should apply');
     });
 
+    test('change FormDialog form options', function(assert) {
+        const formDialog = new FormDialog(this.componentMock);
+
+        formDialog.formOption('width', 155);
+
+        assert.equal(formDialog.formOption('width'), 155, 'Custom width should apply');
+    });
+
     test('show dialog', function(assert) {
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
         const promise = formDialog.show({ items: ['name', 'age'] });

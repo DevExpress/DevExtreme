@@ -15115,6 +15115,28 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
+   * [descr:dxHtmlEditorImageUpload]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxHtmlEditorImageUpload {
+    /**
+     * [descr:dxHtmlEditorImageUpload.uploadUrl]
+     */
+    uploadUrl?: string;
+    /**
+     * [descr:dxHtmlEditorImageUpload.uploadDirectory]
+     */
+    uploadDirectory?: string;
+    /**
+     * [descr:dxHtmlEditorImageUpload.fileUploadMode]
+     */
+    fileUploadMode?: 'base64' | 'server' | 'both';
+    /**
+     * [descr:dxHtmlEditorImageUpload.tabs]
+     */
+    tabs?: Array<'url' | 'file'>;
+  }
+  /**
    * [descr:dxHtmlEditorMediaResizing]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -15214,6 +15236,10 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.tableContextMenu]
      */
     tableContextMenu?: dxHtmlEditorTableContextMenu;
+    /**
+     * [descr:dxHtmlEditorOptions.imageUpload]
+     */
+    imageUpload?: dxHtmlEditorImageUpload;
     /**
      * [descr:dxHtmlEditorOptions.name]
      */

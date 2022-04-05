@@ -10,6 +10,7 @@
 @use "../textEditor/colors" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
+@use "../fileUploader/sizes" as *;
 @use "../../base/htmlEditor";
 
 // adduse
@@ -345,6 +346,50 @@
   .dx-resizable-handle-bottom {
     &::after {
       background-color: $htmleditor-resize-handle-bg;
+    }
+  }
+}
+
+.dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
+  .dx-collection .dx-field-item:not(.dx-last-col) {
+    padding-right: $material-html-editor-add-image-dialog-base-padding;
+  }
+
+  .dx-fix-ratio-container {
+    .dx-textbox {
+      width: calc(100% - $material-button-height - $material-html-editor-add-image-dialog-base-padding);
+    }
+
+    .dx-buttongroup {
+      margin-left: $material-html-editor-add-image-dialog-base-padding;
+      width: $material-button-height;
+      margin-top: math.div($material-base-inline-widget-height - $material-button-height, 2);
+    }
+  }
+
+  .dx-collection .dx-field-item:not(.dx-first-col) {
+    padding-left: 0;
+  }
+
+  .dx-fileuploader-input-wrapper {
+    padding: $material-html-editor-add-image-dialog-fileuploader-padding;
+    border: 3px dashed $base-border-color;
+
+    .dx-fileuploader-input-label {
+      border-width: 0;
+    }
+  }
+}
+
+.dx-htmleditor-add-image-popup {
+  .dx-fileuploader-dragover {
+    .dx-fileuploader-input {
+      padding-top: $material-fileuploader-vertical-padding;
+      padding-bottom: $material-fileuploader-vertical-padding + 1px;
+    }
+
+    .dx-fileuploader-content {
+      background-color: $htmleditor-border-color;
     }
   }
 }

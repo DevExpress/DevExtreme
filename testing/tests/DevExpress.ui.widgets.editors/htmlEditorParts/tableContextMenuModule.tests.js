@@ -37,7 +37,8 @@ const moduleConfig = {
                 addCleanCallback: () => {},
                 _createComponent: ($element, widget, options) => new widget($element, options),
                 _getContent: () => this.$element,
-                _getQuillContainer: () => this.$element
+                _getQuillContainer: () => this.$element,
+                option: () => {}
             }
         };
 
