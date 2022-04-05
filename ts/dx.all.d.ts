@@ -13927,8 +13927,8 @@ declare module DevExpress.ui {
           | 'fiveYears';
         readonly scaleElement: DevExpress.core.DxElement;
         readonly separatorElement: DevExpress.core.DxElement;
-        readonly start: Date;
-        readonly end: Date;
+        readonly startDate: Date;
+        readonly endDate: Date;
       };
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxGantt> & {
       readonly selectedRowKey?: any;
@@ -28259,6 +28259,10 @@ declare module DevExpress.viz {
      */
     discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
     /**
+     * [descr:dxChartOptions.commonAxisSettings.aggregatedPointsPosition]
+     */
+    aggregatedPointsPosition?: 'betweenTicks' | 'crossTicks';
+    /**
      * [descr:dxChartOptions.commonAxisSettings.endOnTick]
      */
     endOnTick?: boolean;
@@ -34567,6 +34571,10 @@ declare module DevExpress.viz {
        * [descr:dxRangeSelectorOptions.scale.aggregationInterval]
        */
       aggregationInterval?: VizTimeInterval;
+      /**
+       * [descr:dxRangeSelectorOptions.scale.discreteAxisDivisionMode]
+       */
+      discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
       /**
        * [descr:dxRangeSelectorOptions.scale.allowDecimals]
        */
