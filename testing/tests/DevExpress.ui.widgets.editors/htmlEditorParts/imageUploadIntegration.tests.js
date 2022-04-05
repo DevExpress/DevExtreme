@@ -595,14 +595,39 @@ module('Image uploading integration', {
     });
 
     test('check fileUploaderOption', function(assert) {
-        this.createWidget({ imageUpload: { tabs: ['file'], fileUploadMode: 'both', fileUploaderOptions: { width: 155 } } });
+        this.createWidget({ imageUpload: { tabs: ['file'], fileUploadMode: 'both', fileUploaderOptions: { width: 155, name: 'photo123' } } });
         this.clock.tick(TIME_TO_WAIT);
 
         const $form = this.getFormElement([1, 2]);
 
         const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
 
-        assert.strictEqual(fileUploader.option('width'), 155, 'value is correct');
+        assert.strictEqual(fileUploader.option('width'), 155, 'width value is correct');
+        assert.strictEqual(fileUploader.option('name'), 'photo123', 'name is correct');
+    });
+
+    [[fakeFile], [fakeFile, fakeFile]].forEach((filesData) => {
+        test(`check upload to the server after drop ${filesData.length} images`, function(assert) {
+            const expectedValue = '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"></p>';
+
+            this.createWidget();
+            this.clock.tick(TIME_TO_WAIT);
+
+            const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+            const uploadStub = sinon.stub(fileUploader, 'upload');
+            const triggerDrop = (targetFiles) => {
+                const event = $.Event($.Event('drop', { dataTransfer: { files: targetFiles } }));
+                $(this.quillInstance.root).trigger(event);
+            };
+
+            const files = filesData;
+            triggerDrop(files);
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(uploadStub.callCount, 1, 'upload was called');
+            assert.strictEqual(this.instance.option('value'), expectedValue, 'value is correct');
+        });
     });
 
 });
