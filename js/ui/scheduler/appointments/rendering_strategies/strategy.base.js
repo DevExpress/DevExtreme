@@ -8,7 +8,7 @@ import { AppointmentSettingsGenerator } from '../settingsGenerator';
 
 import timeZoneUtils from '../../utils.timeZone';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
-import { getAppointmentTakesAllDay } from '../dataProvider/utils';
+import { getAppointmentTakesAllDay } from '../../../../renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
 
 const toMs = dateUtils.dateToMilliseconds;
 

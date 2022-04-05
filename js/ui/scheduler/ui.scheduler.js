@@ -72,7 +72,7 @@ import {
 import { renderAppointments } from './appointments/render';
 import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
 import { AppointmentDataProvider } from './appointments/dataProvider/appointmentDataProvider';
-import { getAppointmentTakesAllDay } from './appointments/dataProvider/utils';
+import { getAppointmentTakesAllDay } from '../../renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
 import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
@@ -2079,14 +2079,14 @@ class Scheduler extends Widget {
     }
 
     appointmentTakesAllDay(rawAppointment) {
-        const adapter = createAppointmentAdapter(
+        const appointment = createAppointmentAdapter(
             rawAppointment,
             this._dataAccessors,
             this.timeZoneCalculator
         );
 
         return getAppointmentTakesAllDay(
-            adapter,
+            appointment,
             this._getCurrentViewOption('startDayHour'),
             this._getCurrentViewOption('endDayHour')
         );

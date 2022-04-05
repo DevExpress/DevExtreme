@@ -14,6 +14,7 @@ export interface AppointmentGeometry {
 }
 
 export interface AppointmentData {
+  allDay: boolean;
   startDate: Date;
   endDate: Date;
   text: string;
