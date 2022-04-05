@@ -13927,8 +13927,8 @@ declare module DevExpress.ui {
           | 'fiveYears';
         readonly scaleElement: DevExpress.core.DxElement;
         readonly separatorElement: DevExpress.core.DxElement;
-        readonly start: Date;
-        readonly end: Date;
+        readonly startDate: Date;
+        readonly endDate: Date;
       };
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxGantt> & {
       readonly selectedRowKey?: any;
@@ -18787,6 +18787,10 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
+    /**
+     * [descr:dxResizableOptions.area]
+     */
+    area?: string | DevExpress.core.UserDefinedElement;
     /**
      * [descr:dxResizableOptions.handles]
      */
@@ -24958,6 +24962,12 @@ declare module DevExpress.ui {
    */
   export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**
+   * [descr:ui.hideToasts(container)]
+   */
+  export function hideToasts(
+    container?: string | DevExpress.core.UserDefinedElement
+  ): void;
+  /**
    * [descr:HierarchicalCollectionWidget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -28251,6 +28261,10 @@ declare module DevExpress.viz {
      */
     discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
     /**
+     * [descr:dxChartOptions.commonAxisSettings.aggregatedPointsPosition]
+     */
+    aggregatedPointsPosition?: 'betweenTicks' | 'crossTicks';
+    /**
      * [descr:dxChartOptions.commonAxisSettings.endOnTick]
      */
     endOnTick?: boolean;
@@ -29944,9 +29958,9 @@ declare module DevExpress.viz {
      */
     visible?: boolean;
     /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.pattern]
+     * [descr:dxChartSeriesTypes.CommonSeries.label.displayFormat]
      */
-    pattern?: string;
+    displayFormat?: string;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -32582,6 +32596,10 @@ declare module DevExpress.viz {
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap]
        */
       wordWrap?: DevExpress.viz.BaseWidget.WordWrapType;
+      /**
+       * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.displayFormat]
+       */
+      displayFormat?: string;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount]
@@ -33899,6 +33917,10 @@ declare module DevExpress.viz {
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.visible]
      */
     visible?: boolean;
+    /**
+     * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.displayFormat]
+     */
+    displayFormat?: string;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -34551,6 +34573,10 @@ declare module DevExpress.viz {
        * [descr:dxRangeSelectorOptions.scale.aggregationInterval]
        */
       aggregationInterval?: VizTimeInterval;
+      /**
+       * [descr:dxRangeSelectorOptions.scale.discreteAxisDivisionMode]
+       */
+      discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
       /**
        * [descr:dxRangeSelectorOptions.scale.allowDecimals]
        */

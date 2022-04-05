@@ -961,6 +961,24 @@ QUnit.test('T111893. Customize point and empty customize label result', function
     });
 });
 
+QUnit.test('displayFormat option. Passing to point', function(assert) {
+    const series = createSeries({
+        type: 'line',
+        label: {
+            visible: true,
+            displayFormat: '_{argument}_'
+        }
+    });
+    const data = [{ arg: 1, val: 3 }, { arg: 2, val: 4 }];
+
+    series.updateData(data);
+    series.createPoints();
+
+    series.getAllPoints().forEach(point => {
+        assert.equal(point.getOptions().label.displayFormat, '_{argument}_');
+    });
+});
+
 QUnit.test('Update data with null values for argument', function(assert) {
     const series = createSeries({ type: 'line', label: { visible: false } });
 
@@ -4095,7 +4113,7 @@ QUnit.test('double showing invisible series', function(assert) {
     assert.ok(series.getOptions().visible);
 });
 
-QUnit.test('set visibility from options', function(assert) {
+QUnit.test('set visibility from options. updating true -> false', function(assert) {
     const spy = sinon.spy();
     const seriesGroup = this.renderer.g();
     const series = createSeries({
@@ -4118,7 +4136,7 @@ QUnit.test('set visibility from options', function(assert) {
     assert.ok(series._group.stub('remove').called);
 });
 
-QUnit.test('set visibility from options', function(assert) {
+QUnit.test('set visibility from options. updating true -> true', function(assert) {
     const spy = sinon.spy();
     const seriesGroup = this.renderer.g();
     const series = createSeries({

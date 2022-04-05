@@ -25,6 +25,16 @@ const getHandle = (direction) => {
 };
 
 QUnit.module('behavior', () => {
+    ['none', '', undefined].forEach((handles) => {
+        QUnit.test(`no handle should be rendered if handles=${handles}`, function(assert) {
+            const $resizable = $('#resizable').dxResizable({
+                handles
+            });
+
+            assert.strictEqual($resizable.find(`.${RESIZABLE_HANDLE_CLASS}`).length, 0, 'no handle is rendered');
+        });
+    });
+
     QUnit.test('resizable should have dx-resizable-resizing class while resizing', function(assert) {
         const $resizable = $('#resizable').dxResizable({
             handles: 'right'

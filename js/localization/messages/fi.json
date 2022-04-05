@@ -67,9 +67,9 @@
         "dxFileUploader-readyToUpload": "Valmis lähetettäväksi",
         "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Lähetys epäonnistui",
-        "dxFileUploader-invalidFileExtension": "",
-        "dxFileUploader-invalidMaxFileSize": "",
-        "dxFileUploader-invalidMinFileSize": "",
+        "dxFileUploader-invalidFileExtension": "TODO",
+        "dxFileUploader-invalidMaxFileSize": "TODO",
+        "dxFileUploader-invalidMinFileSize": "TODO",
 
         "dxRangeSlider-ariaFrom": "Alkaen",
         "dxRangeSlider-ariaTill": "Asti",

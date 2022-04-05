@@ -10,7 +10,7 @@ import {
   Method,
 } from '@devextreme-generator/declarations';
 import devices from '../../../../core/devices';
-import { Editor, EditorProps } from '../internal/editor';
+import { Editor, EditorProps } from '../common/editor';
 import BaseComponent from '../../../component_wrapper/editors/check_box';
 import { combineClasses } from '../../../utils/combine_classes';
 import { CheckBoxIcon } from './check_box_icon';
