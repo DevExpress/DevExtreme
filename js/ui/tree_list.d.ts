@@ -708,7 +708,6 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type_function_param1_field6 newRowIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 rows:Array<dxTreeListRowObject>
-     * @type_function_param1_field9 cancel:boolean
      * @default null
      * @action
      * @public

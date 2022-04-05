@@ -443,7 +443,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 values:any
+     * @type_function_param1_field4 value:any
      * @type_function_param1_field5 key:any
      * @action
      * @public
