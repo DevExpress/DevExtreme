@@ -120,7 +120,15 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: compared-screenshots
-        path: ${{ github.workspace }}/testing/renovation-npm/artifacts/compared-screenshots/**/*
+        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/compared-screenshots/**/*
+        if-no-files-found: ignore
+
+    - name: Copy failed test artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: failed-tests
+        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
   test_angular:
