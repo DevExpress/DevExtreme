@@ -977,7 +977,7 @@ export const columnsControllerModule = {
             };
 
             const strictParseNumber = function(text, format) {
-                const parsedValue = numberLocalization.parse(text, format);
+                const parsedValue = numberLocalization.parse(text);
 
                 if(isNumeric(parsedValue)) {
                     const formattedValue = numberLocalization.format(parsedValue, format);
