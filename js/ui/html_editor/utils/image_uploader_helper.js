@@ -28,9 +28,9 @@ import FileUploader from '../../file_uploader';
 import TextBox from '../../text_box';
 
 export class ImageUploader {
-    constructor(module, config = {}) {
+    constructor(module, config) {
         this.module = module;
-        this.config = config;
+        this.config = config ?? {};
         this.quill = this.module.quill;
         this.editorInstance = this.module.editorInstance;
 
