@@ -2711,7 +2711,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
     };
 
 
-    [0.85, 1, 1.25].forEach((zoom) => {
+    [0.8, 1, 1.25].forEach((zoom) => {
         ['push', 'indicate'].forEach((dropFeedbackMode) => {
             QUnit.test(`The item position should be changed after scrolling the list to the bottom and dragging an item to the first position (zoom=${zoom}, dropFeedbackMode=${dropFeedbackMode})`, function(assert) {
                 // arrange
@@ -2769,7 +2769,6 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
             QUnit.test(`The item position should be changed after dragging a first item to the last position (zoom=${zoom}, dropFeedbackMode=${dropFeedbackMode})`, function(assert) {
                 // arrange
                 let scrollView;
-                const originalZoom = $('body').css('zoom');
 
                 try {
                     $('body').css('zoom', zoom);
@@ -2807,7 +2806,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
                     assert.strictEqual(items.last().text(), '1', 'the first cell became the last');
                     assert.ok($(scrollView.container()).scrollTop() > 0, 'scrollTop > 0');
                 } finally {
-                    $('body').css('zoom', originalZoom);
+                    $('body').css('zoom', '');
                     scrollView && scrollView.dispose();
                 }
             });
@@ -3455,7 +3454,9 @@ QUnit.module('Drag and drop with nested sortable', crossComponentModuleConfig, (
         assert.strictEqual($placeholder.length, 1, 'placeholder exists');
         assert.equal($placeholder.get(0).style.height, '250px', 'placeholder height style');
         assert.equal($placeholder.get(0).style.width, '', 'placeholder width style');
-        assert.deepEqual(translator.locate($placeholder), { left: 604, top: 0 }, 'placeholder position');
+        const position = translator.locate($placeholder);
+        assert.strictEqual(Math.round(position.left), 604, 'placeholder position left');
+        assert.strictEqual(position.top, 0, 'placeholder position top');
     });
 });
 
