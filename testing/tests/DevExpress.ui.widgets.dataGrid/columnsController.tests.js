@@ -1203,6 +1203,18 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         assert.deepEqual(column.calculateFilterExpression(12, '>='), ['TestField', '>=', 12]);
     });
 
+    QUnit.test('calculateFilterExpression for column with object dataField (T1065008)', function(assert) {
+        this.applyOptions({
+            columns: [{ dataField: 'TestField', dataType: 'object' }]
+        });
+
+        const column = this.columnsController.getColumns()[0];
+        assert.ok(column);
+        assert.ok(column.calculateFilterExpression);
+        assert.deepEqual(column.calculateFilterExpression('test'), ['TestField', '=', 'test']);
+        assert.deepEqual(column.calculateFilterExpression('test', '>='), ['TestField', '>=', 'test']);
+    });
+
     QUnit.test('calculateFilterExpression for column with lookup and string dataField', function(assert) {
         this.applyOptions({
             columns: [{ dataField: 'TestField', dataType: 'string', lookup: {} }]
@@ -6533,6 +6545,28 @@ QUnit.module('Sorting/Grouping', { beforeEach: setupModule, afterEach: teardownM
         assert.strictEqual(expandColumns[0].dataField, 'field');
         assert.strictEqual(expandColumns[0].groupIndex, 0);
         assert.strictEqual(expandColumns[0].headerCellTemplate, null);
+    });
+
+    // T1075560
+    QUnit.test('Fixed position of expand columns should be identical to RTL', function(assert) {
+        [true, false].forEach((rtlEnabled) => {
+            ['left', 'right'].forEach((initialFixedPosition) => {
+                this.applyOptions({
+                    columns: [{
+                        dataField: 'field', groupIndex: 0, fixed: true, fixedPosition: initialFixedPosition
+                    }],
+                    rtlEnabled,
+                });
+
+                // assert
+                const expandColumns = this.columnsController.getExpandColumns();
+                const properFixedPosition = rtlEnabled ? 'right' : 'left';
+
+                assert.strictEqual(expandColumns.length, 1, 'count expand column');
+                assert.strictEqual(expandColumns[0].fixedPosition, properFixedPosition, `rtl: ${rtlEnabled}, initialFixedPosition: ${initialFixedPosition}`);
+            });
+        });
+
     });
 });
 

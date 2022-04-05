@@ -103,7 +103,7 @@ const Resizable = DOMComponent.inherit({
         this._handles = [];
         const handles = this.option('handles');
 
-        if(handles === 'none') {
+        if(handles === 'none' || !handles) {
             return;
         }
 

@@ -1252,9 +1252,14 @@ export const validatingModule = {
                         if(showValidationMessage && $cell && column && validationResult && validationResult.brokenRules) {
                             const errorMessages = [];
                             validationResult.brokenRules.forEach(function(rule) {
-                                errorMessages.push(rule.message);
+                                if(rule.message) {
+                                    errorMessages.push(rule.message);
+                                }
                             });
-                            this._showValidationMessage($focus, errorMessages, column.alignment || 'left', revertTooltip);
+
+                            if(errorMessages.length) {
+                                this._showValidationMessage($focus, errorMessages, column.alignment || 'left', revertTooltip);
+                            }
                         }
 
                         !hideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
