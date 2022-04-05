@@ -2,35 +2,12 @@ const RenovatedScrollable = require('renovation/ui/scroll_view/scrollable.j.js')
 // eslint-disable-next-line spellcheck/spell-checker
 const reRender = require('inferno').rerender;
 
-// default export not supported
 exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
 
     _initMarkup() {
         super._initMarkup.apply(this, arguments);
 
         const scrollable = this._viewRef.current.scrollableRef;
-
-        // const setContainerDimensions = scrollable.setContainerDimensions;
-
-        // scrollable.setContainerDimensions = function() {
-        //     setContainerDimensions.apply(this, arguments);
-        //     reRender();
-        // };
-
-        // const setContentHeight = scrollable.setContentHeight;
-
-        // scrollable.setContentHeight = function() {
-        //     setContentHeight.apply(this, arguments);
-        //     reRender();
-        // };
-
-        // const setContentWidth = scrollable.setContentWidth;
-
-        // scrollable.setContentWidth = function() {
-        //     setContentWidth.apply(this, arguments);
-        //     reRender();
-        // };
-
         const handleScroll = scrollable.handleScroll;
 
         scrollable.handleScroll = function() {
