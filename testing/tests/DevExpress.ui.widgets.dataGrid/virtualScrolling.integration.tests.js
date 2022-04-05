@@ -6659,6 +6659,6 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         this.clock.tick(100);
 
         // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), 500, 'scroll position is not reseted');
+        assert.equal(dataGrid.getScrollable().scrollTop(), 500, 'scroll position is not reset');
     });
 });
