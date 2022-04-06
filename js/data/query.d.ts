@@ -103,7 +103,7 @@ export interface Query {
     /**
      * @docid
      * @publicName select(getter)
-     * @param1 getter:object
+     * @param1 getter:object|Array<getter>
      * @public
      */
     select(...getters: any[]): Query;
