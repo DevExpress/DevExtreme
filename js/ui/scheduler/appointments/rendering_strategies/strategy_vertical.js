@@ -297,14 +297,12 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     isAllDay(appointmentData) {
-        const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointmentData);
-
-        if(allDay) {
-            return true;
-        }
-
-        const adapter = createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator);
-        return getAppointmentTakesAllDay(adapter, this.startDayHour, this.endDayHour);
+        return getAppointmentTakesAllDay(
+            createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator),
+            this.startDayHour,
+            this.endDayHour,
+            this.showAllDayAppointments
+        );
     }
 
     _getAppointmentMaxWidth() {

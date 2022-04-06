@@ -50,7 +50,8 @@ export class AppointmentDataProvider {
             viewDirection: this.options.getViewDirection,
             dateRange: this.options.getDateRange,
             groupCount: this.options.getGroupCount,
-            viewDataProvider: this.options.getViewDataProvider
+            viewDataProvider: this.options.getViewDataProvider,
+            showAllDayAppointments: this.options.showAllDayAppointments,
         };
 
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual

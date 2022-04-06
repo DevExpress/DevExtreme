@@ -87,6 +87,7 @@ class AppointmentLayoutManager {
             allDayHeight: allDayHeight,
             resizableStep: positionHelper.getResizableStep(),
             visibleDayDuration,
+            showAllDayAppointments: this.instance._getCurrentViewOption('showAllDayAppointments'),
             // appointment settings
             timeZoneCalculator: this.instance.timeZoneCalculator,
             timeZone: this.instance.option('timeZone'),
