@@ -25040,17 +25040,14 @@ declare module DevExpress.ui {
     displayTime?: number
   ): void;
   /**
-   * [descr:ui.notify(message,stackOptions)]
+   * [descr:ui.notify(message,stacking)]
    */
-  export function notify(message: string, stackOptions?: StackOptions): void;
+  export function notify(message: string, stacking?: Stacking): void;
   /**
-   * [descr:ui.notify(options,stackOptions)]
+   * [descr:ui.notify(options,stacking)]
    */
-  export function notify(options: any, stackOptions?: StackOptions): void;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  type NotifyStackDirection =
+  export function notify(options: any, stacking?: Stacking): void;
+  type NotifyStackingDirection =
     | 'down'
     | 'up'
     | 'left'
@@ -25059,10 +25056,7 @@ declare module DevExpress.ui {
     | 'up-reverse'
     | 'left-reverse'
     | 'right-reverse';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  type NotifyStackPosition =
+  type NotifyStackingPosition =
     | 'top left'
     | 'top right'
     | 'bottom left'
@@ -25200,37 +25194,34 @@ declare module DevExpress.ui {
      */
     searchValue?: string;
   }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  interface StackOptions {
+  interface Stacking {
     /**
-     * [descr:StackOptions.position]
+     * [descr:Stacking.position]
      */
     position?:
-      | NotifyStackPosition
+      | NotifyStackingPosition
       | {
           /**
-           * [descr:StackOptions.position.top]
+           * [descr:Stacking.position.top]
            */
           top?: number;
           /**
-           * [descr:StackOptions.position.left]
+           * [descr:Stacking.position.left]
            */
           left?: number;
           /**
-           * [descr:StackOptions.position.bottom]
+           * [descr:Stacking.position.bottom]
            */
           bottom?: number;
           /**
-           * [descr:StackOptions.position.right]
+           * [descr:Stacking.position.right]
            */
           right?: number;
         };
     /**
-     * [descr:StackOptions.direction]
+     * [descr:Stacking.direction]
      */
-    direction?: NotifyStackDirection;
+    direction?: NotifyStackingDirection;
   }
   /**
    * [descr:StringLengthRule]

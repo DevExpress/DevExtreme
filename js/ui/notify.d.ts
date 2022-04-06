@@ -1,12 +1,16 @@
-type NotifyStackPosition = 'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center';
-type NotifyStackDirection = 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse';
+/** @public */
+type NotifyStackingPosition = 'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center';
 
-interface StackOptions {
+/** @public */
+type NotifyStackingDirection = 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse';
+
+/** @public */
+interface Stacking {
     /**
      * @docid
-     * @type Enums.NotifyStackPosition|object
+     * @type Enums.NotifyStackingPosition|object
      */
-    position?: NotifyStackPosition | {
+    position?: NotifyStackingPosition | {
         /**
          * @docid
          * @type number
@@ -30,9 +34,9 @@ interface StackOptions {
     };
     /**
      * @docid
-     * @type Enums.NotifyStackDirection
+     * @type Enums.NotifyStackingDirection
      */
-    direction?: NotifyStackDirection;
+    direction?: NotifyStackingDirection;
 }
 
 /**
@@ -60,21 +64,21 @@ declare function notify(options: any, type?: string, displayTime?: number): void
 /**
  * @docid ui.notify
  * @static
- * @publicName notify(message,stackOptions)
+ * @publicName notify(message,stacking)
  * @param1 message:string
- * @param2 stackOptions:object
+ * @param2 stacking:object
  * @public
  */
-declare function notify(message: string, stackOptions?: StackOptions): void;
+declare function notify(message: string, stacking?: Stacking): void;
 
 /**
  * @docid ui.notify
  * @static
- * @publicName notify(options,stackOptions)
+ * @publicName notify(options,stacking)
  * @param1 options:object
- * @param2 stackOptions:object
+ * @param2 stacking:object
  * @public
  */
-declare function notify(options: any, stackOptions?: StackOptions): void;
+declare function notify(options: any, stacking?: Stacking): void;
 
 export default notify;

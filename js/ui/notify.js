@@ -10,16 +10,16 @@ const window = getWindow();
 let $notify = null;
 const $containers = {};
 
-function notify(message, /* optional */ typeOrStackOptions, displayTime) {
+function notify(message, /* optional */ typeOrStacking, displayTime) {
     const options = isPlainObject(message) ? message : { message: message };
-    const stackOptions = isPlainObject(typeOrStackOptions) ? typeOrStackOptions : undefined;
-    const type = isPlainObject(typeOrStackOptions) ? undefined : typeOrStackOptions;
+    const stacking = isPlainObject(typeOrStacking) ? typeOrStacking : undefined;
+    const type = isPlainObject(typeOrStacking) ? undefined : typeOrStacking;
 
     const userHiddenAction = options.onHidden;
 
-    if(stackOptions?.position) {
-        const { position } = stackOptions;
-        const direction = stackOptions.direction || getDefaultDirection(position);
+    if(stacking?.position) {
+        const { position } = stacking;
+        const direction = stacking.direction || getDefaultDirection(position);
         const containerKey = typeof position === 'string'
             ? position
             : `${position.top}-${position.left}-${position.bottom}-${position.right}`;
