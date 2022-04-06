@@ -20,9 +20,9 @@ export default async function createWidget(
   })();
 
   if (disableAnimation) {
-    await (ClientFunction(() => {
+    await ClientFunction(() => {
       (window as any).DevExpress.fx.off = true;
-    }))();
+    })();
   }
 }
 
