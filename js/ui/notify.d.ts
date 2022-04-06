@@ -1,16 +1,16 @@
 /** @public */
-type NotifyStackingPosition = 'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center';
+type NotifyStackPosition = 'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center';
 
 /** @public */
-type NotifyStackingDirection = 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse';
+type NotifyStackDirection = 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse';
 
 /** @public */
-interface Stacking {
+interface Stack {
     /**
      * @docid
-     * @type Enums.NotifyStackingPosition|object
+     * @type Enums.NotifyStackPosition|object
      */
-    position?: NotifyStackingPosition | {
+    position?: NotifyStackPosition | {
         /**
          * @docid
          * @type number
@@ -34,9 +34,9 @@ interface Stacking {
     };
     /**
      * @docid
-     * @type Enums.NotifyStackingDirection
+     * @type Enums.NotifyStackDirection
      */
-    direction?: NotifyStackingDirection;
+    direction?: NotifyStackDirection;
 }
 
 /**
@@ -64,21 +64,21 @@ declare function notify(options: any, type?: string, displayTime?: number): void
 /**
  * @docid ui.notify
  * @static
- * @publicName notify(message,stacking)
+ * @publicName notify(message,stack)
  * @param1 message:string
- * @param2 stacking:object
+ * @param2 stack:object
  * @public
  */
-declare function notify(message: string, stacking?: Stacking): void;
+declare function notify(message: string, stack?: Stack): void;
 
 /**
  * @docid ui.notify
  * @static
- * @publicName notify(options,stacking)
+ * @publicName notify(options,stack)
  * @param1 options:object
- * @param2 stacking:object
+ * @param2 stack:object
  * @public
  */
-declare function notify(options: any, stacking?: Stacking): void;
+declare function notify(options: any, stack?: Stack): void;
 
 export default notify;

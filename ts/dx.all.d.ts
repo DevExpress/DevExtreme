@@ -25040,14 +25040,14 @@ declare module DevExpress.ui {
     displayTime?: number
   ): void;
   /**
-   * [descr:ui.notify(message,stacking)]
+   * [descr:ui.notify(message,stack)]
    */
-  export function notify(message: string, stacking?: Stacking): void;
+  export function notify(message: string, stack?: Stack): void;
   /**
-   * [descr:ui.notify(options,stacking)]
+   * [descr:ui.notify(options,stack)]
    */
-  export function notify(options: any, stacking?: Stacking): void;
-  type NotifyStackingDirection =
+  export function notify(options: any, stack?: Stack): void;
+  type NotifyStackDirection =
     | 'down'
     | 'up'
     | 'left'
@@ -25056,7 +25056,7 @@ declare module DevExpress.ui {
     | 'up-reverse'
     | 'left-reverse'
     | 'right-reverse';
-  type NotifyStackingPosition =
+  type NotifyStackPosition =
     | 'top left'
     | 'top right'
     | 'bottom left'
@@ -25194,34 +25194,34 @@ declare module DevExpress.ui {
      */
     searchValue?: string;
   }
-  interface Stacking {
+  interface Stack {
     /**
-     * [descr:Stacking.position]
+     * [descr:Stack.position]
      */
     position?:
-      | NotifyStackingPosition
+      | NotifyStackPosition
       | {
           /**
-           * [descr:Stacking.position.top]
+           * [descr:Stack.position.top]
            */
           top?: number;
           /**
-           * [descr:Stacking.position.left]
+           * [descr:Stack.position.left]
            */
           left?: number;
           /**
-           * [descr:Stacking.position.bottom]
+           * [descr:Stack.position.bottom]
            */
           bottom?: number;
           /**
-           * [descr:Stacking.position.right]
+           * [descr:Stack.position.right]
            */
           right?: number;
         };
     /**
-     * [descr:Stacking.direction]
+     * [descr:Stack.direction]
      */
-    direction?: NotifyStackingDirection;
+    direction?: NotifyStackDirection;
   }
   /**
    * [descr:StringLengthRule]

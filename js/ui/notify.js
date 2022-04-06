@@ -10,32 +10,33 @@ const window = getWindow();
 let $notify = null;
 const $containers = {};
 
-function notify(message, /* optional */ typeOrStacking, displayTime) {
+function notify(message, /* optional */ typeOrStack, displayTime) {
     const options = isPlainObject(message) ? message : { message: message };
-    const stacking = isPlainObject(typeOrStacking) ? typeOrStacking : undefined;
-    const type = isPlainObject(typeOrStacking) ? undefined : typeOrStacking;
-
+    const stack = isPlainObject(typeOrStack) ? typeOrStack : undefined;
+    const type = isPlainObject(typeOrStack) ? undefined : typeOrStack;
     const { onHidden: userHiddenAction } = options;
 
-    if(stacking?.position) {
-        const { position } = stacking;
-        const direction = stacking.direction || getDefaultDirection(position);
+    if(stack?.position) {
+        const { position } = stack;
+        const direction = stack.direction || getDefaultDirection(position);
         const containerKey = isString(position)
             ? position
             : `${position.top}-${position.left}-${position.bottom}-${position.right}`;
 
+        const { onShowing: userShowingAction } = options;
         const $container = getStackContainer(containerKey);
         setContainerClasses($container, direction);
-        options.container = $container;
 
-        const { onShowing: userShowingAction } = options;
-        options.onShowing = function(args) {
-            setContainerStyles($container, direction, position);
+        extend(options, {
+            container: $container,
+            onShowing: function(args) {
+                setContainerStyles($container, direction, position);
 
-            new Action(userShowingAction, {
-                context: args.model
-            }).execute(arguments);
-        };
+                new Action(userShowingAction, {
+                    context: args.model
+                }).execute(arguments);
+            }
+        });
     }
 
     extend(options, {

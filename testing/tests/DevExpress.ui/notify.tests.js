@@ -61,12 +61,12 @@ QUnit.module('notify', {
         this.clock.tick(100);
     });
 
-    QUnit.module('stackOptions', {
+    QUnit.module('stack', {
         beforeEach: function() {
             this.options = {
                 displayTime: 100
             };
-            this.stackOptions = {
+            this.stack = {
                 position: 'top left'
             };
         },
@@ -76,59 +76,59 @@ QUnit.module('notify', {
             notify._resetContainers();
         }
     }, () => {
-        QUnit.test('do not create toast-stack if stackOptions do not have position field', function(assert) {
+        QUnit.test('do not create toast-stack if stack do not have position field', function(assert) {
             notify(this.options, {});
             assert.equal($(`.${TOAST_STACK}`).length, 0);
             this.clock.tick(100);
         });
 
-        QUnit.test('create toast-stack if stackOptions have position field', function(assert) {
-            notify(this.options, this.stackOptions);
+        QUnit.test('create toast-stack if stack have position field', function(assert) {
+            notify(this.options, this.stack);
 
             assert.equal($(`.${TOAST_STACK}`).length, 1);
             this.clock.tick(100);
         });
 
         QUnit.test('use the same toast-stack if two notifies have the same position', function(assert) {
-            notify(this.options, this.stackOptions);
-            notify(this.options, this.stackOptions);
+            notify(this.options, this.stack);
+            notify(this.options, this.stack);
 
             assert.equal($(`.${TOAST_STACK}`).length, 1);
             this.clock.tick(100);
         });
 
         QUnit.test('use different toast-stacks if two notifies have diefferent position', function(assert) {
-            notify(this.options, this.stackOptions);
+            notify(this.options, this.stack);
             notify(this.options, { position: 'bottom left' });
 
             assert.equal($(`.${TOAST_STACK}`).length, 2);
             this.clock.tick(100);
         });
 
-        QUnit.test('add down direction class if stackOptions do not have direction field and position is a top position alias', function(assert) {
-            notify(this.options, this.stackOptions);
+        QUnit.test('add down direction class if stack do not have direction field and position is a top position alias', function(assert) {
+            notify(this.options, this.stack);
 
             assert.equal($(`.${TOAST_STACK}-down-direction`).length, 1);
             this.clock.tick(100);
         });
 
-        QUnit.test('add up direction class if stackOptions do not have direction field and position is not a top position alias', function(assert) {
+        QUnit.test('add up direction class if stack do not have direction field and position is not a top position alias', function(assert) {
             notify(this.options, { position: { top: 100, left: 100 } });
 
             assert.equal($(`.${TOAST_STACK}-up-direction`).length, 1);
             this.clock.tick(100);
         });
 
-        QUnit.test('add correct direction class if stackOptions have direction field', function(assert) {
+        QUnit.test('add correct direction class if stack have direction field', function(assert) {
             const direction = 'left-reverse';
-            notify(this.options, { ...this.stackOptions, direction });
+            notify(this.options, { ...this.stack, direction });
 
             assert.equal($(`.${TOAST_STACK}-${direction}-direction`).length, 1);
             this.clock.tick(100);
         });
 
         QUnit.test('set container option as a toast stack element', function(assert) {
-            notify(this.options, this.stackOptions);
+            notify(this.options, this.stack);
 
             const $container = $(`.${TOAST_STACK}`);
             const instance = $(`.${TOAST_CLASS}`).dxToast('instance');
@@ -144,7 +144,7 @@ QUnit.module('notify', {
             { direction: 'right', style: 'left' }
         ].forEach(({ direction, style }) => {
             QUnit.test(`should set ${style} style if stack has ${direction} direction`, function(assert) {
-                notify(this.options, { ...this.stackOptions, direction });
+                notify(this.options, { ...this.stack, direction });
 
                 const stackStyles = $(`.${TOAST_STACK}`)[0].style;
 
