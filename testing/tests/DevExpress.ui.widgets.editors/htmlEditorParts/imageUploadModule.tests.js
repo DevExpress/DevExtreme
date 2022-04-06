@@ -69,7 +69,8 @@ module('ImageUpload module', moduleConfig, () => {
         ImageUploadInstance.option('fileUploadMode', 'base64');
 
         assert.notOk(ImageUploadInstance._getUploaderModule().preventImageUpload);
-        assert.strictEqual(this.attachEventsSpy.callCount, 0, 'Events are attached on module initialization at runtime');
+        assert.strictEqual(this.attachEventsSpy.callCount, 0, 'Events are attached');
+        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached');
     });
 
     test('events should be attached if the fileUploadMode is changed to server at runtime', function(assert) {
@@ -80,8 +81,18 @@ module('ImageUpload module', moduleConfig, () => {
         ImageUploadInstance.option('fileUploadMode', 'server');
 
         assert.ok(ImageUploadInstance._getUploaderModule().preventImageUpload);
-        assert.strictEqual(this.attachEventsSpy.callCount, 1, 'Events are attached on module initialization at runtime');
+        assert.strictEqual(this.attachEventsSpy.callCount, 1, 'Events are attached');
+        assert.strictEqual(this.detachEventsSpy.callCount, 0, 'Events are detached');
     });
 
-    // after dispose
+    test('events should be detached on clean', function(assert) {
+        this.options.fileUploadMode = 'server';
+        const ImageUploadInstance = new ImageUpload(this.quillMock, this.options);
+
+        this.attachSpies(ImageUploadInstance);
+        ImageUploadInstance.clean();
+
+        assert.notOk(ImageUploadInstance._getUploaderModule().preventImageUpload);
+        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached');
+    });
 });
