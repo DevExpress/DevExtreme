@@ -65,7 +65,7 @@ function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, jsPDFTe
 
 function drawCellBackground(doc, cell) {
     if(isDefined(cell.backgroundColor)) {
-        callMethodWithColorParameter(doc, 'fillColor', cell.backgroundColor);
+        trySetColor(doc, 'fill', cell.backgroundColor);
         drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
     }
 }
@@ -143,7 +143,7 @@ function drawBorders(doc, rect, { borderWidth, borderColor, drawLeftBorder = tru
 }
 
 function setTextStyles(doc, { textColor, font }, docStyles) {
-    callMethodWithColorParameter(doc, 'textColor', isDefined(textColor) ? textColor : docStyles.textColor);
+    trySetColor(doc, 'text', isDefined(textColor) ? textColor : docStyles.textColor);
 
     const currentFont = isDefined(font) ? extend({}, docStyles.font, font) : docStyles.font;
     const docFont = doc.getFont();
@@ -165,16 +165,16 @@ function setLinesStyles(doc, { borderWidth, borderColor }, docStyles) {
         setDocBorderWidth(doc, toPdfUnit(doc, currentBorderWidth));
     }
 
-    callMethodWithColorParameter(doc, 'drawColor', isDefined(borderColor) ? borderColor : docStyles.borderColor);
+    trySetColor(doc, 'draw', isDefined(borderColor) ? borderColor : docStyles.borderColor);
 }
 
-function callMethodWithColorParameter(doc, method, color) {
-    const getterName = `get${capitalizeFirstLetter(method)}`;
-    const setterName = `set${capitalizeFirstLetter(method)}`;
+function trySetColor(doc, target, color) {
+    const getterName = `get${capitalizeFirstLetter(target)}Color`;
+    const setterName = `set${capitalizeFirstLetter(target)}Color`;
 
     const { ch1 = color, ch2, ch3, ch4 } = color;
 
-    const normalizedColor = doc.__private__.decodeColorString(doc.__private__.encodeColorString({ ch1, ch2, ch3, ch4, precision: method === 'textColor' ? 3 : 2 }));
+    const normalizedColor = doc.__private__.decodeColorString(doc.__private__.encodeColorString({ ch1, ch2, ch3, ch4, precision: target === 'text' ? 3 : 2 }));
 
     if(normalizedColor !== doc[getterName]()) {
         doc[setterName].apply(doc, [ch1, ch2, ch3, ch4].filter(item => item !== undefined));
