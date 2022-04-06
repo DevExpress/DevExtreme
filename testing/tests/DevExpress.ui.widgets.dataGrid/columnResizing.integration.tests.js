@@ -6,6 +6,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(gridMarkup);
+    // $('body').html(gridMarkup);
 });
 
 import $ from 'jquery';
@@ -847,9 +848,102 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         }
     });
 
+    QUnit.test('Cell widths in group and data rows should be synchronized (T1078605)', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{
+                ID: 1,
+                CompanyName: 'Super Mart of the West',
+                City: 'Bentonville',
+                State: 'Arkansas',
+            }],
+            keyExpr: 'ID',
+            loadingTimeout: null,
+            allowColumnResizing: true,
+            showBorders: true,
+            columnResizingMode: 'widget',
+            columnMinWidth: 50,
+            width: 1000,
+            columnAutoWidth: true,
+            selection: {
+                mode: 'multiple'
+            },
+            columns: ['CompanyName', 'City', { dataField: 'State', groupIndex: 0 }],
+        });
+        const instance = dataGrid.dxDataGrid('instance');
+        const offset = $('#dataGrid').offset();
+
+        // act
+        const resizeController = instance.getController('columnsResizer');
+        resizeController._startResizing({
+            event: {
+                data: resizeController,
+                type: 'touchstart',
+                pageX: offset.left + 689,
+                pageY: offset.top + 15,
+                preventDefault: function() { },
+                stopPropagation: function() { }
+            }
+        });
+        resizeController._moveSeparator({
+            event: {
+                data: resizeController,
+                pageX: offset.left + 300,
+                preventDefault: commonUtils.noop
+            }
+        });
+        resizeController._endResizing({
+            event: {
+                data: resizeController
+            }
+        });
+
+        let headerSelectCellWidth = $('#dataGrid').find('.dx-datagrid-headers .dx-command-select').width();
+        let groupRowSelectCellWidth = $('#dataGrid').find('.dx-group-row .dx-command-select').width();
+        let dataRowSelectCellWidth = $('#dataGrid').find('.dx-data-row .dx-command-select').width();
+
+        // assert
+        assert.ok(instance.columnOption('CompanyName', 'width') < 250, 'column is resized');
+        assert.roughEqual(headerSelectCellWidth, groupRowSelectCellWidth, 1.1, 'select cells in header and group rows are equal');
+        assert.strictEqual(headerSelectCellWidth, dataRowSelectCellWidth, 'select cells in header and data rows are equal');
+
+        // act
+        resizeController._startResizing({
+            event: {
+                data: resizeController,
+                type: 'touchstart',
+                pageX: offset.left + 363,
+                pageY: offset.top + 15,
+                preventDefault: function() { },
+                stopPropagation: function() { }
+            }
+        });
+        resizeController._moveSeparator({
+            event: {
+                data: resizeController,
+                pageX: offset.left + 600,
+                preventDefault: commonUtils.noop
+            }
+        });
+        resizeController._endResizing({
+            event: {
+                data: resizeController
+            }
+        });
+
+        headerSelectCellWidth = $('#dataGrid').find('.dx-datagrid-headers .dx-command-select').width();
+        groupRowSelectCellWidth = $('#dataGrid').find('.dx-group-row .dx-command-select').width();
+        dataRowSelectCellWidth = $('#dataGrid').find('.dx-data-row .dx-command-select').width();
+
+        // assert
+        assert.ok(instance.columnOption('CompanyName', 'width') > 400, 'column is resized');
+        assert.roughEqual(headerSelectCellWidth, groupRowSelectCellWidth, 1.1, 'select cells in header and group rows are equal');
+        assert.strictEqual(headerSelectCellWidth, dataRowSelectCellWidth, 'select cells in header and data rows are equal');
+    });
+
     QUnit.module('RTL mode', () => {
         QUnit.test('The separator position should be correct when a parent grid container in RTL mode', function(assert) {
-            // arrange
+        // arrange
             const $testElement = $('#dataGrid');
 
             $testElement.parent().attr('dir', 'rtl').css({ width: '1000px', height: '500px' });
