@@ -83,6 +83,34 @@ $transparent-border: 1px solid transparent;
   }
 }
 
+.dx-htmleditor-add-image-popup-with-tabs > .dx-overlay-content > .dx-popup-content {
+  padding: 0;
+}
+
+.dx-htmleditor-add-image-popup > .dx-overlay-content {
+  > .dx-popup-content {
+    .dx-multiview-wrapper {
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+    }
+
+    .dx-fix-ratio-container {
+      .dx-textbox {
+        display: inline-block;
+      }
+
+      .dx-buttongroup {
+        vertical-align: top;
+      }
+    }
+  }
+
+  .dx-popup-title {
+    border-bottom: 0;
+  }
+}
+
 .dx-quill-container {
   box-sizing: border-box;
   display: flex;

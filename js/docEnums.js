@@ -1030,6 +1030,16 @@
  */
 
 /**
+ * @typedef {string} Enums.HtmlEditorImageUploadTab
+ * @enum {'url'|'file'}
+ */
+
+/**
+ * @typedef {string} Enums.HtmlEditorImageUploadFileUploadMode
+ * @enum {'base64'|'server'|'both'}
+ */
+
+/**
  * @typedef {string} Enums.EditorStylingMode
  * @enum {'outlined'|'underlined'|'filled'}
  */

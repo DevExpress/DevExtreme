@@ -807,7 +807,7 @@ QUnit.module('Coordinates calculation. PolarChart plugin', {
 
         polarChart.option('useSpiderWeb', true);
 
-        this.checkCoords(assert, polarChart, { angle: 350, series: 's2' }, { x: 95, y: 71.3 });
+        this.checkCoords(assert, polarChart, { angle: 350, series: 's2' }, { x: 91, y: 50 });
     });
 
     QUnit.test('Cases when coords can not be calculated', function(assert) {

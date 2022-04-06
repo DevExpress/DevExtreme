@@ -1081,9 +1081,9 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
             type: 'extendedImage',
             value: {
                 alt: 'Alternate',
-                height: '100',
+                height: 100,
                 src: 'http://test.com/test.jpg',
-                width: '100'
+                width: 100
             }
         }, 'expected insert new image config');
 

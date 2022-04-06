@@ -1441,6 +1441,142 @@ QUnit.module('Table', moduleConfig, () => {
             done();
         });
     });
+
+    QUnit.test('3 cols - 2 rows - exporting 1 hiddel field', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            width: 1000,
+            columns: [
+                {
+                    name: 'f1',
+                    dataField: 'f1',
+                    visible: false,
+                },
+                'f2',
+                'f3'
+            ],
+            dataSource: [{ f1: 'v1_1', f2: 'v2_1', f3: 'v3_1' }, { f1: 'v1_2', f2: 'v2_2', f3: 'v3_2' }]
+        });
+
+        const expectedLog = [
+            'setTextColor,#979797',
+            'setFontSize,10',
+            'text,F1,45,50.75,{baseline:middle}',
+            'text,F2,269.035,50.75,{baseline:middle}',
+            'text,F3,493.07,50.75,{baseline:middle}',
+            'setTextColor,#000000',
+            'text,v1_1,45,72.25,{baseline:middle}',
+            'text,v2_1,269.035,72.25,{baseline:middle}',
+            'text,v3_1,493.07,72.25,{baseline:middle}',
+            'text,v1_2,45,93.75,{baseline:middle}',
+            'text,v2_2,269.035,93.75,{baseline:middle}',
+            'text,v3_2,493.07,93.75,{baseline:middle}',
+            'setLineWidth,0.5',
+            'setDrawColor,#979797',
+            'rect,40,40,224.035,21.5',
+            'rect,264.035,40,224.035,21.5',
+            'rect,488.07,40,67.21,21.5',
+            'rect,40,61.5,224.035,21.5',
+            'rect,264.035,61.5,224.035,21.5',
+            'rect,488.07,61.5,67.21,21.5',
+            'rect,40,83,224.035,21.5',
+            'rect,264.035,83,224.035,21.5',
+            'rect,488.07,83,67.21,21.5',
+            'setFontSize,16',
+            'setLineWidth,0.200025',
+            'setDrawColor,#000000'
+        ];
+
+        dataGrid.beginUpdate();
+        dataGrid.columnOption('f1', 'visible', true);
+
+        exportDataGrid({ jsPDFDocument: doc, component: dataGrid }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        }).then(() => {
+            dataGrid.columnOption('f1', 'visible', false);
+            dataGrid.endUpdate();
+        });
+    });
+
+    QUnit.test('3 cols - 2 rows - exporting 2 hiddel field', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            width: 1000,
+            columns: [
+                {
+                    name: 'f1',
+                    dataField: 'f1',
+                    visible: false,
+                },
+                'f2',
+                'f3',
+                {
+                    name: 'f4',
+                    caption: 'f4',
+                    visible: false,
+                    calculateCellValue(cellData) {
+                        return 1;
+                    }
+                }
+            ],
+            dataSource: [{ f1: 'v1_1', f2: 'v2_1', f3: 'v3_1' }, { f1: 'v1_2', f2: 'v2_2', f3: 'v3_2' }]
+        });
+
+        const expectedLog = [
+            'setTextColor,#979797',
+            'setFontSize,10',
+            'text,F1,45,50.75,{baseline:middle}',
+            'text,F2,243.185,50.75,{baseline:middle}',
+            'text,F3,441.369,50.75,{baseline:middle}',
+            'text,f4,550.28,50.75,{baseline:middle,align:right}',
+            'setTextColor,#000000',
+            'text,v1_1,45,72.25,{baseline:middle}',
+            'text,v2_1,243.185,72.25,{baseline:middle}',
+            'text,v3_1,441.369,72.25,{baseline:middle}',
+            'text,1,550.28,72.25,{baseline:middle,align:right}',
+            'text,v1_2,45,93.75,{baseline:middle}',
+            'text,v2_2,243.185,93.75,{baseline:middle}',
+            'text,v3_2,441.369,93.75,{baseline:middle}',
+            'text,1,550.28,93.75,{baseline:middle,align:right}',
+            'setLineWidth,0.5',
+            'setDrawColor,#979797',
+            'rect,40,40,198.185,21.5',
+            'rect,238.185,40,198.185,21.5',
+            'rect,436.369,40,59.455,21.5',
+            'rect,495.825,40,59.455,21.5',
+            'rect,40,61.5,198.185,21.5',
+            'rect,238.185,61.5,198.185,21.5',
+            'rect,436.369,61.5,59.455,21.5',
+            'rect,495.825,61.5,59.455,21.5',
+            'rect,40,83,198.185,21.5',
+            'rect,238.185,83,198.185,21.5',
+            'rect,436.369,83,59.455,21.5',
+            'rect,495.825,83,59.455,21.5',
+            'setFontSize,16',
+            'setLineWidth,0.200025',
+            'setDrawColor,#000000'
+        ];
+
+        dataGrid.beginUpdate();
+        dataGrid.columnOption('f1', 'visible', true);
+        dataGrid.columnOption('f4', 'visible', true);
+
+        exportDataGrid({ jsPDFDocument: doc, component: dataGrid }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        }).then(() => {
+            dataGrid.columnOption('f1', 'visible', false);
+            dataGrid.columnOption('f4', 'visible', false);
+            dataGrid.endUpdate();
+        });
+    });
 });
 
 JSPdfMultilineTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

@@ -599,6 +599,73 @@ const JSPdfSplittingTests = {
                     done();
                 });
             });
+
+
+            QUnit.test('3 cols - 1 rows, margin=30, unit = mm, no page splitting', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc({ unit: 'mm' });
+
+                const dataGrid = createDataGrid({
+                    width: 1000,
+                    columns: [
+                        { dataField: 'f1' },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                    ],
+                    dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }]
+                });
+
+                const expectedLog = [
+                    'setTextColor,#979797',
+                    'setFontSize,10',
+                    'text,F1,31.764,33.792,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F2,69.264,33.792,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F3,106.765,33.792,{baseline:middle}',
+                    'setTextColor,#979797',
+                    'text,F4,144.265,33.792,{baseline:middle}',
+                    'setTextColor,#000000',
+                    'text,f1,31.764,41.377,{baseline:middle}',
+                    'text,f2,69.264,41.377,{baseline:middle}',
+                    'text,f3,106.765,41.377,{baseline:middle}',
+                    'text,f4,144.265,41.377,{baseline:middle}',
+                    'setLineWidth,0.17638888888888887',
+                    'setDrawColor,#979797',
+                    'rect,30,30,37.5,7.585',
+                    'setLineWidth,0.17638888888888887',
+                    'setDrawColor,#979797',
+                    'rect,67.5,30,37.5,7.585',
+                    'setLineWidth,0.17638888888888887',
+                    'setDrawColor,#979797',
+                    'rect,105.001,30,37.5,7.585',
+                    'setLineWidth,0.17638888888888887',
+                    'setDrawColor,#979797',
+                    'rect,142.501,30,37.5,7.585',
+                    'setLineWidth,0.17638888888888887',
+                    'setDrawColor,#979797',
+                    'rect,30,37.585,37.5,7.585',
+                    'setLineWidth,0.17638888888888887',
+                    'setDrawColor,#979797',
+                    'rect,67.5,37.585,37.5,7.585',
+                    'setLineWidth,0.17638888888888887',
+                    'setDrawColor,#979797',
+                    'rect,105.001,37.585,37.5,7.585',
+                    'setLineWidth,0.17638888888888887',
+                    'setDrawColor,#979797',
+                    'rect,142.501,37.585,37.5,7.585',
+                    'setFontSize,16',
+                    'setLineWidth,0.200025',
+                    'setDrawColor,#000000'
+                ];
+
+                exportDataGrid({ jsPDFDocument: doc, component: dataGrid, margin: 30 }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
         });
 
         QUnit.module('Splitting - Vertically splitting for simple cells', moduleConfig, () => {
