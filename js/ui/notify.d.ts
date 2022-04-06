@@ -1,16 +1,16 @@
 /** @public */
-type NotifyStackPosition = 'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center';
+type StackPosition = 'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center';
 
 /** @public */
-type NotifyStackDirection = 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse';
+type StackDirection = 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse';
 
 /** @public */
 interface Stack {
     /**
      * @docid
-     * @type Enums.NotifyStackPosition|object
+     * @type Enums.StackPosition|object
      */
-    position?: NotifyStackPosition | {
+    position?: StackPosition | {
         /**
          * @docid
          * @type number
@@ -34,9 +34,9 @@ interface Stack {
     };
     /**
      * @docid
-     * @type Enums.NotifyStackDirection
+     * @type Enums.StackDirection
      */
-    direction?: NotifyStackDirection;
+    direction?: StackDirection;
 }
 
 /**

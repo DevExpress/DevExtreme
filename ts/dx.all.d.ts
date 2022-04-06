@@ -25047,25 +25047,6 @@ declare module DevExpress.ui {
    * [descr:ui.notify(options,stack)]
    */
   export function notify(options: any, stack?: Stack): void;
-  type NotifyStackDirection =
-    | 'down'
-    | 'up'
-    | 'left'
-    | 'right'
-    | 'down-reverse'
-    | 'up-reverse'
-    | 'left-reverse'
-    | 'right-reverse';
-  type NotifyStackPosition =
-    | 'top left'
-    | 'top right'
-    | 'bottom left'
-    | 'bottom right'
-    | 'top center'
-    | 'bottom center'
-    | 'left center'
-    | 'right center'
-    | 'center';
   /**
    * [descr:NumericRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25199,7 +25180,7 @@ declare module DevExpress.ui {
      * [descr:Stack.position]
      */
     position?:
-      | NotifyStackPosition
+      | StackPosition
       | {
           /**
            * [descr:Stack.position.top]
@@ -25221,8 +25202,27 @@ declare module DevExpress.ui {
     /**
      * [descr:Stack.direction]
      */
-    direction?: NotifyStackDirection;
+    direction?: StackDirection;
   }
+  type StackDirection =
+    | 'down'
+    | 'up'
+    | 'left'
+    | 'right'
+    | 'down-reverse'
+    | 'up-reverse'
+    | 'left-reverse'
+    | 'right-reverse';
+  type StackPosition =
+    | 'top left'
+    | 'top right'
+    | 'bottom left'
+    | 'bottom right'
+    | 'top center'
+    | 'bottom center'
+    | 'left center'
+    | 'right center'
+    | 'center';
   /**
    * [descr:StringLengthRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
