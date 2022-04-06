@@ -209,25 +209,6 @@ const subscribes = {
         return this.getRenderingStrategyInstance().getDirection();
     },
 
-    updateAppointmentStartDate: function(options) {
-        const appointment = options.appointment;
-        const firstViewDate = this._workSpace.getStartViewDate();
-        let startDate = new Date(options.startDate);
-        const startDayHour = this._getCurrentViewOption('startDayHour');
-        let updatedStartDate;
-
-        if(this.appointmentTakesAllDay(appointment)) {
-            updatedStartDate = dateUtils.normalizeDate(startDate, firstViewDate);
-        } else {
-            if(startDate < firstViewDate) {
-                startDate = firstViewDate;
-            }
-            updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
-        }
-
-        return dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
-    },
-
     updateAppointmentEndDate: function(options) {
         const endDate = options.endDate;
         const endDayHour = this._getCurrentViewOption('endDayHour');
