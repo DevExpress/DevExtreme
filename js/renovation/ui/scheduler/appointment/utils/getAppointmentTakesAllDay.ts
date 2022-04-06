@@ -1,5 +1,7 @@
 import dateUtils from '../../../../../core/utils/date';
 
+export type ShowAllDayAppointmentsType = 'auto' | 'allDay' | 'none';
+
 const getAppointmentDurationInHours = (
   startDate: Date,
   endDate: Date,
@@ -22,34 +24,43 @@ const appointmentHasShortDayDuration = (
 };
 
 export const getAppointmentTakesAllDay = (
-  appointment: {
+  appointmentAdapter: {
     allDay: boolean;
     startDate: Date;
     endDate: Date;
   },
   viewStartDayHour: number,
   viewEndDayHour: number,
+  showAllDayAppointments: ShowAllDayAppointmentsType,
 ): boolean => {
   const {
     allDay,
     startDate,
     endDate,
-  } = appointment;
+  } = appointmentAdapter;
 
-  if (allDay) {
-    return true;
-  }
+  const hasAllDay = (): boolean => allDay;
 
-  const dayDuration = 24;
-  const appointmentDurationInHours = getAppointmentDurationInHours(
-    startDate,
-    endDate,
-  );
+  return {
+    none: (): boolean => false,
+    allDay: hasAllDay,
+    auto: (): boolean => {
+      if (hasAllDay()) {
+        return true;
+      }
 
-  return appointmentDurationInHours >= dayDuration || appointmentHasShortDayDuration(
-    startDate,
-    endDate,
-    viewStartDayHour,
-    viewEndDayHour,
-  );
+      const appointmentDurationInHours = getAppointmentDurationInHours(
+        startDate,
+        endDate,
+      );
+
+      const dayDuration = 24;
+      return appointmentDurationInHours >= dayDuration || appointmentHasShortDayDuration(
+        startDate,
+        endDate,
+        viewStartDayHour,
+        viewEndDayHour,
+      );
+    },
+  }[showAllDayAppointments]();
 };

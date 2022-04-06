@@ -457,6 +457,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         type: this.currentViewConfig.type,
         cellDuration: this.currentViewConfig.cellDuration,
         maxAppointmentsPerCell: this.currentViewConfig.maxAppointmentsPerCell,
+        showAllDayAppointments: this.currentViewConfig.showAllDayAppointments,
       },
       this.loadedResources,
       this.workSpaceViewModel!.viewDataProvider,

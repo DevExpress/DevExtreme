@@ -78,6 +78,7 @@ export const getAppointmentsConfig = (
   | 'type'
   | 'cellDuration'
   | 'maxAppointmentsPerCell'
+  | 'showAllDayAppointments'
   >,
   loadedResources: Group[],
   viewDataProvider: ViewDataProviderType,
@@ -106,6 +107,7 @@ export const getAppointmentsConfig = (
     intervalCount: viewConfig.intervalCount,
     hoursInterval: viewConfig.hoursInterval,
     showAllDayPanel: viewConfig.showAllDayPanel,
+    showAllDayAppointments: viewConfig.showAllDayAppointments,
     supportAllDayRow: isAllDayPanelSupported, // ?
     groupOrientation: viewDataProvider.getViewOptions().groupOrientation,
     firstDayOfWeek: viewConfig.firstDayOfWeek,
