@@ -131,7 +131,7 @@ function checkAxisGroup(assert, createAxisArguments, chart) {
 }
 
 const stubSeries = [createSeries(), createSeries()];
-const stubAxes = [createStubAxis(), createStubAxis()];
+const stubAxes = [createStubAxis(), createStubAxis(), createStubAxis(), createStubAxis()];
 let axesIndex;
 const environment = {
     beforeEach: function() {
@@ -716,4 +716,23 @@ QUnit.test('ClipPaths. Refresh clip path', function(assert) {
 
     assert.deepEqual(chart._panesClipRects.fixed[0].attr.lastCall.args[0], { cx: 100, cy: 100, r: 10 });
     assert.deepEqual(chart._panesClipRects.base[0].attr.lastCall.args[0], { cx: 100, cy: 100, r: 10 });
+});
+
+QUnit.module('Option changing', environment);
+
+QUnit.test('Change of useSpiderWeb', function(assert) {
+    const chart = this.createPolarChart({
+        series: [{}]
+    });
+
+    chart.option('useSpiderWeb', true);
+
+    assert.strictEqual(stubAxes[0].dispose.called, true);
+    assert.strictEqual(stubAxes[1].dispose.called, true);
+
+    assert.strictEqual(stubAxes[2].draw.called, true);
+    assert.strictEqual(stubAxes[3].draw.called, true);
+
+    assert.strictEqual(stubAxes[2], chart.getArgumentAxis());
+    assert.strictEqual(stubAxes[3], chart.getValueAxis());
 });
