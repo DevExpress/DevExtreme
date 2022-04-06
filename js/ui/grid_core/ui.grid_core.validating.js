@@ -425,6 +425,9 @@ const ValidatingController = modules.Controller.inherit((function() {
                     if(adapter) {
                         adapter.getValue = getValue;
                         adapter.validationRequestsCallbacks = [];
+                        adapter.bypass = () => {
+                            return parameters.row.isNewRow && !this._isValidationInProgress && !editingController.isCellModified(parameters);
+                        };
                     }
                 }
 
@@ -637,7 +640,7 @@ export const validatingModule = {
 
                 _validateEditFormAfterUpdate: function(row, isCustomSetCellValue) {
                     // T816256, T844143
-                    if(isCustomSetCellValue && this._editForm && !row.isNewRow) {
+                    if(isCustomSetCellValue && this._editForm) {
                         this._editForm.validate();
                     }
 
