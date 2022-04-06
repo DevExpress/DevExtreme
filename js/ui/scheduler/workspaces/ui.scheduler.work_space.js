@@ -2001,19 +2001,12 @@ class SchedulerWorkSpace extends WidgetObserver {
     _createDragBehaviorBase($element, options) {
         const container = this.$element().find(`.${FIXED_CONTAINER_CLASS}`);
 
-        const element = this.$element();
-
-        const attachGeneralEvents = () => this._attachDragEvents(element);
-        const detachGeneralEvents = () => this._detachDragEvents(element);
-
         const isDefaultDraggingMode = this.option('draggingMode') === 'default';
 
         this.dragBehavior.addTo($element, createDragBehaviorConfig(
             container,
             isDefaultDraggingMode,
             this.dragBehavior,
-            attachGeneralEvents,
-            detachGeneralEvents,
             () => this._getDroppableCell(),
             () => this._getDateTables(),
             () => this.removeDroppableCellClass(),
@@ -3010,8 +3003,6 @@ const createDragBehaviorConfig = (
     container,
     isDefaultDraggingMode,
     dragBehavior,
-    attachGeneralEvents,
-    detachGeneralEvents,
     getDroppableCell,
     getDateTables,
     removeDroppableCellClass,
@@ -3049,10 +3040,6 @@ const createDragBehaviorConfig = (
     };
 
     const onDragStart = e => {
-        if(!isDefaultDraggingMode) {
-            detachGeneralEvents();
-        }
-
         const canceled = e.cancel;
         const event = e.event;
         const $itemElement = $(e.itemElement);
@@ -3129,10 +3116,6 @@ const createDragBehaviorConfig = (
     };
 
     const onDragEnd = e => {
-        if(!isDefaultDraggingMode) {
-            attachGeneralEvents();
-        }
-
         if(!isItemDisabled()) {
             dragBehavior.onDragEnd(e);
         }
