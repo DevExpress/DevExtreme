@@ -536,12 +536,12 @@ const EditingController = modules.ViewController.inherit((function() {
             return ['addRow', 'deleteRow', 'undeleteRow', 'editRow', 'saveEditData', 'cancelEditData', 'hasEditData'];
         },
 
-        refresh: function(isPageChanged) {
+        refresh: function() {
             if(!isDefined(this._pageIndex)) {
                 return;
             }
 
-            this._refreshCore(isPageChanged);
+            this._refreshCore.apply(this, arguments);
         },
 
         _refreshCore: noop,
@@ -874,7 +874,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const oldEditRowIndex = this._getVisibleEditRowIndex();
             const deferred = new Deferred();
 
-            this.refresh();
+            this.refresh({ allowCancelEditing: true });
 
             if(!this._allowRowAdding()) {
                 when(this._navigateToNewRow(oldEditRowIndex)).done(deferred.resolve).fail(deferred.reject);
@@ -1763,7 +1763,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(dataController && this._pageIndex !== dataController.pageIndex()) {
                 if(changeType === 'refresh') {
-                    this.refresh(true);
+                    this.refresh({ isPageChanged: true });
                 }
                 this._pageIndex = dataController.pageIndex();
             }
