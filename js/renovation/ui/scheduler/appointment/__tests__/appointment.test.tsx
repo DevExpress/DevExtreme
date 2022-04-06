@@ -27,7 +27,7 @@ describe('Appointment', () => {
       startDate: new Date('2021-08-05T10:00:00.000Z'),
       endDate: new Date('2021-08-05T12:00:00.000Z'),
       text: 'Some text',
-    },
+    } as any,
 
     geometry: {
       empty: false,
