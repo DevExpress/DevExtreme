@@ -304,6 +304,8 @@ class Scheduler extends Widget {
                 mode: 'standard'
             },
 
+            showAllDayAppointments: 'auto',
+
             renovateRender: true,
 
             _draggingMode: 'outlook',
@@ -731,6 +733,9 @@ class Scheduler extends Widget {
 
                 this._updateOption('workSpace', args.fullName, value);
                 break;
+            case 'showAllDayAppointments':
+                this._updateOption('showAllDayAppointments', name, value);
+                break;
             case 'renovateRender':
                 this._updateOption('workSpace', name, value);
                 break;
@@ -967,6 +972,7 @@ class Scheduler extends Widget {
             startDayHour: this._getCurrentViewOption('startDayHour'),
             endDayHour: this._getCurrentViewOption('endDayHour'),
             appointmentDuration: this._getCurrentViewOption('cellDuration'),
+            showAllDayAppointments: this._getCurrentViewOption('showAllDayAppointments'),
             showAllDayPanel: this.option('showAllDayPanel'),
             getLoadedResources: () => this.option('loadedResources'),
             getIsVirtualScrolling: () => this.isVirtualScrolling(),
@@ -975,7 +981,7 @@ class Scheduler extends Widget {
             getViewDirection: () => this._workSpace.viewDirection,
             getDateRange: () => this._workSpace.getDateRange(),
             getGroupCount: () => this._workSpace._getGroupCount(),
-            getViewDataProvider: () => this._workSpace.viewDataProvider
+            getViewDataProvider: () => this._workSpace.viewDataProvider,
         });
     }
 
@@ -2092,7 +2098,8 @@ class Scheduler extends Widget {
         return getAppointmentTakesAllDay(
             appointment,
             this._getCurrentViewOption('startDayHour'),
-            this._getCurrentViewOption('endDayHour')
+            this._getCurrentViewOption('endDayHour'),
+            this._getCurrentViewOption('showAllDayAppointments'),
         );
     }
 
