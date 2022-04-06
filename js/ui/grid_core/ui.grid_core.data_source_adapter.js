@@ -718,8 +718,11 @@ export default gridCore.Controller.inherit((function() {
         isLastPage: function() {
             return this._isLastPage;
         },
+        _dataSourceTotalCount: function() {
+            return this._dataSource.totalCount();
+        },
         totalCount: function() {
-            return parseInt((this._currentTotalCount || this._dataSource.totalCount()) + this._totalCountCorrection);
+            return parseInt((this._currentTotalCount || this._dataSourceTotalCount()) + this._totalCountCorrection);
         },
         totalCountCorrection: function() {
             return this._totalCountCorrection;

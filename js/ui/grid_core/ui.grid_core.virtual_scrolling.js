@@ -83,6 +83,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         init: function() {
             this.callBase.apply(this, arguments);
             this._items = [];
+            this._totalCount = -1;
             this._isLoaded = true;
             this._loadPageCount = 1;
 
@@ -167,6 +168,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         _handleDataChanged: function(e) {
             if(this.option(LEGACY_SCROLLING_MODE) === false) {
                 this._items = this._dataSource.items().slice();
+                this._totalCount = this._dataSourceTotalCount(true);
                 this.callBase.apply(this, arguments);
                 return;
             }
@@ -191,6 +193,9 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         },
         items: function() {
             return this._items;
+        },
+        _dataSourceTotalCount: function(isBase) {
+            return this.option(LEGACY_SCROLLING_MODE) === false && isVirtualMode(this) && !isBase ? this._totalCount : this.callBase();
         },
         itemsCount: function(isBase) {
             if(isBase || this.option(LEGACY_SCROLLING_MODE) === false) {
