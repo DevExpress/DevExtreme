@@ -53,6 +53,7 @@ export class AppointmentFilterBaseStrategy {
     get dateRange() { return this._resolveOption('dateRange'); }
     get groupCount() { return this._resolveOption('groupCount'); }
     get viewDataProvider() { return this._resolveOption('viewDataProvider'); }
+    get showAllDayAppointments() { return this._resolveOption('showAllDayAppointments'); }
 
     _resolveOption(name) {
         const result = this.options[name];
@@ -98,7 +99,12 @@ export class AppointmentFilterBaseStrategy {
         let result = false;
 
         each(adapters, (_, item) => {
-            if(getAppointmentTakesAllDay(item, this.viewStartDayHour, this.viewEndDayHour)) {
+            if(getAppointmentTakesAllDay(
+                item,
+                this.viewStartDayHour,
+                this.viewEndDayHour,
+                this.showAllDayAppointments,
+            )) {
                 result = true;
                 return false;
             }
@@ -118,7 +124,12 @@ export class AppointmentFilterBaseStrategy {
         } = filterOptions;
 
         return [[
-            (appointment) => getAppointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour)
+            (appointment) => getAppointmentTakesAllDay(
+                appointment,
+                viewStartDayHour,
+                viewEndDayHour,
+                this.showAllDayAppointments,
+            )
         ]];
     }
 
@@ -167,7 +178,12 @@ export class AppointmentFilterBaseStrategy {
                 recurrenceRule = appointment.recurrenceRule;
             }
 
-            const appointmentTakesAllDay = getAppointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
+            const appointmentTakesAllDay = getAppointmentTakesAllDay(
+                appointment,
+                viewStartDayHour,
+                viewEndDayHour,
+                this.showAllDayAppointments,
+            );
             const appointmentTakesSeveralDays = getAppointmentTakesSeveralDays(appointment);
             const isAllDay = appointment.allDay;
             const isLongAppointment = appointmentTakesSeveralDays || appointmentTakesAllDay;

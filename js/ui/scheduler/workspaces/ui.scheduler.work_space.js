@@ -2066,6 +2066,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolling: {
                 mode: 'standard',
             },
+            showAllDayAppointments: 'auto',
             renovateRender: true,
             height: undefined,
             draggingMode: 'outlook',
