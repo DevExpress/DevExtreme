@@ -33,14 +33,21 @@ const fakeFile = {
     name: 'fakefile1.jpeg',
     size: 1063,
     type: 'image/jpeg',
-    lastModifiedDate: $.now()
+    lastModifiedDate: Date.now()
+};
+
+const fakeFile2 = {
+    name: 'fakefile2.jpeg',
+    size: 963,
+    type: 'image/jpeg',
+    lastModifiedDate: Date.now()
 };
 
 const fakeFileText = {
     name: 'fakefile1.txt',
     size: 1063,
     type: 'text/plain',
-    lastModifiedDate: $.now()
+    lastModifiedDate: Date.now()
 };
 
 const serverUploadMarkup = '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"></p>';
@@ -622,7 +629,7 @@ module('Image uploading integration', {
         uploadCallCount: 1,
         expectedMarkup: serverUploadMarkup
     }, {
-        testNamePart: 'two } files',
+        testNamePart: 'image and text files',
         files: [fakeFile, fakeFileText],
         uploadCallCount: 1,
         expectedMarkup: serverUploadMarkup
@@ -631,6 +638,11 @@ module('Image uploading integration', {
         files: [fakeFileText],
         uploadCallCount: 0,
         expectedMarkup: markup
+    }, {
+        testNamePart: 'two image files',
+        files: [fakeFile, fakeFile2],
+        uploadCallCount: 1,
+        expectedMarkup: '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"><img src="/uploadDirectory/fakefile2.jpeg"></p>'
     }].forEach((data) => {
         test(`check upload to the server after drop ${data.testNamePart}`, function(assert) {
             this.createWidget();

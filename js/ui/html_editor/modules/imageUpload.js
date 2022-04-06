@@ -78,25 +78,24 @@ if(Quill) {
 
             const dataTransfer = e.originalEvent.dataTransfer;
             // const hasFiles = dataTransfer?.files?.length;
-            const file = dataTransfer.files[0];
+            const files = dataTransfer.files ?? [];
 
-            const imageUrl = this.options.uploadDirectory + file.name;
 
             const selection = this.quill.getSelection();
-            const pasteIndex = selection ? selection.index : this.quill.getLength();
+            let pasteIndex = selection ? selection.index : this.quill.getLength();
 
-            // const uploads = [];
-            if(this._isImage(file)) {
-                // e.preventDefault();
-                // e.stopPropagation();
-                this._fileUploader.upload(file);
+            const uploads = files.filter((file) => this._isImage(file));
+
+            uploads.forEach((file) => {
+                const imageUrl = this.options.uploadDirectory + file.name;
                 urlUpload(this.quill, pasteIndex, { src: imageUrl });
-            // this._fileUploader.option('value', [file]);
-            }
+                pasteIndex++;
+            });
 
-            // if(uploads.length >= 0) {
-            //     this._fileUploader.upload(file);
-            // }
+            if(uploads.length > 0) {
+                this._fileUploader.option('value', uploads);
+                this._fileUploader.upload();
+            }
         }
 
         _pasteHandler(e) {
