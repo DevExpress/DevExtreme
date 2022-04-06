@@ -54,7 +54,7 @@ describe('Appointment utils', () => {
           ...testViewModel.info as any,
           resourceColor: undefined,
         },
-      }))
+      } as any))
         .toEqual({
           height: '20px',
           left: '1px',
