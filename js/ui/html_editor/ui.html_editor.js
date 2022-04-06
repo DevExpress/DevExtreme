@@ -515,6 +515,7 @@ const HtmlEditor = Editor.inherit({
                 this._repaintToolbar();
                 break;
             case 'imageUpload':
+                this._moduleOptionChanged('imageUpload', args);
                 break;
             default:
                 this.callBase(args);

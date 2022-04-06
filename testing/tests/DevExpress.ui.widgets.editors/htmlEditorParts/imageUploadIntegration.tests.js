@@ -622,7 +622,6 @@ module('Image uploading integration', {
         assert.strictEqual(fileUploader.option('name'), 'photo123', 'name is correct');
     });
 
-
     [{
         testNamePart: 'one file',
         files: [fakeFile],
@@ -650,13 +649,48 @@ module('Image uploading integration', {
 
             const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
             const uploadStub = sinon.stub(fileUploader, 'upload');
-            const triggerDrop = (targetFiles) => {
-                const event = $.Event($.Event('drop', { dataTransfer: { files: targetFiles } }));
-                $(this.quillInstance.root).trigger(event);
-            };
 
             const files = data.files;
-            triggerDrop(files);
+            const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
+            $(this.quillInstance.root).trigger(event);
+
+            this.clock.tick(TIME_TO_WAIT);
+            assert.strictEqual(uploadStub.callCount, data.uploadCallCount, 'upload was called');
+            assert.strictEqual(this.instance.option('value'), data.expectedMarkup, 'value is correct');
+        });
+    });
+
+    [{
+        testNamePart: 'one file',
+        files: [fakeFile],
+        uploadCallCount: 1,
+        expectedMarkup: serverUploadMarkup
+    }, {
+        testNamePart: 'image and text files',
+        files: [fakeFile, fakeFileText],
+        uploadCallCount: 1,
+        expectedMarkup: serverUploadMarkup
+    }, {
+        testNamePart: 'one text file',
+        files: [fakeFileText],
+        uploadCallCount: 0,
+        expectedMarkup: markup
+    }, {
+        testNamePart: 'two image files',
+        files: [fakeFile, fakeFile2],
+        uploadCallCount: 1,
+        expectedMarkup: '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"><img src="/uploadDirectory/fakefile2.jpeg"></p>'
+    }].forEach((data) => {
+        test(`check upload to the server after paste ${data.testNamePart}`, function(assert) {
+            this.createWidget();
+            this.clock.tick(TIME_TO_WAIT);
+
+            const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+            const uploadStub = sinon.stub(fileUploader, 'upload');
+
+            const files = data.files;
+            const event = $.Event($.Event('paste', { clipboardData: { files: files } }));
+            $(this.quillInstance.root).trigger(event);
 
             this.clock.tick(TIME_TO_WAIT);
             assert.strictEqual(uploadStub.callCount, data.uploadCallCount, 'upload was called');

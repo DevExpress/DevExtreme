@@ -2,6 +2,7 @@ import Quill from 'devextreme-quill';
 import BaseModule from './base';
 import eventsEngine from '../../../events/core/events_engine';
 import $ from '../../../core/renderer';
+import { isDefined } from '../../../core/utils/type';
 // import { getFormatHandlers, getDefaultClickHandler, ICON_MAP } from '../utils/toolbar_helper'
 import { urlUpload } from '../utils/image_uploader_helper';
 import { addNamespace } from '../../../events/utils/index';
@@ -22,25 +23,46 @@ if(Quill) {
             super(quill, options);
 
             this.options = options;
+            this.quill = quill;
 
             this._quillContainer = this.editorInstance._getQuillContainer();
 
             this.addCleanCallback(this.prepareCleanCallback());
             // this._formatHandlers = getFormatHandlers(this);
             // this._tableFormats = getTableFormats(quill);
+            this._handleServerUpload();
 
-            const useServerUpload = this.options.fileUploadMode !== 'base64';
+        }
+
+        _handleServerUpload() {
+            const useServerUpload = isDefined(this.options.fileUploadMode) && this.options.fileUploadMode !== 'base64';
 
             if(useServerUpload) {
-                this._enableDragAndDropUploading(quill);
+                this._enableDragAndDropUploading();
+            } else {
+                this._disableDragAndDropUploading();
             }
         }
 
-        _enableDragAndDropUploading(quill) {
+
+        _getUploaderModule() {
+            if(!this._uploaderModule) {
+                this._uploaderModule = this.quill.getModule('uploader');
+            }
+
+            return this._uploaderModule;
+        }
+
+        _disableDragAndDropUploading() {
+            this._getUploaderModule().preventImageUpload = false;
+            this._detachEvents();
+        }
+
+        _enableDragAndDropUploading() {
             this._initFileUploader();
 
             // quill.getModule('uploader').removeDropHandler();
-            quill.getModule('uploader').preventImageUpload = true;
+            this._getUploaderModule().preventImageUpload = true;
             this._attachEvents();
         }
 
@@ -64,7 +86,6 @@ if(Quill) {
         }
 
         _attachEvents() {
-
             eventsEngine.on(this.quill.root, 'drop', this._dropHandler.bind(this));
             eventsEngine.on(this.quill.root, addNamespace('paste', MODULE_NAMESPACE), this._pasteHandler.bind(this));
         }
@@ -74,13 +95,16 @@ if(Quill) {
         }
 
         _dropHandler(e) {
+            this._handleInsertImages(e, 'dataTransfer');
+        }
+
+        _pasteHandler(e) {
+            this._handleInsertImages(e, 'clipboardData');
+        }
+
+        _handleInsertImages(e, filesField) {
             this.saveValueChangeEvent(e);
-
-            const dataTransfer = e.originalEvent.dataTransfer;
-            // const hasFiles = dataTransfer?.files?.length;
-            const files = dataTransfer.files ?? [];
-
-
+            const files = Array.from(e.originalEvent[filesField].files || []);
             const selection = this.quill.getSelection();
             let pasteIndex = selection ? selection.index : this.quill.getLength();
 
@@ -93,14 +117,11 @@ if(Quill) {
             });
 
             if(uploads.length > 0) {
+                e.preventDefault();
+                e.stopPropagation();
                 this._fileUploader.option('value', uploads);
                 this._fileUploader.upload();
             }
-        }
-
-        _pasteHandler(e) {
-            e.preventDefault();
-            e.stopPropagation();
         }
 
         _isImage(file) {
@@ -108,13 +129,25 @@ if(Quill) {
         }
 
         clean() {
-            this._detachEvents();
+            this._disableDragAndDropUploading();
         }
 
         prepareCleanCallback() {
             return () => {
                 this.clean();
             };
+        }
+
+        option(option, value) {
+            if(option === 'imageUpload') {
+                this.handleOptionChangeValue(value);
+                return;
+            }
+
+            if(option === 'fileUploadMode') {
+                this.options.fileUploadMode = value;
+                this._handleServerUpload();
+            }
         }
     };
 }
