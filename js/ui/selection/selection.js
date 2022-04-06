@@ -108,7 +108,7 @@ export default Class.inherit({
         this._selectionStrategy.onSelectionChanged();
     },
 
-    changeItemSelection: function(itemIndex, keys) {
+    changeItemSelection: function(itemIndex, keys, setFocusOnly) {
         let isSelectedItemsChanged;
         const items = this.options.plainItems();
         const item = items[itemIndex];
@@ -148,7 +148,7 @@ export default Class.inherit({
             if(this.options.mode === 'single') {
                 this.clearSelectedItems();
             }
-            if(isSelected) {
+            if(isSelected && !setFocusOnly) {
                 this._removeSelectedItem(itemKey);
             } else {
                 this._addSelectedItem(itemData, itemKey);
@@ -166,7 +166,7 @@ export default Class.inherit({
         if(isSelectedItemsChanged) {
             when(deferred).done(() => {
                 this._focusedItemIndex = itemIndex;
-                this.onSelectionChanged();
+                !setFocusOnly && this.onSelectionChanged();
             });
             return true;
         }
