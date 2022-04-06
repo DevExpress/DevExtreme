@@ -314,7 +314,7 @@ export const BaseChart = BaseWidget.inherit({
         onPointSelectionChanged: { name: 'pointSelectionChanged' },
         onSeriesHoverChanged: { name: 'seriesHoverChanged' },
         onPointHoverChanged: { name: 'pointHoverChanged' },
-        onDone: { name: 'done' },
+        onDone: { name: 'done', actionSettings: { excludeValidators: ['disabled'] } },
         onZoomStart: { name: 'zoomStart' },
         onZoomEnd: { name: 'zoomEnd' }
     },
