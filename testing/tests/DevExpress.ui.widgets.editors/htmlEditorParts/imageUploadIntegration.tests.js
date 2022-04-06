@@ -36,6 +36,15 @@ const fakeFile = {
     lastModifiedDate: $.now()
 };
 
+const fakeFileText = {
+    name: 'fakefile1.txt',
+    size: 1063,
+    type: 'text/plain',
+    lastModifiedDate: $.now()
+};
+
+const serverUploadMarkup = '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"></p>';
+
 module('Image uploading integration', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -606,10 +615,24 @@ module('Image uploading integration', {
         assert.strictEqual(fileUploader.option('name'), 'photo123', 'name is correct');
     });
 
-    [[fakeFile], [fakeFile, fakeFile]].forEach((filesData) => {
-        test(`check upload to the server after drop ${filesData.length} images`, function(assert) {
-            const expectedValue = '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"></p>';
 
+    [{
+        testNamePart: 'one file',
+        files: [fakeFile],
+        uploadCallCount: 1,
+        expectedMarkup: serverUploadMarkup
+    }, {
+        testNamePart: 'two } files',
+        files: [fakeFile, fakeFileText],
+        uploadCallCount: 1,
+        expectedMarkup: serverUploadMarkup
+    }, {
+        testNamePart: 'one text file',
+        files: [fakeFileText],
+        uploadCallCount: 0,
+        expectedMarkup: markup
+    }].forEach((data) => {
+        test(`check upload to the server after drop ${data.testNamePart}`, function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
 
@@ -620,13 +643,12 @@ module('Image uploading integration', {
                 $(this.quillInstance.root).trigger(event);
             };
 
-            const files = filesData;
+            const files = data.files;
             triggerDrop(files);
 
             this.clock.tick(TIME_TO_WAIT);
-
-            assert.strictEqual(uploadStub.callCount, 1, 'upload was called');
-            assert.strictEqual(this.instance.option('value'), expectedValue, 'value is correct');
+            assert.strictEqual(uploadStub.callCount, data.uploadCallCount, 'upload was called');
+            assert.strictEqual(this.instance.option('value'), data.expectedMarkup, 'value is correct');
         });
     });
 

@@ -39,7 +39,8 @@ if(Quill) {
         _enableDragAndDropUploading(quill) {
             this._initFileUploader();
 
-            quill.getModule('uploader').removeDropHandler();
+            // quill.getModule('uploader').removeDropHandler();
+            quill.getModule('uploader').preventImageUpload = true;
             this._attachEvents();
         }
 
@@ -73,10 +74,6 @@ if(Quill) {
         }
 
         _dropHandler(e) {
-            // debugger;
-            e.preventDefault();
-            e.stopPropagation();
-            // debugger;
             this.saveValueChangeEvent(e);
 
             const dataTransfer = e.originalEvent.dataTransfer;
@@ -88,16 +85,27 @@ if(Quill) {
             const selection = this.quill.getSelection();
             const pasteIndex = selection ? selection.index : this.quill.getLength();
 
-            this._fileUploader.upload(file);
+            // const uploads = [];
+            if(this._isImage(file)) {
+                // e.preventDefault();
+                // e.stopPropagation();
+                this._fileUploader.upload(file);
+                urlUpload(this.quill, pasteIndex, { src: imageUrl });
+            // this._fileUploader.option('value', [file]);
+            }
 
-            urlUpload(this.quill, pasteIndex, { src: imageUrl });
-
-            // e.originalEvent.preventDefault();
-            // e.originalEvent.stopPropagation();
+            // if(uploads.length >= 0) {
+            //     this._fileUploader.upload(file);
+            // }
         }
 
         _pasteHandler(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
 
+        _isImage(file) {
+            return !!file.type.match(/^image\/(a?png|bmp|gif|p?jpe?g|svg|vnd\.microsoft\.icon|webp)/i);
         }
 
         clean() {

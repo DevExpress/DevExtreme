@@ -413,7 +413,7 @@ class FileStrategy extends BaseStrategy {
 
 export function base64Upload(quill, files) {
     const range = quill.getSelection();
-    quill.getModule('uploader').upload(range, files);
+    quill.getModule('uploader').upload(range, files, true);
 }
 
 export function urlUpload(quill, index, attributes) {
