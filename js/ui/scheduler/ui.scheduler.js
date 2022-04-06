@@ -1845,7 +1845,6 @@ class Scheduler extends Widget {
                 performFailAction();
                 deferred.resolve();
             }
-
             return deferred.promise();
         });
     }
