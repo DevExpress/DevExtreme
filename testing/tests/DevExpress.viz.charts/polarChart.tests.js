@@ -184,7 +184,6 @@ const environment = {
             if(seriesTheme.valueErrorBar) {
                 stubSeries[seriesIndex].areErrorBarsVisible.returns(true);
             }
-            stubSeries[seriesIndex].getValueFields.returns(['val']);
             return $.extend(true, stubSeries[seriesIndex++], seriesTheme);
         });
 
@@ -723,8 +722,7 @@ QUnit.module('Option changing', environment);
 
 QUnit.test('Change of useSpiderWeb', function(assert) {
     const chart = this.createPolarChart({
-        series: [{}],
-        dataSource: [{ arg: 1, val: 1 }]
+        series: [{}]
     });
 
     chart.option('useSpiderWeb', true);
