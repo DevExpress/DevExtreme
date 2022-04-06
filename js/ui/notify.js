@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import Action from '../core/action';
 import { value as viewPort } from '../core/utils/view_port';
 import { extend } from '../core/utils/extend';
-import { isPlainObject } from '../core/utils/type';
+import { isPlainObject, isString } from '../core/utils/type';
 import { getWindow } from '../core/utils/window';
 import Toast from './toast';
 
@@ -15,12 +15,12 @@ function notify(message, /* optional */ typeOrStacking, displayTime) {
     const stacking = isPlainObject(typeOrStacking) ? typeOrStacking : undefined;
     const type = isPlainObject(typeOrStacking) ? undefined : typeOrStacking;
 
-    const userHiddenAction = options.onHidden;
+    const { onHidden: userHiddenAction } = options;
 
     if(stacking?.position) {
         const { position } = stacking;
         const direction = stacking.direction || getDefaultDirection(position);
-        const containerKey = typeof position === 'string'
+        const containerKey = isString(position)
             ? position
             : `${position.top}-${position.left}-${position.bottom}-${position.right}`;
 
@@ -28,7 +28,7 @@ function notify(message, /* optional */ typeOrStacking, displayTime) {
         setContainerClasses($container, direction);
         options.container = $container;
 
-        const userShowingAction = options.onShowing;
+        const { onShowing: userShowingAction } = options;
         options.onShowing = function(args) {
             setContainerStyles($container, direction, position);
 
@@ -55,7 +55,7 @@ function notify(message, /* optional */ typeOrStacking, displayTime) {
 }
 
 const getDefaultDirection = (position) => {
-    return typeof position === 'string' && position.includes('top') ? 'down' : 'up';
+    return isString(position) && position.includes('top') ? 'down' : 'up';
 };
 
 const createStackContainer = (key) => {
@@ -72,21 +72,21 @@ const getStackContainer = (key) => {
 };
 
 const setContainerClasses = (container, direction) => {
-    container
-        .removeClass()
-        .addClass('dx-toast-stack')
-        .addClass(`dx-toast-stack-${direction}-direction`);
+    const containerClasses = `dx-toast-stack dx-toast-stack-${direction}-direction`;
+    container.removeClass().addClass(containerClasses);
 };
 
 const setContainerStyles = (container, direction, position) => {
+    const { offsetWidth: toastWidth, offsetHeight: toastHeight } = container.children().first().get(0);
+
     const dimensions = {
-        toastWidth: container.children().first()[0].offsetWidth,
-        toastHeight: container.children().first()[0].offsetHeight,
+        toastWidth,
+        toastHeight,
         windowHeight: window.innerHeight,
         windowWidth: window.innerWidth,
     };
 
-    const coordinates = typeof position === 'string' ? getCoordinatesByAlias(position, dimensions) : position;
+    const coordinates = isString(position) ? getCoordinatesByAlias(position, dimensions) : position;
 
     const styles = getPositionStylesByCoordinates(direction, coordinates, dimensions);
 
