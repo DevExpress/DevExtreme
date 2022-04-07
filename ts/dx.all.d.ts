@@ -2932,7 +2932,7 @@ declare module DevExpress.data {
     /**
      * [descr:Query.select(getter)]
      */
-    select(getter: any): Query;
+    select(...getters: any[]): Query;
     /**
      * [descr:Query.slice(skip, take)]
      */
@@ -13927,8 +13927,8 @@ declare module DevExpress.ui {
           | 'fiveYears';
         readonly scaleElement: DevExpress.core.DxElement;
         readonly separatorElement: DevExpress.core.DxElement;
-        readonly start: Date;
-        readonly end: Date;
+        readonly startDate: Date;
+        readonly endDate: Date;
       };
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxGantt> & {
       readonly selectedRowKey?: any;
@@ -15130,7 +15130,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorImageUpload.fileUploadMode]
      */
-     fileUploadMode?: 'url' | 'base64' | 'both';
+     fileUploadMode?: 'base64' | 'server' | 'both';
     /**
      * [descr:dxHtmlEditorImageUpload.fileUploaderOptions]
      */
@@ -24992,11 +24992,9 @@ declare module DevExpress.ui {
    */
   export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**
-   * [descr:ui.hideToasts(container)]
+   * [descr:ui.hideToasts()]
    */
-  export function hideToasts(
-    container?: string | DevExpress.core.UserDefinedElement
-  ): void;
+  export function hideToasts(): void;
   /**
    * [descr:HierarchicalCollectionWidget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25069,6 +25067,14 @@ declare module DevExpress.ui {
     type?: string,
     displayTime?: number
   ): void;
+  /**
+   * [descr:ui.notify(message,stack)]
+   */
+  export function notify(message: string, stack?: Stack): void;
+  /**
+   * [descr:ui.notify(options,stack)]
+   */
+  export function notify(options: any, stack?: Stack): void;
   /**
    * [descr:NumericRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25197,6 +25203,54 @@ declare module DevExpress.ui {
      */
     searchValue?: string;
   }
+  interface Stack {
+    /**
+     * [descr:Stack.position]
+     */
+    position?:
+      | StackPosition
+      | {
+          /**
+           * [descr:Stack.position.top]
+           */
+          top?: number;
+          /**
+           * [descr:Stack.position.left]
+           */
+          left?: number;
+          /**
+           * [descr:Stack.position.bottom]
+           */
+          bottom?: number;
+          /**
+           * [descr:Stack.position.right]
+           */
+          right?: number;
+        };
+    /**
+     * [descr:Stack.direction]
+     */
+    direction?: StackDirection;
+  }
+  type StackDirection =
+    | 'down'
+    | 'up'
+    | 'left'
+    | 'right'
+    | 'down-reverse'
+    | 'up-reverse'
+    | 'left-reverse'
+    | 'right-reverse';
+  type StackPosition =
+    | 'top left'
+    | 'top right'
+    | 'bottom left'
+    | 'bottom right'
+    | 'top center'
+    | 'bottom center'
+    | 'left center'
+    | 'right center'
+    | 'center';
   /**
    * [descr:StringLengthRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28290,6 +28344,10 @@ declare module DevExpress.viz {
      * [descr:dxChartOptions.commonAxisSettings.discreteAxisDivisionMode]
      */
     discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
+    /**
+     * [descr:dxChartOptions.commonAxisSettings.aggregatedPointsPosition]
+     */
+    aggregatedPointsPosition?: 'betweenTicks' | 'crossTicks';
     /**
      * [descr:dxChartOptions.commonAxisSettings.endOnTick]
      */
@@ -34599,6 +34657,10 @@ declare module DevExpress.viz {
        * [descr:dxRangeSelectorOptions.scale.aggregationInterval]
        */
       aggregationInterval?: VizTimeInterval;
+      /**
+       * [descr:dxRangeSelectorOptions.scale.discreteAxisDivisionMode]
+       */
+      discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
       /**
        * [descr:dxRangeSelectorOptions.scale.allowDecimals]
        */

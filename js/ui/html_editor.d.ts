@@ -420,7 +420,7 @@ export interface dxHtmlEditorTableResizing {
    * @public
    */
    fileUploadMode?: 'base64' | 'server' | 'both';
-    /**
+     /**
    * @docid
    * @default ["url"]
    * @type Array<Enums.HtmlEditorImageUploadTab>
@@ -432,7 +432,7 @@ export interface dxHtmlEditorTableResizing {
     * @public
     * @type dxFileUploaderOptions
     */
-     fileUploaderOptions?: dxFileUploaderOptions;
+    fileUploaderOptions?: dxFileUploaderOptions;
  }
 
 /**

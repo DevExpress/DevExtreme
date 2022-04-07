@@ -260,7 +260,8 @@ QUnit.module('Aggregation methods', {
             },
             getVisualRangeCenter({ minVisible, maxVisible }) {
                 return (minVisible + maxVisible) / 2;
-            }
+            },
+            aggregatedPointBetweenTicks: sinon.stub()
         };
 
         this.createSeries = function(method, type, options) {
@@ -332,6 +333,13 @@ QUnit.test('Avg', function(assert) {
     assert.equal(points[0].value, 500);
 });
 
+QUnit.test('Aggregation with aggregatedPointsPosition', function(assert) {
+    this.argumentAxis.aggregatedPointBetweenTicks.returns(true);
+    const points = this.aggregateData('avg', this.data);
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 500);
+});
 QUnit.test('Sum', function(assert) {
     const points = this.aggregateData('sum', this.data);
     assert.equal(points.length, 1);

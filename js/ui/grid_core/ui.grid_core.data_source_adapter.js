@@ -127,7 +127,9 @@ export default gridCore.Controller.inherit((function() {
                 }
                 for(let i = 0; take === undefined ? items[i + skip] : i < take; i++) {
                     const childCacheItem = items[i + skip];
-                    const item = getGroupItemFromCache(childCacheItem, groupCount - 1, skips.slice(1), takes.slice(1));
+                    const isLast = i + 1 === take;
+                    const item = getGroupItemFromCache(childCacheItem, groupCount - 1, i === 0 ? skips.slice(1) : [], isLast ? takes.slice(1) : []);
+
                     if(item !== undefined) {
                         result.items.push(item);
                     } else {
@@ -716,8 +718,11 @@ export default gridCore.Controller.inherit((function() {
         isLastPage: function() {
             return this._isLastPage;
         },
+        _dataSourceTotalCount: function() {
+            return this._dataSource.totalCount();
+        },
         totalCount: function() {
-            return parseInt((this._currentTotalCount || this._dataSource.totalCount()) + this._totalCountCorrection);
+            return parseInt((this._currentTotalCount || this._dataSourceTotalCount()) + this._totalCountCorrection);
         },
         totalCountCorrection: function() {
             return this._totalCountCorrection;

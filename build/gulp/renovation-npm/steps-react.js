@@ -17,7 +17,7 @@ function createModuleEntryPointers(context) {
                 const componentPath = `./${c.pathInRenovationFolder.slice(0, -2)}`;
                 return {
                     fileName: `${name}.js`,
-                    content: `import ${c.name} from '${componentPath}';
+                    content: `import { ${c.name} } from '${componentPath}';
     export * from '${componentPath}';
     export default ${c.name};
     `

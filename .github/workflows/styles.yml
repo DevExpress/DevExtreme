@@ -11,7 +11,7 @@ on:
 
 jobs:
   Tests:
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -36,7 +36,7 @@ jobs:
       run: npm run test-styles
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     name: Send notifications
     needs: [Tests]
     if: always() && contains(needs.*.result, 'failure')

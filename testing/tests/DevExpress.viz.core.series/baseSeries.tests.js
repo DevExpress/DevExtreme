@@ -4113,7 +4113,7 @@ QUnit.test('double showing invisible series', function(assert) {
     assert.ok(series.getOptions().visible);
 });
 
-QUnit.test('set visibility from options', function(assert) {
+QUnit.test('set visibility from options. updating true -> false', function(assert) {
     const spy = sinon.spy();
     const seriesGroup = this.renderer.g();
     const series = createSeries({
@@ -4136,7 +4136,7 @@ QUnit.test('set visibility from options', function(assert) {
     assert.ok(series._group.stub('remove').called);
 });
 
-QUnit.test('set visibility from options', function(assert) {
+QUnit.test('set visibility from options. updating true -> true', function(assert) {
     const spy = sinon.spy();
     const seriesGroup = this.renderer.g();
     const series = createSeries({
