@@ -10,6 +10,7 @@ export type WidgetName =
 'dxTabPanel' |
 'dxScrollable' |
 'dxScrollView' |
+'dxPivotGrid' |
 'dxDataGrid' |
 'dxDataGridNext' |
 'dxTreeList' |

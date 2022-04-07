@@ -2932,7 +2932,7 @@ declare module DevExpress.data {
     /**
      * [descr:Query.select(getter)]
      */
-    select(getter: any): Query;
+    select(...getters: any[]): Query;
     /**
      * [descr:Query.slice(skip, take)]
      */
