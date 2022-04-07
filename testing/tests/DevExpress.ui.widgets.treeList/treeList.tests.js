@@ -2435,5 +2435,108 @@ QUnit.module('Selection', defaultModuleConfig, () => {
         // assert
         assert.deepEqual(treeList.getSelectedRowKeys(), [2, 5, 4, 3], 'selected keys with Shift');
     });
+
+    QUnit.test('Rows should be selected correctly with Shift when recursive selection is enabled (T1072845)', function(assert) {
+        // arrange
+        const items = [{
+            ID: 1,
+            Parent_ID: 0,
+            Name: 'Test1'
+        }, {
+            ID: 2,
+            Parent_ID: 1,
+            Name: 'Test2'
+        }, {
+            ID: 3,
+            Parent_ID: 2,
+            Name: 'Test3'
+        }, {
+            ID: 4,
+            Parent_ID: 3,
+            Name: 'Test4'
+        }, {
+            ID: 5,
+            Parent_ID: 3,
+            Name: 'Test5'
+        }, {
+            ID: 6,
+            Parent_ID: 3,
+            Name: 'Test6'
+        }, {
+            ID: 7,
+            Parent_ID: 3,
+            Name: 'Test7'
+        }, {
+            ID: 8,
+            Parent_ID: 1,
+            Name: 'Test8'
+        }, {
+            ID: 9,
+            Parent_ID: 1,
+            Name: 'Test9'
+        }];
+
+        const treeList = createTreeList({
+            dataSource: items,
+            keyExpr: 'ID',
+            parentIdExpr: 'Parent_ID',
+            showRowLines: true,
+            showBorders: true,
+            columnAutoWidth: true,
+            selection: {
+                mode: 'multiple',
+                recursive: true,
+            },
+            columns: ['Name'],
+            height: 400,
+            expandedRowKeys: [1, 2, 3]
+        });
+
+        const getSelectedRowIndices = () => {
+            const selectedIndices = [];
+            $(treeList.element()).find('.dx-data-row.dx-selection').each((_, element) => selectedIndices.push($(element).index()));
+            return selectedIndices;
+        };
+
+        this.clock.tick(300);
+
+        // act
+        $(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(3)').trigger('dxclick');
+
+        // assert
+        assert.deepEqual(treeList.getSelectedRowKeys(), [4], 'selected key');
+        assert.deepEqual(getSelectedRowIndices(), [3], 'selected index');
+
+        // act
+        let pointer = pointerMock($(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(6)'));
+        pointer.start({ shiftKey: true }).down().up();
+        this.clock.tick(300);
+
+        // assert
+        assert.deepEqual(treeList.getSelectedRowKeys(), [4, 7, 6, 5], 'selected keys with Shift');
+        assert.deepEqual(getSelectedRowIndices(), [1, 2, 3, 4, 5, 6], 'selected indices with Shift');
+
+        // act
+        $(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(2)').trigger('dxclick');
+
+        // assert
+        assert.equal(treeList.getSelectedRowKeys().length, 0, 'no selected keys');
+        assert.equal(getSelectedRowIndices().length, 0, 'no selected indices');
+
+        // act
+        $(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(1)').trigger('dxclick');
+
+        // assert
+        assert.deepEqual(treeList.getSelectedRowKeys(), [2], 'selected key after the second row click');
+        assert.deepEqual(getSelectedRowIndices(), [1, 2, 3, 4, 5, 6], 'selected indices after the second row click');
+
+        // act
+        pointer = pointerMock($(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(8)'));
+        pointer.start({ shiftKey: true }).down().up();
+        this.clock.tick(300);
+
+        assert.deepEqual(treeList.getSelectedRowKeys(), [2, 9, 8, 7, 6, 5, 4, 3], 'selected keys after the last row click with Shift');
+        assert.deepEqual(getSelectedRowIndices(), [0, 1, 2, 3, 4, 5, 6, 7, 8], 'selected indices after the last row click with Shift');
+    });
 });
 
