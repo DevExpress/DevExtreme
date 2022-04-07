@@ -1647,6 +1647,34 @@ QUnit.module('Editing', {
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0, 'editor is closed');
     });
 
+    QUnit.test('Editing Cell should be closed on click outside dataGrid inside dropdowneditor overlay (T1080088)', function(assert) {
+        const testElement = $('#container');
+
+        $.extend(this.options.editing, {
+            allowUpdating: true,
+            mode: 'cell'
+        });
+
+        const parentElement = testElement.parent();
+
+        parentElement.addClass('dx-dropdowneditor-overlay');
+
+        this.rowsView.render(testElement);
+
+        // act
+        this.editCell(0, 0);
+        this.clock.tick();
+
+        // assert
+        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor is rendered');
+
+        // act
+        parentElement.trigger('dxclick');
+
+        // assert
+        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0, 'editor is closed');
+    });
+
     // T749034
     QUnit.test('Changed value should be saved on click outside dataGrid on mobile devices when cell editing mode', function(assert) {
         if(devices.real().deviceType === 'desktop') {

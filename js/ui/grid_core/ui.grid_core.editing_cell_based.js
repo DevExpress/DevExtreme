@@ -50,13 +50,19 @@ export default {
                             const event = e.event;
                             const $target = $(event.target);
                             const targetComponent = event[TARGET_COMPONENT_NAME];
+                            const component = this.component;
 
                             if($pointerDownTarget && $pointerDownTarget.is('input') && !$pointerDownTarget.is($target)) {
                                 return;
                             }
 
                             function checkEditorPopup($element) {
-                                return $element && !!$element.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
+                                if(!$element) {
+                                    return false;
+                                }
+                                const $dropDownEditorOverlay = $element.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
+                                const $componentElement = component.$element();
+                                return $dropDownEditorOverlay.length > 0 && $componentElement.closest($dropDownEditorOverlay).length === 0;
                             }
 
                             if(this.isCellOrBatchEditMode() && !this._editCellInProgress) {
