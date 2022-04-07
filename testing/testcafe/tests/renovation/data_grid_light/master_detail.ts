@@ -18,6 +18,9 @@ const defaultOptions = {
     enabled: true,
     template: () => 'Test',
   },
+  pager: {
+    visible: false,
+  },
 };
 
 const prepareDataGrid = (options = {}) => async (t, { platform }) => {
