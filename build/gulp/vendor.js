@@ -15,7 +15,19 @@ const JS_VENDORS = [
         path: '/angular/angular.js'
     },
     {
+        path: '/exceljs/dist/exceljs.js'
+    },
+    {
+        path: '/file-saver/dist/FileSaver.js'
+    },
+    {
         path: '/jquery/dist/jquery.js'
+    },
+    {
+        path: '/jspdf/dist/jspdf.es.js'
+    },
+    {
+        path: '/jspdf-autotable/dist/jspdf.plugin.autotable.js'
     },
     {
         path: '/jszip/dist/jszip.js'
