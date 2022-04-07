@@ -24,7 +24,7 @@ const JS_VENDORS = [
         path: '/jquery/dist/jquery.js'
     },
     {
-        path: '/jspdf/dist/jspdf.es.js'
+        path: '/jspdf/dist/jspdf.umd.js'
     },
     {
         path: '/jspdf-autotable/dist/jspdf.plugin.autotable.js'
