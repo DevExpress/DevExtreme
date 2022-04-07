@@ -570,47 +570,52 @@ module('Image uploading integration', {
         assert.strictEqual(sizeEditors.widthEditor.option('value'), '50', 'width value is recalculated');
     });
 
-    test('check file uploading to the server', function(assert) {
-        const expectedValue = '<p>t<img src="/uploadDirectory/fakefile1.jpeg">est text</p><p><br></p>';
-        this.createWidget();
-        this.clock.tick(TIME_TO_WAIT);
+    ['/uploadDirectory', '/uploadDirectory/'].forEach((uploadDirectory) => {
+        test(`check file uploading to the server for directoryUrl = "${uploadDirectory}"`, function(assert) {
+            const expectedValue = '<p>t<img src="/uploadDirectory/fakefile1.jpeg">est text</p><p><br></p>';
+            this.createWidget({ imageUpload: {
+                fileUploadMode: 'both',
+                tabs: ['file', 'url'],
+                uploadUrl: '/',
+                uploadDirectory: uploadDirectory
+            }, });
+            this.clock.tick(TIME_TO_WAIT);
 
-        this.xhrMock = new window.XMLHttpRequestMock();
-        this._nativeXhr = XMLHttpRequest;
-        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+            this.xhrMock = new window.XMLHttpRequestMock();
+            this._nativeXhr = XMLHttpRequest;
+            window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
 
-        this.formDataMock = new window.FormDataMock();
-        this._nativeFormData = window.FormData;
-        window.FormData = this.formDataMock.FormData;
+            this.formDataMock = new window.FormDataMock();
+            this._nativeFormData = window.FormData;
+            window.FormData = this.formDataMock.FormData;
 
+            const $form = this.getFormElement([1, 2]);
+            const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
 
-        const $form = this.getFormElement([1, 2]);
+            fileUploader.option('value', [fakeFile]);
 
-        const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+            fileUploader.upload(fileUploader.option('value[0]'));
+            this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
 
-        fileUploader.option('value', [fakeFile]);
+            const request = this.xhrMock.getInstanceAt();
 
-        fileUploader.upload(fileUploader.option('value[0]'));
-        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+            this.clickDialogOkButton();
 
-        const request = this.xhrMock.getInstanceAt();
+            this.clock.tick(TIME_TO_WAIT);
 
-        this.clickDialogOkButton();
+            assert.ok(request.uploaded, 'upload is done');
+            assert.strictEqual(this.instance.option('value'), expectedValue, 'value is correct');
 
-        this.clock.tick(TIME_TO_WAIT);
+            window.XMLHttpRequest = this._nativeXhr;
+            window.FormData = this._nativeFormData;
 
-        assert.ok(request.uploaded, 'upload is done');
-        assert.strictEqual(this.instance.option('value'), expectedValue, 'value is correct');
-
-        window.XMLHttpRequest = this._nativeXhr;
-        window.FormData = this._nativeFormData;
-
-        this.xhrMock.dispose();
-        delete this.xhrMock;
-        delete this.formDataMock;
+            this.xhrMock.dispose();
+            delete this.xhrMock;
+            delete this.formDataMock;
+        });
     });
 
-    test('check fileUploaderOption', function(assert) {
+    test('check form fileUploaderOption', function(assert) {
         this.createWidget({ imageUpload: { tabs: ['file'], fileUploadMode: 'both', fileUploaderOptions: { width: 155, name: 'photo123' } } });
         this.clock.tick(TIME_TO_WAIT);
 
@@ -620,6 +625,25 @@ module('Image uploading integration', {
 
         assert.strictEqual(fileUploader.option('width'), 155, 'width value is correct');
         assert.strictEqual(fileUploader.option('name'), 'photo123', 'name is correct');
+    });
+
+    test('check the fileUploader options are applied for hidden file uploader', function(assert) {
+        const testHandler = () => {};
+
+        this.createWidget({ imageUpload: {
+            tabs: ['file'],
+            fileUploadMode: 'server',
+            uploadUrl: '/Upload/',
+            uploadDirectory: '/uploadDirectory/',
+            fileUploaderOptions: {
+                onBeforeSend: testHandler
+            }
+        } });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+
+        assert.strictEqual(fileUploader.option('onBeforeSend'), testHandler, 'config is applied');
     });
 
     [{
@@ -697,5 +721,4 @@ module('Image uploading integration', {
             assert.strictEqual(this.instance.option('value'), data.expectedMarkup, 'value is correct');
         });
     });
-
 });

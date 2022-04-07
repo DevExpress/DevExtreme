@@ -3,8 +3,9 @@ import BaseModule from './base';
 import eventsEngine from '../../../events/core/events_engine';
 import $ from '../../../core/renderer';
 import { isDefined } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
 // import { getFormatHandlers, getDefaultClickHandler, ICON_MAP } from '../utils/toolbar_helper'
-import { urlUpload } from '../utils/image_uploader_helper';
+import { urlUpload, correctSlashesInUrl } from '../utils/image_uploader_helper';
 import { addNamespace } from '../../../events/utils/index';
 import FileUploader from '../../file_uploader';
 
@@ -56,6 +57,7 @@ if(Quill) {
         _disableDragAndDropUploading() {
             this._getUploaderModule().preventImageUpload = false;
             this._detachEvents();
+            this._fileUploader?.dispose();
         }
 
         _enableDragAndDropUploading() {
@@ -71,11 +73,11 @@ if(Quill) {
                 .addClass(HIDDEN_FILE_UPLOADER_CLASS)
                 .appendTo(this._quillContainer);
 
-            const fileUploaderOptions = {
+            const fileUploaderOptions = extend({}, {
                 accept: 'image/*',
                 uploadUrl: this.options.uploadUrl,
                 uploadMode: 'instantly',
-            };
+            }, this.options.fileUploaderOptions);
 
             this.editorInstance._createComponent($container, FileUploader, fileUploaderOptions);
 
@@ -111,7 +113,7 @@ if(Quill) {
             const uploads = files.filter((file) => this._isImage(file));
 
             uploads.forEach((file) => {
-                const imageUrl = this.options.uploadDirectory + file.name;
+                const imageUrl = correctSlashesInUrl(this.options.uploadDirectory) + file.name;
                 urlUpload(this.quill, pasteIndex, { src: imageUrl });
                 pasteIndex++;
             });

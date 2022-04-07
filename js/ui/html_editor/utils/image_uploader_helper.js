@@ -340,7 +340,7 @@ class FileStrategy extends BaseStrategy {
 
     serverUpload(data) {
         if(!this.useBase64) {
-            const imageUrl = this.config.uploadDirectory + data.file.name;
+            const imageUrl = correctSlashesInUrl(this.config.uploadDirectory) + data.file.name;
 
             urlUpload(this.module.quill, this.selection.index, { src: imageUrl });
             this.closeDialogPopup(this.module.editorInstance, data);
@@ -414,6 +414,10 @@ class FileStrategy extends BaseStrategy {
 export function base64Upload(quill, files) {
     const range = quill.getSelection();
     quill.getModule('uploader').upload(range, files, true);
+}
+
+export function correctSlashesInUrl(url) {
+    return url[url.length - 1] !== '/' ? (url + '/') : url;
 }
 
 export function urlUpload(quill, index, attributes) {
