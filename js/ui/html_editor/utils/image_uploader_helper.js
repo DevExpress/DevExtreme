@@ -2,6 +2,7 @@ import $ from '../../../core/renderer';
 import localizationMessage from '../../../localization/message';
 import { map } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
+import { getHeight, getWidth } from '../../../core/utils/size';
 import devices from '../../../core/devices';
 const isMobile = devices.current().deviceType === 'phone';
 
@@ -289,6 +290,7 @@ class UpdateUrlStrategy extends AddUrlStrategy {
 
     modifyFormData() {
         const { imageSrc } = this.module.quill.getFormat(this.selection.index - 1, 1);
+        this.module.quill.getContents(this.selection.index - 1, 1);
 
         if(!imageSrc || this.selection.index === 0) {
             this.selection = {
@@ -296,6 +298,12 @@ class UpdateUrlStrategy extends AddUrlStrategy {
                 length: 0
             };
             this.module.quill.setSelection(this.selection.index, this.selection.length, SILENT_ACTION);
+        }
+
+        const imgElement = this.module.quill.getLeaf(this.selection.index)[0].domNode;
+        if(imgElement) {
+            this.formData.width = this.formData.width ?? getWidth($(imgElement));
+            this.formData.height = this.formData.height ?? getHeight($(imgElement));
         }
     }
 
