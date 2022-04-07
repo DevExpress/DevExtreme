@@ -4,7 +4,7 @@ import {
 import { Row, ScrollingMode } from '../types';
 import {
   VisibleRows, TotalCount,
-} from '../data_grid_light';
+} from '../data_grid_next';
 import { RowsViewHeightValue } from '../views/table_content';
 import {
   PageIndex, PageSize,

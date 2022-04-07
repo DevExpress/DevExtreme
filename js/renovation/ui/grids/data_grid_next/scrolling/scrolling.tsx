@@ -12,7 +12,7 @@ export const viewFunction = ({
   props: {
     mode,
   },
-}: Scrolling): JSX.Element => (
+}: DataGridNextScrolling): JSX.Element => (
   <Fragment>
     <ValueSetter type={ScrollingModeValue} value={mode} />
     {isVirtualScrolling && (<VirtualScrolling mode={virtualScrollingMode} />)}
@@ -20,7 +20,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class ScrollingProps {
+export class DataGridNextScrollingProps {
   @OneWay()
   mode: ScrollingMode = 'standard';
 }
@@ -29,7 +29,7 @@ export class ScrollingProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Scrolling extends JSXComponent(ScrollingProps) {
+export class DataGridNextScrolling extends JSXComponent(DataGridNextScrollingProps) {
   get isVirtualScrolling(): boolean {
     const { mode } = this.props;
     return mode !== 'standard';
