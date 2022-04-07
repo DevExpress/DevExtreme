@@ -179,7 +179,7 @@
     "through2": "^2.0.1",
     "ts-jest": "^24.3.0",
     "typescript": "~4.2.4",
-    "typescript-min": "npm:typescript@3.1",
+    "typescript-min": "npm:typescript@4.2",
     "underscore": "^1.9.2",
     "vinyl": "^2.2.1",
     "vinyl-named": "^1.1.0",
