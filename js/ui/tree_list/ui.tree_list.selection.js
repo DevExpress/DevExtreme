@@ -199,7 +199,9 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                     if(isRecursiveSelection && !keyboardKeys.shift) {
                         const key = this._dataController.getKeyByRowIndex(itemIndex);
-                        return this.selectedItemKeys(key, true, this.isRowSelected(key));
+                        return this.selectedItemKeys(key, true, this.isRowSelected(key)).done(() => {
+                            this.isRowSelected(key) && this.callBase(itemIndex, keyboardKeys, true);
+                        });
                     }
 
                     return this.callBase.apply(this, arguments);
