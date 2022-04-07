@@ -126,14 +126,16 @@ export default Class.inherit({
             isSelectedItemsChanged = this.changeItemSelectionWhenShiftKeyPressed(itemIndex, items);
         } else if(keys.control) {
             this._resetItemSelectionWhenShiftKeyPressed();
-            const isSelected = this._selectionStrategy.isItemDataSelected(itemData);
-            if(this.options.mode === 'single') {
-                this.clearSelectedItems();
-            }
-            if(isSelected && !setFocusOnly) {
-                this._removeSelectedItem(itemKey);
-            } else {
-                this._addSelectedItem(itemData, itemKey);
+            if(!setFocusOnly) {
+                const isSelected = this._selectionStrategy.isItemDataSelected(itemData);
+                if(this.options.mode === 'single') {
+                    this.clearSelectedItems();
+                }
+                if(isSelected) {
+                    this._removeSelectedItem(itemKey);
+                } else {
+                    this._addSelectedItem(itemData, itemKey);
+                }
             }
             isSelectedItemsChanged = true;
         } else {
