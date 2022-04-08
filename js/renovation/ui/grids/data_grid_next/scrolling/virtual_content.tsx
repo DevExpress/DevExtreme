@@ -14,7 +14,7 @@ import {
 import { VirtualRow } from './virtual_row';
 import {
   VisibleColumns,
-} from '../data_grid_next';
+} from '../plugins';
 import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
 export const viewFunction = ({

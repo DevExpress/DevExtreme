@@ -12,7 +12,7 @@ import { ScrollOffset } from '../../../scroll_view/common/types';
 import { SetRowsViewScrollPositionAction, SetRowsViewContentRenderAction } from '../views/table_content';
 import {
   TotalCount, VisibleRows,
-} from '../data_grid_next';
+} from '../plugins';
 import {
   SetPageIndex, PageSize, SetLoadPageCount,
 } from '../paging/plugins';

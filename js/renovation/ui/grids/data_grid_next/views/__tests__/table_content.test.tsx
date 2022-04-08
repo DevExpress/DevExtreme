@@ -13,7 +13,7 @@ describe('TableContent', () => {
       const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
 
       const tableContent = new TableContent({
-        dataSource: rows,
+        visibleRows: rows,
         columns,
       });
 
@@ -34,7 +34,7 @@ describe('TableContent', () => {
       const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
 
       const tableContent = new TableContent({
-        dataSource: rows,
+        visibleRows: rows,
         columns,
       });
 
@@ -85,7 +85,7 @@ describe('TableContent', () => {
     describe('onRowClick', () => {
       it('should call RowClick', () => {
         const tableContent = new TableContent({});
-        tableContent.props.dataSource = [{ data: {}, rowType: 'data' }, { data: {}, rowType: 'data' }, { data: {}, rowType: 'data' }];
+        tableContent.props.visibleRows = [{ data: {}, rowType: 'data' }, { data: {}, rowType: 'data' }, { data: {}, rowType: 'data' }];
 
         const rowClick = jest.fn();
         tableContent.plugins.set(RowClick, rowClick);
@@ -100,7 +100,7 @@ describe('TableContent', () => {
 
         tableContent.onRowClick({ currentTarget: rows[0] } as any);
         expect(rowClick).toBeCalledTimes(1);
-        expect(rowClick.mock.calls[0][0]).toBe(tableContent.props.dataSource[0]);
+        expect(rowClick.mock.calls[0][0]).toBe(tableContent.props.visibleRows[0]);
 
         tableContent.onRowClick({ currentTarget: 'some other row' } as any);
         expect(rowClick).toBeCalledTimes(1);

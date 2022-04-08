@@ -36,6 +36,6 @@ export class DataGridNextScrolling extends JSXComponent(DataGridNextScrollingPro
   }
 
   get virtualScrollingMode(): VirtualScrollingMode {
-    return this.props.mode as VirtualScrollingMode;
+    return this.props.mode === 'virtual' ? 'virtual' : 'infinite';
   }
 }

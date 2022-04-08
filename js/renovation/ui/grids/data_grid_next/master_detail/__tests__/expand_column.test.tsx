@@ -11,7 +11,7 @@ import {
 } from '../expand_column';
 import {
   KeyExprPlugin,
-} from '../../data_grid_next';
+} from '../../plugins';
 
 describe('Expand column', () => {
   describe('View', () => {

@@ -8,7 +8,7 @@ import {
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
-import { LoadOptionsValue, LocalVisibleItems, LocalDataState } from '../data_grid_next';
+import { LoadOptionsValue, LocalVisibleItems, LocalDataState } from '../plugins';
 
 import {
   PageIndex, PageSize, SetPageIndex, SetPageSize, PagingEnabled,

@@ -5,7 +5,7 @@ import { Row, ScrollingMode, DataState } from '../types';
 import {
   VisibleRows, TotalCount,
   DataStateValue,
-} from '../data_grid_next';
+} from '../plugins';
 import { RowsViewHeightValue } from '../views/table_content';
 import { ScrollOffset } from '../../../scroll_view/common/types';
 import { calculateViewportItemIndex, getVirtualContentOffset } from './utils';

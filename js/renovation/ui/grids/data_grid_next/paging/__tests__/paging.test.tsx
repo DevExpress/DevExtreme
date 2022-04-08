@@ -10,7 +10,7 @@ import { generateData } from '../../__tests__/test_data';
 import { Plugins } from '../../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../../utils/plugin/value_setter';
 import { GetterExtender } from '../../../../../utils/plugin/getter_extender';
-import { TotalCount, LocalVisibleItems, RemoteOperations } from '../../data_grid_next';
+import { TotalCount, LocalVisibleItems, RemoteOperations } from '../../plugins';
 
 describe('Paging', () => {
   describe('View', () => {
@@ -87,7 +87,7 @@ describe('Paging', () => {
 
   describe('Selectors', () => {
     each`
-        totalCount    | pageSize    | pageCount  
+        totalCount    | pageSize    | pageCount
         ${100}        | ${'all'}    | ${1}
         ${10}         | ${5}        | ${2}
         ${11}         | ${5}        | ${3}

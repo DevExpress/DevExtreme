@@ -5,7 +5,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
-  createValue, createGetter, Plugins, PluginsContext, createSelector,
+  Plugins, PluginsContext,
 } from '../../../utils/plugin/context';
 import { ValueSetter } from '../../../utils/plugin/value_setter';
 import { GetterExtender } from '../../../utils/plugin/getter_extender';
@@ -25,44 +25,11 @@ import { Footer } from './views/footer';
 
 import CLASSES from './classes';
 
-export const LocalData = createValue<RowData[] | undefined>();
-export const LocalVisibleItems = createGetter<RowData[] | undefined>([]);
-export const VisibleRows = createGetter<Row[]>([]);
-export const RemoteOperations = createValue<boolean>();
-
-export const LoadOptionsValue = createGetter<LoadOptions>({});
-export const DataStateValue = createValue<DataState>();
-
-export const Columns = createValue<ColumnInternal[]>();
-export const VisibleColumns = createGetter<ColumnInternal[]>([]);
-export const LocalDataState = createGetter<DataState | undefined>(undefined);
-
-export const KeyExprPlugin = createValue<KeyExprInternal>();
-export const TotalCount = createSelector<number>(
-  [DataStateValue],
-  (dataState: DataState) => dataState.totalCount ?? dataState.data.length,
-);
-
-export const VisibleDataRows = createSelector<Row[]>(
-  [
-    DataStateValue, KeyExprPlugin,
-  ],
-  (
-    dataStateValue: DataState, keyExpr: KeyExprInternal,
-  ): Row[] => dataStateValue.data.map((data) => ({
-    key: keyExpr ? data[keyExpr] : data,
-    data,
-    rowType: 'data',
-  })),
-);
-
-export const CalculateLocalDataState = createSelector(
-  [LocalVisibleItems, LocalData],
-  (visibleItems, localData): DataState | undefined => (Array.isArray(localData) ? {
-    data: visibleItems ?? [],
-    totalCount: localData.length,
-  } : undefined),
-);
+import {
+  LocalData, Columns, KeyExprPlugin, RemoteOperations, DataStateValue, VisibleColumns,
+  LocalVisibleItems, VisibleRows, LocalDataState, VisibleDataRows, CalculateLocalDataState,
+  LoadOptionsValue,
+} from './plugins';
 
 function isStore(dataSource: DataSource): dataSource is Store {
   return dataSource !== undefined && !Array.isArray(dataSource);
