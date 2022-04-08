@@ -280,6 +280,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     showClearButton?: boolean;
     /**
      * @docid
+     * @default "input change keyup"
+     * @public
+     */
+    searchStartEvent?: string;
+    /**
+     * @docid
      * @default true
      * @default false &for(desktop except Mac)
      * @public
@@ -294,6 +300,13 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      */
     usePopover?: boolean;
+    /**
+     * @docid
+     * @deprecated
+     * @default "input change keyup"
+     * @public
+     */
+    valueChangeEvent?: string;
     /**
      * @docid
      * @default false

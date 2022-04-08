@@ -16390,6 +16390,10 @@ declare module DevExpress.ui {
      */
     showClearButton?: boolean;
     /**
+     * [descr:dxLookupOptions.searchStartEvent]
+     */
+    searchStartEvent?: string;
+    /**
      * [descr:dxLookupOptions.useNativeScrolling]
      */
     useNativeScrolling?: boolean;
@@ -16397,6 +16401,11 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.usePopover]
      */
     usePopover?: boolean;
+    /**
+     * [descr:dxLookupOptions.valueChangeEvent]
+     * @deprecated [depNote:dxLookupOptions.valueChangeEvent]
+     */
+    valueChangeEvent?: string;
     /**
      * [descr:dxLookupOptions.dropDownCentered]
      */
