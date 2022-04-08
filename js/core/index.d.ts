@@ -26,26 +26,15 @@ export type DeepPartial<T> = T extends object ? {
 // Omit does not exist in TS < 3.5.1
 export type Skip<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-type Property<T, P extends PropertyKey> = P extends keyof T ? T[P] : never;
-
-type PropertyType<T, P> =
-  P extends PropertyKey
-  ? T extends (infer TItem)[]
-    ? Property<TItem, P>
-    : Property<T, P>
-  : never;
-
-export type RecursivePropertyType<T, Props extends string[]> =
-    Props extends [infer P1]
-    ? PropertyType<T, P1>
-    : Props extends [infer P1, infer P2]
-      ? PropertyType<PropertyType<T, P1>, P2>
-      : Props extends [infer P1, infer P2, infer P3]
-        ? PropertyType<PropertyType<PropertyType<T, P1>, P2>, P3>
-        : Props extends [infer P1, infer P2, infer P3, infer P4]
-          ? PropertyType<PropertyType<PropertyType<PropertyType<T, P1>, P2>, P3>, P4>
-          : Props extends [infer P1, infer P2, infer P3, infer P4, infer P5]
-            ? PropertyType<PropertyType<PropertyType<PropertyType<PropertyType<T, P1>, P2>, P3>, P4>, P5>
-            : Props extends [infer P1, infer P2, infer P3, infer P4, infer P5, infer P6]
-              ? PropertyType<PropertyType<PropertyType<PropertyType<PropertyType<PropertyType<T, P1>, P2>, P3>, P4>, P5>, P6>
-              : never;
+export type RecursivePropertyType<T, TProps extends string> =
+  TProps extends `${infer TProp}.${infer Rest}`
+    ? RecursivePropertyType<RecursivePropertyType<T, TProp>, Rest>
+    : (
+      T extends (infer T2)[]
+        ? RecursivePropertyType<T2, TProps>
+        : (
+          T extends Partial<Record<TProps, infer TValue>>
+            ? TValue
+            : never
+          )
+      );
