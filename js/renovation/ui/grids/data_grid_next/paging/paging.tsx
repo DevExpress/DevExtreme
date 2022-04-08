@@ -8,11 +8,12 @@ import {
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 
-import { LoadOptionsValue, LocalVisibleItems } from '../data_grid_next';
+import { LoadOptionsValue, LocalVisibleItems, LocalDataState } from '../data_grid_next';
 
 import {
   PageIndex, PageSize, SetPageIndex, SetPageSize, PagingEnabled,
   ApplyPagingToVisibleItems, AddPagingToLoadOptions, LoadPageCount, SetLoadPageCount,
+  AddPagingToLocalDataState,
 } from './plugins';
 
 export const viewFunction = (viewModel: DataGridNextPaging): JSX.Element => (
@@ -26,6 +27,7 @@ export const viewFunction = (viewModel: DataGridNextPaging): JSX.Element => (
     <ValueSetter type={SetLoadPageCount} value={viewModel.setLoadPageCount} />
     <GetterExtender type={LocalVisibleItems} order={1} value={ApplyPagingToVisibleItems} />
     <GetterExtender type={LoadOptionsValue} order={1} value={AddPagingToLoadOptions} />
+    <GetterExtender type={LocalDataState} order={1} value={AddPagingToLocalDataState} />
   </Fragment>
 );
 

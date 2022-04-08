@@ -17,7 +17,7 @@ import {
   SetPageIndex, PageSize, SetLoadPageCount,
 } from '../paging/plugins';
 import {
-  ExtendVisibleRows, CalculateVisibleRows,
+  AddLoadIndexToVisibleRows, CalculateVisibleRowsInViewport,
   ScrollingPositionValue,
   RowHeightValue, ItemHeightsValue,
   ViewportSkipValue,
@@ -42,8 +42,8 @@ export const viewFunction = ({
     <ValueSetter type={ItemHeightsValue} value={itemHeights} />
     <GetterExtender type={ViewportSkipValue} order={0} value={CalculateViewportSkipValue} />
     <GetterExtender type={ViewportTakeValue} order={0} value={CalculateViewportTakeValue} />
-    <GetterExtender type={VisibleRows} order={1} value={ExtendVisibleRows} />
-    <GetterExtender type={VisibleRows} order={2} value={CalculateVisibleRows} />
+    <GetterExtender type={VisibleRows} order={1} value={AddLoadIndexToVisibleRows} />
+    <GetterExtender type={VisibleRows} order={2} value={CalculateVisibleRowsInViewport} />
     <VirtualContent />
   </Fragment>
 );
@@ -107,6 +107,7 @@ export class VirtualScrolling extends JSXComponent(VirtualScrollingProps) {
 
   onRowsViewContentRender(element: HTMLElement): void {
     const rowElements = Array.from(element.querySelectorAll(`tr.${CLASSES.row}:not(.${CLASSES.virtualRow})`));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     this.visibleRowHeights = rowElements.map((el) => getElementHeight(el));
     this.updateRowHeights();
   }

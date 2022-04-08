@@ -44,6 +44,7 @@ export type SelectAllMode = 'allPages' | 'page';
 export interface DataState {
   data: RowData[];
   totalCount?: number;
+  dataOffset?: number;
 }
 
 export type DataSource = RowData[] | Store | undefined;

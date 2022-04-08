@@ -35,6 +35,7 @@ export const DataStateValue = createValue<DataState>();
 
 export const Columns = createValue<ColumnInternal[]>();
 export const VisibleColumns = createGetter<ColumnInternal[]>([]);
+export const LocalDataState = createGetter<DataState | undefined>(undefined);
 
 export const KeyExprPlugin = createValue<KeyExprInternal>();
 export const TotalCount = createSelector<number>(
@@ -55,7 +56,7 @@ export const VisibleDataRows = createSelector<Row[]>(
   })),
 );
 
-export const LocalDataState = createSelector(
+export const CalculateLocalDataState = createSelector(
   [LocalVisibleItems, LocalData],
   (visibleItems, localData): DataState | undefined => (Array.isArray(localData) ? {
     data: visibleItems ?? [],
@@ -94,6 +95,7 @@ export const viewFunction = (viewModel: DataGridNext): JSX.Element => (
     <GetterExtender type={VisibleColumns} order={-1} value={Columns} />
     <GetterExtender type={LocalVisibleItems} order={-1} value={LocalData} />
     <GetterExtender type={VisibleRows} order={-1} value={VisibleDataRows} />
+    <GetterExtender type={LocalDataState} order={-1} value={CalculateLocalDataState} />
 
     <div className={`${CLASSES.dataGrid} ${CLASSES.gridBaseContainer}`} role="grid" aria-label="Data grid">
       <TableHeader columns={viewModel.visibleColumns} />
@@ -241,11 +243,12 @@ export class DataGridNext extends JSXComponent(DataGridNextProps) {
       if (this.props.remoteOperations) {
         if (Array.isArray(data)) {
           this.props.dataState = {
+            dataOffset: loadOptions.skip,
             data,
             ...extra,
           };
         } else {
-          this.props.dataState = data;
+          this.props.dataState = { ...data, dataOffset: loadOptions.skip };
         }
       } else {
         this.loadedData = data;

@@ -1,14 +1,12 @@
 import {
   createValue, createGetter, createSelector,
 } from '../../../../utils/plugin/context';
-import { Row, ScrollingMode } from '../types';
+import { Row, ScrollingMode, DataState } from '../types';
 import {
   VisibleRows, TotalCount,
+  DataStateValue,
 } from '../data_grid_next';
 import { RowsViewHeightValue } from '../views/table_content';
-import {
-  PageIndex, PageSize,
-} from '../paging/plugins';
 import { ScrollOffset } from '../../../scroll_view/common/types';
 import { calculateViewportItemIndex, getVirtualContentOffset } from './utils';
 
@@ -54,13 +52,11 @@ export const CalculateViewportTakeValue = createSelector<number>(
     return take;
   },
 );
-export const ExtendVisibleRows = createSelector<Row[]>(
-  [VisibleRows, PageIndex, PageSize],
-  (visibleRows: Row[], pageIndex: number, pageSize) => {
-    const pSize = typeof pageSize !== 'number' ? 0 : pageSize;
-    let loadIndex = pageIndex * pSize - 1;
-
-    return visibleRows.map((row) => {
+export const AddLoadIndexToVisibleRows = createSelector<Row[]>(
+  [VisibleRows, DataStateValue],
+  (visibleRows: Row[], dataState: DataState) => {
+    let loadIndex = (dataState.dataOffset ?? 0) - 1;
+    const newRows = visibleRows.map((row) => {
       const r = row;
       if (row.rowType === 'data') {
         loadIndex += 1;
@@ -68,9 +64,10 @@ export const ExtendVisibleRows = createSelector<Row[]>(
       r.loadIndex = loadIndex;
       return r;
     });
+    return newRows;
   },
 );
-export const CalculateVisibleRows = createSelector<Row[]>(
+export const CalculateVisibleRowsInViewport = createSelector<Row[]>(
   [VisibleRows, ViewportSkipValue, ViewportTakeValue],
   (visibleRows: Row[], skip: number, take: number) => visibleRows.filter((row) => {
     const isLoadIndexGreaterStart = row.loadIndex !== undefined && row.loadIndex >= skip;
@@ -87,9 +84,13 @@ export const CalculateTopVirtualRowHeight = createSelector<number>(
   ) => getVirtualContentOffset('top', skip, totalCount, itemHeights, rowHeight),
 );
 export const CalculateBottomVirtualRowHeight = createSelector<number>(
-  [ViewportSkipValue, ViewportTakeValue, TotalCount, RowHeightValue, ItemHeightsValue],
+  [ViewportSkipValue, TotalCount, RowHeightValue, ItemHeightsValue, VisibleRows],
   (
-    skip: number, take: number,
-    totalCount: number, rowHeight: number, itemHeights: Record<number, number>,
-  ) => getVirtualContentOffset('bottom', totalCount - skip - take, totalCount, itemHeights, rowHeight),
+    skip: number, totalCount: number, rowHeight: number,
+    itemHeights: Record<number, number>,
+    visibleRows: Row[],
+  ) => {
+    const rowCount = visibleRows.filter((r) => r.rowType === 'data').length;
+    return getVirtualContentOffset('bottom', totalCount - skip - rowCount, totalCount, itemHeights, rowHeight);
+  },
 );

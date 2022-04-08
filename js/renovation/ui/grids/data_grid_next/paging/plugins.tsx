@@ -1,8 +1,8 @@
 import { createValue, createSelector } from '../../../../utils/plugin/context';
 import {
-  TotalCount, LocalVisibleItems, LoadOptionsValue, RemoteOperations,
+  TotalCount, LocalVisibleItems, LoadOptionsValue, RemoteOperations, LocalDataState,
 } from '../data_grid_next';
-import type { RowData } from '../types';
+import type { RowData, DataState } from '../types';
 import type { LoadOptions } from '../../../../../data';
 
 export const PageIndex = createValue<number>();
@@ -56,5 +56,21 @@ export const AddPagingToLoadOptions = createSelector(
       take: pageSize * loadPageCount,
       requireTotalCount: true,
     };
+  },
+);
+
+export const AddPagingToLocalDataState = createSelector(
+  [LocalDataState, PageIndex, PageSize],
+  (
+    localState: DataState,
+    pageIndex: number,
+    pageSize: number,
+  ) => {
+    const state = localState !== undefined ? {
+      ...localState,
+      dataOffset: pageIndex * pageSize,
+    } : undefined;
+
+    return state;
   },
 );
