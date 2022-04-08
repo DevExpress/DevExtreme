@@ -302,6 +302,8 @@
         "dxHtmlEditor-dialogInsertTableRowsField": "Rows",
         "dxHtmlEditor-dialogInsertTableColumnsField": "Columns",
         "dxHtmlEditor-dialogInsertTableCaption": "Insert Table",
+        "dxHtmlEditor-dialogUpdateImageCaption": "Update Image",
+        "dxHtmlEditor-dialogImageUpdateButton": "Update",
         "dxHtmlEditor-dialogImageAddButton": "Add",
         "dxHtmlEditor-dialogImageSpecifyUrl": "Specify Url",
         "dxHtmlEditor-dialogImageSelectFile": "Select File",

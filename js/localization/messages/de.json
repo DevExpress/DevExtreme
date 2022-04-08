@@ -270,6 +270,8 @@
         "dxHtmlEditor-dialogInsertTableRowsField": "Zeilen",
         "dxHtmlEditor-dialogInsertTableColumnsField": "Spalten",
         "dxHtmlEditor-dialogInsertTableCaption": "Tabelle einfügen",
+        "dxHtmlEditor-dialogUpdateImageCaption": "!TODO",
+        "dxHtmlEditor-dialogImageUpdateButton": "!TODO",
         "dxHtmlEditor-dialogImageAddButton": "!TODO",
         "dxHtmlEditor-dialogImageSpecifyUrl": "!TODO",
         "dxHtmlEditor-dialogImageSelectFile": "!TODO",

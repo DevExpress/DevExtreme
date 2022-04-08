@@ -7,11 +7,13 @@ import devices from '../../../core/devices';
 const isMobile = devices.current().deviceType === 'phone';
 
 const DIALOG_IMAGE_CAPTION = 'dxHtmlEditor-dialogImageCaption';
+const DIALOG_UPDATE_IMAGE_CAPTION = 'dxHtmlEditor-dialogUpdateImageCaption';
 const DIALOG_IMAGE_FIELD_URL = 'dxHtmlEditor-dialogImageUrlField';
 const DIALOG_IMAGE_FIELD_ALT = 'dxHtmlEditor-dialogImageAltField';
 const DIALOG_IMAGE_FIELD_WIDTH = 'dxHtmlEditor-dialogImageWidthField';
 const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
 const DIALOG_IMAGE_ADD_BUTTON = 'dxHtmlEditor-dialogImageAddButton';
+const DIALOG_IMAGE_UPDATE_BUTTON = 'dxHtmlEditor-dialogImageUpdateButton';
 const DIALOG_IMAGE_SPECIFY_URL = 'dxHtmlEditor-dialogImageSpecifyUrl';
 const DIALOG_IMAGE_SELECT_FILE = 'dxHtmlEditor-dialogImageSelectFile';
 const DIALOG_IMAGE_KEEP_ASPECT_RATIO = 'dxHtmlEditor-dialogImageKeepAspectRatio';
@@ -35,12 +37,15 @@ export class ImageUploader {
         this.config = config ?? {};
         this.quill = this.module.quill;
         this.editorInstance = this.module.editorInstance;
+        this.isUpdating = false;
 
         this.tabPanelIndex = 0;
     }
 
     render() {
         this.formData = this.getFormData();
+        this.isUpdating = this.isImageUpdating();
+        this.actualTabs = this.config.tabs?.slice();
         this.tabs = this.createTabs(this.formData);
         const formConfig = this.getFormConfig();
 
@@ -75,19 +80,29 @@ export class ImageUploader {
     createTabs(formData) {
         const result = [];
 
-        if(!this.config.tabs) {
-            this.config.tabs = ['url'];
+        if(!this.actualTabs || this.isUpdating) {
+            this.actualTabs = ['url'];
         }
 
-        this.config.tabs.forEach((tabName) => {
+        this.actualTabs.forEach((tabName) => {
             const newTab = tabName === 'url'
-                ? new UrlTab(this.module, this.config, formData)
-                : new FileTab(this.module, this.config);
+                ? new UrlTab(this.module, {
+                    config: this.config,
+                    formData,
+                    isUpdating: this.isUpdating
+                })
+                : new FileTab(this.module, {
+                    config: this.config
+                });
 
             result.push(newTab);
         });
 
         return result;
+    }
+
+    isImageUpdating() {
+        return Object.prototype.hasOwnProperty.call(this.module.quill.getFormat() ?? {}, 'imageSrc');
     }
 
     modifyDialogPopupOptions() {
@@ -97,8 +112,14 @@ export class ImageUploader {
         }
 
         this.editorInstance.formDialogOption({
-            title: localizationMessage.format(DIALOG_IMAGE_CAPTION),
-            'toolbarItems[0].options.text': localizationMessage.format(DIALOG_IMAGE_ADD_BUTTON),
+            title: localizationMessage.format(
+                this.isUpdating
+                    ? DIALOG_UPDATE_IMAGE_CAPTION
+                    : DIALOG_IMAGE_CAPTION),
+            'toolbarItems[0].options.text': localizationMessage.format(
+                this.isUpdating
+                    ? DIALOG_IMAGE_UPDATE_BUTTON
+                    : DIALOG_IMAGE_ADD_BUTTON),
             'wrapperAttr': { class: wrapperClasses }
         });
     }
@@ -111,7 +132,7 @@ export class ImageUploader {
     }
 
     useTabbedItems() {
-        return this.config.tabs.length > 1;
+        return this.actualTabs.length > 1;
     }
 
     getFormWidth() {
@@ -158,10 +179,11 @@ export class ImageUploader {
 }
 
 class BaseTab {
-    constructor(module, config, formData) {
+    constructor(module, { config, formData, isUpdating }) {
         this.module = module;
         this.config = config;
         this.formData = formData;
+        this.isUpdating = isUpdating;
         this.strategy = this.getStrategy();
     }
 
@@ -175,12 +197,8 @@ class UrlTab extends BaseTab {
         return localizationMessage.format(DIALOG_IMAGE_SPECIFY_URL);
     }
 
-    isImageUpdating() {
-        return Object.prototype.hasOwnProperty.call(this.module.quill.getFormat() ?? {}, 'imageSrc');
-    }
-
     getStrategy() {
-        return this.isImageUpdating()
+        return this.isUpdating
             ? new UpdateUrlStrategy(this.module, this.config, this.formData)
             : new AddUrlStrategy(this.module, this.config);
     }
