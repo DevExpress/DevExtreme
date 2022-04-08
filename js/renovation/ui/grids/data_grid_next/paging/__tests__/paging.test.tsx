@@ -4,7 +4,7 @@ import each from 'jest-each';
 import { DataGridNextPaging, DataGridNextPagingProps, viewFunction as PagingView } from '../paging';
 import {
   PageIndex, PageSize, SetPageIndex, SetPageSize, PageCount, PagingEnabled,
-  ApplyPagingToVisibleItems, AddPagingToLoadOptions,
+  ApplyPagingToVisibleItems, AddPagingToLoadOptions, LoadPageCount,
 } from '../plugins';
 import { generateData } from '../../__tests__/test_data';
 import { Plugins } from '../../../../../utils/plugin/context';
@@ -118,6 +118,7 @@ describe('Paging', () => {
         plugins.set(PagingEnabled, true);
         plugins.set(PageIndex, 0);
         plugins.set(PageSize, 20);
+        plugins.set(LoadPageCount, 1);
       });
 
       it('should return full dataSource if paging is not enabled', () => {
@@ -173,6 +174,7 @@ describe('Paging', () => {
         plugins.set(PagingEnabled, true);
         plugins.set(PageIndex, 0);
         plugins.set(PageSize, 20);
+        plugins.set(LoadPageCount, 1);
       });
 
       it('should return empty object if remoteOperations is false', () => {
