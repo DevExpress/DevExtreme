@@ -447,7 +447,7 @@ module('Image uploading integration', {
 
     test('check file uploading by url with dimentions', function(assert) {
         this.createWidget({
-            value: `<img src=${WHITE_PIXEL}>`,
+            value: `<img width="0" height="0" src=${WHITE_PIXEL}>`,
             imageUpload: { mode: 'url' },
         });
 
@@ -482,13 +482,13 @@ module('Image uploading integration', {
         const $form = this.getFormElement();
         const sizeEditors = this.getSizeEditors($form);
 
-        assert.strictEqual(sizeEditors.heightEditor.option('value'), '40', 'height value is recalculated');
-        assert.strictEqual(sizeEditors.widthEditor.option('value'), '50', 'width value is recalculated');
+        assert.strictEqual(sizeEditors.heightEditor.option('value'), '40', 'height value is correct');
+        assert.strictEqual(sizeEditors.widthEditor.option('value'), '50', 'width value is correct');
     });
 
     test('check aspect ratio base', function(assert) {
         this.createWidget({
-            value: `<img src=${WHITE_PIXEL}>`,
+            value: `<img width="0" height="0" src=${WHITE_PIXEL}>`,
             imageUpload: { mode: 'url' }
         });
 
