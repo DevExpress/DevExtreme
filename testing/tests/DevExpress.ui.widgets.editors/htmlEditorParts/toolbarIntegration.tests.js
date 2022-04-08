@@ -3,7 +3,6 @@ import $ from 'jquery';
 import 'ui/html_editor';
 import fx from 'animation/fx';
 
-import keyboardMock from '../../../helpers/keyboardMock.js';
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
 
 const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
@@ -22,12 +21,8 @@ const DIALOG_CLASS = 'dx-formdialog';
 const DIALOG_FORM_CLASS = 'dx-formdialog-form';
 const BUTTON_CLASS = 'dx-button';
 const LIST_ITEM_CLASS = 'dx-list-item';
-const FIELD_ITEM_CLASS = 'dx-field-item';
-const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-const WHITE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4////fwAJ+wP93BEhJAAAAABJRU5ErkJggg==';
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgYmL6DwABFgEGpP/tHAAAAABJRU5ErkJggg==';
-const ORANGE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4z8j4HwAFBQIB6OfkUgAAAABJRU5ErkJggg==';
 
 const { test, module: testModule } = QUnit;
 
@@ -349,86 +344,6 @@ export default function() {
             const value = $formatWidget.find(`.${INPUT_CLASS}`).val();
 
             assert.strictEqual(value, '11px', 'SelectBox contain selected value');
-        });
-
-        function prepareImageUpdateTest(caretPosition, selectionLength) {
-            return function(assert) {
-                const done = assert.async();
-                const $container = $('#htmlEditor');
-                const instance = $container.dxHtmlEditor({
-                    toolbar: { items: ['image'] },
-                    value: `<img src=${WHITE_PIXEL}>`,
-                    onValueChanged: ({ value }) => {
-                        assert.ok(value.indexOf(WHITE_PIXEL) === -1, 'There is no white pixel');
-                        assert.ok(value.indexOf(BLACK_PIXEL) !== -1, 'There is a black pixel');
-                        done();
-                    }
-                }).dxHtmlEditor('instance');
-
-                instance.focus();
-
-                setTimeout(() => {
-                    instance.setSelection(caretPosition, selectionLength);
-                }, 100);
-
-                this.clock.tick(100);
-                $container
-                    .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-                    .trigger('dxclick');
-
-                const $srcInput = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`).first().val('');
-
-                keyboardMock($srcInput.eq(0))
-                    .type(BLACK_PIXEL)
-                    .change()
-                    .press('enter');
-            };
-        }
-
-        test('image should be correctly updated after change a source and caret placed after', prepareImageUpdateTest(1, 0));
-
-        test('image should be correctly updated after change a source and caret placed before an image', prepareImageUpdateTest(0, 0));
-
-        test('selected image should be correctly updated after change a source and caret placed after', prepareImageUpdateTest(1, 1));
-
-        test('selected image should be correctly updated after change a source and caret placed before an image', prepareImageUpdateTest(0, 1));
-
-        test('image should be correctly updated after change a source and caret placed between two images', function(assert) {
-            const done = assert.async();
-            const $container = $('#htmlEditor');
-            const instance = $container.dxHtmlEditor({
-                toolbar: { items: ['image'] },
-                value: `<img src=${WHITE_PIXEL}><img src=${BLACK_PIXEL}>`,
-                onValueChanged: ({ value }) => {
-                    const blackIndex = value.indexOf(BLACK_PIXEL);
-                    const orangeIndex = value.indexOf(ORANGE_PIXEL);
-
-                    assert.strictEqual(value.indexOf(WHITE_PIXEL), -1, 'There is no white pixel');
-                    assert.notStrictEqual(blackIndex, -1, 'There is a black pixel');
-                    assert.notStrictEqual(orangeIndex, -1, 'There is an orange pixel');
-                    assert.ok(orangeIndex < blackIndex, 'orange pixel placed before black pixel');
-                    done();
-                }
-            }).dxHtmlEditor('instance');
-
-            instance.focus();
-
-            setTimeout(() => {
-                instance.setSelection(1, 0);
-            }, 100);
-
-            this.clock.tick(100);
-
-            $container
-                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-                .trigger('dxclick');
-
-            const $srcInput = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`).first().val('');
-
-            keyboardMock($srcInput.eq(0))
-                .type(ORANGE_PIXEL)
-                .change()
-                .press('enter');
         });
 
         test('link should be correctly set to an image', function(assert) {

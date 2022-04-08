@@ -443,13 +443,13 @@ const SelectionController = gridCore.Controller.inherit((function() {
             return this._selection.getSelectedItems();
         },
 
-        changeItemSelection: function(visibleItemIndex, keys) {
+        changeItemSelection: function(visibleItemIndex, keys, setFocusOnly) {
             keys = keys || {};
             if(this.isSelectionWithCheckboxes()) {
                 keys.control = true;
             }
             const loadedItemIndex = visibleItemIndex + this._dataController.getRowIndexOffset() - this._dataController.getRowIndexOffset(true);
-            return this._selection.changeItemSelection(loadedItemIndex, keys);
+            return this._selection.changeItemSelection(loadedItemIndex, keys, setFocusOnly);
         },
 
         focusedItemIndex: function(itemIndex) {

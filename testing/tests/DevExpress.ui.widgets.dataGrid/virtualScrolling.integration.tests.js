@@ -10,6 +10,7 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import Scrollable from 'ui/scroll_view/ui.scrollable.js';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
+import translator from 'animation/translator';
 
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
@@ -1791,6 +1792,76 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok(dataGrid.getScrollable().scrollTop() > 0, 'content is scrolled');
     });
 
+    // T1072837
+    QUnit.test('Navigating to next row after editing should be correct if editing last row', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1 },
+                { id: 2 },
+                { id: 3 },
+                { id: 4 },
+                { id: 5 },
+                { id: 6 },
+                { id: 7 },
+                { id: 8 },
+                { id: 9 },
+                { id: 10 },
+                { id: 11 },
+                { id: 12 },
+                { id: 13 },
+                { id: 14 },
+                { id: 15 },
+                { id: 16 },
+            ],
+            columns: [
+                'id'
+            ],
+            keyExpr: 'id',
+            paging: false,
+            scrolling: {
+                mode: 'standard',
+                rowRenderingMode: 'virtual',
+                showScrollbar: 'always',
+                useNative: true,
+            },
+            height: 470,
+            showBorders: true,
+            focusedRowEnabled: true,
+            editing: {
+                mode: 'batch',
+                allowUpdating: true,
+            },
+            keyboardNavigation: {
+                enterKeyAction: 'moveFocus',
+                enterKeyDirection: 'column',
+                editOnKeyPress: true,
+            },
+            summary: {
+                recalculateWhileEditing: true,
+                totalItems: [{
+                    column: 'Freight',
+                    summaryType: 'sum',
+                }],
+            },
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.navigateToRow(12);
+        const rowIndex = dataGrid.getRowIndexByKey(12);
+
+        $(dataGrid.getCellElement(rowIndex, 'id')).trigger('dxclick');
+        $(dataGrid.getCellElement(rowIndex, 'id')).find('.dx-texteditor-input').val('100');
+        $(dataGrid.getCellElement(rowIndex, 'id')).find('.dx-texteditor-input').trigger($.Event('keydown', { key: 'Enter' }));
+        $(dataGrid.getScrollable().container()).trigger('scroll');
+        this.clock.tick();
+
+        // assert
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 55, 2, 'scrollTop');
+    });
+
     QUnit.test('scroll to next page several times should works correctly if virtual scrolling is enabled', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
@@ -2705,6 +2776,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         dataGrid.columnOption('group', 'groupIndex', 0);
         this.clock.tick();
+        $(dataGrid.getScrollable().container()).trigger('scroll');
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
@@ -4323,6 +4395,39 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.deepEqual(requestState, ['begin', 'end', 'begin', 'end', 'begin', 'end'], 'requests order after scrolling to the top');
     });
 
+    QUnit.test('New mode. Only one page should be loaded if rowRenderingMode is virtual, mode is standart and stateStoring is enabled (T1072176)', function(assert) {
+        const dataGrid = createDataGrid({
+            height: 50,
+            dataSource: [
+                { id: 1 },
+                { id: 2 },
+                { id: 3 },
+                { id: 4 },
+            ],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad() {
+                    return {
+                        pageIndex: 0,
+                        pageSize: 2,
+                    };
+                }
+            },
+            paging: {
+                pageSize: 2
+            },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            }
+        });
+
+        // act
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 2, 'only first page items are visible');
+    });
 
     // T996914
     QUnit.test('The scrollLeft of the footer view should be restored immediately when scrolling vertically', function(assert) {
@@ -5375,6 +5480,47 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.notStrictEqual(loadSpy.args[1][0].filter, undefined, 'filter is defined in the second call');
         assert.equal(loadSpy.args[1][0].skip, 0, 'skip in the second call');
         assert.equal(loadSpy.args[1][0].take, 15, 'take in the second call');
+    });
+
+    QUnit.test('Rows in fixed table should not have the offset when the content is scrolled to the bottom (T1072358)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 1000000; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 500,
+            columns: [
+                { dataField: 'id', fixed: true },
+                { dataField: 'name' }
+            ],
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            }
+        });
+
+        this.clock.tick(300);
+
+        for(let i = 0; i < 5; i++) {
+            dataGrid.getScrollable().scrollTo({ top: 16000000 });
+            this.clock.tick();
+        }
+        const visibleRows = dataGrid.getVisibleRows();
+        const $fixedTable = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-content-fixed .dx-datagrid-table-fixed');
+
+        // assert
+        assert.ok(visibleRows[visibleRows.length - 1].key > 999993, 'bottom row key');
+        assert.strictEqual(translator.getTranslate($fixedTable).y, 0, 'no offset');
     });
 });
 
@@ -6479,5 +6625,48 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.equal(spyLoad.callCount, 7, 'load count is not changed after scrolling up');
         assert.equal(spyLoad.args[spyLoad.callCount - 1][0].skip, 120, 'skip is not changed after scrolling up');
         assert.equal(spyLoad.args[spyLoad.callCount - 1][0].take, 20, 'take is not changed after scrolling up');
+    });
+
+    QUnit.test('Refresh call should not reset scroll position during scrolling (T1076187)', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: {
+                key: 'id',
+                load: () => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve(getData(100));
+                    }, 100);
+
+                    return d.promise();
+                }
+            },
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            height: 200
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.refresh();
+        dataGrid.getScrollable().scrollTo({ top: 500 });
+        this.clock.tick(100);
+
+        // assert
+        assert.equal(dataGrid.getScrollable().scrollTop(), 500, 'scroll position is not reset');
     });
 });

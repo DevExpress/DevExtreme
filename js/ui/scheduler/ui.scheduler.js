@@ -79,6 +79,7 @@ import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZone
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
+const DEFAULT_AGENDA_DURATION = 7;
 
 const WIDGET_CLASS = 'dx-scheduler';
 const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
@@ -89,7 +90,6 @@ const WIDGET_SMALL_WIDTH = 400;
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
 const UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
 
-const DEFAULT_AGENDA_DURATION = 7;
 const DEFAULT_APPOINTMENT_TEMPLATE_NAME = 'item';
 const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
 const DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME = 'dropDownAppointment';
@@ -536,7 +536,7 @@ class Scheduler extends Widget {
 
                 this._postponeResourceLoading().done((resources) => {
                     this._refreshWorkSpace(resources);
-                    this._updateHeader();
+                    this._header?.option(this._headerConfig());
                     this._filterAppointmentsByDate();
                     this._appointments.option('allowAllDayResize', value !== 'day');
                 });
@@ -745,20 +745,6 @@ class Scheduler extends Widget {
             default:
                 super._optionChanged(args);
         }
-    }
-
-    _updateHeader() {
-        this._header?.option(
-            {
-                'intervalCount': this._getViewCountConfig().intervalCount,
-                'startViewDate': this.getStartViewDate(),
-                'min': this._dateOption('min'),
-                'max': this._dateOption('max'),
-                'currentDate': this._dateOption('currentDate'),
-                'firstDayOfWeek': this.getFirstDayOfWeek(),
-                'currentView': this.currentView,
-            }
-        );
     }
 
     _dateOption(optionName) {
@@ -1419,7 +1405,7 @@ class Scheduler extends Widget {
             rtlEnabled: this.option('rtlEnabled'),
             useDropDownViewSwitcher: this.option('useDropDownViewSwitcher'),
             customizeDateNavigatorText: this.option('customizeDateNavigatorText'),
-            agendaDuration: this.option('agendaDuration') || DEFAULT_AGENDA_DURATION,
+            agendaDuration: currentViewOptions['agendaDuration'] || DEFAULT_AGENDA_DURATION
         }, currentViewOptions);
 
         result.intervalCount = countConfig.intervalCount;
@@ -1428,8 +1414,11 @@ class Scheduler extends Widget {
         result.max = new Date(this._dateOption('max'));
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
         result.onCurrentViewChange = (name) => this.option('currentView', name);
-        result.onCurrentDateChange = (date) => this.option('currentDate', date);
+        result.onCurrentDateChange = (date) => {
+            this.option('currentDate', date);
+        };
         result.items = this.option('toolbar');
+        result.startViewDate = this.getStartViewDate();
 
         result.todayDate = () => {
             const result = this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
@@ -2179,7 +2168,7 @@ class Scheduler extends Widget {
     }
 
     getStartViewDate() {
-        return this._workSpace.getStartViewDate();
+        return this._workSpace?.getStartViewDate();
     }
 
     getEndViewDate() {

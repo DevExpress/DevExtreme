@@ -351,6 +351,13 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       aggregationInterval?: VizTimeInterval;
       /**
        * @docid
+       * @type Enums.DiscreteAxisDivisionMode
+       * @default 'betweenLabels'
+       * @public
+       */
+      discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
+      /**
+       * @docid
        * @default undefined
        */
       allowDecimals?: boolean;

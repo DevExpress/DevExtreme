@@ -1648,6 +1648,34 @@ QUnit.module('Editing', {
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0, 'editor is closed');
     });
 
+    QUnit.test('Editing Cell should be closed on click outside dataGrid inside dropdowneditor overlay (T1080088)', function(assert) {
+        const testElement = $('#container');
+
+        $.extend(this.options.editing, {
+            allowUpdating: true,
+            mode: 'cell'
+        });
+
+        const parentElement = testElement.parent();
+
+        parentElement.addClass('dx-dropdowneditor-overlay');
+
+        this.rowsView.render(testElement);
+
+        // act
+        this.editCell(0, 0);
+        this.clock.tick();
+
+        // assert
+        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor is rendered');
+
+        // act
+        parentElement.trigger('dxclick');
+
+        // assert
+        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0, 'editor is closed');
+    });
+
     // T749034
     QUnit.test('Changed value should be saved on click outside dataGrid on mobile devices when cell editing mode', function(assert) {
         if(devices.real().deviceType === 'desktop') {
@@ -15559,6 +15587,94 @@ QUnit.module('Editing with validation', {
 
             // assert
             assert.strictEqual(newRowCount, 1, 'single new row after saving');
+        });
+    });
+
+    // T1077720
+    ['cell', 'batch', 'row', 'form', 'popup'].forEach((mode) => {
+        QUnit.test(`The ${mode} edit mode - Validation state of editors should not be cleared cleared when a user modifies the value of an editor that has a defined setCellValue function`, function(assert) {
+            // arrange
+            fx.off = true;
+
+            try {
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+                const getCellText = (rowIndex, columnIndex) => {
+                    const $cellElement = $(this.getCellElement(rowIndex, columnIndex));
+                    const $inputElement = $cellElement.find('.dx-texteditor-input');
+
+                    return $inputElement.length ? $inputElement.val() : $cellElement.text();
+                };
+                const isValidCell = (rowIndex, columnIndex) => {
+                    if(mode === 'popup' || mode === 'form') {
+                        return !$(this.getCellElement(rowIndex, columnIndex)).find('.dx-invalid').length;
+                    }
+
+                    return !$(this.getCellElement(rowIndex, columnIndex)).hasClass('dx-datagrid-invalid');
+                };
+
+                this.options.columns = [];
+                const gridConfig = {
+                    dataSource: [{ a: 'test1', b: 'test2' }],
+                    editing: {
+                        mode,
+                        allowAdding: true
+                    },
+                    columns: [
+                        {
+                            dataField: 'a',
+                            setCellValue: function(newData, value) {
+                                this.defaultSetCellValue(newData, value);
+                            },
+                            validationRules: [{ type: 'required' }]
+                        },
+                        {
+                            dataField: 'b',
+                            setCellValue: function(newData, value) {
+                                this.defaultSetCellValue(newData, value);
+                            },
+                            validationRules: [{ type: 'required' }]
+                        }
+                    ]
+                };
+
+                rowsView.render($testElement);
+                this.applyOptions(gridConfig);
+
+                const onInitNewRow = function(e) {
+                    e.data.a = 'test';
+                };
+                this.option('onInitNewRow', onInitNewRow);
+
+                // act
+                this.addRow();
+                this.clock.tick();
+
+                // assert
+                const newRow = this.getVisibleRows()[0];
+                assert.ok(newRow.isNewRow, 'new row');
+
+                // act
+                this.cellValue(0, 0, '');
+                this.clock.tick();
+
+                // assert
+                assert.strictEqual(getCellText(0, 0), '', 'text of the first cell');
+                assert.notOk(isValidCell(0, 0), 'first cell is not valid');
+                assert.ok(isValidCell(0, 1), 'second cell is valid');
+
+                // act
+                this.cellValue(0, 1, '123');
+                this.clock.tick();
+
+                // assert
+                assert.strictEqual(getCellText(0, 0), '', 'text of the first cell');
+                assert.notOk(isValidCell(0, 0), 'first cell is not valid');
+                assert.strictEqual(getCellText(0, 1), '123', 'text of the second cell');
+                assert.ok(isValidCell(0, 1), 'second cell is valid');
+            } finally {
+                fx.off = false;
+            }
         });
     });
 });

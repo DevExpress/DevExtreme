@@ -215,8 +215,8 @@ export type ScaleCellPreparedEvent = InitializedEventInfo<dxGantt> & {
     readonly scaleType: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years' | 'fiveYears';
     readonly scaleElement: DxElement;
     readonly separatorElement: DxElement;
-    readonly start: Date;
-    readonly end: Date;
+    readonly startDate: Date;
+    readonly endDate: Date;
 };
 
 /** @public */

@@ -3,19 +3,19 @@ import {
   Component, ComponentBindings, JSXComponent, InternalState, Effect,
 } from '@devextreme-generator/declarations';
 import React from 'react';
-import { DataGridLight, DataGridLightProps } from '../../../../js/renovation/ui/grids/data_grid_light/data_grid_light';
-import { Pager, PagerProps } from '../../../../js/renovation/ui/grids/data_grid_light/pager/pager';
-import { Paging, PagingProps } from '../../../../js/renovation/ui/grids/data_grid_light/paging/paging';
-import { Selection, SelectionProps } from '../../../../js/renovation/ui/grids/data_grid_light/selection/selection';
-import { MasterDetail, MasterDetailProps } from '../../../../js/renovation/ui/grids/data_grid_light/master_detail/master_detail';
+import { DataGridNext, DataGridNextProps } from '../../../../js/renovation/ui/grids/data_grid_next/data_grid_next';
+import { DataGridNextPager, DataGridNextPagerProps } from '../../../../js/renovation/ui/grids/data_grid_next/pager/pager';
+import { DataGridNextPaging, DataGridNextPagingProps } from '../../../../js/renovation/ui/grids/data_grid_next/paging/paging';
+import { DataGridNextSelection, DataGridNextSelectionProps } from '../../../../js/renovation/ui/grids/data_grid_next/selection/selection';
+import { DataGridNextMasterDetail, DataGridNextMasterDetailProps } from '../../../../js/renovation/ui/grids/data_grid_next/master_detail/master_detail';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 export type OptionsType = Partial<
-DataGridLightProps
-& { pager: PagerProps }
-& { selection: SelectionProps }
-& { paging: PagingProps }
-& { masterDetail: MasterDetailProps }
+DataGridNextProps
+& { pager: DataGridNextPagerProps }
+& { selection: DataGridNextSelectionProps }
+& { paging: DataGridNextPagingProps }
+& { masterDetail: DataGridNextMasterDetailProps }
 >;
 
 export const viewFunction = ({
@@ -29,7 +29,7 @@ export const viewFunction = ({
   setSelectedRowKeys,
   setExpandedRowKeys,
 }: App): JSX.Element => (
-  <DataGridLight
+  <DataGridNext
     id="container"
     dataSource={options.dataSource}
     columns={options.columns}
@@ -37,7 +37,7 @@ export const viewFunction = ({
     noDataTemplate={options.noDataTemplate}
   >
     {paging.enabled && (
-    <Paging
+    <DataGridNextPaging
       enabled={paging.enabled}
       pageIndex={paging.pageIndex}
       pageIndexChange={setPageIndex}
@@ -47,7 +47,7 @@ export const viewFunction = ({
     )}
 
     {/* {pager.visible && ( */}
-    <Pager
+    <DataGridNextPager
       visible={pager.visible}
       allowedPageSizes={pager.allowedPageSizes}
       showPageSizeSelector={pager.showPageSizeSelector}
@@ -56,7 +56,7 @@ export const viewFunction = ({
     {/* )} */}
 
     {selection.mode !== 'none' && (
-    <Selection
+    <DataGridNextSelection
       allowSelectAll={selection.allowSelectAll}
       mode={selection.mode}
       selectAllMode={selection.selectAllMode}
@@ -66,14 +66,14 @@ export const viewFunction = ({
     )}
 
     { masterDetail.enabled && (
-    <MasterDetail
+    <DataGridNextMasterDetail
       enabled={masterDetail.enabled}
       template={masterDetail.template}
       expandedRowKeys={masterDetail.expandedRowKeys}
       expandedRowKeysChange={setExpandedRowKeys}
     />
     )}
-  </DataGridLight>
+  </DataGridNext>
 );
 @ComponentBindings()
 class AppProps { }
@@ -87,16 +87,16 @@ export class App extends JSXComponent<AppProps>() {
   @InternalState() options: OptionsType = {};
 
   @InternalState()
-  paging: Partial<PagingProps> = { enabled: false };
+  paging: Partial<DataGridNextPagingProps> = { enabled: false };
 
   @InternalState()
-  pager: Partial<PagerProps> = { visible: false };
+  pager: Partial<DataGridNextPagerProps> = { visible: false };
 
   @InternalState()
-  selection: Partial<SelectionProps> = { mode: 'none' };
+  selection: Partial<DataGridNextSelectionProps> = { mode: 'none' };
 
   @InternalState()
-  masterDetail: Partial<MasterDetailProps> = { enabled: false };
+  masterDetail: Partial<DataGridNextMasterDetailProps> = { enabled: false };
 
   setPageIndex(pageIndex: number): void {
     this.paging = {

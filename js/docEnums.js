@@ -245,6 +245,11 @@
  */
 
 /**
+ * @typedef {string} Enums.AggregatedPointsPosition
+ * @enum {'betweenTicks'|'crossTicks'}
+ */
+
+/**
  * @typedef {string} Enums.ScaleBreakLineStyle
  * @enum {'straight'|'waved'}
  */
@@ -1022,6 +1027,16 @@
 /**
  * @typedef {string} Enums.HtmlEditorContextMenuItem
  * @enum {'background'|'bold'|'color'|'font'|'italic'|'link'|'image'|'strike'|'subscript'|'superscript'|'underline'|'blockquote'|'increaseIndent'|'decreaseIndent'|'orderedList'|'bulletList'|'alignLeft'|'alignCenter'|'alignRight'|'alignJustify'|'codeBlock'|'variable'|'undo'|'redo'|'clear'|'insertTable'|'insertHeaderRow'|'insertRowAbove'|'insertRowBelow'|'insertColumnLeft'|'insertColumnRight'|'deleteColumn'|'deleteRow'|'deleteTable'|'cellProperties'|'tableProperties'}
+ */
+
+/**
+ * @typedef {string} Enums.HtmlEditorImageUploadTab
+ * @enum {'url'|'file'}
+ */
+
+/**
+ * @typedef {string} Enums.HtmlEditorImageUploadFileUploadMode
+ * @enum {'base64'|'server'|'both'}
  */
 
 /**

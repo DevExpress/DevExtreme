@@ -624,7 +624,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(options.columnIndices) {
             if(options.row.cells) {
-                options.row.cells[cellOptions.columnIndex] = cellOptions;
+                const cellIndex = options.row.cells.findIndex(cell => cell.columnIndex === cellOptions.columnIndex);
+                options.row.cells[cellIndex] = cellOptions;
             }
         } else {
             options.row.cells.push(cellOptions);

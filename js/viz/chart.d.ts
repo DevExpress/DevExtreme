@@ -1534,6 +1534,13 @@ export interface dxChartCommonAxisSettings {
      */
     discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
     /**
+     * @docid dxChartOptions.commonAxisSettings.aggregatedPointsPosition
+     * @type Enums.AggregatedPointsPosition
+     * @default 'betweenTicks'
+     * @public
+     */
+     aggregatedPointsPosition?: 'betweenTicks' | 'crossTicks';
+    /**
      * @docid dxChartOptions.commonAxisSettings.endOnTick
      * @default undefined
      * @public
@@ -3659,11 +3666,11 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      */
     visible?: boolean;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.pattern
+     * @docid dxChartSeriesTypes.CommonSeries.label.displayFormat
      * @default undefined
      * @public
      */
-    pattern?: string;
+     displayFormat?: string;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeriesPoint {
