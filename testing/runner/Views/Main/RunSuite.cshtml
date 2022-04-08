@@ -175,6 +175,7 @@
                     'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
                     '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
+                    '@@devextreme/runtime/common': '@Url.Content("~/node_modules/@devextreme/runtime/common")',
                     '@@devextreme/runtime/inferno': '@Url.Content("~/node_modules/@devextreme/runtime/inferno")',
                     '@@devextreme/runtime/declarations': '@Url.Content("~/node_modules/@devextreme/runtime/declarations")',
                     '@@devextreme/runtime/angular': '@Url.Content("~/node_modules/@devextreme/runtime/angular")',
@@ -203,8 +204,8 @@
                     'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
                 },
                 packages: {
-                    '@@devextreme/runtime/inferno': {
-                        main: '../cjs/inferno/index.js',
+                    '@@devextreme/runtime/common': {
+                        main: '../cjs/common/index.js',
                         defaultExtension: 'js',
                         format: 'cjs'
                     },

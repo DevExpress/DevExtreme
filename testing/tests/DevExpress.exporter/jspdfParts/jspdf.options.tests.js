@@ -5,7 +5,9 @@ const JSPdfOptionTests = {
         QUnit.module('_getFullOptions', moduleConfig, () => {
             runCommonOptionTests(_getFullOptions, getComponent, 'jsPDFDocument');
 
-            [[], '1', 1, undefined, null].forEach((jsPDFDocument) => {
+            [
+                [], '1', 1, undefined, null
+            ].forEach((jsPDFDocument) => {
                 QUnit.test(`jsPDFDocument: ${JSON.stringify(jsPDFDocument)}`, function(assert) {
                     let errorMessage;
                     try {
@@ -29,7 +31,20 @@ const JSPdfOptionTests = {
                 }
             });
 
-            [[], '1', 1].forEach((autoTableOptions) => {
+            QUnit.test('jsPDFDocument.autoTable: {}', function(assert) {
+                let errorMessage;
+                try {
+                    _getFullOptions({ component: getComponent(), jsPDFDocument: {} });
+                } catch(e) {
+                    errorMessage = e.message;
+                } finally {
+                    assert.strictEqual(errorMessage, `The "export${getComponent().NAME.substring(2)}" method requires a autoTable plugin for jsPDF object.`);
+                }
+            });
+
+            [
+                [], '1', 1
+            ].forEach((autoTableOptions) => {
                 QUnit.test(`autoTableOptions: ${JSON.stringify(autoTableOptions)}`, function(assert) {
                     let errorMessage;
                     try {

@@ -314,7 +314,7 @@ export const BaseChart = BaseWidget.inherit({
         onPointSelectionChanged: { name: 'pointSelectionChanged' },
         onSeriesHoverChanged: { name: 'seriesHoverChanged' },
         onPointHoverChanged: { name: 'pointHoverChanged' },
-        onDone: { name: 'done' },
+        onDone: { name: 'done', actionSettings: { excludeValidators: ['disabled'] } },
         onZoomStart: { name: 'zoomStart' },
         onZoomEnd: { name: 'zoomEnd' }
     },
@@ -1046,7 +1046,7 @@ export const BaseChart = BaseWidget.inherit({
         scrollBar: 'SCROLL_BAR'
     },
 
-    _optionChangesOrder: ['ROTATED', 'PALETTE', 'REFRESH_SERIES_REINIT', 'AXES_AND_PANES', 'INIT', 'REINIT', 'DATA_SOURCE', 'REFRESH_SERIES_DATA_INIT', 'DATA_INIT', 'FORCE_DATA_INIT', 'REFRESH_AXES', 'CORRECT_AXIS'],
+    _optionChangesOrder: ['ROTATED', 'PALETTE', 'REFRESH_SERIES_REINIT', 'USE_SPIDER_WEB', 'AXES_AND_PANES', 'INIT', 'REINIT', 'DATA_SOURCE', 'REFRESH_SERIES_DATA_INIT', 'DATA_INIT', 'FORCE_DATA_INIT', 'REFRESH_AXES', 'CORRECT_AXIS'],
 
     _customChangesOrder: ['ANIMATION', 'REFRESH_SERIES_FAMILIES', 'FORCE_FIRST_DRAWING', 'FORCE_DRAWING',
         'FORCE_RENDER', 'VISUAL_RANGE', 'SCROLL_BAR', 'REINIT', 'REFRESH', 'FULL_RENDER'],

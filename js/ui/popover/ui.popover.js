@@ -373,6 +373,10 @@ const Popover = Popup.inherit({
         return this._positionController._getContainerPosition();
     },
 
+    _hideOnParentScrollTarget: function() {
+        return $(this._positionController._position.of || this.callBase());
+    },
+
     _getSideByLocation: function(location) {
         const isFlippedByVertical = location.v.flip;
         const isFlippedByHorizontal = location.h.flip;

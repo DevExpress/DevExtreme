@@ -215,8 +215,8 @@ export type ScaleCellPreparedEvent = InitializedEventInfo<dxGantt> & {
     readonly scaleType: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years' | 'fiveYears';
     readonly scaleElement: DxElement;
     readonly separatorElement: DxElement;
-    readonly start: Date;
-    readonly end: Date;
+    readonly startDate: Date;
+    readonly endDate: Date;
 };
 
 /** @public */
@@ -742,11 +742,11 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 scaleIndex:number
-     * @type_function_param1_field4 scaleType:Enums.GanttScaleType
+     * @type_function_param1_field4 scaleType:Enums.GanttRenderScaleType
      * @type_function_param1_field5 scaleElement:DxElement
      * @type_function_param1_field6 separatorElement:DxElement
-     * @type_function_param1_field7 start:Date
-     * @type_function_param1_field7 end:Date
+     * @type_function_param1_field7 startDate:Date
+     * @type_function_param1_field8 endDate:Date
      * @action
      * @public
      */

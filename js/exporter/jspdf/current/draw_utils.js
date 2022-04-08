@@ -1,6 +1,7 @@
-import { isDefined, isObject } from '../../../core/utils/type';
+import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { calculateTextHeight, toPdfUnit } from './pdf_utils';
+import { capitalizeFirstLetter } from '../../../ui/pivot_grid/ui.pivot_grid.utils';
 
 function roundToThreeDecimals(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
@@ -64,9 +65,7 @@ function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, jsPDFTe
 
 function drawCellBackground(doc, cell) {
     if(isDefined(cell.backgroundColor)) {
-        if(cell.backgroundColor !== doc.getFillColor()) {
-            callMethodWithColorParameter(doc, 'setFillColor', cell.backgroundColor);
-        }
+        trySetColor(doc, 'fill', cell.backgroundColor);
         drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
     }
 }
@@ -108,8 +107,8 @@ function drawCellsLines(doc, cellsArray, docStyles) {
         });
 }
 
-function drawGridLines(doc, rect, { borderWidth, borderColor }, docStyles) {
-    drawBorders(doc, rect, { borderWidth, borderColor }, docStyles);
+function drawGridLines(doc, rect, options, docStyles) {
+    drawBorders(doc, rect, options, docStyles);
 }
 
 function drawBorders(doc, rect, { borderWidth, borderColor, drawLeftBorder = true, drawRightBorder = true, drawTopBorder = true, drawBottomBorder = true }, docStyles) {
@@ -144,10 +143,7 @@ function drawBorders(doc, rect, { borderWidth, borderColor, drawLeftBorder = tru
 }
 
 function setTextStyles(doc, { textColor, font }, docStyles) {
-    const currentTextColor = isDefined(textColor) ? textColor : docStyles.textColor;
-    if(currentTextColor !== doc.getTextColor()) {
-        callMethodWithColorParameter(doc, 'setTextColor', currentTextColor);
-    }
+    trySetColor(doc, 'text', isDefined(textColor) ? textColor : docStyles.textColor);
 
     const currentFont = isDefined(font) ? extend({}, docStyles.font, font) : docStyles.font;
     const docFont = doc.getFont();
@@ -169,24 +165,19 @@ function setLinesStyles(doc, { borderWidth, borderColor }, docStyles) {
         setDocBorderWidth(doc, toPdfUnit(doc, currentBorderWidth));
     }
 
-    const currentBorderColor = isDefined(borderColor) ? borderColor : docStyles.borderColor;
-    if(currentBorderColor !== doc.getDrawColor()) {
-        callMethodWithColorParameter(doc, 'setDrawColor', currentBorderColor);
-    }
+    trySetColor(doc, 'draw', isDefined(borderColor) ? borderColor : docStyles.borderColor);
 }
 
-function callMethodWithColorParameter(doc, method, color) {
-    if(!isObject(color)) {
-        doc[method](color);
-    } else {
-        const argsCount = Object.keys(color).length;
-        if(argsCount === 3) {
-            doc[method](color.ch1, color.ch2, color.ch3);
-        } else if(argsCount === 4) {
-            doc[method](color.ch1, color.ch2, color.ch3, color.ch4);
-        } else {
-            throw Error(`An incorrect color object was passed: 3 or 4 members are expected while the passed object has ${argsCount} members`);
-        }
+function trySetColor(doc, target, color) {
+    const getterName = `get${capitalizeFirstLetter(target)}Color`;
+    const setterName = `set${capitalizeFirstLetter(target)}Color`;
+
+    const { ch1 = color, ch2, ch3, ch4 } = color;
+
+    const normalizedColor = doc.__private__.decodeColorString(doc.__private__.encodeColorString({ ch1, ch2, ch3, ch4, precision: target === 'text' ? 3 : 2 }));
+
+    if(normalizedColor !== doc[getterName]()) {
+        doc[setterName].apply(doc, [ch1, ch2, ch3, ch4].filter(item => item !== undefined));
     }
 }
 
@@ -228,7 +219,6 @@ function setDocumentStyles(doc, styles) {
     if(getDocBorderWidth(doc) !== borderWidth) {
         setDocBorderWidth(doc, borderWidth);
     }
-
     if(doc.getDrawColor() !== borderColor) {
         doc.setDrawColor(borderColor);
     }

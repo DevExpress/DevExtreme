@@ -476,6 +476,12 @@
     }
   },
   {
+    "name": "ui/toast/hide_toasts",
+    "exports": {
+      "default": { "path": "ui.hideToasts" }
+    }
+  },
+  {
     "name": "ui/number_box",
     "exports": {
       "default": { "path": "ui.dxNumberBox", "isWidget": true }

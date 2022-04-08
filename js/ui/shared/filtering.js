@@ -177,7 +177,7 @@ export default (function() {
                 return getFilterExpressionForDate.apply(column, arguments);
             } else if(dataType === 'number') {
                 return getFilterExpressionForNumber.apply(column, arguments);
-            } else if(dataType !== 'object') {
+            } else {
                 filter = [selector, selectedFilterOperation || '=', filterValue];
             }
 

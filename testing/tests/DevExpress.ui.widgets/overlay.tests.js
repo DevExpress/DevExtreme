@@ -3292,10 +3292,24 @@ testModule('overlay utils', moduleConfig, () => {
         assert.strictEqual(zIndex.create(), 1502, 'new zindex is larger than overlay\'s');
     });
 
-    test('overlay should remove its zindex from the stack on dispose', function(assert) {
+    test('overlay should remove its zindex from the stack on dispose if overlay is visible', function(assert) {
         const instance = new Overlay('#overlay', { visible: true });
         instance.dispose();
         assert.strictEqual(zIndex.create(), 1501, 'zindex has been removed');
+    });
+
+    test('overlay should not try to remove its zindex from the stack on dispose if overlay is not visible (T1070941)', function(assert) {
+        const instance = new Overlay('#overlay');
+
+        instance.show();
+        instance.hide();
+
+        const rememberedZIndex = 1501;
+        zIndex.create();
+
+        instance.dispose();
+
+        assert.strictEqual(zIndex.create(), rememberedZIndex + 1, 'remembered zIndex was not removed on dispose');
     });
 
     test('overlay should create new zindex only at first showing', function(assert) {

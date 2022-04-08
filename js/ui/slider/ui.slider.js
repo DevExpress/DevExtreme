@@ -429,6 +429,10 @@ const Slider = TrackBar.inherit({
     },
 
     _swipeEndHandler: function(e) {
+        if(this._isSingleValuePossible()) {
+            return;
+        }
+
         this._feedbackDeferred.resolve();
         this._toggleActiveState(this._activeHandle(), false);
 
@@ -445,6 +449,10 @@ const Slider = TrackBar.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
+        if(this._isSingleValuePossible()) {
+            return;
+        }
+
         this._saveValueChangeEvent(e.event);
         this._updateHandlePosition(e);
     },
@@ -516,7 +524,17 @@ const Slider = TrackBar.inherit({
         this._saveValueChangeEvent(undefined);
     },
 
+    _isSingleValuePossible: function() {
+        const { min, max } = this.option();
+
+        return min === max;
+    },
+
     _startHandler: function(args) {
+        if(this._isSingleValuePossible()) {
+            return;
+        }
+
         const e = args.event;
 
         this._currentRatio = (eventData(e).x - this._$bar.offset().left) / getWidth(this._$bar);

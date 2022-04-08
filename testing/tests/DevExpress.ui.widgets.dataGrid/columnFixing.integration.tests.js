@@ -637,4 +637,31 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         // assert
         assert.equal(dataGrid.getScrollable().scrollTop(), 50, 'scroll top on mousewheel');
     });
+
+    QUnit.test('Column should be fixed on column fixed option change inside onContentReady if scrolling mode is virtual (T1066060)', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: [{
+                ID: 1,
+                FirstName: 'John'
+            }],
+            scrolling: {
+                mode: 'virtual',
+            },
+            columnFixing: {
+                enabled: true
+            },
+            selection: {
+                mode: 'multiple'
+            },
+            onContentReady: function(e) {
+                e.component.columnOption(0, 'fixed', true);
+            },
+        });
+        this.clock.tick();
+
+        // act
+        const $rows = $(dataGrid.getRowElement(0));
+        assert.equal($rows.eq(1).children().eq(1).text(), '1');
+    });
 });

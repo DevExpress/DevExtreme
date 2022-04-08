@@ -7,6 +7,7 @@ import {
 } from '../../core/utils';
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
+import { processDisplayFormat } from '../helpers/display_format_parser';
 
 const _format = formatHelper.format;
 const _math = Math;
@@ -278,7 +279,7 @@ function formatText(data, options) {
         data.reductionValueText = _format(data.reductionValue, format);
     }
 
-    return options.customizeText ? options.customizeText.call(data, data) : data.valueText;
+    return options.customizeText ? options.customizeText.call(data, data) : options.displayFormat ? processDisplayFormat(options.displayFormat, data) : data.valueText;
 }
 
 export function Label(renderSettings) {
@@ -359,7 +360,7 @@ Label.prototype = {
         const renderer = that._renderer;
         const container = that._container;
         const options = that._options || {};
-        const text = that._textContent = formatText(that._data, that._options) || null;
+        const text = that._textContent = formatText(that._data, options) || null;
 
         if(text) {
             if(!that._group) {

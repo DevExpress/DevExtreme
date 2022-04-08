@@ -11,19 +11,6 @@ import messageLocalization from '../../../localization/message';
 import { ExportLoadPanel } from '../../common/export_load_panel';
 import { hasWindow } from '../../../core/utils/window';
 
-// TODO: check names with techwritters
-// IPDFExportOptions: {
-//    repeatHeaders: false,
-//    tableBorderWidth: number,
-//    tableBorderColor: color,
-//    topLeft: {x: number, y: number},
-//    indent: number,
-//    margin: { top:number, left:number, right:number, bottom:number } | number
-//    customizeCell: ({ gridCell, pdfCell }): void
-//    customDrawCell: ({ rect, pdfCell, gridCell, cancel }): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
-//    loadPanel: Object
-// }
-
 function _getFullOptions(options) {
     const { jsPDFDocument } = options;
     const fullOptions = extend({}, options);
@@ -41,11 +28,11 @@ function _getFullOptions(options) {
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
 
-    if(!isDefined(fullOptions.tableBorderWidth)) {
-        fullOptions.tableBorderWidth = getBaseTableStyle().borderWidth;
+    if(!isDefined(fullOptions.borderWidth)) {
+        fullOptions.borderWidth = getBaseTableStyle().borderWidth;
     }
-    if(!isDefined(fullOptions.tableBorderColor)) {
-        fullOptions.tableBorderColor = getBaseTableStyle().borderColor;
+    if(!isDefined(fullOptions.borderColor)) {
+        fullOptions.borderColor = getBaseTableStyle().borderColor;
     }
     if(!isDefined(fullOptions.loadPanel)) {
         fullOptions.loadPanel = {};
@@ -250,9 +237,7 @@ function exportDataGrid(options) {
                 const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
                 if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
                     const tableRect = calculateTableSize(jsPDFDocument, pdfCellsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
-                    const borderWidth = options.tableBorderWidth;
-                    const borderColor = options.tableBorderColor;
-                    drawGridLines(jsPDFDocument, tableRect, { borderWidth, borderColor }, docStyles);
+                    drawGridLines(jsPDFDocument, tableRect, options, docStyles);
                 }
             });
 

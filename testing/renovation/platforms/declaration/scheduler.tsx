@@ -3,10 +3,38 @@ import {
   Component, ComponentBindings, JSXComponent, InternalState, Effect,
 } from '@devextreme-generator/declarations';
 import React from 'react';
+import { AppointmentTemplateProps } from '../../../../js/renovation/ui/scheduler/appointment/types';
 import { SchedulerProps } from '../../../../js/renovation/ui/scheduler/props';
 import { Scheduler } from '../../../../js/renovation/ui/scheduler/scheduler';
 
-export const viewFunction = ({ componentProps }: App): JSX.Element => (
+const defaultAppointmentTemplate = ({
+  data: {
+    appointmentData: {
+      startDate,
+      endDate,
+    },
+  },
+}: AppointmentTemplateProps): JSX.Element => {
+  const styles: CSSProperties = {
+    display: 'flex',
+    flexWrap: 'wrap',
+  };
+
+  const startDateValue = new Date(startDate).toISOString().substring(0, 16);
+  const endDateValue = new Date(endDate).toISOString().substring(0, 16);
+
+  return (
+    <div style={styles}>
+      <input type="datetime-local" value={startDateValue} />
+      <input type="datetime-local" value={endDateValue} />
+    </div>
+  );
+};
+
+export const viewFunction = ({
+  componentProps,
+  appointmentTemplate,
+}: App): JSX.Element => (
   <Scheduler
     id="container"
     adaptivityEnabled={componentProps.adaptivityEnabled}
@@ -68,7 +96,7 @@ export const viewFunction = ({ componentProps }: App): JSX.Element => (
     timeCellTemplate={componentProps.timeCellTemplate}
     resourceCellTemplate={componentProps.resourceCellTemplate}
     appointmentCollectorTemplate={componentProps.appointmentCollectorTemplate}
-    appointmentTemplate={componentProps.appointmentTemplate}
+    appointmentTemplate={appointmentTemplate}
     appointmentTooltipTemplate={componentProps.appointmentTooltipTemplate}
     toolbar={componentProps.toolbar}
     currentDateChange={componentProps.currentDateChange}
@@ -148,5 +176,12 @@ export class App extends JSXComponent<AppProps>() {
       currentDateChange: (date: Date): void => this.currentDateChange(date),
       currentViewChange: (view: string): void => this.currentViewChange(view),
     };
+  }
+
+  get appointmentTemplate() {
+    const { appointmentTemplate } = this.componentProps;
+    return (appointmentTemplate as never) === 'ModularTemplate'
+      ? defaultAppointmentTemplate
+      : appointmentTemplate;
   }
 }

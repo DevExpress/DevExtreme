@@ -967,6 +967,24 @@ describe('templates and slots', () => {
     expect($('#component').children('.templates-root').length).toBe(0);
   });
 
+  it('should not rerender the same template', () => {
+    const render = jest.fn();
+    const template = {
+      render,
+    };
+
+    const instance = $('#component').dxTemplatedTestWidget({
+      template,
+    }).dxTemplatedTestWidget('instance');
+
+    expect(render).toBeCalledTimes(1);
+
+    const widgetTemplate = instance.option('template');
+    instance.option('template', widgetTemplate);
+
+    expect(render).toBeCalledTimes(1);
+  });
+
   it('should not re-render template if new data shadow equal', () => {
     const template = jest.fn();
 
