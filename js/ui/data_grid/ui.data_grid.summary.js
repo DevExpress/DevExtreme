@@ -20,8 +20,10 @@ const DATAGRID_TEXT_CONTENT_CLASS = 'dx-datagrid-text-content';
 const DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer';
 const DATAGRID_GROUP_TEXT_CONTENT_CLASS = 'dx-datagrid-group-text-content';
 const DATAGRID_NOWRAP_CLASS = 'dx-datagrid-nowrap';
+const DATAGRID_FOOTER_ROW_CLASS = 'dx-footer-row';
 
 const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
+const DATAGRID_TOTAL_FOOTER_ROW_TYPE = 'totalFooter';
 
 export const renderSummaryCell = function(cell, options) {
     const $cell = $(cell);
@@ -133,6 +135,16 @@ export const FooterView = ColumnsView.inherit((function() {
             } else if(changeType === 'refresh' || changeType === 'append' || changeType === 'prepend') {
                 this.render();
             }
+        },
+
+        _createRow: function(row) {
+            const $row = this.callBase.apply(this, arguments);
+
+            if(row.rowType === DATAGRID_TOTAL_FOOTER_ROW_TYPE) {
+                $row.addClass(DATAGRID_FOOTER_ROW_CLASS);
+            }
+
+            return $row;
         },
 
         getHeight: function() {
@@ -569,7 +581,7 @@ gridCore.registerModule('summary', {
 
                             if(summaryCells.length) {
                                 that._footerItems.push({
-                                    rowType: 'totalFooter',
+                                    rowType: DATAGRID_TOTAL_FOOTER_ROW_TYPE,
                                     summaryCells: summaryCells
                                 });
                             }
