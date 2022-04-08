@@ -77,6 +77,8 @@ if(Quill) {
                 accept: 'image/*',
                 uploadUrl: this.options.uploadUrl,
                 uploadMode: 'instantly',
+                name: 'dx-htmleditor-image',
+                onUploaded: this._onUploaded.bind(this),
             }, this.options.fileUploaderOptions);
 
             this.editorInstance._createComponent($container, FileUploader, fileUploaderOptions);
@@ -107,16 +109,8 @@ if(Quill) {
         _handleInsertImages(e, filesField) {
             this.saveValueChangeEvent(e);
             const files = Array.from(e.originalEvent[filesField].files || []);
-            const selection = this.quill.getSelection();
-            let pasteIndex = selection ? selection.index : this.quill.getLength();
 
             const uploads = files.filter((file) => this._isImage(file));
-
-            uploads.forEach((file) => {
-                const imageUrl = correctSlashesInUrl(this.options.uploadDirectory) + file.name;
-                urlUpload(this.quill, pasteIndex, { src: imageUrl });
-                pasteIndex++;
-            });
 
             if(uploads.length > 0) {
                 e.preventDefault();
@@ -124,6 +118,16 @@ if(Quill) {
                 this._fileUploader.option('value', uploads);
                 this._fileUploader.upload();
             }
+        }
+
+        _onUploaded(data) {
+            const selection = this.quill.getSelection();
+            const pasteIndex = selection ? selection.index : this.quill.getLength();
+
+            const imageUrl = correctSlashesInUrl(this.options.uploadDirectory) + data.file.name;
+            urlUpload(this.quill, pasteIndex, { src: imageUrl });
+
+            this.quill.setSelection(pasteIndex + 1, 0);
         }
 
         _isImage(file) {
