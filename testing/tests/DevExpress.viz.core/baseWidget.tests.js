@@ -1421,13 +1421,13 @@ QUnit.test('creation', function(assert) {
         'name-2': {
         },
         'name-3': {
-            name: 'name-3-n'
+            name: 'name-3-n', actionSettings: 'settings'
         }
     });
 
     assert.strictEqual(this.callbackGetter.callCount, 2, 'callback getter - call count');
-    assert.deepEqual(this.callbackGetter.getCall(0).args, ['name-1'], 'callback getter - call 1');
-    assert.deepEqual(this.callbackGetter.getCall(1).args, ['name-3'], 'callback getter - call 2');
+    assert.deepEqual(this.callbackGetter.getCall(0).args, ['name-1', undefined], 'callback getter - call 1');
+    assert.deepEqual(this.callbackGetter.getCall(1).args, ['name-3', 'settings'], 'callback getter - call 2');
 });
 
 QUnit.test('calling', function(assert) {
@@ -1468,7 +1468,7 @@ QUnit.test('updating', function(assert) {
 
     trigger.applyChanges();
     assert.strictEqual(this.callbackGetter.callCount, 1, 'callback getter - call count');
-    assert.deepEqual(this.callbackGetter.getCall(0).args, ['name-1'], 'callback getter - call 1');
+    assert.deepEqual(this.callbackGetter.getCall(0).args, ['name-1', undefined], 'callback getter - call 1');
 });
 
 QUnit.module('Misc API', $.extend({}, environment, {
