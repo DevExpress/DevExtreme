@@ -415,12 +415,12 @@ const SelectionController = gridCore.Controller.inherit((function() {
             return this._selection.getSelectedItems();
         },
 
-        changeItemSelection: function(itemIndex, keys) {
+        changeItemSelection: function(itemIndex, keys, setFocusOnly) {
             keys = keys || {};
             if(this.isSelectionWithCheckboxes()) {
                 keys.control = true;
             }
-            return this._selection.changeItemSelection(this._dataController.getRowIndexDelta() + itemIndex, keys);
+            return this._selection.changeItemSelection(this._dataController.getRowIndexDelta() + itemIndex, keys, setFocusOnly);
         },
 
         focusedItemIndex: function(itemIndex) {

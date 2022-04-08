@@ -108,7 +108,7 @@ export default Class.inherit({
         this._selectionStrategy.onSelectionChanged();
     },
 
-    changeItemSelection: function(itemIndex, keys) {
+    changeItemSelection: function(itemIndex, keys, setFocusOnly) {
         let isSelectedItemsChanged;
         const items = this.options.plainItems();
         const item = items[itemIndex];
@@ -126,14 +126,16 @@ export default Class.inherit({
             isSelectedItemsChanged = this.changeItemSelectionWhenShiftKeyPressed(itemIndex, items);
         } else if(keys.control) {
             this._resetItemSelectionWhenShiftKeyPressed();
-            const isSelected = this._selectionStrategy.isItemDataSelected(itemData);
-            if(this.options.mode === 'single') {
-                this.clearSelectedItems();
-            }
-            if(isSelected) {
-                this._removeSelectedItem(itemKey);
-            } else {
-                this._addSelectedItem(itemData, itemKey);
+            if(!setFocusOnly) {
+                const isSelected = this._selectionStrategy.isItemDataSelected(itemData);
+                if(this.options.mode === 'single') {
+                    this.clearSelectedItems();
+                }
+                if(isSelected) {
+                    this._removeSelectedItem(itemKey);
+                } else {
+                    this._addSelectedItem(itemData, itemKey);
+                }
             }
             isSelectedItemsChanged = true;
         } else {
@@ -147,7 +149,7 @@ export default Class.inherit({
 
         if(isSelectedItemsChanged) {
             this._focusedItemIndex = itemIndex;
-            this.onSelectionChanged();
+            !setFocusOnly && this.onSelectionChanged();
             return true;
         }
     },
