@@ -27,6 +27,7 @@ describe('DataGridNext', () => {
         columns: [{ dataField: 'id' }],
         keyExpr: 'id',
         localData: [],
+        dataState: { data: [], totalCount: 0 },
         setDataState: () => {},
       } as Partial<DataGridNext>;
       const tree = mount(<DataGridView {...viewModel as any} /> as any);
@@ -50,7 +51,7 @@ describe('DataGridNext', () => {
         type: RemoteOperations, value: props.remoteOperations,
       });
       expect(tree.find(ValueSetter).at(4).props()).toMatchObject({
-        type: DataStateValue, value: props.dataState,
+        type: DataStateValue, value: viewModel.dataState,
       });
 
       expect(tree.find(GetterExtender).at(0).props()).toMatchObject({
@@ -169,6 +170,24 @@ describe('DataGridNext', () => {
         expect(grid.localData).toEqual(grid.loadedData);
       });
     });
+
+    describe('dataState', () => {
+      it('should return default value if dataState prop is not defined', () => {
+        const grid = new DataGridNext({
+        });
+
+        expect(grid.dataState).toEqual({ data: [], totalCount: 0 });
+      });
+
+      it('should return dataState prop if it is defined', () => {
+        const dataState = { data: [{}], totalCount: 100 };
+        const grid = new DataGridNext({
+          dataState,
+        });
+
+        expect(grid.dataState).toEqual(dataState);
+      });
+    });
   });
 
   describe('Effects', () => {
@@ -219,10 +238,7 @@ describe('DataGridNext', () => {
 
         grid.updateDataStateFromLocal();
 
-        expect(grid.props.dataState).toEqual({
-          data: [],
-          totalCount: 0,
-        });
+        expect(grid.props.dataState).toBeUndefined();
       });
 
       it('should update dataState', () => {
