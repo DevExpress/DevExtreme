@@ -23,6 +23,7 @@ import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/siz
 import { ImageUploader } from './image_uploader_helper';
 
 import { getWindow } from '../../../core/utils/window';
+import { getQuill } from '../quill_importer';
 
 const MIN_HEIGHT = 400;
 const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'];
@@ -166,16 +167,42 @@ function getTargetTableNode(module, partName) {
     return partName === 'table' ? currentSelectionParts[0].domNode : currentSelectionParts[2].domNode;
 }
 
+function getLinkRange(module, range) {
+    const Quill = getQuill();
+    const LinkBlot = Quill.import('formats/link');
+
+    const [link, offset] = module.quill.scroll.descendant(
+        LinkBlot,
+        range.index
+    );
+
+    const result = !link ? null : {
+        index: range.index - offset,
+        length: link.length()
+    };
+
+    return result;
+}
 
 function prepareLinkHandler(module) {
     return () => {
         module.quill.focus();
 
-        const selection = module.quill.getSelection();
+        let selection = module.quill.getSelection();
         const selectionHasEmbedContent = hasEmbedContent(module, selection);
         const formats = selection ? module.quill.getFormat() : {};
         const isCursorAtLink = formats.link && selection?.length === 0;
-        const href = isCursorAtLink ? '' : (formats.link || '');
+        let href = formats.link || '';
+
+        if(isCursorAtLink) {
+            const linkRange = getLinkRange(module, selection);
+            if(linkRange) {
+                selection = linkRange;
+            } else {
+                href = '';
+            }
+        }
+
         const formData = {
             href,
             text: selection && !selectionHasEmbedContent ? module.quill.getText(selection) : '',
