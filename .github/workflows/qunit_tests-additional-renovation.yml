@@ -35,6 +35,10 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
+      env:
+        DEVEXTREME_TEST_CI: "true"
+        DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
       run: npm run build:dev
       
     - name: Zip artifacts 
@@ -118,6 +122,21 @@ jobs:
       with:
         name: devextreme-artifacts
     # Prepare fast re-run end
+
+    - name: Setup firefox profile
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        mkdir -p /tmp/firefox-profile
+        for p in \
+        '"browser.shell.checkDefaultBrowser", false' \
+        '"datareporting.policy.dataSubmissionEnabled", false' \
+        '"font.name-list.monospace.x-western", "Liberation Mono"' \
+        '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
+        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
+    - name: Setup utils
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
 
     - name: Get sources
       if: steps.last_run_status.outputs.last_run_status != 'success'
