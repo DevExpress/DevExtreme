@@ -21,7 +21,6 @@ export const viewFunction = ({
     key={rowKey}
     className={rowClasses}
     role="presentation"
-    style={{ width: '100%' }} // remove after the fix https://github.com/DevExpress/devextreme-renovation/issues/883
   >
     {virtualCells.map(({
       height, key, cellClass,
