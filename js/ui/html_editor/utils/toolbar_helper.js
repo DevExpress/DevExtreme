@@ -174,8 +174,10 @@ function prepareLinkHandler(module) {
         const selection = module.quill.getSelection();
         const selectionHasEmbedContent = hasEmbedContent(module, selection);
         const formats = selection ? module.quill.getFormat() : {};
+        const isCursorAtLink = formats.link && selection?.length === 0;
+        const href = isCursorAtLink ? '' : (formats.link || '');
         const formData = {
-            href: formats.link || '',
+            href,
             text: selection && !selectionHasEmbedContent ? module.quill.getText(selection) : '',
             target: Object.prototype.hasOwnProperty.call(formats, 'target') ? !!formats.target : true
         };
