@@ -134,7 +134,7 @@ export class DataGridNextProps extends BaseWidgetProps {
   columns: (Column | string)[] = [];
 
   @OneWay()
-  showBorders = true;
+  showBorders = false;
 
   @Event()
   onDataErrorOccurred?: (e: { error: Error }) => void;
