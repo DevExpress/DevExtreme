@@ -27,6 +27,7 @@ const defaultDataAccessors = {
 const createAppointmentDataProvider = (options) => {
     return {
         appointmentDataProvider: new AppointmentDataProvider({
+            showAllDayAppointments: 'auto',
             timeZoneCalculator: ({
                 createDate: date => date
             }),
