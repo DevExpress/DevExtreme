@@ -1,3 +1,4 @@
+import { isDefined } from '../../../../../core/utils/type';
 import dateUtils from '../../../../../core/utils/date';
 
 export type ShowAllDayAppointmentsType = 'auto' | 'allDay' | 'none';
@@ -33,13 +34,7 @@ export const getAppointmentTakesAllDay = (
   viewEndDayHour: number,
   showAllDayAppointments: ShowAllDayAppointmentsType,
 ): boolean => {
-  const {
-    allDay,
-    startDate,
-    endDate,
-  } = appointmentAdapter;
-
-  const hasAllDay = (): boolean => allDay;
+  const hasAllDay = (): boolean => appointmentAdapter.allDay;
 
   return {
     none: (): boolean => false,
@@ -47,6 +42,15 @@ export const getAppointmentTakesAllDay = (
     auto: (): boolean => {
       if (hasAllDay()) {
         return true;
+      }
+
+      const {
+        startDate,
+        endDate,
+      } = appointmentAdapter;
+
+      if (!isDefined(endDate)) {
+        return false;
       }
 
       const appointmentDurationInHours = getAppointmentDurationInHours(
