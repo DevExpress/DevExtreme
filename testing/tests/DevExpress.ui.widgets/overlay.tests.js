@@ -1689,6 +1689,20 @@ testModule('close on outside click', moduleConfig, () => {
             assert.strictEqual(overlay.option('visible'), false, 'overlay is hidden');
         });
 
+        test('overlay should be hidden after click outside was present if a function is passed to the property', function(assert) {
+            const overlay = $('#overlay').dxOverlay({
+                [closeOnOutsideClickOptionName]: () => true,
+                visible: true
+            }).dxOverlay('instance');
+            const $content = overlay.$content();
+
+            $($content).trigger('dxpointerdown');
+            assert.strictEqual(overlay.option('visible'), true, 'overlay is not hidden');
+
+            $(document).trigger('dxpointerdown');
+            assert.strictEqual(overlay.option('visible'), false, 'overlay is hidden');
+        });
+
         test('overlay should not be hidden after click inside was present', function(assert) {
             const $overlay = $('#overlay');
             $('<div id=\'innerContent\'>').appendTo($overlay);
@@ -1919,6 +1933,23 @@ testModule('close on outside click', moduleConfig, () => {
                 fx.off = true;
             }
         });
+    });
+
+    test('closeOnOutsideClick option using should raise a warning about deprecation', function(assert) {
+        sinon.spy(errors, 'log');
+
+        try {
+            $('#overlay').dxOverlay({ closeOnOutsideClick: true });
+            assert.deepEqual(errors.log.lastCall.args, [
+                'W0001',
+                'dxOverlay',
+                'closeOnOutsideClick',
+                '22.1',
+                'Use the \'hideOnOutsideClick\' option instead'
+            ], 'warning is raised with correct parameters');
+        } finally {
+            errors.log.restore();
+        }
     });
 });
 
