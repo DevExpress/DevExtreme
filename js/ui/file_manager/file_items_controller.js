@@ -406,7 +406,7 @@ export default class FileItemsController {
     }
 
     _processEditAction(actionInfo, action, completeAction) {
-        let succeeded = 0;
+        let isAnyOperationSuccessful = false;
         let actionResult = null;
 
         this._raiseEditActionStarting(actionInfo);
@@ -429,12 +429,12 @@ export default class FileItemsController {
         return whenSome(
             actionResult,
             info => {
-                succeeded++;
+                isAnyOperationSuccessful = true;
                 this._raiseCompleteEditActionItem(actionInfo, info);
             },
             errorInfo => this._raiseEditActionItemError(actionInfo, errorInfo)
         ).then(() => {
-            completeAction(succeeded !== 0);
+            completeAction(isAnyOperationSuccessful);
             this._raiseCompleteEditAction(actionInfo);
         });
     }
