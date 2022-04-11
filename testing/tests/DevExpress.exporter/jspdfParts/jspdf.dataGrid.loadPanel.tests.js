@@ -1,5 +1,5 @@
 import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
-import { LoadPanelTests } from '../../commonParts/loadPanel.tests.js';
+import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import { moduleConfig, createDataGrid } from './jspdf.dataGrid_utils.js';
 
 [
