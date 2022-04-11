@@ -2955,10 +2955,10 @@ module('Virtual scrolling integration', () => {
         [
             {
                 groupOrientation: 'horizontal',
-                expectedReducers: [true, true, false, true, true, false]
+                expectedReducers: [true, false, true, true, false, true]
             }, {
                 groupOrientation: 'vertical',
-                expectedReducers: [true, true, false]
+                expectedReducers: [true, false, true]
             }
         ].forEach(option => {
             test(`Reccurrent appointment should not have a reducer icon if ${option.groupOrientation} group orientation`, function(assert) {
