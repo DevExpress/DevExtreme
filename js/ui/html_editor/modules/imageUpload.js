@@ -47,14 +47,14 @@ if(Quill) {
         }
 
         _disableDragAndDropUploading() {
-            this._getUploaderModule().preventImageUpload = false;
+            this._getUploaderModule().preventImageUploading(false);
             this._detachEvents();
             this._fileUploader?.dispose();
         }
 
         _enableDragAndDropUploading() {
             this._initFileUploader();
-            this._getUploaderModule().preventImageUpload = true;
+            this._getUploaderModule().preventImageUploading(true);
             this._attachEvents();
         }
 

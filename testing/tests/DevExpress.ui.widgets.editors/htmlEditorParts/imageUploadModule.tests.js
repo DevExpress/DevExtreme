@@ -11,11 +11,20 @@ const moduleConfig = {
 
         this.selectedRange = { index: 0, length: 0 };
 
+        this.preventImageUpload = false;
+
         this.quillMock = {
             root: this.$element.get(0),
             on: (e) => {},
             off: (e) => {},
-            uploader: { preventImageUpload: false },
+            uploader: {
+                preventImageUploading: (value) => {
+                    if(typeof value !== 'undefined') {
+                        this.preventImageUpload = value;
+                    }
+                    return this.preventImageUpload;
+                }
+            },
             getModule: (moduleName) => this.quillMock[moduleName]
         };
 
@@ -51,14 +60,14 @@ module('ImageUpload module', moduleConfig, () => {
     test('create module instance with default options', function(assert) {
         const ImageUploadInstance = new ImageUpload(this.quillMock, this.options);
 
-        assert.notOk(ImageUploadInstance._getUploaderModule().preventImageUpload);
+        assert.notOk(ImageUploadInstance._getUploaderModule().preventImageUploading());
     });
 
     test('create module instance with fileUploadMode = server', function(assert) {
         this.options.fileUploadMode = 'server';
         const ImageUploadInstance = new ImageUpload(this.quillMock, this.options);
 
-        assert.ok(ImageUploadInstance._getUploaderModule().preventImageUpload);
+        assert.ok(ImageUploadInstance._getUploaderModule().preventImageUploading());
     });
 
     test('events should be attached if the fileUploadMode is changed to base64 at runtime', function(assert) {
@@ -68,7 +77,7 @@ module('ImageUpload module', moduleConfig, () => {
         this.attachSpies(ImageUploadInstance);
         ImageUploadInstance.option('fileUploadMode', 'base64');
 
-        assert.notOk(ImageUploadInstance._getUploaderModule().preventImageUpload);
+        assert.notOk(ImageUploadInstance._getUploaderModule().preventImageUploading());
         assert.strictEqual(this.attachEventsSpy.callCount, 0, 'Events are attached');
         assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached');
     });
@@ -80,7 +89,7 @@ module('ImageUpload module', moduleConfig, () => {
         this.attachSpies(ImageUploadInstance);
         ImageUploadInstance.option('fileUploadMode', 'server');
 
-        assert.ok(ImageUploadInstance._getUploaderModule().preventImageUpload);
+        assert.ok(ImageUploadInstance._getUploaderModule().preventImageUploading());
         assert.strictEqual(this.attachEventsSpy.callCount, 1, 'Events are attached');
         assert.strictEqual(this.detachEventsSpy.callCount, 0, 'Events are detached');
     });
@@ -92,7 +101,7 @@ module('ImageUpload module', moduleConfig, () => {
         this.attachSpies(ImageUploadInstance);
         ImageUploadInstance.clean();
 
-        assert.notOk(ImageUploadInstance._getUploaderModule().preventImageUpload);
+        assert.notOk(ImageUploadInstance._getUploaderModule().preventImageUploading());
         assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached');
     });
 });
