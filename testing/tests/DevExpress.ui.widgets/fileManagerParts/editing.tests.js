@@ -1853,10 +1853,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
                 moveItem: function() { throw new FileSystemError(0, null); },
             }),
             selectionMode: 'multiple',
-            selectedItemKeys: [ fileName1, fileName2 ],
-            onItemMoving: e => {
-                e.cancel = true;
-            }
+            selectedItemKeys: [ fileName1, fileName2 ]
         });
         this.clock.tick(400);
 
@@ -1867,6 +1864,66 @@ QUnit.module('Editing operations', moduleConfig, () => {
         $folderNodes.eq(3).trigger('dxclick');
 
         this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getFocusedItemText(), initialDirName, 'initial folder should be selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().name, '', 'current folder is the initial folder');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), fileName1, '1st file is still in the initial dir');
+        assert.strictEqual(this.wrapper.getDetailsItemName(1), fileName2, '2nd file is still in the initial dir');
+    });
+
+    test('current directory must not be changed when all items not copied - events (T1080473)', function(assert) {
+        const fileName1 = 'File 1.txt';
+        const fileName2 = 'File 2.jpg';
+        const initialDirName = 'Files';
+
+        this.fileManager.option({
+            selectionMode: 'multiple',
+            selectedItemKeys: [ fileName1, fileName2 ],
+            onItemCopying: e => {
+                e.cancel = true;
+            }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        $folderNodes.eq(3).trigger('dxclick');
+
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getFocusedItemText(), initialDirName, 'initial folder should be selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().name, '', 'current folder is the initial folder');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), fileName1, '1st file is still in the initial dir');
+        assert.strictEqual(this.wrapper.getDetailsItemName(1), fileName2, '2nd file is still in the initial dir');
+    });
+
+    test('current directory must not be changed when all items not copied - provider (T1080473)', function(assert) {
+        const fileName1 = 'File 1.txt';
+        const fileName2 = 'File 2.jpg';
+        const initialDirName = 'Files';
+        const objectProvider = new ObjectFileSystemProvider({ data: createTestFileSystem() });
+
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                getItems: function() { return objectProvider.getItems(...arguments); },
+                copyItem: function() { throw new FileSystemError(0, null); },
+            }),
+            selectionMode: 'multiple',
+            selectedItemKeys: [ fileName1, fileName2 ]
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        $folderNodes.eq(3).trigger('dxclick');
+
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getFocusedItemText(), initialDirName, 'initial folder should be selected');
