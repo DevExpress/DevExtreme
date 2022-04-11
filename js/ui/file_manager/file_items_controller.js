@@ -345,12 +345,14 @@ export default class FileItemsController {
                 };
                 this._editingEvents.onItemMoved(args);
             },
-            () => {
-                destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
+            needChangeCurrentDirectory => {
+                if(needChangeCurrentDirectory) {
+                    destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
+                    this._resetDirectoryState(destinationDirectory);
+                    this.setCurrentDirectory(destinationDirectory);
+                    destinationDirectory.expanded = true;
+                }
                 itemInfos.forEach(itemInfo => this._resetDirectoryState(itemInfo.parentDirectory, true));
-                this._resetDirectoryState(destinationDirectory);
-                this.setCurrentDirectory(destinationDirectory);
-                destinationDirectory.expanded = true;
             });
     }
 
@@ -372,11 +374,13 @@ export default class FileItemsController {
                 };
                 this._editingEvents.onItemCopied(args);
             },
-            () => {
-                destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
-                this._resetDirectoryState(destinationDirectory);
-                this.setCurrentDirectory(destinationDirectory);
-                destinationDirectory.expanded = true;
+            needChangeCurrentDirectory => {
+                if(needChangeCurrentDirectory) {
+                    destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
+                    this._resetDirectoryState(destinationDirectory);
+                    this.setCurrentDirectory(destinationDirectory);
+                    destinationDirectory.expanded = true;
+                }
             });
     }
 
@@ -500,6 +504,7 @@ export default class FileItemsController {
     }
 
     _processEditAction(actionInfo, beforeAction, action, afterAction, completeAction) {
+        let succeeded = 0;
         this._raiseEditActionStarting(actionInfo);
 
         const actionResult = actionInfo.itemInfos.map((itemInfo, itemIndex) => {
@@ -519,10 +524,13 @@ export default class FileItemsController {
 
         return whenSome(
             actionResult,
-            info => this._raiseCompleteEditActionItem(actionInfo, info),
+            info => {
+                succeeded++;
+                this._raiseCompleteEditActionItem(actionInfo, info);
+            },
             errorInfo => this._raiseEditActionItemError(actionInfo, errorInfo)
         ).then(() => {
-            completeAction();
+            completeAction(succeeded !== 0);
             this._raiseCompleteEditAction(actionInfo);
         });
     }
