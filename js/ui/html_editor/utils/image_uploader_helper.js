@@ -362,8 +362,8 @@ class FileStrategy extends BaseStrategy {
         this.useBase64 = this.config.fileUploadMode === 'base64';
     }
 
-    closeDialogPopup(editorInstance, data) {
-        editorInstance._formDialog.hide({ file: data.value ? data.value[0] : data.file }, data.event);
+    closeDialogPopup(data) {
+        this.editorInstance._formDialog.hide({ file: data.value ? data.value[0] : data.file }, data.event);
     }
 
     serverUpload(data) {
@@ -371,8 +371,13 @@ class FileStrategy extends BaseStrategy {
             const imageUrl = correctSlashesInUrl(this.config.uploadDirectory) + data.file.name;
 
             urlUpload(this.quill, this.selection.index, { src: imageUrl });
-            this.closeDialogPopup(this.editorInstance, data);
+            this.closeDialogPopup(data);
         }
+    }
+
+    base64Upload(data) {
+        this.quill.getModule('uploader').upload(this.selection, data.value, true);
+        this.closeDialogPopup(data);
     }
 
     pasteImage(formData, event) {
@@ -395,8 +400,7 @@ class FileStrategy extends BaseStrategy {
             uploadMode: 'instantly',
             onValueChanged: (data) => {
                 if(this.useBase64) {
-                    base64Upload(this.quill, data.value);
-                    this.closeDialogPopup(this.editorInstance, data);
+                    this.base64Upload(data);
                 }
             },
             onUploaded: (data) => {
@@ -437,11 +441,6 @@ class FileStrategy extends BaseStrategy {
             }
         ];
     }
-}
-
-export function base64Upload(quill, files) {
-    const range = quill.getSelection();
-    quill.getModule('uploader').upload(range, files, true);
 }
 
 export function correctSlashesInUrl(url) {
