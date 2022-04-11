@@ -142,6 +142,8 @@ if(Quill) {
             if(option === 'fileUploadMode') {
                 this.options.fileUploadMode = value;
                 this._handleServerUpload();
+            } else if(option === 'fileUploaderOptions') {
+                this._fileUploader.option(value);
             }
         }
     };

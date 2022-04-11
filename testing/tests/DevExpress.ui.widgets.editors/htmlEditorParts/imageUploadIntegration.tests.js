@@ -655,6 +655,38 @@ module('Image uploading integration', {
         assert.strictEqual(fileUploader.option('onBeforeSend'), testHandler, 'config is applied');
     });
 
+    test('check the fileUploader options can be changed at runtime', function(assert) {
+        const testHandler = () => {};
+
+        this.createWidget();
+        this.clock.tick(TIME_TO_WAIT);
+
+        const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+
+        this.instance.option('imageUpload.fileUploaderOptions', {
+            onBeforeSend: testHandler
+        });
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.strictEqual(fileUploader.option('onBeforeSend'), testHandler, 'config is applied');
+    });
+
+    test('check the fileUploader cascaded options can be changed at runtime', function(assert) {
+        const testHandler = () => {};
+
+        this.createWidget();
+        this.clock.tick(TIME_TO_WAIT);
+
+        const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+
+        this.instance.option('imageUpload.fileUploaderOptions.onBeforeSend', testHandler);
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.strictEqual(fileUploader.option('onBeforeSend'), testHandler, 'config is applied');
+    });
+
     [{
         testNamePart: 'one file',
         files: [fakeFile],
