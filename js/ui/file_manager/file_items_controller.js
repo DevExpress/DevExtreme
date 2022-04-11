@@ -504,7 +504,7 @@ export default class FileItemsController {
     }
 
     _processEditAction(actionInfo, beforeAction, action, afterAction, completeAction) {
-        let succeeded = 0;
+        let isAnyOperationSuccessful = false;
         this._raiseEditActionStarting(actionInfo);
 
         const actionResult = actionInfo.itemInfos.map((itemInfo, itemIndex) => {
@@ -525,12 +525,12 @@ export default class FileItemsController {
         return whenSome(
             actionResult,
             info => {
-                succeeded++;
+                isAnyOperationSuccessful = true;
                 this._raiseCompleteEditActionItem(actionInfo, info);
             },
             errorInfo => this._raiseEditActionItemError(actionInfo, errorInfo)
         ).then(() => {
-            completeAction(succeeded !== 0);
+            completeAction(isAnyOperationSuccessful);
             this._raiseCompleteEditAction(actionInfo);
         });
     }
