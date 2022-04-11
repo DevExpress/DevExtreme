@@ -27,6 +27,8 @@ const FORM_DIALOG_CLASS = 'dx-formdialog';
 const USER_ACTION = 'user';
 const SILENT_ACTION = 'silent';
 
+const FILE_UPLOADER_NAME = 'dx-htmleditor-image';
+
 import ButtonGroup from '../../button_group';
 import FileUploader from '../../file_uploader';
 import TextBox from '../../text_box';
@@ -37,8 +39,6 @@ export class ImageUploader {
         this.config = config ?? {};
         this.quill = this.module.quill;
         this.editorInstance = this.module.editorInstance;
-        this.isUpdating = false;
-
         this.tabPanelIndex = 0;
     }
 
@@ -389,7 +389,7 @@ class FileStrategy extends BaseStrategy {
         const baseFileUploaderOptions = {
             multiple: false,
             value: [],
-            name: 'dx-htmleditor-image',
+            name: FILE_UPLOADER_NAME,
             accept: 'image/*',
             uploadUrl: this.config.uploadUrl,
             uploadMode: 'instantly',

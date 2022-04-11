@@ -4,47 +4,39 @@ import eventsEngine from '../../../events/core/events_engine';
 import $ from '../../../core/renderer';
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-// import { getFormatHandlers, getDefaultClickHandler, ICON_MAP } from '../utils/toolbar_helper'
 import { urlUpload, correctSlashesInUrl } from '../utils/image_uploader_helper';
 import { addNamespace } from '../../../events/utils/index';
 import FileUploader from '../../file_uploader';
 
-const MODULE_NAMESPACE = 'dxHtmlEditorImageUpload';
 
+const MODULE_NAMESPACE = 'dxHtmlEditorImageUpload';
 const IMAGE_UPLOAD_EVENT = addNamespace('dxcontextmenu', MODULE_NAMESPACE);
 
 const HIDDEN_FILE_UPLOADER_CLASS = 'dx-htmleditor-hidden-content';
+const FILE_UPLOADER_NAME = 'dx-htmleditor-image';
 
 let ImageUploadModule = BaseModule;
 
 if(Quill) {
     ImageUploadModule = class ImageUploadModule extends BaseModule {
         constructor(quill, options) {
-
             super(quill, options);
 
             this.options = options;
             this.quill = quill;
-
             this._quillContainer = this.editorInstance._getQuillContainer();
 
             this.addCleanCallback(this.prepareCleanCallback());
-            // this._formatHandlers = getFormatHandlers(this);
-            // this._tableFormats = getTableFormats(quill);
             this._handleServerUpload();
-
         }
 
         _handleServerUpload() {
             const useServerUpload = isDefined(this.options.fileUploadMode) && this.options.fileUploadMode !== 'base64';
 
-            if(useServerUpload) {
-                this._enableDragAndDropUploading();
-            } else {
-                this._disableDragAndDropUploading();
-            }
+            useServerUpload
+                ? this._enableDragAndDropUploading()
+                : this._disableDragAndDropUploading();
         }
-
 
         _getUploaderModule() {
             if(!this._uploaderModule) {
@@ -62,8 +54,6 @@ if(Quill) {
 
         _enableDragAndDropUploading() {
             this._initFileUploader();
-
-            // quill.getModule('uploader').removeDropHandler();
             this._getUploaderModule().preventImageUpload = true;
             this._attachEvents();
         }
@@ -77,7 +67,7 @@ if(Quill) {
                 accept: 'image/*',
                 uploadUrl: this.options.uploadUrl,
                 uploadMode: 'instantly',
-                name: 'dx-htmleditor-image',
+                name: FILE_UPLOADER_NAME,
                 onUploaded: this._onUploaded.bind(this),
             }, this.options.fileUploaderOptions);
 
@@ -85,12 +75,11 @@ if(Quill) {
 
             this._fileUploader = $container.dxFileUploader('instance');
 
-
             return $container;
         }
 
         _attachEvents() {
-            eventsEngine.on(this.quill.root, 'drop', this._dropHandler.bind(this));
+            eventsEngine.on(this.quill.root, addNamespace('drop', MODULE_NAMESPACE), this._dropHandler.bind(this));
             eventsEngine.on(this.quill.root, addNamespace('paste', MODULE_NAMESPACE), this._pasteHandler.bind(this));
         }
 

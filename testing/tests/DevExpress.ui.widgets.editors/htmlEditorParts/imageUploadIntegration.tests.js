@@ -2,6 +2,7 @@ import $ from 'jquery';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import '../../../helpers/xmlHttpRequestMock.js';
 import devices from 'core/devices';
+import { createBlobFile } from '../../../helpers/fileHelper.js';
 
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -35,6 +36,7 @@ const fakeFile = {
     type: 'image/jpeg',
     lastModifiedDate: Date.now()
 };
+// const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
 
 const fakeFile2 = {
     name: 'fakefile2.jpeg',
@@ -42,6 +44,7 @@ const fakeFile2 = {
     type: 'image/jpeg',
     lastModifiedDate: Date.now()
 };
+// const fakeFile2Blob = createBlobFile(fakeFile2.name, fakeFile2.size, fakeFile2.type);
 
 const fakeFileText = {
     name: 'fakefile1.txt',
@@ -49,6 +52,7 @@ const fakeFileText = {
     type: 'text/plain',
     lastModifiedDate: Date.now()
 };
+// const fakeFileTextBlob = createBlobFile(fakeFileText.name, fakeFileText.size, fakeFile2.type);
 
 const serverUploadMarkup = '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"></p>';
 
@@ -336,6 +340,7 @@ module('Image uploading integration', {
         test('check file uploading in base64 format', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
+            const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
 
             const uploadSpy = sinon.spy(this.quillInstance.getModule('uploader'), 'upload');
             const $form = this.getFormElement([1, 2]);
@@ -345,12 +350,12 @@ module('Image uploading integration', {
 
             base64EditorInstance.option('value', true);
 
-            fileUploader.option('value', [fakeFile]);
+            fileUploader.option('value', [fakeFileBlob]);
             this.clock.tick(TIME_TO_WAIT);
 
             assert.strictEqual(uploadSpy.callCount, 1, 'file uploader upload method is called');
             assert.strictEqual(uploadSpy.getCall(0).args[0].index, 1, 'first upload arg index is correct');
-            assert.deepEqual(uploadSpy.getCall(0).args[1], [fakeFile], 'file upload arg is correct');
+            assert.deepEqual(uploadSpy.getCall(0).args[1], [fakeFileBlob], 'file upload arg is correct');
         });
 
         function prepareImageUpdateTest(caretPosition, selectionLength) {
@@ -675,54 +680,64 @@ module('Image uploading integration', {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
 
+            this.xhrMock = new window.XMLHttpRequestMock();
+            this._nativeXhr = XMLHttpRequest;
+            window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+            this.formDataMock = new window.FormDataMock();
+            this._nativeFormData = window.FormData;
+            window.FormData = this.formDataMock.FormData;
+
             const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
-            const uploadStub = sinon.stub(fileUploader, 'upload');
+            const uploadStub = sinon.spy(fileUploader, 'upload');
 
             const files = data.files;
             const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
             $(this.quillInstance.root).trigger(event);
 
-            this.clock.tick(TIME_TO_WAIT);
+            this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
             assert.strictEqual(uploadStub.callCount, data.uploadCallCount, 'upload was called');
             assert.strictEqual(this.instance.option('value'), data.expectedMarkup, 'value is correct');
-        });
-    });
 
-    [{
-        testNamePart: 'one file',
-        files: [fakeFile],
-        uploadCallCount: 1,
-        expectedMarkup: serverUploadMarkup
-    }, {
-        testNamePart: 'image and text files',
-        files: [fakeFile, fakeFileText],
-        uploadCallCount: 1,
-        expectedMarkup: serverUploadMarkup
-    }, {
-        testNamePart: 'one text file',
-        files: [fakeFileText],
-        uploadCallCount: 0,
-        expectedMarkup: markup
-    }, {
-        testNamePart: 'two image files',
-        files: [fakeFile, fakeFile2],
-        uploadCallCount: 1,
-        expectedMarkup: '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"><img src="/uploadDirectory/fakefile2.jpeg"></p>'
-    }].forEach((data) => {
+            window.XMLHttpRequest = this._nativeXhr;
+            window.FormData = this._nativeFormData;
+
+            this.xhrMock.dispose();
+            delete this.xhrMock;
+            delete this.formDataMock;
+        });
+
         test(`check upload to the server after paste ${data.testNamePart}`, function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
 
+            this.xhrMock = new window.XMLHttpRequestMock();
+            this._nativeXhr = XMLHttpRequest;
+            window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+            this.formDataMock = new window.FormDataMock();
+            this._nativeFormData = window.FormData;
+            window.FormData = this.formDataMock.FormData;
+
             const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
-            const uploadStub = sinon.stub(fileUploader, 'upload');
+            const uploadStub = sinon.spy(fileUploader, 'upload');
 
             const files = data.files;
             const event = $.Event($.Event('paste', { clipboardData: { files: files } }));
             $(this.quillInstance.root).trigger(event);
 
-            this.clock.tick(TIME_TO_WAIT);
+            this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
             assert.strictEqual(uploadStub.callCount, data.uploadCallCount, 'upload was called');
             assert.strictEqual(this.instance.option('value'), data.expectedMarkup, 'value is correct');
+
+            window.XMLHttpRequest = this._nativeXhr;
+            window.FormData = this._nativeFormData;
+
+            this.xhrMock.dispose();
+            delete this.xhrMock;
+            delete this.formDataMock;
         });
     });
 
