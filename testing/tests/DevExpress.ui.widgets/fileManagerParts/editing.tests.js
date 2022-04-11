@@ -2,7 +2,9 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
+import ObjectFileSystemProvider from 'file_management/object_provider';
 import CustomFileSystemProvider from 'file_management/custom_provider';
+import FileSystemError from 'file_management/error.js';
 import ErrorCode from 'file_management/error_codes';
 import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader, getDropFileEvent } from '../../../helpers/fileManagerHelpers.js';
 import NoDuplicatesFileProvider from '../../../helpers/fileManager/file_provider.no_duplicates.js';
@@ -1808,5 +1810,68 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.ok(initMarkupSpy.notCalled, '_initMarkup not called yet');
         fileManager.option('permissions', { copy: true });
         assert.ok(initMarkupSpy.notCalled, '_initMarkup not called yet');
+    });
+
+    test('current directory must not be changed when all items not moved - events (T1080473)', function(assert) {
+        const fileName1 = 'File 1.txt';
+        const fileName2 = 'File 2.jpg';
+        const initialDirName = 'Files';
+
+        this.fileManager.option({
+            selectionMode: 'multiple',
+            selectedItemKeys: [ fileName1, fileName2 ],
+            onItemMoving: e => {
+                e.cancel = true;
+            }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        $folderNodes.eq(3).trigger('dxclick');
+
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getFocusedItemText(), initialDirName, 'initial folder should be selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().name, '', 'current folder is the initial folder');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), fileName1, '1st file is still in the initial dir');
+        assert.strictEqual(this.wrapper.getDetailsItemName(1), fileName2, '2nd file is still in the initial dir');
+    });
+
+    test('current directory must not be changed when all items not moved - provider (T1080473)', function(assert) {
+        const fileName1 = 'File 1.txt';
+        const fileName2 = 'File 2.jpg';
+        const initialDirName = 'Files';
+        const objectProvider = new ObjectFileSystemProvider({ data: createTestFileSystem() });
+
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                getItems: function() { return objectProvider.getItems(...arguments); },
+                moveItem: function() { throw new FileSystemError(0, null); },
+            }),
+            selectionMode: 'multiple',
+            selectedItemKeys: [ fileName1, fileName2 ],
+            onItemMoving: e => {
+                e.cancel = true;
+            }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        $folderNodes.eq(3).trigger('dxclick');
+
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getFocusedItemText(), initialDirName, 'initial folder should be selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().name, '', 'current folder is the initial folder');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), fileName1, '1st file is still in the initial dir');
+        assert.strictEqual(this.wrapper.getDetailsItemName(1), fileName2, '2nd file is still in the initial dir');
     });
 });
