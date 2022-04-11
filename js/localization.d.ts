@@ -83,6 +83,13 @@ export interface FormatObject {
      */
    currency?: string;
    /**
+     * @docid
+     * @type Enums.CurrencySign
+     * @default 'accounting'
+     * @public
+     */
+    currencySign?: 'standard' | 'accounting';
+   /**
     * @docid Format.formatter
     * @public
     * @type_function_param1 value:number|date

@@ -53,6 +53,11 @@ import Globalize from 'globalize';
 import config from '../../core/config';
 import numberLocalization from '../number';
 
+const CURRENCY_STYLE_TABLE = {
+    standard: 'symbol',
+    accounting: 'accounting'
+};
+
 if(Globalize && Globalize.formatCurrency) {
 
     if(Globalize.locale().locale === 'en') {
@@ -93,13 +98,14 @@ if(Globalize && Globalize.formatCurrency) {
             return this.callBase.apply(this, arguments);
         },
         _normalizeFormatConfig: function(format, formatConfig, value) {
-            const config = this.callBase(format, formatConfig, value);
+            const normalizedConfig = this.callBase(format, formatConfig, value);
 
             if(format === 'currency') {
-                config.style = 'accounting';
+                const currencySign = formatConfig.currencySign || config().defaultCurrencySign;
+                normalizedConfig.style = CURRENCY_STYLE_TABLE[currencySign];
             }
 
-            return config;
+            return normalizedConfig;
         },
         format: function(value, format) {
             if(typeof value !== 'number') {

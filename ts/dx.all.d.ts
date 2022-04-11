@@ -982,6 +982,10 @@ declare module DevExpress {
      */
     currency?: string;
     /**
+     * [descr:FormatObject.currencySign]
+     */
+    currencySign?: 'standard' | 'accounting';
+    /**
      * [descr:Format.formatter]
      */
     formatter?: (value: number | Date) => string;

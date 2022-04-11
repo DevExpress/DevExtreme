@@ -10,14 +10,17 @@ QUnit.test('get/set', function(assert) {
     try {
         assert.equal(originalConfig.rtlEnabled, false);
         assert.equal(originalConfig.defaultCurrency, 'USD');
+        assert.equal(originalConfig.defaultCurrencySign, 'accounting');
 
         config({
             rtlEnabled: true,
-            defaultCurrency: 'EUR'
+            defaultCurrency: 'EUR',
+            defaultCurrencySign: 'standard'
         });
 
         assert.equal(config().rtlEnabled, true);
         assert.equal(config().defaultCurrency, 'EUR');
+        assert.equal(config().defaultCurrencySign, 'standard');
 
         config({
             rtlEnabled: false
@@ -25,6 +28,7 @@ QUnit.test('get/set', function(assert) {
 
         assert.equal(config().rtlEnabled, false);
         assert.equal(config().defaultCurrency, 'EUR');
+        assert.equal(config().defaultCurrencySign, 'standard');
     } finally {
         config(originalConfig);
     }
