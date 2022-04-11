@@ -55,19 +55,19 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getItemPosition(appointment) {
-        const adapter = createAppointmentAdapter(appointment, this.dataAccessors, this.timeZoneCalculator);
-
         const allDay = this.isAllDay(appointment);
+
+        if(allDay) {
+            return super._getItemPosition(appointment);
+        }
+
+        const adapter = createAppointmentAdapter(appointment, this.dataAccessors, this.timeZoneCalculator);
         const isRecurring = !!adapter.recurrenceRule;
 
         const appointmentStartDate = adapter.calculateStartDate('toGrid');
         const appointmentEndDate = adapter.calculateEndDate('toGrid');
 
         const isAppointmentTakesSeveralDays = !timeZoneUtils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
-
-        if(allDay) {
-            return super._getItemPosition(appointment);
-        }
 
         const settings = this.generateAppointmentSettings(appointment);
         let result = [];
@@ -83,8 +83,9 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             const currentMaxAllowedPosition = currentSetting.vMax;
 
             if(this._isMultiViewAppointment(currentSetting, height) || (isAppointmentTakesSeveralDays && !isRecurring)) {
-                const reduceHead = dateUtils.sameDate(appointmentStartDate, currentSetting.info.appointment.startDate) || isRecurring;
-
+                const trimmedStartDate = dateUtils.trimTime(appointmentStartDate);
+                const trimmedSettingStartDate = dateUtils.trimTime(currentSetting.info.appointment.startDate);
+                const reduceHead = (trimmedStartDate <= trimmedSettingStartDate) || isRecurring;
                 if(reduceHead) {
                     resultHeight = this._reduceMultiDayAppointment(height, {
                         top: currentSetting.top,
@@ -134,9 +135,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _reduceMultiDayAppointment(sourceAppointmentHeight, bound) {
-        sourceAppointmentHeight = bound.bottom - Math.floor(bound.top);
-
-        return sourceAppointmentHeight;
+        return Math.min(sourceAppointmentHeight, bound.bottom - Math.floor(bound.top));
     }
 
     _getGroupHeight() {
@@ -209,6 +208,11 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             }
 
             const height = Math.min(tailHeight, vMax);
+            tailHeight -= vMax;
+            const appointmentReduced = tailHeight > 0
+                ? 'head'
+                : 'tail';
+
             const columnIndex = appointmentSettings.columnIndex + cellsDiff;
 
             result.push(extend(true, {}, appointmentSettings, {
@@ -216,13 +220,12 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 left,
                 height,
                 width,
-                appointmentReduced: 'tail',
+                appointmentReduced,
                 rowIndex: 0,
                 columnIndex,
             }));
 
             left += offset;
-            tailHeight -= vMax;
         }
 
         return result;
