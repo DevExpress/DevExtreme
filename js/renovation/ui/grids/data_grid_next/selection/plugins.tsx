@@ -72,10 +72,12 @@ export const IsSelected = createSelector<(data: RowData) => boolean>(
 ) => (data: RowData): boolean => selectedRowKeys.includes(getKey(data, keyExpr)));
 
 export const ToggleSelected = createSelector<(data: RowData) => void>(
-  [SetSelected, IsSelected],
-(setSelected, isSelected) => (data: RowData): void => {
-  const selected = isSelected(data);
-  setSelected(data, !selected);
+  [SetSelected, IsSelected, SelectionModeValue],
+(setSelected, isSelected, selectionMode) => (data: RowData): void => {
+  if (selectionMode !== 'none') {
+    const selected = isSelected(data);
+    setSelected(data, !selected);
+  }
 });
 
 export const SelectAll = createSelector<() => void>(

@@ -67,11 +67,14 @@ function isStore(dataSource: DataSource): dataSource is Store {
   return dataSource !== undefined && !Array.isArray(dataSource);
 }
 
+const defaultDataState: DataState = { data: [], totalCount: 0 };
+
 export const viewFunction = (viewModel: DataGridNext): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
     accessKey={viewModel.props.accessKey}
     activeStateEnabled={viewModel.props.activeStateEnabled}
     aria={viewModel.aria}
+    className={viewModel.props.className}
     disabled={viewModel.props.disabled}
     focusStateEnabled={viewModel.props.focusStateEnabled}
     height={viewModel.props.height}
@@ -87,7 +90,7 @@ export const viewFunction = (viewModel: DataGridNext): JSX.Element => (
     <ValueSetter type={Columns} value={viewModel.columns} />
     <ValueSetter type={KeyExprPlugin} value={viewModel.keyExpr} />
     <ValueSetter type={RemoteOperations} value={viewModel.props.remoteOperations} />
-    <ValueSetter type={DataStateValue} value={viewModel.props.dataState} />
+    <ValueSetter type={DataStateValue} value={viewModel.dataState} />
     <GetterExtender type={VisibleColumns} order={-1} value={Columns} />
     <GetterExtender type={LocalVisibleItems} order={-1} value={LocalData} />
     <GetterExtender type={VisibleRows} order={-1} value={VisibleDataRows} />
@@ -117,7 +120,7 @@ export class DataGridNextProps extends BaseWidgetProps {
   cacheEnabled = true;
 
   @TwoWay()
-  dataState: DataState = { data: [], totalCount: 0 };
+  dataState: DataState | undefined = undefined;
 
   @OneWay()
   keyExpr?: KeyExpr;
@@ -141,13 +144,17 @@ const aria = {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
+  angular: { innerComponent: false },
   view: viewFunction,
 })
 export class DataGridNext extends JSXComponent(DataGridNextProps) {
   // eslint-disable-next-line class-methods-use-this
   get aria(): Record<string, string> {
     return aria;
+  }
+
+  get dataState(): DataState {
+    return this.props.dataState ?? defaultDataState;
   }
 
   @Provider(PluginsContext)
@@ -230,7 +237,7 @@ export class DataGridNext extends JSXComponent(DataGridNextProps) {
   }
 
   loadStore(store: Store, loadOptions: LoadOptions): void {
-    store.load(loadOptions).then((data, extra) => {
+    store.load(loadOptions).then(((data, extra) => {
       if (this.props.remoteOperations) {
         if (Array.isArray(data)) {
           this.props.dataState = {
@@ -243,7 +250,8 @@ export class DataGridNext extends JSXComponent(DataGridNextProps) {
       } else {
         this.loadedData = data;
       }
-    }, (error) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }) as any, (error) => {
       this.props.onDataErrorOccurred?.({ error });
     });
   }

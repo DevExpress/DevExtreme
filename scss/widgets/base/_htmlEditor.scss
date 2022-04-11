@@ -336,6 +336,10 @@ $transparent-border: 1px solid transparent;
       z-index: -1;
       visibility: hidden;
     }
+
+    &[data-placeholder] > p {
+      height: 0.1px;
+    }
   }
 
   // stylelint-enable selector-class-pattern

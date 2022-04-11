@@ -38,7 +38,7 @@ export const viewFunction = (viewModel: TableContent): JSX.Element => (
   </div>
 );
 
-export const RowClick = createValue<(row: Row) => void>();
+export const RowClick = createValue<(row: Row, e: Event) => void>();
 
 @ComponentBindings()
 export class TableContentProps {
@@ -75,7 +75,7 @@ export class TableContent extends JSXComponent(TableContentProps) {
     const allRows = this.divRef.current!.getElementsByClassName(CLASSES.row);
     const index = Array.from(allRows).indexOf(e.currentTarget as Element);
     if (index >= 0) {
-      this.plugins.callAction(RowClick, this.props.dataSource[index]);
+      this.plugins.callAction(RowClick, this.props.dataSource[index], e);
     }
   }
 
