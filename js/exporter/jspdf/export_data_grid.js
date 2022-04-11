@@ -1,6 +1,6 @@
 import { isDefined, isObject } from '../../core/utils/type';
 import errors from '../../core/errors';
-import { Export } from './utils/export';
+import { Export } from './common/export';
 
 const HOW_TO_MIGRATE_ARTICLE = 'https://supportcenter.devexpress.com/ticket/details/t1077554';
 
