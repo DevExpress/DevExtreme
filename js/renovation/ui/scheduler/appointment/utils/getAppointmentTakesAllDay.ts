@@ -28,7 +28,7 @@ export const getAppointmentTakesAllDay = (
   appointmentAdapter: {
     allDay: boolean;
     startDate: Date;
-    endDate: Date;
+    endDate: Date | undefined | null;
   },
   viewStartDayHour: number,
   viewEndDayHour: number,
@@ -36,10 +36,16 @@ export const getAppointmentTakesAllDay = (
 ): boolean => {
   const hasAllDay = (): boolean => appointmentAdapter.allDay;
 
-  return {
-    none: (): boolean => false,
-    allDay: hasAllDay,
-    auto: (): boolean => {
+  switch (showAllDayAppointments) {
+    case 'none':
+      return false;
+
+    case 'allDay':
+      return hasAllDay();
+
+    case 'auto':
+    default:
+    {
       if (hasAllDay()) {
         return true;
       }
@@ -65,6 +71,6 @@ export const getAppointmentTakesAllDay = (
         viewStartDayHour,
         viewEndDayHour,
       );
-    },
-  }[showAllDayAppointments]();
+    }
+  }
 };

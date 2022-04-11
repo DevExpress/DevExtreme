@@ -56,6 +56,22 @@ describe('getAppointmentTakesAllDay', () => {
       expect(getAppointmentTakesAllDay(appointment, 8, 11, 'auto'))
         .toBe(false);
     });
+
+    [
+      undefined,
+      null,
+    ].forEach((endDate) => {
+      it(`should return false if endDate is ${endDate}`, () => {
+        const appointment = {
+          allDay: false,
+          startDate: new Date(2022, 0, 1, 8),
+          endDate,
+        };
+
+        expect(getAppointmentTakesAllDay(appointment, 8, 11, 'auto'))
+          .toBe(false);
+      });
+    });
   });
 
   describe('showAllDayAppointments is none', () => {
