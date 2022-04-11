@@ -1,3 +1,4 @@
+import '../../helpers/noIntl.js';
 import $ from 'jquery';
 import Box from 'ui/box';
 import Calendar from 'ui/calendar';

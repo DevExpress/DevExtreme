@@ -32,8 +32,6 @@
         if(isServerSideTest) {
             yield return Url.Content("~/testing/helpers/ssrEmulator.js");
         }
-
-        yield return Url.Content("~/testing/helpers/noIntl.js");
     }
 }
 <!DOCTYPE html>
@@ -139,7 +137,6 @@
     <script>
         (function() {
             jQuery.noConflict();
-            window.Intl = undefined;
 
             var cacheBuster = '@Url.CacheBuster()';
             if(cacheBuster.length) {

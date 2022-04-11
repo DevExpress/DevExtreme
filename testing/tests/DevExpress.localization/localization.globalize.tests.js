@@ -61,7 +61,7 @@ define(function(require, exports, module) {
     const browser = require('core/utils/browser');
     const dateUtils = require('core/utils/date');
 
-    const sharedTests = require('./sharedParts/localization.shared.js');
+    const sharedTests = require('./sharedParts/localization.shared.js').default;
 
     const NEGATIVE_NUMBERS = [-4.645, -35.855];
     const ROUNDING_CORRECTION = {
