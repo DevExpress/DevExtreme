@@ -5,6 +5,7 @@
         <div class="dx-fieldset-header">Resizable DataGrid</div>
         <div class="dx-field">
           <DxResizable
+            :class="resizableClasses"
             id="gridContainer"
             :min-width="400"
             :min-height="150"
@@ -16,7 +17,7 @@
             <DxDataGrid
               id="grid"
               :data-source="orders"
-              :key-expr="ID"
+              key-expr="ID"
               :show-borders="true"
               height="100%"
             >
@@ -76,6 +77,8 @@ import DxCheckBox from 'devextreme-vue/check-box';
 
 import service from './data.js';
 
+const handleValues = ['left', 'top', 'right', 'bottom'];
+
 export default {
   components: {
     DxDataGrid,
@@ -88,11 +91,22 @@ export default {
   },
   data() {
     return {
-      handleValues: ['left', 'top', 'right', 'bottom'],
-      handles: ['left', 'top', 'right', 'bottom'],
+      handleValues,
+      handles: handleValues,
       keepAspectRatio: true,
       orders: service.getOrders(),
     };
+  },
+  computed: {
+    resizableClasses() {
+      return {
+        'dx-resizable': true,
+        'no-left-handle': !this.handles.includes('left'),
+        'no-right-handle': !this.handles.includes('right'),
+        'no-top-handle': !this.handles.includes('top'),
+        'no-bottom-handle': !this.handles.includes('bottom'),
+      };
+    },
   },
 };
 </script>

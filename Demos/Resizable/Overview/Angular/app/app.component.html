@@ -3,6 +3,7 @@
     <div class="dx-fieldset-header">Resizable DataGrid</div>
     <div class="dx-field">
       <dx-resizable
+        [class]="resizableClasses"
         id="gridContainer"
         [minWidth]="400"
         [minHeight]="150"
@@ -43,7 +44,11 @@
   <div class="caption">Resizable Options</div>
   <div class="option">
     <div>Handles</div>
-    <dx-tag-box [items]="handleValues" [(value)]="handles"></dx-tag-box>
+    <dx-tag-box
+      [items]="handleValues"
+      [(value)]="handles"
+      (onValueChanged)="handlesValueChange($event)"
+    ></dx-tag-box>
   </div>
   <div class="option">
     <dx-check-box

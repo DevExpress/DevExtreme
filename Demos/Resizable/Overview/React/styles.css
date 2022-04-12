@@ -9,7 +9,7 @@
 .dx-fieldset,
 .dx-field {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 60px);
 }
 
 .options {
@@ -38,6 +38,42 @@
 
 #grid {
   border: 1px solid black;
+}
+
+.no-left-handle .dx-resizable-handle-top,
+.no-left-handle .dx-resizable-handle-bottom {
+  left: 10px;
+  width: calc(100% - 10px);
+}
+
+.no-right-handle .dx-resizable-handle-top,
+.no-right-handle .dx-resizable-handle-bottom {
+  right: 10px;
+  width: calc(100% - 10px);
+}
+
+.no-right-handle.no-left-handle .dx-resizable-handle-top,
+.no-right-handle.no-left-handle .dx-resizable-handle-bottom {
+  left: 10px;
+  width: calc(100% - 20px);
+}
+
+.no-top-handle .dx-resizable-handle-right,
+.no-top-handle .dx-resizable-handle-left {
+  top: 10px;
+  height: calc(100% - 10px);
+}
+
+.no-bottom-handle .dx-resizable-handle-right,
+.no-bottom-handle .dx-resizable-handle-left {
+  bottom: 10px;
+  height: calc(100% - 10px);
+}
+
+.no-top-handle.no-bottom-handle .dx-resizable-handle-left,
+.no-top-handle.no-bottom-handle .dx-resizable-handle-right {
+  top: 10px;
+  height: calc(100% - 20px);
 }
 
 .dx-resizable-handle-right {

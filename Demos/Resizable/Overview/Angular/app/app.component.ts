@@ -31,8 +31,17 @@ export class AppComponent {
 
   orders: Order[];
 
+  resizableClasses = '';
+
   constructor(service: Service) {
     this.orders = service.getOrders();
+  }
+
+  handlesValueChange({ value }) {
+    this.resizableClasses = this.handleValues.reduce((acc, handle) => {
+      const newClass = value.includes(handle) ? '' : ` no-${handle}-handle`;
+      return acc + newClass;
+    }, 'dx-resizable');
   }
 }
 

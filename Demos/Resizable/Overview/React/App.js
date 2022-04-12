@@ -10,14 +10,21 @@ const handleValues = ['left', 'top', 'right', 'bottom'];
 
 function App() {
   const [keepAspectRatio, setKeepAspectRatio] = React.useState(true);
-  const [handles, setHandles] = React.useState(['left', 'bottom', 'top', 'right']);
+  const [handles, setHandles] = React.useState(handleValues);
+  const [resizableClasses, setResizableClasses] = React.useState('');
 
   const keepAspectRatioValueChange = React.useCallback((value) => {
     setKeepAspectRatio(value);
   }, [setKeepAspectRatio]);
 
   const handlesValueChange = React.useCallback((value) => {
+    const classes = handleValues.reduce((acc, handle) => {
+      const newClass = value.includes(handle) ? '' : ` no-${handle}-handle`;
+      return acc + newClass;
+    }, '');
+
     setHandles(value);
+    setResizableClasses(classes);
   }, [setHandles]);
 
   return <React.Fragment>
@@ -26,6 +33,7 @@ function App() {
         <div className='dx-fieldset-header'>Resizable DataGrid</div>
         <div className='dx-field'>
           <Resizable
+            className={resizableClasses}
             id='gridContainer'
             minWidth={400}
             minHeight={150}
