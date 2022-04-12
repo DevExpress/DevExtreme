@@ -11,7 +11,7 @@ on:
 
 jobs:
   dart-test:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
@@ -61,7 +61,7 @@ jobs:
       run: npx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.material.blue.light.css"
 
   notify:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [dart-test]
     if: always() && contains(needs.*.result, 'failure')
