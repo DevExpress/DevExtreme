@@ -51,3 +51,4 @@ export type DataSource = RowData[] | Store | undefined;
 
 export type VirtualScrollingMode = 'virtual' | 'infinite';
 export type ScrollingMode = 'standard' | VirtualScrollingMode;
+export type VirtualContentType = 'top' | 'bottom';

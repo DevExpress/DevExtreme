@@ -1,4 +1,4 @@
-import { Row } from '../types';
+import { Row, VirtualContentType } from '../types';
 
 export const DEFAULT_ROW_HEIGHT = 20;
 export const calculateRowHeight = (
@@ -29,6 +29,9 @@ export const calculateItemHeights = (
     lastLoadIndex = currentItem.loadIndex as number;
     itemSize += height;
   });
+
+  itemSize > 0 && calculatedRowSizes.push(itemSize);
+
   return calculatedRowSizes;
 };
 export const calculateViewportItemIndex = (
@@ -59,7 +62,7 @@ export const calculateViewportItemIndex = (
   return Math.round(itemOffset * 50) / 50;
 };
 export const getVirtualContentOffset = (
-  type: 'top' | 'bottom',
+  type: VirtualContentType,
   itemIndex: number,
   totalCount: number,
   itemHeights: Record<number, number>,
