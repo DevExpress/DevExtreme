@@ -1230,12 +1230,17 @@ QUnit.module('columnWidth auto option', {
         assert.equal($groupSpaceCells.eq(0).width(), $groupSpaceCells.eq(1).width(), 'group space cell widths are equals');
     });
 
-    QUnit.test('Group summary cells should update width via setColumnWidths', function(assert) {
+    QUnit.test('Group row should have correct widths via setColumnWidths', function(assert) {
+        // arrange
         $('#dataGrid').dxDataGrid({
             loadingTimeout: null,
             dataSource: [{ value0: 0, value1: 1, value2: 2 }],
             columnAutoWidth: true,
-            width: 300,
+            width: 400,
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'always',
+            },
             columns: [
                 {
                     dataField: 'value0',
@@ -1246,19 +1251,27 @@ QUnit.module('columnWidth auto option', {
                 }, {
                     dataField: 'value2',
                     width: 100,
+                }, {
+                    dataField: 'value3',
+                    width: 100,
                 }
             ],
             summary: {
                 groupItems: [{
-                    column: 'value2',
+                    column: 'value3',
                     alignByColumn: true,
                 }]
             },
         });
 
         // assert
-        const width = $('.dx-group-row td')[2].style.width;
-        assert.strictEqual(width, '');
+        const widths = $('.dx-group-row td').toArray().map(el => el.style.width);
+        assert.deepEqual(widths, [
+            '', // select column, no width
+            '', // expand column, no width
+            '', // group column, no width
+            '100px', // summary column, has width
+        ]);
     });
 });
 

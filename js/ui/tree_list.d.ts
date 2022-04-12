@@ -73,6 +73,7 @@ import {
     TreeListFilterMode,
     TreeListCommandColumnType,
     TreeListToolbarItem,
+    ToolbarItemLocation,
 } from '../types/enums';
 
 interface CellInfo<TRowData = any, TKey = any> {
@@ -1205,11 +1206,10 @@ export interface ToolbarItem extends dxToolbarItem {
     name?: TreeListToolbarItem | string;
     /**
      * @docid dxTreeListToolbarItem.location
-     * @type Enums.ToolbarItemLocation
      * @default 'after'
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
 }
 
 /**

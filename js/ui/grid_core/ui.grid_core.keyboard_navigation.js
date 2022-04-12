@@ -54,6 +54,7 @@ const FOCUS_TYPE_ROW = 'row';
 const FOCUS_TYPE_CELL = 'cell';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
+const FUNCTIONAL_KEYS = ['shift', 'control', 'alt'];
 
 
 function isGroupRow($row) {
@@ -288,7 +289,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._isNeedFocus = true;
         this._isNeedScroll = true;
 
-        this._updateFocusedCellPositionByTarget(originalEvent.target);
+        FUNCTIONAL_KEYS.indexOf(e.keyName) < 0 && this._updateFocusedCellPositionByTarget(originalEvent.target);
 
         if(!isHandled) {
             switch(e.keyName) {
@@ -315,8 +316,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     break;
 
                 case 'space':
-                    this._spaceKeyHandler(e, isEditing);
-                    isHandled = true;
+                    isHandled = this._spaceKeyHandler(e, isEditing);
                     break;
 
                 case 'A':
@@ -426,8 +426,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const $event = eventArgs.originalEvent;
         const isUpArrow = eventArgs.keyName === 'upArrow';
         const dataSource = this._dataController.dataSource();
+        const isRowEditingInCurrentRow = this._editingController?.isEditRow(visibleRowIndex);
         const isEditingNavigationMode = this._isFastEditingStarted();
-        const allowNavigate = (!isEditing || isEditingNavigationMode) && $row && !isDetailRow($row);
+        const allowNavigate = (!isRowEditingInCurrentRow || !isEditing || isEditingNavigationMode) && $row && !isDetailRow($row);
 
         if(allowNavigate) {
             isEditingNavigationMode && this._closeEditCell();
@@ -463,6 +464,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _spaceKeyHandler: function(eventArgs, isEditing) {
         const rowIndex = this.getVisibleRowIndex();
         const $target = $(eventArgs.originalEvent && eventArgs.originalEvent.target);
+
         if(this.option('selection') && this.option('selection').mode !== 'none' && !isEditing) {
             const isFocusedRowElement = this._getElementType($target) === 'row' && this.isRowFocusType() && isDataRow($target);
             const isFocusedSelectionCell = $target.hasClass(COMMAND_SELECT_CLASS);
@@ -475,9 +477,13 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     control: eventArgs.ctrl
                 });
                 eventArgs.originalEvent.preventDefault();
+
+                return true;
             }
+
+            return false;
         } else {
-            this._beginFastEditing(eventArgs.originalEvent);
+            return this._beginFastEditing(eventArgs.originalEvent);
         }
     },
     _ctrlAKeyHandler: function(eventArgs, isEditing) {
@@ -2208,7 +2214,8 @@ export const keyboardNavigationModule = {
                     const virtualItemsCount = this.virtualItemsCount();
 
                     if(virtualItemsCount) {
-                        result += (virtualItemsCount.begin + virtualItemsCount.end);
+                        const rowIndexOffset = this.getRowIndexOffset();
+                        result += (rowIndexOffset + virtualItemsCount.end);
                     }
 
                     return result;

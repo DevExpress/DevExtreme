@@ -3963,6 +3963,24 @@ QUnit.module('disabled option', () => {
         $fileUploader.dxFileUploader('option', 'disabled', true);
         assert.equal($fileInput.css('display'), 'none', 'input is hidden');
     });
+
+    QUnit.test('label text must be visible when disabled option chаnged dynamically', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            disabled: true,
+            useDragOver: true,
+            nativeDropSupported: true,
+            uploadMode: 'useForm'
+        });
+        const $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
+        const $inputLabel = $inputContainer.find('.' + FILEUPLOADER_INPUT_LABEL_CLASS);
+
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), '', 'label has no text');
+
+        $fileUploader.dxFileUploader('option', 'disabled', false);
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), 'or Drop file here', 'label has default text');
+    });
 });
 
 QUnit.module('readOnly option', moduleConfig, () => {

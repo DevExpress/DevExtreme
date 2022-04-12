@@ -91,6 +91,8 @@ export type RelativePosition = 'inside' | 'outside';
 
 export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
 
+export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
+
 export type ScaleBreakLineStyle = 'straight' | 'waved';
 
 export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
@@ -401,6 +403,10 @@ export type HtmlEditorToolbarItem = 'background' | 'bold' | 'color' | 'font' | '
 export type HtmlEditorFormat = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block';
 
 export type HtmlEditorContextMenuItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'cellProperties' | 'tableProperties';
+
+export type HtmlEditorImageUploadTab = 'url' | 'file';
+
+export type HtmlEditorImageUploadFileUploadMode = 'base64' | 'server' | 'both';
 
 export type EditorStylingMode = 'outlined' | 'underlined' | 'filled';
 

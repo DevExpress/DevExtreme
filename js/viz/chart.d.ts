@@ -80,6 +80,7 @@ import {
     ChartFinancialSeriesAggregationMethod,
     ChartRangeSeriesAggregationMethod,
     ChartBubbleSeriesAggregationMethod,
+    AggregatedPointsPosition,
 } from '../types/enums';
 
 interface SeriesInteractionInfo {
@@ -1581,6 +1582,12 @@ export interface dxChartCommonAxisSettings {
      * @public
      */
     discreteAxisDivisionMode?: DiscreteAxisDivisionMode;
+    /**
+     * @docid dxChartOptions.commonAxisSettings.aggregatedPointsPosition
+     * @default 'betweenTicks'
+     * @public
+     */
+     aggregatedPointsPosition?: AggregatedPointsPosition;
     /**
      * @docid dxChartOptions.commonAxisSettings.endOnTick
      * @default undefined
@@ -3675,11 +3682,11 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      */
     visible?: boolean;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.pattern
+     * @docid dxChartSeriesTypes.CommonSeries.label.displayFormat
      * @default undefined
      * @public
      */
-    pattern?: string;
+     displayFormat?: string;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeriesPoint {

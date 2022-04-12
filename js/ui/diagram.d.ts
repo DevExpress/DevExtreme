@@ -35,6 +35,7 @@ import {
   DiagramExportFormat,
   DiagramRequestEditOperationReason,
   DiagramConnectorPosition,
+  ToolbarItemLocation,
 } from '../types/enums';
 
 /** @public */
@@ -1323,10 +1324,9 @@ export interface dxDiagramCustomCommand {
     /**
      * @docid
      * @default "before"
-     * @type Enums.ToolbarItemLocation
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
 }
 
 /**

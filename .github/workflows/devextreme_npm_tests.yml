@@ -1,7 +1,7 @@
 name: DevExtreme package tests
 
 concurrency:
-  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
@@ -115,6 +115,22 @@ jobs:
       run: |
         npm run test:${{ matrix.framework }}
 
+    - name: Copy compared screenshot artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: compared-screenshots
+        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/compared-screenshots/**/*
+        if-no-files-found: ignore
+
+    - name: Copy failed test artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: failed-tests
+        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/failedtests/**/*
+        if-no-files-found: ignore
+
   test_angular:
     name: Angular wrapper tests
     needs: build
@@ -170,7 +186,7 @@ jobs:
       run: |
         REMOTE_URL=https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular
         REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
-        
+
         if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
           git clone -b $REMOTE_BRANCH $REMOTE_URL ../devextreme-angular-repo
         fi
@@ -186,7 +202,7 @@ jobs:
       with:
         name: devextreme-npm
         path: ../devextreme-angular-repo/devextreme-setup
-   
+
     - name: Install devextreme package
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ../devextreme-angular-repo
@@ -225,7 +241,7 @@ jobs:
   test_bundlers:
     name: Bundlers tests
     needs: build
-    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 60
 
     steps:
@@ -259,18 +275,18 @@ jobs:
 
     - name: Install bundlers
       if: steps.last_run_status.outputs.last_run_status != 'success'
-      working-directory: ./testing/bundlers  
+      working-directory: ./testing/bundlers
       run: npm install --no-audit --no-fund
 
-    - name: Install DevExtreme package 
+    - name: Install DevExtreme package
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm install --save-dev $(find . -maxdepth 1 -name "devextreme-*.tgz")
 
-    - name: Generate entry files 
+    - name: Generate entry files
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
-      run: npm run generate-entry-files  
+      run: npm run generate-entry-files
 
     - name: Build webpack cjs
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -291,12 +307,12 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run build:rollup
-      
+
     - name: Build parcel
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run build:parcel
-      
+
     - name: Build vite
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
@@ -305,18 +321,18 @@ jobs:
     - name: Save run status
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: echo "::set-output name=last_run_status::success" > last_run_status
-      
+
   test_demos:
     needs: build
     strategy:
       fail-fast: false
-      matrix:      
+      matrix:
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
 
     runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     name: Demos visual tests ${{ matrix.CONSTEL }}
     timeout-minutes: 20
-  
+
     steps:
     - name: Get sources
       uses: actions/checkout@v2
@@ -345,7 +361,7 @@ jobs:
       run: |
         REMOTE_URL=https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos
         REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
-        
+
         if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
           git clone -b $REMOTE_BRANCH $REMOTE_URL ./devextreme-demos
         fi
@@ -382,7 +398,7 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
       run: npm run prepare-js
-      
+
     - name: Run Web Server
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
@@ -416,7 +432,7 @@ jobs:
       run: echo "::set-output name=last_run_status::success" > last_run_status
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     name: Send notifications
     needs: [build, test_angular, test_bundlers, test_demos, test_npm_renovation]
     if: always() && contains(needs.*.result, 'failure')

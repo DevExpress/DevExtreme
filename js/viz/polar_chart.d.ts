@@ -1914,6 +1914,12 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @public
      */
     visible?: boolean;
+    /**
+     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.displayFormat
+     * @default undefined
+     * @public
+     */
+     displayFormat?: string;
 }
 /** @namespace DevExpress.viz */
 export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {

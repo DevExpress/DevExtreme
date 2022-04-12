@@ -681,6 +681,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @default 'normal'
        */
       wordWrap?: VizWordWrap;
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.displayFormat
+       * @default undefined
+       * @public
+       */
+       displayFormat?: string;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount

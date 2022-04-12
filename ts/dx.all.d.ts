@@ -2845,7 +2845,7 @@ declare module DevExpress.data {
     /**
      * [descr:Query.select(getter)]
      */
-    select(getter: any): Query;
+    select(...getters: any[]): Query;
     /**
      * [descr:Query.slice(skip, take)]
      */
@@ -4247,6 +4247,10 @@ declare module DevExpress.types {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
+  export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
   export type AnimationType =
     | 'css'
     | 'fade'
@@ -5243,6 +5247,17 @@ declare module DevExpress.types {
     | 'list'
     | 'align'
     | 'code-block';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type HtmlEditorImageUploadFileUploadMode =
+    | 'base64'
+    | 'server'
+    | 'both';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type HtmlEditorImageUploadTab = 'url' | 'file';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -11002,7 +11017,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramCustomCommand.location]
      */
-    location?: 'after' | 'before' | 'center';
+    location?: DevExpress.types.ToolbarItemLocation;
   }
   /**
    * [descr:dxDiagramDeleteConnectorArgs]
@@ -14754,8 +14769,8 @@ declare module DevExpress.ui {
         readonly scaleType: DevExpress.types.GanttRenderScaleType;
         readonly scaleElement: DevExpress.core.DxElement;
         readonly separatorElement: DevExpress.core.DxElement;
-        readonly start: Date;
-        readonly end: Date;
+        readonly startDate: Date;
+        readonly endDate: Date;
       };
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxGantt> & {
       readonly selectedRowKey?: any;
@@ -15442,27 +15457,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.scaleTypeRange.min]
        */
-      min?:
-        | 'minutes'
-        | 'hours'
-        | 'sixHours'
-        | 'days'
-        | 'weeks'
-        | 'months'
-        | 'quarters'
-        | 'years';
+      min?: DevExpress.types.GanttScaleType;
       /**
        * [descr:dxGanttOptions.scaleTypeRange.max]
        */
-      max?:
-        | 'minutes'
-        | 'hours'
-        | 'sixHours'
-        | 'days'
-        | 'weeks'
-        | 'months'
-        | 'quarters'
-        | 'years';
+      max?: DevExpress.types.GanttScaleType;
     };
     /**
      * [descr:dxGanttOptions.selectedRowKey]
@@ -15815,6 +15814,28 @@ declare module DevExpress.ui {
       DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
+   * [descr:dxHtmlEditorImageUpload]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxHtmlEditorImageUpload {
+    /**
+     * [descr:dxHtmlEditorImageUpload.uploadUrl]
+     */
+    uploadUrl?: string;
+    /**
+     * [descr:dxHtmlEditorImageUpload.uploadDirectory]
+     */
+    uploadDirectory?: string;
+    /**
+     * [descr:dxHtmlEditorImageUpload.fileUploadMode]
+     */
+    fileUploadMode?: DevExpress.types.HtmlEditorImageUploadFileUploadMode;
+    /**
+     * [descr:dxHtmlEditorImageUpload.tabs]
+     */
+    tabs?: Array<DevExpress.types.HtmlEditorImageUploadTab>;
+  }
+  /**
    * [descr:dxHtmlEditorMediaResizing]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -15914,6 +15935,10 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.tableContextMenu]
      */
     tableContextMenu?: dxHtmlEditorTableContextMenu;
+    /**
+     * [descr:dxHtmlEditorOptions.imageUpload]
+     */
+    imageUpload?: dxHtmlEditorImageUpload;
     /**
      * [descr:dxHtmlEditorOptions.name]
      */
@@ -16241,7 +16266,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
       ListItemInfo<TItem> & {
-        cancel?: boolean | PromiseLike<void>;
+        cancel?: boolean | PromiseLike<boolean> | PromiseLike<void>;
       };
     export type ItemHoldEvent<
       TItem extends ItemLike = any,
@@ -19226,6 +19251,10 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
+    /**
+     * [descr:dxResizableOptions.area]
+     */
+    area?: string | DevExpress.core.UserDefinedElement;
     /**
      * [descr:dxResizableOptions.handles]
      */
@@ -25358,6 +25387,10 @@ declare module DevExpress.ui {
    */
   export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**
+   * [descr:ui.hideToasts()]
+   */
+  export function hideToasts(): void;
+  /**
    * [descr:HierarchicalCollectionWidget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -25429,6 +25462,14 @@ declare module DevExpress.ui {
     type?: string,
     displayTime?: number
   ): void;
+  /**
+   * [descr:ui.notify(message,stack)]
+   */
+  export function notify(message: string, stack?: Stack): void;
+  /**
+   * [descr:ui.notify(options,stack)]
+   */
+  export function notify(options: any, stack?: Stack): void;
   /**
    * [descr:NumericRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25557,6 +25598,54 @@ declare module DevExpress.ui {
      */
     searchValue?: string;
   }
+  interface Stack {
+    /**
+     * [descr:Stack.position]
+     */
+    position?:
+      | StackPosition
+      | {
+          /**
+           * [descr:Stack.position.top]
+           */
+          top?: number;
+          /**
+           * [descr:Stack.position.left]
+           */
+          left?: number;
+          /**
+           * [descr:Stack.position.bottom]
+           */
+          bottom?: number;
+          /**
+           * [descr:Stack.position.right]
+           */
+          right?: number;
+        };
+    /**
+     * [descr:Stack.direction]
+     */
+    direction?: StackDirection;
+  }
+  type StackDirection =
+    | 'down'
+    | 'up'
+    | 'left'
+    | 'right'
+    | 'down-reverse'
+    | 'up-reverse'
+    | 'left-reverse'
+    | 'right-reverse';
+  type StackPosition =
+    | 'top left'
+    | 'top right'
+    | 'bottom left'
+    | 'bottom right'
+    | 'top center'
+    | 'bottom center'
+    | 'left center'
+    | 'right center'
+    | 'center';
   /**
    * [descr:StringLengthRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25795,7 +25884,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:dxDataGridToolbarItem.location]
      */
-    location?: 'after' | 'before' | 'center';
+    location?: DevExpress.types.ToolbarItemLocation;
   }
 }
 declare module DevExpress.ui.dxDiagram {
@@ -25904,7 +25993,7 @@ declare module DevExpress.ui.dxTreeList {
     /**
      * [descr:dxTreeListToolbarItem.location]
      */
-    location?: 'after' | 'before' | 'center';
+    location?: DevExpress.types.ToolbarItemLocation;
   }
 }
 declare module DevExpress.ui.dxTreeView {
@@ -28589,6 +28678,10 @@ declare module DevExpress.viz {
      */
     discreteAxisDivisionMode?: DevExpress.types.DiscreteAxisDivisionMode;
     /**
+     * [descr:dxChartOptions.commonAxisSettings.aggregatedPointsPosition]
+     */
+    aggregatedPointsPosition?: DevExpress.types.AggregatedPointsPosition;
+    /**
      * [descr:dxChartOptions.commonAxisSettings.endOnTick]
      */
     endOnTick?: boolean;
@@ -30261,9 +30354,9 @@ declare module DevExpress.viz {
      */
     visible?: boolean;
     /**
-     * [descr:dxChartSeriesTypes.CommonSeries.label.pattern]
+     * [descr:dxChartSeriesTypes.CommonSeries.label.displayFormat]
      */
-    pattern?: string;
+    displayFormat?: string;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -32881,6 +32974,10 @@ declare module DevExpress.viz {
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap]
        */
       wordWrap?: DevExpress.types.VizWordWrap;
+      /**
+       * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.displayFormat]
+       */
+      displayFormat?: string;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount]
@@ -34176,6 +34273,10 @@ declare module DevExpress.viz {
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.visible]
      */
     visible?: boolean;
+    /**
+     * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.displayFormat]
+     */
+    displayFormat?: string;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -34814,6 +34915,10 @@ declare module DevExpress.viz {
        * [descr:dxRangeSelectorOptions.scale.aggregationInterval]
        */
       aggregationInterval?: VizTimeInterval;
+      /**
+       * [descr:dxRangeSelectorOptions.scale.discreteAxisDivisionMode]
+       */
+      discreteAxisDivisionMode?: DevExpress.types.DiscreteAxisDivisionMode;
       /**
        * [descr:dxRangeSelectorOptions.scale.allowDecimals]
        */

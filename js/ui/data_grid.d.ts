@@ -121,6 +121,7 @@ import {
   GridDataChangeType,
   DataGridToolbarItem,
   GridNewRowPosition,
+  ToolbarItemLocation,
 } from '../types/enums';
 
 export interface AdaptiveDetailRowPreparingInfo {
@@ -4138,11 +4139,10 @@ export interface ToolbarItem extends dxToolbarItem {
   name?: DataGridToolbarItem | string;
   /**
    * @docid dxDataGridToolbarItem.location
-   * @type Enums.ToolbarItemLocation
    * @default 'after'
    * @public
    */
-  location?: 'after' | 'before' | 'center';
+  location?: ToolbarItemLocation;
 }
 
 /**
@@ -4213,7 +4213,6 @@ export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & 
     texts?: any;
     /**
      * @docid dxDataGridOptions.editing.newRowPosition
-     * @type Enums.GridNewRowPosition
      * @default "viewportTop"
      * @public
      */

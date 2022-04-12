@@ -1,5 +1,4 @@
 import { isDefined } from '../../../core/utils/type';
-import { roundToThreeDecimals } from './draw_utils';
 import { getPageWidth, getPageHeight } from './pdf_utils';
 
 function convertToCellsArray(rows) {
@@ -116,7 +115,7 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, checkPredi
     while(rectsToSplit.length > 0) {
         let currentPageMaxRectCoordinate = 0;
         const currentPageRects = rectsToSplit.filter(rect => {
-            const currentRectCoordinate = roundToThreeDecimals(rect[coordinate] + rect[dimension]);
+            const currentRectCoordinate = rect[coordinate] + rect[dimension];
             if(checkPredicate(pages.length, currentRectCoordinate)) {
                 if(currentPageMaxRectCoordinate <= currentRectCoordinate) {
                     currentPageMaxRectCoordinate = currentRectCoordinate;
@@ -129,8 +128,8 @@ function splitRectsByPages(rects, marginValue, coordinate, dimension, checkPredi
 
         const rectsToSeparate = rectsToSplit.filter(rect => {
             // Check cells that have 'coordinate' less than 'currentPageMaxRectCoordinate'
-            const currentRectLeft = roundToThreeDecimals(rect[coordinate]);
-            const currentRectRight = roundToThreeDecimals(rect[coordinate] + rect[dimension]);
+            const currentRectLeft = rect[coordinate];
+            const currentRectRight = rect[coordinate] + rect[dimension];
             if(currentRectLeft < currentPageMaxRectCoordinate && currentPageMaxRectCoordinate < currentRectRight) {
                 return true;
             }

@@ -107,7 +107,8 @@ function getLabelOptions(labelOptions, defaultColor) {
         rotationAngle: opt.rotationAngle,
         wordWrap: opt.wordWrap,
         textOverflow: opt.textOverflow,
-        cssClass: opt.cssClass
+        cssClass: opt.cssClass,
+        displayFormat: opt.displayFormat
     };
 }
 

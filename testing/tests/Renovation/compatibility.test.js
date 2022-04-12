@@ -5,6 +5,7 @@ import Button from 'ui/button';
 import 'ui/check_box';
 import 'ui/pager';
 import 'ui/data_grid';
+import 'ui/data_grid_next';
 
 /**
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
@@ -17,7 +18,12 @@ const PRIVATE_JQUERY_WIDGETS = [
     'GridPager', 'Scrollable', 'DraggableContainer', 'Droppable',
     'Editor'
 ];
-const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
+
+const CUSTOM_ROOT_WIDGET_CLASS = {
+    'dxGridPager': 'datagrid-pager',
+    'dxDataGrid': 'widget',
+    'dxDataGridNext': 'widget'
+};
 
 const widgetsInBundle = publicWidgets
     .filter((item) => !item.inProgress)
@@ -147,7 +153,7 @@ QUnit.module('Mandatory component setup', {
                 + 'and add correspondig tests in your component\'s test suite.';
                 const templatesToCheck = meta.props.template.filter(templateName => {
                     // skip template here if you don't want to test its compatibility
-                    return templateName !== 'iconTemplate';
+                    return templateName !== 'iconTemplate' && templateName !== 'noDataTemplate';
                 });
                 assert.expect(templatesToCheck.length * 3);
 

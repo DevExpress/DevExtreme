@@ -38,7 +38,7 @@ export function createEventTrigger(eventsMap, callbackGetter) {
     function createEvent(name) {
         const eventInfo = eventsMap[name];
 
-        triggers[eventInfo.name] = callbackGetter(name);
+        triggers[eventInfo.name] = callbackGetter(name, eventInfo.actionSettings);
     }
 
     function triggerEvent(name, arg, complete) {

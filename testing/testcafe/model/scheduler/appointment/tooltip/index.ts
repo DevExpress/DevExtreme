@@ -27,6 +27,7 @@ export default class AppointmentTooltip extends TooltipBase {
     this.mobileElement = Selector(CLASS.mobileTooltip);
 
     this.deleteButton = Selector(`.${CLASS.tooltipDeleteButton}`);
+
     this.wrapper = Selector(`.${CLASS.tooltipWrapper}.${CLASS.appointmentTooltipWrapper}`);
   }
 

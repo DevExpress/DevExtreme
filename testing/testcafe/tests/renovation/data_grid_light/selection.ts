@@ -2,9 +2,9 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../helpers/multi-platform-test';
 
-const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['react', 'angular'] });
+const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['jquery', 'react', 'angular'] });
 
-const defaultOptions = {
+const getDefaultOptions = (platform) => ({
   columns: ['id', 'text'],
   dataSource: [
     { id: 1, text: 'text 1' },
@@ -18,17 +18,20 @@ const defaultOptions = {
     allowSelectAll: true,
     mode: 'single',
     selectAllMode: 'page',
-    selectedRowKeys: [],
+    selectedRowKeys: platform === 'jquery' ? undefined : [],
   },
-};
+  pager: {
+    visible: false,
+  },
+});
 
 const prepareDataGrid = (options = {}) => async (t, { platform }) => {
   await t.resizeWindow(800, 600);
-  await createWidget(platform, 'dxDataGridLight', defaultOptions);
+  await createWidget(platform, 'dxDataGridNext', getDefaultOptions(platform));
   await updateComponentOptions(platform, options);
 };
 
-fixture('DataGridLight with Pager');
+fixture('DataGridNext with Pager');
 
 test('Render', async (t, { screenshotComparerOptions }) => {
   await t

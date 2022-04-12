@@ -226,8 +226,8 @@ export type ScaleCellPreparedEvent = InitializedEventInfo<dxGantt> & {
     readonly scaleType: GanttRenderScaleType;
     readonly scaleElement: DxElement;
     readonly separatorElement: DxElement;
-    readonly start: Date;
-    readonly end: Date;
+    readonly startDate: Date;
+    readonly endDate: Date;
 };
 
 /** @public */
@@ -756,8 +756,8 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field4 scaleType:Enums.GanttRenderScaleType
      * @type_function_param1_field5 scaleElement:DxElement
      * @type_function_param1_field6 separatorElement:DxElement
-     * @type_function_param1_field7 start:Date
-     * @type_function_param1_field7 end:Date
+     * @type_function_param1_field7 startDate:Date
+     * @type_function_param1_field8 endDate:Date
      * @action
      * @public
      */
@@ -832,16 +832,14 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     scaleTypeRange?: {
         /**
          * @docid
-         * @type Enums.GanttScaleType
          * @default "minutes"
          */
-        min?: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        min?: GanttScaleType;
         /**
          * @docid
-         * @type Enums.GanttScaleType
          * @default "years"
          */
-        max?: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        max?: GanttScaleType;
     };
     /**
      * @docid

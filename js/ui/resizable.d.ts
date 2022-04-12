@@ -1,3 +1,4 @@
+import { UserDefinedElement } from '../core/element';
 import DOMComponent, {
     DOMComponentOptions,
 } from '../core/dom_component';
@@ -47,6 +48,12 @@ export type ResizeEndEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEven
  * @namespace DevExpress.ui
  */
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    area?: string | UserDefinedElement;
     /**
      * @docid
      * @default "all"

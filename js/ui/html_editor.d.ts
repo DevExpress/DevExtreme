@@ -35,6 +35,8 @@ import {
     HtmlEditorFormat,
     EditorStylingMode,
     HtmlEditorContextMenuItem,
+    HtmlEditorImageUploadTab,
+    HtmlEditorImageUploadFileUploadMode,
 } from '../types/enums';
 
 /** @public */
@@ -111,6 +113,12 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @public
      */
     tableContextMenu?: dxHtmlEditorTableContextMenu;
+    /**
+     * @docid
+     * @default { tabs: ["url"], fileUploadMode: 'base64', uploadUrl: undefined, uploadDirectory: undefined }
+     * @public
+     */
+    imageUpload?: dxHtmlEditorImageUpload;
     /**
      * @docid
      * @hidden false
@@ -399,6 +407,38 @@ export interface dxHtmlEditorTableResizing {
  * @type object
  * @namespace DevExpress.ui
  */
+ export interface dxHtmlEditorImageUpload {
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  uploadUrl?: string;
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  uploadDirectory?: string;
+  /**
+   * @docid
+   * @default 'base64'
+   * @public
+   */
+   fileUploadMode?: HtmlEditorImageUploadFileUploadMode;
+     /**
+   * @docid
+   * @default ["url"]
+   * @public
+   */
+    tabs?: Array<HtmlEditorImageUploadTab>;
+ }
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
 export interface dxHtmlEditorTableContextMenu {
     /**
      * @docid
@@ -428,7 +468,6 @@ export interface dxHtmlEditorTableContextMenuItem extends MenuBasePlainItem {
     /**
      * @docid
      * @default undefined
-     * @type Enums.HtmlEditorContextMenuItem
      * @public
      */
     name?: HtmlEditorContextMenuItem;

@@ -5458,6 +5458,22 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
         assert.equal(onCustomItemCreating.callCount, 1, 'action was called');
     });
 
+    QUnit.test('initial input custom text should not be restored on blur if acceptCustomValue=true (T1075506)', function(assert) {
+        const initialCustomValue = 'custom';
+        const $selectBox = $('#selectBox').dxSelectBox({
+            acceptCustomValue: true,
+            value: initialCustomValue
+        });
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        $input
+            .focus()
+            .blur();
+
+        assert.strictEqual(selectBox.option('text'), initialCustomValue, 'text was not restored');
+    });
+
     QUnit.test('custom value should be added on enter key when acceptCustomValue=true and dd is initially closed', function(assert) {
         const onCustomItemCreating = sinon.stub().returns('Custom item');
         const $selectBox = $('#selectBox').dxSelectBox({

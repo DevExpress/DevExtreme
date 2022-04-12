@@ -129,7 +129,11 @@
   min-height: 100%;
   box-sizing: border-box;
 
-  @include dx-clearfix-mixin();
+  &::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
 }
 
 .dx-scrollable-horizontal .dx-scrollable-content,

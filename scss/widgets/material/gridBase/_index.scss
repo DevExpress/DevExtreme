@@ -73,9 +73,11 @@ $grid-masterdetail-padding: 16px;
     }
 
     .dx-editor-with-menu {
-      height: $material-grid-base-cell-height;
-
       .dx-menu-item-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         .dx-icon {
           @include dx-icon-sizing($material-grid-base-filter-icon-size - 4);
 

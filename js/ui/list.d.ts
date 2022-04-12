@@ -86,7 +86,7 @@ export type ItemDeletedEvent<TItem extends ItemLike = any, TKey = any> = EventIn
 
 /** @public */
 export type ItemDeletingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
-    cancel?: boolean | PromiseLike<void>;
+    cancel?: boolean | PromiseLike<boolean> | PromiseLike<void>;
 };
 
 /** @public */
@@ -323,7 +323,7 @@ export interface dxListOptions<
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 cancel:boolean | Promise<void>
+     * @type_function_param1_field7 cancel:boolean | Promise<boolean> | Promise<void>
      * @type_function_param1_field1 component:dxList
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any

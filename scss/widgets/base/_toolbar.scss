@@ -131,7 +131,8 @@
 }
 
 .dx-dropdownmenu-popup-wrapper .dx-toolbar-menu-custom > .dx-list-item-content,
-.dx-toolbar-menu-section .dx-toolbar-hidden-button > .dx-list-item-content {
+.dx-toolbar-menu-section .dx-toolbar-hidden-button > .dx-list-item-content,
+.dx-toolbar-menu-section .dx-toolbar-hidden-button-group > .dx-list-item-content {
   padding: 0;
 }
 
@@ -161,9 +162,11 @@
   }
 }
 
-.dx-toolbar-menu-section .dx-toolbar-hidden-button {
-  .dx-toolbar-item-auto-hide {
-    padding: 0;
+.dx-toolbar-menu-section {
+  .dx-toolbar-hidden-button {
+    .dx-toolbar-item-auto-hide {
+      padding: 0;
+    }
   }
 }
 

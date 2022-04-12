@@ -42,6 +42,7 @@ import {
   ValueChangedCallMode,
   BackgroundImageLocation,
   RangeSelectorChartAxisScaleType,
+  DiscreteAxisDivisionMode,
 } from '../types/enums';
 
 /** @public */
@@ -360,6 +361,12 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @type number|object|Enums.VizTimeInterval
        */
       aggregationInterval?: VizTimeInterval;
+      /**
+       * @docid
+       * @default 'betweenLabels'
+       * @public
+       */
+      discreteAxisDivisionMode?: DiscreteAxisDivisionMode;
       /**
        * @docid
        * @default undefined
