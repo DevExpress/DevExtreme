@@ -97,7 +97,7 @@ const ColumnsControllerExtender = (function() {
             const date = new Date();
             this.columnsChanged.fire({
                 optionNames: { all: true, length: 1 },
-                changeTypes: { columns: true, length: 1 }
+                changeTypes: { columns: true, virtualColumnsScrolling: true, length: 2 }
             });
             this._renderTime = new Date() - date;
         },
