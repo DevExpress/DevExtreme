@@ -68,6 +68,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const appointmentEndDate = adapter.calculateEndDate('toGrid');
         const appointmentDuration = appointmentEndDate - appointmentStartDate;
 
+        const appointmentBeginInCurrentView = this.options.startViewDate < appointmentStartDate;
         const isAppointmentTakesSeveralDays = !timeZoneUtils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
 
         const settings = this.generateAppointmentSettings(appointment);
@@ -107,9 +108,10 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
                 const currentSettingDuration = currentSettingNormalizedEndDate - currentSettingStartDate;
                 const hasNextParts = currentSettingDuration < appointmentDuration;
-                appointmentReduced = multiDaysAppointmentParts.length > 0 || hasNextParts
-                    ? 'head'
-                    : 'tail';
+
+                appointmentReduced = hasNextParts
+                    ? appointmentBeginInCurrentView ? 'head' : 'body'
+                    : appointmentBeginInCurrentView ? 'head' : 'tail';
             }
 
             extend(currentSetting, {
@@ -199,15 +201,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             hMax
         } = appointmentSettings;
 
+        const hasTailPart = this.options.endViewDate > appointmentSettings.info.appointment.endDate;
         let left = Math.round(appointmentSettings.left + offset);
         let tailHeight = this._getTailHeight(appointmentGeometry, appointmentSettings);
+
         while(tailHeight > 0 && left < hMax) {
             tailHeight = Math.max(minHeight, tailHeight);
             const columnIndex = appointmentSettings.columnIndex + cellsDiff;
             const height = Math.min(tailHeight, vMax);
-            const appointmentReduced = height === vMax
-                ? 'head'
-                : undefined;
 
             result.push({
                 ...appointmentSettings,
@@ -215,13 +216,17 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 left,
                 height,
                 width,
-                appointmentReduced,
+                appointmentReduced: 'body',
                 rowIndex: 0,
                 columnIndex,
             });
 
             left += offset;
             tailHeight -= vMax;
+        }
+
+        if(hasTailPart && result.length > 0) {
+            result[result.length - 1].appointmentReduced = 'tail';
         }
 
         return result;
