@@ -613,6 +613,50 @@ export default function() {
             $okDialogButton.trigger('dxclick');
         });
 
+        test('Update whole link by dialog (zero-length selection)', function(assert) {
+            const done = assert.async();
+            const initialUrl = 'http://test.test';
+            const initialUrlText = 'test';
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                value: `<a href="${initialUrl}">${initialUrlText}</a>']`,
+                toolbar: { items: ['link'] },
+                onValueChanged: ({ value }) => {
+                    checkLink(assert, {
+                        href: initialUrl + 'a',
+                        content: initialUrlText + 't'
+                    }, value);
+                    done();
+                }
+            }).dxHtmlEditor('instance');
+
+            instance.setSelection(2, 0);
+
+            $('#htmlEditor')
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .trigger('dxclick');
+
+            const $inputs = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`);
+            const url = $inputs.first().val();
+            const urlText = $inputs.last().val();
+
+            $inputs
+                .first()
+                .val(initialUrl + 'a')
+                .change();
+
+            $inputs
+                .last()
+                .val(initialUrlText + 't')
+                .change();
+
+            $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
+                .first()
+                .trigger('dxclick');
+
+            assert.strictEqual(url, initialUrl);
+            assert.strictEqual(urlText, initialUrlText);
+        });
+
         [
             { format: 'bold', which: 66 },
             { format: 'italic', which: 73 },
