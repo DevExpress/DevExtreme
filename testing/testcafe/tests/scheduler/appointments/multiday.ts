@@ -8,16 +8,21 @@ const checkAllDayAppointment = async (
   scheduler: Scheduler,
   title: string,
   index: number,
-  isReduced: boolean,
+  reduceType: 'head' | 'body' | 'tail' | undefined,
   width: number,
 ): Promise<void> => {
   const appointment = scheduler.getAppointment(title, index);
+  const isReduced = reduceType !== undefined;
 
   await t
     .expect(appointment.reducedIcon.exists)
     .eql(isReduced)
     .expect(appointment.isReducedHead)
-    .eql(isReduced)
+    .eql(reduceType === 'head')
+    .expect(appointment.isReducedBody)
+    .eql(reduceType === 'body')
+    .expect(appointment.isReducedTail)
+    .eql(reduceType === 'tail')
     .expect(appointment.isAllDay)
     .ok()
     .expect(appointment.element.clientWidth)
@@ -29,16 +34,21 @@ const checkRegularAppointment = async (
   scheduler: Scheduler,
   title: string,
   index: number,
-  isReduced: boolean,
+  reduceType: 'head' | 'body' | 'tail' | undefined,
   height: number,
 ): Promise<void> => {
   const appointment = scheduler.getAppointment(title, index);
+  const isReduced = reduceType !== undefined;
 
   await t
     .expect(appointment.reducedIcon.exists)
     .eql(isReduced)
     .expect(appointment.isReducedHead)
-    .eql(isReduced)
+    .eql(reduceType === 'head')
+    .expect(appointment.isReducedBody)
+    .eql(reduceType === 'body')
+    .expect(appointment.isReducedTail)
+    .eql(reduceType === 'tail')
     .expect(appointment.element.clientHeight)
     .within(height - 1, height + 1);
 };
@@ -93,11 +103,11 @@ test('it should render multi-day and multi-view appointments correctly if showAl
     .expect(appointmentCount)
     .eql(4);
 
-  await checkRegularAppointment(t, scheduler, 'appt-00', 0, false, 200);
+  await checkRegularAppointment(t, scheduler, 'appt-00', 0, undefined, 200);
 
-  await checkRegularAppointment(t, scheduler, 'appt-01', 0, true, 100);
+  await checkRegularAppointment(t, scheduler, 'appt-01', 0, 'head', 100);
   for (let i = 1; i < appointmentCount - 2; i += 1) {
-    await checkRegularAppointment(t, scheduler, 'appt-01', i, true, 200);
+    await checkRegularAppointment(t, scheduler, 'appt-01', i, 'body', 200);
   }
 
   await t
@@ -109,7 +119,7 @@ test('it should render multi-day and multi-view appointments correctly if showAl
     .eql(7);
 
   for (let i = 0; i < appointmentCount; i += 1) {
-    await checkRegularAppointment(t, scheduler, 'appt-01', i, true, 200);
+    await checkRegularAppointment(t, scheduler, 'appt-01', i, 'body', 200);
   }
 
   await t
@@ -119,9 +129,9 @@ test('it should render multi-day and multi-view appointments correctly if showAl
   await t
     .expect(appointmentCount)
     .eql(3);
-  await checkRegularAppointment(t, scheduler, 'appt-01', 0, true, 200);
-  await checkRegularAppointment(t, scheduler, 'appt-01', 1, true, 200);
-  await checkRegularAppointment(t, scheduler, 'appt-01', 2, false, 50);
+  await checkRegularAppointment(t, scheduler, 'appt-01', 0, 'body', 200);
+  await checkRegularAppointment(t, scheduler, 'appt-01', 1, 'body', 200);
+  await checkRegularAppointment(t, scheduler, 'appt-01', 2, 'tail', 50);
 }).before(async () => createWidget(
   'dxScheduler',
   {
@@ -152,8 +162,8 @@ test('it should render all-day appointments if showAllDayAppointments is "auto"'
   await t
     .expect(appointmentCount)
     .eql(2);
-  await checkAllDayAppointment(t, scheduler, 'appt-00', 0, false, 109);
-  await checkAllDayAppointment(t, scheduler, 'appt-01', 0, true, 337);
+  await checkAllDayAppointment(t, scheduler, 'appt-00', 0, undefined, 109);
+  await checkAllDayAppointment(t, scheduler, 'appt-01', 0, 'head', 337);
 
   await t
     .click(scheduler.toolbar.navigator.nextButton);
@@ -162,7 +172,7 @@ test('it should render all-day appointments if showAllDayAppointments is "auto"'
   await t
     .expect(appointmentCount)
     .eql(1);
-  await checkAllDayAppointment(t, scheduler, 'appt-01', 0, true, 793);
+  await checkAllDayAppointment(t, scheduler, 'appt-01', 0, 'head', 793);
 
   await t
     .click(scheduler.toolbar.navigator.nextButton);
@@ -171,7 +181,7 @@ test('it should render all-day appointments if showAllDayAppointments is "auto"'
   await t
     .expect(appointmentCount)
     .eql(1);
-  await checkAllDayAppointment(t, scheduler, 'appt-01', 0, false, 337);
+  await checkAllDayAppointment(t, scheduler, 'appt-01', 0, undefined, 337);
 }).before(async () => createWidget(
   'dxScheduler',
   {
@@ -202,11 +212,11 @@ test('it should render all-day and multi-day appointments if showAllDayAppointme
     .expect(scheduler.getAppointmentCount())
     .eql(5);
 
-  await checkAllDayAppointment(t, scheduler, 'allDay', 0, false, 109);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 0, true, 200);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 1, true, 200);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 2, true, 200);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 3, false, 150);
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 109);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 200);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 200);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 200);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 150);
 }).before(async () => createWidget(
   'dxScheduler',
   {
