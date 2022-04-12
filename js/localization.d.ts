@@ -84,11 +84,11 @@ export interface FormatObject {
    currency?: string;
    /**
      * @docid
-     * @type Enums.CurrencySign
-     * @default 'accounting'
+     * @type boolean
+     * @default true
      * @public
      */
-    currencySign?: 'standard' | 'accounting';
+    useCurrencyAccountingStyle?: boolean;
    /**
     * @docid Format.formatter
     * @public
