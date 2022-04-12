@@ -20,10 +20,10 @@ namespace Runner.Controllers
         readonly string _completedSuitesFileName;
 
         UIModelHelper _uiModelHelper;
-        IHostingEnvironment _env;
+        IWebHostEnvironment _env;
         RunFlags _runFlags;
 
-        public MainController(IHostingEnvironment env, RunFlags runFlags)
+        public MainController(IWebHostEnvironment env, RunFlags runFlags)
         {
             ConsoleHelper.Logger.SetWorkingFolder(env.ContentRootPath);
             _env = env;
