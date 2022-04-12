@@ -259,13 +259,13 @@ class AddUrlStrategy extends BaseStrategy {
     }
 
     createKeepAspectRatioEditor($container, data, dependentEditorDataField) {
-        return this.editorInstance._createComponent($container, TextBox, {
+        return this.editorInstance._createComponent($container, TextBox, extend(true, data.editorOptions, {
             value: data.component.option('formData')[data.dataField],
             onEnterKey: data.component.option('onEditorEnterKey').bind(this.editorInstance._formDialog, data),
             onValueChanged: (e) => {
                 this.keepAspectRatio(data, { dependentEditor: this[dependentEditorDataField + 'Editor'], e });
             }
-        });
+        }));
     }
 
     getItemsConfig() {

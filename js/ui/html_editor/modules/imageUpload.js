@@ -8,7 +8,6 @@ import { urlUpload, correctSlashesInUrl } from '../utils/image_uploader_helper';
 import { addNamespace } from '../../../events/utils/index';
 import FileUploader from '../../file_uploader';
 
-
 const MODULE_NAMESPACE = 'dxHtmlEditorImageUpload';
 const IMAGE_UPLOAD_EVENT = addNamespace('dxcontextmenu', MODULE_NAMESPACE);
 
@@ -71,11 +70,19 @@ if(Quill) {
                 onUploaded: this._onUploaded.bind(this),
             }, this.options.fileUploaderOptions);
 
-            this.editorInstance._createComponent($container, FileUploader, fileUploaderOptions);
-
-            this._fileUploader = $container.dxFileUploader('instance');
+            this._fileUploader = this.editorInstance._createComponent($container, FileUploader, fileUploaderOptions);
 
             return $container;
+        }
+
+        _onUploaded(data) {
+            const selection = this.quill.getSelection();
+            const pasteIndex = selection ? selection.index : this.quill.getLength();
+
+            const imageUrl = correctSlashesInUrl(this.options.uploadDirectory) + data.file.name;
+            urlUpload(this.quill, pasteIndex, { src: imageUrl });
+
+            this.quill.setSelection(pasteIndex + 1, 0);
         }
 
         _attachEvents() {
@@ -99,7 +106,7 @@ if(Quill) {
             this.saveValueChangeEvent(e);
             const files = Array.from(e.originalEvent[filesField].files || []);
 
-            const uploads = files.filter((file) => this._isImage(file));
+            const uploads = files;
 
             if(uploads.length > 0) {
                 e.preventDefault();
@@ -107,20 +114,6 @@ if(Quill) {
                 this._fileUploader.option('value', uploads);
                 this._fileUploader.upload();
             }
-        }
-
-        _onUploaded(data) {
-            const selection = this.quill.getSelection();
-            const pasteIndex = selection ? selection.index : this.quill.getLength();
-
-            const imageUrl = correctSlashesInUrl(this.options.uploadDirectory) + data.file.name;
-            urlUpload(this.quill, pasteIndex, { src: imageUrl });
-
-            this.quill.setSelection(pasteIndex + 1, 0);
-        }
-
-        _isImage(file) {
-            return !!file.type.match(/^image\/(a?png|bmp|gif|p?jpe?g|svg|vnd\.microsoft\.icon|webp)/i);
         }
 
         clean() {

@@ -36,7 +36,6 @@ const fakeFile = {
     type: 'image/jpeg',
     lastModifiedDate: Date.now()
 };
-// const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
 
 const fakeFile2 = {
     name: 'fakefile2.jpeg',
@@ -44,7 +43,6 @@ const fakeFile2 = {
     type: 'image/jpeg',
     lastModifiedDate: Date.now()
 };
-// const fakeFile2Blob = createBlobFile(fakeFile2.name, fakeFile2.size, fakeFile2.type);
 
 const fakeFileText = {
     name: 'fakefile1.txt',
@@ -52,7 +50,6 @@ const fakeFileText = {
     type: 'text/plain',
     lastModifiedDate: Date.now()
 };
-// const fakeFileTextBlob = createBlobFile(fakeFileText.name, fakeFileText.size, fakeFile2.type);
 
 const serverUploadMarkup = '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"></p>';
 
@@ -450,8 +447,10 @@ module('Image uploading integration', {
         const $form = this.getFormElement();
         const sizeEditors = this.getSizeEditors($form);
 
-        assert.strictEqual(sizeEditors.heightEditor.option('value'), undefined, 'height value is empty');
-        assert.strictEqual(sizeEditors.widthEditor.option('value'), undefined, 'width value is empty');
+        assert.strictEqual(sizeEditors.heightEditor.option('value'), '', 'height value is empty');
+        assert.strictEqual(sizeEditors.widthEditor.option('value'), '', 'width value is empty');
+        assert.ok(sizeEditors.widthEditor.option('inputAttr.id'), 'label id is defined');
+        assert.ok(sizeEditors.heightEditor.option('inputAttr.id'), 'label id is defined');
     });
 
     test('check file uploading by url with dimentions', function(assert) {
@@ -575,7 +574,7 @@ module('Image uploading integration', {
 
         sizeEditors.widthEditor.option('value', '50');
 
-        assert.strictEqual(sizeEditors.heightEditor.option('value'), undefined, 'height value is recalculated');
+        assert.strictEqual(sizeEditors.heightEditor.option('value'), '', 'height value is recalculated');
         assert.strictEqual(sizeEditors.widthEditor.option('value'), '50', 'width value is recalculated');
     });
 
@@ -681,22 +680,22 @@ module('Image uploading integration', {
     [{
         testNamePart: 'one file',
         files: [fakeFile],
-        uploadCallCount: 1,
+        uploadedStatus: true,
         expectedMarkup: serverUploadMarkup
     }, {
         testNamePart: 'image and text files',
         files: [fakeFile, fakeFileText],
-        uploadCallCount: 1,
+        uploadedStatus: true,
         expectedMarkup: serverUploadMarkup
     }, {
         testNamePart: 'one text file',
         files: [fakeFileText],
-        uploadCallCount: 0,
+        uploadedStatus: undefined,
         expectedMarkup: markup
     }, {
         testNamePart: 'two image files',
         files: [fakeFile, fakeFile2],
-        uploadCallCount: 1,
+        uploadedStatus: true,
         expectedMarkup: '<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"><img src="/uploadDirectory/fakefile2.jpeg"></p>'
     }].forEach((data) => {
         test(`check upload to the server after drop ${data.testNamePart}`, function(assert) {
@@ -711,16 +710,14 @@ module('Image uploading integration', {
             this._nativeFormData = window.FormData;
             window.FormData = this.formDataMock.FormData;
 
-            const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
-            const uploadStub = sinon.spy(fileUploader, 'upload');
-
             const files = data.files;
             const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
             $(this.quillInstance.root).trigger(event);
 
+            const request = this.xhrMock.getInstanceAt();
             this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
 
-            assert.strictEqual(uploadStub.callCount, data.uploadCallCount, 'upload was called');
+            assert.strictEqual(request && request.uploaded, data.uploadedStatus, 'upload is called');
             assert.strictEqual(this.instance.option('value'), data.expectedMarkup, 'value is correct');
 
             window.XMLHttpRequest = this._nativeXhr;
@@ -743,16 +740,14 @@ module('Image uploading integration', {
             this._nativeFormData = window.FormData;
             window.FormData = this.formDataMock.FormData;
 
-            const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
-            const uploadStub = sinon.spy(fileUploader, 'upload');
-
             const files = data.files;
             const event = $.Event($.Event('paste', { clipboardData: { files: files } }));
             $(this.quillInstance.root).trigger(event);
 
+            const request = this.xhrMock.getInstanceAt();
             this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
 
-            assert.strictEqual(uploadStub.callCount, data.uploadCallCount, 'upload was called');
+            assert.strictEqual(request && request.uploaded, data.uploadedStatus, 'upload is called');
             assert.strictEqual(this.instance.option('value'), data.expectedMarkup, 'value is correct');
 
             window.XMLHttpRequest = this._nativeXhr;
