@@ -58,7 +58,7 @@ export const AddLoadIndexToVisibleRows = createSelector<Row[]>(
     let loadIndex = (dataState.dataOffset ?? 0) - 1;
     const newRows = visibleRows.map((row) => {
       const r = row;
-      if (row.rowType === 'data') {
+      if (r.rowType === 'data') {
         loadIndex += 1;
       }
       r.loadIndex = loadIndex;
