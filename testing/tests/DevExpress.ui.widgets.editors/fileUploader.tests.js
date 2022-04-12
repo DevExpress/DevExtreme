@@ -3229,7 +3229,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.strictEqual($fileStatusMessage.text(), customMessage, 'message was applied');
     });
 
-    QUnit.test('bytesTotal argument og the onProgress with custom uploadFile (T1081131)', function(assert) {
+    QUnit.test('bytesTotal argument of the onProgress event must not be undefined when using custom uploadFile callback (T1081131)', function(assert) {
         const progressSpy = sinon.spy();
         const files = [fakeFile];
         const $element = $('#fileuploader').dxFileUploader({
