@@ -45,6 +45,7 @@ $(() => {
               DevExpress.pdfExporter.exportDataGrid({
                 jsPDFDocument: doc,
                 component: dataGrid,
+                indent: 5,
               }).then(() => {
                 doc.save('Companies.pdf');
               });

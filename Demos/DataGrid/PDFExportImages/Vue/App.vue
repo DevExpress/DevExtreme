@@ -50,7 +50,7 @@ import DxButton from 'devextreme-vue/button';
 import {
   DxDataGrid, DxColumn, DxExport, DxToolbar, DxItem,
 } from 'devextreme-vue/data-grid';
-import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 import service from './data.js';
 
@@ -76,7 +76,7 @@ export default {
       // eslint-disable-next-line new-cap
       const doc = new jsPDF();
 
-      exportDataGridToPdf({
+      exportDataGrid({
         jsPDFDocument: doc,
         component: this.dataGrid,
         margin: {

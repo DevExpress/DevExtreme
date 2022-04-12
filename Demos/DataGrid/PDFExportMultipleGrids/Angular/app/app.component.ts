@@ -6,7 +6,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
-import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 
 import 'devextreme/data/odata/store';
@@ -65,7 +65,7 @@ export class AppComponent {
       }
     }
 
-    exportDataGridToPdf({
+    exportDataGrid({
       jsPDFDocument: doc,
       component: context.priceDataGrid.instance,
       topLeft: { x: 0, y: 5 },
@@ -75,7 +75,7 @@ export class AppComponent {
       },
     }).then(() => {
       doc.addPage();
-      exportDataGridToPdf({
+      exportDataGrid({
         jsPDFDocument: doc,
         component: context.ratingDataGrid.instance,
         topLeft: { x: 0, y: 5 },

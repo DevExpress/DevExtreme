@@ -7,7 +7,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxDataGridModule, DxTemplateModule, DxButtonModule, DxDataGridComponent,
 } from 'devextreme-angular';
-import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 import { Service, Country } from './app.service';
 
@@ -33,7 +33,7 @@ export class AppComponent {
   exportGrid() {
     const doc = new jsPDF();
     const lastPoint = { x: 0, y: 0 };
-    exportDataGridToPdf({
+    exportDataGrid({
       jsPDFDocument: doc,
       component: this.dataGrid.instance,
       topLeft: { x: 1, y: 15 },

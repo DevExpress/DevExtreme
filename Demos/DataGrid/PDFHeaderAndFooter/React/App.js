@@ -3,7 +3,7 @@ import React from 'react';
 import DataGrid, { Column, Toolbar, Item } from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
 import { jsPDF } from 'jspdf';
-import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme/pdf_exporter';
 
 import { countries } from './data.js';
 
@@ -21,7 +21,7 @@ export default function App() {
     const dataGrid = dataGridRef.current.instance;
 
     const lastPoint = { x: 0, y: 0 };
-    exportDataGridToPdf({
+    exportDataGrid({
       jsPDFDocument: doc,
       component: dataGrid,
       topLeft: { x: 1, y: 15 },

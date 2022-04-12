@@ -4,7 +4,7 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxButtonModule, DxDataGridComponent } from 'devextreme-angular';
-import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 import { Service, Customer } from './app.service';
 
@@ -29,9 +29,10 @@ export class AppComponent {
 
   exportGrid() {
     const doc = new jsPDF();
-    exportDataGridToPdf({
+    exportDataGrid({
       jsPDFDocument: doc,
       component: this.dataGrid.instance,
+      indent: 5,
     }).then(() => {
       doc.save('Companies.pdf');
     });

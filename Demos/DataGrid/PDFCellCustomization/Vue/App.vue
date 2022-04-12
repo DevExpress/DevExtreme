@@ -82,7 +82,7 @@ import {
 } from 'devextreme-vue/data-grid';
 
 import { jsPDF } from 'jspdf';
-import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme/pdf_exporter';
 
 import service from './data.js';
 
@@ -117,7 +117,7 @@ export default {
     exportGrid() {
       // eslint-disable-next-line new-cap
       const doc = new jsPDF();
-      exportDataGridToPdf({
+      exportDataGrid({
         jsPDFDocument: doc,
         component: this.dataGrid,
         columnWidths: [40, 40, 30, 30, 40],

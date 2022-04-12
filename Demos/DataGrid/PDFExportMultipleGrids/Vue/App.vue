@@ -83,7 +83,7 @@
 import DxButton from 'devextreme-vue/button';
 import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
-import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 import 'devextreme/data/odata/store';
 
@@ -136,7 +136,7 @@ export default {
       // eslint-disable-next-line new-cap
       const doc = new jsPDF();
 
-      exportDataGridToPdf({
+      exportDataGrid({
         jsPDFDocument: doc,
         component: context.priceGridInstance,
         topLeft: { x: 0, y: 5 },
@@ -146,7 +146,7 @@ export default {
         },
       }).then(() => {
         doc.addPage();
-        exportDataGridToPdf({
+        exportDataGrid({
           jsPDFDocument: doc,
           component: context.ratingGridInstance,
           topLeft: { x: 0, y: 5 },

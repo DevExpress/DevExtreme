@@ -2,7 +2,7 @@ import React from 'react';
 import Button from 'devextreme-react/button';
 import TabPanel, { Item } from 'devextreme-react/tab-panel';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
-import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 
 import 'devextreme/data/odata/store';
@@ -80,7 +80,7 @@ class App extends React.Component {
       }
     }
 
-    exportDataGridToPdf({
+    exportDataGrid({
       jsPDFDocument: doc,
       component: context.priceDataGrid,
       topLeft: { x: 0, y: 5 },
@@ -90,7 +90,7 @@ class App extends React.Component {
       },
     }).then(() => {
       doc.addPage();
-      exportDataGridToPdf({
+      exportDataGrid({
         jsPDFDocument: doc,
         component: context.ratingDataGrid,
         topLeft: { x: 0, y: 5 },

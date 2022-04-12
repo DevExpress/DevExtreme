@@ -1,7 +1,7 @@
 import React from 'react';
 import DataGrid, { Column, Toolbar, Item } from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
-import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 import service from './data.js';
 
@@ -51,7 +51,7 @@ class App extends React.Component {
     const doc = new jsPDF();
     const dataGrid = this.dataGridRef.current.instance;
 
-    exportDataGridToPdf({
+    exportDataGrid({
       jsPDFDocument: doc,
       component: dataGrid,
       margin: {
