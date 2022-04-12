@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/no-type-alias */
 import {
   PropertyType,
-} from '.';
+} from '../../js/core';
 
 import {
   assertType,
   toAssertion,
-} from '../../testing/typescript/consts';
+} from './consts';
 
 type ComplexType = {
   a: {
