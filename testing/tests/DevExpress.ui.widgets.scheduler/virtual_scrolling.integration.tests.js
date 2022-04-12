@@ -2955,10 +2955,10 @@ module('Virtual scrolling integration', () => {
         [
             {
                 groupOrientation: 'horizontal',
-                expectedReducers: [true, false, true, true, false, true]
+                expectedReducers: ['head', 'tail', 'head', 'head', 'tail', 'head']
             }, {
                 groupOrientation: 'vertical',
-                expectedReducers: [true, false, true]
+                expectedReducers: ['head', 'tail', 'head']
             }
         ].forEach(option => {
             test(`Reccurrent appointment should not have a reducer icon if ${option.groupOrientation} group orientation`, function(assert) {
@@ -3003,7 +3003,7 @@ module('Virtual scrolling integration', () => {
 
                 assert.equal(settings.length, expectedReducers.length, 'Appointment settings amount is correct');
                 expectedReducers.forEach((expected, i) => {
-                    assert.equal(!!settings[i].appointmentReduced, expected, `Part "${i}" has correct reducer state`);
+                    assert.equal(settings[i].appointmentReduced, expected, `Part "${i}" has correct reducer state`);
                 });
             });
         });
