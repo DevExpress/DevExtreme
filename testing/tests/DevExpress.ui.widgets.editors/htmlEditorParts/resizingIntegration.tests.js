@@ -212,7 +212,7 @@ module('Resizing integration', {
         assert.notOk($resizeFrame.is(':visible'), 'Resize frame isn\'t visible, image isn\'t resizable');
     });
 
-    test('editor should have initial range after click on image', function(assert) {
+    test('editor should move selection to the image after click on image', function(assert) {
         this.options.mediaResizing = { enabled: true };
         this.createWidget();
 
@@ -222,7 +222,7 @@ module('Resizing integration', {
 
         const { index, length } = this.instance.getSelection();
 
-        assert.strictEqual(index, 0, 'by default - zero index');
+        assert.strictEqual(index, 1, 'by image - index is 1');
         assert.strictEqual(length, 0, 'by default - zero length');
     });
 });

@@ -389,7 +389,7 @@
     }
 
     .dx-fileuploader-content {
-      background-color: $htmleditor-border-color;
+      background-color: color.change($htmleditor-border-color, $alpha: 0.8);
     }
   }
 }

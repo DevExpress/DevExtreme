@@ -318,7 +318,7 @@ module('Image uploading integration', {
             const base64EditorInstance = $base64Editor.dxCheckBox('instance');
 
             assert.strictEqual(base64EditorInstance.option('value'), false, 'base64 checkbox default value is false');
-            assert.strictEqual(base64EditorInstance.option('disabled'), false, 'base64 checkbox is not disabled');
+            assert.strictEqual(base64EditorInstance.option('visible'), true, 'base64 checkbox is visible');
         });
 
         test('check file uploading form base64 checkbox if mode = "base64"', function(assert) {
@@ -331,7 +331,7 @@ module('Image uploading integration', {
             const base64EditorInstance = $base64Editor.dxCheckBox('instance');
 
             assert.strictEqual(base64EditorInstance.option('value'), true, 'base64 checkbox default value is true');
-            assert.strictEqual(base64EditorInstance.option('disabled'), true, 'base64 checkbox is disabled');
+            assert.strictEqual(base64EditorInstance.option('visible'), false, 'base64 checkbox is hidden');
         });
 
         test('check file uploading in base64 format', function(assert) {

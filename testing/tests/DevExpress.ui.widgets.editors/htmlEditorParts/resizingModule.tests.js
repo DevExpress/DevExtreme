@@ -36,7 +36,10 @@ const moduleConfig = {
             on: () => {},
             off: () => {},
             getSelection: () => this.selectedRange,
-            setSelection: (index, length) => { this.selectedRange = { index, length }; }
+            setSelection: (index, length) => { this.selectedRange = { index, length }; },
+            scroll: {
+                find: () => null
+            }
         };
 
         this.options = {
@@ -434,8 +437,8 @@ module('Resizing module', moduleConfig, () => {
         assert.deepEqual(this.selectedRange, { index: 0, length: 0 }, 'editor has an default range');
     });
 
-    test('module should keep actual range', function(assert) {
-        const actualRange = { index: 5, length: 0 };
+    test('module should try to move selection to the image', function(assert) {
+        const actualRange = { index: 0, length: 0 };
         this.options.enabled = true;
         this.selectedRange = actualRange;
         new Resizing(this.quillMock, this.options);

@@ -62,7 +62,7 @@ export class ImageUploader {
     }
 
     getActiveTabIndex() {
-        return this.tabPanelIndex;
+        return this.isUpdating ? 0 : this.tabPanelIndex;
     }
 
     getFormData() {
@@ -285,6 +285,7 @@ class AddUrlStrategy extends BaseStrategy {
                         value: 'keepRatio',
                     }],
                     hint: localizationMessage.format(DIALOG_IMAGE_KEEP_ASPECT_RATIO),
+                    focusStateEnabled: false,
                     keyExpr: 'value',
                     stylingMode: 'outlined',
                     selectionMode: 'multiple',
@@ -430,7 +431,7 @@ class FileStrategy extends BaseStrategy {
                 editorType: 'dxCheckBox',
                 editorOptions: {
                     value: this.useBase64,
-                    disabled: !this.isBase64Editable(),
+                    visible: this.isBase64Editable(),
                     text: localizationMessage.format(DIALOG_IMAGE_ENCODE_TO_BASE64),
                     onValueChanged: (e) => {
                         if(this.isBase64Editable()) {
