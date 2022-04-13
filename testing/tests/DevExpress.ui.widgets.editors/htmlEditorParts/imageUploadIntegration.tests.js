@@ -132,6 +132,7 @@ module('Image uploading integration', {
             assert.strictEqual(formInstance.option('width'), devices.current().deviceType === 'phone' ? '100%' : 493, 'has correct form width');
             assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
             assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+            assert.ok($(DIALOG_OK_BUTTON_SELECTOR).first().is(':visible'), 'dialog add button is visible');
         };
 
         this.checkFileTabConfigs = (assert, { formItems, formInstance }) => {
@@ -143,6 +144,7 @@ module('Image uploading integration', {
             assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
             assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
             assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
+            assert.notOk($(DIALOG_OK_BUTTON_SELECTOR).first().is(':visible'), 'dialog add button is hidden');
         };
 
         this.checkUrlTabConfigs = (assert, { formItems, formInstance, isUpdating = false }) => {

@@ -91,7 +91,7 @@ if(Quill) {
         }
 
         _detachEvents() {
-            eventsEngine.off(this.editorInstance._getContent(), IMAGE_UPLOAD_EVENT);
+            eventsEngine.off(this.quill.root, MODULE_NAMESPACE, IMAGE_UPLOAD_EVENT);
         }
 
         _dropHandler(e) {

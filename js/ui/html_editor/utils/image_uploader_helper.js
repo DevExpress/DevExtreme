@@ -120,13 +120,19 @@ export class ImageUploader {
                 this.isUpdating
                     ? DIALOG_IMAGE_UPDATE_BUTTON
                     : DIALOG_IMAGE_ADD_BUTTON),
+            'toolbarItems[0].options.visible': !this.shouldHideAddButton(),
             'wrapperAttr': { class: wrapperClasses }
         });
+    }
+
+    shouldHideAddButton() {
+        return !this.isUpdating && this.actualTabs.length === 1 && this.actualTabs[0] !== 'url';
     }
 
     resetDialogPopupOptions() {
         this.editorInstance.formDialogOption({
             'toolbarItems[0].options.text': localizationMessage.format('OK'),
+            'toolbarItems[0].options.visible': true,
             wrapperAttr: { class: FORM_DIALOG_CLASS }
         });
     }
