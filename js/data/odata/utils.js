@@ -252,7 +252,7 @@ const formatDotNetError = (errorObj) => {
         message = errorObj.message?.value || errorObj.message;
     }
     while((currentError = (currentError['innererror'] || currentError['internalexception']))) {
-        message = currentError.message;
+        message += currentError.message ? `\n ${currentError.message}` : '';
         if(currentError['internalexception'] && (message.indexOf('inner exception') === -1)) {
             break;
         }

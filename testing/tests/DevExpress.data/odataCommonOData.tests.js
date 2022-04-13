@@ -37,6 +37,40 @@ QUnit.test('error', function(assert) {
     assert.ok(r.error);
     assert.equal(r.error.message, 'Something goes wrong');
 });
+QUnit.test('empty innererror (T1081655)', function(assert) {
+    const e = {
+        error: {
+            message: 'Something goes wrong',
+            ['innererror']: {}
+        }
+    };
+
+    const r = interpretJsonFormat(e, 'success');
+
+    assert.ok(r.error);
+    assert.equal(r.error.message, 'Something goes wrong');
+});
+
+QUnit.test('innererror (T1081655)', function(assert) {
+    const e = {
+        error: {
+            message: 'Something goes wrong',
+            ['innererror']: {
+                message: 'Inner error 1',
+                ['innererror']: {
+                    message: 'Inner error 2',
+                }
+            }
+        }
+    };
+
+    const r = interpretJsonFormat(e, 'success');
+
+    assert.ok(r.error);
+    assert.equal(r.error.message, `Something goes wrong
+ Inner error 1
+ Inner error 2`);
+});
 
 QUnit.test('list', function(assert) {
     const a = {
@@ -105,6 +139,41 @@ QUnit.test('error', function(assert) {
     assert.equal(r.error.message, 'Something goes wrong');
 });
 
+QUnit.test('empty innererror (T1081655)', function(assert) {
+    const e = {
+        error: {
+            message: 'Something goes wrong',
+            ['innererror']: {}
+        }
+    };
+
+    const r = interpretJsonFormat(e, 'success');
+
+    assert.ok(r.error);
+    assert.equal(r.error.message, 'Something goes wrong');
+});
+
+QUnit.test('innererror (T1081655)', function(assert) {
+    const e = {
+        error: {
+            message: 'Something goes wrong',
+            ['innererror']: {
+                message: 'Inner error 1',
+                ['innererror']: {
+                    message: 'Inner error 2',
+                }
+            }
+        }
+    };
+
+    const r = interpretJsonFormat(e, 'success');
+
+    assert.ok(r.error);
+    assert.equal(r.error.message, `Something goes wrong
+ Inner error 1
+ Inner error 2`);
+});
+
 QUnit.module('OData 4');
 QUnit.test('key converters', function(assert) {
     assert.equal(converters.String(1), '1', 'string');
@@ -138,6 +207,41 @@ QUnit.test('error', function(assert) {
 
     assert.ok(r.error);
     assert.equal(r.error.message, 'Something goes wrong');
+});
+
+QUnit.test('empty innererror (T1081655)', function(assert) {
+    const e = {
+        error: {
+            message: 'Something goes wrong',
+            ['innererror']: {}
+        }
+    };
+
+    const r = interpretJsonFormat(e, 'success');
+
+    assert.ok(r.error);
+    assert.equal(r.error.message, 'Something goes wrong');
+});
+
+QUnit.test('innererror (T1081655)', function(assert) {
+    const e = {
+        error: {
+            message: 'Something goes wrong',
+            ['innererror']: {
+                message: 'Inner error 1',
+                ['innererror']: {
+                    message: 'Inner error 2',
+                }
+            }
+        }
+    };
+
+    const r = interpretJsonFormat(e, 'success');
+
+    assert.ok(r.error);
+    assert.equal(r.error.message, `Something goes wrong
+ Inner error 1
+ Inner error 2`);
 });
 
 QUnit.test('list', function(assert) {
