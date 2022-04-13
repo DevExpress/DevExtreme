@@ -19,7 +19,7 @@ namespace Runner.Tools
         UrlHelper UrlHelper;
         string TestsRootPath;
 
-        public UIModelHelper(ActionContext actionContext, IHostingEnvironment env)
+        public UIModelHelper(ActionContext actionContext, IWebHostEnvironment env)
         {
             UrlHelper = new UrlHelper(actionContext);
             TestsRootPath = Path.Combine(env.ContentRootPath, "testing/tests");
