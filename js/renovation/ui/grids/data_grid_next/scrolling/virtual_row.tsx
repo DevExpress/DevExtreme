@@ -48,12 +48,16 @@ export class VirtualRowProps {
 export class VirtualRow extends JSXComponent(VirtualRowProps) {
   get virtualCells(): { key: number; height: number; cellClass: string }[] {
     const { height, cellClasses } = this.props;
-    return Array(cellClasses.length).fill(height).map((item, index) => (
-      {
-        height: item,
+    const cells: { key: number; height: number; cellClass: string }[] = [];
+
+    cellClasses.forEach((c_class, index) => {
+      cells.push({
+        height,
         key: index,
-        cellClass: cellClasses[index],
-      }
-    ));
+        cellClass: c_class,
+      });
+    });
+
+    return cells;
   }
 }
