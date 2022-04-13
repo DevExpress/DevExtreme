@@ -180,7 +180,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._setRowsViewAttributes();
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
-                needUpdateFocus = this._isNeedFocus ? !isAppend : this._isHiddenFocus && isFullUpdate && !e.virtualColumnsScrolling;
+                needUpdateFocus = this._isNeedFocus ? !isAppend : this._isHiddenFocus && isFullUpdate && !e?.virtualColumnsScrolling;
                 needUpdateFocus && this._updateFocus(true);
             }
         });
