@@ -158,14 +158,15 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field6 itemElement:DxElement
+     * @type_function_param1_field7 itemIndex:number
+     * @type_function_param1_field8 node:dxTreeViewNode
+
      * @action
      * @public
      */
@@ -174,14 +175,14 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:Number
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field6 itemElement:DxElement
+     * @type_function_param1_field7 itemIndex:Number
+     * @type_function_param1_field8 node:dxTreeViewNode
      * @action
      * @public
      */
@@ -190,10 +191,10 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field6 itemElement:DxElement
+     * @type_function_param1_field7 itemIndex:number
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
      * @type_function_param1_field2 element:DxElement
@@ -206,14 +207,14 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:Number
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field6 itemElement:DxElement
+     * @type_function_param1_field7 itemIndex:Number
+     * @type_function_param1_field8 node:dxTreeViewNode
      * @action
      * @public
      */
@@ -222,14 +223,14 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field6 itemElement:DxElement
+     * @type_function_param1_field7 itemIndex:number
+     * @type_function_param1_field8 node:dxTreeViewNode
      * @action
      * @public
      */
@@ -253,13 +254,13 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 node:dxTreeViewNode
+     * @type_function_param1_field7 node:dxTreeViewNode
      * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field1 component:dxTreeView
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field6 itemData:object
-     * @type_function_param1_field7 itemIndex:number
+     * @type_function_param1_field4 itemData:object
+     * @type_function_param1_field6 itemIndex:number
      * @action
      * @public
      */

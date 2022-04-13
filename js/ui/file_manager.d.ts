@@ -295,10 +295,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field1 component:dxFileManager
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field6 itemElement:DxElement
+     * @type_function_param1_field7 itemIndex:number
+     * @type_function_param1_field4 event:event
      * @type_function_param1_field8 fileSystemItem:FileSystemItem
      * @type_function_param1_field9 viewArea:Enums.FileManagerViewArea
      * @action
@@ -309,13 +309,13 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 fileSystemItem:FileSystemItem
-     * @type_function_param1_field5 targetElement:DxElement
-     * @type_function_param1_field6 cancel:boolean
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field2 component:dxFileManager
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field6 fileSystemItem:FileSystemItem
+     * @type_function_param1_field7 targetElement:DxElement
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field5 event:event
      * @type_function_param1_field8 viewArea:Enums.FileManagerViewArea
      * @action
      * @public
@@ -366,10 +366,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field1 component:dxFileManager
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field6 itemElement:DxElement
+     * @type_function_param1_field7 itemIndex:number
+     * @type_function_param1_field4 event:event
      * @action
      * @public
      */

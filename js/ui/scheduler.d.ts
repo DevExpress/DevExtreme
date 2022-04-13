@@ -244,46 +244,46 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 itemData:any
        * @type_function_param1_field4 itemElement:DxElement
-       * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field7 fromData:any
+       * @type_function_param1_field5 fromData:any
+       * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+       * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field8 toData:any
        */
       onAdd?: ((e: AppointmentDraggingAddEvent) => void);
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field1 component:dxScheduler
-       * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 cancel:boolean
+       * @type_function_param1_field1 cancel:boolean
+       * @type_function_param1_field2 component:dxScheduler
+       * @type_function_param1_field3 event:event
        * @type_function_param1_field4 itemData:any
        * @type_function_param1_field5 itemElement:DxElement
-       * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field8 fromData:any
+       * @type_function_param1_field6 fromData:any
+       * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+       * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field9 toData:any
        */
       onDragEnd?: ((e: AppointmentDraggingEndEvent) => void);
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field1 component:dxScheduler
-       * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 cancel:boolean
+       * @type_function_param1_field1 cancel:boolean
+       * @type_function_param1_field2 component:dxScheduler
+       * @type_function_param1_field3 event:event
        * @type_function_param1_field4 itemData:any
        * @type_function_param1_field5 itemElement:DxElement
-       * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field8 fromData:any
+       * @type_function_param1_field6 fromData:any
+       * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+       * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field9 toData:any
        */
       onDragMove?: ((e: AppointmentDraggingMoveEvent) => void);
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field1 component:dxScheduler
-       * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 cancel:boolean
+       * @type_function_param1_field1 cancel:boolean
+       * @type_function_param1_field2 component:dxScheduler
+       * @type_function_param1_field3 event:event
        * @type_function_param1_field4 itemData:any
        * @type_function_param1_field5 itemElement:DxElement
        * @type_function_param1_field6 fromData:any
@@ -296,9 +296,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 itemData:any
        * @type_function_param1_field4 itemElement:DxElement
-       * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field7 fromData:any
+       * @type_function_param1_field5 fromData:any
+       * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+       * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
        */
       onRemove?: ((e: AppointmentDraggingRemoveEvent) => void);
       /**
@@ -548,14 +548,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field5 targetedAppointmentData:dxSchedulerAppointment
-     * @type_function_param1_field6 appointmentElement:DxElement
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 cancel:Boolean
+     * @type_function_param1_field1 cancel:Boolean
+     * @type_function_param1_field2 component:dxScheduler
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field7 targetedAppointmentData:dxSchedulerAppointment
+     * @type_function_param1_field8 appointmentElement:DxElement
      * @action
      * @public
      */
@@ -568,10 +568,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field5 targetedAppointmentData:dxSchedulerAppointment
-     * @type_function_param1_field6 appointmentElement:DxElement
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field6 targetedAppointmentData:dxSchedulerAppointment
+     * @type_function_param1_field7 appointmentElement:DxElement
      * @action
      * @public
      */
@@ -581,14 +581,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field5 targetedAppointmentData:dxSchedulerAppointment
-     * @type_function_param1_field6 appointmentElement:DxElement
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 cancel:Boolean
+     * @type_function_param1_field1 cancel:Boolean
+     * @type_function_param1_field2 component:dxScheduler
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field7 targetedAppointmentData:dxSchedulerAppointment
+     * @type_function_param1_field8 appointmentElement:DxElement
      * @action
      * @public
      */
@@ -623,13 +623,13 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field5 form:dxForm
-     * @type_function_param1_field6 popup:dxPopup
-     * @type_function_param1_field7 cancel:Boolean
+     * @type_function_param1_field1 cancel:Boolean
+     * @type_function_param1_field2 component:dxScheduler
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field6 form:dxForm
+     * @type_function_param1_field7 popup:dxPopup
      * @action
      * @public
      */
@@ -680,13 +680,13 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 cellData:object
-     * @type_function_param1_field5 cellElement:DxElement
-     * @type_function_param1_field6 event:event
-     * @type_function_param1_field7 cancel:Boolean
+     * @type_function_param1_field1 cancel:Boolean
+     * @type_function_param1_field2 component:dxScheduler
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 cellData:object
+     * @type_function_param1_field7 cellElement:DxElement
      * @action
      * @public
      */
@@ -699,9 +699,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 cellData:object
-     * @type_function_param1_field5 cellElement:DxElement
-     * @type_function_param1_field6 event:event
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 cellData:object
+     * @type_function_param1_field6 cellElement:DxElement
      * @action
      * @public
      */

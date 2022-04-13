@@ -6163,7 +6163,6 @@ const JSPdfWordWrapTests = {
                     'text,F1,45,50.75,{baseline:middle}',
                     'setTextColor,#000000',
                     'deleted text',
-                    'setLineWidth,0.5',
                     'rect,40,40,100,21.5',
                     'rect,40,101.5,100,48931',
                     'setFontSize,16',

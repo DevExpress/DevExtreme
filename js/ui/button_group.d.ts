@@ -92,10 +92,10 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @type_function_param1_field1 component:dxButtonGroup
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field6 itemElement:DxElement
+     * @type_function_param1_field7 itemIndex:number
+     * @type_function_param1_field4 event:event
      * @action
      * @public
      */
