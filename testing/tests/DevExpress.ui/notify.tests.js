@@ -127,6 +127,18 @@ QUnit.module('notify', {
             this.clock.tick(100);
         });
 
+        QUnit.test('delete previous direction class on container', function(assert) {
+            const direction = 'up';
+            const newDirection = 'down';
+            notify(this.options, { ...this.stack, direction });
+            assert.equal($(`.${TOAST_STACK}-${direction}-direction`).length, 1);
+
+            notify(this.options, { ...this.stack, direction: newDirection });
+            assert.equal($(`.${TOAST_STACK}-${direction}-direction`).length, 0);
+
+            this.clock.tick(100);
+        });
+
         QUnit.test('set container option as a toast stack element', function(assert) {
             notify(this.options, this.stack);
 
