@@ -14,7 +14,6 @@ if(Quill) {
         constructor(quill, options) {
             super(quill, options);
 
-            this.options = options;
             this.quill = quill;
 
             this.addCleanCallback(this.clean.bind(this));
@@ -33,13 +32,6 @@ if(Quill) {
         _clickHandler(e) {
             if(this._isAllowedTarget(e.target)) {
                 this._adjustSelection(e);
-            }
-        }
-
-        _doubleClickHandler(e) {
-            if(this._isAllowedTarget(e.target)) {
-                this._adjustSelection(e);
-                this._formatHandlers['image']();
             }
         }
 
