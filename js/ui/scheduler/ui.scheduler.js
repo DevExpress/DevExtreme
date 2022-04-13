@@ -1403,6 +1403,7 @@ class Scheduler extends Widget {
         const result = extend({
             firstDayOfWeek: this.getFirstDayOfWeek(),
             currentView: this.currentView,
+            views: this.option('views'),
             isAdaptive: this.option('adaptivityEnabled'),
             tabIndex: this.option('tabIndex'),
             focusStateEnabled: this.option('focusStateEnabled'),
