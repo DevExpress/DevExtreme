@@ -1311,7 +1311,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[10].key, 11, 'last visible row key on the first page after srolling up to top');
     });
 
-    QUnit.test('New mode. Rows should be rendered properly when the page size is changed, rowRenderingMode is virtual and max height (T1054920)', function(assert) {
+    QUnit.test('New mode. No data text should not be shown when rowRenderingMode is virtual and max height (T1054920)', function(assert) {
         // arrange
         const getData = function() {
             const items = [];
@@ -1323,6 +1323,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             }
             return items;
         };
+
         $('#dataGrid').css('max-height', '600px');
         const dataGrid = createDataGrid({
             dataSource: getData(),
@@ -1342,7 +1343,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
                 showPageSizeSelector: true
             },
         });
-
         this.clock.tick(300);
         let visibleRows = dataGrid.getVisibleRows();
 
@@ -1376,16 +1376,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.ok(!$noDataElement.is(':visible'), 'No data element is hidden');
-
-        // act
-        this.clock.tick(300);
-        visibleRows = dataGrid.getVisibleRows();
-        $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
-
-        // assert
-        assert.equal(visibleRows.length, 10, 'visible row count after switch to 10 page size');
-        assert.equal(dataGrid.pageIndex(), 0, 'page index');
-        assert.equal($virtualRowElement.length, 0, 'no virtual rows');
 
         $('#dataGrid').css('max-height', '');
     });

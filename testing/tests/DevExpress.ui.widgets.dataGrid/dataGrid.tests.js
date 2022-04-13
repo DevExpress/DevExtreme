@@ -2748,6 +2748,53 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // assert
         assert.ok($toolbar.hasClass('dx-state-disabled'), 'toolbar is disabled');
     });
+
+    // T1077905
+    QUnit.test('The grid should not freeze after changing a dataSource and columns options together when there are band columns', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4' }],
+            columns: ['field1', { caption: 'Band column 1', isBand: true }, { dataField: 'field2', ownerBand: 1 }, { dataField: 'field3', ownerBand: 1 }, 'field4']
+        });
+        this.clock.tick(100);
+
+        // act
+        dataGrid.option({
+            dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4' }],
+            columns: ['field1', { caption: 'Band column 1', isBand: true }, { dataField: 'field2', ownerBand: 1 }, { dataField: 'field3' }, 'field4']
+        });
+        this.clock.tick(100);
+
+        // assert
+        let columns = dataGrid.getVisibleColumns(0);
+
+        assert.strictEqual(columns[0].dataField, 'field1', 'dataField of the first column of the first level');
+        assert.strictEqual(columns[0].index, 0, 'index of the first column of the first level');
+        assert.strictEqual(columns[0].isBand, undefined, 'isBand of the first column of the first level');
+        assert.strictEqual(columns[0].ownerBand, undefined, 'ownerBand of the first column of the first level');
+
+        assert.strictEqual(columns[1].caption, 'Band column 1', 'caption of the second column of the first level');
+        assert.strictEqual(columns[1].index, 1, 'index of the second column of the first level');
+        assert.strictEqual(columns[1].isBand, true, 'isBand of the second column of the first level');
+        assert.strictEqual(columns[1].ownerBand, undefined, 'ownerBand of the second column of the first level');
+
+        assert.strictEqual(columns[2].dataField, 'field3', 'dataField of the third column of the first level');
+        assert.strictEqual(columns[2].index, 3, 'index of the third column of the first level');
+        assert.strictEqual(columns[2].isBand, undefined, 'isBand of the third column of the first level');
+        assert.strictEqual(columns[2].ownerBand, undefined, 'ownerBand of the third column of the first level');
+
+        assert.strictEqual(columns[3].dataField, 'field4', 'dataField of the fourth column of the first level');
+        assert.strictEqual(columns[3].index, 4, 'index of the fourth column of the first level');
+        assert.strictEqual(columns[3].isBand, undefined, 'isBand of the fourth column of the first level');
+        assert.strictEqual(columns[3].ownerBand, undefined, 'ownerBand of the fourth column of the first level');
+
+        columns = dataGrid.getVisibleColumns(1);
+
+        assert.strictEqual(columns[0].dataField, 'field2', 'dataField of the first column of the second level');
+        assert.strictEqual(columns[0].index, 2, 'index of the first column of the second level');
+        assert.strictEqual(columns[0].isBand, undefined, 'isBand of the first column of the second level');
+        assert.strictEqual(columns[0].ownerBand, 1, 'ownerBand of the first column of the second level');
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {

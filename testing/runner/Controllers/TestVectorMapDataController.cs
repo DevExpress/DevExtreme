@@ -42,9 +42,9 @@ namespace Runner.Controllers
             }
         }
 
-        IHostingEnvironment _env;
+        IWebHostEnvironment _env;
 
-        public TestVectorMapDataController(IHostingEnvironment env)
+        public TestVectorMapDataController(IWebHostEnvironment env)
         {
             _env = env;
             ConsoleHelper.Logger.SetWorkingFolder(env.ContentRootPath);

@@ -1,7 +1,7 @@
 name: Additional QUnit
 
 concurrency:
-  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: ubuntu-latest
     name: Build
     timeout-minutes: 15
 
@@ -35,6 +35,10 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
+      env:
+        DEVEXTREME_TEST_CI: "true"
+        DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
       run: npm run build:dev
       
     - name: Zip artifacts 
@@ -50,7 +54,7 @@ jobs:
 
   qunit-tests:
     needs: build
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: ubuntu-latest
     name: ${{ matrix.envs.name }}
     timeout-minutes: 30
     strategy:
@@ -119,6 +123,21 @@ jobs:
         name: devextreme-artifacts
     # Prepare fast re-run end
 
+    - name: Setup firefox profile
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        mkdir -p /tmp/firefox-profile
+        for p in \
+        '"browser.shell.checkDefaultBrowser", false' \
+        '"datareporting.policy.dataSubmissionEnabled", false' \
+        '"font.name-list.monospace.x-western", "Liberation Mono"' \
+        '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
+        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
+    - name: Setup utils
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
+
     - name: Get sources
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/checkout@v2
@@ -186,7 +205,7 @@ jobs:
         if-no-files-found: ignore
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [build, qunit-tests]
     if: always() && contains(needs.*.result, 'failure')

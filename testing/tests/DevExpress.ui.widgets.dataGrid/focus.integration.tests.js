@@ -4088,6 +4088,49 @@ QUnit.module('View\'s focus', {
             assert.strictEqual($focusedRowElement.attr('aria-rowindex'), '2', 'aria-rowindex');
         });
     });
+
+    QUnit.test('Fixed cells should be focused after navigating to focused row', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [
+                { id: 1, name: 'name 1' },
+                { id: 2, name: 'name 2' },
+                { id: 3, name: 'name 3' },
+                { id: 4, name: 'name 4' },
+            ],
+            columns: [{
+                dataField: 'id',
+                fixed: true,
+            }, {
+                dataField: 'name',
+                fixed: false,
+            }],
+            height: 100,
+            keyExpr: 'id',
+            focusedRowEnabled: true,
+            scrolling: {
+                mode: 'virtual',
+            },
+        });
+        this.clock.tick(300);
+
+        // act
+        let rowIndex = this.dataGrid.getRowIndexByKey(4);
+        this.dataGrid.option('focusedRowIndex', rowIndex);
+        this.clock.tick(100);
+
+        // assert
+        rowIndex = this.dataGrid.getRowIndexByKey(4);
+        const row = this.dataGrid.getVisibleRows()[rowIndex];
+        assert.strictEqual(row.cells.length, 2);
+
+        row.cells.forEach((cell) => {
+            const $cell = $(cell.cellElement);
+            const $row = $cell.parent();
+
+            assert.ok($row.hasClass('dx-row-focused'));
+        });
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {

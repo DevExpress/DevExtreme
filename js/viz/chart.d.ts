@@ -953,16 +953,16 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
-     * @type_function_param1_field6 rangeEnd:Date|Number:deprecated(range)
-     * @type_function_param1_field7 axis:chartAxisObject
-     * @type_function_param1_field8 range:VizRange
-     * @type_function_param1_field9 previousRange:VizRange
-     * @type_function_param1_field10 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:dxChart
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 rangeStart:Date|Number:deprecated(range)
+     * @type_function_param1_field7 rangeEnd:Date|Number:deprecated(range)
+     * @type_function_param1_field8 axis:chartAxisObject
+     * @type_function_param1_field9 range:VizRange
+     * @type_function_param1_field10 previousRange:VizRange
      * @type_function_param1_field11 actionType:Enums.ChartZoomPanActionType
      * @type_function_param1_field12 zoomFactor:Number
      * @type_function_param1_field13 shift:Number
@@ -975,13 +975,13 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 axis:chartAxisObject
-     * @type_function_param1_field6 range:VizRange
-     * @type_function_param1_field7 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:dxChart
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 axis:chartAxisObject
+     * @type_function_param1_field7 range:VizRange
      * @type_function_param1_field8 actionType:Enums.ChartZoomPanActionType
      * @notUsedInTheme
      * @action
@@ -1569,6 +1569,13 @@ export interface dxChartCommonAxisSettings {
      * @public
      */
     discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
+    /**
+     * @docid dxChartOptions.commonAxisSettings.aggregatedPointsPosition
+     * @type Enums.AggregatedPointsPosition
+     * @default 'betweenTicks'
+     * @public
+     */
+     aggregatedPointsPosition?: 'betweenTicks' | 'crossTicks';
     /**
      * @docid dxChartOptions.commonAxisSettings.endOnTick
      * @default undefined
@@ -3709,11 +3716,11 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      */
     visible?: boolean;
     /**
-     * @docid dxChartSeriesTypes.CommonSeries.label.pattern
+     * @docid dxChartSeriesTypes.CommonSeries.label.displayFormat
      * @default undefined
      * @public
      */
-    pattern?: string;
+     displayFormat?: string;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeriesPoint {

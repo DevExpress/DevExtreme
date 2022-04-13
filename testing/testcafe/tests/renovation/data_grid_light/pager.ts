@@ -28,10 +28,10 @@ const defaultOptions = {
 
 const prepareDataGrid = async (t, { platform }) => {
   await t.resizeWindow(800, 600);
-  await createWidget(platform, 'dxDataGridLight', defaultOptions);
+  await createWidget(platform, 'dxDataGridNext', defaultOptions);
 };
 
-fixture('DataGridLight with Pager');
+fixture('DataGridNext with Pager');
 
 test('Render', async (t, { screenshotComparerOptions }) => {
   await t

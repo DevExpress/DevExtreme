@@ -64,9 +64,13 @@ export const editingRowBasedModule = {
                     this.callBase.apply(this, arguments);
                 },
 
-                _refreshCore: function() {
+                _refreshCore: function(params) {
+                    const { allowCancelEditing } = params ?? {};
                     if(this.isRowBasedEditMode()) {
+                        const hasUpdateChanges = this.getChanges().filter(it => it.type === 'update').length > 0;
+
                         this.init();
+                        allowCancelEditing && hasUpdateChanges && this._cancelEditDataCore();
                     }
 
                     this.callBase.apply(this, arguments);

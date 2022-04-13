@@ -1,7 +1,7 @@
 name: TestCafe tests
 
 concurrency:
-  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
@@ -19,7 +19,7 @@ jobs:
           { name: "wip-renovation", inProgressRenovation: true },
           { name: "default" },
         ]
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
@@ -72,12 +72,17 @@ jobs:
           { componentFolder: "navigation", name: "navigation (2/4)", quarantineMode: false, indices: "2/4" },
           { componentFolder: "navigation", name: "navigation (3/4)", quarantineMode: false, indices: "3/4" },
           { componentFolder: "navigation", name: "navigation (4/4)", quarantineMode: false, indices: "4/4" },
-          { componentFolder: "renovation", name: "renovation (jquery) (1/2)", platform: "jquery", quarantineMode: false, inProgressRenovation: true, indices: "1/2" },
-          { componentFolder: "renovation", name: "renovation (jquery) (2/2)", platform: "jquery", quarantineMode: false, inProgressRenovation: true, indices: "2/2" },
-          { componentFolder: "renovation", name: "renovation (react)", platform: "react", quarantineMode: false, inProgressRenovation: true },
-          { componentFolder: "renovation", name: "renovation (angular)", platform: "angular", quarantineMode: false, inProgressRenovation: true }
+          { componentFolder: "renovation", name: "renovation (jquery) (1/4)", platform: "jquery", quarantineMode: false, inProgressRenovation: true, indices: "1/4" },
+          { componentFolder: "renovation", name: "renovation (jquery) (2/4)", platform: "jquery", quarantineMode: false, inProgressRenovation: true, indices: "2/4" },
+          { componentFolder: "renovation", name: "renovation (jquery) (3/4)", platform: "jquery", quarantineMode: false, inProgressRenovation: true, indices: "3/4" },
+          { componentFolder: "renovation", name: "renovation (jquery) (4/4)", platform: "jquery", quarantineMode: false, inProgressRenovation: true, indices: "4/4" },
+          { componentFolder: "renovation", name: "renovation (react) (1/4)", platform: "react", quarantineMode: false, indices: "1/4" },
+          { componentFolder: "renovation", name: "renovation (react) (2/4)", platform: "react", quarantineMode: false, indices: "2/4" },
+          { componentFolder: "renovation", name: "renovation (react) (3/4)", platform: "react", quarantineMode: false, indices: "3/4" },
+          { componentFolder: "renovation", name: "renovation (react) (4/4)", platform: "react", quarantineMode: false, indices: "4/4" },
+          { componentFolder: "renovation", name: "renovation (angular)", platform: "angular", quarantineMode: false }
         ]
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: ubuntu-latest
     timeout-minutes: 90
 
     steps:
@@ -145,7 +150,7 @@ jobs:
         if-no-files-found: ignore
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [build, testcafe]
     if: always() && contains(needs.*.result, 'failure')

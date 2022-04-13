@@ -41,7 +41,6 @@ describe('Widget', () => {
         attributes: 'attributes',
         style: { display: 'none' },
         className: 'cssClasses',
-        hidden: false,
         title: 'hint',
         tabIndex: 10,
       });
