@@ -282,6 +282,31 @@ QUnit.module('Color Box', {
         }, assert);
     });
 
+    QUnit.test('Restore handle position on cancel button click after drag without changing value (T1080535)', function(assert) {
+        const colorBox = showColorBox.call(this, {
+            value: 'rgba(50, 150, 250, 0.3)',
+            editAlphaChannel: true
+        }).dxColorBox('instance');
+        const $overlay = getColorBoxOverlay();
+        const $hueHandle = $overlay.find('.dx-colorview-hue-scale-handle');
+        const positionOnInit = $hueHandle.position().top;
+
+        move($hueHandle, {
+            left: 0,
+            top: 0.01
+        });
+
+        const positionAfterDrag = $hueHandle.position().top;
+
+        assert.notStrictEqual(positionOnInit, positionAfterDrag);
+
+        colorBox.close();
+        colorBox.open();
+        const positionOnReopen = $hueHandle.position().top;
+
+        assert.equal(positionOnReopen, positionOnInit);
+    });
+
     QUnit.test('When hue was changed opacity is OK', function(assert) {
         showColorBox.call(this, {
             value: 'rgba(255, 0, 0, 0.3)',
