@@ -38,9 +38,12 @@ const SRC = [
 
 const IGNORE_PATHS_BY_FRAMEWORKS = {
     vue: [],
-    react: [],
+    react: [
+        '!js/renovation/ui/grids/data_grid_next/data_grid_next_full.tsx'
+    ],
     angular: [
         '!js/renovation/ui/pager/pager.tsx',
+        '!js/renovation/ui/grids/data_grid_next/data_grid_next_full.tsx',
     ]
 };
 
