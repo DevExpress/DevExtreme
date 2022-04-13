@@ -74,7 +74,7 @@ const getStackContainer = (key) => {
 
 const setContainerClasses = (container, direction) => {
     const containerClasses = `dx-toast-stack dx-toast-stack-${direction}-direction`;
-    container.removeClass().addClass(containerClasses);
+    container.removeAttr('class').addClass(containerClasses);
 };
 
 const setContainerStyles = (container, direction, position) => {
