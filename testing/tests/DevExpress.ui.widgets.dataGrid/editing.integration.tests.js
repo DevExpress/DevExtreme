@@ -1773,25 +1773,23 @@ QUnit.module('Editing', baseModuleConfig, () => {
     });
 
     QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)', function(assert) {
-        ['row', 'cell'].forEach(editingMode => {
-            // arrange
-            const dataGrid = createDataGrid({
-                dataSource: [{ field1: 'test1' }],
-                editing: {
-                    mode: editingMode,
-                    allowUpdating: true
-                }
-            });
-            this.clock.tick();
-
-            // act
-            $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
-            this.clock.tick();
-
-            // assert
-            assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), `cell has dx-cell-focus-disabled class in '${editingMode}' editing mode`);
-            assert.equal($(dataGrid.$element()).find('.dx-datagrid-focus-overlay').length, 0, `focus overlay is not rendered in '${editingMode}' editing mode`);
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1' }],
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            }
         });
+        this.clock.tick();
+
+        // act
+        $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), 'cell has dx-cell-focus-disabled class');
+        assert.equal($(dataGrid.$element()).find('.dx-datagrid-focus-overlay').length, 0, 'focus overlay is not rendered');
     });
 
     QUnit.test('The cell should not have dx-cell-focus-disabled class on pointerEvents.down event with row editing mode if row in editing state (T850219)', function(assert) {
