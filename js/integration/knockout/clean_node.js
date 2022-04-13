@@ -2,6 +2,7 @@ import { afterCleanData, strategyChanging, cleanData } from '../../core/element_
 // eslint-disable-next-line no-restricted-imports
 import ko from 'knockout';
 import { compare as compareVersion } from '../../core/utils/version';
+import $ from '../../core/renderer';
 
 if(ko) {
     const originalKOCleanExternalData = ko.utils.domNodeDisposal.cleanExternalData;
@@ -25,9 +26,13 @@ if(ko) {
         });
 
         ko.utils.domNodeDisposal.cleanExternalData = function(node) {
+            const $el = $(node);
+            const data = $el.data();
             node.cleanedByKo = true;
-            if(!node.cleanedByJquery) {
-                cleanData([node]);
+            if(data && data['dxKoCreation']) {
+                if(!node.cleanedByJquery) {
+                    cleanData([node]);
+                }
             }
         };
     };
