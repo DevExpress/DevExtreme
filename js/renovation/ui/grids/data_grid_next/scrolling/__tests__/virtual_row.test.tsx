@@ -27,13 +27,13 @@ describe('Virtual row', () => {
       const rowElement = tree.find('tr');
       const cellElements = rowElement.find('td');
 
-      expect(rowElement.length).toEqual(1);
+      expect(rowElement).toHaveLength(1);
       expect(rowElement.at(0).key()).toEqual('1');
       expect(rowElement.props().role).toEqual('presentation');
       expect(rowElement.hasClass(CLASSES.row)).toBe(true);
       expect(rowElement.hasClass(CLASSES.columnLines)).toBe(true);
       expect(rowElement.hasClass(CLASSES.virtualRow)).toBe(true);
-      expect(cellElements.length).toEqual(2);
+      expect(cellElements).toHaveLength(2);
       expect(cellElements.at(0).key()).toEqual('0');
       expect(cellElements.at(0).hasClass('a')).toBe(true);
       expect(cellElements.at(0).props().style?.height).toEqual(10);
