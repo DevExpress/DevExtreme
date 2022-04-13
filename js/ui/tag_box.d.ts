@@ -136,6 +136,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field2 component:dxTagBox
      * @type_function_param1_field6 selectedItems:Array<string,number,Object>
      * @action
      * @public

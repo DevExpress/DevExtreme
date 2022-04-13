@@ -124,6 +124,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field2 component:dxContextMenu
      * @action
      * @public
      */
@@ -142,6 +143,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field2 component:dxContextMenu
      * @action
      * @public
      */

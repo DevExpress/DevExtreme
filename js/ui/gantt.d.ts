@@ -478,6 +478,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field2 component:dxGantt
      * @type_function_param1_field7 readOnlyFields:Array<string>
      * @type_function_param1_field8 hiddenFields:Array<string>
      * @action
