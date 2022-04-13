@@ -32,7 +32,7 @@
     "@devextreme/vdom": "~1.2.3",
     "devexpress-diagram": "2.1.47",
     "devexpress-gantt": "3.0.19",
-    "devextreme-quill": "~1.4.4",
+    "devextreme-quill": "~1.4.5",
     "devextreme-showdown": "^1.0.1",
     "inferno": "^7.4.6",
     "inferno-compat": "^7.4.6",
