@@ -63,7 +63,7 @@ export default class ResizingModule extends BaseModule {
 
             this.updateFramePosition();
             this.showFrame();
-            this._adjustSelection(e);
+            this._adjustSelection();
         } else if(this._$target) {
             this.hideFrame();
         }
@@ -77,12 +77,8 @@ export default class ResizingModule extends BaseModule {
         };
     }
 
-    _adjustSelection(e) {
-        const blot = this.quill.scroll.find(e.target);
-        if(blot) {
-            const index = blot.offset(this.quill.scroll);
-            this.quill.setSelection(index + 1, 0);
-        } else {
+    _adjustSelection() {
+        if(!this.quill.getSelection()) {
             this.quill.setSelection(0, 0);
         }
     }
