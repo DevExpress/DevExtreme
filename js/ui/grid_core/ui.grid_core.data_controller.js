@@ -277,9 +277,9 @@ export const dataControllerModule = {
                     let filterApplied;
 
                     // B255430
-                    const updateItemsHandler = function() {
+                    const updateItemsHandler = function(change) {
                         that._columnsController.columnsChanged.remove(updateItemsHandler);
-                        that.updateItems();
+                        that.updateItems(change?.changeTypes?.virtualColumnsScrolling ? { virtualColumnsScrolling: true } : {});
                     };
 
                     if(changeTypes.sorting || changeTypes.grouping) {
