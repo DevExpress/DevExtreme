@@ -80,3 +80,40 @@ fixture`Resources`
     },
   ));
 });
+
+test('Scheduler should renders correctly if resource dataSource is not set', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const appointment1 = scheduler.getAppointment('Appt-1');
+  const appointment2 = scheduler.getAppointment('Appt-2');
+
+  await t
+    .expect(appointment1.element.exists)
+    .ok()
+    .expect(appointment2.element.exists)
+    .ok();
+}).before(async (_, { platform }) => createWidget(
+  platform,
+  'dxScheduler',
+  {
+    height: 600,
+    width: 800,
+    dataSource: [{
+      text: 'Appt-1',
+      startDate: new Date(2021, 3, 27, 10),
+      endDate: new Date(2021, 3, 27, 12),
+    }, {
+      text: 'Appt-2',
+      startDate: new Date(2021, 3, 29, 11),
+      endDate: new Date(2021, 3, 29, 13),
+    }],
+    views: ['workWeek'],
+    currentView: 'workWeek',
+    currentDate: new Date(2021, 3, 26),
+    startDayHour: 9,
+    endDayHour: 14,
+    resources: [{
+      fieldExpr: 'roomId',
+      label: 'Room',
+    }],
+  },
+));
