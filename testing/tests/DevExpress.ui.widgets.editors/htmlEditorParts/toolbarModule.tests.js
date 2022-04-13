@@ -1253,6 +1253,33 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         assert.equal(fieldsText, 'URL:Open link in new window', 'Check labels');
     });
 
+    [0, 1].forEach((length) => {
+        const testName = `"URL" field should be ${length ? 'not' : ''} empty when selection length is ${length} and selection stays at link`;
+        test(testName, function(assert) {
+            const text = length ? 'T' : '';
+            const link = length ? 'http://test.com' : '';
+            this.options.items = ['link'];
+            this.quillMock.getFormat = () => {
+                return {
+                    link,
+                    target: undefined,
+                    text
+                };
+            };
+            this.quillMock.getSelection = () => { return { index: 0, length }; };
+            this.quillMock.getText = () => text;
+            new Toolbar(this.quillMock, this.options);
+            this.$element
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .trigger('dxclick');
+
+            const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+
+            assert.equal($fieldInputs.eq(0).val(), link, 'URL');
+            assert.equal($fieldInputs.eq(1).val(), text, 'Text');
+        });
+    });
+
     test('show insertTable dialog', function(assert) {
         this.options.items = ['insertTable'];
         new Toolbar(this.quillMock, this.options);

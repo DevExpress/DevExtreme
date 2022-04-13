@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
@@ -37,12 +38,15 @@ namespace Runner
                             .AddMvcCore()
                             .AddViews()
                             .AddRazorViewEngine()
-                            .AddJsonFormatters()
-                            .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
-
+                            .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+                        services.AddMvc(options => options.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
                         services.AddWebEncoders();
 
                         services.Configure<RazorViewEngineOptions>(options => options.ViewLocationExpanders.Add(new ViewLocationExpander()));
+                        services.Configure<KestrelServerOptions>(options =>
+                        {
+                            options.AllowSynchronousIO = true;
+                        });
 
                         services.AddSingleton(new RunFlags
                         {
