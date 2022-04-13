@@ -528,6 +528,7 @@ const HtmlEditor = Editor.inherit({
         this._abortUpdateContentTask();
         this._cleanCallback.empty();
         this._contentInitializedCallback.empty();
+
         this.callBase();
     },
 
