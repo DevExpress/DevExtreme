@@ -1,13 +1,12 @@
 import $ from 'jquery';
 import ImageUpload from 'ui/html_editor/modules/imageUpload';
 
-
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         this.$element = $('#htmlEditor').css({ margin: '10px' });
-        this.$table = $('<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"></p>').appendTo(this.$element);
+        this.$markup = $('<p>test text</p><p><br></p><p><img src="/uploadDirectory/fakefile1.jpeg"></p>').appendTo(this.$element);
 
         this.selectedRange = { index: 0, length: 0 };
 
@@ -29,7 +28,7 @@ const moduleConfig = {
         };
 
         this.options = {
-            _quillContainer: this.$table,
+            _quillContainer: this.$markup,
 
             editorInstance: {
                 on: () => {},

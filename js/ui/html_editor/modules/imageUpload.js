@@ -9,7 +9,6 @@ import { addNamespace } from '../../../events/utils/index';
 import FileUploader from '../../file_uploader';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorImageUpload';
-const IMAGE_UPLOAD_EVENT = addNamespace('dxcontextmenu', MODULE_NAMESPACE);
 
 const HIDDEN_FILE_UPLOADER_CLASS = 'dx-htmleditor-hidden-content';
 const FILE_UPLOADER_NAME = 'dx-htmleditor-image';
@@ -91,7 +90,7 @@ if(Quill) {
         }
 
         _detachEvents() {
-            eventsEngine.off(this.quill.root, MODULE_NAMESPACE, IMAGE_UPLOAD_EVENT);
+            eventsEngine.off(this.quill.root, MODULE_NAMESPACE);
         }
 
         _dropHandler(e) {

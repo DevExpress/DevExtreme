@@ -122,6 +122,7 @@ module('Image uploading integration', {
         };
 
         this.checkBothTabsConfigs = (assert, { formItems, formInstance, fileUploader }) => {
+            const $okButton = $(DIALOG_OK_BUTTON_SELECTOR).first();
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 1, 'has add image dialog with tabs class');
             assert.strictEqual(formItems[0].itemType, 'tabbed', 'has tabbed items');
@@ -131,11 +132,12 @@ module('Image uploading integration', {
             assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form colCount');
             assert.strictEqual(formInstance.option('width'), devices.current().deviceType === 'phone' ? '100%' : 493, 'has correct form width');
             assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
-            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
-            assert.ok($(DIALOG_OK_BUTTON_SELECTOR).first().is(':visible'), 'dialog add button is visible');
+            assert.strictEqual($okButton.text(), 'Add', 'dialog add button text is modified');
+            assert.ok($okButton.is(':visible'), 'dialog add button is visible');
         };
 
         this.checkFileTabConfigs = (assert, { formItems, formInstance }) => {
+            const $okButton = $(DIALOG_OK_BUTTON_SELECTOR).first();
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
             assert.strictEqual(formItems.length, 2, 'has correct form items count');
@@ -143,18 +145,20 @@ module('Image uploading integration', {
             assert.strictEqual(formInstance.option('width'), devices.current().deviceType === 'phone' ? '100%' : 493, 'has correct form width');
             assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
             assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
-            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
-            assert.notOk($(DIALOG_OK_BUTTON_SELECTOR).first().is(':visible'), 'dialog add button is hidden');
+            assert.strictEqual($okButton.text(), 'Add', 'dialog add button text is modified');
+            assert.notOk($okButton.is(':visible'), 'dialog add button is hidden');
         };
 
         this.checkUrlTabConfigs = (assert, { formItems, formInstance, isUpdating = false }) => {
+            const $okButton = $(DIALOG_OK_BUTTON_SELECTOR).first();
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 1, 'has add image dialog class');
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
             assert.strictEqual(formItems.length, 4, 'has correct form items count');
             assert.strictEqual(formInstance.option('colCount'), 11, 'has correct form callCount');
             assert.strictEqual(formItems[0].items || formItems[0].tabs, undefined, 'has no embeded items');
             assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), isUpdating ? 'Update Image' : 'Add Image', 'dialog title is modified');
-            assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), isUpdating ? 'Update' : 'Add', 'dialog add button text is modified');
+            assert.strictEqual($okButton.text(), isUpdating ? 'Update' : 'Add', 'dialog add button text is modified');
+            assert.ok($okButton.is(':visible'), 'dialog add button is visible');
         };
     },
     afterEach: function() {

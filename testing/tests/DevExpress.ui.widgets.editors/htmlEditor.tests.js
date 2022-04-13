@@ -24,6 +24,7 @@ import './htmlEditorParts/tableContextMenuIntegration.tests.js';
 import './htmlEditorParts/tableProperties.tests.js';
 import './htmlEditorParts/imageUploadModule.tests.js';
 import './htmlEditorParts/imageUploadIntegration.tests.js';
+import './htmlEditorParts/imageCursorModule.tests.js';
 import './htmlEditorParts/mentionModule.tests.js';
 import mentionIntegrationTests from './htmlEditorParts/mentionIntegration.tests.js';
 import './htmlEditorParts/scrolling.tests.js';
