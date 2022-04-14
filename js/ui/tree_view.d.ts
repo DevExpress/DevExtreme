@@ -153,10 +153,11 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field8 node:dxTreeViewNode
+
      * @action
      * @public
      */
@@ -165,10 +166,10 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field8 node:dxTreeViewNode
      * @action
      * @public
      */
@@ -177,8 +178,8 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
      * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
      * @action
@@ -189,10 +190,10 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field8 node:dxTreeViewNode
      * @action
      * @public
      */
@@ -201,10 +202,10 @@ export interface dxTreeViewOptions<TKey = any>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field8 node:dxTreeViewNode
      * @action
      * @public
      */

@@ -413,13 +413,13 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
      * @docid
      * @type_function_param1 e:Object
+     * @default null
+     * @type_function_param1_field2 component:dxPivotGrid
+     * @type_function_param1_field5 event:event
      * @type_function_param1_field8 cell:dxPivotGridPivotGridCell
      * @type_function_param1_field11 columnFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field12 rowFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field13 dataFields:Array<PivotGridDataSourceOptions.fields>
-     * @type_function_param1_field5 event:event
-     * @default null
-     * @type_function_param1_field2 component:dxPivotGrid
      * @action
      * @public
      */
@@ -437,14 +437,14 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
      * @docid
      * @type_function_param1 e:Object
-     * @type_function_param1_field13 items:Array<Object>
+     * @type_function_param1_field1 component:dxPivotGrid
      * @type_function_param1_field5 cell:dxPivotGridPivotGridCell
      * @type_function_param1_field9 dataFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field10 rowFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field11 columnFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field12 field:PivotGridDataSourceOptions.fields
+     * @type_function_param1_field13 items:Array<Object>
      * @default null
-     * @type_function_param1_field1 component:dxPivotGrid
      * @action
      * @public
      */

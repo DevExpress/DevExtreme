@@ -264,9 +264,9 @@ export interface dxListOptions<
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:dxList
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
      * @action
      * @public
      */
@@ -275,9 +275,9 @@ export interface dxListOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:dxList
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
      * @action
      * @public
      */
@@ -309,9 +309,9 @@ export interface dxListOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:dxList
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
      * @action
      * @public
      */

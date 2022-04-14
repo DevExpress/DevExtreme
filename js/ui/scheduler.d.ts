@@ -589,8 +589,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field2 component:dxScheduler
-     * @type_function_param1_field6 cellData:object
      * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 cellData:object
      * @action
      * @public
      */
@@ -601,8 +601,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field5 cellData:object
      * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 cellData:object
      * @action
      * @public
      */

@@ -181,7 +181,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._setRowsViewAttributes();
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
-                needUpdateFocus = this._isNeedFocus ? !isAppend : this._isHiddenFocus && isFullUpdate;
+                needUpdateFocus = this._isNeedFocus ? !isAppend : this._isHiddenFocus && isFullUpdate && !e?.virtualColumnsScrolling;
                 needUpdateFocus && this._updateFocus(true);
             }
         });
@@ -1142,9 +1142,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     $cell = this._getNextCell(direction);
                 }
                 if(isElementDefined($cell)) {
-                    if(isRenderView && !isEditing && this._checkCellOverlapped($cell)) {
-                        return;
-                    }
                     if($cell.is('td') || $cell.hasClass(this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
                         const $focusedElementInsideCell = $cell.find(':focus');
@@ -1167,21 +1164,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 }
             }
         });
-    },
-    _checkCellOverlapped: function($cell) {
-        const cellOffset = $cell.offset();
-        const hasScrollable = this.component.getScrollable && this.component.getScrollable();
-        let isOverlapped = false;
-
-        if(hasScrollable) {
-            if(cellOffset.left < 0) {
-                isOverlapped = getWidth($cell) + cellOffset.left <= 0;
-            } else if(cellOffset.top < 0) {
-                isOverlapped = getHeight($cell) + cellOffset.top <= 0;
-            }
-        }
-
-        return isOverlapped;
     },
 
     _getFocusedCell: function() {

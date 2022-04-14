@@ -49,9 +49,9 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field9 event:event
      * @type_function_param1_field1 scrollOffset:object
      * @type_function_param1_field6 component:this
+     * @type_function_param1_field9 event:event
      * @action
      * @public
      */
@@ -60,9 +60,9 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field9 event:event
      * @type_function_param1_field1 scrollOffset:object
      * @type_function_param1_field6 component:this
+     * @type_function_param1_field9 event:event
      * @action
      * @public
      */
