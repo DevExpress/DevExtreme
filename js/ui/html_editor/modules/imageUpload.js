@@ -20,7 +20,6 @@ if(Quill) {
             super(quill, options);
 
             this.options = options;
-            this.quill = quill;
             this._quillContainer = this.editorInstance._getQuillContainer();
 
             this.addCleanCallback(this.prepareCleanCallback());
@@ -71,8 +70,7 @@ if(Quill) {
         }
 
         _onUploaded(data) {
-            const selection = this.quill.getSelection();
-            const pasteIndex = selection ? selection.index : this.quill.getLength();
+            const { index: pasteIndex } = this.quill.getSelection() ?? { index: this.quill.getLength() };
 
             const imageUrl = correctSlashesInUrl(this.options.uploadDirectory) + data.file.name;
             urlUpload(this.quill, pasteIndex, { src: imageUrl });
@@ -122,16 +120,16 @@ if(Quill) {
         }
 
         option(option, value) {
-            if(option === 'imageUpload') {
-                this.handleOptionChangeValue(value);
-                return;
-            }
-
-            if(option === 'fileUploadMode') {
-                this.options.fileUploadMode = value;
-                this._handleServerUpload();
-            } else if(option === 'fileUploaderOptions') {
-                this._fileUploader.option(value);
+            switch(option) {
+                case 'imageUpload':
+                    this.handleOptionChangeValue(value);
+                    break;
+                case 'fileUploadMode':
+                    this.options.fileUploadMode = value;
+                    this._handleServerUpload();
+                    break;
+                case 'fileUploaderOptions':
+                    this._fileUploader.option(value);
             }
         }
     };

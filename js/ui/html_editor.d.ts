@@ -430,7 +430,6 @@ export interface dxHtmlEditorTableResizing {
     /**
     * @docid
     * @public
-    * @type dxFileUploaderOptions
     */
     fileUploaderOptions?: dxFileUploaderOptions;
  }

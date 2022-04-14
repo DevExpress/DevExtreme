@@ -436,7 +436,7 @@ const HtmlEditor = Editor.inherit({
         return this._$htmlContainer;
     },
 
-    _parseOptionsData(args) {
+    _prepareModuleOptions(args) {
         const optionData = args.fullName?.split('.');
         let value = args.value;
         const optionName = optionData.length >= 2 ? optionData[1] : args.name;
@@ -453,7 +453,7 @@ const HtmlEditor = Editor.inherit({
         const shouldPassOptionsToModule = Boolean(moduleInstance);
 
         if(shouldPassOptionsToModule) {
-            moduleInstance.option(...this._parseOptionsData(args));
+            moduleInstance.option(...this._prepareModuleOptions(args));
         } else {
             this._invalidate();
         }

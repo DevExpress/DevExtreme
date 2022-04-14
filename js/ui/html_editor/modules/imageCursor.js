@@ -13,8 +13,6 @@ if(Quill) {
         constructor(quill, options) {
             super(quill, options);
 
-            this.quill = quill;
-
             this.addCleanCallback(this.clean.bind(this));
             this._attachEvents();
         }
