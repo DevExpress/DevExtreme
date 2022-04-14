@@ -3977,7 +3977,7 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Batch edit mode', function(assert) {
         // arrange
-        $('.dx-datagrid').width(200);
+        const $parentContainer = $('.dx-datagrid').parent().width(200);
 
         const dataSource = [
             { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum' },
@@ -3999,7 +3999,8 @@ QUnit.module('Validation', {
             },
             columnHidingEnabled: true
         };
-        setupDataGrid(this);
+
+        setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -4034,7 +4035,7 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Batch edit mode if cellTemplate is defined', function(assert) {
         // arrange
-        $('.dx-datagrid').width(200);
+        const $parentContainer = $('.dx-datagrid').parent().width(200);
 
         const dataSource = [
             { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum' },
@@ -4059,7 +4060,7 @@ QUnit.module('Validation', {
             dataSource: dataSource,
             columnHidingEnabled: true
         };
-        setupDataGrid(this);
+        setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -4094,7 +4095,7 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Batch edit mode. Editor is not marked as invalid when row is created', function(assert) {
         // arrange
-        $('.dx-datagrid').width(200);
+        const $parentContainer = $('.dx-datagrid').parent().width(200);
 
         this.columns = [
             {
@@ -4119,7 +4120,7 @@ QUnit.module('Validation', {
                 }
             }
         };
-        setupDataGrid(this);
+        setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -4137,7 +4138,7 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Cell edit mode', function(assert) {
         // arrange
-        $('.dx-datagrid').width(200);
+        const $parentContainer = $('.dx-datagrid').parent().width(200);
 
         const dataSource = [
             { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum' },
@@ -4160,7 +4161,7 @@ QUnit.module('Validation', {
             },
             columnHidingEnabled: true
         };
-        setupDataGrid(this);
+        setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -4194,7 +4195,7 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Cell edit mode. Validation works only for editable form item with a validation rules', function(assert) {
         // arrange
-        $('.dx-datagrid').width(200);
+        const $parentContainer = $('.dx-datagrid').parent().width(200);
 
         const dataSource = [
             { firstName: 'Super', lastName: 'Man', description: 'Test Test Test' },
@@ -4229,7 +4230,7 @@ QUnit.module('Validation', {
             },
             columnHidingEnabled: true
         };
-        setupDataGrid(this);
+        setupDataGrid(this, $parentContainer);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -4305,7 +4306,7 @@ QUnit.module('Validation', {
 
     QUnit.test('The onRowValidating event is not called twice if isValid is set to \'false\'', function(assert) {
         // arrange
-        $('.dx-datagrid').width(800);
+        const $parentContainer = $('.dx-datagrid').parent().width(800);
 
         let rowValidatingCounter = 0;
 
@@ -4330,7 +4331,7 @@ QUnit.module('Validation', {
                 e.isValid = false;
             }
         };
-        setupDataGrid(this);
+        setupDataGrid(this, $parentContainer);
         this.rowsView.render($('#container'));
 
         // act

@@ -1867,13 +1867,14 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return scrollable.scrollBy({ left, top });
     },
     _isInsideEditForm: function(element) {
-        return $(element).closest('.' + this.addWidgetPrefix(EDIT_FORM_CLASS)).length > 0;
+        const $editForm = $(element).closest('.' + this.addWidgetPrefix(EDIT_FORM_CLASS));
+
+        return $editForm.length && this.elementIsInsideGrid($editForm);
     },
     _isMasterDetailCell: function(element) {
         const $masterDetailCell = $(element).closest('.' + MASTER_DETAIL_CELL_CLASS);
-        const $masterDetailGrid = $masterDetailCell.closest('.' + this.getWidgetContainerClass()).parent();
 
-        return $masterDetailCell.length && $masterDetailGrid.is(this.component.$element());
+        return $masterDetailCell.length && this.elementIsInsideGrid($masterDetailCell);
     },
     _processNextCellInMasterDetail: function($nextCell) {
         if(!this._isInsideEditForm($nextCell) && $nextCell) {
