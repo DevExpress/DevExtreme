@@ -13867,6 +13867,8 @@ QUnit.module('Editing with validation', {
         $($input).trigger('change');
 
         this.editingController.saveEditData();
+        this.clock.tick();
+
         $input.trigger('dxclick');
         this.clock.tick();
 
