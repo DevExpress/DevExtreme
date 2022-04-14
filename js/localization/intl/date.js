@@ -14,7 +14,7 @@ const getIntlFormatter = format => {
             const recognizableAsTwentyCentury = String(year).length < 3;
             const safeYearShift = 400;
             const temporaryYearValue = recognizableAsTwentyCentury ? year + safeYearShift : year;
-            const utcDate = new Date(Date.UTC(temporaryYearValue, date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+            const utcDate = new Date(Date.UTC(temporaryYearValue, date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
             if(recognizableAsTwentyCentury) {
                 utcDate.setFullYear(year);
             }
