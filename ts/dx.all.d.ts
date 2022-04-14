@@ -15130,15 +15130,15 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorImageUpload.fileUploadMode]
      */
-     fileUploadMode?: 'base64' | 'server' | 'both';
-    /**
-     * [descr:dxHtmlEditorImageUpload.fileUploaderOptions]
-     */
-    fileUploaderOptions?: dxFileUploader;
+    fileUploadMode?: 'base64' | 'server' | 'both';
     /**
      * [descr:dxHtmlEditorImageUpload.tabs]
      */
     tabs?: Array<'url' | 'file'>;
+    /**
+     * [descr:dxHtmlEditorImageUpload.fileUploaderOptions]
+     */
+    fileUploaderOptions?: dxFileUploader;
   }
   /**
    * [descr:dxHtmlEditorMediaResizing]
