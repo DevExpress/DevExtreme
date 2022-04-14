@@ -3,8 +3,16 @@ import { mount } from 'enzyme';
 import {
   emit, fakeClickEvent, clear, EVENT,
 } from '../../../../../test_utils/events_mock';
-import { RowClick, TableContent, viewFunction as TableContentView } from '../table_content';
+import {
+  RowClick, TableContent, TableContentProps, viewFunction as TableContentView, TopRowPlaceholder,
+  BottomRowPlaceholder, RowsViewHeightValue, SetRowsViewContentRenderAction,
+  SetRowsViewScrollPositionAction,
+} from '../table_content';
 import { Row, ColumnInternal } from '../../types';
+import { Scrollable } from '../../../../scroll_view/scrollable';
+import { Placeholder } from '../../../../../utils/plugin/placeholder';
+import { setWindow } from '../../../../../../core/utils/window';
+import { Plugins } from '../../../../../utils/plugin/context';
 
 describe('TableContent', () => {
   describe('View', () => {
@@ -18,7 +26,13 @@ describe('TableContent', () => {
       });
 
       const tree = mount(<TableContentView rows={tableContent.rows} {...tableContent as any} />);
+      const scrollable = tree.find(Scrollable);
+      const placeholders = scrollable.find(Placeholder);
 
+      expect(scrollable.exists()).toBe(true);
+      expect(placeholders).toHaveLength(2);
+      expect(placeholders.at(0).props().type).toBe(TopRowPlaceholder);
+      expect(placeholders.at(1).props().type).toBe(BottomRowPlaceholder);
       expect(tree.find('table').exists()).toBe(true);
       expect(tree.find('tr').length).toBe(1);
       expect(tree.find('tr').find('td').length).toBe(2);
@@ -79,6 +93,41 @@ describe('TableContent', () => {
         expect(tableContent.onRowClick).not.toBeCalled();
       });
     });
+
+    describe('calculateRowsViewHeight', () => {
+      it('should update rows view height', () => {
+        setWindow({ getComputedStyle: () => ({ height: '100px' }) }, true);
+        const tableContent = new TableContent(new TableContentProps());
+        tableContent.plugins = new Plugins();
+        tableContent.rowsViewRef = {
+          current: {} as any,
+        } as any;
+
+        tableContent.calculateRowsViewHeight();
+
+        expect(tableContent.plugins.getValue(RowsViewHeightValue)).toEqual(100);
+      });
+    });
+
+    describe('rowsViewContentReady', () => {
+      it('should call view content ready action', () => {
+        const tableContent = new TableContent(new TableContentProps());
+        tableContent.plugins = new Plugins();
+        const actionMock = jest.fn();
+        tableContent.plugins.set(SetRowsViewContentRenderAction, actionMock);
+        tableContent.divRef = {
+          current: {
+            myVal: 1,
+          } as any,
+        } as any;
+
+        tableContent.rowsViewContentReady();
+
+        expect(actionMock).toHaveBeenCalledWith({
+          myVal: 1,
+        });
+      });
+    });
   });
 
   describe('Events', () => {
@@ -104,6 +153,25 @@ describe('TableContent', () => {
 
         tableContent.onRowClick({ currentTarget: 'some other row' } as any);
         expect(rowClick).toBeCalledTimes(1);
+      });
+    });
+
+    describe('onScrollContent', () => {
+      it('should call setRowsViewContent action', () => {
+        const tableContent = new TableContent({});
+        tableContent.plugins = new Plugins();
+        const actionMock = jest.fn();
+        tableContent.plugins.set(SetRowsViewScrollPositionAction, actionMock);
+        const scrollEventsArg = {
+          scrollOffset: {
+            top: 10,
+            left: 20,
+          },
+        };
+
+        tableContent.onScrollContent(scrollEventsArg);
+
+        expect(actionMock).toHaveBeenCalledWith(scrollEventsArg.scrollOffset);
       });
     });
   });
