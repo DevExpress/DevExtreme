@@ -28,6 +28,12 @@ createTestCafe('localhost', 1437, 1438)
 
             .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
+        runner.compilerOptions({
+            'typescript': {
+                customCompilerModulePath: '../../node_modules/typescript',
+            }
+        });
+
         if(args.concurrency > 0) {
             runner.concurrency(args.concurrency);
         }
