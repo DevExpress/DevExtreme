@@ -45,17 +45,17 @@ QUnit.module('DataSources', moduleConfig, () => {
         this.clock.tick();
 
         const updatedTaskId = 3;
-        const updatedStart = new Date('2019-02-21');
-        const updatedEnd = new Date('2019-02-22');
-        const updatedTitle = 'New';
-        getGanttViewCore(this.instance).commandManager.changeTaskTitleCommand.execute(updatedTaskId.toString(), updatedTitle);
-        getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
-        getGanttViewCore(this.instance).commandManager.changeTaskEndCommand.execute(updatedTaskId.toString(), updatedEnd);
+        const dataToUpdate = {
+            start: new Date('2019-02-21'),
+            end: new Date('2019-02-22'),
+            title: 'New'
+        };
+        getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), dataToUpdate);
         this.clock.tick();
         const updatedTask = data.tasks.filter((t) => t.id === updatedTaskId)[0];
-        assert.equal(updatedTask.title, updatedTitle, 'task title is updated');
-        assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
-        assert.equal(updatedTask.end, updatedEnd, 'new task end is updated');
+        assert.equal(updatedTask.title, dataToUpdate.title, 'task title is updated');
+        assert.equal(updatedTask.start, dataToUpdate.start, 'new task start is updated');
+        assert.equal(updatedTask.end, dataToUpdate.end, 'new task end is updated');
     });
     test('removing', function(assert) {
         this.createInstance(options.allSourcesOptions);
