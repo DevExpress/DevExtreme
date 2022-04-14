@@ -106,8 +106,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 fileName:string
-     * @type_function_param1_field5 cancel:boolean
-     * @type_function_param1_field6 format:string
+     * @type_function_param1_field5 format:string
      * @default null
      * @action
      * @public
@@ -116,12 +115,12 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 fileName:string
-     * @type_function_param1_field4 format:string
-     * @type_function_param1_field5 data:BLOB
-     * @type_function_param1_field6 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:this
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 fileName:string
+     * @type_function_param1_field5 format:string
+     * @type_function_param1_field6 data:BLOB
      * @default null
      * @action
      * @public

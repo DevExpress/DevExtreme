@@ -1,4 +1,4 @@
-import { runCommonOptionTests } from '../commonParts/options.tests.js';
+import { runCommonOptionTests } from '../../commonParts/options.tests.js';
 
 const JSPdfOptionTests = {
     runTests(moduleConfig, _getFullOptions, getComponent) {

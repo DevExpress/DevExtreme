@@ -89,9 +89,11 @@ QUnit.module('Summary footer', {
         // act
         footerView.render($('#container'));
         const $summary = $('.dx-datagrid-summary-item');
-        const $cells = $('.dx-row td');
+        const $footerRow = $('.dx-row');
+        const $cells = $footerRow.children();
 
         // assert
+        assert.ok($footerRow.hasClass('dx-footer-row'), 'footer row');
         assert.equal($('col').length, 5, 'col elements count');
         assert.equal($('.dx-datagrid-total-footer').length, 1, 'footer element');
         assert.equal($('.dx-datagrid-scroll-container').length, 1, 'scroll container');

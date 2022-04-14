@@ -344,3 +344,113 @@ test('Virtual rendering during auto scrolling should not cause errors in onDragC
     },
   },
 }));
+
+// T1078513
+test('Headers should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
+  await t.drag(Selector('.dx-data-row .dx-command-drag').nth(0), 0, 90, { speed: 0.01 });
+
+  const headerRow = Selector('tr.dx-header-row');
+
+  await t
+    .expect(headerRow.exists)
+    .ok()
+    .expect(headerRow.getStyleProperty('transform'))
+    .eql('none');
+}).before(async () => createWidget('dxDataGrid', {
+  height: 200,
+  keyExpr: 'id',
+  scrolling: {
+    mode: 'virtual',
+  },
+  paging: {
+    pageSize: 2,
+  },
+  dataSource: [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+    { id: 6 },
+    { id: 7 },
+    { id: 8 },
+    { id: 9 },
+    { id: 10 },
+    { id: 11 },
+    { id: 12 },
+    { id: 13 },
+    { id: 14 },
+    { id: 15 },
+  ],
+  columns: ['id'],
+  columnAutoWidth: true,
+  rowDragging: {
+    allowReordering: true,
+    dropFeedbackMode: 'push',
+    onDragEnd(e: any): void {
+      e.cancel = new Promise<void>((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, 500);
+      });
+    },
+  },
+}));
+
+// T1078513
+test('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
+  await t.drag(Selector('.dx-data-row .dx-command-drag').nth(0), 0, 90, { speed: 0.01 });
+
+  const footerRow = Selector('tr.dx-footer-row');
+
+  await t
+    .expect(footerRow.exists)
+    .ok()
+    .expect(footerRow.getStyleProperty('transform'))
+    .eql('none');
+}).before(async () => createWidget('dxDataGrid', {
+  height: 250,
+  keyExpr: 'id',
+  scrolling: {
+    mode: 'virtual',
+  },
+  summary: {
+    totalItems: [{
+      column: 'id',
+      summaryType: 'count',
+    }],
+  },
+  paging: {
+    pageSize: 2,
+  },
+  dataSource: [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+    { id: 6 },
+    { id: 7 },
+    { id: 8 },
+    { id: 9 },
+    { id: 10 },
+    { id: 11 },
+    { id: 12 },
+    { id: 13 },
+    { id: 14 },
+    { id: 15 },
+  ],
+  columns: ['id'],
+  columnAutoWidth: true,
+  rowDragging: {
+    allowReordering: true,
+    dropFeedbackMode: 'push',
+    onDragEnd(e: any): void {
+      e.cancel = new Promise<void>((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, 500);
+      });
+    },
+  },
+}));

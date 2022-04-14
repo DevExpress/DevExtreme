@@ -615,9 +615,9 @@ function getExportOptions(widget, exportOptions, fileName, format) {
         margin: exportOptions.margin,
         svgToCanvas: exportOptions.svgToCanvas,
         forceProxy: exportOptions.forceProxy,
-        exportingAction: widget._createActionByOption('onExporting'),
-        exportedAction: widget._createActionByOption('onExported'),
-        fileSavingAction: widget._createActionByOption('onFileSaving')
+        exportingAction: widget._createActionByOption('onExporting', { excludeValidators: ['disabled'] }),
+        exportedAction: widget._createActionByOption('onExported', { excludeValidators: ['disabled'] }),
+        fileSavingAction: widget._createActionByOption('onFileSaving', { excludeValidators: ['disabled'] })
     };
 }
 
