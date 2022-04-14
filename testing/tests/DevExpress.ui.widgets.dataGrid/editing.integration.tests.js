@@ -1644,6 +1644,79 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
+    // T1080084
+    QUnit.test('The validation message should be shown on focus for nested grid', function(assert) {
+        // arrange
+        let nestedDataGrid;
+
+        const dataGrid = createDataGrid({
+            dataSource: [],
+            keyExpr: 'ID',
+            columns: [{
+                dataField: 'CompanyName',
+                editCellTemplate(e) {
+                    const $nestedDataGrid = $('<div/>').dxDataGrid({
+                        dataSource: [],
+                        keyExpr: 'id',
+                        height: 400,
+                        columns: [{
+                            dataField: 'test1',
+                            validationRules: [{ type: 'required' }]
+                        }, {
+                            dataField: 'test2',
+                            validationRules: [{ type: 'required' }]
+                        }],
+                        editing: {
+                            allowAdding: true
+                        }
+                    });
+
+                    nestedDataGrid = $nestedDataGrid.dxDataGrid('instance');
+
+                    return $nestedDataGrid;
+                }
+            }],
+            editing: {
+                mode: 'form',
+                allowAdding: true,
+                form: {
+                    colCount: 1
+                }
+            }
+        });
+
+        // act
+        dataGrid.addRow();
+        this.clock.tick();
+
+        // assert
+        assert.ok(dataGrid.getVisibleRows()[0].isNewRow, 'grid has new row');
+
+        // act
+        nestedDataGrid.addRow();
+        this.clock.tick();
+
+        // assert
+        assert.ok(nestedDataGrid.getVisibleRows()[0].isNewRow, 'nested grid has new row');
+
+        // act
+        nestedDataGrid.saveEditData();
+        this.clock.tick();
+
+        // assert
+        const $cellElements = $(nestedDataGrid.getRowElement(0)).children();
+        assert.strictEqual($cellElements.length, 3, 'new row - cell count');
+        assert.strictEqual($cellElements.filter('.dx-datagrid-invalid').length, 2, 'new row - number of invalid cells');
+
+        // act
+        $cellElements.first().find('.dx-texteditor-input').first().trigger('dxpointerdown').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        const $overlayWrapper = $(dataGrid.element()).find('.dx-overlay-wrapper.dx-datagrid-invalid-message');
+        assert.strictEqual($overlayWrapper.length, 1, 'has tooltip');
+        assert.strictEqual($overlayWrapper.css('visibility'), 'visible', 'validation message wrapper is visible');
+    });
 
     ['Batch', 'Cell'].forEach(editMode => {
         [null, 'left', 'right'].forEach(fixedPosition => {

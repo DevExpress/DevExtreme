@@ -5924,16 +5924,13 @@ QUnit.module('Editing with real dataController', {
         // arrange
         const that = this;
         const rowsView = this.rowsView;
-        const $testElement = $('#container');
+        const $testElement = $('.dx-datagrid');
 
         $.extend(that.options.editing, {
             allowUpdating: true,
             allowDeleting: true,
             mode: 'cell'
         });
-        that.$element = function() {
-            return $testElement;
-        };
 
         that.options.dataSource = {
             load: function() {
@@ -5970,16 +5967,13 @@ QUnit.module('Editing with real dataController', {
         // arrange
         const that = this;
         const rowsView = this.rowsView;
-        const $testElement = $('#container');
+        const $testElement = $('.dx-datagrid');
 
         $.extend(that.options.editing, {
             allowUpdating: true,
             allowDeleting: true,
             mode: 'cell'
         });
-        that.$element = function() {
-            return $testElement;
-        };
 
         that.options.dataSource = {
             load: function() {
@@ -6369,7 +6363,7 @@ QUnit.module('Editing with real dataController', {
         const that = this;
         let $cellElement;
         const rowsView = that.rowsView;
-        const $testElement = $('#container');
+        const $testElement = $('.dx-datagrid');
 
         that.options.columns[0] = {
             dataField: 'name',
@@ -6384,9 +6378,6 @@ QUnit.module('Editing with real dataController', {
             allowUpdating: true,
             mode: 'cell'
         });
-        that.$element = function() {
-            return $testElement;
-        };
         rowsView.render($testElement);
         that.columnsController.init();
 
@@ -6413,7 +6404,7 @@ QUnit.module('Editing with real dataController', {
         // arrange
         const that = this;
         const rowsView = that.rowsView;
-        const $testElement = $('#container');
+        const $testElement = $('.dx-datagrid');
 
         that.options.columns[0] = {
             dataField: 'name',
@@ -6425,9 +6416,6 @@ QUnit.module('Editing with real dataController', {
             allowUpdating: true,
             mode: 'row'
         });
-        that.$element = function() {
-            return $testElement;
-        };
         rowsView.render($testElement);
         that.columnsController.init();
 
@@ -6460,7 +6448,7 @@ QUnit.module('Editing with real dataController', {
         // arrange
         const that = this;
         const rowsView = that.rowsView;
-        const $testElement = $('#container');
+        const $testElement = $('.dx-datagrid');
 
         that.options.columns[0] = {
             dataField: 'name',
@@ -6472,9 +6460,6 @@ QUnit.module('Editing with real dataController', {
             allowUpdating: true,
             mode: 'batch'
         });
-        that.$element = function() {
-            return $testElement;
-        };
         rowsView.render($testElement);
         that.columnsController.init();
 
@@ -11632,6 +11617,8 @@ QUnit.module('Editing with validation', {
         const rowsView = this.rowsView;
         const $testElement = $('#container .dx-datagrid');
 
+        that.$element = () => renderer('#container');
+
         that.applyOptions({
             dataSource: [{ id: 1, boolean: true }],
             keyExpr: 'id',
@@ -11676,6 +11663,7 @@ QUnit.module('Editing with validation', {
         const rowsView = this.rowsView;
         const $testElement = $('#container .dx-datagrid');
 
+        that.$element = () => renderer('#container');
         that.applyOptions({
             dataSource: [{ id: 1 }],
             keyExpr: 'id',
@@ -12187,6 +12175,8 @@ QUnit.module('Editing with validation', {
         const that = this;
         const rowsView = this.rowsView;
 
+        that.$element = () => renderer('#container');
+
         rowsView.render(that.gridContainer);
 
         that.applyOptions({
@@ -12231,6 +12221,8 @@ QUnit.module('Editing with validation', {
         // arrange
         const that = this;
         const rowsView = this.rowsView;
+
+        that.$element = () => renderer('#container');
 
         rowsView.render(that.gridContainer);
 
@@ -12475,7 +12467,7 @@ QUnit.module('Editing with validation', {
 
     QUnit.testInActiveWindow('Show the revert button when an edit cell to invalid value when the edit mode cell is enabled', function(assert) {
         // arrange
-
+        this.$element = () => renderer('#container');
         this.rowsView.render(this.gridContainer);
 
         this.applyOptions({
@@ -12520,7 +12512,7 @@ QUnit.module('Editing with validation', {
     // T297742
     QUnit.testInActiveWindow('Show the revert button when an edit cell, server returns error and the edit mode cell is enabled', function(assert) {
         // arrange
-
+        this.$element = () => renderer('#container');
         this.rowsView.render(this.gridContainer);
 
         this.applyOptions({
@@ -12608,6 +12600,7 @@ QUnit.module('Editing with validation', {
 
     QUnit.testInActiveWindow('Change hint for revert button', function(assert) {
         // arrange
+        this.$element = () => renderer('#container');
         this.rowsView.render(this.gridContainer);
 
         this.applyOptions({
@@ -12684,6 +12677,7 @@ QUnit.module('Editing with validation', {
         let $revertButton;
         let $cells;
 
+        this.$element = () => renderer('#container');
         this.rowsView.render(this.gridContainer);
 
         this.applyOptions({
@@ -12786,6 +12780,7 @@ QUnit.module('Editing with validation', {
         // arrange
         let $cells;
 
+        this.$element = () => renderer('#container');
         this.rowsView.render(this.gridContainer);
 
         this.applyOptions({
@@ -12966,6 +12961,7 @@ QUnit.module('Editing with validation', {
             }
         });
 
+        this.$element = () => renderer('#container');
         rowsView.render(that.gridContainer);
 
         that.applyOptions({
@@ -13844,6 +13840,7 @@ QUnit.module('Editing with validation', {
         // arrange
         const rowsView = this.rowsView;
 
+        this.$element = () => renderer('#container');
         this.applyOptions({
             editing: {
                 allowUpdating: true,
@@ -13879,7 +13876,7 @@ QUnit.module('Editing with validation', {
     QUnit.test('Show error message on save inserted rows when edit mode is \'popup\'', function(assert) {
         // arrange
         const rowsView = this.rowsView;
-        const $testElement = $('#container');
+        const $testElement = $('.dx-datagrid');
 
         rowsView.render($testElement);
 
@@ -13897,7 +13894,7 @@ QUnit.module('Editing with validation', {
 
         this.editRow(0);
 
-        const $popupContent = $('.dx-datagrid').find('.dx-datagrid-edit-popup').dxPopup('instance').$content().find('.dx-scrollable-content');
+        const $popupContent = $('#container').find('.dx-datagrid-edit-popup').dxPopup('instance').$content().find('.dx-scrollable-content');
         const $inputElement = $popupContent.find('input').first();
         $inputElement.val('');
         $($inputElement).trigger('change');
@@ -14162,6 +14159,7 @@ QUnit.module('Editing with validation', {
         fx.off = true;
 
         try {
+            that.$element = () => renderer('#container');
             that.applyOptions({
                 dataSource: {
                     asyncLoadEnabled: false,
@@ -14243,6 +14241,7 @@ QUnit.module('Editing with validation', {
         const that = this;
         const rowsView = that.rowsView;
 
+        that.$element = () => renderer('#container');
         rowsView.render(that.gridContainer);
 
         that.applyOptions({
@@ -14289,6 +14288,7 @@ QUnit.module('Editing with validation', {
         const that = this;
         const rowsView = that.rowsView;
 
+        that.$element = () => renderer('#container');
         setWidth(that.$element(), 400);
 
         rowsView.render(that.gridContainer);
@@ -14330,6 +14330,7 @@ QUnit.module('Editing with validation', {
         const that = this;
         const rowsView = that.rowsView;
 
+        that.$element = () => renderer('#container');
         setWidth(that.$element(), 400);
 
         rowsView.render(that.gridContainer);
@@ -14385,6 +14386,7 @@ QUnit.module('Editing with validation', {
         const that = this;
         const rowsView = that.rowsView;
 
+        that.$element = () => renderer('#container');
         setWidth(that.$element(), 500);
 
         rowsView.render(that.gridContainer);

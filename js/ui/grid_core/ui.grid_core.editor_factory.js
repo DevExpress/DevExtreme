@@ -29,7 +29,9 @@ const EditorFactory = modules.ViewController.inherit({
         const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus, .dx-switch:focus, .dx-dropdownbutton .dx-buttongroup:focus`;
 
         // T181706
-        return $dataGridElement.find(focusedElementSelector);
+        const $focusedElement = $dataGridElement.find(focusedElementSelector);
+
+        return this.elementIsInsideGrid($focusedElement) && $focusedElement;
     },
 
     _getFocusCellSelector: function() {
@@ -46,7 +48,7 @@ const EditorFactory = modules.ViewController.inherit({
             // this selector is specific to IE
             $focus = this._getFocusedElement($dataGridElement);
 
-            if($focus.length) {
+            if($focus && $focus.length) {
                 if(!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(ROW_CLASS)) {
                     $focusCell = $focus.closest(this._getFocusCellSelector() + ', .' + CELL_FOCUS_DISABLED_CLASS);
                     hideBorders = $focusCell.get(0) !== $focus.get(0) && $focusCell.hasClass(EDITOR_INLINE_BLOCK);
