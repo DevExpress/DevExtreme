@@ -3440,6 +3440,10 @@ QUnit.module('dxPivotGrid', {
 
         assert.ok(!columnsArea.hasScroll(), 'no columnAreaScroll');
         assert.ok(columnsArea.getGroupWidth());
+        const tableWidth = pivotGrid._columnsArea._virtualContent ? pivotGrid._columnsArea._virtualContentWidth : pivotGrid._columnsArea._tableWidth;
+        assert.equal(tableWidth, -1);
+        const groupWidth = pivotGrid._columnsArea.getGroupWidth();
+        assert.equal(groupWidth, -1);
         assert.ok(pivotGrid._rowsArea.hasScroll());
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
@@ -3563,6 +3567,10 @@ QUnit.module('dxPivotGrid', {
 
         const columnsArea = pivotGrid._columnsArea;
         assert.ok(!columnsArea.hasScroll(), 'no columnAreaScroll');
+        const tableWidth = pivotGrid._columnsArea._virtualContent ? pivotGrid._columnsArea._virtualContentWidth : pivotGrid._columnsArea._tableWidth;
+        assert.equal(tableWidth, -1);
+        const groupWidth = pivotGrid._columnsArea.getGroupWidth();
+        assert.equal(groupWidth, -1);
         assert.ok(pivotGrid._rowsArea.hasScroll());
     });
 
