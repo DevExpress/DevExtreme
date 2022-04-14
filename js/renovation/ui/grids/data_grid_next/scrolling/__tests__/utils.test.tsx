@@ -12,6 +12,7 @@ describe('Utils', () => {
           ${[]}                | ${0}               | ${DEFAULT_ROW_HEIGHT}
           ${[30]}              | ${0}               | ${DEFAULT_ROW_HEIGHT}
           ${[]}                | ${1}               | ${DEFAULT_ROW_HEIGHT}
+          ${[]}                | ${undefined}       | ${DEFAULT_ROW_HEIGHT}
       `('visibleRowHeights: $visibleRowHeights, visibleRowCount: $visibleRowCount, result: $result', ({
       visibleRowHeights, visibleRowCount, result,
     }) => {

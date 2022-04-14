@@ -161,6 +161,8 @@ describe('Virtual scrolling', () => {
         const setLoadPageCount = jest.fn();
         virtualScrolling.plugins.set(SetPageIndex, setPageIndex);
         virtualScrolling.plugins.set(SetLoadPageCount, setLoadPageCount);
+        virtualScrolling.plugins.extend(ViewportSkipValue, -1, () => undefined);
+        virtualScrolling.plugins.extend(ViewportTakeValue, -1, () => undefined);
 
         virtualScrolling.loadViewport();
 
@@ -247,6 +249,8 @@ describe('Virtual scrolling', () => {
     describe('updateRowHeights', () => {
       it('rowHeight should be updated and visibleRows, skip are not defined', () => {
         const virtualScrolling = new VirtualScrolling(new VirtualScrollingProps());
+        virtualScrolling.plugins.extend(VisibleRows, -1, () => undefined);
+        virtualScrolling.plugins.extend(ViewportSkipValue, -1, () => undefined);
         virtualScrolling.visibleRowHeights = [30, 40, 50];
 
         virtualScrolling.updateRowHeights();

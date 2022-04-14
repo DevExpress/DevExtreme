@@ -238,9 +238,18 @@ describe('Paging', () => {
     });
 
     describe('AddPagingToLocalDataState', () => {
-      const plugins = new Plugins();
+      let plugins = new Plugins();
+      const reinitPlugins = () => {
+        plugins = new Plugins();
+      };
+
+      beforeEach(reinitPlugins);
 
       it('should return undefined', () => {
+        plugins.extend(LocalDataState, -1, () => undefined);
+        plugins.set(PageIndex, 2);
+        plugins.set(PageSize, 10);
+
         expect(plugins.getValue(AddPagingToLocalDataState)).toBe(undefined);
       });
 
@@ -252,6 +261,7 @@ describe('Paging', () => {
         plugins.extend(LocalDataState, -1, () => state);
         plugins.set(PageIndex, 2);
         plugins.set(PageSize, 10);
+
         expect(plugins.getValue(AddPagingToLocalDataState)).toEqual({
           data: [],
           totalCount: 50,

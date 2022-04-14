@@ -36,6 +36,14 @@ describe('Plugins', () => {
 
       expect(plugins.getValue(CalculateViewportSkipValue)).toEqual(2);
     });
+
+    it('viewport skip value (scroll position not defined)', () => {
+      plugins.set(ScrollingPositionValue, undefined);
+      plugins.set(RowHeightValue, 40);
+      plugins.set(ItemHeightsValue, { 0: 35, 1: 35, 2: 35 });
+
+      expect(plugins.getValue(CalculateViewportSkipValue)).toEqual(0);
+    });
   });
 
   describe('CalculateViewportTakeValue', () => {
@@ -54,6 +62,18 @@ describe('Plugins', () => {
       plugins.set(ItemHeightsValue, { 0: 35, 1: 35, 2: 35 });
 
       expect(plugins.getValue(CalculateViewportTakeValue)).toEqual(result);
+    });
+
+    it('viewport take value with undefined values', () => {
+      plugins.set(ScrollingModeValue, 'standard');
+      plugins.set(TotalCount, undefined);
+      plugins.set(RowsViewHeightValue, undefined);
+      plugins.set(ScrollingPositionValue, undefined);
+      plugins.extend(ViewportSkipValue, -1, () => 0);
+      plugins.set(RowHeightValue, 40);
+      plugins.set(ItemHeightsValue, { 0: 35, 1: 35, 2: 35 });
+
+      expect(plugins.getValue(CalculateViewportTakeValue)).toEqual(0);
     });
   });
 
