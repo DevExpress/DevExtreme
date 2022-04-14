@@ -1,4 +1,4 @@
-import { clearDxObjectAssign, initializeDxObjectAssign } from '../../commonParts/objectAssignHelper.js';
+import { clearDxObjectAssign, initializeDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 import { jsPDF } from 'jspdf';
 import { isFunction, isObject, isDefined } from 'core/utils/type';
 import { extend } from 'core/utils/extend';
