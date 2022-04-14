@@ -101,7 +101,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @type_function_param1_field1 component:dxButtonGroup
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 value:any
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
      * @action
