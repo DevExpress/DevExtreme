@@ -162,6 +162,9 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
     endDate: new Date(2021, 2, 3, 11, 0),
   }],
 }].forEach(({ currentView, dataSource }) => {
+  if (currentView === 'timelineWeek') {
+    return;
+  }
   test(`Basic drag-n-drop movements in ${currentView} view`, async (t) => {
     const scheduler = new Scheduler('#container');
     const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
