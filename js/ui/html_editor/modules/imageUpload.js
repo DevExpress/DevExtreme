@@ -4,14 +4,13 @@ import eventsEngine from '../../../events/core/events_engine';
 import $ from '../../../core/renderer';
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { urlUpload, correctSlashesInUrl } from '../utils/image_uploader_helper';
+import { urlUpload, getFileUploaderBaseOptions, correctSlashesInUrl } from '../utils/image_uploader_helper';
 import { addNamespace } from '../../../events/utils/index';
 import FileUploader from '../../file_uploader';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorImageUpload';
 
 const HIDDEN_FILE_UPLOADER_CLASS = 'dx-htmleditor-hidden-content';
-const FILE_UPLOADER_NAME = 'dx-htmleditor-image';
 
 let ImageUploadModule = BaseModule;
 
@@ -61,11 +60,8 @@ if(Quill) {
                 .addClass(HIDDEN_FILE_UPLOADER_CLASS)
                 .appendTo(this._quillContainer);
 
-            const fileUploaderOptions = extend({}, {
-                accept: 'image/*',
+            const fileUploaderOptions = extend({}, getFileUploaderBaseOptions(), {
                 uploadUrl: this.options.uploadUrl,
-                uploadMode: 'instantly',
-                name: FILE_UPLOADER_NAME,
                 onUploaded: this._onUploaded.bind(this),
             }, this.options.fileUploaderOptions);
 

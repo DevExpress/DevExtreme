@@ -1,7 +1,6 @@
 import Quill from 'devextreme-quill';
 import BaseModule from './base';
 import eventsEngine from '../../../events/core/events_engine';
-
 import { addNamespace } from '../../../events/utils/index';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorImageCursor';
@@ -17,7 +16,6 @@ if(Quill) {
             this.quill = quill;
 
             this.addCleanCallback(this.clean.bind(this));
-
             this._attachEvents();
         }
 

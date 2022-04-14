@@ -398,13 +398,8 @@ class FileStrategy extends BaseStrategy {
     }
 
     getFileUploaderOptions() {
-        const baseFileUploaderOptions = {
-            multiple: false,
-            value: [],
-            name: FILE_UPLOADER_NAME,
-            accept: 'image/*',
+        const fileUploaderOptions = {
             uploadUrl: this.config.uploadUrl,
-            uploadMode: 'instantly',
             onValueChanged: (data) => {
                 if(this.useBase64) {
                     this.base64Upload(data);
@@ -415,7 +410,7 @@ class FileStrategy extends BaseStrategy {
             }
         };
 
-        return extend({}, baseFileUploaderOptions, this.config.fileUploaderOptions);
+        return extend({}, getFileUploaderBaseOptions(), fileUploaderOptions, this.config.fileUploaderOptions);
     }
 
     getItemsConfig() {
@@ -452,6 +447,15 @@ class FileStrategy extends BaseStrategy {
 
 export function correctSlashesInUrl(url) {
     return url[url.length - 1] !== '/' ? (url + '/') : url;
+}
+
+export function getFileUploaderBaseOptions() {
+    return {
+        value: [],
+        name: FILE_UPLOADER_NAME,
+        accept: 'image/*',
+        uploadMode: 'instantly'
+    };
 }
 
 export function urlUpload(quill, index, attributes) {
