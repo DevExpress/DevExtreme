@@ -95,7 +95,6 @@ if($.fn.jquery[0] !== '1') {
         markup.find('*').addBack().each(function() {
             dataUtils.data(this, 'dxTestData', true);
             ko.utils.domData.set(this, 'dxTestData', true);
-            dataUtils.data(this, 'dxKoCreation', true);
         });
 
         const cleanDataLog = [];
@@ -141,7 +140,6 @@ if($.fn.jquery[0] !== '1') {
 
         markup.find('*').addBack().each(function() {
             dataUtils.data($(this)[0], 'dxTestData', true);
-            dataUtils.data($(this)[0], 'dxKoCreation', true);
             ko.utils.domData.set(this, 'dxTestData', true);
         });
         const cleanDataLog = [];
