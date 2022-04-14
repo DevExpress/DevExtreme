@@ -790,7 +790,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field4 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @type_function_param1_field6 key:any
      * @type_function_param1_field7 newData:object
      * @type_function_param1_field8 oldData:object
