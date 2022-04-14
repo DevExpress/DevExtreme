@@ -1,6 +1,6 @@
 import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
-import { compileGetter, compileSetter } from '../../core/utils/data';
+import { compileGetter } from '../../core/utils/data';
 import { extend } from '../../core/utils/extend';
 import { getWindow } from '../../core/utils/window';
 import { isDefined } from '../../core/utils/type';
@@ -298,13 +298,11 @@ class Gantt extends Widget {
             });
         }
     }
-    _onRecordUpdated(optionName, key, fieldName, value) {
+    _onRecordUpdated(optionName, key, values) {
         const dataOption = this[`_${optionName}Option`];
         const isTaskUpdated = optionName === GANTT_TASKS;
         if(dataOption) {
-            const setter = compileSetter(this.option(`${optionName}.${fieldName}Expr`));
-            const data = {};
-            setter(data, value);
+            const data = this._mappingHelper.convertCoreToMappedData(optionName, values);
             const hasCustomFieldsData = isTaskUpdated && this._customFieldsManager.cache.hasData(key);
             if(hasCustomFieldsData) {
                 this._customFieldsManager.addCustomFieldsDataFromCache(key, data);

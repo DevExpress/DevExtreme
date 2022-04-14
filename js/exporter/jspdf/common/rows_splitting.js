@@ -1,5 +1,6 @@
 import { isDefined } from '../../../core/utils/type';
 import { getPageWidth, getPageHeight } from './pdf_utils';
+import { roundToThreeDecimals } from './draw_utils';
 
 function convertToCellsArray(rows) {
     return [].concat.apply([],
@@ -31,7 +32,7 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
             const additionalHeight = (pagesLength > 0 && options.repeatHeaders)
                 ? headerHeight
                 : 0;
-            return currentCoordinate + additionalHeight <= maxBottomRight.y;
+            return roundToThreeDecimals(currentCoordinate + additionalHeight) <= roundToThreeDecimals(maxBottomRight.y);
         },
         (rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit) => {
             const args = {
@@ -71,7 +72,7 @@ function splitByPages(doc, rowsInfo, options, onSeparateRectHorizontally, onSepa
     let pageIndex = 0;
     while(pageIndex < verticallyPages.length) {
         const horizontallyPages = splitRectsByPages(verticallyPages[pageIndex], options.margin.left, 'x', 'w',
-            (pagesLength, currentCoordinate) => currentCoordinate <= maxBottomRight.x,
+            (pagesLength, currentCoordinate) => roundToThreeDecimals(currentCoordinate) <= roundToThreeDecimals(maxBottomRight.x),
             (rect, currentPageMaxRectCoordinate, currentPageRects, rectsToSplit) => {
                 const args = {
                     sourceRect: rect,
