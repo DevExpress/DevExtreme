@@ -3,11 +3,10 @@ import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
 import { isDefined, isFunction } from 'core/utils/type';
-import { JSPdfDataGridTestHelper } from './jspdfTestHelper.js';
-import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
-import { JSPdfOptionTests } from './jspdf.options.tests.js';
+import { JSPdfDataGridTestHelper } from './jspdfParts/autotable/jspdfTestHelper.js';
+import { LoadPanelTests } from './commonParts/loadPanel.tests.js';
+import { JSPdfOptionTests } from './jspdfParts/autotable/jspdf.options.tests.js';
 import { exportDataGridWithAutoTable } from 'pdf_exporter';
-import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
 import 'ui/data_grid';
 
@@ -22,9 +21,6 @@ QUnit.testStart(() => {
 let helper;
 
 const moduleConfig = {
-    before: function() {
-        initializeDxObjectAssign();
-    },
     beforeEach: function() {
         // The transpiling of the script on the drone and locally has differences that affect the imported jsPDF type.
         const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
@@ -32,9 +28,6 @@ const moduleConfig = {
         this.customizeCellCallCount = 0;
 
         helper = new JSPdfDataGridTestHelper(this.jsPDFDocument);
-    },
-    after: function() {
-        clearDxObjectAssign();
     }
 };
 
@@ -4520,4 +4513,5 @@ LoadPanelTests.runTests(moduleConfig, exportDataGridWithAutoTable, (options) => 
         dataSource: [{ f1: 'f1_1' }],
         loadingTimeout: null
     }, 'jsPDFDocument');
+
 

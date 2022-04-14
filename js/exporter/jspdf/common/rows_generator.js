@@ -3,34 +3,6 @@ import dateLocalization from '../../../localization/date';
 import numberLocalization from '../../../localization/number';
 import { toPdfUnit } from './pdf_utils';
 
-// Returns IPdfRowInfo[]
-// [
-//    {
-//      rowType, - readonly
-//      rowIndex, - readonly
-//      indentLevel, - readonly
-//      cells: [ - readonly
-//        {
-//          colSpan, - readonly (for internal use/hide from api/useless???)
-//          rowSpan, - readonly (for internal use/hide from api/useless???)
-//          gridCell, - readonly
-//          pdfCell : {
-//              text,
-//              textColor: '#0000ff', // TODO: specify color format for docs
-//              backgroundColor: '#0000ff', // TODO: specify color format for docs
-//              verticalAlign: 'top' | 'bottom' | 'middle | undefined. Default value is middle
-//              horizontalAlign: 'left' | 'right' | 'center' | undefined. Default value is left
-//              wordWrapEnabled, // true | false. Default value is inherited from grid props,
-//              drawRightBorder,
-//              drawLeftBorder
-//              drawTopBorder
-//              drawBottomBorder
-//          }
-//        }
-//      ],
-//    }
-// ]
-
 const defaultStyles = {
     base: { font: { size: 10 }, borderWidth: 0.5, borderColor: '#979797' },
     header: { textColor: '#979797' },
