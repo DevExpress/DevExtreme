@@ -114,6 +114,7 @@ export const viewFunction = ({
     intervalCount,
     groupOrientation,
     startDate,
+    allDayPanelMode,
     showAllDayPanel,
     showCurrentTimeIndicator,
     indicatorUpdateInterval,
@@ -185,6 +186,7 @@ export const viewFunction = ({
             startDate={startDate}
             startViewDate={startViewDate}
             showAllDayPanel={showAllDayPanel}
+            allDayPanelMode={allDayPanelMode}
             showCurrentTimeIndicator={showCurrentTimeIndicator}
             indicatorUpdateInterval={indicatorUpdateInterval}
             shadeUntilCurrentTime={shadeUntilCurrentTime}
@@ -497,6 +499,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.timeZoneCalculator,
       this.dataAccessors,
       this.workSpaceViewModel!.viewDataProvider,
+      this.currentViewConfig.allDayPanelMode,
     );
 
     return filterStrategy.filter(this.preparedDataItems);

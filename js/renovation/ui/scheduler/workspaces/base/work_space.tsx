@@ -381,10 +381,12 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   }
 
   get isAllDayPanelVisible(): boolean {
-    const { showAllDayPanel } = this.props;
+    const {
+      allDayPanelMode,
+    } = this.props;
     const { isAllDayPanelSupported } = this.renderConfig;
 
-    return isAllDayPanelSupported && showAllDayPanel;
+    return isAllDayPanelSupported && allDayPanelMode !== 'hidden';
   }
 
   get viewDataGenerator(): ViewDataGeneratorType {
