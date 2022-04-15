@@ -9,6 +9,7 @@ import pointerEvents from '../../events/pointer';
 import { addNamespace } from '../../events/utils/index';
 import { isDefined } from '../../core/utils/type';
 import { noop as _noop } from '../../core/utils/common';
+import errors from '../../core/errors';
 const _floor = Math.floor;
 const eventsConsts = consts.events;
 const statesConsts = consts.states;
@@ -56,8 +57,15 @@ function getData(event, dataKey, tryCheckParent) {
     return data;
 }
 
-function eventCanceled(event, target) {
-    return event.cancel || !target.getOptions();
+function eventCanceled({ event, cancel }, target, clickTarget) {
+    const deprecatedCancel = event.cancel; // DEPRECATED_22_1
+    const eventCanceled = cancel || deprecatedCancel;
+
+    if(deprecatedCancel) {
+        errors.log('W0003', `${clickTarget}Ckick handler argument`, 'event.cancel', '22.1', 'Use the \'cancel\' field instead');
+    }
+
+    return eventCanceled || !target.getOptions();
 }
 
 function correctLegendHoverMode(mode) {
@@ -277,7 +285,7 @@ const baseTrackerPrototype = {
         const eventTrigger = this._eventTrigger;
 
         eventTrigger(LEGEND_CLICK, eventArgs, function() {
-            !eventCanceled(eventArgs.event, eventArgs.target) && eventTrigger(elementClick, eventArgs);
+            !eventCanceled(eventArgs, eventArgs.target, 'Legend') && eventTrigger(elementClick, eventArgs);
         });
     },
 
@@ -486,9 +494,10 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         const that = this;
         const eventTrigger = that._eventTrigger;
         const series = point.series;
+        const eventArgs = { target: point, event: event };
 
-        eventTrigger(POINT_CLICK, { target: point, event: event }, function() {
-            !eventCanceled(event, series) && eventTrigger(SERIES_CLICK, { target: series, event: event });
+        eventTrigger(POINT_CLICK, eventArgs, function() {
+            !eventCanceled(eventArgs, series, 'Point') && eventTrigger(SERIES_CLICK, { target: series, event: event });
         });
     },
     ///#DEBUG

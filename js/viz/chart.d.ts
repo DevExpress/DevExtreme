@@ -84,7 +84,7 @@ export type IncidentOccurredEvent = EventInfo<dxChart> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxChart>;
 
 /** @public */
-export type LegendClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
+export type LegendClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
     readonly target: chartSeriesObject;
 };
 
@@ -92,7 +92,7 @@ export type LegendClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEven
 export type OptionChangedEvent = EventInfo<dxChart> & ChangedOptionInfo;
 
 /** @public */
-export type PointClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & PointInteractionInfo;
+export type PointClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
 /** @public */
 export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
