@@ -23,6 +23,7 @@ class DiagramScrollView extends Widget {
         const options = {
             direction: 'both',
             bounceEnabled: false,
+            scrollByContent: false,
             onScroll: ({ scrollOffset }) => {
                 this._raiseOnScroll(scrollOffset.left, scrollOffset.top);
             }
