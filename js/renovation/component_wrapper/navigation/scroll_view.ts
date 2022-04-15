@@ -3,6 +3,7 @@ import { Deferred } from '../../../core/utils/deferred';
 import { Option } from '../common/types';
 import type { ScrollView } from '../../ui/scroll_view/scroll_view';
 import type { UserDefinedElement } from '../../../core/element';
+import { DxMouseEvent } from '../../ui/scroll_view/common/types';
 
 export class ScrollViewWrapper extends Component {
   constructor(element: UserDefinedElement, options: ComponentWrapperProps) {
@@ -58,5 +59,10 @@ export class ScrollViewWrapper extends Component {
     if (name === 'onPullDown' || name === 'onReachBottom') {
       this.updateAdditionalOptions();
     }
+  }
+
+  _moveIsAllowed(event: DxMouseEvent): boolean {
+    // eslint-disable-next-line
+    return (this.viewRef as ScrollView).scrollableRef.current!.scrollableRef.moveIsAllowed(event);
   }
 }
