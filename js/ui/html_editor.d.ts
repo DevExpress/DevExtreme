@@ -426,12 +426,22 @@ export interface dxHtmlEditorTableResizing {
    * @type Array<Enums.HtmlEditorImageUploadTab>
    * @public
    */
-    tabs?: Array<'url' | 'file'>;
+    tabs?: Array<dxHtmlEditorImageUploadTabItem | 'url' | 'file'>;
     /**
     * @docid
     * @public
     */
     fileUploaderOptions?: dxFileUploaderOptions;
+ }
+
+ export interface dxHtmlEditorImageUploadTabItem {
+    /**
+     * @docid
+     * @default undefined
+     * @type Enums.HtmlEditorImageUploadTab
+     * @public
+     */
+    name?: 'url' | 'file';
  }
 
 /**

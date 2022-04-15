@@ -183,6 +183,20 @@ module('Image uploading integration', {
             });
         });
 
+        test('the form popup is correctly rendered for two tabs with object configs', function(assert) {
+            this.createWidget({
+                imageUpload: { tabs: [{ name: 'file' }, { name: 'url' }] }
+            });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $form = this.getFormElement();
+            const formInstance = $form.dxForm('instance');
+            const formItems = formInstance.option('items');
+            const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`);
+
+            this.checkBothTabsConfigs(assert, { formItems, formInstance, fileUploader });
+        });
+
         test('the popup and form is correctly rendered for url tab', function(assert) {
             this.createWidget({ imageUpload: { tabs: ['url'] } });
             this.clock.tick(TIME_TO_WAIT);

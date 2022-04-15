@@ -11,3 +11,7 @@ export default HtmlEditor;
  * @name dxHtmlEditorToolbarItem
  * @inherits dxToolbarItem
  */
+
+/**
+ * @name dxHtmlEditorImageUploadTabItem
+ */

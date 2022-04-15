@@ -84,6 +84,8 @@ export class ImageUploader {
             this.actualTabs = ['url'];
         }
 
+        this.actualTabs = this.normalizeTabs(this.actualTabs);
+
         this.actualTabs.forEach((tabName) => {
             const newTab = tabName === 'url'
                 ? new UrlTab(this.module, {
@@ -99,6 +101,12 @@ export class ImageUploader {
         });
 
         return result;
+    }
+
+    normalizeTabs(tabsConfig) {
+        return tabsConfig.map((item) => {
+            return typeof item === 'object' ? item.name : item;
+        });
     }
 
     isImageUpdating() {
