@@ -734,7 +734,7 @@ class Scheduler extends Widget {
                 this._updateOption('workSpace', args.fullName, value);
                 break;
             case 'showAllDayAppointments':
-                this._updateOption('showAllDayAppointments', name, value);
+                this._workSpace.option('showAllDayAppointments', value);
                 break;
             case 'renovateRender':
                 this._updateOption('workSpace', name, value);
@@ -1604,7 +1604,7 @@ class Scheduler extends Widget {
             schedulerHeight: this.option('height'),
             schedulerWidth: this.option('width'),
             onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
-            onVirtualScrollingUpdated: this._renderAppointments.bind(this),
+            onRenderAppointments: this._renderAppointments.bind(this),
             getHeaderHeight: () => utils.DOM.getHeaderHeight(this._header),
             onScrollEnd: () => this._appointments.updateResizableArea(),
 

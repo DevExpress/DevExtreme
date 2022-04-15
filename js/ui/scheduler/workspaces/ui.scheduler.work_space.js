@@ -2072,7 +2072,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             draggingMode: 'outlook',
             onScrollEnd: () => {},
             getHeaderHeight: undefined,
-            onVirtualScrollingUpdated: undefined,
+            onRenderAppointments: () => {},
             onSelectedCellsClick: () => {},
             timeZoneCalculator: undefined,
             schedulerHeight: undefined,
@@ -2152,6 +2152,9 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'crossScrollingEnabled':
                 this._toggleHorizontalScrollClass();
                 this._dateTableScrollable.option(this._dateTableScrollableConfig());
+                break;
+            case 'showAllDayAppointments':
+                this.updateAppointments();
                 break;
             case 'width':
                 super._optionChanged(args);
@@ -2666,7 +2669,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     updateAppointments() {
-        this.option('onVirtualScrollingUpdated')();
+        this.option('onRenderAppointments')();
         this.dragBehavior?.updateDragSource();
     }
 
