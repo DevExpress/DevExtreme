@@ -1043,3 +1043,43 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
     },
   });
 });
+
+test('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
+
+  await t.click(addRowButton);
+  await t.pressKey('Tab');
+  await t.pressKey('Tab');
+  await t.pressKey('Tab');
+  await t.pressKey('Tab');
+
+  const lastCell = dataGrid.getDataCell(3, 0);
+
+  // assert
+  await t
+    .expect(lastCell.element.textContent)
+    .eql('4');
+
+  await t
+    .expect(lastCell.isFocused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  height: 150,
+  keyExpr: 'id',
+  dataSource: [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+  ],
+  editing: {
+    mode: 'batch',
+    allowAdding: true,
+  },
+  columns: ['id'],
+  scrolling: {
+    mode: 'virtual',
+  },
+}));

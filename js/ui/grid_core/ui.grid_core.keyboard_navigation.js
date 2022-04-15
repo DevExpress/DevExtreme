@@ -181,7 +181,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._setRowsViewAttributes();
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
-                needUpdateFocus = this._isNeedFocus ? !isAppend : this._isHiddenFocus && isFullUpdate;
+                needUpdateFocus = this._isNeedFocus ? !isAppend : this._isHiddenFocus && isFullUpdate && !e?.virtualColumnsScrolling;
                 needUpdateFocus && this._updateFocus(true);
             }
         });
@@ -1142,9 +1142,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     $cell = this._getNextCell(direction);
                 }
                 if(isElementDefined($cell)) {
-                    if(isRenderView && !isEditing && this._checkCellOverlapped($cell)) {
-                        return;
-                    }
                     if($cell.is('td') || $cell.hasClass(this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
                         const $focusedElementInsideCell = $cell.find(':focus');
@@ -1167,21 +1164,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 }
             }
         });
-    },
-    _checkCellOverlapped: function($cell) {
-        const cellOffset = $cell.offset();
-        const hasScrollable = this.component.getScrollable && this.component.getScrollable();
-        let isOverlapped = false;
-
-        if(hasScrollable) {
-            if(cellOffset.left < 0) {
-                isOverlapped = getWidth($cell) + cellOffset.left <= 0;
-            } else if(cellOffset.top < 0) {
-                isOverlapped = getHeight($cell) + cellOffset.top <= 0;
-            }
-        }
-
-        return isOverlapped;
     },
 
     _getFocusedCell: function() {
@@ -1860,13 +1842,14 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return scrollable.scrollBy({ left, top });
     },
     _isInsideEditForm: function(element) {
-        return $(element).closest('.' + this.addWidgetPrefix(EDIT_FORM_CLASS)).length > 0;
+        const $editForm = $(element).closest('.' + this.addWidgetPrefix(EDIT_FORM_CLASS));
+
+        return $editForm.length && this.elementIsInsideGrid($editForm);
     },
     _isMasterDetailCell: function(element) {
         const $masterDetailCell = $(element).closest('.' + MASTER_DETAIL_CELL_CLASS);
-        const $masterDetailGrid = $masterDetailCell.closest('.' + this.getWidgetContainerClass()).parent();
 
-        return $masterDetailCell.length && $masterDetailGrid.is(this.component.$element());
+        return $masterDetailCell.length && this.elementIsInsideGrid($masterDetailCell);
     },
     _processNextCellInMasterDetail: function($nextCell) {
         if(!this._isInsideEditForm($nextCell) && $nextCell) {
@@ -2214,7 +2197,8 @@ export const keyboardNavigationModule = {
                     const virtualItemsCount = this.virtualItemsCount();
 
                     if(virtualItemsCount) {
-                        result += (virtualItemsCount.begin + virtualItemsCount.end);
+                        const rowIndexOffset = this.getRowIndexOffset();
+                        result += (rowIndexOffset + virtualItemsCount.end);
                     }
 
                     return result;

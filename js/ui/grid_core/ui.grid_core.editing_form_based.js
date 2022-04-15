@@ -191,6 +191,7 @@ export const editingFormBasedModule = {
                     const row = this.component.getVisibleRows()[rowIndex];
                     const templateOptions = {
                         row: row,
+                        values: row.values,
                         rowType: row.rowType,
                         key: row.key,
                         rowIndex
@@ -454,11 +455,13 @@ export const editingFormBasedModule = {
                     this.callBase.apply(this, arguments);
                 },
 
-                _editRowFromOptionChangedCore: function(rowIndices, rowIndex, oldRowIndex) {
-                    if(this.isPopupEditMode()) {
+                _editRowFromOptionChangedCore: function(rowIndices, rowIndex) {
+                    const isPopupEditMode = this.isPopupEditMode();
+
+                    this.callBase(rowIndices, rowIndex, isPopupEditMode);
+
+                    if(isPopupEditMode) {
                         this._showEditPopup(rowIndex);
-                    } else {
-                        this.callBase.apply(this, arguments);
                     }
                 }
             },

@@ -301,11 +301,11 @@ export const dataControllerModule = {
                     let filterApplied;
 
                     // B255430
-                    const updateItemsHandler = function() {
+                    const updateItemsHandler = function(change) {
                         that._columnsController.columnsChanged.remove(updateItemsHandler);
                         that.updateItems({
                             repaintChangesOnly: false,
-                            virtualColumnsScrolling: e.changeTypes.virtualColumnsScrolling
+                            virtualColumnsScrolling: change?.changeTypes?.virtualColumnsScrolling
                         });
                     };
 

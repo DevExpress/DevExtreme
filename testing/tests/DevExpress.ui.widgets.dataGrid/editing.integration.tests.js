@@ -1644,6 +1644,79 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
+    // T1080084
+    QUnit.test('The validation message should be shown on focus for nested grid', function(assert) {
+        // arrange
+        let nestedDataGrid;
+
+        const dataGrid = createDataGrid({
+            dataSource: [],
+            keyExpr: 'ID',
+            columns: [{
+                dataField: 'CompanyName',
+                editCellTemplate(e) {
+                    const $nestedDataGrid = $('<div/>').dxDataGrid({
+                        dataSource: [],
+                        keyExpr: 'id',
+                        height: 400,
+                        columns: [{
+                            dataField: 'test1',
+                            validationRules: [{ type: 'required' }]
+                        }, {
+                            dataField: 'test2',
+                            validationRules: [{ type: 'required' }]
+                        }],
+                        editing: {
+                            allowAdding: true
+                        }
+                    });
+
+                    nestedDataGrid = $nestedDataGrid.dxDataGrid('instance');
+
+                    return $nestedDataGrid;
+                }
+            }],
+            editing: {
+                mode: 'form',
+                allowAdding: true,
+                form: {
+                    colCount: 1
+                }
+            }
+        });
+
+        // act
+        dataGrid.addRow();
+        this.clock.tick();
+
+        // assert
+        assert.ok(dataGrid.getVisibleRows()[0].isNewRow, 'grid has new row');
+
+        // act
+        nestedDataGrid.addRow();
+        this.clock.tick();
+
+        // assert
+        assert.ok(nestedDataGrid.getVisibleRows()[0].isNewRow, 'nested grid has new row');
+
+        // act
+        nestedDataGrid.saveEditData();
+        this.clock.tick();
+
+        // assert
+        const $cellElements = $(nestedDataGrid.getRowElement(0)).children();
+        assert.strictEqual($cellElements.length, 3, 'new row - cell count');
+        assert.strictEqual($cellElements.filter('.dx-datagrid-invalid').length, 2, 'new row - number of invalid cells');
+
+        // act
+        $cellElements.first().find('.dx-texteditor-input').first().trigger('dxpointerdown').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        const $overlayWrapper = $(dataGrid.element()).find('.dx-overlay-wrapper.dx-datagrid-invalid-message');
+        assert.strictEqual($overlayWrapper.length, 1, 'has tooltip');
+        assert.strictEqual($overlayWrapper.css('visibility'), 'visible', 'validation message wrapper is visible');
+    });
 
     ['Batch', 'Cell'].forEach(editMode => {
         [null, 'left', 'right'].forEach(fixedPosition => {
@@ -1773,25 +1846,23 @@ QUnit.module('Editing', baseModuleConfig, () => {
     });
 
     QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)', function(assert) {
-        ['row', 'cell'].forEach(editingMode => {
-            // arrange
-            const dataGrid = createDataGrid({
-                dataSource: [{ field1: 'test1' }],
-                editing: {
-                    mode: editingMode,
-                    allowUpdating: true
-                }
-            });
-            this.clock.tick();
-
-            // act
-            $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
-            this.clock.tick();
-
-            // assert
-            assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), `cell has dx-cell-focus-disabled class in '${editingMode}' editing mode`);
-            assert.equal($(dataGrid.$element()).find('.dx-datagrid-focus-overlay').length, 0, `focus overlay is not rendered in '${editingMode}' editing mode`);
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1' }],
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            }
         });
+        this.clock.tick();
+
+        // act
+        $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), 'cell has dx-cell-focus-disabled class');
+        assert.equal($(dataGrid.$element()).find('.dx-datagrid-focus-overlay').length, 0, 'focus overlay is not rendered');
     });
 
     QUnit.test('The cell should not have dx-cell-focus-disabled class on pointerEvents.down event with row editing mode if row in editing state (T850219)', function(assert) {
@@ -3390,6 +3461,58 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
     });
 
+    ['Row', 'Form'].forEach(editMode => {
+        QUnit.test(`${editMode} - Modified value should not be saved when a new row is added (T1076827)`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'test2' },
+                ],
+                columns: ['field1', 'field2'],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true,
+                    allowAdding: true
+                }
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.editRow(0);
+            this.clock.tick();
+
+            // assert
+            assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-edit-row'), 'row is in editing mode');
+            if(editMode === 'Form') {
+                assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-datagrid-edit-form'), 'edit form in a row');
+            }
+
+            // act
+            $(dataGrid.getRowElement(0)).find('.dx-texteditor-input:eq(0)').val('123').trigger('change');
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 0), '123', 'cell value is modified');
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+
+            // assert
+            assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-row-inserted'), 'first inserted row');
+            if(editMode === 'Form') {
+                assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-datagrid-edit-form'), 'edit form in the first row');
+            }
+            assert.notOk($(dataGrid.getRowElement(1)).hasClass('dx-edit-row'), 'second row is not in editing mode');
+            assert.equal($(dataGrid.getRowElement(1)).find('.dx-cell-modified').length, 0, 'no modified cells in the second row');
+            assert.equal($(dataGrid.getRowElement(1)).find('.dx-texteditor-input').length, 0, 'no inputs in the second row');
+            if(editMode === 'Form') {
+                assert.notOk($(dataGrid.getRowElement(1)).hasClass('dx-datagrid-edit-form'), 'edit form not in the second row');
+            }
+            assert.strictEqual(dataGrid.cellValue(1, 0), 'test11', 'cell is not modified');
+            assert.equal(dataGrid.option('editing.changes').length, 1, 'one change');
+            assert.strictEqual(dataGrid.option('editing.changes')[0].type, 'insert', 'insert type');
+        });
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
@@ -6937,7 +7060,6 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             // act
             dataGrid.addRow();
             this.clock.tick(300);
-
 
             // assert
             assert.ok(dataGrid.getVisibleRows()[newRowVisibleIndex].isNewRow, 'row was added initially');

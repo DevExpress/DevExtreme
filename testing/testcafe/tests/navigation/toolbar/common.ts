@@ -130,85 +130,92 @@ fixture`Toolbar_common`
       await changeTheme('generic.light');
     });
 
-    test(`Toolbar with different types of buttons,theme=${theme},items[].locateInMenu=${locateInMenu}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    ['text', 'outlined', 'contained'].forEach((stylingMode) => {
+      test(`Toolbar with different types of buttons,theme=${theme},items[{locateInMenu=${locateInMenu},stylingMode:${stylingMode}}]`, async (t) => {
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      let targetContainerSelector = '#container';
+        let targetContainerSelector = '#container';
 
-      if (locateInMenu === 'always') {
-        await ClientFunction(() => {
-          $('.dx-toolbar .dx-dropdownmenu-button').click();
-        })();
+        if (locateInMenu === 'always') {
+          await ClientFunction(() => {
+            $('.dx-toolbar .dx-dropdownmenu-button').click();
+          })();
 
-        targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
-      }
+          targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+        }
 
-      await t
-        .expect(await takeScreenshot(`Toolbar-with-button,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
-        .ok()
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await changeTheme(theme);
+        await t
+          .expect(await takeScreenshot(`Toolbar-with-${stylingMode}-buttons,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
+          .ok()
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
+      }).before(async () => {
+        await changeTheme(theme);
 
-      const toolbarItems = [
-        {
-          location: 'before',
-          locateInMenu,
-          widget: 'dxButton',
-          options: {
-            type: 'default',
-            text: 'default',
-            icon: 'money',
+        const toolbarItems = [
+          {
+            location: 'before',
+            locateInMenu,
+            widget: 'dxButton',
+            options: {
+              type: 'default',
+              text: 'default',
+              icon: 'money',
+              stylingMode,
+            },
           },
-        },
-        {
-          location: 'before',
-          locateInMenu,
-          widget: 'dxButton',
-          options: {
-            type: 'back',
-            text: 'back',
-            icon: 'money',
+          {
+            location: 'before',
+            locateInMenu,
+            widget: 'dxButton',
+            options: {
+              type: 'back',
+              text: 'back',
+              icon: 'money',
+              stylingMode,
+            },
           },
-        },
-        {
-          location: 'before',
-          locateInMenu,
-          widget: 'dxButton',
-          options: {
-            type: 'danger',
-            text: 'danger',
-            icon: 'money',
+          {
+            location: 'before',
+            locateInMenu,
+            widget: 'dxButton',
+            options: {
+              type: 'danger',
+              text: 'danger',
+              icon: 'money',
+              stylingMode,
+            },
           },
-        },
-        {
-          location: 'before',
-          locateInMenu,
-          widget: 'dxButton',
-          options: {
-            type: 'normal',
-            text: 'normal',
-            icon: 'money',
+          {
+            location: 'before',
+            locateInMenu,
+            widget: 'dxButton',
+            options: {
+              type: 'normal',
+              text: 'normal',
+              icon: 'money',
+              stylingMode,
+            },
           },
-        },
-        {
-          location: 'before',
-          locateInMenu,
-          widget: 'dxButton',
-          options: {
-            type: 'success',
-            text: 'success',
-            icon: 'money',
+          {
+            location: 'before',
+            locateInMenu,
+            widget: 'dxButton',
+            options: {
+              type: 'success',
+              text: 'success',
+              icon: 'money',
+              stylingMode,
+            },
           },
-        },
-      ] as Item[];
+        ] as Item[];
 
-      return createWidget('dxToolbar', {
-        items: toolbarItems,
+        return createWidget('dxToolbar', {
+          items: toolbarItems,
+        });
+      }).after(async () => {
+        await changeTheme('generic.light');
       });
-    }).after(async () => {
-      await changeTheme('generic.light');
     });
   });
 

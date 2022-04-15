@@ -73,6 +73,20 @@
       padding: 0;
     }
 
+    .dx-button-mode-contained {
+      &.dx-button-default {
+        @include dx-button-flat-color-styling($button-default-bg, transparent, transparent, transparent);
+      }
+
+      &.dx-button-danger {
+        @include dx-button-flat-color-styling($button-danger-bg, transparent, transparent, transparent);
+      }
+
+      &.dx-button-success {
+        @include dx-button-flat-color-styling($button-success-bg, transparent, transparent, transparent);
+      }
+    }
+
     .dx-button {
       height: $material-list-item-height;
       padding: 0;

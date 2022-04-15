@@ -356,9 +356,9 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
     /**
      * @docid GridBaseOptions.rowDragging.onDragChange
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 event:event
-     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:this
+     * @type_function_param1_field3 event:event
      * @type_function_param1_field4 itemData:any
      * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 fromIndex:number
@@ -373,9 +373,9 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
     /**
      * @docid GridBaseOptions.rowDragging.onDragEnd
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 event:event
-     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:this
+     * @type_function_param1_field3 event:event
      * @type_function_param1_field4 itemData:any
      * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 fromIndex:number
@@ -390,9 +390,9 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
     /**
      * @docid GridBaseOptions.rowDragging.onDragMove
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 event:event
-     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:this
+     * @type_function_param1_field3 event:event
      * @type_function_param1_field4 itemData:any
      * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 fromIndex:number
@@ -407,9 +407,9 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
     /**
      * @docid GridBaseOptions.rowDragging.onDragStart
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 event:event
-     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:this
+     * @type_function_param1_field3 event:event
      * @type_function_param1_field4 itemData:any
      * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 fromIndex:number
@@ -712,11 +712,11 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 changes:Array<DataChange>
-     * @type_function_param1_field5 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:this
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 changes:Array<DataChange>
      * @default null
      * @action
      * @public
@@ -763,11 +763,11 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 key:any
-     * @type_function_param1_field5 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:this
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 key:any
      * @default null
      * @action
      * @public
@@ -788,11 +788,11 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 key:any
-     * @type_function_param1_field5 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:this
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 key:any
      * @default null
      * @action
      * @public
@@ -3328,12 +3328,12 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 data:object
-     * @type_function_param1_field5 key:any
-     * @type_function_param1_field6 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:dxDataGrid
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 data:object
+     * @type_function_param1_field6 key:any
      * @type_function_param1_field7 column:object
      * @default null
      * @action
@@ -3402,11 +3402,11 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 fileName:string
-     * @type_function_param1_field5 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:dxDataGrid
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 fileName:string
      * @default null
      * @action
      * @public
@@ -3415,12 +3415,12 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 fileName:string
-     * @type_function_param1_field4 format:string
-     * @type_function_param1_field5 data:BLOB
-     * @type_function_param1_field6 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:dxDataGrid
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 fileName:string
+     * @type_function_param1_field5 format:string
+     * @type_function_param1_field6 data:BLOB
      * @default null
      * @action
      * @public
@@ -3446,18 +3446,18 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 cellElement:DxElement
-     * @type_function_param1_field5 prevColumnIndex:number
-     * @type_function_param1_field6 prevRowIndex:number
-     * @type_function_param1_field7 newColumnIndex:number
-     * @type_function_param1_field8 newRowIndex:number
-     * @type_function_param1_field9 event:event
-     * @type_function_param1_field10 rows:Array<dxDataGridRowObject>
-     * @type_function_param1_field11 columns:Array<dxDataGridColumn>
-     * @type_function_param1_field12 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:dxDataGrid
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 cellElement:DxElement
+     * @type_function_param1_field7 prevColumnIndex:number
+     * @type_function_param1_field8 prevRowIndex:number
+     * @type_function_param1_field9 newColumnIndex:number
+     * @type_function_param1_field10 newRowIndex:number
+     * @type_function_param1_field11 rows:Array<dxDataGridRowObject>
+     * @type_function_param1_field12 columns:Array<dxDataGridColumn>
      * @type_function_param1_field13 isHighlighted:boolean
      * @default null
      * @action
@@ -3481,15 +3481,15 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 rowElement:DxElement
-     * @type_function_param1_field5 prevRowIndex:number
-     * @type_function_param1_field6 newRowIndex:number
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 rows:Array<dxDataGridRowObject>
-     * @type_function_param1_field9 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:dxDataGrid
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 rowElement:DxElement
+     * @type_function_param1_field7 prevRowIndex:number
+     * @type_function_param1_field8 newRowIndex:number
+     * @type_function_param1_field9 rows:Array<dxDataGridRowObject>
      * @default null
      * @action
      * @public

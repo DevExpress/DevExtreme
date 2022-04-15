@@ -11,6 +11,8 @@ import {
   Plugins, PluginsContext,
 } from '../../../../utils/plugin/context';
 
+import CLASSES from '../classes';
+
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import { TemplateSetter } from '../../../../utils/plugin/template_setter';
 import { GetterExtender } from '../../../../utils/plugin/getter_extender';
@@ -87,8 +89,11 @@ export class DataGridNextSelection extends JSXComponent(DataGridNextSelectionPro
 
   @Effect()
   setRowClickEvent(): void {
-    this.plugins.set(RowClick, (row) => {
-      this.plugins.callAction(ToggleSelected, row.data);
+    this.plugins.set(RowClick, (row, event) => {
+      const isSelectCheckBox = Boolean((event.target as Element).closest(`.${CLASSES.selectCheckbox}`));
+      if (!isSelectCheckBox) {
+        this.plugins.callAction(ToggleSelected, row.data);
+      }
     });
   }
 

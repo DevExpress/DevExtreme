@@ -120,8 +120,8 @@ function sizeIsValid(value) {
 
 const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _eventsMap: {
-        'onIncidentOccurred': { name: 'incidentOccurred' },
-        'onDrawn': { name: 'drawn' }
+        'onIncidentOccurred': { name: 'incidentOccurred', actionSettings: { excludeValidators: ['disabled'] } },
+        'onDrawn': { name: 'drawn', actionSettings: { excludeValidators: ['disabled'] } }
     },
 
     _getDefaultOptions: function() {
@@ -446,7 +446,9 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _initEventTrigger: function() {
         const that = this;
-        that._eventTrigger = createEventTrigger(that._eventsMap, function(name) { return that._createActionByOption(name); });
+        that._eventTrigger = createEventTrigger(that._eventsMap, function(name, actionSettings) {
+            return that._createActionByOption(name, actionSettings);
+        });
     },
 
     _calculateCanvas: function() {

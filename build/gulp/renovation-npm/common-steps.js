@@ -1,12 +1,11 @@
 const gulp = require('gulp');
 const createVinyl = require('./utils/create-gulp-file');
-const { camelCase, getComponentsSpecification } = require('./utils');
+const { getComponentsSpecification } = require('./utils');
 
 function createEntryPoint(context, fileName) {
     return () => {
         const contents = getComponentsSpecification(context.destination, context.components)
-            .map(x => x.pathInRenovationFolder.slice(0, -2))
-            .map(x => `export * as ${camelCase(x.split('/').splice(-1)[0])} from './${x}';`)
+            .map(x => `export * as ${x.name} from './${x.pathInRenovationFolder.slice(0, -2)}';`)
             .join('\n');
     
         return createVinyl(fileName, contents)

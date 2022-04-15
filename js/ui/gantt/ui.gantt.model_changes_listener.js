@@ -8,12 +8,7 @@ export const ModelChangesListener = {
         return { // IModelChangesListener
             NotifyTaskCreated: (task, callback, errorCallback) => { gantt._onRecordInserted(GANTT_TASKS, task, callback); },
             NotifyTaskRemoved: (taskId, errorCallback, task) => { gantt._onRecordRemoved(GANTT_TASKS, taskId, task); },
-            NotifyTaskTitleChanged: (taskId, newValue, errorCallback) => { gantt._onRecordUpdated(GANTT_TASKS, taskId, 'title', newValue); },
-            NotifyTaskDescriptionChanged: (taskId, newValue, errorCallback) => { gantt._onRecordUpdated(GANTT_TASKS, taskId, 'description', newValue); },
-            NotifyTaskStartChanged: (taskId, newValue, errorCallback) => { gantt._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
-            NotifyTaskEndChanged: (taskId, newValue, errorCallback) => { gantt._onRecordUpdated(GANTT_TASKS, taskId, 'end', newValue); },
-            NotifyTaskProgressChanged: (taskId, newValue, errorCallback) => { gantt._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
-            NotifyTaskColorChanged: (taskId, newValue, errorCallback) => { gantt._onRecordUpdated(GANTT_TASKS, taskId, 'color', newValue); },
+            NotifyTaskUpdated: (taskId, newValues, errorCallback) => { gantt._onRecordUpdated(GANTT_TASKS, taskId, newValues); },
             NotifyParentTaskUpdated: (task, errorCallback) => { gantt._onParentTaskUpdated(task); },
             NotifyDependencyInserted: (dependency, callback, errorCallback) => { gantt._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
             NotifyDependencyRemoved: (dependencyId, errorCallback, dependency) => { gantt._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId, dependency); },

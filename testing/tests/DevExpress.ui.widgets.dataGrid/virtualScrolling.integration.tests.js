@@ -6626,4 +6626,47 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.equal(spyLoad.args[spyLoad.callCount - 1][0].skip, 120, 'skip is not changed after scrolling up');
         assert.equal(spyLoad.args[spyLoad.callCount - 1][0].take, 20, 'take is not changed after scrolling up');
     });
+
+    QUnit.test('Refresh call should not reset scroll position during scrolling (T1076187)', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: {
+                key: 'id',
+                load: () => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve(getData(100));
+                    }, 100);
+
+                    return d.promise();
+                }
+            },
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            height: 200
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.refresh();
+        dataGrid.getScrollable().scrollTo({ top: 500 });
+        this.clock.tick(100);
+
+        // assert
+        assert.equal(dataGrid.getScrollable().scrollTop(), 500, 'scroll position is not reset');
+    });
 });

@@ -25,3 +25,12 @@ export type DeepPartial<T> = T extends object ? {
 
 // Omit does not exist in TS < 3.5.1
 export type Skip<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+type ItemType<T> = T extends (infer TItem)[] ? TItem : T;
+type Property<T, TPropName extends string> = T extends Partial<Record<TPropName, infer TValue>> ? TValue : never;
+type OwnPropertyType<T, TPropName extends string> = Property<ItemType<T>, TPropName>;
+
+export type PropertyType<T, TProp extends string> =
+  TProp extends `${infer TOwnProp}.${infer TNestedProps}`
+    ? PropertyType<OwnPropertyType<T, TOwnProp>, TNestedProps>
+    : OwnPropertyType<T, TProp>;
