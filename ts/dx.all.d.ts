@@ -27939,18 +27939,14 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxChart>;
-    export type LegendClickEvent = DevExpress.events.NativeEventInfo<
-      dxChart,
-      MouseEvent | PointerEvent
-    > & {
-      readonly target: chartSeriesObject;
-    };
+    export type LegendClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
+        readonly target: chartSeriesObject;
+      };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.events.ChangedOptionInfo;
-    export type PointClickEvent = DevExpress.events.NativeEventInfo<
-      dxChart,
-      MouseEvent | PointerEvent
-    > &
+    export type PointClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<dxChart, MouseEvent | PointerEvent> &
       DevExpress.viz.BaseChart.PointInteractionInfo;
     export type PointHoverChangedEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseChart.PointInteractionInfo;
@@ -32807,18 +32803,20 @@ declare module DevExpress.viz {
         DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxPolarChart>;
-    export type LegendClickEvent = DevExpress.events.NativeEventInfo<
-      dxPolarChart,
-      MouseEvent | PointerEvent
-    > & {
-      readonly target: polarChartSeriesObject;
-    };
+    export type LegendClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<
+        dxPolarChart,
+        MouseEvent | PointerEvent
+      > & {
+        readonly target: polarChartSeriesObject;
+      };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPolarChart> &
       DevExpress.events.ChangedOptionInfo;
-    export type PointClickEvent = DevExpress.events.NativeEventInfo<
-      dxPolarChart,
-      MouseEvent | PointerEvent
-    > &
+    export type PointClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<
+        dxPolarChart,
+        MouseEvent | PointerEvent
+      > &
       DevExpress.viz.BaseChart.PointInteractionInfo;
     export type PointHoverChangedEvent =
       DevExpress.events.EventInfo<dxPolarChart> &
