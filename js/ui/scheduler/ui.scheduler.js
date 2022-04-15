@@ -1342,9 +1342,18 @@ class Scheduler extends Widget {
             this.timeZoneCalculator
         );
 
-        this._checkRecurringAppointment(appointment, targetedAppointment, targetedAdapter.startDate, () => {
-            this.deleteAppointment(appointment);
-        }, true);
+        const deletingOptions = this.fireOnAppointmentDeleting(appointment, targetedAdapter);
+        if(!deletingOptions.cancel) {
+            this._checkRecurringAppointment(
+                appointment,
+                targetedAppointment,
+                targetedAdapter.startDate,
+                () => {
+                    this.processDeleteAppointment(appointment, deletingOptions);
+                },
+                true
+            );
+        }
     }
 
     _getExtraAppointmentTooltipOptions() {
@@ -2385,20 +2394,49 @@ class Scheduler extends Widget {
     }
 
     deleteAppointment(rawAppointment) {
+        const deletingOptions = this.fireOnAppointmentDeleting(rawAppointment);
+        this.processDeleteAppointment(rawAppointment, deletingOptions);
+    }
+
+    fireOnAppointmentDeleting(rawAppointment, targetedAppointmentData) {
         const deletingOptions = {
             appointmentData: rawAppointment,
+            targetedAppointmentData,
             cancel: false
         };
 
         this._actions[StoreEventNames.DELETING](deletingOptions);
 
+        return deletingOptions;
+    }
+
+    processDeleteAppointment(rawAppointment, deletingOptions) {
         this._processActionResult(deletingOptions, function(canceled) {
             if(!canceled) {
                 this.appointmentDataProvider
                     .remove(rawAppointment)
-                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, storeAppointment, rawAppointment));
+                    .always(storeAppointment => this._onDataPromiseCompleted(
+                        StoreEventNames.DELETED,
+                        storeAppointment,
+                        rawAppointment,
+                    ));
             }
         });
+    }
+
+    addRecurrenceException(rawAppointment, targetedAppointment) {
+        const targetedAdapter = createAppointmentAdapter(
+            targetedAppointment,
+            this._dataAccessors,
+            this.timeZoneCalculator
+        );
+
+        this._excludeAppointmentFromSeries(
+            rawAppointment,
+            targetedAppointment,
+            targetedAdapter.startDate,
+            true,
+        );
     }
 
     focus() {
