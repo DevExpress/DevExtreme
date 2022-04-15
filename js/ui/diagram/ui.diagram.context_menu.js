@@ -7,7 +7,6 @@ import DiagramMenuHelper from './ui.diagram.menu_helper';
 
 import DiagramBar from './diagram.bar';
 import { getDiagram } from './diagram.importer';
-import { hasWindow, getWindow } from '../../core/utils/window';
 
 const DIAGRAM_TOUCHBAR_CLASS = 'dx-diagram-touchbar';
 const DIAGRAM_TOUCHBAR_OVERLAY_CLASS = 'dx-diagram-touchbar-overlay';
@@ -92,21 +91,10 @@ class DiagramContextMenuWrapper extends Widget {
     _hide() {
         this._$contextMenuTargetElement.hide();
         this._contextMenuInstance.hide();
-        delete this._isTouchMode;
     }
     _isTouchBarMode() {
-        if(this._isTouchMode !== undefined) {
-            return this._isTouchMode;
-        }
         const { Browser } = getDiagram();
-        if(Browser.TouchUI) {
-            return true;
-        }
-        if(!hasWindow()) {
-            return false;
-        }
-        const window = getWindow();
-        return window.navigator && window.navigator.maxTouchPoints > 0;
+        return Browser.TouchUI;
     }
     _onItemClick(itemData) {
         let processed = false;
