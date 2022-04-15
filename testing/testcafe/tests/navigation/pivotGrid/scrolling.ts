@@ -74,7 +74,7 @@ fixture`PivotGrid_scrolling`
     });
   });
 
-  test(`Rows sincronization with vertical scrollbar when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal`, async (t) => {
+  test(`Rows sincronization with both scrollbars when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await ClientFunction(() => {
@@ -83,7 +83,7 @@ fixture`PivotGrid_scrolling`
     })();
 
     await t
-      .expect(await takeScreenshot(`Rows_sinc_vert_scrollbar_useNative=${useNative}_mode=${mode}.png`, '#container'))
+      .expect(await takeScreenshot(`Rows_sinc_both_scrollbars_useNative=${useNative}_mode=${mode}.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
