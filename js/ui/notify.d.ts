@@ -1,16 +1,10 @@
 /** @public */
-type StackPosition = 'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center';
-
-/** @public */
-type StackDirection = 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse';
-
-/** @public */
 interface Stack {
     /**
      * @docid
      * @type Enums.StackPosition|object
      */
-    position?: StackPosition | {
+    position?: 'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center' | {
         /**
          * @docid
          * @type number
@@ -36,7 +30,7 @@ interface Stack {
      * @docid
      * @type Enums.StackDirection
      */
-    direction?: StackDirection;
+    direction?: 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse';
 }
 
 /**
