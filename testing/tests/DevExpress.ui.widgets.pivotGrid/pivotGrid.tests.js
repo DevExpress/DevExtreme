@@ -3451,7 +3451,7 @@ QUnit.module('dxPivotGrid', {
 
         const table = pivotGrid.$element().find('table').first();
 
-        assert.strictEqual(getWidth(table), 1005, 'table width');
+        assert.strictEqual(getWidth(table), 1020, 'table width');
     });
 
 

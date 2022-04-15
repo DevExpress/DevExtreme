@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import Widget from '../internal/widget';
 
-export default class DataGrid extends Widget {
+export default class PivotGrid extends Widget {
   getGridInstance: ClientFunction;
 
   name: string;
