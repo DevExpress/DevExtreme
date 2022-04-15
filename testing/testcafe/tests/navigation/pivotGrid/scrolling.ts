@@ -1,12 +1,15 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
-import { virtualData, dataOptions } from './data.js';
+import { virtualData } from './virtualData.js';
+// eslint-disable-next-line import/extensions
+import { dataOptions } from './virtualDataOptions.js';
+import PivotGrid from '../../../model/pivotGrid';
 
 fixture`PivotGrid_scrolling`
-  .page(url(__dirname, './pages/T1081956.html'));
+  .page(url(__dirname, './pages/T1081956.html'))
+  .afterEach(async () => disposeWidgets());
 
 // T1081956
 [
@@ -17,11 +20,10 @@ fixture`PivotGrid_scrolling`
 ].forEach(({ useNative, mode }) => {
   test(`Rows sincronization with vertical scrollbar when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const pivotGrid = new PivotGrid('#container');
 
-    await ClientFunction(() => {
-      // eslint-disable-next-line no-underscore-dangle
-      ($('#container') as any).dxPivotGrid('instance')._dataArea._getScrollable().scrollTo({ top: 83200 });
-    })();
+    await pivotGrid.scrollTo({ top: 300000 });
+    await pivotGrid.scrollBy({ top: -150 });
 
     await t
       .expect(await takeScreenshot(`Rows_sinc_vert_scrollbar_useNative=${useNative}_mode=${mode}.png`, '#container'))
@@ -76,11 +78,10 @@ fixture`PivotGrid_scrolling`
 
   test(`Rows sincronization with both scrollbars when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const pivotGrid = new PivotGrid('#container');
 
-    await ClientFunction(() => {
-      // eslint-disable-next-line no-underscore-dangle
-      ($('#container') as any).dxPivotGrid('instance')._dataArea._getScrollable().scrollTo({ top: 132700 });
-    })();
+    await pivotGrid.scrollTo({ top: 300000 });
+    await pivotGrid.scrollBy({ top: -150 });
 
     await t
       .expect(await takeScreenshot(`Rows_sinc_both_scrollbars_useNative=${useNative}_mode=${mode}.png`, '#container'))
