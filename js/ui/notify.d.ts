@@ -43,7 +43,6 @@ interface Stack {
  * @docid ui.notify
  * @static
  * @publicName notify(message,type,displayTime)
- * @param1 message:string
  * @param2 type:string|undefined
  * @param3 displayTime:integer|undefined
  * @public
@@ -65,7 +64,6 @@ declare function notify(options: any, type?: string, displayTime?: number): void
  * @docid ui.notify
  * @static
  * @publicName notify(message,stack)
- * @param1 message:string
  * @param2 stack:object
  * @public
  */
