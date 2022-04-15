@@ -1,6 +1,5 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../model/scheduler';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
 const checkAllDayAppointment = async (
@@ -53,49 +52,11 @@ const checkRegularAppointment = async (
     .within(height - 1, height + 1);
 };
 
-fixture`Scheduler - Multiday appointments`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Scheduler - Multiday appointments`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-[
-  'week',
-  'month',
-  'timelineMonth',
-].forEach((currentView) => {
-  test(`it should not cut multiday appointment in ${currentView} view`, async (t) => {
-    const {
-      takeScreenshot,
-      compareResults,
-    } = createScreenshotsComparer(t);
-    const scheduler = new Scheduler('#container');
-
-    await t
-      .expect(await takeScreenshot(
-        `multiday-appointment_${currentView}.png`,
-        scheduler.element,
-      ))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => createWidget(
-    'dxScheduler',
-    {
-      width: 900,
-      height: 400,
-      dataSource: [{
-        text: 'Website Re-Design Plan',
-        startDate: new Date(2021, 2, 28, 8),
-        endDate: new Date(2021, 3, 4, 8),
-      }],
-      views: ['week', 'month', 'timelineMonth'],
-      currentView,
-      currentDate: new Date(2021, 3, 4),
-      startDayHour: 12,
-    },
-    true,
-  ));
-});
-
-test('it should render multi-day and multi-view appointments correctly if showAllDayAppointments is "none"', async (t) => {
+test('it should render multi-day and multi-view appointments correctly if allDayPanelMode is "hidden"', async (t) => {
   const scheduler = new Scheduler('#container');
 
   let appointmentCount = await scheduler.getAppointmentCount();
@@ -151,11 +112,11 @@ test('it should render multi-day and multi-view appointments correctly if showAl
     currentDate: new Date(2021, 2, 21),
     startDayHour: 8,
     endDayHour: 10,
-    showAllDayAppointments: 'none',
+    allDayPanelMode: 'hidden',
   },
 ));
 
-test('it should render all-day appointments if showAllDayAppointments is "auto"', async (t) => {
+test('it should render all-day appointments if allDayPanelMode is "all"', async (t) => {
   const scheduler = new Scheduler('#container');
 
   let appointmentCount = await scheduler.getAppointmentCount();
@@ -201,11 +162,11 @@ test('it should render all-day appointments if showAllDayAppointments is "auto"'
     currentDate: new Date(2021, 2, 21),
     startDayHour: 8,
     endDayHour: 10,
-    showAllDayAppointments: 'auto',
+    allDayPanelMode: 'all',
   },
 ));
 
-test('it should render all-day and multi-day appointments if showAllDayAppointments is "allDay"', async (t) => {
+test('it should render all-day and multi-day appointments if allDayPanelMode is "allDay"', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -236,6 +197,78 @@ test('it should render all-day and multi-day appointments if showAllDayAppointme
     currentDate: new Date(2021, 2, 21),
     startDayHour: 8,
     endDayHour: 10,
-    showAllDayAppointments: 'allDay',
+    allDayPanelMode: 'allDay',
+  },
+));
+
+test('it should correctly change allDayPanelOption at runtime', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t
+    .expect(scheduler.getAppointmentCount())
+    .eql(2);
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 95);
+  await checkAllDayAppointment(t, scheduler, 'multiDay', 0, undefined, 395);
+
+  await scheduler.option('allDayPanelMode', 'allDay');
+  await t
+    .expect(scheduler.getAppointmentCount())
+    .eql(5);
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 95);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 400);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 400);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 400);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 150);
+
+  await scheduler.option('allDayPanelMode', 'hidden');
+  await t
+    .expect(scheduler.getAppointmentCount())
+    .eql(5)
+    .expect(scheduler.allDayTableCells.exists)
+    .notOk();
+  await checkRegularAppointment(t, scheduler, 'allDay', 0, undefined, 400);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 400);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 400);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 400);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 150);
+
+  await scheduler.option('allDayPanelMode', 'allDay');
+  await t
+    .expect(scheduler.getAppointmentCount())
+    .eql(5);
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 95);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 400);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 400);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 400);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 150);
+
+  await scheduler.option('allDayPanelMode', 'all');
+  await t
+    .expect(scheduler.getAppointmentCount())
+    .eql(2);
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 95);
+  await checkAllDayAppointment(t, scheduler, 'multiDay', 0, undefined, 395);
+}).before(async () => createWidget(
+  'dxScheduler',
+  {
+    width: 800,
+    height: 600,
+    dataSource: [
+      {
+        text: 'allDay',
+        startDate: new Date(2021, 2, 22),
+        allDay: true,
+      },
+      {
+        text: 'multiDay',
+        startDate: new Date(2021, 2, 22, 8),
+        endDate: new Date(2021, 2, 25, 9, 30),
+      }],
+    views: ['week', 'workWeek'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 22),
+    maxAppointmentsPerCell: 2,
+    startDayHour: 8,
+    endDayHour: 12,
   },
 ));

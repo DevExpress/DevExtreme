@@ -579,7 +579,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             appointmentDataProvider: {
                 appointmentTakesAllDay: commonUtils.noop,
             },
-            showAllDayAppointments: 'auto',
+            allDayPanelMode: 'all',
             cellDurationInMinutes: 30,
             cellHeight: 50
         });

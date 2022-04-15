@@ -53,7 +53,7 @@ export class AppointmentFilterBaseStrategy {
     get dateRange() { return this._resolveOption('dateRange'); }
     get groupCount() { return this._resolveOption('groupCount'); }
     get viewDataProvider() { return this._resolveOption('viewDataProvider'); }
-    get showAllDayAppointments() { return this._resolveOption('showAllDayAppointments'); }
+    get allDayPanelMode() { return this._resolveOption('allDayPanelMode'); }
 
     _resolveOption(name) {
         const result = this.options[name];
@@ -103,7 +103,7 @@ export class AppointmentFilterBaseStrategy {
                 item,
                 this.viewStartDayHour,
                 this.viewEndDayHour,
-                this.showAllDayAppointments,
+                this.allDayPanelMode,
             )) {
                 result = true;
                 return false;
@@ -128,7 +128,7 @@ export class AppointmentFilterBaseStrategy {
                 appointment,
                 viewStartDayHour,
                 viewEndDayHour,
-                this.showAllDayAppointments,
+                this.allDayPanelMode,
             )
         ]];
     }
@@ -182,7 +182,7 @@ export class AppointmentFilterBaseStrategy {
                 appointment,
                 viewStartDayHour,
                 viewEndDayHour,
-                this.showAllDayAppointments,
+                this.allDayPanelMode,
             );
             const appointmentTakesSeveralDays = getAppointmentTakesSeveralDays(appointment);
             const isAllDay = appointment.allDay;

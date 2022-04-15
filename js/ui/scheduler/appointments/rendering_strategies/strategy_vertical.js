@@ -305,7 +305,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator),
             this.startDayHour,
             this.endDayHour,
-            this.showAllDayAppointments
+            this.allDayPanelMode
         );
     }
 
