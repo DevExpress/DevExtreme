@@ -60,7 +60,7 @@ class BaseRenderingStrategy {
     get dataAccessors() { return this.options.dataAccessors; }
     get timeZoneCalculator() { return this.options.timeZoneCalculator; }
     get intervalCount() { return this.options.intervalCount; }
-    get showAllDayAppointments() { return this.options.showAllDayAppointments; }
+    get allDayPanelMode() { return this.options.allDayPanelMode; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
@@ -249,7 +249,7 @@ class BaseRenderingStrategy {
             adapter,
             this.viewStartDayHour,
             this.viewEndDayHour,
-            this.showAllDayAppointments,
+            this.allDayPanelMode,
         );
     }
 

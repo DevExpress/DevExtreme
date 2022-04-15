@@ -1927,6 +1927,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             utils.renovation.renderComponent(this, this._$allDayTable, dxrAllDayPanelTable, 'renovatedAllDayPanel', options);
             utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', {});
         }
+
         this._toggleAllDayVisibility(true);
     }
 
@@ -2066,13 +2067,14 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolling: {
                 mode: 'standard',
             },
-            showAllDayAppointments: 'auto',
+            allDayPanelMode: 'all',
             renovateRender: true,
             height: undefined,
             draggingMode: 'outlook',
             onScrollEnd: () => {},
             getHeaderHeight: undefined,
             onRenderAppointments: () => {},
+            onShowAllDayPanel: () => {},
             onSelectedCellsClick: () => {},
             timeZoneCalculator: undefined,
             schedulerHeight: undefined,
@@ -2153,7 +2155,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this._toggleHorizontalScrollClass();
                 this._dateTableScrollable.option(this._dateTableScrollableConfig());
                 break;
-            case 'showAllDayAppointments':
+            case 'allDayPanelMode':
+                this.updateShowAllDayPanel();
                 this.updateAppointments();
                 break;
             case 'width':
@@ -2176,6 +2179,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             default:
                 super._optionChanged(args);
         }
+    }
+
+    updateShowAllDayPanel() {
+        const isHiddenAllDayPanel = this.option('allDayPanelMode') === 'hidden';
+        this.option('onShowAllDayPanel')(!isHiddenAllDayPanel);
     }
 
     _getVirtualScrollingDispatcherOptions() {
