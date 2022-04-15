@@ -68,6 +68,8 @@ const Lookup = DropDownList.inherit({
 
             searchEnabled: true,
 
+            searchStartEvent: 'input change keyup',
+
             cleanSearchOnOpening: true,
 
             showCancelButton: true,
@@ -226,6 +228,13 @@ const Lookup = DropDownList.inherit({
 
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
+        });
+    },
+
+    _setDeprecatedOptions() {
+        this.callBase();
+        extend(this._deprecatedOptions, {
+            'valueChangeEvent': { since: '22.1', alias: 'searchStartEvent' }
         });
     },
 
@@ -820,6 +829,8 @@ const Lookup = DropDownList.inherit({
         this._renderSearch();
     },
 
+    _renderValueChangeEvent: noop,
+
     _renderSearch: function() {
         const isSearchEnabled = this.option('searchEnabled');
 
@@ -843,7 +854,7 @@ const Lookup = DropDownList.inherit({
                 onKeyboardHandled: opts => isKeyboardListeningEnabled && this._list._keyboardHandler(opts),
                 mode: searchMode,
                 showClearButton: true,
-                valueChangeEvent: this.option('valueChangeEvent'),
+                valueChangeEvent: this.option('searchStartEvent'),
                 onValueChanged: (e) => { this._searchHandler(e); }
             });
 
@@ -1087,6 +1098,9 @@ const Lookup = DropDownList.inherit({
             case 'grouped':
             case 'groupTemplate':
                 this._setListOption(name);
+                break;
+            case 'searchStartEvent':
+                this._searchBox?.option('valueChangeEvent', value);
                 break;
             case 'onScroll':
                 this._initScrollAction();

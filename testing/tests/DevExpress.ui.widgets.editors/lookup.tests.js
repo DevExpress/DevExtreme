@@ -4,6 +4,7 @@ import devices from 'core/devices';
 import dataUtils from 'core/element_data';
 import config from 'core/config';
 import browser from 'core/utils/browser';
+import errors from 'core/errors';
 import { isRenderer } from 'core/utils/type';
 import { normalizeKeyName } from 'events/utils/index';
 
@@ -4170,5 +4171,83 @@ QUnit.module('valueChanged handler should receive correct event', {
                 this.testProgramChange(assert);
             });
         });
+    });
+});
+
+QUnit.module('searchStartEvent', {
+    beforeEach: function() {
+        this.$lookup = $('#lookup');
+        const defaultOptions = {
+            items: ['1', '11', '111'],
+            opened: true,
+            searchTimeout: 0
+        };
+
+        const init = (options = {}) => {
+            this.lookup = this.$lookup
+                .dxLookup($.extend({}, defaultOptions, options))
+                .dxLookup('instance');
+
+            this.getItemsCount = () => getList().option('items').length;
+            const $input = $(this.lookup.content()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            this.keyboard = keyboardMock($input);
+        };
+
+        this.reinit = (options) => {
+            this.lookup.dispose();
+            init(options);
+        };
+
+        init();
+    }
+}, () => {
+    ['valueChangeEvent', 'searchStartEvent'].forEach((propName) => {
+        QUnit.test(`${propName} specifies event to start search`, function(assert) {
+            this.reinit({ [propName]: 'change' });
+
+            this.keyboard.type('11');
+            assert.strictEqual(this.getItemsCount(), 3, 'items are not filtered');
+
+            this.keyboard.change();
+            assert.strictEqual(this.getItemsCount(), 2, 'items are filtered after search start event is fired');
+        });
+
+        QUnit.test(`${propName} specifies event to start search (runtime change)`, function(assert) {
+            this.lookup.option(propName, 'change');
+
+            this.keyboard.type('11');
+            assert.strictEqual(this.getItemsCount(), 3, 'items are not filtered');
+
+            this.keyboard.change();
+            assert.strictEqual(this.getItemsCount(), 2, 'items are filtered after search start event is fired');
+        });
+    });
+
+    QUnit.test('valueChangeEvent prop using should raise a warning about deprecation', function(assert) {
+        sinon.spy(errors, 'log');
+
+        try {
+            this.lookup.option('valueChangeEvent', 'change');
+            assert.deepEqual(errors.log.lastCall.args, [
+                'W0001',
+                'dxLookup',
+                'valueChangeEvent',
+                '22.1',
+                'Use the \'searchStartEvent\' option instead'
+            ], 'warning is raised with correct parameters');
+        } finally {
+            errors.log.restore();
+        }
+    });
+
+    QUnit.test('no warning should be logged on pure init', function(assert) {
+        sinon.spy(errors, 'log');
+
+        try {
+            this.reinit();
+            assert.deepEqual(errors.log.callCount, 0, 'no warning is logged');
+        } finally {
+            errors.log.restore();
+        }
     });
 });
