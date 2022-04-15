@@ -49,7 +49,8 @@ const data = {
 const dependency_options = {
     tasks: { dataSource: data.tasks },
     dependencies: { dataSource: data.dependencies },
-    editing: { enabled: true }
+    editing: { enabled: true },
+    validation: { validateDependencies: true }
 };
 
 const moduleConfig = {

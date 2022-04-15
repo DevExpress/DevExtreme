@@ -1874,7 +1874,7 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
         const progressCallback = loadedBytes => {
             const arg = {
                 loaded: loadedBytes,
-                total: file.size
+                total: file.value.size
             };
             this._handleProgress(file, arg);
         };
