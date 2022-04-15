@@ -76,6 +76,12 @@ export const getCurrentViewConfig = (
   const crossScrollingEnabled = schedulerProps.crossScrollingEnabled
         || isVirtualScrolling;
 
+  const allDayPanelMode = currentViewProps.allDayPanelMode
+    || restSchedulerProps.allDayPanelMode;
+
+  const showAllDayPanel = restSchedulerProps.showAllDayPanel
+    && allDayPanelMode !== 'hidden';
+
   const result = {
     scrolling: schedulerScrolling,
     ...restSchedulerProps,
@@ -84,6 +90,8 @@ export const getCurrentViewConfig = (
     schedulerHeight: schedulerProps.height,
     schedulerWidth: schedulerProps.width,
     crossScrollingEnabled,
+    allDayPanelMode,
+    showAllDayPanel, // TODO get rid of this property
 
     // Default value for templates in Angular is null
     appointmentTemplate: currentViewProps.appointmentTemplate
@@ -97,8 +105,6 @@ export const getCurrentViewConfig = (
       || restSchedulerProps.appointmentCollectorTemplate,
     appointmentTooltipTemplate: currentViewProps.appointmentTooltipTemplate
       || restSchedulerProps.appointmentTooltipTemplate,
-    allDayPanelMode: currentViewProps.allDayPanelMode
-      || restSchedulerProps.allDayPanelMode,
   };
 
   return {

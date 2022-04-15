@@ -6,6 +6,7 @@ import {
 import { TimeZoneCalculator } from '../../timeZoneCalculator/utils';
 import { Group, ViewDataProviderType } from '../../workspaces/types';
 import { ResourceProps } from '../../props';
+import { AllDayPanelModeType } from '../../appointment/utils/getAppointmentTakesAllDay';
 
 export const getFilterStrategy = (
   resources: ResourceProps[],
@@ -23,6 +24,7 @@ export const getFilterStrategy = (
   timeZoneCalculator: TimeZoneCalculator,
   dataAccessors: DataAccessorType,
   viewDataProvider: ViewDataProviderType,
+  allDayPanelMode: AllDayPanelModeType,
 ): AppointmentFilter => {
   const filterOptions = {
     resources,
@@ -42,6 +44,7 @@ export const getFilterStrategy = (
     dataSource: undefined,
     dataAccessors,
     viewDataProvider,
+    allDayPanelMode,
   };
 
   return isVirtualScrolling
