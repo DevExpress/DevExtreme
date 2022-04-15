@@ -1,4 +1,4 @@
-import { ShowAllDayAppointmentsType } from '../appointment/utils/getAppointmentTakesAllDay';
+import { AllDayPanelModeType } from '../appointment/utils/getAppointmentTakesAllDay';
 import { ResourceProps } from '../props';
 import { DataAccessorType, GroupOrientation, ViewType } from '../types';
 import { CellsMetaData, Group } from '../workspaces/types';
@@ -34,7 +34,7 @@ export interface AppointmentsConfigType {
   supportAllDayRow: boolean;
   isVerticalGroupOrientation: boolean;
   groupCount: number;
-  showAllDayAppointments: ShowAllDayAppointmentsType;
+  allDayPanelMode: AllDayPanelModeType;
   dateRange: Date[]; // TODO replace with min / max
 }
 

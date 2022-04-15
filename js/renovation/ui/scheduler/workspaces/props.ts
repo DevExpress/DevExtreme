@@ -22,7 +22,7 @@ import { DateTableLayoutProps } from './base/date_table/layout';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 import { ScrollableDirection } from '../../scroll_view/common/types';
 import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from '../appointment/types';
-import { ShowAllDayAppointmentsType } from '../appointment/utils/getAppointmentTakesAllDay';
+import { AllDayPanelModeType } from '../appointment/utils/getAppointmentTakesAllDay';
 
 // TODO: WA for bug in generators: they use getters for default props
 const DEFAULT_GROUPS = [];
@@ -103,7 +103,7 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
 
-  @OneWay() showAllDayAppointments: ShowAllDayAppointmentsType = 'auto';
+  @OneWay() allDayPanelMode: AllDayPanelModeType = 'all';
 
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 
@@ -146,7 +146,7 @@ WorkSpaceProps,
 | 'appointmentTemplate'
 | 'appointmentCollectorTemplate'
 | 'maxAppointmentsPerCell'
-| 'showAllDayAppointments'
+| 'allDayPanelMode'
 >;
 
 export interface ViewRenderConfig {
