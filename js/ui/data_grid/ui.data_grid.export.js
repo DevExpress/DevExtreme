@@ -650,6 +650,8 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
         const eventArgs = {
             selectedRowsOnly: !!selectedRowsOnly,
             format: 'pdf',
+            fileName: this.option('export.fileName'),
+            cancel: false,
         };
 
         isFunction(onExporting) && onExporting(eventArgs);

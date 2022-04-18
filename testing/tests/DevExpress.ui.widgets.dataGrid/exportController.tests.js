@@ -2322,6 +2322,51 @@ QUnit.module('Export menu', {
         assert.strictEqual(this.headerPanel._exportController.exportToPdf.getCall(1).args[0], true, 'called with selectedOnly=true');
     });
 
+    ['pdf', 'xlsx'].forEach((format) => {
+        QUnit.test(`onExporting event args, export to ${format}`, function(assert) {
+            const onExporting = sinon.spy((e) => {
+                e.cancel = true;
+            });
+
+            // arrange
+            this.setupModules({
+                'export': {
+                    formats: [format],
+                    enabled: true,
+                    allowExportSelectedData: true
+                },
+                onExporting,
+            }, true);
+
+            const $container = $('#container');
+            this.headerPanel.render($container);
+
+            // act
+            const $exportButton = $container.find('.dx-datagrid-export-button').first();
+            $exportButton.find('.dx-button').trigger('dxclick');
+
+            const $exportAllButton = $('.dx-datagrid-export-menu .dx-item:eq(0)');
+            const $exportSelectedRows = $('.dx-datagrid-export-menu .dx-item:eq(1)');
+
+            $exportAllButton.trigger('dxclick');
+            $exportSelectedRows.trigger('dxclick');
+
+            // assert
+            assert.deepEqual(onExporting.getCall(0).args[0], {
+                cancel: true, // changed in onExporting
+                format,
+                selectedRowsOnly: false,
+                fileName: 'DataGrid',
+            }, 'called with selectedOnly=false');
+
+            assert.deepEqual(onExporting.getCall(1).args[0], {
+                cancel: true,
+                format,
+                selectedRowsOnly: true,
+                fileName: 'DataGrid',
+            }, 'called with selectedOnly=true');
+        });
+    });
 
     QUnit.test('Search panel should be replaced after export button', function(assert) {
         this.setupModules({
