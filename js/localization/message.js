@@ -1,7 +1,5 @@
-import $ from '../core/renderer';
 import dependencyInjector from '../core/utils/dependency_injector';
 import { extend } from '../core/utils/extend';
-import { each } from '../core/utils/iterator';
 import { format as stringFormat } from '../core/utils/string';
 import { humanize } from '../core/utils/inflector';
 import coreLocalization from './core';
@@ -50,36 +48,6 @@ const messageLocalization = dependencyInjector({
             }
 
             return prefix + (result || defaultResult);
-        });
-    },
-
-    localizeNode: function(node) {
-        const that = this;
-
-        $(node).each((index, nodeItem) => {
-            if(!nodeItem.nodeType) {
-                return;
-            }
-
-            if(nodeItem.nodeType === 3) {
-                nodeItem.nodeValue = that.localizeString(nodeItem.nodeValue);
-            } else {
-                if(!$(nodeItem).is('iframe')) { // T199912
-                    each(nodeItem.attributes || [], (index, attr) => {
-                        if(typeof attr.value === 'string') {
-                            const localizedValue = that.localizeString(attr.value);
-
-                            if(attr.value !== localizedValue) {
-                                attr.value = localizedValue;
-                            }
-                        }
-                    });
-
-                    $(nodeItem).contents().each((index, node) => {
-                        that.localizeNode(node);
-                    });
-                }
-            }
         });
     },
 

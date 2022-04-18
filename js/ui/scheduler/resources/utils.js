@@ -570,3 +570,21 @@ export const loadResources = (groups, resources, resourceLoaderMap) => {
 
     return result.promise();
 };
+
+export const getNormalizedResources = (rawAppointment, dataAccessors, resources) => {
+    const result = { };
+
+    each(dataAccessors.resources.getter, (fieldName) => {
+        const value = dataAccessors.resources.getter[fieldName](rawAppointment);
+
+        if(isDefined(value)) {
+            const isMultiple = isResourceMultiple(resources, fieldName);
+            const resourceValue = isMultiple
+                ? wrapToArray(value)
+                : value;
+            result[fieldName] = resourceValue;
+        }
+    });
+
+    return result;
+};

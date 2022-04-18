@@ -162,17 +162,14 @@ registerDecorator(
 
             const isSelectedAll = this._selectAllCheckBox.option('value');
 
-            const result = this._list._createActionByOption('onSelectAllValueChanged')({ value: isSelectedAll });
-            if(result === false) {
-                return;
-            }
-
             e.event && this._list._saveSelectionChangeEvent(e.event);
             if(isSelectedAll === true) {
                 this._selectAllItems();
             } else if(isSelectedAll === false) {
                 this._unselectAllItems();
             }
+
+            this._list._createActionByOption('onSelectAllValueChanged')({ value: isSelectedAll });
         },
 
         _checkSelectAllCapability: function() {

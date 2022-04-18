@@ -1223,22 +1223,8 @@ const PivotGrid = Widget.inherit({
         };
 
         deferUpdate(function() {
-            const resultWidths = that._dataArea.getColumnsWidth();
             const rowHeights = that._rowsArea.getRowsHeight();
-
-            const rowsAreaHeights = needSynchronizeFieldPanel ? rowHeights.slice(1) : rowHeights;
-            const dataAreaHeights = that._dataArea.getRowsHeight();
-
             const descriptionCellHeight = getOuterHeight(descriptionCell[0], true) + (needSynchronizeFieldPanel ? rowHeights[0] : 0);
-
-            const columnsAreaRowCount = that._dataController.getColumnsInfo().length;
-
-            const resultHeights = mergeArraysByMaxValue(rowsAreaHeights, dataAreaHeights.slice(columnsAreaRowCount));
-
-            const columnsAreaRowHeights = dataAreaHeights.slice(0, columnsAreaRowCount);
-            const columnsAreaHeight = getArraySum(columnsAreaRowHeights);
-
-            const rowsAreaColumnWidths = that._rowsArea.getColumnsWidth();
 
             let filterAreaHeight = 0;
             let dataAreaHeight = 0;
@@ -1251,6 +1237,29 @@ const PivotGrid = Widget.inherit({
                 bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
                 dataAreaHeight = getHeight(that.$element()) - filterAreaHeight - dataHeaderHeight - (Math.max(getHeight(that._dataArea.headElement()), getHeight(columnAreaCell), descriptionCellHeight) + bordersWidth);
             }
+
+            const scrollBarWidth = that._dataArea.getScrollbarWidth();
+            const hasVerticalScrollbar = calculateHasScroll(dataAreaHeight, getHeight(that._dataArea.tableElement()));
+
+            that._dataArea.tableElement().css({
+                width: that._hasHeight && hasVerticalScrollbar && scrollBarWidth
+                    ? `calc(100% - ${scrollBarWidth}px)`
+                    : '100%'
+            });
+
+            const resultWidths = that._dataArea.getColumnsWidth();
+
+            const rowsAreaHeights = needSynchronizeFieldPanel ? rowHeights.slice(1) : rowHeights;
+            const dataAreaHeights = that._dataArea.getRowsHeight();
+
+            const columnsAreaRowCount = that._dataController.getColumnsInfo().length;
+
+            const resultHeights = mergeArraysByMaxValue(rowsAreaHeights, dataAreaHeights.slice(columnsAreaRowCount));
+
+            const columnsAreaRowHeights = dataAreaHeights.slice(0, columnsAreaRowCount);
+            const columnsAreaHeight = getArraySum(columnsAreaRowHeights);
+
+            const rowsAreaColumnWidths = that._rowsArea.getColumnsWidth();
 
             totalWidth = getWidth(that._dataArea.tableElement());
 
@@ -1279,8 +1288,6 @@ const PivotGrid = Widget.inherit({
             hasRowsScroll = that._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
             hasColumnsScroll = calculateHasScroll(groupWidth, totalWidth);
 
-            const scrollBarWidth = that._dataArea.getScrollbarWidth();
-
             ///#DEBUG
             that.__scrollBarUseNative = that._dataArea.getUseNativeValue();
             that.__scrollBarWidth = scrollBarWidth;
@@ -1292,11 +1299,6 @@ const PivotGrid = Widget.inherit({
                 that._columnsArea.tableElement().append(that._dataArea.headElement());
 
                 rowFieldsHeader.tableElement().append(that._rowsArea.headElement());
-
-                if(!hasColumnsScroll && hasRowsScroll && scrollBarWidth) {
-                    adjustSizeArray(resultWidths, scrollBarWidth);
-                    totalWidth -= scrollBarWidth;
-                }
 
                 if(descriptionCellHeight > columnsAreaHeight) {
                     adjustSizeArray(columnsAreaRowHeights, columnsAreaHeight - descriptionCellHeight);

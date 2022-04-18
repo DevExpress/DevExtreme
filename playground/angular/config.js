@@ -35,10 +35,11 @@ System.config({
         'inferno-create-element': 'npm:inferno-create-element/dist/inferno-create-element.min.js',
 
         'jszip': 'npm:jszip@3.1.3/dist/jszip.min.js',
+        'rrule': 'npm:rrule@2.6.8/dist/es5/rrule.js',
         'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.js',
         'devextreme': '../../artifacts/angular',
         '@devextreme/runtime/angular': '../../node_modules/@devextreme/runtime/cjs/angular',
-        'rrule': 'npm:rrule@2.6.8/dist/es5/rrule.js'
+        '@devextreme/runtime/common': '../../node_modules/@devextreme/runtime/cjs/common',
     },
     packages: {
         'app': {

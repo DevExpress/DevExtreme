@@ -1081,9 +1081,9 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
             type: 'extendedImage',
             value: {
                 alt: 'Alternate',
-                height: '100',
+                height: 100,
                 src: 'http://test.com/test.jpg',
-                width: '100'
+                width: 100
             }
         }, 'expected insert new image config');
 
@@ -1251,6 +1251,33 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
 
         assert.equal($fields.length, 2, 'Form with 2 fields shown');
         assert.equal(fieldsText, 'URL:Open link in new window', 'Check labels');
+    });
+
+    [0, 1].forEach((length) => {
+        const testName = `"URL" field should be ${length ? 'not' : ''} empty when selection length is ${length} and selection stays at link`;
+        test(testName, function(assert) {
+            const text = length ? 'T' : '';
+            const link = length ? 'http://test.com' : '';
+            this.options.items = ['link'];
+            this.quillMock.getFormat = () => {
+                return {
+                    link,
+                    target: undefined,
+                    text
+                };
+            };
+            this.quillMock.getSelection = () => { return { index: 0, length }; };
+            this.quillMock.getText = () => text;
+            new Toolbar(this.quillMock, this.options);
+            this.$element
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .trigger('dxclick');
+
+            const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+
+            assert.equal($fieldInputs.eq(0).val(), link, 'URL');
+            assert.equal($fieldInputs.eq(1).val(), text, 'Text');
+        });
     });
 
     test('show insertTable dialog', function(assert) {

@@ -3229,6 +3229,22 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.strictEqual($fileStatusMessage.text(), customMessage, 'message was applied');
     });
 
+    QUnit.test('bytesTotal argument of the onProgress event must not be undefined when using custom uploadFile callback (T1081131)', function(assert) {
+        const progressSpy = sinon.spy();
+        const files = [fakeFile];
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            uploadFile: (file, progressCallback) => progressCallback(1337),
+            onProgress: progressSpy
+        });
+
+        simulateFileChoose($element, files);
+        this.clock.tick(this.xhrMock.PROGRESS_INTERVAL);
+        assert.strictEqual(progressSpy.callCount, 1, 'the \'onProgress\' callback is called once');
+        assert.strictEqual(progressSpy.args[0][0].bytesLoaded, 1337, 'the bytesLoaded argument value is correct');
+        assert.strictEqual(progressSpy.args[0][0].bytesTotal, 100023, 'the bytesTotal argument value is correct');
+    });
+
 });
 
 QUnit.module('keyboard navigation', moduleConfig, () => {
@@ -3962,6 +3978,24 @@ QUnit.module('disabled option', () => {
 
         $fileUploader.dxFileUploader('option', 'disabled', true);
         assert.equal($fileInput.css('display'), 'none', 'input is hidden');
+    });
+
+    QUnit.test('label text must be visible when disabled option chаnged dynamically', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            disabled: true,
+            useDragOver: true,
+            nativeDropSupported: true,
+            uploadMode: 'useForm'
+        });
+        const $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
+        const $inputLabel = $inputContainer.find('.' + FILEUPLOADER_INPUT_LABEL_CLASS);
+
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), '', 'label has no text');
+
+        $fileUploader.dxFileUploader('option', 'disabled', false);
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), 'or Drop file here', 'label has default text');
     });
 });
 

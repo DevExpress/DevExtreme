@@ -245,6 +245,11 @@
  */
 
 /**
+ * @typedef {string} Enums.AggregatedPointsPosition
+ * @enum {'betweenTicks'|'crossTicks'}
+ */
+
+/**
  * @typedef {string} Enums.ScaleBreakLineStyle
  * @enum {'straight'|'waved'}
  */
@@ -1025,6 +1030,16 @@
  */
 
 /**
+ * @typedef {string} Enums.HtmlEditorImageUploadTab
+ * @enum {'url'|'file'}
+ */
+
+/**
+ * @typedef {string} Enums.HtmlEditorImageUploadFileUploadMode
+ * @enum {'base64'|'server'|'both'}
+ */
+
+/**
  * @typedef {string} Enums.EditorStylingMode
  * @enum {'outlined'|'underlined'|'filled'}
  */
@@ -1195,7 +1210,12 @@
 
 /**
  * @typedef {string} Enums.GanttScaleType
- * @enum {'auto'|'minutes'|'hours'|'sixHours'|'days'|'weeks'|'months'|'quarters'|'years'|'fiveYears'}
+ * @enum {'auto'|'minutes'|'hours'|'sixHours'|'days'|'weeks'|'months'|'quarters'|'years'}
+ */
+
+/**
+ * @typedef {string} Enums.GanttRenderScaleType
+ * @enum {'minutes'|'hours'|'sixHours'|'days'|'weeks'|'months'|'quarters'|'years'|'fiveYears'}
  */
 
 /**

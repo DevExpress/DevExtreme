@@ -9,6 +9,7 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import config from 'core/config';
 import errors from 'ui/widget/ui.errors';
+import coreErrors from 'core/errors';
 import ajaxMock from '../../helpers/ajaxMock.js';
 
 import 'ui/data_grid';
@@ -1201,6 +1202,18 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         assert.deepEqual(column.calculateFilterExpression(201), ['TestField', '=', 201]);
         assert.deepEqual(column.calculateFilterExpression(1.2), ['TestField', '=', 1.2]);
         assert.deepEqual(column.calculateFilterExpression(12, '>='), ['TestField', '>=', 12]);
+    });
+
+    QUnit.test('calculateFilterExpression for column with object dataField (T1065008)', function(assert) {
+        this.applyOptions({
+            columns: [{ dataField: 'TestField', dataType: 'object' }]
+        });
+
+        const column = this.columnsController.getColumns()[0];
+        assert.ok(column);
+        assert.ok(column.calculateFilterExpression);
+        assert.deepEqual(column.calculateFilterExpression('test'), ['TestField', '=', 'test']);
+        assert.deepEqual(column.calculateFilterExpression('test', '>='), ['TestField', '>=', 'test']);
     });
 
     QUnit.test('calculateFilterExpression for column with lookup and string dataField', function(assert) {
@@ -6534,6 +6547,28 @@ QUnit.module('Sorting/Grouping', { beforeEach: setupModule, afterEach: teardownM
         assert.strictEqual(expandColumns[0].groupIndex, 0);
         assert.strictEqual(expandColumns[0].headerCellTemplate, null);
     });
+
+    // T1075560
+    QUnit.test('Fixed position of expand columns should be identical to RTL', function(assert) {
+        [true, false].forEach((rtlEnabled) => {
+            ['left', 'right'].forEach((initialFixedPosition) => {
+                this.applyOptions({
+                    columns: [{
+                        dataField: 'field', groupIndex: 0, fixed: true, fixedPosition: initialFixedPosition
+                    }],
+                    rtlEnabled,
+                });
+
+                // assert
+                const expandColumns = this.columnsController.getExpandColumns();
+                const properFixedPosition = rtlEnabled ? 'right' : 'left';
+
+                assert.strictEqual(expandColumns.length, 1, 'count expand column');
+                assert.strictEqual(expandColumns[0].fixedPosition, properFixedPosition, `rtl: ${rtlEnabled}, initialFixedPosition: ${initialFixedPosition}`);
+            });
+        });
+
+    });
 });
 
 QUnit.module('ParseValue', { beforeEach: setupModule, afterEach: teardownModule }, () => {
@@ -6586,6 +6621,23 @@ QUnit.module('ParseValue', { beforeEach: setupModule, afterEach: teardownModule 
         assert.equal(column.parseValue('$12,000'), 12000, '$12,000');
         assert.equal(column.parseValue('12000'), 12000, '12000');
         assert.equal(column.parseValue(12), 12, '12 (number)');
+    });
+
+    QUnit.test('parseValue should not rise warning if column with number dataField and format with object (T1079297)', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [{ dataField: 'TestField', dataType: 'number', format: { type: 'fixedPoint', precision: 4 } }]
+        });
+
+        const column = this.columnsController.getColumns()[0];
+        const errorHandler = sinon.spy(coreErrors, 'log');
+
+        // act
+        const value = column.parseValue('123');
+
+        // assert
+        assert.equal(value, 123, '123');
+        assert.equal(errorHandler.callCount, 0, 'warning was not rised');
     });
 
     QUnit.test('parseValue for column with date dataField', function(assert) {

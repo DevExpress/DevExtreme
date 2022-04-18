@@ -194,21 +194,21 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         this.clock.tick();
 
         const taskToUpdate = data.tasks[0];
-        const newStart = new Date('2019-02-21');
-        const newEnd = new Date('2019-02-22');
-        const newTitle = 'New';
+        const dataToUpdate = {
+            start: new Date('2019-02-21'),
+            end: new Date('2019-02-22'),
+            title: 'New'
+        };
+
         this.instance.option('onTaskUpdating', (e) => {
             e.cancel = true;
         });
 
-        getGanttViewCore(this.instance).commandManager.changeTaskTitleCommand.execute(taskToUpdate.id.toString(), newTitle);
-        getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(taskToUpdate.id.toString(), newStart);
-        getGanttViewCore(this.instance).commandManager.changeTaskEndCommand.execute(taskToUpdate.id.toString(), newEnd);
-
+        getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(taskToUpdate.id.toString(), dataToUpdate);
         this.clock.tick();
-        assert.notEqual(taskToUpdate.title, newTitle, 'task title is not updated');
-        assert.notEqual(taskToUpdate.start, newStart, 'new task start is not updated');
-        assert.notEqual(taskToUpdate.end, newEnd, 'new task end is not updated');
+        assert.notEqual(taskToUpdate.title, dataToUpdate.title, 'task title is not updated');
+        assert.notEqual(taskToUpdate.start, dataToUpdate.start, 'new task start is not updated');
+        assert.notEqual(taskToUpdate.end, dataToUpdate.end, 'new task end is not updated');
     });
     test('task updating - change args', function(assert) {
         this.createInstance(options.allSourcesOptions);
@@ -218,7 +218,14 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const taskToUpdate = data.tasks[0];
         const newStart = new Date('2019-02-25');
         const newEnd = new Date('2019-02-26');
-        const newTitle = 'New';
+        const newTitle = 'New_2';
+
+        const dataToUpdate = {
+            start: new Date('2019-02-21'),
+            end: new Date('2019-02-22'),
+            title: 'New'
+        };
+
         let keyIsDefined = false;
         this.instance.option('onTaskUpdating', (e) => {
             if(e.newValues['title']) {
@@ -233,11 +240,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             keyIsDefined = taskToUpdate.id === e.key;
         });
 
-        getGanttViewCore(this.instance).commandManager.changeTaskTitleCommand.execute(taskToUpdate.id.toString(), '1');
-        assert.ok(keyIsDefined, 'key defined');
-        getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(taskToUpdate.id.toString(), '2');
-        assert.ok(keyIsDefined, 'key defined');
-        getGanttViewCore(this.instance).commandManager.changeTaskEndCommand.execute(taskToUpdate.id.toString(), '3');
+        getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(taskToUpdate.id.toString(), dataToUpdate);
         assert.ok(keyIsDefined, 'key defined');
 
         this.clock.tick();

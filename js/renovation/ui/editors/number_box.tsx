@@ -1,11 +1,12 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, React,
+  Component, ComponentBindings, JSXComponent, OneWay, TwoWay, React, Event,
 } from '@devextreme-generator/declarations';
-/* eslint-disable-next-line import/named */
 import LegacyNumberBox from '../../../ui/number_box';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { EventCallback } from '../common/event_callback';
-import { BaseWidgetProps } from '../common/base_props';
+import { EditorProps } from './common/editor';
+import { EditorStateProps } from './common/editor_state_props';
+import { EditorLabelProps } from './common/editor_label_props';
 
 const DEFAULT_VALUE = 0;
 
@@ -23,11 +24,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class NumberBoxProps extends BaseWidgetProps {
-  // props was copied from js\ui\number_box.d.ts
-
-  // buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
-  // format?: format;
+export class NumberBoxProps extends EditorProps {
   @OneWay() invalidValueMessage?: string;
 
   @OneWay() max?: number;
@@ -36,9 +33,6 @@ export class NumberBoxProps extends BaseWidgetProps {
 
   @OneWay() mode?: 'number' | 'text' | 'tel';
 
-  // Needed only for jQuery. Should be auto-generated
-  // onValueChanged?: ((e: { component?: T, element?: DxElement, model?: any,
-  // value?: any, previousValue?: any, event?: event }) => any);
   @OneWay() showSpinButtons?: boolean;
 
   @OneWay() step?: number;
@@ -47,20 +41,17 @@ export class NumberBoxProps extends BaseWidgetProps {
 
   @TwoWay() value: number | null = DEFAULT_VALUE;
 
-  @Event() valueChange?: EventCallback<number>;
-
-  @OneWay() focusStateEnabled?: boolean = true;
-
-  @OneWay() hoverStateEnabled?: boolean = true;
+  @Event() valueChange?: EventCallback<number | null>;
 }
 
+export type NumberBoxPropsType = NumberBoxProps & EditorStateProps & EditorLabelProps;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class NumberBox extends JSXComponent(NumberBoxProps) {
+export class NumberBox extends JSXComponent<NumberBoxPropsType>() {
   /* istanbul ignore next: WA for Angular */
-  get componentProps(): NumberBoxProps {
+  get componentProps(): NumberBoxPropsType {
     return this.props;
   }
 }

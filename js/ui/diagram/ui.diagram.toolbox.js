@@ -1,7 +1,7 @@
 import { getHeight, setHeight, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { hasWindow, getWindow } from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
 import messageLocalization from '../../localization/message';
 import TextBox from '../text_box';
@@ -18,7 +18,8 @@ const DIAGRAM_TOOLBOX_PANEL_CLASS = 'dx-diagram-toolbox-panel';
 const DIAGRAM_TOOLBOX_INPUT_CONTAINER_CLASS = 'dx-diagram-toolbox-input-container';
 const DIAGRAM_TOOLBOX_INPUT_CLASS = 'dx-diagram-toolbox-input';
 const DIAGRAM_TOOLTIP_DATATOGGLE = 'shape-toolbox-tooltip';
-const DIAGRAM_SKIP_GESTURE_CLASS = 'dx-skip-gesture-event';
+// const DIAGRAM_SKIP_GESTURE_CLASS = 'dx-skip-gesture-event';
+const DIAGRAM_TOOLBOX_START_DRAG_CLASS = '.dxdi-tb-start-drag-flag';
 
 class DiagramToolbox extends DiagramFloatingPanel {
     _init() {
@@ -193,6 +194,18 @@ class DiagramToolbox extends DiagramFloatingPanel {
 
         this._scrollView = this._createComponent($scrollViewWrapper, ScrollView);
 
+        // Prevent scroll toolbox content for dragging vertically
+        const _moveIsAllowed = this._scrollView._moveIsAllowed.bind(this._scrollView);
+        this._scrollView._moveIsAllowed = (e) => {
+            for(let i = 0; i < this._toolboxes.length; i++) {
+                const $element = this._toolboxes[i];
+                if($($element).children(DIAGRAM_TOOLBOX_START_DRAG_CLASS).length) {
+                    return false;
+                }
+            }
+            return _moveIsAllowed(e);
+        };
+
         const $accordion = $('<div>')
             .appendTo(this._scrollView.content());
         this._updateElementWidth($accordion);
@@ -261,14 +274,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
     }
     _isTouchMode() {
         const { Browser } = getDiagram();
-        if(Browser.TouchUI) {
-            return true;
-        }
-        if(!hasWindow()) {
-            return false;
-        }
-        const window = getWindow();
-        return window.navigator && window.navigator.maxTouchPoints > 0;
+        return Browser.TouchUI;
     }
     _renderAccordion($container) {
         this._accordion = this._createComponent($container, Accordion, {
@@ -315,10 +321,12 @@ class DiagramToolbox extends DiagramFloatingPanel {
         });
     }
     _raiseToolboxDragStart() {
-        this._scrollView.$element().addClass(DIAGRAM_SKIP_GESTURE_CLASS);
+        // this._scrollView.$element().addClass(DIAGRAM_SKIP_GESTURE_CLASS);
+        // this._scrollView.option('scrollByContent', false); // It raises invalidate() and reset scrolling. Use _moveIsAllowed instead
     }
     _raiseToolboxDragEnd() {
-        this._scrollView.$element().removeClass(DIAGRAM_SKIP_GESTURE_CLASS);
+        // this._scrollView.$element().removeClass(DIAGRAM_SKIP_GESTURE_CLASS);
+        // this._scrollView.option('scrollByContent', true);
     }
     _onInputChanged(text) {
         this._filterText = text;

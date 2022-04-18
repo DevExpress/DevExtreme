@@ -136,6 +136,7 @@ export const editingFormBasedModule = {
                     if(this.isPopupEditMode()) {
                         if(this.option('repaintChangesOnly')) {
                             row.update?.(row);
+                            this._rowsView.renderDelayedTemplates();
                         } else if(editForm) {
                             this._updateEditFormDeferred = new Deferred().done(() => editForm.repaint());
                             if(!this._updateLockCount) {
@@ -190,6 +191,7 @@ export const editingFormBasedModule = {
                     const row = this.component.getVisibleRows()[rowIndex];
                     const templateOptions = {
                         row: row,
+                        values: row.values,
                         rowType: row.rowType,
                         key: row.key,
                         rowIndex
@@ -423,6 +425,7 @@ export const editingFormBasedModule = {
                         }
 
                         this._editForm.on('contentReady', () => {
+                            this._rowsView.renderDelayedTemplates();
                             this._editPopup?.repaint();
                         });
                     };
@@ -452,11 +455,13 @@ export const editingFormBasedModule = {
                     this.callBase.apply(this, arguments);
                 },
 
-                _editRowFromOptionChangedCore: function(rowIndices, rowIndex, oldRowIndex) {
-                    if(this.isPopupEditMode()) {
+                _editRowFromOptionChangedCore: function(rowIndices, rowIndex) {
+                    const isPopupEditMode = this.isPopupEditMode();
+
+                    this.callBase(rowIndices, rowIndex, isPopupEditMode);
+
+                    if(isPopupEditMode) {
                         this._showEditPopup(rowIndex);
-                    } else {
-                        this.callBase.apply(this, arguments);
                     }
                 }
             },

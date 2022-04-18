@@ -2,21 +2,24 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../helpers/multi-platform-test';
 
-const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['angular', 'react'] });
+const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['jquery', 'angular', 'react'] });
 const testReactOnly = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['react'] });
 
 const defaultOptions = {
   columns: ['id', 'text'],
   dataSource: [],
+  pager: {
+    visible: false,
+  },
 };
 
 const prepareDataGrid = (options = {}) => async (t, { platform }) => {
   await t.resizeWindow(800, 600);
-  await createWidget(platform, 'dxDataGridLight', defaultOptions);
+  await createWidget(platform, 'dxDataGridNext', defaultOptions);
   await updateComponentOptions(platform, options);
 };
 
-fixture('DataGridLight with Master Detail');
+fixture('DataGridNext with Master Detail');
 
 test('Default template', async (t, { screenshotComparerOptions }) => {
   await t

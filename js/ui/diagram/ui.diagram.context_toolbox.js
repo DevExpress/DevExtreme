@@ -4,7 +4,7 @@ import Widget from '../widget/ui.widget';
 import Popover from '../popover';
 
 import { getDiagram } from './diagram.importer';
-import { hasWindow, getWindow } from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 
 const DIAGRAM_CONTEXT_TOOLBOX_TARGET_CLASS = 'dx-diagram-context-toolbox-target';
 const DIAGRAM_CONTEXT_TOOLBOX_CLASS = 'dx-diagram-context-toolbox';
@@ -61,14 +61,7 @@ class DiagramContextToolbox extends Widget {
     }
     _isTouchMode() {
         const { Browser } = getDiagram();
-        if(Browser.TouchUI) {
-            return true;
-        }
-        if(!hasWindow()) {
-            return false;
-        }
-        const window = getWindow();
-        return window.navigator && window.navigator.maxTouchPoints > 0;
+        return Browser.TouchUI;
     }
     _show(x, y, side, category, callback) {
         this._popoverInstance.hide();

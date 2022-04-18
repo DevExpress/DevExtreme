@@ -7,6 +7,7 @@ import { Deferred } from '../../../core/utils/deferred';
 import localizationMessage from '../../../localization/message';
 import { getCurrentScreenFactor, hasWindow } from '../../../core/utils/window';
 import devices from '../../../core/devices';
+import { isMaterial } from '../../themes';
 
 const DIALOG_CLASS = 'dx-formdialog';
 const FORM_CLASS = 'dx-formdialog-form';
@@ -127,15 +128,28 @@ class FormDialog {
             .attr('aria-label', label);
     }
 
+    _getDefaultFormOptions() {
+        return {
+            colCount: 1,
+            width: 'auto',
+            labelLocation: isMaterial() ? 'top' : 'left'
+        };
+    }
+
+    formOption(optionName, optionValue) {
+        return this._form.option.apply(this._form, arguments);
+    }
+
     show(formUserConfig) {
         if(this._popup.option('visible')) {
             return;
         }
 
         this.deferred = new Deferred();
-        const formConfig = extend({}, formUserConfig);
+        const formConfig = extend(this._getDefaultFormOptions(), formUserConfig);
 
         this._form.option(formConfig);
+
         this._popup.show();
 
         return this.deferred.promise();

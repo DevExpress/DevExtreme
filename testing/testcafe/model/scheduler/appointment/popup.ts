@@ -8,6 +8,8 @@ export const CLASS = {
   stateInvisible: 'dx-state-invisible',
   recurrenceEditor: 'dx-recurrence-editor',
   textEditorInput: 'dx-texteditor-input',
+  overlayWrapper: 'dx-overlay-wrapper',
+  fullScreen: 'dx-popup-fullscreen',
 };
 
 export default class AppointmentPopup {
@@ -37,6 +39,8 @@ export default class AppointmentPopup {
 
   repeatEveryElement: Selector;
 
+  fullScreen: Promise<boolean>;
+
   constructor(scheduler: Selector) {
     this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
     this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
@@ -55,13 +59,15 @@ export default class AppointmentPopup {
 
     this.endRepeatDateElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(2);
     this.repeatEveryElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(1);
+
+    this.fullScreen = this.wrapper.find(`.${CLASS.overlayWrapper} .${CLASS.fullScreen}`).exists;
   }
 
   isVisible(): Promise<boolean> {
     const { element } = this;
     const invisibleStateClass = CLASS.stateInvisible;
 
-    return ClientFunction(() => !$(element()).hasClass(invisibleStateClass), {
+    return ClientFunction(() => !(element() as any).classList.contains(invisibleStateClass), {
       dependencies: { element, invisibleStateClass },
     })();
   }

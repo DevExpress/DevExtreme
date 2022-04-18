@@ -274,9 +274,9 @@ const Sortable = Draggable.inherit({
             if(itemPoint && itemPoint.top !== undefined) {
                 const isVertical = this._isVerticalOrientation();
                 if(isVertical) {
-                    return top <= itemPoint.top && itemPoint.top <= bottom;
+                    return top <= Math.ceil(itemPoint.top) && Math.floor(itemPoint.top) <= bottom;
                 } else {
-                    return left <= itemPoint.left && itemPoint.left <= right;
+                    return left <= Math.ceil(itemPoint.left) && Math.floor(itemPoint.left) <= right;
                 }
             }
         }

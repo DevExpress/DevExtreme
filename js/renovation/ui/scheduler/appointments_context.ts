@@ -21,6 +21,7 @@ export interface IAppointmentContext {
   appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
   overflowIndicatorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
   onAppointmentClick: (e: AppointmentClickData) => void;
+  onAppointmentDoubleClick: (e: AppointmentClickData) => void;
   showReducedIconTooltip: (data: ReducedIconHoverData) => void;
   hideReducedIconTooltip: () => void;
 }

@@ -87,7 +87,7 @@ export type IncidentOccurredEvent = EventInfo<dxPolarChart> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxPolarChart>;
 
 /** @public */
-export type LegendClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
+export type LegendClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
     readonly target: polarChartSeriesObject;
 };
 
@@ -95,7 +95,7 @@ export type LegendClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | Pointe
 export type OptionChangedEvent = EventInfo<dxPolarChart> & ChangedOptionInfo;
 
 /** @public */
-export type PointClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & PointInteractionInfo;
+export type PointClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
 /** @public */
 export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
@@ -344,14 +344,14 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxPolarChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 axis:chartAxisObject
-     * @type_function_param1_field6 range:VizRange
-     * @type_function_param1_field7 previousRange:VizRange
-     * @type_function_param1_field8 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:dxPolarChart
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 axis:chartAxisObject
+     * @type_function_param1_field7 range:VizRange
+     * @type_function_param1_field8 previousRange:VizRange
      * @type_function_param1_field9 actionType:Enums.ChartZoomPanActionType
      * @type_function_param1_field10 zoomFactor:Number
      * @type_function_param1_field11 shift:Number
@@ -364,13 +364,13 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxPolarChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 axis:chartAxisObject
-     * @type_function_param1_field6 range:VizRange
-     * @type_function_param1_field7 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:dxPolarChart
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 axis:chartAxisObject
+     * @type_function_param1_field7 range:VizRange
      * @type_function_param1_field8 actionType:Enums.ChartZoomPanActionType
      * @notUsedInTheme
      * @action
@@ -1921,6 +1921,12 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @public
      */
     visible?: boolean;
+    /**
+     * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.displayFormat
+     * @default undefined
+     * @public
+     */
+     displayFormat?: string;
 }
 /** @namespace DevExpress.viz */
 export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {

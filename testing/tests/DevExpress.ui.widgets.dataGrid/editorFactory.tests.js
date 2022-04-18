@@ -1436,7 +1436,7 @@ QUnit.module('Focus', {
         };
 
         that.$element = function() {
-            return $('#qunit-fixture');
+            return $('.dx-datagrid').parent();
         };
 
         setupDataGridModules(that, ['data', 'columns', 'rows', 'columnHeaders', 'filterRow', 'editorFactory', 'editing', 'editingCellBased', 'keyboardNavigation'], {
@@ -1498,7 +1498,7 @@ QUnit.module('Focus', {
         };
 
         that.$element = function() {
-            return $('#qunit-fixture');
+            return $('.dx-datagrid').parent();
         };
 
         setupDataGridModules(that, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'editingCellBased', 'keyboardNavigation'], {
@@ -1545,7 +1545,7 @@ QUnit.module('Focus', {
         };
 
         that.$element = function() {
-            return $('#qunit-fixture');
+            return $('.dx-datagrid').parent();
         };
 
         setupDataGridModules(that, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'editingCellBased', 'keyboardNavigation'], {

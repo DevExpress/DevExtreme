@@ -14,7 +14,12 @@ export class TemplateBase {
         const onRendered = options.onRendered;
         delete options.onRendered;
 
-        const $result = this._renderCore(options);
+        let $result;
+        if(options.renovated && options.transclude && this._element) {
+            $result = $('<div>').append(this._element).contents();
+        } else {
+            $result = this._renderCore(options);
+        }
 
         this._ensureResultInContainer($result, options.container);
         renderedCallbacks.fire($result, options.container);

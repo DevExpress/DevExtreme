@@ -399,8 +399,13 @@ const baseScatterMethods = {
 
     _getIntervalCenter(intervalStart, intervalEnd) {
         const argAxis = this.getArgumentAxis();
+        const axisOptions = argAxis.getOptions();
 
-        return argAxis.getOptions().type !== 'discrete'
+        if(argAxis.aggregatedPointBetweenTicks()) {
+            return intervalStart;
+        }
+
+        return axisOptions.type !== 'discrete'
             ? argAxis.getVisualRangeCenter({ minVisible: intervalStart, maxVisible: intervalEnd }, true)
             : intervalStart;
     },

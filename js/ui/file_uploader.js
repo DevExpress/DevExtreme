@@ -1307,6 +1307,10 @@ class FileUploader extends Editor {
                 this._updateReadOnlyState();
                 super._optionChanged(args);
                 break;
+            case 'disabled':
+                this._updateInputLabelText();
+                super._optionChanged(args);
+                break;
             case 'selectButtonText':
                 this._selectButton.option('text', value);
                 break;
@@ -1870,7 +1874,7 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
         const progressCallback = loadedBytes => {
             const arg = {
                 loaded: loadedBytes,
-                total: file.size
+                total: file.value.size
             };
             this._handleProgress(file, arg);
         };

@@ -20,7 +20,10 @@ import ScrollView from '../../scroll_view';
 
 import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
 
+import { ImageUploader } from './image_uploader_helper';
+
 import { getWindow } from '../../../core/utils/window';
+import { getQuill } from '../quill_importer';
 
 const MIN_HEIGHT = 400;
 const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'];
@@ -31,19 +34,12 @@ const SILENT_ACTION = 'silent';
 const DIALOG_COLOR_CAPTION = 'dxHtmlEditor-dialogColorCaption';
 const DIALOG_BACKGROUND_CAPTION = 'dxHtmlEditor-dialogBackgroundCaption';
 const DIALOG_LINK_CAPTION = 'dxHtmlEditor-dialogLinkCaption';
-const DIALOG_IMAGE_CAPTION = 'dxHtmlEditor-dialogImageCaption';
 const DIALOG_TABLE_CAPTION = 'dxHtmlEditor-dialogInsertTableCaption';
 
 const DIALOG_LINK_FIELD_URL = 'dxHtmlEditor-dialogLinkUrlField';
 const DIALOG_LINK_FIELD_TEXT = 'dxHtmlEditor-dialogLinkTextField';
 const DIALOG_LINK_FIELD_TARGET = 'dxHtmlEditor-dialogLinkTargetField';
 const DIALOG_LINK_FIELD_TARGET_CLASS = 'dx-formdialog-field-target';
-
-const DIALOG_IMAGE_FIELD_URL = 'dxHtmlEditor-dialogImageUrlField';
-const DIALOG_IMAGE_FIELD_ALT = 'dxHtmlEditor-dialogImageAltField';
-const DIALOG_IMAGE_FIELD_WIDTH = 'dxHtmlEditor-dialogImageWidthField';
-const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
-
 
 const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
 const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
@@ -64,7 +60,7 @@ function getFormatHandlers(module) {
             }
         },
         link: prepareLinkHandler(module),
-        image: prepareImageHandler(module),
+        image: prepareImageHandler(module, module.editorInstance.option('imageUpload')),
         color: prepareColorClickHandler(module, 'color'),
         background: prepareColorClickHandler(module, 'background'),
         orderedList: prepareShortcutHandler(module, 'list', 'ordered'),
@@ -171,16 +167,44 @@ function getTargetTableNode(module, partName) {
     return partName === 'table' ? currentSelectionParts[0].domNode : currentSelectionParts[2].domNode;
 }
 
+function getLinkRange(module, range) {
+    const Quill = getQuill();
+    const LinkBlot = Quill.import('formats/link');
+
+    const [link, offset] = module.quill.scroll.descendant(
+        LinkBlot,
+        range.index
+    );
+
+    const result = !link ? null : {
+        index: range.index - offset,
+        length: link.length()
+    };
+
+    return result;
+}
 
 function prepareLinkHandler(module) {
     return () => {
         module.quill.focus();
 
-        const selection = module.quill.getSelection();
+        let selection = module.quill.getSelection();
         const selectionHasEmbedContent = hasEmbedContent(module, selection);
         const formats = selection ? module.quill.getFormat() : {};
+        const isCursorAtLink = formats.link && selection?.length === 0;
+        let href = formats.link || '';
+
+        if(isCursorAtLink) {
+            const linkRange = getLinkRange(module, selection);
+            if(linkRange) {
+                selection = linkRange;
+            } else {
+                href = '';
+            }
+        }
+
         const formData = {
-            href: formats.link || '',
+            href,
             text: selection && !selectionHasEmbedContent ? module.quill.getText(selection) : '',
             target: Object.prototype.hasOwnProperty.call(formats, 'target') ? !!formats.target : true
         };
@@ -214,49 +238,10 @@ function prepareLinkHandler(module) {
     };
 }
 
-function prepareImageHandler(module) {
+function prepareImageHandler(module, imageUploadOption) {
+    const imageUploader = new ImageUploader(module, imageUploadOption);
     return () => {
-        const formData = module.quill.getFormat();
-        const isUpdateDialog = Object.prototype.hasOwnProperty.call(formData, 'imageSrc');
-        const defaultIndex = defaultPasteIndex(module);
-
-        if(isUpdateDialog) {
-            const { imageSrc } = module.quill.getFormat(defaultIndex - 1, 1);
-
-            formData.src = formData.imageSrc;
-            delete formData.imageSrc;
-
-            if(!imageSrc || defaultIndex === 0) {
-                module.quill.setSelection(defaultIndex + 1, 0, SILENT_ACTION);
-            }
-        }
-
-        const formatIndex = embedFormatIndex(module);
-
-        module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
-
-        const promise = module.editorInstance.showFormDialog({
-            formData: formData,
-            items: imageFormItems()
-        });
-
-        promise
-            .done((formData, event) => {
-                let index = defaultIndex;
-
-                module.saveValueChangeEvent(event);
-
-                if(isUpdateDialog) {
-                    index = formatIndex;
-                    module.quill.deleteText(index, 1, SILENT_ACTION);
-                }
-
-                module.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
-                module.quill.setSelection(index + 1, 0, USER_ACTION);
-            })
-            .always(() => {
-                module.quill.focus();
-            });
+        imageUploader.render();
     };
 }
 
@@ -277,34 +262,6 @@ function getLinkFormItems(module, selection) {
             cssClass: DIALOG_LINK_FIELD_TARGET_CLASS,
             label: { visible: false }
         }
-    ];
-}
-
-function embedFormatIndex(module) {
-    const selection = module.quill.getSelection();
-
-    if(selection) {
-        if(selection.length) {
-            return selection.index;
-        } else {
-            return selection.index - 1;
-        }
-    } else {
-        return module.quill.getLength();
-    }
-}
-
-function defaultPasteIndex(module) {
-    const selection = module.quill.getSelection();
-    return selection?.index ?? module.quill.getLength();
-}
-
-function imageFormItems() {
-    return [
-        { dataField: 'src', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
-        { dataField: 'width', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) } },
-        { dataField: 'height', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) } },
-        { dataField: 'alt', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
     ];
 }
 

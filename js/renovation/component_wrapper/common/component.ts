@@ -430,10 +430,15 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   _optionChanged(option: Option): void {
-    const { name, fullName, value } = option;
+    const {
+      name,
+      fullName,
+      value,
+      previousValue,
+    } = option;
     updatePropsImmutable(this._props, this.option(), name, fullName);
 
-    if (this._propsInfo.templates.includes(name)) {
+    if (this._propsInfo.templates.includes(name) && value !== previousValue) {
       this._componentTemplates[name] = this._createTemplateComponent(value);
     }
 
@@ -453,6 +458,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       return renderer.createElement(TemplateWrapper, {
         template: this._getTemplate(this._templateManager.anonymousTemplateName),
         transclude: true,
+        renovated: true,
       });
     }
     return null;

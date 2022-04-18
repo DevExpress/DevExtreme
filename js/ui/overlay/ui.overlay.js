@@ -195,7 +195,7 @@ const Overlay = Widget.inherit({
         this.callBase();
         extend(this._deprecatedOptions, {
             'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' },
-            'closeOnOutsideClick': { since: '22.2', alias: 'hideOnOutsideClick' }
+            'closeOnOutsideClick': { since: '22.1', alias: 'hideOnOutsideClick' }
         });
     },
 
@@ -210,7 +210,7 @@ const Overlay = Widget.inherit({
     _init: function() {
         this.callBase();
         this._initActions();
-        this._initCloseOnOutsideClickHandler();
+        this._initHideOnOutsideClickHandler();
         this._initTabTerminatorHandler();
 
         this._customWrapperClass = null;
@@ -229,7 +229,7 @@ const Overlay = Widget.inherit({
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
         this._parentsScrollSubscriptionInfo = {
-            handler: e => { this._targetParentsScrollHandler(e); }
+            handler: e => { this._hideOnParentsScrollHandler(e); }
         };
 
         this.warnPositionAsFunction();
@@ -264,7 +264,7 @@ const Overlay = Widget.inherit({
         });
     },
 
-    _initCloseOnOutsideClickHandler: function() {
+    _initHideOnOutsideClickHandler: function() {
         this._proxiedDocumentDownHandler = (...args) => {
             return this._documentDownHandler(...args);
         };
@@ -306,15 +306,13 @@ const Overlay = Widget.inherit({
     },
 
     _shouldHideOnOutsideClick: function(e) {
-        const { closeOnOutsideClick, hideOnOutsideClick } = this.option();
+        const { hideOnOutsideClick } = this.option();
 
         if(isFunction(hideOnOutsideClick)) {
             return hideOnOutsideClick(e);
-        } else if(isFunction(closeOnOutsideClick)) {
-            return closeOnOutsideClick(e);
-        } else {
-            return hideOnOutsideClick || closeOnOutsideClick;
         }
+
+        return hideOnOutsideClick;
     },
 
     _outsideClickHandler(e) {
@@ -716,7 +714,7 @@ const Overlay = Widget.inherit({
     _toggleSubscriptions: function(enabled) {
         if(hasWindow()) {
             this._toggleHideTopOverlayCallback(enabled);
-            this._toggleParentsScrollSubscription(enabled);
+            this._toggleHideOnParentsScrollSubscription(enabled);
         }
     },
 
@@ -732,7 +730,7 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _toggleParentsScrollSubscription: function(needSubscribe) {
+    _toggleHideOnParentsScrollSubscription: function(needSubscribe) {
         const scrollEvent = addNamespace('scroll', this.NAME);
         const { prevTargets, handler } = this._parentsScrollSubscriptionInfo ?? {};
 
@@ -740,7 +738,7 @@ const Overlay = Widget.inherit({
 
         const closeOnScroll = this.option('hideOnParentScroll');
         if(needSubscribe && closeOnScroll) {
-            let $parents = this._$wrapper.parents();
+            let $parents = this._hideOnParentScrollTarget().parents();
             if(devices.real().deviceType === 'desktop') {
                 $parents = $parents.add(window);
             }
@@ -749,7 +747,7 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _targetParentsScrollHandler: function(e) {
+    _hideOnParentsScrollHandler: function(e) {
         let closeHandled = false;
         const closeOnScroll = this.option('hideOnParentScroll');
         if(isFunction(closeOnScroll)) {
@@ -759,6 +757,10 @@ const Overlay = Widget.inherit({
         if(!closeHandled && !this._showAnimationProcessing) {
             this.hide();
         }
+    },
+
+    _hideOnParentScrollTarget: function() {
+        return this._$wrapper;
     },
 
     _render: function() {
@@ -1150,7 +1152,7 @@ const Overlay = Widget.inherit({
                 this._toggleHideTopOverlayCallback(this.option('visible'));
                 break;
             case 'hideOnParentScroll':
-                this._toggleParentsScrollSubscription(this.option('visible'));
+                this._toggleHideOnParentsScrollSubscription(this.option('visible'));
                 break;
             case 'closeOnOutsideClick':
             case 'hideOnOutsideClick':

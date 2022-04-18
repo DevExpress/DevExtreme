@@ -25,6 +25,7 @@ module.exports = {
         './js/renovation/ui/common/event_callback.ts', // NOTE: this is temporary file for Vue2
         './js/renovation/ui/scheduler/header/props.ts',
         './js/renovation/ui/scheduler/view_model/to_test/', // TODO: this is temporary
+        './js/renovation/ui/scheduler/appointment_edit_form/layout.tsx', // NOTE: covering with TestCafe
         './js/renovation/ui/scheduler/workspaces/utils.ts',
         './js/renovation/utils/get_computed_style.ts',
         './js/renovation/utils/render_template.ts', // TODO: this is temporary file

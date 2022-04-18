@@ -22,6 +22,7 @@ import './htmlEditorParts/tableResizingIntegration.tests.js';
 import './htmlEditorParts/tableContextMenuModule.tests.js';
 import './htmlEditorParts/tableContextMenuIntegration.tests.js';
 import './htmlEditorParts/tableProperties.tests.js';
+import './htmlEditorParts/imageUploading.tests.js';
 import './htmlEditorParts/mentionModule.tests.js';
 import mentionIntegrationTests from './htmlEditorParts/mentionIntegration.tests.js';
 import './htmlEditorParts/scrolling.tests.js';

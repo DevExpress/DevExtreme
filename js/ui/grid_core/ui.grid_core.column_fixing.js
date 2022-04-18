@@ -1,4 +1,4 @@
-import { getOuterWidth, getHeight } from '../../core/utils/size';
+import { getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { name as wheelEventName } from '../../events/core/wheel';
@@ -847,18 +847,17 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
     _getElasticScrollTop: function(e) {
         let elasticScrollTop = 0;
-        const scrollbarWidth = this.getScrollbarWidth(true);
 
         if(e.scrollOffset.top < 0) {
             elasticScrollTop = -e.scrollOffset.top;
         } else if(e.reachedBottom) {
-            const scrollableContent = this._findContentElement();
+            const $scrollableContent = $(this._findContentElement());
             const $scrollableContainer = $(e.component.container());
-            const maxScrollTop = Math.max(getHeight(scrollableContent) + scrollbarWidth - getHeight($scrollableContainer), 0);
+            const maxScrollTop = Math.max($scrollableContent.get(0).clientHeight - $scrollableContainer.get(0).clientHeight, 0);
             elasticScrollTop = maxScrollTop - e.scrollOffset.top;
         }
 
-        return elasticScrollTop;
+        return Math.floor(elasticScrollTop);
     },
 
     _applyElasticScrolling: function(e) {

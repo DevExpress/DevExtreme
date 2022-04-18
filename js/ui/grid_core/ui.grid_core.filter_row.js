@@ -182,7 +182,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             let $editorRangeElements;
             let $menu;
 
-            if(gridCoreUtils.checkChanges(optionNames, ['filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation']) && e.columnIndex !== undefined) {
+            if(gridCoreUtils.checkChanges(optionNames, ['filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'filterValues', 'filterType']) && e.columnIndex !== undefined) {
                 const visibleIndex = that._columnsController.getVisibleIndex(e.columnIndex);
                 const column = that._columnsController.columnOption(e.columnIndex);
                 $cell = that._getCellElement(that.element().find('.' + that.addWidgetPrefix(FILTER_ROW_CLASS)).index(), visibleIndex) || $();
