@@ -3550,7 +3550,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 this.clock.tick();
 
                 // assert
-                assert.notOk(isNewRowExists(dataGrid, editMode), 'there is not new row');
+                assert.notOk(isNewRowExists(dataGrid, editMode), 'no new row');
             } catch(e) {
                 assert.ok(false, 'exception is thrown');
             }
