@@ -3381,6 +3381,49 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.strictEqual(dataGrid.option('editing.changes')[0].type, 'insert', 'insert type');
         });
     });
+
+    // T1082426
+    const isNewRowExists = function(dataGrid, editMode) {
+        if(editMode === 'popup') {
+            return $('.dx-overlay-wrapper.dx-datagrid-edit-popup').is(':visible');
+        }
+
+        return !!$(dataGrid.$element()).find('.dx-row-inserted').length;
+    };
+    ['row', 'form', 'popup', 'cell', 'batch'].forEach((editMode) => {
+        QUnit.test(`The ${editMode} edit mode - No exceptions on cancel new row addition when a column is fixed and grouped`, function(assert) {
+            try {
+                // arrange
+                const dataGrid = createDataGrid({
+                    dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3' }],
+                    repaintChangesOnly: true,
+                    columns: [{ dataField: 'field1', fixed: true, groupIndex: 0 }, 'field2', 'field3'],
+                    editing: {
+                        mode: editMode,
+                        allowAdding: true
+                    }
+                });
+
+                this.clock.tick(100);
+
+                // act
+                dataGrid.addRow();
+                this.clock.tick();
+
+                // assert
+                assert.ok(isNewRowExists(dataGrid, editMode), 'there is a new row');
+
+                // act
+                dataGrid.cancelEditData();
+                this.clock.tick();
+
+                // assert
+                assert.notOk(isNewRowExists(dataGrid, editMode), 'no new row');
+            } catch(e) {
+                assert.ok(false, 'exception is thrown');
+            }
+        });
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
