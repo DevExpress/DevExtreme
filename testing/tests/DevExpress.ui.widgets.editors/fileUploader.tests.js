@@ -3229,6 +3229,22 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.strictEqual($fileStatusMessage.text(), customMessage, 'message was applied');
     });
 
+    QUnit.test('bytesTotal argument of the onProgress event must not be undefined when using custom uploadFile callback (T1081131)', function(assert) {
+        const progressSpy = sinon.spy();
+        const files = [fakeFile];
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            uploadFile: (file, progressCallback) => progressCallback(1337),
+            onProgress: progressSpy
+        });
+
+        simulateFileChoose($element, files);
+        this.clock.tick(this.xhrMock.PROGRESS_INTERVAL);
+        assert.strictEqual(progressSpy.callCount, 1, 'the \'onProgress\' callback is called once');
+        assert.strictEqual(progressSpy.args[0][0].bytesLoaded, 1337, 'the bytesLoaded argument value is correct');
+        assert.strictEqual(progressSpy.args[0][0].bytesTotal, 100023, 'the bytesTotal argument value is correct');
+    });
+
 });
 
 QUnit.module('keyboard navigation', moduleConfig, () => {
