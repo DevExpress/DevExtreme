@@ -944,6 +944,9 @@ export const filterRowModule = {
                     if(args.name === 'filterRow') {
                         this._invalidate();
                         args.handled = true;
+                    } else if(args.name === 'syncLookupFilterValues') {
+                        this.component.getView('columnHeadersView')?.updateLookupDataSource();
+                        args.handled = true;
                     } else {
                         this.callBase(args);
                     }
