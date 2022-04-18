@@ -2357,9 +2357,6 @@ QUnit.module('Export menu', {
             'export': {
                 enabled: false,
             },
-            'pdfExport': {
-                enabled: false,
-            }
         });
 
         const $container = $('#container');

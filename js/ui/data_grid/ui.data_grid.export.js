@@ -862,7 +862,7 @@ dataGridCore.registerModule('export', {
 
                 optionChanged: function(args) {
                     this.callBase(args);
-                    if(args.name === 'export' || args.name === 'pdfExport') {
+                    if(args.name === 'export') {
                         args.handled = true;
                         this._invalidate();
                     }
