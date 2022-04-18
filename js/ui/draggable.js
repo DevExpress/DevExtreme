@@ -628,6 +628,11 @@ const Draggable = DOMComponent.inherit({
             initialOffset: isFixedPosition && initialOffset
         }));
 
+        this._getAction('onDraggableElementShown')({
+            ...dragStartArgs,
+            dragElement: $dragElement
+        });
+
         const $area = this._getArea();
         const areaOffset = this._getAreaOffset($area);
         const boundOffset = this._getBoundOffset();
@@ -941,6 +946,7 @@ const Draggable = DOMComponent.inherit({
             case 'onDrop':
             case 'onDragEnter':
             case 'onDragLeave':
+            case 'onDraggableElementShown':
                 this['_' + name + 'Action'] = this._createActionByOption(name);
                 break;
             case 'dragTemplate':

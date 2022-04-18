@@ -60,6 +60,24 @@ const RowDraggingExtender = {
             this[currentSortableName] = this._createComponent($content, Sortable, extend({
                 component: this.component,
                 contentTemplate: null,
+                cursorOffset: (options) => {
+                    const event = options.event;
+                    const rowsViewOffset = $(this.element()).offset();
+
+                    return {
+                        x: event.pageX - rowsViewOffset.left
+                    };
+                },
+                onDraggableElementShown: (e) => {
+                    if(rowDragging.dragTemplate) {
+                        return;
+                    }
+
+                    const $dragElement = $(e.dragElement);
+                    const gridInstance = $dragElement.children('.dx-widget').data(this.component.NAME);
+
+                    this._synchronizeScrollLeftPosition(gridInstance);
+                },
                 filter: '> table > tbody > .dx-row:not(.dx-freespace-row):not(.dx-virtual-row)',
                 dragTemplate: this._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
@@ -150,6 +168,12 @@ const RowDraggingExtender = {
                 $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0).clone());
             }
         };
+    },
+
+    _synchronizeScrollLeftPosition: function(gridInstance) {
+        const scrollable = gridInstance?.getScrollable();
+
+        scrollable?.scrollTo({ x: this._scrollLeft });
     },
 
     _getDraggableRowTemplate: function() {

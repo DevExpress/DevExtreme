@@ -309,9 +309,11 @@ export default class DataGrid extends Widget {
     return ClientFunction(() => {
       const gridInstance = getGridInstance() as any;
       const $row = $(gridInstance.getRowElement(rowIndex));
-      const $cell = $row.children('.dx-command-drag');
+      let $dragElement = $row.children('.dx-command-drag');
 
-      moveElement($cell, x, y, isStart);
+      $dragElement = $dragElement.length ? $dragElement : $row;
+
+      moveElement($dragElement, x, y, isStart);
     },
     {
       dependencies: {
