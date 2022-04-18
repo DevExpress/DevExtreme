@@ -482,7 +482,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             const dataSource = this.getController('data').dataSource();
             const filterRowController = this.getController('applyFilter');
 
-            if(options.lookup && this.option('filterRow.showRelevantValues')) {
+            if(options.lookup && this.option('syncLookupFilterValues')) {
                 filterRowController.setCurrentColumnForFiltering(options);
                 const filter = this.getController('data').getCombinedFilter();
                 filterRowController.setCurrentColumnForFiltering(null);
@@ -664,7 +664,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
         },
 
         updateLookupDataSource: function() {
-            if(!this.option('filterRow.showRelevantValues')) {
+            if(!this.option('syncLookupFilterValues')) {
                 return;
             }
 
@@ -800,11 +800,11 @@ const ApplyFilterViewController = modules.ViewController.inherit({
 export const filterRowModule = {
     defaultOptions: function() {
         return {
+            syncLookupFilterValues: true,
             filterRow: {
                 visible: false,
                 showOperationChooser: true,
                 showAllText: messageLocalization.format('dxDataGrid-filterRowShowAllText'),
-                showRelevantValues: true,
                 resetOperationText: messageLocalization.format('dxDataGrid-filterRowResetOperationText'),
                 applyFilter: 'auto',
                 applyFilterText: messageLocalization.format('dxDataGrid-applyFilterText'),

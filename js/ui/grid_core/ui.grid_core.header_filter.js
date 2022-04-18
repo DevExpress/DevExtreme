@@ -209,7 +209,7 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
             } else if(column.lookup) {
                 isLookup = true;
 
-                if(this.option('headerFilter.showRelevantValues')) {
+                if(this.option('syncLookupFilterValues')) {
                     this._currentColumn = column;
                     const filter = this._dataController.getCombinedFilter();
                     this._currentColumn = null;
@@ -504,13 +504,13 @@ const DataControllerFilterRowExtender = {
 export const headerFilterModule = {
     defaultOptions: function() {
         return {
+            syncLookupFilterValues: true,
             headerFilter: {
                 visible: false,
                 width: 252,
                 height: 325,
                 allowSearch: false,
                 searchTimeout: 500,
-                showRelevantValues: true,
                 texts: {
                     emptyValue: messageLocalization.format('dxDataGrid-headerFilterEmptyValue'),
                     ok: messageLocalization.format('dxDataGrid-headerFilterOK'),
