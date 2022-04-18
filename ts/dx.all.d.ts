@@ -7195,7 +7195,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.export.formats]
        */
-      formats?: ('excel' | 'pdf')[];
+      formats?: ('xlsx' | 'pdf')[];
       /**
        * [descr:dxDataGridOptions.export.fileName]
        * @deprecated [depNote:dxDataGridOptions.export.fileName]
@@ -7227,7 +7227,7 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
         fileName: string;
         selectedRowsOnly: boolean;
-        format: 'excel' | 'pdf';
+        format: 'xlsx' | 'pdf';
       };
     export type ExportTexts = {
       /**
