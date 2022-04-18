@@ -648,7 +648,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
     exportToPdf: function(selectedRowsOnly) {
         const onExporting = this.getAction('onExporting');
         const eventArgs = {
-            selectedRowsOnly,
+            selectedRowsOnly: !!selectedRowsOnly,
             format: 'pdf',
         };
 
