@@ -62,9 +62,16 @@ export class TimeZoneCalculator {
       ? -1
       : 1;
 
-    const utcDate = date.getTime() - direction * clientOffset * dateUtils.dateToMilliseconds('hour');
+    const resultDate = new Date(date);
 
-    return new Date(utcDate + direction * targetOffset * dateUtils.dateToMilliseconds('hour'));
+    resultDate.setMinutes(resultDate.getMinutes() - direction * (60 * clientOffset));
+    resultDate.setMinutes(resultDate.getMinutes() + direction * (60 * targetOffset));
+
+    return new Date(resultDate);
+
+    // eslint-disable-next-line max-len
+    // const utcDate = date.getTime() - direction * clientOffset * dateUtils.dateToMilliseconds('hour');
+    // return new Date(utcDate + direction * targetOffset * dateUtils.dateToMilliseconds('hour'));
   }
 
   protected getClientOffset(date: Date): number {
