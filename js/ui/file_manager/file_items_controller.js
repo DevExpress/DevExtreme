@@ -308,12 +308,14 @@ export default class FileItemsController {
         const actionInfo = this._createEditActionInfo('move', itemInfos, destinationDirectory);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.moveItems(items, destinationDirectory.fileItem),
-            () => {
-                destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
+            needChangeCurrentDirectory => {
+                if(needChangeCurrentDirectory) {
+                    destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
+                    this._resetDirectoryState(destinationDirectory);
+                    this.setCurrentDirectory(destinationDirectory);
+                    destinationDirectory.expanded = true;
+                }
                 itemInfos.forEach(itemInfo => this._resetDirectoryState(itemInfo.parentDirectory, true));
-                this._resetDirectoryState(destinationDirectory);
-                this.setCurrentDirectory(destinationDirectory);
-                destinationDirectory.expanded = true;
             });
     }
 
@@ -322,11 +324,13 @@ export default class FileItemsController {
         const actionInfo = this._createEditActionInfo('copy', itemInfos, destinationDirectory);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.copyItems(items, destinationDirectory.fileItem),
-            () => {
-                destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
-                this._resetDirectoryState(destinationDirectory);
-                this.setCurrentDirectory(destinationDirectory);
-                destinationDirectory.expanded = true;
+            needChangeCurrentDirectory => {
+                if(needChangeCurrentDirectory) {
+                    destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
+                    this._resetDirectoryState(destinationDirectory);
+                    this.setCurrentDirectory(destinationDirectory);
+                    destinationDirectory.expanded = true;
+                }
             });
     }
 
@@ -402,6 +406,7 @@ export default class FileItemsController {
     }
 
     _processEditAction(actionInfo, action, completeAction) {
+        let isAnyOperationSuccessful = false;
         let actionResult = null;
 
         this._raiseEditActionStarting(actionInfo);
@@ -423,10 +428,13 @@ export default class FileItemsController {
 
         return whenSome(
             actionResult,
-            info => this._raiseCompleteEditActionItem(actionInfo, info),
+            info => {
+                isAnyOperationSuccessful = true;
+                this._raiseCompleteEditActionItem(actionInfo, info);
+            },
             errorInfo => this._raiseEditActionItemError(actionInfo, errorInfo)
         ).then(() => {
-            completeAction();
+            completeAction(isAnyOperationSuccessful);
             this._raiseCompleteEditAction(actionInfo);
         });
     }
