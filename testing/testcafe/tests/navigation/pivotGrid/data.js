@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 export const sales = [{
     id: 1,
     region: 'North America',

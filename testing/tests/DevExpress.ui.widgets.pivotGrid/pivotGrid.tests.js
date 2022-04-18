@@ -3426,7 +3426,7 @@ QUnit.module('dxPivotGrid', {
             return pivotGridOptions;
         };
 
-        const pivotGrid = createPivotGrid(createPivotGridOptions({ width: 1005, height: 250 }));
+        const pivotGrid = createPivotGrid(createPivotGridOptions({ width: 1020, height: 250 }));
 
         this.clock.tick();
 
@@ -3446,7 +3446,7 @@ QUnit.module('dxPivotGrid', {
 
         const table = pivotGrid.$element().find('table').first();
 
-        assert.strictEqual(getWidth(table), 1005, 'table width');
+        assert.strictEqual(getWidth(table), 1020, 'table width');
     });
 
 
@@ -3552,7 +3552,7 @@ QUnit.module('dxPivotGrid', {
             return pivotGridOptions;
         };
 
-        const pivotGrid = createPivotGrid(createPivotGridOptions({ width: 1005, height: 250 }));
+        const pivotGrid = createPivotGrid(createPivotGridOptions({ width: 1020, height: 250 }));
 
         this.clock.tick();
 

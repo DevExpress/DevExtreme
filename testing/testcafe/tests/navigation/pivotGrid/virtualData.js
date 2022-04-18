@@ -1,0 +1,5570 @@
+/* eslint-disable spellcheck/spell-checker */
+export const virtualData = [{
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'NARRATIVE',
+    'value': 'CGIAR has a Strategy and Results Framework (SRF) in place for 2016-30, has put in place the first business plan for 2019-21, with plans for three further, three-year business plans up to 2030, and has published a Research Financing Plan (2019-2021 FINPLAN) that brings together, in a single budget, all of the resources for the CGIAR Strategy. The SRF maps out CGIAR’s contribution to the Sustainable Development Goals (SDGs), through addressing five global challenges and clearly sets out CGIAR’s comparative advantage. The business plan further articulates the vision and mission of CGIAR around these contributions and establishes the ongoing reforms that are needed to make CGIAR fit for purpose. The financing plan aims for greater transparency around the allocation of resources and the challenges that CGIAR faces in working towards these longer-term objectives.<br>There are a number of recognised challenges in the implementation of this strategic plan and in the progress towards the achievement of expected results:<br>Work is continuing to clarify the connection between what CGIAR delivers on the ground and the ambitious contribution to the SDGs envisaged. There is further work required to agree on CGIAR’s comparative advantage. The first Performance Report produced for 2017 begins to set out what CGIAR has been able to achieve, with a recognition that more work is needed on the evidence base to continue to build confidence in achievements.<br>Further work is underway and is required to make CGIAR an effective and focused system. While significant progress has been made in reforming CGIAR over the last decade, the first business plan highlights the future challenges of continued reform. Change continues, although there is some frustration among stakeholders both with the complex nature of decision-making in the partnership and with the pace of this change.<br>Funding remains an issue where there is a need for a clear shared vision between CGIAR and its Funders. CGIAR has had to work hard to manage a complex and changing funding situation and has recently put in place online systems to increase the transparency of its finances. While there was initial optimism on the part of CGIAR for obtaining longer-term financial support and while the funding situation has stabilised over the last two to three years, there is still a need for a greater range of Funders to recognise the need for longer-term and more consistent funding of CGIAR as a whole.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:KPI1;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:KPI1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'SCORE',
+    'value': '2.81',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:KPI1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'NARRATIVE',
+    'value': 'Performance for this KPI is rated as highly satisfactory. The Multilateral Fund for the Implementation of the Montreal Protocol (MLF) is the financial mechanism for the Montreal Protocol (MP) and is mandated to provide financing for the incremental costs of the phase-out of nearly 100 substances controlled by the MP. The Control Schedule for these substances provides an extremely clear long-term, time-bound vision and intended results for the MLF, which the Fund and its four implementing agencies operationalise through three-year rolling business plans. The MLF is the sole international financial mechanism for the phase-out of ozone depleting substances and for the phase-down of hydrofluorocarbons (HFCs) under the Kigali Amendment.<br>The organisational architecture of the MLF was established under the MP in order to assist Article 5 countries (recipients) to comply with the terms of the Protocol. The Fund is not a programme but a financial mechanism under the authority of the Meeting of the Parties to the MP with the programmatic responsibility entrusted to the Executive Committee (EXCOM). Its programmes are carried out through four implementing agencies – the United Nations Development Programme (UNDP), the United Nations Environment Programme (UNEP), the United Nations Industrial Development Organization (UNIDO) and the World Bank – and a few bilateral agencies. As structured, it is fully congruent with a clear long-term vision and associated operating model.<br>The MP is an international normative agreement in its own right, and the MLF is mandated solely to provide financing for Article 5 countries under this agreement. The extent to which the strategic plan of the MLF supports wider normative frameworks is therefore considered to be non-applicable for this assessment.<br>The MLF is replenished every three years by the Parties to the MP. Financial and budgetary planning under the Montreal Protocol is based on a three-year rolling business plan approved by the EXCOM. Virtually all funding is non-earmarked. The financial framework is regularly reviewed by the EXCOM and by the Parties in order to ensure that it provides appropriate and effective support to compliance under the terms of the MP.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:KPI1;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'RATING',
+    'value': 'Highly satisfactory',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:KPI1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'SCORE',
+    'value': '3.85',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:KPI1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'NARRATIVE',
+    'value': 'UNCTAD’s long-term vision is laid out in its mandate, which is updated during quadrennial conferences, most recently with the UNCTAD XIV Nairobi Maafikiano outcome document. Through these, member states task the UNCTAD secretariat to operate across a vast and growing set of ambitious trade and development challenges. UNCTAD fulfils its mandate through three closely interlinked functions or pillars, covering four broad cross-cutting themes and five subprogrammes and building on six geographical priority principles. The Maafikiano – similar to previous outcome documents – identifies no less than 110 priorities.<br>Technical co-operation (TC) is one of UNCTAD’s three pillars. Due to a lack of consensus among member states, the last secretariat-wide strategy on TC was adopted in 2003 and consists of guiding principles. It has not been updated to align with outcome documents. The Maafikiano provides policy overview but not a clearly defined strategy on TC operationalising the mandate in terms of intended results. At UNCTAD, TC is de facto decentralised; the five divisional directors maintain a high level of autonomy with respect to the way they strategise, operationalise, process and organise TC. Consequently, different operating models have evolved over time and co-exist alongside each other, with Technical Cooperation Section (TCS) of the Office of the Secretary-General (OSG) more in an enabling than a steering capacity. Inter-divisional co-operation is a persistent challenge within the secretariat. While OSG’s incremental efforts to promote interdivisional collaboration are noteworthy, in practice, much still depends on the personal networks and initiative of staff members.<br>The degree to which UNCTAD engages in strong co-operation with other agencies varies considerably, again depending on how each division, branch, section and individual staff member approach this. As a non-resident agency, UNCTAD acknowledges the need for strong co-operation with other agencies. It aligns its TC to relevant wider normative frameworks pertinent to its mandate, including inter alia the Agenda 2030 and the Istanbul Programme of Action for the Least Developed Countries for the Decade 2011-2020, the Addis Ababa Action Agenda on Financing for Development and the Vienna Programme of Action for LLDCs for the Decade 2014–2024; and the Small Island Developing States Accelerated Modalities of Action (Samoa Pathway). UNCTAD leads the UN Inter-Agency Cluster on Trade and Productive Capacity. TC projects and programmes support and strengthen national policy frameworks that incorporate normative frameworks. Despite limited staff capacity, the secretariat engages in 37 UNDAFs (now known as UNSDCFs). UNCTAD reports annually to member states on expenditures against the Sustainable Development Goals (SDGs).<br>At UNCTAD, member states play a key role in determining work plans. Neither member states nor the secretariat have set clear, strategic priorities between UNCTAD’s three pillars, or within the TC pillar. UNCTAD faces mounting pressure to deliver more results with less resources. Demand for its TC is growing, often as the result of engagement in the context of UNTAD’s consensus-building pillar and research and analysis pillar. Consequently, although budgets are adequately prepared and planned, in practice, resources are spread too thinly across a growing number of workstreams. Accordingly, the TC pillar suffers from resource shortages as well as competing priorities. While ideally demand-driven, in practice, TC relies heavily on earmarked donor funding in accordance with donor priorities.<br>UNCTAD lacks a secretariat-wide fundraising strategy; previous attempts to address this were not met with consensus among member states. TC is highly fragmented. It is grouped into 28 “products” and is largely funded through extrabudgetary (XB) sources (90.4%). Projects are (partially) self-financed or externally funded. XB funding has been erratic. The two main programmes, ASYCUDA and DMFAS, account for 58% of the expenses, and slightly less than half of the projects. Generally speaking, projects are small in size, with a short lifespan. In December 2018, over 80 sources of funding (USD 34 million) contributed to no less than 249 projects in over a hundred countries.',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:KPI1;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:KPI1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'SCORE',
+    'value': '2.25',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:KPI1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'NARRATIVE',
+    'value': 'UNIDO’s strategic plan is formulated in the organisation’s Medium-Term Programme Framework (MTPF) 2018-21 which updates and builds on the 2016-19 version. The MTPF 2018-21 currently addresses the global mandate of Agenda 2030 and other changes in the global development landscape. It provides strategic guidance for UNIDO to achieve its mandate of supporting countries to achieve inclusive and sustainable industrial development. The MTPF is supported by an integrated results and performance framework (IRPF). The IRPF provides clarity on the Organisation’s expected contribution to global development results, in particular for achieving Sustainable Development Goal (SDG) 9. Results chains and responsibilities for results are not clear.<br>The organisational architecture is increasingly congruent with the MTPF, but there remain some gaps in alignment. UNIDO is taking steps to address these gaps, as evident in recent promulgation of policies intended to provide a coherent, strategic approach and vision to deliver the organisation’s strategic objectives and in revision of the IRPF and theory of change to ensure it is better aligned to the MTPF. UNIDO’s internal operating model is highly centralised, and the field is not always well integrated with headquarters (HQ) in all cases. UNIDO does not always strike a clear balance between its role as a normative organisation and as a development organisation. While norms and standards feature among the four functions, reference to critical sector-specific normative frameworks are mostly lacking, e.g. International Labour Organization (ILO) core labour standards or United Nations Environment Programme (UNEP) conventions. <br>UNIDO is largely supported through voluntary contributions, and most funding is earmarked. This presents an ongoing challenge to the organisation which has also lost some member states in recent years and seen consequent decreases to the regular budget. Dependence on earmarked contributions constrains the organisation’s independence in pursuing its strategic aims and implementing the MTPF, as well as aligning activities to country priorities and results.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:KPI1;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:KPI1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'SCORE',
+    'value': '2.63',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:KPI1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'NARRATIVE',
+    'value': 'UNODC’s strategic documents do not articulate a detailed long-term vision except insofar as they refer to the Office’s role in supporting the achievement of a series of international instruments for which the Office acts as “guardian and advocate”, the SDGs and a series of United Nations (UN) resolutions. There does not appear to be a strong, clear and unifying long-term vision that drives the Office – and that is articulated publicly. <br>UNODC’s organisational architecture is only partially congruent with the strategic plan. The operating model appears to support the implementation of the strategic plan to a limited extent. This is one of UNODC’s fundamental challenges, of which it is keenly aware. UNODC’s operating model is a function of its financial framework. UNODC is overwhelmingly reliant on tightly earmarked, often short-term donor contributions. Its ability to deliver value to beneficiaries is driven by what its donors are willing to finance. UNODC is keenly aware of this consequence, noting that its financial framework hinders its ability to deliver its mandate effectively.<br>The strategic plan is aligned to wider normative frameworks. The activities of UNODC are grounded in a series of international instruments for which the Office acts as “guardian and advocate”. They include the three international drug control conventions, the United Nations Convention against Corruption (UNCAC), the United Nations Convention against Transnational Organized Crime (UNTOC) and its protocols, the international legal instruments against terrorism, and the UN Standards and Norms in Crime Prevention and Criminal Justice. In addition to its foundational mandates, UNODC sees itself as responsible for supporting the delivery of certain SDGs and a series of UN agreements. <br>UNODC has very limited ability to ensure that all priority areas have adequate funding. Its ability to do this is restricted by its lack of access to flexible finance. The volume of core resources UNODC receives is insufficient to finance functions that in other institutions would be considered integral (e.g. evaluation, gender, results management systems). UNODC must rely on special purpose funds – earmarked donor funds – to finance these functions. Most of its normative work is also financed from earmarked funds.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:KPI1;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:KPI1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1',
+    'y2code': 'SCORE',
+    'value': '2.4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:KPI1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_1;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'NARRATIVE',
+    'value': 'CGIAR agreed and published a SRF for the period 2016-30, which defines the aspirations and strategic actions of the CGIAR System as a whole, with the 15 Research Centers working to deliver on the overall mission. Within this framework, there is a commitment to a cycle of four three-year business plans, with the first business plan for 2019-21 setting out the decisions and actions that need to be taken at the collective level, while reflecting that the implementation of actions set out in the plan will be most efficiently and effectively addressed through Center-level decision-making processes. CGIAR agreed and published a SRF for the period 2016-30, which defines the aspirations and strategic actions of the CGIAR System as a whole, with the 15 Research Centers working to deliver on the overall mission. Within this framework, there is a commitment to a cycle of four three-year business plans, with the first business plan for 2019-21 setting out the decisions and actions that need to be taken at the collective level, while reflecting that the implementation of actions set out in the plan will be most efficiently and effectively addressed through Center-level decision-making processes.<br>The business plan sets out a new articulation of CGIAR’s vision and mission, focused on meeting the SDGs. The Plan outlines five global challenges and for each of these challenges clearly outlines the CGIAR System’s comparative advantage in addressing these, specifically through diverse partnerships. There are, however, differing views on CGIAR’s comparative advantage, with some stakeholders urging a greater focus on applied research. The survey shows a high proportion of respondents stating that CGIAR demonstrates a clarity of vision and a good understanding of comparative advantage (over 50% rate CGIAR as excellent or very good). <br>The SRF is ambitious, setting out a significant contribution towards global targets and the SDGs. The overall targets are related to the work of CGIAR through: three goals, or SLOs; ten Intermediate Development Outcomes (IDOs), defined as aspirational targets, where CGIAR can make a direct contribution; and four key cross-cutting themes that are critical to attaining these goals and targets, including climate change and gender. While the plan is clearly set out, work is still ongoing within CGIAR on defining and collecting evidence for the IDOs.<br>The business plan sets out for four three-year business plans over the life of the SRF 2016-2030, with an additional aim to prepare a longer-term plan up to 2030. The first CGIAR Annual Performance Report was produced for 2017, bringing together information on outputs and outcomes from research, including quantitative data on the nine common reporting indicators, and outlining the contributions towards the SRF targets and the SDGs. The report includes an update on progress on performance management, with a commitment that this area will be covered in more detail in future reports.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_1;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'SCORE',
+    'value': '3.25',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_1;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'NARRATIVE',
+    'value': 'The Montreal Protocol on Substances that Deplete the Ozone Layer, created under the Vienna Convention for the Protection of the Ozone Layer and adopted in 1987, is equivalent to a strategic plan for the MLF. The MLF produces a publicly available consolidated three-year business plan based on the business plans prepared by the four implementing agencies (IAs) and a few bilateral agencies. These are designed to help Article 5 countries comply with the control targets of the Montreal Protocol. The MP provides the long-term vision for the business plans, which in turn distribute the financial resources available under the MLF among Article 5 countries.<br>The Montreal Protocol, subsequent amendments and the replenishment studies (which indicate the level of funding required to achieve the immediate phase-out targets of the MP) prepared by the Technology and Economic Assessment Panel for the Parties to the MP provide a clear analysis of the vision and the comparative advantage of the MLF in providing support to Article 5 countries. In response to the survey question “Strategies and policies demonstrate clarity of vision and good understanding of comparative advantage”, 40% of respondents answered “excellent” and 50% “very good”. <br>The bilateral and implementing agencies’ three-year business plans operationalise the vision of the MP and define intended activities. However, the consolidated business plan for the MLF – and the individual business plans produced by the bilateral and implementing agencies – contains budgets by activity and country in Excel spreadsheets but not intended consolidated results. Intended results are detailed in the project proposals and in the Montreal Protocol Control Schedule. Tonnages planned to be phased out are listed by country and activity in the Excel business plans. <br>The MLF consolidated business plan, as well as the bilateral and implementing agencies’ business plans, are reviewed once a year by the Executive Committee. Reports on the status of implementation of the consolidated business plan are considered in every Executive Committee meeting.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_1;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'RATING',
+    'value': 'Highly satisfactory',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'SCORE',
+    'value': '3.75',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_1;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'NARRATIVE',
+    'value': 'MI 1.1 Analysis<br>UNCTAD was established to promote an inclusive global economy, through informing national and international policies, while giving priority consideration for the needs and interests of developing countries.<br>UNCTAD’s strategic priorities are determined by member states and reflected in the quadrennial conference outcome documents, including the Accra Accord (2008), the Doha Mandate (2012) and most recently the Nairobi Maafikiano (2016). The Nairobi Maafikiano is the outcome document of the 14th session of the United Nations Conference on Trade and Development in 2016 and frames the agenda for UNCTAD work over a four-year period until 2020. It sets out a work programme that builds on the Doha Mandate and updates the thematic and priority areas of UNCTAD’s work.<br>These quadrennial outcome documents direct UNCTAD’s TC to work on a vast number of thematic priorities, across a large geographic scope. In the Maafikiano, in keeping with previous outcome documents, member states call on UNCTAD to concentrate on four broad cross-cutting themes, while also contributing to the implementation of and follow-up to the outcomes of relevant global conferences. At the same time, it should also strengthen its role as focal point within the UN for the integrated treatment of trade and development in the areas of finance, technology, investment and sustainable development. Geographically, it should focus on the least developed countries (LDCs), Africa, landlocked developing countries (LLDCs), small island developing states (SIDSs), and other vulnerable and small economies, while also giving attention to the needs of middle-income countries. Altogether, this amounts to 110 priorities. <br>There are five subprogrammes: (i) Globalisation and Development Strategies; (ii) Investment and Enterprise; (iii) International Trade and Commodities; (iv) Technology and Logistics; and (5) Africa, Least Developed Countries and Special Programmes. Each subprogramme is led by a division within the secretariat. For each subprogramme, the strategic framework outlines a general strategy to achieve the subprogramme’s objectives. These strategies do not specify actions for TC.<br>The most recent secretariat-wide TC strategy of UNCTAD was adopted in 2003 and is annexed to the Trade and Development Board’s decision 478 (L) of October 2003. The strategy sets the scope, guiding principles and objectives of UNCTAD TC activities. Six key principles characterise the 2003 strategy:<br>focus on long-term, sustainable capacity development<br>strengthened links between analytical work and TC activities<br>emphasis on ownership by beneficiaries and demand-driven operations<br>priority for activities in favour of LDCs and countries with particular needs and weaknesses<br>(increased co-operation with other international organisations<br>strengthened governance and co-ordination, including improved monitoring and evaluation    of projects.<br>UNCTAD’s TC should be demand-driven; embracing country ownership; based on principles of transparency, efficiency, effectiveness and accountability; and implemented in a geographically balanced manner; with priority given to LDCs, LLDCs, SIDSs and fragile and conflict-affected states (FCASs). Since 2003, these principles have been consistently reiterated and have driven the composition of UNCTAD’s TC portfolio.<br>The Working Party on the Strategic Framework and the Programme Budget is the mechanism for consultations among member states on all issues regarding TC and for interactive debate among the secretariat, potential beneficiaries and donors. It meets every year in September to discuss TC matters and submits a draft decision for adoption by the Trade and Development Board. The deliberations of the Working Party are based on information prepared by the secretariat every year and contained in three documents: (i) the review of the TC activities of UNCTAD; (ii) summary of activities undertaken in a given year and (iii) statistical tables.<br>Since 2003, the TC strategy has not been updated to ensure consistency with policy developments within UNCTAD. While the strategic priorities for the organisation are set every four years by the outcome document of the quadrennial ministerial conference, neither member states nor the secretariat’s management have set clear, strategic priorities between UNCTAD’s three pillars, nor have they articulated a regularly updated and aligned TC strategy.<br>The 2003 strategy does not contain a clearly articulated and operationalised long-term vision, nor does it articulate or operationalise UNCTAD’s comparative advantages, also in light of the ongoing UN reform. It was not until September 2019, at the 78th Session of the Working Party, in consideration of the ongoing UN development system reform, that member states charged UNCTAD’s secretariat with developing a new TC strategy for presentation in early 2020.<br>Consequently, set against the elements’ benchmarks, the MI is assessed as unsatisfactory.',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_1;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_1;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'NARRATIVE',
+    'value': 'The 2018-21 MTPF, which is publicly available, provides strategic guidance for UNIDO to implement its mandate of supporting countries to achieve inclusive and sustainable industrial development. The long-term vision of UNIDO, as reflected in the MTPF, is “the eradication of poverty through inclusive and sustainable industrial development” (1) (ISID). It is based on the 2013 Lima Declaration and specifically SDG 9 to “Build resilient infrastructure, promote inclusive and sustainable industrialisation and foster innovation” (1). UNIDO’s programmatic focus, as per the MTPF, is structured around four strategic priorities: <br>• advancing economic competitiveness<br>• creating shared prosperity<br>• safeguarding the environment<br>• strengthening knowledge and institutions. <br><br>UNIDO’s vision is based on recognition of the organisation’s comparative advantage in industrial development, being the only international organisation mandated to support countries in pursuing ISID and SDG 9. Other strengths that contribute to UNIDO’s comparative advantage are that it: <br>• is one of the leading United Nations (UN) agencies working with the business sector <br>• has experience working to address global environmental challenges <br>• has a convening role for different stakeholders.<br><br>Interviewees at HQ were of the view that UNIDO’s comparative advantage included a good understanding of the issues in industry and the ability to propose the right solutions based on industrial culture which makes them “unique”. Staff were not always clear about who they are targeting and who their ultimate beneficiaries are; however, these are generally recognised as being governments. The Director General (DG) broadcasts management priorities at the beginning of each year. There are currently (2019) three – upscaling technical assistance services (including the Programmes for Country Partnership, PCP), driving operational efficiency and developing innovative partnerships. <br>The MTPF 2018-21 operationalises UNIDO’s vision; an integrated results and performance framework (IRPF) consisting of two tiers (development and organisational performance respectively) is included in the MTPF 2018-21 which defines the organisation’s intended results at both programmatic and management levels. This was updated in May 2019; indicators were fine-tuned and adapted to ensure the telling of an evidence-based performance story “connecting key elements of UNIDO’s strategy and capturing of SDG indicators” (9). Interviewees suggested that “[t]he IRPF makes sense at organisational and high levels now”. The four levels of the IRPF (as per the 2019 revision) are:<br>• industrial development context<br>• country and global results with UNIDO support<br>• programme offer and programme management effectiveness<br>• organisational resources and efficiency.<br><br>The 2019 IRPF contains a much clearer theory of change than the previous iteration and considers external factors that will influence the organisation’s pathway towards ISID as well as contextual issues such as UN reform. A new policy published in May 2019, entitled “Overarching Policy on the Management for Scale up and Integration of Results”, complements a suite of six other new documents providing a more coherent and strategic approach and vision to deliver UNIDO’s strategic objectives.<br>To ensure relevance, the MTPF is reviewed and revised; an earlier version of the MTPF (2016-19) was revised in 2017 to create the current 2018-21 version. Following this, a mid-term review of the MTPF 2018-21 was conducted in 2019, which interviews suggested was an “inclusive process” involving questionnaires and interviews with staff. It was the first mid-term review of an MTPF and called “an update of the MTPF” rather than a conventional review.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_1;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'SCORE',
+    'value': '3.5',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_1;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'NARRATIVE',
+    'value': 'UNODC’s Proposed programme budget for the 2018-19 biennium contains a mission statement, namely: to “contribute to the achievement of security and justice for all by making the world safer from drugs, crime and terrorism” (4/69). UNODC’s strategic documents do not articulate a more detailed long-term vision except insofar as they refer to the Office’s role in supporting the achievement of a series of international instruments for which the Office acts as “guardian and advocate”, the Sustainable Development Goals (SDGs) and a number of UN resolutions. There does not appear to be a strong, clear and unifying long-term vision that drives the Office – and that is articulated publicly. The strategy framework mirrors the budget reporting cycle and is refreshed every two years. There is thus no longer-term vision that drives or underpins UNODC’s programme budget. Interviews with UNODC’s stakeholders and staff indicated that there is a strong appetite for a current and clear strategic vision across the Office – a high-level, long-term vision as well as a vision on more specific areas such as how the Office will align itself with a reforming UN system. <br>UNODC’s vision, as it stands, is in line with its comparative advantage, which in turn is identified from the mandates given to it by the UN. Its mandate derives from a series of international instruments for which the Office acts as “guardian and advocate”. They include the three international drug control conventions, the UNCAC, the UNTOC and its protocols, the international legal instruments against terrorism, and the UN Standards and Norms in Crime Prevention and Criminal Justice. The broad areas of UNODC’s mandate are clear and relatively uncontested within and outside the UN family – there are few areas of overlap with other multilateral organisations. However, as several interviewees noted, UNODC has not yet articulated strategically which elements of these very broad conventions and other standards it will prioritise, or how it will support them. This is an area that several interlocutors consider a significant gap in UNODC’s strategic outlook. <br>UNODC does have strategic-level documents that aim to operationalise its mandate and that seek to set out to define intended results. UNODC’s strategic planning is encapsulated in two documents: its biennial strategic framework and its budget. Both seek to operationalise its mandate and define the intended results to which the organisation contributes. As UNODC is an Office of the UN Secretariat, its 2018-19 strategic framework is embedded within the General Assembly’s overall “biennial plan and priorities”, currently listed as Programme 13. Its strategic framework identifies nine subprogrammes. Each has an objective followed by an “expected accomplishment of the Secretariat” with “indicators of achievement” – i.e. the intended results. UNODC’s strategic plan then includes an outline of its strategy to implement each subprogramme. <br>UNODC has six thematic subprogrammes:<br>1. Countering transnational organized crime<br>2. A comprehensive and balanced approach to counter the world drug problem<br>3. Countering corruption<br>4. Terrorism prevention<br>5. Justice<br>6. Research, trend analysis and forensics<br>And three cross-cutting subprogrammes that provide services to member states:<br>1. Policy support<br>2. Technical co-operation and field support<br>3. Provision of secretariat services and substantive support to the United Nations intergovernmental bodies, the International Narcotics Control Board and the United Nations Congress on Crime Prevention and Criminal Justice.<br><br>UNODC’s Programme and Budget for 2018-19 seeks to operationalise the strategic plan by allocating funding and staff resources to each of the subprogrammes. It further identifies the expected accomplishments of the Secretariat, indicators of achievement and the biannual performance measures as well as outputs. However, the “expected accomplishments” and “indicators of achievement” – or results – tend to be at the level of outputs rather than outcomes. <br>The strategic plan is renewed and reviewed by UNODC’s governing bodies every two years, and the Programme and Budget is produced every two years as well. Beginning in 2020 and on a trial basis, the Programme and Budget will be reviewed on an annual basis. Unless UNODC is able to develop a longer-term strategic vision, this change may encourage UNODC to focus on what can be achieved in an even shorter timeframe (one rather than two years) – encouraging an operational rather than strategic focus. UNODC will continue with the current biennial cycle for its consolidated budget. UNODC’s plans do reflect new priorities that are substantive challenges in UNODC’s area of competence. However, reviews do not appear to have reflected on the need for a clearer vision and do not present a strategic response to UNODC’s strategic challenges: to a large extent, it is dependent on direction from the provision of donor finance, as outlined below.<br>There is tension within UNODC relating to its strategic direction. On the one hand, some consider that UNODC is not a development agency. This view holds that UNODC works to a security and justice mandate that creates the conditions for development but that it is not a development agency or organisation itself. Those that hold this view cite the recent decision not to charge the 1% levy on UNODC’s budget as a contribution to the UN Resident Coordinator System. Certain donors also hold this view – with some representing member states’ law enforcement agencies. On the other hand, several interviewees consider that, given the Secretary-General’s recent directive for the UN family to be “people-centred” and given the focus of the SDGs, UNODC’s core mandate is fundamentally about making a contribution to development. <br>The conventions and protocols for which UNODC is a guardian, while giving primacy to criminal-justice and law-enforcement perspectives, also call for a people-centred approach in some areas, and UNODC clearly takes a people-centred, developmental approach in several fields of competence. But interviews indicate that there were, at the time of the assessment, differences of opinion on the direction UNODC should take. For example, some staff within UNODC who considered that UNODC needs to become more people-centred thought it should re-orientate resources from headquarters to the field to better focus on beneficiaries. In specific areas of competence, interviewees reflected that a stronger people-centred approach would result in UNODC doing more to support victims of terrorism, as well as prevention and investigation; victims of human trafficking, in addition to tackling traffickers; drug users, to reduce harm, as well as focus on prevention.<br>The tension between these views of UNODC’s strategic direction has yet to be resolved. There is a need for a leadership decision on its vision and strategic direction in the light of the Secretary-General’s position.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_1;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_1_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_1_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_1_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_1_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_1_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_1_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_1',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_1_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_1',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_1_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_1_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_1_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_2',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_1_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_2',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_1_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_1_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_1_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_2',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_1_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_2',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_1_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_1_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_1_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_1_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_1_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_1_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_1_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_3',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_1_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_3',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_1_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_1_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_1_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_4',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_1_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_4',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_1_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_4',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_1_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_4',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_1_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_1_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_1|1_1_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_1_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_2;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3',
+    'y2code': 'NARRATIVE',
+    'value': 'Although the most recent Programme Budget 2020-21, as a transitional budget, sets out the intent to align resources to results, there is still a gap between ambition and practice. The 2018 External Auditor’s Report found that there is a lack of clarity on what the intended results are, on what UNIDO is accountable for and on the linkage between the key corporate documents. With the advent of the revised 2019 IRPF, which specifies results more clearly and will require projects and the organisation as a whole to report to these indicators, it should become possible in time to link budgets and costings to results.<br>The Programme and Budget (P&B) 2020-21 provides costings for each major programme. Major Programme C “Thematic Programme Framework towards ISID” is broken down into the high level ISID goals but not into specific results from the IRPF. The 2020-21 budget identifies the outcomes for each element of Programme C and the results anticipated from each, but these are not yet linked to resources. There are no results identified at present for non-project-based activities, and so these are not currently subject to results-based assessment, costings or reporting.<br>Currently there is no tracking of costs from activity through to results. The 2018 External Auditor’s Report observed, “[W]e determined that while the P&B’s major programmes, programmes and sub-programmes identified the objectives and expected results, these were neither from the MTPF nor the IRPF. The P&B was only linked with the IRPF through the indicators in both documents but not on the objectives and expected results in the P&B” (13). The ERP has the capacity to allow reporting on results and activities as well as finance and expenditure, but this has not been done to date. <br>Within the ERP, there has been a heavy emphasis on financial data, required for donor reporting, rather than on results data which has not been well specified or aligned with an RBM framework. Less attention has been paid to the quality of data, and it has not been widely used, so there has been little incentive to improve data quality. A further challenge is that UNIDO’s heavy focus on projects means that there is no comparable financial or results reporting for non-project activities. With the introduction of the 2019 IRPF, there is an evident intent to minimise the use of unsynchronised indicators, which has impeded their aggregation. <br>UNIDO has recently taken steps to develop the budgeting system to ensure the 2022-23 budget cycle is fully results-driven and can provide costing for results, thus providing effective implementation and support to IRPF and MTPF. The implementation of simplified time recording and introduction of Full Cost Recovery costing mechanisms in the ERP system also commenced in 2019. A Taskforce on Full Cost Recovery was established in 2018. One of the objectives of the task force is to trace and record costs spent per result to enhance budget processes for regular budget as well as technical co-operation activities.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_3;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3',
+    'y2code': 'RATING',
+    'value': 'Highly unsatisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3',
+    'y2code': 'SCORE',
+    'value': '1.5',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_3;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3',
+    'y2code': 'NARRATIVE',
+    'value': 'UNODC’s recent organisational budget – and its composite budgets – align financial resources with strategic objectives and intended results of the current strategic plan. The biennium 2018-19 consolidated budget and the 2018-19 programme budget align financing with objectives for the biennium: the objective, expected “accomplishments”, and indicators of achievement are identified along with the resources allocated (disaggregated by source). The internal instructions for preparing these budgets give instructions to staff on how to ensure the budgets follow the results-based approach. <br>UNODC’s budget document does provide clear costings for the achievement of each management result. In the consolidated budget for the biennium 2018-19, a budget table lists the distribution of resources by components. Another budget table shows requirements by component broken down by programme of work. A third shows costings for objectives for the biennium, expected accomplishments, indicators of achievement and performance measures.<br>Systems are available to track costs from activity to result at a relatively high level. At programme level, managers use workplans (normally costed by activity) to monitor implementation in quantitative and qualitative terms. These are not online and make office-wide analysis complex: at present, Umoja lacks modules to track programme management. Umoja Extension 2 will introduce this facility when it is rolled out. To close this gap, the Regional Office for Southeast Asia and the Pacific and Afghanistan and Pakistan country offices developed their own online smart sheets. <br>They use this online monitoring tool to track and monitor implementation data, related SDGs and relevant regional initiatives, including activity status, delivery date, number of participants (male/female) and beneficiaries. These programmes can track costs at a higher level of detail. <br>There is evidence that UNODC’s costing of management and development results has improved over time. The assessment team saw evidence that UNODC is reviewing and revising its costing of standard budget input – helping to improve the accuracy of budgets. UNODC’s introduction of the full cost recovery model – and the need to accurately calculate direct and indirect costs – in the 2014-15 consolidated budget drove its ability to cost inputs more accurately. <br>UNODC’s consolidated budget for the 2008-09 biennium was its first results-based budget, and it harmonised UNODC budget terminology with that of the UN Secretariat. The General Assembly’s Advisory Committee on Administrative and Budgetary Questions report on the consolidated budget for the biennium 2012-13, noted that improvements had been made to the results-based format but that there was scope for further refinement of the results-based framework, particularly in terms of strengthening the relationship between indicators of achievement and the relevant performance measures. Some progress has been made in improving them. UNODC restructured its programme into nine subprogrammes in the 2014-15 biennium partly to strengthen results-based management. In the proposed 2020 budget, variances between 2019 and 2020 estimates are explained.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_3;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_3_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_3_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_3_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_3_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_1',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_3_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_1',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_3_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_3_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_3_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_3_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_3_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_3_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_3_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_2',
+    'y2code': 'RATING',
+    'value': 'Partially meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_3_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_2',
+    'y2code': 'SCORE',
+    'value': '1',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_3_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_2',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_3_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_2',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_3_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_3_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_3_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_3',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_3_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_3',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_3_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_3',
+    'y2code': 'RATING',
+    'value': 'Partially meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_3_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_3',
+    'y2code': 'SCORE',
+    'value': '1',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_3_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_3',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_3_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_3',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_3_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_3_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_3_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_3_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_3_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_3_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_3_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_3_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_3|4_3_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_3_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_4;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'NARRATIVE',
+    'value': 'The CGIAR System Organisation and each of the Research Centers are independent organisations that produce annual financial statements that are externally audited. As set out in the CGIAR System Framework, the System Council has as one of the standing committees an Assurance Oversight Committee. Its purpose is to provide “the System Council with assurance of the completeness and effectiveness of the Internal Audit Function and the independence of external audit functions; a structured reporting line between internal and external auditors and the System Council; and oversight of system-wide governance, risk management and internal controls.“<br>The annual audited financial statements for the CGIAR System Organisation and for the Research Centers are produced in accordance with International Financial Reporting Standards. <br>The external audits of the Research Centers include an action plan, which are submitted to the relevant board. A management letter, providing a response, is made available to internal auditors, management and the board, but the responses are not publicly available.<br>In 2018, the chairs of CGIAR’s Audit Committees agreed to commission a single firm to carry out an External Quality Assessment of all Center Internal Audit services. That work was overseen by the CGIAR System Internal Audit Function, and a copy of the Executive Summary of the Consolidated Report was shared with the System Management Board and its Audit and Risk Committee in April 2019. The Assessment found that 12 of the 15 Research Centers conform to the Institute of Internal Auditors Standards, 2 partially conform and 1 centre could not be assessed.<br>CGIAR as a System has yet to adopt a policy of publishing internal audit reports.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_4;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'SCORE',
+    'value': '2.83',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'EV_CONF',
+    'value': 'Medium Confidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_4;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'NARRATIVE',
+    'value': 'The Secretariat is administratively part of UNEP, and the MLF Treasurer is UNEP. The Minutes of the 82nd Meeting of the EXCOM confirmed that the audited financial statements had been prepared in accordance with the International Public Sector Accounting Standards. Final accounts for the Multilateral Fund are audited annually as part of the UNEP Financial Report and Audited Statements, with a separate schedule for the Fund. <br>Reports on the accounts of the MLF are provided annually by the United Nations Board of Auditors. These reports are prepared by an external board of auditors appointed by the UN General Assembly to audit the UN Secretariat, of which UNEP is part.<br>The UNEP Financial Report and Audited Statements contain audit observations and recommendations for each UNEP fund as necessary. None have been made for the MLF in recent years. Were any to be made, a management response would be recorded in the report to the EXCOM. <br>Internal audits of the Fund are periodically conducted by the Office of Internal Oversight (OIOS) of the UN. However, no internal audits of the Secretariat were conducted during the assessment period. The last audit of the Secretariat was conducted on the retirement of the previous Chief Officer in August 2013. In conducting its work, the Internal Audit Division is guided by the International Standards for the Professional Practice of Internal Auditing promulgated by the Institute of Internal Auditors. OIOS reports are publicly available on the OIOS website. <br>Previous MOPAN assessments for UNDP, UNEP and the World Bank rated these IAs as highly satisfactory against this MI. UNIDO was assessed as satisfactory in the recent MOPAN assessment.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_4;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'RATING',
+    'value': 'Highly satisfactory',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'SCORE',
+    'value': '3.83',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_4;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'NARRATIVE',
+    'value': 'UNCTAD states that it is committed to evaluation as a key enabler in a culture of accountability. As a member of the United Nations Evaluation Group (UNEG), it contributes to the full implementation of evaluation norms and standards.<br>At the organisational level, UNCTAD is subject to a robust system of internal and external oversight, including external audits by the UN Board of Auditors (BoA), an audit body composed of three supreme national audit bodies on a rotational basis that exercises external audit mainly of a financial nature. UNCTAD’s internal audits are conducted by the OIOS and the Internal Audit Division, which provides the functions of audit and carries out audits in accordance with the International Standards for the Professional Practice of Internal Auditing. Audits by OIOS are conducted independently of UNCTAD, though within the UN system they are considered to be internal audits. OIOS undertakes two to three audits a year, based on its own risk assessment. Since November 2013, OIOS has completed nine internal audits of UNCTAD, though these have a broader focus than TC. OIOS has only completed two external evaluations of UNCTAD in the same time period, a programme evaluation of the research and analysis pillar in 2015 and the follow-up review in 2018.<br>JIU is the only independent external oversight body of the UN system and the only entity mandated with conducting inspections, evaluations and investigations system-wide. JIU conducted its most recent UNCTAD-specific review of the management and organisation in 2012. UNCTAD’s management response is publicly available as a report to the UNCTAD Trade and Development Board. JUI also engages with UNCTAD when evaluating system-wide thematic issues. Given the broad-scale nature of the reports and recommendations, there is not a direct management response from UNCTAD to these.<br>There is a progress tracking system for OIOS recommendations and JUI recommendations within the MIS dashboard. For external evaluations that form part of the annual evaluation plan, responses to recommendations and actions are formally reported to the Working Party. Updates on audits are also reported to the Working Party.<br>UNCTAD monitors implementation of audit recommendations through its MIS dashboard on a two-monthly basis. UNCTAD has a track record of full implementation of OIOS recommendations, with 100% in 2017 and 2018, and has consistently met the 80% implementation requirement over recent years.<br>OIOS reports on evaluations/audits of various UNCTAD functions and management units are available on the OIOS website but could not be located on the UNCTAD website.',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_4;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'RATING',
+    'value': 'Highly satisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_4;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'NARRATIVE',
+    'value': 'External Audits of the accounts of UNIDO are conducted in accordance with International Standards on Auditing issued by the International Auditing and Assurance Standards Board.<br>The most recent external audit of 2018, and the previous 2017 external audit, confirms compliance in accordance with this as well as with the International Public Sector Accounting Standards (IPSAS) and Article X of the Financial Regulations of UNIDO for the latter. It indicates that UNIDO has “used appropriate accounting policies, consistently applied and supported by reasonable and prudent judgements and management’s best estimates” (13).<br>Management responses to findings and recommendations made in external audits are provided to the External Auditor with a summary of progress on actions taken and their current status. Each response also states a focal point. This summary is included as an annex in the 2017 audit report, going back for three years of recommendations, and the 2018 report contains a “summary of recommendations”. <br>The internal audit function of UNIDO has achieved the highest possible rating “Generally Conforms” with the International Standards for the Professional Practice of Internal Auditing and with the principles of the Institute of Internal Auditors’ (IIA) Code of Ethics, namely integrity, objectivity, confidentiality and competency, as a result of the external assessment recently conducted by the Institute of Internal Auditors Austria. Internal audit reviews such as that of the Ethiopia Regional Office and Partnerships and of the Payment Process stated that both were conducted in accordance with the relevant charter at the time of their undertaking, and on the basis of the International Standards for the Professional Practice of Internal Auditing.<br>The newly established Office of Independent Evaluation and Internal Oversight (EIO) has overall responsibility for internal audit in UNIDO and an Independent Audit Advisory Committee also exists. Prior to the 2018 restructuring, it was the responsibility of the Office of Internal Oversight and Ethics (IOE). The Charter for the new EIO states, “The Director, EIO and IOE staff will conduct their internal audit work in conformity with the core principles of the Institute of Internal Auditors (IIA), including the International Standards for the Professional Practice of Internal Auditing, Code of Ethics and the Definition of Internal Auditing”. It also explains that investigations shall be conducted in accordance with investigation guidelines in a manner that reflects best practices, taking into due consideration the provisions contained in the Uniform Principles and Guidelines for Investigations, adopted by the Conference of International Investigators in its latest version. <br>Internal audit reports are made available to all member states on a password secured website. There is direct reporting to the Industrial Development Board (IDB) and DG on the outcome of internal audits as well as to relevant managers. Permanent missions are notified of new reports issued for example through Information Notes, and member states also have access to them.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_4;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'SCORE',
+    'value': '3.17',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_4;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'NARRATIVE',
+    'value': 'UNODC’s external audits comply with international standards. External financial reports and audited financial statements are available for the years ended 31 December 2017 and 31 December 2018. These audits were conducted by the Board of Auditors in accordance with the International Standards on Auditing (ISA 240). The two external audits relevant to the assessment period confirm compliance with international standards across different functions. Both the 2017 and 2018 external audits express the opinion that “financial statements present fairly, in all material respects, the financial position of UNODC” and that its financial performance was in accordance with the International Public Sector Accounting Standards.<br>UNODC gives a management response to all external audit report recommendations. UNODC produces an annual report that summarises the status of implementation of the main recommendations. Management’s response to the 2018 external audit was not available at the time of writing – as the audit was published only at the end of July 2019.<br>UNODC’s internal audit function is performed by OIOS – the internal oversight body of the United Nations. It is based in Geneva, not Vienna. The OIOS is mandated to implement the oversight responsibilities held by the Secretary-General through the provision of audit, investigation, inspection and evaluation services. OIOS audits assess the adequacy and effectiveness of internal controls and review UNODC’s risk management, control and governance processes. The audits are conducted in accordance with the International Standards for the Professional Practice of Internal Auditing. Management responses are presented in annexes to internal audit reports issued by OIOS.<br>Internal audit reports issued by OIOS are publicly available on their website. However, the search facility on UNODC’s own website makes them difficult to find. The search facility – even using “advanced search” is not user friendly. They are more easily found on OIOS’s website.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_4;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'RATING',
+    'value': 'Highly satisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4',
+    'y2code': 'SCORE',
+    'value': '3.83',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_2',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_2',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_2',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_2',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_2',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_2',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_2',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_2',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_3',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_3',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_3',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_3',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_4',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_4',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_5',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_5',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_5',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_5',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_5',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_5',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_5',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_5',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_6',
+    'y2code': 'RATING',
+    'value': 'Does not meet conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_6',
+    'y2code': 'SCORE',
+    'value': '0',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_4_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_6',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_6',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_4_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_6',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_6',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_4_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_6',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_4|4_4_6',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_4_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_5;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'NARRATIVE',
+    'value': 'As set out in the Charter, the System Management Board has, as one of its standing committees, an Audit and Risk Committee. Its purpose is to provide the System Management Board with independent assurance of adequate internal audit capacity, system-wide governance, risk management and internal controls.<br>The System Management Board is responsible for ensuring the completeness and effectiveness of arrangements for the Internal Audit Function, taking into account audit arrangements at the Research Centers and the risk management framework. The CGIAR System Internal Audit Function Charter (April 2018) sets out that the Head of the Internal Audit Function has the responsibility to “[f]ollow up on engagement findings and corrective actions, and report periodically to senior management and the Audit and Risk Committee any corrective actions not effectively implemented.”<br>As set out in the CGIAR System Framework, the System Council has, as one of its standing committees, an Assurance Oversight Committee. Its purpose is to provide “the System Council with assurance of the completeness and effectiveness of the CGIAR System Internal Audit Function and the independence of external audit functions; a structured reporting line between internal and external auditors and the System Council; and oversight of system-wide governance, risk management and internal controls.”<br>The CGIAR Risk Management Guidelines set out the policy requirement that CGIAR Research Centers must have, and provide on request, their whistle-blower policies that provide for reporting of issues. Each of the Research Centers has its own system for reporting issues, with guidelines and a process for tracking. <br>Material that is reported across the System is communicated to the System Management Board and System Council and then published. Internal Audit recommendations typically explain the proposed timeframe for making improvements, although 12 months is not prescribed.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_5;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'SCORE',
+    'value': '3.5',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'EV_CONF',
+    'value': 'Medium Confidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_5;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI6_8;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'NARRATIVE',
+    'value': 'At the level of the CRP, there is evidence of five of the sample of six CRPs (FTA, WHEAT, LIVESTOCK, RTB, CCAFS, PIM) collaborating with partners (CRPs, Research Centers or external stakeholders) on studies and assessments relevant to CRP outcomes and impacts. Interviews with Research Centers and CRP leads gave significant evidence of their involvement in joint assessments.<br>The CRPs hold regular national, regional and international conferences and meetings. They bring together wide ranges of stakeholders to review key sectoral issues, assess progress and map out<br>future ways forward on a range of issues, from responses to diseases and threats to climate smart agriculture and agriculture and food policy, to preservation of crop biodiversity.<br>In the development of the CRPs, surveys have been undertaken on partners’ perceptions of the performance of the programmes and the CGIAR. The evaluations of the CRPs all included, in their methodology, survey and interviews, to assess partner perception of CRP progress. In addition, individual CRPs, such as the Wheat and Maize programmes, have carried out partner surveys.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI6_8;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI6_8;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI6_8;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI6_8;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'NARRATIVE',
+    'value': 'All reporting of results of Montreal Protocol funded activities is a joint enterprise between the MLF and the relevant IA. It is unclear from documentation the extent to which NOUs are involved in assessments of interventions. <br>No evidence was found of MLF participation in multi-stakeholder dialogue (e.g. involving non-governmental organisations or civil society) around the normative commitments of the Montreal Protocol during the period of assessment. However, NGOs have influenced the international negotiations in the past and are engaged in lobbying activities related to the Protocol.<br>Given the MLF’s role in funding incremental costs of investment projects and other activities which support countries to meet their obligations under the Protocol, the contributions of the MLF and partners are quantified to an exact financial value in reporting documents.<br>Consolidated progress reports summarising progress and financial information provided by bilateral and implementing agencies are produced annually and considered by the Executive Committee. <br>The Secretariat sends out a survey to all NOUs annually in order to get their feedback on the agencies they work with. The responses are mostly treated as confidential.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI6_8;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI6_8;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'SCORE',
+    'value': '3.4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI6_8;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'EV_CONF',
+    'value': 'Little to no Confidence',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI6_8;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'NARRATIVE',
+    'value': 'Development Account projects, though less than 10% of projects, require joint assessments of progress. The Evaluation and Monitoring Unit (EMU) has developed guidelines for participatory self-evaluation for project managers; nevertheless, given its limited capacity, it has no way of tracking whether joint evaluations have been conducted or not. Interviews suggest that joint progress assessments of TC do occur, though not in all cases. EMU is not always informed about self-evaluations that are conducted jointly with other entities.<br>Almost 90% of partner survey respondents state that mutual assessments of progress with national and regional partners are undertaken in a more than satisfactory manner. Looking at the limited evidence that emerged from the analysis of the sample of projects, we observed that all UNDAF/UNSDCF projects have evidence of contribution to a joint report but no available evidence of collaboration in the reporting process. There was one example of a government partner providing monitoring data and another of a government partner contributing to monitoring. We also saw evidence of a government partner establishing a technical and financial monitoring system to generate progress reports and safeguard controls (Angola), of participant feedback/surveys, of in-country monitoring, and of a planned joint evaluation.',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI6_8;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI6_8;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI6_8;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI6_8;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'NARRATIVE',
+    'value': 'At country level, the project steering committee assesses progress of interventions on a regular basis, usually every six months. Such steering committees consist of line ministries; national and local stakeholders; UNIDO; other relevant UN agencies/IFIs; relevant business representatives; and in some cases donors. Project managers report against the log-frame and also report on budgets, changes and any issues requiring agreement to an adjustment of the project. Countries with country programmes have national steering committees with a similar set of partners to review progress on the country programme. Interviewees noted that not all project managers engage stakeholders well in mutual assessments and feedback. The survey findings indicate lower levels of satisfaction with mutual assessments, one part of synergies with partners.<br>Within PCPs, there is a national multi-sectoral body tasked with co-ordination and review. For instance in Ethiopia, the National Technical Task Force (made up of national bodies) is responsible for the day-to-day operations of the PCP, including reviewing implementation status and challenges, recommending mitigation measures, monitoring progress and reporting on it annually. A UNIDO PCP programme manager is responsible for overseeing and drawing together monitoring information and the progress report for PCPs. At the end of the first phase of the PCP, there is a joint review to take stock of PCP accomplishments and measure the results and contribution to impact of the PCP programme on specific industrial sectors/areas and its contributions to the achievement of ISID and the SDGs, as well as to validate the way forward for the country’s industrial development. The contribution of UNIDO is specified in terms of UNIDO project implementation progress and expenditure.<br>PCP programme managers present and discuss findings of the mid-term PCP review with the National Coordination Body and other national stakeholders, and recommendations are agreed and formalised by the body. The UNIDO Evaluation Office finalises evaluation reports for projects and country programmes and shares the latter with internal and external stakeholders, including the relevant management response sheet. The mechanism by which this is agreed by all partners is not clearly specified, and there are no joint assessment reports.<br>Interviewees cautioned that some projects do not engage stakeholders well in mutual assessments and feedback on projects and in agreeing changes to projects. <br>The UNIDO evaluation manual and TOR for mid-term reviews both require an assessment of partner and stakeholder/beneficiary perceptions to be undertaken. UNIDO does not survey partners to elicit their views',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI6_8;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI6_8;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'SCORE',
+    'value': '2.4',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI6_8;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI6_8;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'NARRATIVE',
+    'value': 'UNODC has a mandate to lead in the assessment of globally agreed drug and crime conventions. Therefore, participation with partners in assessments of progress in implementing agreed commitments is one of its key functions. There is a great deal of evidence from the different sectors that headquarters-based sectors, regional offices and global programmes lead or participate in multi-stakeholder dialogue at the global, regional and national levels. UNODC is also involved at the country level in mutual assessments in its areas of competence – using its influence to encourage partner governments to improve its performance. It also takes part in UN Country Team planning, monitoring and evaluation.<br>UNODC participates in multi-stakeholder dialogue around joint sectoral or normative commitments in all the sectors and with respect to its strategic objectives. Participating and convening are one of UNODC’s core functions, and there is strong and consistent evidence that it does this with respect to its strategic objectives. It also leads the process of joint performance reviews on normative standards in relation to both the drug and crime conventions it safeguards. For example, the December 2017 resolution and decisions of the Conference of the States Parties to the United Nations Convention against Corruption represents the culmination of a review process that is multi-stakeholder.<br>There is particularly strong evidence of UNODC participation in joint sectoral and normative commitments in relation to drugs and crime. To give just two examples, UNODC has operated in partnership with the World Bank in the Stolen Asset Recovery Initiative since 2007 and in 2017 supported the organisation of the first Global Forum on Asset Recovery (GFAR) where representatives from 26 jurisdictions, international organisations and civil society created the basis for stronger global asset recovery. This forum established a basis for learning and stronger practice – facilitating the return of USD 321 million. UNODC also engages in the UNAIDS Joint Programme and is the technical and convening agency on HIV/AIDS and people who use drugs and on HIV/AIDS in prisons on an ongoing basis. <br>At the country level, UNODC participates as a member of UN Country Teams in joint analytical work – principally the mandatory Common Country Assessment as part of the UNDAF development: it also joins in multi-stakeholder dialogue during the strategic prioritisation phase of the UNDAF and in common UN system monitoring and evaluation of the implementation of UNDAF and associated workplan results. In addition, it has participated in UNDAFs where it does not have a permanent country representative.<br>UNODC contributes to or is the lead author of joint progress statements or status reports in a broad range of issues – set out below in MI 6.9. UNODC’s contribution is evidenced by reports and its own reporting. Most of its flagship reports and the reports undertaken by programmes are the result of collaboration. Specifically, UNODC is a co-facilitator, alongside UNDP, the United Nations Educational, Scientific and Cultural Organisation, and UNHCR, on the Global Alliance for Reporting Progress on Promoting Peaceful, Just and Inclusive Societies. <br>These reports present assessments of progress made by its partners and stakeholders that relate to UNODC’s mandate at the global level and indicate its influencing. <br>Documentation from mutual progress assessments contains a clear statement of UNODC’s contribution and is agreed by partners.<br>Some UNODC programmes do use surveys and other means of obtaining partner perceptions of progress. UNODC’s collaborative work with partners and stakeholders is evident in the management of most of its programmes. UNODC makes extensive use of surveys as a tool to help counterparts identify progress. For example, together with WHO, UNODC developed a drug treatment survey to help national counterparts plan and monitor the impact of treatment systems it helped develop. A 2018 audit recommended that one of UNODC’s programmes could better capture beneficiary feedback and use it to design programme revisions.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI6_8;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'RATING',
+    'value': 'Highly satisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI6_8;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8',
+    'y2code': 'SCORE',
+    'value': '3.6',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI6_8;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_8_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_8_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_8_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_8_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_8_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_8_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_8_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_8_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_8_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_8_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_2',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_8_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_2',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_8_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_8_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_8_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_2',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_8_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_2',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_8_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_8_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_8_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_3',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_8_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_3',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_8_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_3',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_8_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_3',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_8_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_3',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_8_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_3',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_8_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_8_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_8_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_4',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_8_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_4',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_8_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_8_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_8_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_8_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_8_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_5',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_8_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_5',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_8_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_5',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_8_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_5',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_8_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_5',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_8_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_5',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_8_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_5',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_8_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_8|6_8_5',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_8_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI6_9;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'NARRATIVE',
+    'value': 'The CGIAR website has a clear statement on the importance of knowledge production, under the heading of Open Access and Open Data: CGIAR Research Centers and Research Programs have been leaders in agricultural development for decades, producing valuable outputs that are generally considered to be global public goods.” In the preamble to CGIAR’s Open Access and Data Management Policy, its role in knowledge production is set out as follows: “CGIAR regards the results of its research and development activities as international public goods and is committed to their widespread dissemination and use to achieve the maximum impact to advantage the poor, especially smallholder farmers in developing countries.” <br>There is considerable evidence in the 2017 Performance Report that CGIAR’s research results have contributed to national- and international-level policies. There are also specific examples, such as in the FTA Annual Report, that knowledge products have been used by partners to inform advocacy at national and regional levels. There is some evidence from interviews that knowledge products are timely.<br>On the production of knowledge products, The Synthesis and Lessons Learned from 15 CRP Evaluations includes this conclusion: “Overall, the evaluations concluded that the CRPs have been able to produce outputs of a quality that is consistent with what can be expected from international agricultural research Organisations.” However, there is considerable variability in this respect. Over 75% of survey respondents rated CGIAR’s knowledge products as excellent or very good. <br>The evidence available shows that the main knowledge products have in the main been peer-reviewed articles, which can have limited reach, as is recognised in CGIAR. As a result, efforts are being made to extend the reach of CGIAR’s work, through a greater range of knowledge products.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI6_9;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI6_9;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'SCORE',
+    'value': '2.83',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI6_9;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'EV_CONF',
+    'value': 'Medium Confidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI6_9;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'NARRATIVE',
+    'value': 'The 2016 Consolidated Text of the Montreal Protocol states that parties to the Montreal Protocol shall, individually, jointly or through international bodies, “co-operate in promoting public awareness of the environmental effects of the emissions of controlled substances and other substances that deplete the ozone layer”. Within two years of the entry into force of this Protocol and every two years thereafter, each Party is required to submit to the Secretariat a summary of the activities it has conducted pursuant to this Article. Opportunities for knowledge production are discussed at Executive Committee meetings; “the Executive Committee has recently decided:<br>(a) to request that the Secretariat continue to make available through the Multilateral Fund website the outcome of the demonstration projects implemented to date<br>(b) to further share the results of the demonstration projects through dedicated communication products such as project fact sheets (MLF, 2018, Report of the 81st Meeting of the Executive Committee).<br>Regional networks and workshops are used as a tool for sharing knowledge: “The Executive Committee agreed that, given the opportunities provided through the regional networks, other regional and national training workshops, the process of country programme preparation and institutional strengthening activities, there should normally not be a need for regional workshops specifically on data collection and reporting. It further agreed that, on the understanding that there were no financial implications for the Fund in such a project, UNEP should be invited to proceed with the preparation of a manual on data collection” (MLF, 2017, Policies, Procedures, Guidelines and Criteria. 9. Project Proposals). HQ interviews described how a major role of the MLF in knowledge management is the experience it gains from reviewing all projects under the Montreal Protocol and sharing this learning with IAs and NOUs.<br>An information strategy for the MLF was produced in 2003. HQ staff described how the MLF website provides a “wealth of information”, how reporting is generated after each meeting of the Executive Committee (to be shared with all parties) and how the MLF produces a colloquial report which it provides to UNEP – which then distributes it to all countries. HQ interviews suggested that the unique role of the MLF in knowledge production is supporting demonstration projects for new technologies and generating factsheets on the results. Guides produced by the Secretariat are also knowledge products.<br>Within the MLF, it is principally the role of UNEP to produce knowledge products and assess their utility. UNEP has a clearinghouse function under the Montreal Protocol and occasionally produces knowledge products for technicians involved in the phase-out of ODS, as well as for other audiences. UNEP has produced many products over the years for a wide range of stakeholders.<br>The document review found no evidence regarding how MLF knowledge products have been used by partners to inform action.<br>The document review found no evidence regarding whether MLF knowledge products have been applied to inform advocacy at country, regional or global level.<br>The document review found no evidence regarding whether knowledge products have been perceived as timely by partners.<br>The document review found no evidence regarding whether knowledge products have been perceived as high quality by partners.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI6_9;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI6_9;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI6_9;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'EV_CONF',
+    'value': 'Little to no Confidence',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI6_9;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'NARRATIVE',
+    'value': 'Seen from an organisational level, “knowledge products” include research and flagship reports, which trigger demand for and help inform design and implementation of TC projects. Seen from a purely TC perspective, knowledge products include items from the UNCTAD Toolbox such as Investment Policy Reviews, Trade Policy Framework Reviews and any other knowledge products that are generated by a project. For example, the diagnostic trade integration study with regard to the Djibouti–Ethiopia corridor led by ALDC was one of the major provisions of TC in the undertaking of the project. Ethiopia had used the diagnostic trade integration study to mainstream trade into its five-year national plan. In addition, the United Nations Industrial Development Organisation had used this study to develop its programme for country partnership in Ethiopia, and the World Bank had referred to the study for policy formulations in Ethiopia.<br>Evaluations point to the interconnectivity between knowledge products generated in the research and analysis pillar and in TC: “Subprogramme 5 is essentially following a ripple-effect strategy whereby research, which lies at the core of the strategy, is used as the impact that generates waves, creating awareness for change, which in turn lead to demand for TC and, together, research and TC lead to debates, to the evolution of new norms and new consensus and to new policies.”<br>Member states participating in the partner survey show high levels of appreciation for UNCTAD’s knowledge products, with over 90% of respondents stating that they are (very) useful to their work.',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI6_9;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI6_9;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI6_9;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI6_9;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'NARRATIVE',
+    'value': 'UNIDO’s new fourth strategic priority, adopted in the MTPF 2018-21 is to strengthen knowledge and institutions. The MTPF 2018-21 states, “The emphasis on partnerships and on increasing the development impact of UNIDO’s work requires a systematic approach to knowledge management within and beyond the Organisation”. The MTPF 2018-21 emphasises UNIDO’s plan to increase its focus on analytic and statistical work to better support countries in their efforts towards achieving ISID and the SDGs. These activities include those in the appraisal phase of large projects or programmes, including the PCPs, which require country and sector-specific ISID analysis, co-ordination work, institutional support, and, where necessary, capacity building services. This approach is further built on by the 2019 IRPF which states that a fundamental area of influence of UNIDO’s efforts is the generation of increased knowledge and understanding of ISID issues.<br>UNIDO has the mandate to collect and produce global industrial statistics. UNIDO’s Policy, Research and Statistics Department is responsible for producing a range of well-respected knowledge products, which are widely used by governments and by research institutions to inform analysis and policy. The Industrial Development Report (IDR) is the periodical flagship publication of UNIDO. It is complemented by relevant working papers and studies published on the UNIDO website, for example on women’s participation, industrialisation in Africa and least developed countries, migration, and globalisation. UNIDO also maintains and manages five global databases comprising statistics on overall industrial growth, detailed data on business structure and statistics on major indicators of industrial performance by country in a historical time series. Data from these are used by governments and economists in assessing industrial performance and for monitoring six SDG 9 indicators.<br>UNIDO convenes global and regional fora and is part of various networks and platforms which serve as means of sharing best practices and innovative solutions in the field of ISID. These are well attended and provide an opportunity for UNIDO to influence thinking through its studies and experience from country level work and research briefs. UNIDO participates in global fora on industrial statistics and SDG indicators. Statistical country briefs are produced to support country ISID and policy development. At country level, workshops and conferences are used by URs/UCRs to share knowledge on technology and industrialisation, bringing in experts as necessary. Some URs/UCRs who have technical backgrounds have the requisite technical knowledge to do this themselves and support advocacy at country level, but not all URs/UCRs have the necessary skills for advocacy and influencing thinking. The MOPAN partner survey found that partners working for Cambodia and Senegal (both PCP countries) tend to assign higher ratings in the survey for quality of inputs to policy dialogue.<br>UNIDO supports South-South and triangular industrial co-operation for knowledge and technology exchange. UNIDO also has a role in building capacity for effective statistical information, especially in those countries where national statistical offices lack the technical capacity to establish a system in compliance with new statistical standards. This capacity building aspect of UNIDO’s work has decreased in recent years due to lack of UNIDO staff capacity. Interviewees noted that project managers and donors do not prioritise production of statistics and data, so resources for these in projects are often inadequate.<br>The IDR is produced on a two-year cycle, and databases are regularly updated. Statistical databases are available online and on CD-ROMs, with some annual and quarterly reports as PDFs; working papers and studies are accessed online or by PDF download.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI6_9;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI6_9;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'SCORE',
+    'value': '2.83',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI6_9;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI6_9;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'NARRATIVE',
+    'value': 'The objective of one of UNODC’s six substantive subprogrammes is to “enhance knowledge” of trends on drugs and crime to support evidence-based policy. UNODC’s Research and Trend Analysis Branch produces several flagship publications periodically, and there is evidence that these are used and valued. Individual programmes also tend to contain a research component. However, a recent evaluation noted that UNODC “has allowed political concerns to take precedence over credible research’ and that this has encouraged a “culture of conservatism” that is not in UNODC’s long-term interest. Interviews confirmed that this is an issue of concern internally. UNODC’s Research Branch is more dependent on programme funds than was the case historically: this dependence further undermines its ability to maintain the independence of the topics it focuses on and its findings.<br>UNODC aims to offer impartial, evidence-based information to member states to support policies on drugs and crime. The Objective of Subprogramme 6, “Research, trend analysis and forensics”, is “to enhance knowledge of trends on drugs and crime for scientific evidence-based policy formulation”. Knowledge production also runs through each UNODC intervention and is a key objective of several subprogrammes. UNODC’s Research and Trend Analysis Branch (RAB) produces several research flagship publications that are considered to guide debate and inform global action. It produces: the biennial Global Report on Trafficking in Persons; the World Drug Report; Homicide Study; and the World Wildlife Report. <br>UNODC cites as evidence that its knowledge products are used in research publications: the number of citations increased in 2018 (1 800 total). There is evaluative evidence that UNODC knowledge products inform action. An in-depth cluster evaluation (2018) of five of UNODC’s global research projects (covering its flagship reports) notes that UNODC “has made a substantial contribution towards improving the effectiveness of stakeholder response to current and emerging challenges”. However, the evaluation points out that overall there is inadequate data to identify impact due to an absence of relevant data and that some research “is not sufficiently analytical to be of much use in policymaking”. The cluster evaluation noted that many of the stakeholders reportedly used Thematic Programme on Research publications and found them useful as reference documents. MOPAN survey respondents hold UNODC’s knowledge products in very high regard: 33% rated the value of UNODC’s knowledge products for their work as “excellent”, and a further 38% judged the contribution as “very good”. <br>UNODC has built a global knowledge management platform (SHERLOC) to make information on implementing the UN Convention against Transnational Organized Crime, its three protocols and the international drug control treaties accessible. In 2017, it had around 170 000 visitors.<br>Given that UNODC’s flagship reports are either annual or biannual and are produced on target, they are timely. However, the cluster evaluation notes structuring them in a more flexible way may be worthwhile: “Most stakeholders indicated preference for more frequent updates and operational information, so they could keep themselves abreast of new trends.”<br>The cluster evaluation highlights a result that risk aversion limits the quality of knowledge generated. It notes that “UNODC has allowed development of a culture of risk avoidance that is not in its long-term interest”. It notes that “UNODC has allowed political concerns (e.g. fear of backlash from some Member States) to take precedence over credible research (e.g. analysis that shows policy impacts)” and that “[t]his has encouraged a culture of conservatism and risk avoidance that is not in the long-term interest of UNODC”. The cluster evaluation called for a “bold long-term strategic vision for research”. Interviews echoed the findings of the cluster evaluation: we heard of instances of self-censorship and reluctance within the organisation to take on research that could prove contentious. Given that UNODC is a custodian of the UNCAC, the absence of a flagship annual report on global progress in combatting corruption is noteworthy. Giving the Research and Analysis Branch the same degree of structural independence that evaluation functions have would address several of these concerns.<br>UNODC‘s dependence on earmarked funding presents UNODC with a difficult balance. The cluster evaluation notes that an increased reliance of the thematic programme on projects for funding can “create unhealthy dependence that may compromise [a] programme’s independence and credibility”. It notes that there is a need to find the right balance between programming and operational independence for the thematic programme. UNODC has perhaps been deprioritising the importance of research in recent years. In its initial budget for the 2018-19 biennium, UNODC<br>removed a USD 2 million general purpose budget allocation that the Research and Trend Analysis Branch had previously received. FINGOV insisted UNODC review this and would not approve the budget as it stood. The outcome was that two-thirds of its budget is still provided by some form of core budget, leaving it dependent on extrabudgetary funds for a third of its budget.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI6_9;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI6_9;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9',
+    'y2code': 'SCORE',
+    'value': '3.17',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI6_9;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_9_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_9_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_9_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_9_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_9_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_9_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_9_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_9_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_9_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_9_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_2',
+    'y2code': 'RATING',
+    'value': 'No evidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_9_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_2',
+    'y2code': 'SCORE',
+    'value': 'NE',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_9_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_9_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_9_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_9_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_9_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_9_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_9_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_3',
+    'y2code': 'RATING',
+    'value': 'No evidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_9_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_3',
+    'y2code': 'SCORE',
+    'value': 'NE',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_9_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_3',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_9_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_3',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_9_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_9_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_9_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_9_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:6_9_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_4',
+    'y2code': 'RATING',
+    'value': 'No evidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_9_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_4',
+    'y2code': 'SCORE',
+    'value': 'NE',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:6_9_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_9_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:6_9_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_9_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '3|KPI6|MI6_9|6_9_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:6_9_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'NARRATIVE',
+    'value': 'CGIAR has undergone a considerable process of reform and change over the last decade. In 2016, the CGIAR System was established. It comprises the 15 independent Research Centers, the Funders, the System Council, the CGIAR System Organisation, the Independent Science for Development Council, the Standing Panel on Impact Assessment, the CGIAR System Internal Audit Function and CGIAR Research. The new business plan sets out both the potential of the System and the outstanding challenges of continued reform. <br>The CGIAR System Framework sets out the structure of the CGIAR System: the Research Centers as independent and autonomous organisations, focused on research for development; the Funders providing guidance and financial resources; governance and administration for the System Organisation through the System Management Board and the System Management Office, respectively; with advice from the Independent Science for Development Council, Internal Audit Function and the Standing Panel on Impact Assessment. The business plan sets out a range of actions, which are aimed at creating a more efficient, focused and less fragmented System.<br>There is a clear commitment in the business plan to improving performance management, through a combination of careful evaluation of the past programmes and developing approaches to assure that current research management systems are designed, positioned and managed to deliver impacts as effectively and efficiently as possible, all aimed at driving improvements over time. These processes are still at the early stages of their development, and there are considerable concerns about the time that reform processes have taken and the need to keep a complex group of stakeholders together in the ongoing reforms. <br>The Evaluation of Partnerships concluded that the CRPs (CGIAR Research Programs and Platforms) created closer relationships between Research Centers, resulting from the need to plan programmes together, share funding and report jointly. In addition, partnerships, both within the System and outside, are central to the way in which CGIAR works, and their centrality is set out strongly in the SRF and business plan. It is, however, generally agreed that there is a need to go further to encourage greater co-operation across the CGIAR System.<br>The CGIAR SRF sets out an overview of responsibilities for results, with the basis in the formation of the CGIAR System under one unified governance structure providing a framework for the delivery of results. The aim of the round of governance reforms over 2016 and 2017 has been to deliver improved co-ordination, accountability and transparency in decision-making throughout the CGIAR System as a whole. This statement in the SRF comes with the caveat that this will also require an agreed and sustainable funding envelope to support the portfolio of CRPs. While some of this funding has been provided, the need for significant continued resource mobilisation by individual Research Centers undermines co-operation and the focus of the System as a whole.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_2;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'SCORE',
+    'value': '2.4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_2;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'NARRATIVE',
+    'value': 'The organisational architecture of the MLF is congruent with the Montreal Protocol. The MLF is a financial mechanism established under Article 10 of the MP.<br>The Meeting of the Parties takes place annually to review progress and implementation of the MP. The Executive Committee meets twice a year to review progress with the business plan. The operating model of the MLF was favourably evaluated in 2012. In response to the survey question on whether MLF “Defines and adapts its organisational architecture in a way that allows full support to the vision”, 28% of respondents answered “excellent” and 53% “very good”.<br>The EXCOM discharges its tasks and responsibilities with the co-operation and assistance of the Secretariat as well as the four IAs and bilateral agencies. Programmes are implemented individually or jointly by the IAs and bilateral agencies. These agencies attend the EXCOM meetings. While co-operation was assessed to be strong by interviewees, there is an element of competition for MLF funding between agencies.<br>The implementing agencies are assessed annually against targets set in their business plans. A document evaluating the performance of the IAs against their business plans is reviewed by the EXCOM at the same meeting where bilateral and implementing agencies’ progress reports are presented. Article 5 countries are ultimately responsible for delivering against the Control Schedule under the terms of the MP.<br>The organisational architecture of the MLF is congruent with the Montreal Protocol. The MLF is a financial mechanism established under Article 10 of the MP.<br>The Meeting of the Parties takes place annually to review progress and implementation of the MP. The Executive Committee meets twice a year to review progress with the business plan. The operating model of the MLF was favourably evaluated in 2012. In response to the survey question on whether MLF “Defines and adapts its organisational architecture in a way that allows full support to the vision”, 28% of respondents answered “excellent” and 53% “very good”.<br>The EXCOM discharges its tasks and responsibilities with the co-operation and assistance of the Secretariat as well as the four IAs and bilateral agencies. Programmes are implemented individually or jointly by the IAs and bilateral agencies. These agencies attend the EXCOM meetings. While co-operation was assessed to be strong by interviewees, there is an element of competition for MLF funding between agencies.<br>The implementing agencies are assessed annually against targets set in their business plans. A document evaluating the performance of the IAs against their business plans is reviewed by the EXCOM at the same meeting where bilateral and implementing agencies’ progress reports are presented. Article 5 countries are ultimately responsible for delivering against the Control Schedule under the terms of the MP.<br>The organisational architecture of the MLF is congruent with the Montreal Protocol. The MLF is a financial mechanism established under Article 10 of the MP.<br>The Meeting of the Parties takes place annually to review progress and implementation of the MP. The Executive Committee meets twice a year to review progress with the business plan. The operating model of the MLF was favourably evaluated in 2012. In response to the survey question on whether MLF “Defines and adapts its organisational architecture in a way that allows full support to the vision”, 28% of respondents answered “excellent” and 53% “very good”.<br>The EXCOM discharges its tasks and responsibilities with the co-operation and assistance of the Secretariat as well as the four IAs and bilateral agencies. Programmes are implemented individually or jointly by the IAs and bilateral agencies. These agencies attend the EXCOM meetings. While co-operation was assessed to be strong by interviewees, there is an element of competition for MLF funding between agencies.<br>The implementing agencies are assessed annually against targets set in their business plans. A document evaluating the performance of the IAs against their business plans is reviewed by the EXCOM at the same meeting where bilateral and implementing agencies’ progress reports are presented. Article 5 countries are ultimately responsible for delivering against the Control Schedule under the terms of the MP.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_2;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'RATING',
+    'value': 'Highly satisfactory',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'SCORE',
+    'value': '3.8',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_2;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'NARRATIVE',
+    'value': 'UNCTAD is a permanent intergovernmental body established by the United Nations General Assembly in 1964. Its headquarters are located in Geneva, Switzerland, and it has two small offices in New York and Addis Ababa. UNCTAD is part of the UN Secretariat. Between quadrennial conferences, the Trade and Development Board oversees the activities of the organisation. It meets in Geneva in a regular session and up to three times a year in executive sessions to deal with urgent policy issues, as well as management and institutional matters. The Working Party on the Strategic Framework and the Programme Budget reviews UNCTAD’s communication strategy, publications programme, TC activities and programme of work.<br>In undertaking its programme of work, including TC, UNCTAD is organised into five divisions, each responsible for one of the five subprogrammes, namely:<br>Subprogramme 1: Division for Globalisation, Interdependence and Development<br>Subprogramme 2: Division for Investment and Enterprise<br>Subprogramme 3: Division for International Trade and Commodities<br>Subprogramme 4: Division for Technology and Logistics<br>Subprogramme 5: Division for Africa, Least Developed Countries and Special Programmes.<br>The structural arrangements of UNCTAD are directly aligned with these five subprogrammes, and all five contribute substantially to outputs in all three pillars.<br>In addition, there are programme support services that support these divisions to achieve their goals:<br>the Intergovernmental Support Service<br>the Technical Cooperation Section (TCS), managing project databases and providing co-ordination of TC activities<br>the Resources Management Service (RMS), responsible for the management of budget, finance, information technology and human resources<br>the Evaluation and Monitoring Unit (EMU)<br>the Communications, Information and Outreach Section.<br>Within the Office of the Secretary-General (OSG), there are also UNCTAD offices in New York and Addis Ababa. The five substantive divisions and the programme support services report directly to the OSG as do the New York office and the regional office in Addis Ababa.<br>At UNCTAD, the management of TC is de facto decentralised. While the 2003 TC strategy does not call for a decentralised operating model per se, this has evolved and been maintained over the years. Substantive divisions have autonomy to set division-level strategies. They each engage with partners, identify interventions, mobilise resources and implement activities. Consequently, different operating models for TC exist alongside each other.<br>TCS, located in the OSG, has a back-office support and co-ordination function for trust fund-related TC and an oversight role for UN Development Account projects. The OSG, represented by TCS, is involved in the review of new project proposals through a centrally co-ordinated electronic approval system, together with RMS, EMU, the gender advisor and the legal advisor. Secretariat-wide co-ordination of TC does take place and is being increasingly streamlined in a number of areas.<br>The operating model is reviewed every two years, as part of the Strategic Framework. Over the years, the organisational architecture has largely been maintained. TC is mostly managed by Geneva-based staff, often alongside other duties in the two other pillars of UNCTAD. In many cases, implementation is undertaken by UNCTAD’s regular budget-funded staff, complemented<br>by XB-funded project staff, and/or consultants and contractors on temporary assignments. In a few cases, dedicated project management units have been established (ASYCUDA, DMFAS) with mostly XB-funded staff.<br>The operating model is reviewed every two years, as part of the Strategic Framework. Over the years, the organisational architecture has largely been maintained. TC is mostly managed by Geneva-based staff, often alongside other duties in the two other pillars of UNCTAD. In many cases, implementation is undertaken by UNCTAD’s regular budget-funded staff, complemented by XB-funded project staff, and/or consultants and contractors on temporary assignments. In a few cases, dedicated project management units have been established (ASYCUDA, DMFAS) with mostly XB-funded staff.<br>Secretariat-wide, cross-divisional collaboration and co-ordination has been a persistent challenge for UNCTAD. UNCTAD recognises that interdivisional co-operation, which builds on the strength and expertise of different divisions, is important for the effective delivery of TC activities. Recently, the OSG has embarked on an organisation-wide effort to move from a division-based approach to management to a horizontal, task-based approach in certain areas, notably by creating cross-divisional working groups on statistical co-ordination, gender, financing for development and South-South co-operation.<br>Nevertheless, other than biannual management retreats and the Divisional Chiefs of Staff meetings chaired by the OSG Chief of Staff, we did not find compelling evidence of a structural, secretariat-wide and systematic approach to cross-divisional collaboration at directors level, in contrast to, for example, the research and analysis pillar. In practice, in TC, the level of co-operation between sections, branches and divisions varies considerably from project to project. It is undertaken mostly at an operational project/programme level, with different sections and branches contributing to each other’s interventions. Much depends on the staff’s own professional networks, experience and preferences.<br>The Project Review Committee is the secretariat’s main mechanism to enhance interdivisional co-operation and ensure the coherence of UNCTAD’s technical assistance. In practice, however, it does not perform this role in the way it was intended. It meets rarely and at irregular intervals. In 2018, the Committee held one face-to-face meeting to review the strategy for further deploying the results-based management framework for TC, the terms of reference of the Project Review Committee and the request database. The Project Review Committee could, in principle, perform a more strategic oversight role, if its terms of reference (TORs) were revised and it convened more regularly.<br>The de facto decentralised operating model allows for project- and programme-level co-ordination with other agencies. The degree to which UNCTAD engages in strong co-operation with other agencies varies considerably, again depending on how each division, branch, section and individual staff member approach this. The “eTrade for all” initiative stands out as a positive example of inter-agency co-operation, building on the principles of complementarity and comparative advantage.<br>Meanwhile, at the secretariat level, UNCTAD contributes to ongoing reform initiatives and system-wide efforts to strengthen inter-agency co-ordination. UNCTAD leads the United Nations Inter-Agency Cluster on Trade and Productive Capacity in delivering operational activities “as one” at the country level, in collaboration with UNIDO, UNDP, ITC, FAO, WTO, UNEP, ILO UNOPS and the five regional commissions. At the country level, TCS has driven efforts to contribute to 37 United Nations Sustainable Development Cooperation Frameworks (UNSDCF, formerly known as UNDAF).',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_2;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_2;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'NARRATIVE',
+    'value': 'UNIDO’s organisational architecture is congruent with the MTPF in terms of the purposes of directorates and departments which relate to the overall strategic priorities of UNIDO. Following a restructuring in 2018, there are clearer links between the organisation and MTPF, for instance to strengthen the partnership directorate and integrate the field and technical co-operation directorates. The role of field representation in relation to the MTPF is not clearly identified, and therefore it is difficult to comment on the extent to which field offices are aligned with the strategic direction. UNIDO’s organisational model internally is highly centralised, and the field is not always well integrated with HQ, which is compounded by a limited field office capacity for engagement.<br>The organisation is heavily predicated on earmarked project funding, which potentially limits or distorts the alignment of the organisation’s structure with its strategic aims. For instance, the size of different directorates is generally related to the level of activity required, which in turn is related to the level of funding available. UNIDO does not always strike a clear balance between its roles as a normative organisation and as a technical co-operation organisation. The MTPF’s strategic objectives are not all equally visible within the architecture; for instance, knowledge and institutional strengthening, a new strategic priority introduced in 2018-21, is not as well-resourced and staffed in relation to other strategic priorities.<br>The operating model supports technical co-operation well, since it is largely based on implementing technical co-operation projects. Project development, management and implementation are a dominant activity within UNIDO. This leaves other aspects of UNIDO’s strategic plan, such as its normative and influencing work, less well-resourced and less clearly prioritised. The projectised operational model also limits UNIDO’s ability to consider the big picture results it wants to achieve, since it is often drawn into small-scale projects, with small-scale results. Dependence on earmarked funding also runs the risk that UNIDO is influenced by donor interests and priorities rather than pursuing it strategic aims. Recent adoption of a theory of change and IRPF, updated in 2019, may assist UNIDO in integrating its project-based activities better with strategic aims, and aligning them with organisational outcomes and impacts. More specialised project management teams and implementation, monitoring and reporting to align with the new IRPF and results focus are being piloted in 2019.<br>UNIDO recognises the need to continuously make sure “that the approaches adopted by the Organisation [are] periodically reviewed to ensure that it remains aligned with agreed United Nations system-wide frameworks and responds effectively to emerging new developmental challenges”. The MTPF was revised in 2017, and there has been a mid-term review in 2019 although this was the first ever mid-term review of a UNIDO MTPF. The operating model has not been reviewed, although there is a stated organisational commitment to reducing the number of projects in operation (estimated at 850 in 2019) and to increase the size/value of projects to support the twin organisational aims of scale-up and integration to achieve impact. The extent to which UNIDO can review the operational model is constrained by its lack of regular budget.<br>The MTPF 2018-21 places an emphasis on partnerships as a key element of UNIDO’s implementation approach. A set of Director General’s Bulletins (DGBs), promulgated by the Secretariat, define and operationalise partnerships which are at the core of UNIDO’s Programme for Country Partnership (PCP), an integrated engagement modality used in six countries to date which is intended to be spread and is being expanded further. It provides a model whereby UNIDO’s work is more than just project interventions, but rather is built around higher level partnerships with national country institutions, the private sector and donors to create interventions with greater impact and potential for sustainability. UNIDO is now considering developing clearer partnership modalities which can be more systematically used and will relate to the type of partners, project and also the country operating context, for example middle- and lower-income countries. The PCPs are still pilots and so far have largely helped to better co-ordinate UNIDO country projects, although there are some signs that they are now bringing together partners in new ways. <br>There is still not good integration between the field network and HQ, with continuing evidence of fragmented and siloed working. Recent changes in field network to HQ communications are beginning to lead to better co-ordination. <br>The IRPF shows how the different tiers and levels of results are aligned to the strategic priorities and core functions. Linkages between tiers and organisational levels of results for the IRPF are not clear, and responsibilities are not clearly allocated within the organisation. Project results are still frequently owned at project level and do not generally aggregate to country or global results frameworks. A new Quality Assurance Framework (QAF) means there is now clearer responsibility for results owned by relevant managers, but this was only promulgated in 2019.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_2;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'SCORE',
+    'value': '2.2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_2;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'NARRATIVE',
+    'value': 'UNODC’s organisational architecture is only partially congruent with the strategic plan. <br>UNODC is a Vienna-based office of the United Nations Secretariat: it was established to assist member states in tackling illicit drugs, crime and terrorism. UNODC is positioned as the UN lead office in the fight against illicit drugs and international crime. It was established when the United Nations Drug Control Programme and the Centre for International Crime Prevention were merged in 1997. <br>Responsibility for delivering each of UNODC’s substantive subprogrammes is divided between and among its divisions. The Office is divided into four divisions: Operations; Treaty Affairs; Policy Analysis and Public Affairs; and Management. The Division for Operations is responsible for overseeing the field network and contains four regional sections. UNODC operates in all regions through a network of field offices. The division oversees eight regional offices, seven country offices, 17 field offices and 87 programme/project offices. It also houses UNODC’s Drug Prevention and Health Branch and its Justice Section. The Division for Treaty Affairs houses branches on organised crime and illicit trafficking; corruption and economic crime; and terrorism prevention. It also holds the Secretariat of the Governing Bodies. The semi-autonomous Secretariat of the International Narcotics Control Board is linked to the Division for Treaty Affairs, although it is functionally independent. The Division for Policy Analysis and Public Affairs houses UNODC’s Public Affairs and Policy Support Branch and its Research and Trend Analysis Branch (RAB). <br>Interviews indicated that there are several elements of the organisational architecture that stakeholders consider in need of reform: some mentioned that there is a lack of clarity and collaboration between headquarters units and between field entities. They noted there is sometimes an unhelpful gap between them, and the division of labour and allocation of responsibility are not sufficiently clear. <br>The International Narcotics Control Board is an independent and quasi-judicial control organ for the implementation of the United Nations drug conventions. It plays an important role in monitoring enforcement of restrictions on narcotics and psychotropics and in deciding which precursors should be regulated. Its budget is included in that of UNODC, but it is operationally and functionally independent, and therefore this assessment does not address it.<br>The operating model appears to support the implementation of the strategic plan to a limited extent. This is one of UNODC’s fundamental challenges, of which it is keenly aware. UNODC’s operating model is a function of its financial framework. UNODC is overwhelmingly reliant on tightly earmarked, often short-term donor contributions. As much as 90% of its total budget derives from voluntary donor contributions. It is therefore, to use a phrase from several interviewees, “donor-driven”. Its<br>ability to deliver value to beneficiaries is driven by what its donors are willing to finance. It has limited ability to strategically commit resources to either thematic areas of its mandate or to target groups that it would consider priorities unless donors are willing to provide finance. UNODC is keenly aware of this consequence, noting that its financial framework hinders its ability to deliver its mandate effectively: <br>“The unprecedented decline in general-purpose funds is unquestionably hindering the ability of UNODC to: (a) strategically manage its operations; (b) improve upon its management processes; (c) exercise effective corporate oversight; (d) fund key activities; and (e) launch new initiatives and programmes. As the flow of sustained unearmarked resources is key to the Office’s viability, UNODC continues to make calls to Member States to pledge adequate general-purpose contributions.” (7/111) <br>UNODC’s external audits have also reflected the continuing trend and the same negative impact on UNODC’s ability to implement its mandate: “The continuous decline, in absolute and percentage terms, of general purpose income negatively affects the medium-term ability of UNODC to: (a) implement its strategy; (b) improve upon its management processes; (c) exercise effective corporate oversight; and (d) launch new initiatives and programmes.” <br>Operationally, UNODC manages global, thematic, regional and country programmes through a combination of Vienna, regional and national field offices. This structure allows it to engage with a wide cross-section of stakeholders including regional entities, partner countries, multilateral bodies, civil society, research institutes and the mass media. <br>UNODC’s governing bodies – its two commissions and the UN General Assembly – can consider the Office’s operating model when reviewing and approving its budget documents. The assessment team did not, however, find evidence that the Office has initiated fundamental reviews of its operating model.<br>Interviewees raised concerns that UNODC as an organisation has not yet reviewed its business model in the light of the ongoing UN development system reform and has not yet identified and communicated internally or externally how it will adapt. There does not appear to have been organisation-wide discussions on this challenge and opportunity. The Division of Operations, however, which is responsible for the delivery of field-level interventions through UNODC’s regional and field network, has initiated an internal review of how UNODC needs to adapt. It is using the performance management system to encourage its staff to engage fully with the reforms. However, the Office does not appear yet to have identified its strategic position and developed a change management plan. Further, this review will not look at the global and thematic programmes delivered from headquarters. <br>There is evidence that UNODC’s de facto operating model, while in principle allowing for co-operation across the organisation and with other agencies, also sometimes undermines the potential for internal collaboration. UNODC’s operating model incentivises staff to secure donor funding to finance the vast majority of UNODC’s activities. Interviewees noted that there is often competition between units for donor funding – competition between headquarters entities themselves and between headquarters entities and field offices. The incentives for collaboration across the organisation are weakened by the imperative to raise funds that can be managed to sustain a unit’s or programme’s activities and staff. <br>Some subprogrammes are implemented by more than one division, which UNODC states allow for the leveraging of complementarities and synergies. And there were, of course, cases of strong cross-organisation working. But internal competition and a lack of internal collaboration were strong enough concerns to be raised by the majority of those interviewed. <br>UNODC’s current and draft 2020 strategic plans delineate which division or divisions have the responsibility for delivering the results set out in each subprogramme. Successive programme and consolidated budgets from 2014-15 have steadily improved how responsibility for results is identified. However, results remain aggregated at the level of subprogramme. There is no aggregation of results at the portfolio (organisation-wide) level. <br>The relationship between UNODC’s policy and delivery units and the unit responsible for supporting delivery, the Division for Management, introduces a degree of complexity to UNODC’s ability to deliver. UNODC’s Division for Management, while functionally part of UNODC, is simultaneously part of the UN Office of Vienna (UNOV). This is explored in detail in the text on MI 3.1.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_2;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2',
+    'y2code': 'SCORE',
+    'value': '2.2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_2_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_2_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_2_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_2_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_1',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_2_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_1',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_2_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_1',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_2_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_1',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_2_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_2',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_2_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_2',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_2_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_2',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_2_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_2',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_2_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_2',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_2_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_2',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_2_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_2',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_2_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_2',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_2_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_3',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_2_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_3',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_2_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_3',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_2_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_3',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_2_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_2_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_2_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_3',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_2_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_3',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_2_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_2_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_2_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_2_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_2_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_2_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_2_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_2_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_2_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_5',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_2_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_5',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_2_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_5',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_2_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_5',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_2_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_5',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_2_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_5',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_2_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_5',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_2_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_2|1_2_5',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_2_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_3;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'NARRATIVE',
+    'value': 'The SRF sets out how the CGIAR System will contribute directly to the achievement of the SDGs outlined by the United Nations, in particular to reduce poverty, to improve food and nutrition security for health, and to improve natural resources systems and ecosystems services. The business plan further develops this vision, setting out a role in meeting the SDGs and the global challenges of poverty, hunger and environmental degradation. This is, however, still a work in progress.<br>The SRF outlines that the System Level Outcomes (SLOs) are the higher-level goals for the CGIAR System aligned with international development imperatives, specifically the SDGs, contributing strongly to SDGs 1, 2, 3, 5, 6, 13 and 15 and moderately to SDGs 8, 10, 12, 16 and 17. The SRF states its aim that the IDOs and sub-IDOs will be adopted or adjusted by the CGIAR research program, with targets at the sub-IDO level to be aligned with the Results Framework.<br>The first Annual Performance Report, using a standard reporting format and providing quantitative reporting on the full set of common reporting indicators, was produced for 2017 and published in 2018. The 2018 report was in preparation during 2019, with the aim to be published before the System Council meeting in November 2019.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_3;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'SCORE',
+    'value': '2.6',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'NARRATIVE',
+    'value': 'The MP is an international normative framework in its own right. Its subsidiary bodies (Secretariat, Executive Committee etc.) have been established with the sole objective of delivering the Montreal Protocol and its more recent amendments. As described in the 2019 MLF management document, the Multilateral Fund: Governance, Business Model, Accomplishments, the objective of the MLF is as follows: “Assist Article 5 countries (developing countries) to meet their obligations under the Montreal Protocol.” Alignment with, and achievement of, other normative frameworks is considered to be not applicable in this assessment, although it clearly contributes to frameworks such as the SDGs (see Results below).',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_3;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'RATING',
+    'value': 'Not applicable',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'SCORE',
+    'value': 'N/A',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_3;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'NARRATIVE',
+    'value': 'UNCTAD aligns its subprogrammes to relevant wider normative frameworks. For each of the five subprogrammes (i.e. covering all three pillars), the 2020 programme budget summarises the specific SDGs with which the objectives, and therefore the deliverables, of the respective subprogrammes are aligned. UNCTAD’s TC is particularly relevant to three SDGs, namely Goal 8 on decent work and economic growth; Goal 9 on industry, innovation and infrastructure; and Goal 17 on partnerships for the Goals.<br>The objectives of the subprogrammes are also aligned with numerous other relevant agendas, including the Programme of Action for the Least Developed Countries for the Decade 2011-2020 (the Istanbul Programme of Action), Agenda 2063 of the African Union, the Beijing Declaration and Platform for Action, the Addis Ababa Action Agenda of the Third International Conference on Financing for Development, the Programme for the Further Implementation of Agenda 21 and the outcomes of the World Summit on Sustainable Development and of the United Nations Conference on Sustainable Development, the Monterrey Consensus of the International Conference on Financing for Development, the outcomes and the Declaration of Principles and the Plan of Action of the World Summit on the Information Society, the Sendai Framework for Disaster Risk Reduction 2015–2030, the Vienna Programme of Action for Landlocked Developing Countries for the Decade 2014–2024, the Mauritius Strategy for the Further Implementation of the Programme of Action for the Sustainable Development of Small Island Developing States, the SIDS Accelerated Modalities of Action (SAMOA) Pathway and the results of the 24th and previous sessions of the Conference of the Parties to the United Nations Framework Convention on Climate Change.<br>Despite not having a comprehensive, up-to-date TC strategic plan, UNCTAD does acknowledge and respond to normative frameworks at the divisional level to a large extent. In this regard, UNCTAD sees TC as an important vehicle in assisting developing countries to achieve the SDGs as well as the objectives in the Addis Ababa Action Agenda of the Third International Conference on Financing for Development.<br>In January 2017, UNCTAD established an interdivisional working group on the 2015-post development agenda and sustainable development objectives. Out of 17 SDGs, UNCTAD identified 7 as primary targets. Programme/project managers were required to identify primary and secondary SDGs in their project proposals and explain what has to happen for their work to contribute to the SDGs. The 2017 UNCTAD annual report was also updated to reflect its contribution to the SDGs.<br>The TC Toolbox links UNCTAD’s TC products directly to the SDGs and operationalises the strategy along with the objectives and indicators in the programme budgets. UNCTAD reports on its progress in mainstreaming SDGs in its TC activities on an annual basis. Results frameworks pertaining to TC have been developed at the product level that align the results of each product with the SDGs of focus and the targets under these Goals. At the project level, project officers are required to mainstream the SDGs into projects by describing how projects contribute to achieving the Goals; specifying relevant targets under the SDGs; using the findings of voluntary national reviews (on progress on the implementation of the 2030 Agenda) in project documents whenever such information is available; and ensuring that the SDGs of focus in the results framework match those selected for the product.<br>The two major programmes ASYCUDA and DMFAS in particular support national policy frameworks that incorporate global norms and standards. TCS works with UNDAF/UNSDCF processes that support normative frameworks. Project frameworks acknowledge 2030 Agenda indicators and targets. As per UN Secretariat requirements, TCS reports on expenditure against the SDGs within the annual Review of TC Activities and Their Financing, but not on results.',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_3;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_3;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'NARRATIVE',
+    'value': 'UNIDO’s MTPF is aligned to the main normative frameworks relating to ISID; it is based on the global mandate received by Agenda 2030 for sustainable development which recognises the importance of ISID as a major driver for achieving SDG 9. The MTPF also makes explicit reference to the SDG framework in Level 1 of the IRPF, and interviewees also indicated its links to the SDGs. <br>The MTPF 2016-19 provided a suitable framework for UNIDO until 2017 to align with and contribute to the SDGs. Its revision in 2017 (covering the period 2018 to 2021) further consolidated the close and formal links between UNIDO results with the SDGs. This revision also provided for coverage of the 2020-21 biennium. This was necessary to allow for the alignment of the MTPF cycle to the Quadrennial Comprehensive Policy Review (QCPR) of UN operational activities for development, in particular General Assembly resolution 71/243, which provides guidelines for the implementation of the 2030 Agenda for Sustainable Development. There is also alignment with the Addis Ababa Action Agenda and with UN system-wide coherence mechanisms, including the UN Resident Coordinator system. Alignment with other normative frameworks, such as those of ILO on labour rights and human rights frameworks, are not specified in the MTPF.<br>The IRPF provides clarity on the organisation’s expected contribution to global development results from normative frameworks relating to the SDGs, which are reflected in Tier 1 Level 1 of UNIDO’s MTPF and IRPF. Interviewees stated that the IRPF is a chance for the organisation “to tell their story” of how they contribute to Agenda 2030. Interviewees explained that the new IRPF is aligned with Agenda 2030 in relation to both UNIDO custodian indicators and the wider implications for Agenda 2030 on partnerships, poverty reduction and leaving no one behind. Level 1 indicators of the IRPF include industry-related SDG indicators in addition to SDG 9 indicators, to fully capture the contribution of ISID to the realisation of the SDGs. While norms and standards feature among the four functions, reference to critical sector-specific normative frameworks are mostly lacking, e.g. ILO core labour standards or UNEP conventions. <br>There is currently no clear system for tracking results in UNIDO, although UNIDO states a strong commitment to the principles of results-based management (RBM) and emphasises its commitment to improving capacity for results reporting. Documentation states that reporting on corporate results should be carried out on a quarterly basis on the Open Data Platform and annually in the annual report. Reporting should take the form of a corporate scorecard, partly based on data generated in the Enterprise Resource Planning (ERP) system and partly on other internal and external sources. <br>While not solely accountable for achievement of SDG 9 indicators and targets, UNIDO was appointed as a custodian agency for six industry-related indicators under SDG 9 in 2016 by the UN Statistical Commission and is responsible for collecting data and monitoring for the SDG 9 indicators. It was noted by some interviewees that the SDGs are so macro it is hard for any single organisation to make a direct contribution or attribution to it, and many expressed the view that the IRPF is critical in showing UNIDO’s contribution. Accountability for other relevant normative frameworks is not specified.<br>UNIDO reports on its progress towards results at an aggregated level annually in its publicly available annual reports which showcase different results including normative results in relation to SDG 9.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_3;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'SCORE',
+    'value': '2.6',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_3;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'NARRATIVE',
+    'value': 'The strategic plan is aligned to wider normative frameworks. The activities of UNODC are grounded in a series of international instruments for which the Office acts as “guardian and advocate”. They include the three international drug control conventions, the UNCAC, the UNTOC and its protocols, the international legal instruments against terrorism, and the UN Standards and Norms in Crime Prevention and Criminal Justice. In addition to its foundational mandates, UNODC sees itself as responsible for supporting the delivery of certain SDGs and a series of UN agreements. Crime prevention and criminal justice reform – Mandate: UN Standards and Norms in Crime Prevention and Criminal Justice. Building capacity to combat piracy off the Horn of Africa or Prison reform in Occupied Palestinian Territories. <br>Drug prevention and health – Mandate: Commission on Narcotic Drugs and three international drug control treaties as well as guardian of Standard Minimum Rules for the Treatment of Prisoners. Promoting universal access to drug dependence treatment and care in Serbia or Preventing spread of HIV in prisons in South Africa. <br>Terrorism prevention – Mandate: 19 international legal instruments, Security Council and General Assembly Resolution 60/288 on UN Global Counter-Terrorism Strategy and the 2017 Security Council resolutions to prevent human trafficking in conflict situations, looting and the sale of cultural heritage to finance terrorism. Building counter-terrorism capacity in Colombia and Yemen. <br>UNODC has drafted a results-based management approach in its strategic framework for 2018-19 and proposed 2020 programme budget, as required by the QCPR resolution. It also seeks to reflect national ownership, full participation in the reform of the UN Country Teams and unified reporting on the 2030 Agenda in these documents.<br>The subprogrammes detailed in UNODC’s 2018-19 strategic framework (embedded within the General Assembly’s overall “biennial plan and priorities”) state the results it is aiming to achieve relating to each element of its normative mandate. Funding is allocated to the normative work in UNODC’s biennual budget document and is identified within each of the subprogrammes. Against each of UNODC’s normative mandates, the strategic framework defines the “expected accomplishments of the Secretariat’ and, in a separate column, “indicators of achievement”. For example, to promote effective responses to transnational organised crime and illicit trafficking, the Secretariat will provide support to promote the ratification of conventions; one of the indicators is cited as an increased number of states parties ratifying the relevant convention. <br>The way UNODC measures results is set within the UN Secretariat action plan for the implementation of results-based management. Within UNODC, the Strategic Planning and Inter-agency Affairs Unit is responsible for ensuring that a results-based management (RBM) approach is mainstreamed into UNODC’s global, regional and national programming. The unit co-ordinates the formulation of the strategic framework of UNODC and develops institutional standards, methodologies and tools for results-based management for UNODC programmes and projects. As outlined in the Results section below (7.1), UNODC’s ability to track either normative or programmatic results is not yet effective. An organisation-wide RBM approach is not practised – though it exists in policy. UNODC is far from what is required to institutionalise a culture of managing for results at all levels. <br>There is, in principle, accountability for the achievement of normative results within UNODC. Branches and divisions within the Secretariat are responsible for the delivery of subprogrammes – in which normative results are embedded – and they are accountable, under the authority of the Executive Director, for their results. However, in practice, accountability systems are weak, as monitoring is largely absent (see MI 7.4). The following commissions and conferences of the parties covering UNODC’s mandates meet regularly and review budgetary and administrative issues. <br>The Commission on Narcotic Drugs (CND)<br>The Commission on Crime Prevention and Criminal Justice (CCPCJ)<br>The Conference of the Parties to the United Nations Convention against Transnational Organized Crime<br>The Conference of the States Parties to the United Nations Convention against Corruption.<br><br>Insofar as the two commissions (CND and CCPCJ) give strategic direction to UNODC, they share accountability for normative results. The two conferences, in theory, also share accountability for their specific mandate areas. <br>UNODC reports on the implementation of some normative results at least annually. It reports on implementation at an aggregate level against the achievement of normative frameworks in its institution-wide annual report. Reporting in the annual report tends to be at the level of the activities and outputs. Insofar as UNODC’s global programmes are designed to implement the Office’s normative mandates, the Annual Results-Based Report examines implementation progress (this is an internal report for member states only). The latest available report covers 2018. Some of UNODC’s flagship reports – for example, its World Drugs report – also include reference to normative results the organisation has supported.<br><br>Within these mandates, UNODC gathers and analyses evidence that identifies trends and serves as a platform for action. It does this across and within five areas – or “service lines”, to use its terminology. Each service line also implements programmes (some of which are cited as examples).<br>Organised crime and trafficking – Mandate: UN Convention against Transnational Crime (Palermo Convention) and three protocols. UNODC and the World Customs Organisation implementing the Container Control Programme or the UNODC Blue Heart Campaign raising worldwide awareness about modern forms of slavery. <br>Corruption – Mandate: UN Convention against Corruption. Combatting environmental crime and corruption in Indonesia.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_3;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3',
+    'y2code': 'SCORE',
+    'value': '2.4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_3_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_3_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_1',
+    'y2code': 'RATING',
+    'value': 'Not applicable',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_3_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_1',
+    'y2code': 'SCORE',
+    'value': 'N/A',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_3_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_3_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_3_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_3_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_3_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_3_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_3_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_2',
+    'y2code': 'RATING',
+    'value': 'Not applicable',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_3_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_2',
+    'y2code': 'SCORE',
+    'value': 'N/A',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_3_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_3_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_3_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_3_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_3_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_3_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_3_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_3',
+    'y2code': 'RATING',
+    'value': 'Not applicable',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_3_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_3',
+    'y2code': 'SCORE',
+    'value': 'N/A',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_3_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_3',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_3_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_3',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_3_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_3',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_3_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_3',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_3_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_3_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_3_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_4',
+    'y2code': 'RATING',
+    'value': 'Not applicable',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_3_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_4',
+    'y2code': 'SCORE',
+    'value': 'N/A',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_3_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_3_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_3_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_3_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_3_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_5',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_3_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_5',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_3_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_5',
+    'y2code': 'RATING',
+    'value': 'Not applicable',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_3_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_5',
+    'y2code': 'SCORE',
+    'value': 'N/A',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_3_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_5',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_3_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_5',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_3_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_5',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_3_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_3|1_3_5',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_3_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_4;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'NARRATIVE',
+    'value': 'There was optimism when the CRPs were first launched that Funders would provide a greater proportion of funding that CGIAR could use flexibly. After an initial period where this optimism was realised, Funders have increasingly resorted to more bilateral funding, through the Research Centers. Throughout these changes, CGIAR has worked hard to ensure that the main priority areas, primarily the CRPs, have received adequate funding. Efforts are now being undertaken to make the funding and allocation processes more transparent.<br>As a companion document to the business plan, the 2019-2021 CGIAR Research Financing Plan (2019-2021 FINPLAN) aims to bring together, in a single budget, all of the resources for the CGIAR Strategy. These are complemented by the CGIAR Trust Fund dashboards, available online, which should ensure greater transparency.<br>Following the September 2016 approval of the CGIAR Research Portfolio 2017-2021 by the System Council, the portfolio was launched in January 2017. The CGIAR Financial Report for 2017 was produced by the System Management Office and presented to the System Council and was published again in 2018 for review by the System Council.<br>CGIAR through the Trust Fund has put in place a number of means to designate resources to one or more of three System funding Windows: Window 1 - Contributions are received from Funders without restriction; Window 2 - Contributions are designated by Funders to specific CRPs; and, Window 3 - Contributions are allocated to specific Research Centers by Funders. <br>In the principles set out in the financing plan it is stated that: Funders may allocate Window 2 funding to specific Flagships within CRPs. In both the business plan and the financing plan, it is further noted: “Any Window 2 funds received in 2019 for a specific CRP or Platform that are more than the above allocations will be considered additional funds available for use by the CRP/Platform and will not result in a downwards adjustment of the planned allocation of Window 1 funds.”',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_4;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI1_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_4;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'NARRATIVE',
+    'value': 'Financial and budgetary planning under the Montreal Protocol is based on a triennial assessment by the Parties and a three-year rolling business plan approved by the Parties (the 197 countries that have ratified the Protocol). As at May 2019, the total value of the 2019-21 consolidated business plan was USD 517 million. The total value of the 2019 consolidated business plan was USD 175 million, of which UNDP planned USD 32 million, UNEP USD 28 million, UNIDO USD 60 million, and the World Bank USD 46 million. At the end of each year, the cycle starts with the preparation of business plans for the following year by bilateral and implementing agencies. These plans propose target levels of controlled substances to be phased out and the level of funds to be disbursed, together with other performance indicators which provide the basis for the evaluation of the agencies’ performance. The business plans of the agencies reflect the activities that need to be financed and implemented during the year. These are reviewed by the EXCOM, and a consolidated business plan is produced. Meetings of the EXCOM include discussion of funding levels.<br>At the third meeting of the Executive Committee, it was decided that the budget of the MLF Secretariat should be in two separate parts: “the administrative budget, and the budget for operational activities (meetings, equipment and premises components)” (MLF, year unknown, Relevant Information on the Multilateral Fund). Financial and budgetary planning under the Montreal Protocol is based on a three-year rolling business plan approved by the EXCOM.<br>Documents and interviews confirm that the financial framework is regularly reviewed by the EXCOM and by the Meeting of the Parties. In response to the MOPAN partner survey question “Financial framework supports the effective implementation of the mandate and strategy”, 36% of respondents answered “excellent” and “44% “very good”.<br>Virtually all funding provided to the MLF by non-Article 5 countries is non-earmarked. Elements 4 and 5 are considered as not applicable for this reason. Non-Article 5 countries can use 20% of their annual contributions for bilateral projects. Only one non-core contribution was offered from the United Kingdom, but it was not accepted at that time. During 2017 and 2018, 17 donor countries (including Canada and the United Kingdom) did make voluntary “additional contributions” to the MLF for the purpose of assisting countries’ “fast-track” implementation of the Kigali Amendment.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_4;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'RATING',
+    'value': 'Highly satisfactory',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI1_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_4;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'NARRATIVE',
+    'value': 'UNCTAD is financed through assessed contributions as part of the United Nations Secretariat and extrabudgetary or voluntary contributions from member states and other donors. All regular budget resources are approved at the level of subprogrammes. Post resources are approved in given categories and grades, while non-post resources are approved by budget class and budget line. Once the regular budget is approved, there is limited discretion for the UNCTAD secretariat on the usage of these resources. The regular budget is complemented by extrabudgetary  resources financed mainly through voluntary contributions. These contributions are mainly demand-driven and therefore earmarked for individual projects and activities.<br>The Proposed Programme and Budget documents describe the proposed programme plan for the following year/biennium and programme performance for the previous year/biennium. The documents outline the proposed post and non-post resource requirements by subprogramme as well as the organisational structure and post distribution and a summary of proposed changes in established and temporary posts by component and subprogramme.<br>The prerogatives to consider any administrative and budgetary matters is solely with the Fifth Committee and the relevant subsidiary organs, while other committees and organs are restricted to their specific substantive, sectoral or regional expertise. The Trade and Development Board falls under the category of other intergovernmental organs and therefore its involvement in budgetary matters is restricted to the consideration of the programme of work.<br>TC activities of UNCTAD and their financing are reviewed annually by the Working Party on the Strategic Framework and the Programme Budget of the Trade and Development Board.<br>TC is largely funded through XB sources (90.4%). Projects are (partially) self-financed or externally funded. Funding for TC is provided through extrabudgetary funding of trust funds, the United Nations Regular Programme of Technical Cooperation and the Development Account (8.7%), and the United Nations “Delivering as One” funding mechanisms (1%). Voluntary funding to trust funds is the principal funding source; the contribution to the trust funds from developing and transition countries rose from 43% in 2017 to 50% in 2018.<br>In December 2018, over 80 sources of funding contributed to 249 TC projects. In December 2018, the two major programmes of UNCTAD, ASYCUDA and DMFAS, accounted for about 56% of total expenditures (USD 25.5 million) and were financed mainly by direct contribution from the respective member states and from proceeds of loans or grants from international financial institutions. In 2018, MOPAN members contributed USD 9.8 million (28.9%) to the trust funds, other member states contributed USD 0.97 million (2.9%), while the UN system, other international organisations and private and public sources contributed USD 7.3 million (21.6%).<br>Whereas demand for TC is growing, contributions to trust funds for TC show an erratic and unpredictable pattern. In 2013, contributions amounted to USD 31 million. Compared with 2017, in 2018 TC funding decreased by 3% to USD 34 million. Compared with 2016, extrabudgetary funding decreased by 20% (from USD 40 million in 2018), while total expenditure for TC rose to USD 44 million. Conversely, 2019 saw an increase in funds, rising to almost USD 44m. Resource shortages, including in terms of staff, reduce UNCTAD’s ability to respond to all requests.<br>Many developing countries use self-funding options to benefit from TC. However, limited financial resources in other developing countries and vulnerable countries such as the least developed countries mean they continue to rely on the support of development partners to finance TC projects.<br>UNCTAD has categorised its TC activities over the past few years through the development and update of the TC Toolbox, which currently features a diverse portfolio of 28 TC products, reflecting the broad demand by member states and challenges in bringing greater focus. Although donors are encouraged to make unearmarked multi-year contributions, including contributions to the multi-donor thematic trust funds, in practice, this rarely happens. Currently, most of the trust fund contributions are tightly earmarked by single contributors for specific projects. Few donors provide predictable annual contributions regulated by a co-operation agreement signed between the donor and UNCTAD. A few trust funds established in UNCTAD share the features of multi-donor thematic funds, such as co-mingled contributions, greater flexibility in fund allocation and consolidated reports.<br>TC is not only demand-driven; it is also supply-driven and (donor) funding-driven. Reports from the research and analysis pillar as well as discussions in the consensus-building pillar tend to trigger new insights and demands. Nevertheless, TC requests remain pending until funding is sourced.<br>At a time when XB resources are unpredictable and largely earmarked, UNCTAD faces mounting pressure to deliver more results and, at the same time, to meet increasing demand from countries for support in implementing the new development agenda. Although these circumstances call for a concerted, focused fundraising strategy for TC, UNCTAD has thus far been lacking one. Previous attempts to address this were not met with consensus among member states.',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_4;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI1_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_4;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'NARRATIVE',
+    'value': 'UNIDO’s financial and budgetary planning is presented in the form of a single, integrated budgetary framework, the Programme and Budget (PB) document by biennium of the planning period. It ensures all priority areas have adequate funding by programme and sub-programme, linking it to the IRPF and in line with strategic priorities. It also outlines a set of expected results, performance indicators and means of verification linking directly to the MTPF through the IRPF indicators. There are six programmes as follows, funded through a combination of regular and operational budget:<br>Policy-making Organs<br>Executive direction and Strategic Management<br>Thematic Programme Framework: Towards ISID<br>Corporate Management and Operations<br>Buildings Management<br>Indirect Costs.<br>The PB also includes four supplementary items in addition to the six major programmes. These are Special Resources’ for Africa, the Regular Programme of Technical Cooperation (RPTC), and Miscellaneous Income and the Special Account of Voluntary Contributions for Core Activities (SAVCCA). <br>The 2020-21 PB shows total net requirements to be EUR 142.6 million from regular resources as well as EUR 37.2 million from the operational budget. This is in addition to funding for technical co-operation which is extra-budgetary and stands at EUR 330 million. Of all the Major Programmes A-F, Programme C is by far the most heavily funded, receiving 83.8% of the total budget, but it is noted that most of this comes from extra-budgetary technical co-operation funding. A breakdown for technical co-operation delivery and support cost income shows that all areas of technical co-operation have funding. <br>Governing bodies review the financial framework each year through a medium-term investment plan which identifies gaps in regular budget funding by describing activities which have been “unfunded” and indicating their priority level. Interviewees explained that there is currently no full cost recovery (FCR) for projects, so UNIDO is effectively subsidising the operational budget with the regular budget (assessed contributions). A pilot on FCR is currently running on European Union projects with a view to claim FCR on all new projects from 2020 onwards. UNIDO governing bodies review financial performance of the organisation twice a year, and the DG reports to member states on the budget performance and implementation. Member states are being encouraged to contribute unearmarked or programmable funds, but there are not any incentives in place for this. There has been some growth in thematic trust funds built from unutilised contributions where member states agree to this, but this is in effect management of a different issue. UNIDO is largely funded through voluntary contributions (EUR 147 214 in 2018 compared to EUR 68 351 from assessed contributions). Voluntary contributions are perceived by member states to provide them with more control over use on operations. Most resources are earmarked (interviewees suggested around 98%); voluntary contributions recently exceeded assessed contributions by a factor of 3 and are accepted if considered in line with the organisation’s mandate.<br>There are no policies to ensure earmarked funds are targeted at priority areas, although the Programme and Budget frames earmarked funds under UNIDO programme areas. Staff suggested that earmarked funds are a way to ensure results are provided, but dependence on earmarked funds affects UNIDO’s ability to implement the MTPF. A major risk for UNIDO is dependence on external funding through earmarked contributions as strong reliance on earmarked funds may cause UNIDO to lose its independence and its ability to implement its strategic vision as well as to align activities to country priorities and results (MI 5.1). <br>Voluntary contributions to UNIDO are increasing, but at the same time regular resources are have decreased due to member states’ departure.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_4;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'SCORE',
+    'value': '2.2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI1_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_4;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'NARRATIVE',
+    'value': 'UNODC has very limited ability to ensure that all priority areas have adequate funding. Its ability to do this is restricted by its lack of access to flexible finance. The volume and share of earmarked voluntary contributions – “special purpose funds” have been rising, reflecting higher donor investment in its activities. But core resources (general purpose funds and regular budget) have been declining in real terms and relative to non-core resources (special purpose funds) for several years. Core resources (general purpose funds) were forecast to be less than 1% in 2018-19. The volume of core resources UNODC receives is insufficient to finance functions that in other institutions would be considered integral (e.g. evaluation, gender, results management systems). UNODC must rely on special purpose funds – earmarked donor funds – to finance these functions. Most of its normative work is also financed from earmarked funds. UNODC is well below the average of the UN development system entities in terms of the share of core resources it receives. The average for the UN system in 2017 was 21%; UNODC was 10% in 2016 and declined to 7.6% in 2017. <br>Within these constraints, there is mixed evidence in relation to UNODC’s financial and budgetary planning to ensure priority areas have adequate funding. For example, the initial 2018-19 budget made an inadequate core funding commitment to the Research Trend Analysis Branch rendering the branch – which was largely dependent on core funds – vulnerable. The budget was rejected by member states and resubmitted with an allocation from core funds – including programme support costs (PSCs) (10/111).<br>UNODC’s terminology for funding sources is as follows:<br>general purpose funds: unearmarked voluntary contributions to finance core programmatic activities that are not funded by the regular budget (e.g. normative work, research)<br>regular budget: received from the UN biennial programme budget<br>special purpose funds: earmarked voluntary contributions for technical co-operation projects in the field or at headquarters (HQ)<br>programme support costs: overhead charge made against special purpose funds. PSCs are indirect costs that cannot be readily and directly attributed to, and are recovered from, activities financed from voluntary contributions (as per the supplement of the financial regulations and rules applicable to UNODC (ST/SGB/2015/4). PSCs are set for most donors at 13% (the European Union is charged 7%) and used to support central services.<br>UNODC income projections for the biennium 2018–19 highlight the divergence between earmarked and unearmarked funding. Income from special purpose funds (earmarked) was projected at USD 662.4 million (86.8%), and income from general purpose funds (unearmarked) was projected at USD 6.8 million (0.9%). The other two funding sources, programme support cost funds and the regular budget, account for 7.1% and 5.2% of the Office’s income. UNODC continues to face a persistent deterioration in general purpose income and added pressures on its regular budget and programme support cost funds. As indicated above, UNODC is also explicit that its financial framework hinders its ability to deliver its mandate effectively. The lack of general purpose funds reduces its capacity to: “(a) strategically manage its operations; (b) improve upon it management processes; (c) exercise effective corporate oversight; (d) fund key activities; and (e) launch new initiatives and programmes”. UNODC’s external audits have also reflected the continuing trend and the same negative impact on UNODC’s ability to implement its mandate. <br>UNODC creates a single integrated budgetary framework and has done so at least since 2014. However, voluntary contributions are also budgeted and accounted for separately under the two funds under which UNODC was established: the Fund of the United Nations International Drug Control Programme and the United Nations Crime Prevention and Criminal Justice Fund. Each biennial consolidated budget reports against the financial position of each fund separately. The reports set out anticipated general purpose income, the allocation of income from programme support costs to the Fund and anticipated special purpose income. Each Fund budget identifies the proposed commitment to each individual subprogramme.<br>The financial framework is reviewed regularly by the governing bodies. In line with General Assembly resolutions, the budget of general purpose funds (the “programme of the funds”), is presented to the commissions for approval. The budgets for special purpose funds (extrabudgetary support) and the related administrative and programme support cost budget (programme support cost funds) are presented to the commissions for endorsement only. <br>UNODC is seeking to introduce incentives to encourage donors to provide more flexible/un-earmarked funding at global and country levels, but, to date, this initiative has had limited impact. UNODC’s “Consolidated budget for the biennium 2018-19” and other documents state that “UNODC continues to make pleas to Member States and donors for unearmarked contributions”. Its draft annual programme implementation plan for 2020 states that UNODC is working on the assumption that there will be “less strictly earmarked special purpose contributions”, though without evidence that this will happen. <br>UNODC does seek multi-year funding and manages to get longer-term commitments in some cases. UNODC is structuring regional and country programmes in ways that allow donors to provide support to multi-year elements of the programmes. It concluded multi-year funding agreements with Australia and Qatar in 2016 and with Germany, Norway and the United Kingdom in 2018. However, a significant proportion of donors continue to provide small funding commitments that are often only valid for one year and are also often earmarked for very specific purposes. This funding pattern hampers UNODC’s ability to undertake sustainable planning and achieving long-term objectives since the financing of a significant share of activities and staff costs are only secured on an ad hoc and short-term basis.<br>The “standing open-ended intergovernmental working group on improving governance and financial situation of UNODC” (referred to internally as FINGOV) is an informal advisory body of member states. It is regularly briefed on the status of the budget, and its members are encouraged to provide more unearmarked contributions. In April 2019 UNODC presented to FINGOV a document applying the proposed Funding Compact to UNODC. The Funding Compact aims to raise core contributions to the UN to 30% of their budgets to help them support the achievement of the SDGs. <br>Through the Funding Compact, member states are committing to bringing core resources to at least 30% in the next five years. UNODC repeated its plea to member states to provide less hard-earmarked funding. It asked that, if general purpose funding cannot be provided, donors “soft earmark” their contributions. It also asked donors who have to “soft earmark” their contributions to dedicate them to one or more of UNODC’s “fundamental roles” or to specific thematic and/or geographic areas. UNODC identified its fundamental roles under four headings: normative work, strategic direction and policy support, knowledge leadership, and cross-cutting support functions. The latter includes roles or functions such as results-based management, evaluation and gender mainstreaming. <br>UNODC invited member states to engage in a dialogue to explore increased support to UNODC’s fundamental roles and how these roles could be matched with core resources. UNODC noted that it could highlight, in the consolidated budget, any funding gaps for fundamental roles that are currently funded through PSCs, extrabudgetary support or are not funded at all.<br>UNODC’s procedures and policies for planning and budgeting provide the overall framework governing how earmarked funds are targeted. However, given that around 90% of its budget derives from voluntary contributions, it is inevitable that funds are targeted to areas that are priorities for its donors as well as priorities UNODC identifies. <br>In 2014, to address falling general purpose income, UNODC introduced arrangements to achieve full cost recovery of donor financed programmes. In line with Secretariat-wide policies, UNODC costed its technical co-operation assistance. Since 2014, UNODC has continued to apply full cost recovery to all programmes and projects funded from voluntary contributions. <br>UNODC has stated that it has developed a monitoring and early warning dashboard on full cost recovery (the “full cost recovery barometer”) as a risk management tool to provide senior management with monthly and quarterly updates on full cost recovery implementation, to enable it to understand its cost base and to monitor recovery rates and their impact on the field office network and programme activities.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_4;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI1_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_4_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_4_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_4_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_4_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_4_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_4_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_4_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_4_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_4_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_4_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_2',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_4_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_2',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_4_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_4_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_4_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_4_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_4_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_4_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_4_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_3',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_4_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_3',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_4_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_4_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_4_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_4_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_4_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_4',
+    'y2code': 'RATING',
+    'value': 'Not applicable',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_4',
+    'y2code': 'SCORE',
+    'value': 'N/A',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_4',
+    'y2code': 'RATING',
+    'value': 'Partially meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_4',
+    'y2code': 'SCORE',
+    'value': '1',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_4_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_4_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_5',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_5',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:1_4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_5',
+    'y2code': 'RATING',
+    'value': 'Not applicable',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_5',
+    'y2code': 'SCORE',
+    'value': 'N/A',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:1_4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_5',
+    'y2code': 'RATING',
+    'value': 'Partially meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_5',
+    'y2code': 'SCORE',
+    'value': '1',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:1_4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_5',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI1|MI1_4|1_4_5',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:1_4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'NARRATIVE',
+    'value': 'Structures and mechanisms to support cross-cutting issues are quite fragmented within CGIAR, leading to slow progress on their integration, with the exception of environmental sustainability and climate change. Integrating a focus on gender equality and empowerment of women has been part of the CGIAR strategy since 2011, but there is widespread recognition and frustration within CGIAR that integration of gender issues into CGIAR’s science and workplaces has been partial and slow. Nevertheless, a high proportion of survey respondents rated CGIAR’s performance on gender as excellent or very good (over 45%). Since 2017, gender has been re-prioritised in the new System-level business plan through the development of a new gender and inclusion policy and people management plan, as well as through an injection of dedicated funding provided by donors to elevate a new Gender Platform within the CGIAR architecture. The Gender Platform is intended to provide leadership, expertise and resources across the System to better prioritise and integrate gender equality issues across CGIAR’s research. However, these measures are still in development, with implementation due to start in early 2020. <br>Environmental sustainability and climate change is a core focus of CGIAR’s research and substantially integrated into System-level strategies, Research Centers and research programmes. Although there is no dedicated policy statement on climate, CGIAR’s commitment to environmental sustainability and climate change is explicitly expressed in various strategic documents, the policies are widely implemented and the accountability systems are comprehensive. Substantial climate change leadership, expertise and resources are mobilised across the System by the CGIAR Research Program on Climate Change, Agriculture and Food Security (CCAFS), led by the International Center for Tropical Agriculture, which is a collaboration among all 15 CGIAR Research Centers and co-ordinates with the other CGIAR Research Programs to integrate climate change. A high proportion of survey respondents rated CGIAR’s performance on environmental sustainability as excellent or very good (just short of 50%). However, more could be done to integrate climate change more consistently and strategically into the design of interventions, through expert advice and capacity building.<br>The definition of good governance used here focuses principally on the approach that CGIAR takes to partnerships, particularly at the national level including government agricultural research systems, and on capacity building of these partners. Working in partnerships and building capacity are integral to promoting CGIAR’s development outcomes at scale. A clear policy and strong accountability systems track a high volume of partnerships along the phases of the impact pathway. However, variability is noted in the strategic rationale and effectiveness of partnership strategies at CRP level. A further challenge is that financial and human resources are noted to be suboptimal for a more strategic, effective and sustainable approach. This is balanced by the concentration of resources and expertise in the CGIAR Research Program on Policies, Institutions, and Markets (PIM) directed towards the institutional policy and regulatory environment, which is the other aspect of good governance addressed by CGIAR. (The results of these efforts are discussed in KPI 9.6.)<br>CGIAR does not work explicitly on human rights, rather it is committed to protecting and promoting farmers’ rights, aligning with the System’s over-arching strategic commitment to the interests of poor farmers, both men and women. There was only a limited proportion of survey respondents who rated CGIAR’s performance on human rights as excellent or very good (only around a quarter). There is no explicit policy; however, CGIAR Research Centers that host genebanks have legal treaty obligations within the International Treaty on Plant Genetic Resources for Food and Agriculture (ITPGRFA) to protect and promote farmers’ rights within their approach to conserving and making available a global resource of germplasm from crops and trees. These obligations are further embedded within the System-wide Principles on Management of Intellectual Assets. This has an implementation plan but no accountability systems to track system-wide efforts on farmers’ rights. The Genebank Platform provides leadership, advice and guidance to Research Centers on farmers’ rights, but there are few other resources or development of capacity dedicated to ensuring a consistent approach.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:KPI2;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:KPI2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'SCORE',
+    'value': '2.13',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:KPI2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'NARRATIVE',
+    'value': 'This KPI was not rated. <br>Environment and climate change, good governance, and human rights were considered to be not applicable as cross-cutting issues. Environment and climate change, and governance, are core to the mandate of the Multilateral Fund. Human rights was not assessed as documents and discussions indicated no evidence of human rights issues being connected with the implementation of the Fund, and the Fund does not have an explicit human rights policy statement or strategy.<br>The only cross-cutting issue considered applicable to MLF was considered to be gender equality and women’s empowerment. It was found to be applicable  not only because the MLF, as part of the UN, must abide to international norms, but also because evaluations of the MLF confirmed that some MLF projects may have gender dimensions, and because the EXCOM has, with its adoption of a gender policy for the MLF in December 2019, recognised the relevance of the issue for the Fund. <br>MOPAN decided, however, not to apply a rating for KPI 2, as its rating – composed only of the gender rating – would highlight the issue in a way that is disproportionate to the role it plays in the Multilateral Fund, with its close focus on phasing-out ODS and phasing down HFCs.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:KPI2;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'RATING',
+    'value': 'Not applicable',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:KPI2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'SCORE',
+    'value': 'N/A',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:KPI2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'NARRATIVE',
+    'value': 'The Secretariat is administratively part of UNEP, and the MLF Treasurer is UNEP. The last internal audit of the Fund Secretariat was carried out by the Internal Audit Division of the OIOS in 2013. The 2014 report on this audit included a management response from UNEP detailing the action taken in response to the recommendations. <br>The 2017 IAD Internal Audit Manual describes how all recommendations from internal audits are maintained in an automated audit management system. Implementation of critical and important recommendations are monitored on a quarterly and annual basis, respectively. Long overdue recommendations (defined as overdue for more than one year past the target date for critical recommendations and three years past the target date for important recommendations) are reviewed for potential closure, unless reasonable action plans for full implementation are provided.<br>The Secretariat has well-established procedures for reviewing all projects, for identifying any issues and for making recommendations to the EXCOM for any action proposed. Project amendment documents submitted to the EXCOM provide good evidence of actions required and taken to address any financial and operational issues identified in implementation. Progress reports are submitting annually by the bilateral and implementing agencies, with financial data as of 31 December of the previous year. Each project is reviewed annually and has a completion date and a status code. Once the completion date has been reached and the project has been completed, then any balances must be returned to the Fund. This process is well-established with very defined steps to be followed. <br>The report on the final audited accounts submitted to the EXCOM each year includes a section commenting on any audit observations relating to the Multilateral Fund and the action to be taken. None of the final accounts during the assessment period have contained any such observations. <br>In response to a survey question on whether the MLF adequately addresses concerns raised by internal control mechanisms, 28% and 33% of respondents rated the MLF as “excellent” and ”very good”, respectively. <br>The previous MOPAN assessment for the World Bank rated this MI as highly satisfactory. UNDP, UNEP and UNIDO were assessed as satisfactory.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_5;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'SCORE',
+    'value': '3.33',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_5;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'NARRATIVE',
+    'value': 'Internal control has been greatly strengthened in recent years. There is a robust control framework in place, including internal and external oversight, financial and conflict of interest disclosure requirements, whistle-blower protection and other mechanisms detailed in the Anti-Fraud and Anti-Corruption Framework of the United Nations Secretariat. These are communicated to UNCTAD staff through intranet, town hall meetings and induction meetings for new recruits with RMS staff. Staff can – and in many cases must – follow online training courses; Anti-Fraud and Ethics training courses are available and mandatory for all UN Secretariat staff.<br>UNCTAD has a track record of full implementation of OIOS recommendations, with 100% in 2017 and 2018, and has consistently met the 80% implementation requirement over recent years. UNCTAD tracks implementation rates on the MIS dashboard and sends monthly updates of progress that identify timeframes and responsible parties.<br>OIOS also tracks implementation rates of recommendations and the information is publicly available online: <a class="external" href="https://oios.un.org/sites/oios.un.org/files/web_impl_rate_ied.pdf" target="_bank"><span class="fa fa-external-link"></span></a>. During sessions of the Working Party, the DSG of UNCTAD briefs member states on the status of implementation of the recommendations of the OIOS on the audit of the Intergovernmental Support Service of UNCTAD.<br>UNCTAD is obliged to report cases of fraud to the UN Comptroller and to OIOS immediately and in the year-end exercise. The head of RMS reports directly to the Secretary-General. Investigations are conducted by OIOS and reported upon by the UN Secretariat’s comptroller office.<br>Management responses to OIOS audits include a memorandum from the UNCTAD DSG outlining any issues and a table of audit recommendations, acceptance by UNCTAD (yes/no), the title of the responsible individual, the implementation date and UNCTAD comments. In a reviewed example, the implementation dates ranged from within 1 month to 14 months from the final audit report',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_5;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'RATING',
+    'value': 'Highly satisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_5;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'NARRATIVE',
+    'value': 'UNIDO has an internal control framework which “encompasses all the policies, procedures, monitoring activities and commitments, standards of behaviour and other aspects that govern UNIDO operations” (7). It is based on a set of core guiding principles and policies which are fully integrated into the management processes of planning, execution and monitoring and aimed at ensuring the effective and efficient management of UNIDO and use of resources.<br>UNIDO also has an Enterprise Risk Management (ERM) Policy with the purpose of “embed [ding] a systematic and consistent approach to identifying, assessing, and managing risks faced by UNIDO” (63). Interviews at HQ suggested that UNIDO’s risk management function is not yet mature, and the links between risk management and audit are not as strong as they could be, nor is the link between risk management and evaluation. Staff did explain though that information received on risk tends to align relatively well with audit findings and that UNIDO carries out its own annual risk assessment and assurance map for the risk committee. <br>It is unclear how issues identified through internal control mechanisms are to be addressed. The Report to the External Auditor for 2017 suggests that “the Internal Control Framework is outdated and does not reflect the current internal control system in place” (25), which is particularly evident in the case of risk management, which is still at its early stage of development. The ICF does describe various “control activities” that should help UNIDO achieve its objectives through addressing risks. <br>Guidelines for staff reporting of issues of concern through internal control mechanisms were not seen but would be covered by the policy on “Protection against retaliation for reporting misconduct or co-operating with audits or investigations”.<br>A tracking system to record issues and responses exists in the form of Management Action Plans (MAPs) which indicate the person or office responsible for ensuring specific actions are taken to address issues identified through audit. The EIO reports yearly to the IDB. HQ interviewees acknowledge that there are currently many outstanding audit recommendations including some that are over two years old, for example regarding IT and cyber security. This is attributed by UNIDO to resource constraints. Staff also suggested there are currently only five to seven internal audits conducted a year due to lack of capacity and resourcing, and likewise these constraints affect the organisation’s ability to act on the findings of audit including implementing timelines. <br>The Investigation Guidelines indicate investigations should be completed within six months of the receipt of a wrongdoing report, although timing depends on the complexity of the matter and case priority. The Director General’s Bulletin on “Protection against retaliation for reporting misconduct or co-operating with audits or investigation” paragraphs 22 and 27 provide for 45-day and 85-day timelines.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_5;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'SCORE',
+    'value': '2.33',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_5;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'NARRATIVE',
+    'value': 'UNODC has an internal control framework which is based on UN core principles and institutional control mechanisms and which is managed by OIOS. UNODC follows the Secretariat-wide approach to implement the Committee of Sponsoring Organizations of the Treadway Commission internal integrated control framework. It produces a monthly financial status and progress monitoring report.<br>Channels and mechanisms are in place for individuals – both internal and external – to report any issues. UNODC notes that reports of misconduct should be made through the established internal mechanisms: to OIOS. UNODC is obliged to protect the confidentiality of the individual’s identity. Reporting and investigations related to fraud and whistleblowing are also defined in the UN Secretariat’s Anti-Fraud and Anti-Corruption Framework. <br>UNODC has a tracking system which records responses and actions taken in relation to internal audits and other OIOS findings. The assessment team had access to a spreadsheet that monitored the status of recommendation implementation.<br>Annual external audits do report on the status of the implementation of recommendations. These annexed reports cite the Audit Board’s recommendation, UNODC’s response, and the Board’s assessment of UNODC’s response or action. The Board’s report registers the implementation status of each action. UNODC also reports its follow-up action to recommendations made by its oversight bodies in an annex to each of its biennial consolidated budget documents. These provide the recommendation and action taken to implement it.<br>UNODC has stated that on a quarterly basis it monitors and reports progress made in addressing audit recommendations. The assessment did not have access to data on the timeliness of implementation, but the 2018 external audit notes that 62% of recommendations from 2017 had yet to be completed at the end of 2018. It states: “The Board noted that there were 65 outstanding recommendations up to the year ended 31 December 2017, of which 25 (38%) had been fully implemented and 40 (62%) were under implementation.”',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_5;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'RATING',
+    'value': 'Highly satisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5',
+    'y2code': 'SCORE',
+    'value': '3.67',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_2',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_2',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_3',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_3',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_3',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_3',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_4',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_4',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_4',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_4',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_5',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_5',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_5',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_5',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_5',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_5',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_5',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_5',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_6',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_6',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_5_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_6',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_6',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_5_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_6',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_6',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_5_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_6',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_5|4_5_6',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_5_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_6;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'NARRATIVE',
+    'value': 'The CGIAR website sets out the overarching policy on fraud and corruption:<br><a class="external" href="https://www.cgiar.org/how-we-work/accountability/ethics/" target="_bank"><span class="fa fa-external-link"></span></a>.<br>This makes reference to the fact that an employee of the CGIAR System Organisation or one of the CGIAR Research Centers should read the applicable internal policies which describe relevant reporting procedures and should follow those procedures first.<br>The individual Research Centers each have their own anti-fraud and anti-corruption policies, which are available online, through searching. The policies clearly set out the roles of management and staff, include a commitment to developing and conducting training and disclosure programmes and establish clear mechanisms for reporting fraud.<br>Material that is reported across the System is communicated to the System Management Board and System Council and then published. In 2018, CGIAR developed an annual CGIAR Integrity Report, providing summarised analysis on financial irregularity matters reported to the System Organisation: <a class="external" href="https://www.cgiar.org/wp/wp-content/uploads/2019/07/Pilot_CGIAR_IntegrityReport_May2019.pdf" target="_bank"><span class="fa fa-external-link"></span></a>.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_6;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'SCORE',
+    'value': '3.33',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI4_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'EV_CONF',
+    'value': 'Medium Confidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_6;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'NARRATIVE',
+    'value': 'The Secretariat is administratively part of UNEP. UNEP, as a constituent part of the United Nations Secretariat, complies with General Assembly and Security Council Resolutions, United Nations Regulations and Rules, and administrative instructions and guidelines issued by the mandated authorities. Issues related to fraud, corruption and financial irregularities are directly addressed by OIOS through the UNEP Executive Office and the Corporate Services Division  following UN directives and guidelines. More specifically, Information Circular ST/IC/2016/25 on the Anti-Fraud and Anti-Corruption Framework of the United Nations Secretariat governs UNEP as part of the UN Secretariat. In addition, UNEP issued Interim Anti-Fraud and Anti-Corruption Guidelines to operationalise the internal circular. These guidelines define the roles of management and staff. While clear, these policies and guidelines are not specific to the Fund. <br>Interviews with Secretariat staff confirmed that policies and procedures are effective in practice, although there is no evidence of regular monitoring and reporting to the Governing Body. All staff at the Fund Secretariat have completed UN online anti-fraud training. No cases of fraud were reported to the Committee during the assessment period. Any cases would be handled by OIOS or the UNEP Corporate Services Division/Legal Unit on behalf of UNEP Executive Director. <br>There are several mechanisms in place for reporting suspicion of misuse of funds. These include UNEP internal operating procedures on whistleblowing, training on integrity and prevention of fraud and retaliation, and annual financial disclosure by managers and staff with financial responsibilities. Furthermore, OIOS has established a reporting facility to provide a confidential mechanism for individuals wishing to report waste, fraud, mismanagement, sexual harassment or other types of misconduct. The Investigations Division reviews all reports of possible wrongdoing it receives to determine whether the report is receivable for investigation. The Division has discretionary authority to decide which matters to investigate and, where suitable, may also decide to refer a report to another entity for appropriate action, including investigation.<br>UNEP, as part of the UN Secretariat, obtains oversight services from OIOS. Any fraud or attempted fraud would be directed to OIOS for investigation. UNEP does not issue a separate public report on fraud and corruption, although fraud, attempted fraud and corruption cases, if any, would be disclosed as part of its annual financial statements for audit to the Board of Auditors.<br>Previous MOPAN assessments for UNDP and the World Bank rated this MI as highly satisfactory. UNEP and UNIDO were assessed as satisfactory.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_6;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'SCORE',
+    'value': '3.5',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI4_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_6;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'NARRATIVE',
+    'value': 'The UN Secretariat documents ST/IC/2016/25 on anti-fraud and anti-corruption and ST AI/2017/1 on unsatisfactory conduct, investigations and the disciplinary process, as well as the UN Secretariat’s Guidebook on Ethics, provide guidance to staff members and other UN personnel, whose duty it is to report any and all possible cases of fraudulent acts. These guidelines have been distributed to all staff through a bespoke Information Circular on Anti-Fraud and Anti-Corruption Framework of the UN Secretariat. Other methods such as push notifications, banners and on-the-job training are also applied to raise attention to anti-fraud and anti-corruption policy.<br>Staff members at all levels are expected to become familiar with the contents of the Anti-Fraud and Anti-Corruption Framework and to comply with the guidance and principles established therein. Staff can – and in many cases must – follow online training courses; Anti-Fraud and Ethics training courses are available and mandatory for all UN Secretariat staff. In practice, however, it would seem that few staff actually take part: as at October 2019, the rate of formal internal training though the United Nations Office at Geneva on Preventing Fraud and Corruption at the United Nations stood at 45 staff (9.9%).<br>In the event of fraud cases, these are reported to the DSG, to the UN Comptroller’s office and to OIOS immediately, and in the year end exercise. Investigations are conducted by OIOS. The Comptroller’s office at the UN headquarters issues a public report on disciplinary cases.',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_6;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI4_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_6;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'NARRATIVE',
+    'value': 'A specific Policy on Fraud Awareness and Prevention (2013) exists which is centred around the organisation’s commitment “to the proper use of funds and resources entrusted to it, as well as the prevention of fraud and protection of the Organisation’s reputation and interests” (61). Relevant policies on fraud and corruption are also available in Article 6 of the 2018 Procurement Manual. These are published. <br>Responsibility for meeting the organisation’s commitment to the proper use of funds and prevention of fraud rests with all staff members. “Managers at all levels have the additional overall responsibility for monitoring and assessing internal controls and preventing fraud” (61). The Policy on Fraud Awareness and Prevention also states that any managers who fail to take appropriate action or who directly or indirectly tolerate or condone improper behaviour shall themselves be held accountable. Staff at HQ explained how the “four eyes” principle is used for check and control. They explained that, although there is some decentralised procurement, there is a heavily centralised processing of payments in Vienna as there is no delegation of financial authority to the field. <br>UNIDO’s policy on fraud in all its manifestations is one of zero tolerance. UNIDO is committed to the development and maintenance of a control structure based on best practices, processes, procedures and system”. Documentation is clear regarding guidelines for reporting issues identified. Reports of misconduct should be made to the Director, Human Resource Management Branch, or to the Office of Internal Oversight Services, the Ethics Office.<br>Staff at HQ have indicated that fraud awareness courses are among the mandatory training in UNIDO and also mentioned a “fraud awareness week” as well as various IT campaigns to help staff become aware and know what to do in the case of receiving fraudulent emails. The Policy on Fraud Awareness and Prevention commits UNIDO to “develop and conduct a training programme aimed at: increasing anti-fraud awareness, and developing skills for understanding, detecting, preventing and reporting fraudulent practices” (61).<br>Regular monitoring and reporting to the Governing Body annually provides evidence of policy and guideline implementation. An Information Circular summarising the findings and recommendations of investigations completed during the reporting period is issued annually, and an Activity Report is also issued annually to the Director General, the Board, the Audit Advisory Committee and the External Auditor. The Activity Report describes the activities of IOE during the reporting period and summarises significant oversight findings, recommendations and actions taken in response, but it is not made public.<br>Mechanisms are in place for reporting suspicion of misuse of funds, for example a policy for “Protection against retaliation for reporting misconduct or cooperating with audits or investigations” with the purpose of “protect[ing] those individuals working for the Organisation who report misconduct, provide information in good faith on alleged wrongdoing, or cooperate with an audit or investigation” (62). UNIDO commits to handling any such complaints with “the utmost discretion” and hosts a dedicated web-based reporting tool for allegations as well as a dedicated email address and telephone/fax number. Staff at HQ, when asked, said that they would know how to use such channels and would do so if necessary.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_6;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'SCORE',
+    'value': '2.83',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI4_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_6;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'NARRATIVE',
+    'value': 'The four internal and external oversight bodies that cover the UN Secretariat are OIOS, the Board of Auditors, the Joint Inspection Unit and the Independent Audit Advisory Committee. Those bodies were established by the General Assembly to assist in promoting a culture of compliance and integrity and in deterring fraudulent acts by independently assessing the adequacy and effectiveness of the internal control systems and, in the case of OIOS, undertaking investigations into possible cases of fraudulent acts, as appropriate.<br>UNODC‘s policy and guidelines are set out in the Anti-Fraud and Anti-Corruption Framework of the United Nations Secretariat (2016). OIOS provides advice on potential fraudulent acts and has a dedicated hotline to receive confidential reports, which can also be submitted through its website. The 2017 external audit report notes that UNODC’s intranet site did not provide a section <br>about fraud and corruption. Some information regarding fraud and corruption was available only through the search function. Although the United Nations intranet site provides such information, the Board recommended that UNODC should make its approach to fraud and corruption clearer to its staff by providing that information in a special section on its own intranet site. UNODC notes that instead of maintaining its own intranet, it will be part of a new UN intranet which will have a dedicated UNODC webpage on tackling fraud. <br>UNODC has created its own risk register, and an interdivisional team is developing risk mitigation plans. UNODC anticipates that this will be available on its intranet in the third quarter of 2019.<br>UNODC’s policy clearly defines the roles and responsibilities of personnel and the applicable sanctions. <br>Staff training and awareness-raising have been conducted, and information is circulated on UNODC’s Anti-Fraud and Anti-Corruption Framework of the UN Secretariat. The UN intranet site provides information related to the prevention of fraudulent acts, including common or frequently asked questions and answers, hotlines, training materials and relevant documentation such as the organisation’s administrative instructions and Secretary-General’s bulletins. However, the 2017 external audit notes that, while training was mandatory, UNODC could not track compliance. This has been remedied, and UNODC reports that a Fraud and Corruption Awareness Workshop was held in April 2019 for Procurement and Finance staff.<br>UNODC’s Board of Auditors (2017) also found that in applying the UN Secretariat Anti-Fraud and Anti-Corruption Framework, UNODC had not undertaken systematic fraud risk assessments to identify areas where it was most susceptible to fraud. The 2018 Audit Board report notes that UNODC is in the process of assessing its specific fraud risks and will update its enterprise risk management matrix in line with that of the UN Secretariat. UNODC expects to implement this recommendation by the second quarter of 2020. UNODC had established a fraud and corruption risk register in early 2019. At the time of this assessment, it was undergoing final review and, upon adoption in November, would be integrated into the overall Enterprise Risk Management register and framework. <br>Channels and mechanisms are in place to report suspicion of misuse of funds. Complainants should send reports to OIOS.<br>OIOS submits annual reports to the General Assembly and makes references to specific investigations of possible misconduct, including fraudulent acts. On an annual basis, the Secretary-General reports to the Assembly the number and nature of cases involving credible allegations. In its audit report of 2018, the Audit Board states that there was a discrepancy (of three cases) between the reports of fraud and presumptive fraud cases that it received from OIOS and those from UNODC management. The Board notes that this indicates there is an “undesirable inconsistency because the lack of accurate information related to fraud may imply a potential risk for the entity, with financial implications”. It recommended that UNODC management improve co-ordination with OIOS.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_6;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6',
+    'y2code': 'SCORE',
+    'value': '2.83',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI4_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'NARRATIVE',
+    'value': 'Over the past years, UNCTAD has made notable progress in developing policy to mainstream gender equality and women’s empowerment in TC. A gender strategy, developed in 2011, will be updated with a view to incorporate the 2020 UNCTAD XV conference outcomes. UNCTAD identified two goals for gender equality and women’s empowerment (GEWE) in the 2018-19 biennium programme and budget proposal. Organisationally, a gender task force (network of gender focal points within each division) has been established to reinforce and broaden the scope of UNCTAD’s activities for women’s economic empowerment. The gender parity strategy 2018-21 sets gender targets in priority areas of human resource management. In 2016, gender became an explicit component in the design and screening of new TC interventions. Results on the ground are yet to flourish, but the overall trajectory seems positive.<br>This cannot be said for two other cross-cutting items in TC, namely environmental sustainability and climate change, and respect for human rights. Whereas UNCTAD is showing a growing interest in environmental sustainability and climate change and is engaged in a number of TC projects to that effect, there is no evidence of secretariat-wide adoption and integration of environmental sustainability and climate change considerations into UNCTAD’s TC. Processes and mechanisms to incorporate these considerations throughout the project cycle are lacking. Similarly, with regard to human rights, although the Maafikiano does identify human rights as a priority cross-cutting issue, this has not been operationalised. While human rights are included in due diligence requirements and some isolated examples of projects that explicitly address human rights do exist, there is no evidence of secretariat-wide adoption and integration of human rights considerations in UNCTAD’s TC. Processes and mechanisms to incorporate these considerations throughout the project cycle are lacking. Staff have not been trained, nor has any bespoke guidance for UNCTAD staff been developed.<br>While enhancing economic good governance is a critical programmatic area and implicit in relation to UNCTAD’s mandate, the secretariat has no clear definition or explicit economic governance strategy or business processes in place. Still, many TC programmes and projects do include an explicit objective to improve economic policy and strengthen the capacity of relevant government institutions. At the level of the five subprogrammes, but more so at the level of individual projects and programmes, indicators of enhanced economic governance capacity are included in plans and reported against. UNCTAD events and training also include a focus on improving economic governance, and staff regard this objective as a sine qua non. UNCTAD’s partners appreciate UNCTAD’s assistance in this regard.',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:KPI2;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:KPI2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'SCORE',
+    'value': '2.5',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:KPI2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'NARRATIVE',
+    'value': 'UNIDO has made good progress towards consideration of gender and the environment into its operational management and at a project level through the introduction of dedicated policies and strategies for gender, and various screening mechanisms for environment. There is little evidence of how UNIDO addresses cross-cutting issues such as good governance and human rights, which are neither clearly addressed nor resourced. To some extent these are incorporated in practice into UNIDO’s everyday work. UNIDO has no articulated organisational policy statements on its approach to environmental sustainability, human rights or governance.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:KPI2;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:KPI2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'SCORE',
+    'value': '2.38',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:KPI2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'NARRATIVE',
+    'value': 'UNODC has structures and mechanisms to support the implementation of global frameworks for cross-cutting issues on gender equality, human rights and governance but not, to date, climate change or the environment. Its framework in relation to gender sensitivity and equality, however, has only recently been developed, and there is little evidence of implementation. A core part of UNODC’s mandate is to promote good governance; its governance work is a strength.<br>UNODC has a clear strategy on gender equality. It was approved in December 2017 and is still in the early stages of being implemented. The Action Plan to operationalise the strategy was adopted in December 2018 – leaving just six months for implementation in the assessment period (January to June 2019). Because there has been insufficient time to drive delivery of the plan, there is not yet consolidated evidence showing use.<br>UNODC does not have a dedicated, office-specific policy statement on environmental sustainability and climate change. As a UN Office, UNODC subscribes to UN-wide policies on environmental sustainability and climate change. It contributed to the creation of the UN Sustainability Strategy (2019) and subscribes to the UN Secretariat’s Climate Action Plan (2019) and the Ten Principles of the UN Global Compact, three of which relate to the environment. Although these frameworks are very recent, UNODC has been addressing certain aspects pertaining to environmental sustainability and climate change in some of its projects. Systematic checklists for screening, however, do not yet exist.<br>Given its mandate and operational focus, UNODC has the structures and mechanisms to support the implementation of global frameworks for cross-cutting issues relating to good governance. This is a strength. UNODC’s core mandate concerns promoting good governance. <br>UNODC’s mandate is in the security and justice sector, and it has a responsibility to safeguard human rights as well as promote them. UNODC reports against the UN’s Human Rights Due Diligence Policy that relates to UN Support to Non-UN Security Forces (HRDDP) – and did so in 2017, contributing to the 2018 review. It was among the entities that “have taken significant steps in progressing implementation through advisory groups, SOPs [standard operating procedures], task forces and the development of related tools and guidance”. While UNODC has systems and procedures to ensure to ensure its interventions safeguard hunan rights, some interviewees considered that, in practice, these might not be implemented adequately and equally across the organisation.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:KPI2;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:KPI2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2',
+    'y2code': 'SCORE',
+    'value': '2.42',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:KPI2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI2_1a;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'NARRATIVE',
+    'value': 'The first Consortium Level Gender Strategy (CLGS) was adopted by the Consortium Board in September 2011, with two pillars: gender in CGIAR research and gender and diversity in the CGIAR workplace. However, the 2017 independent Gender Evaluation found that, overall, the CLGS did not provide a clear accountability framework or road map for gender in CGIAR Research and in the workplace and called for an updated gender framework. The new business plan’s prioritisation of gender policies effectively responds to this recommendation, although work is still in development. Documents and interviews suggest that CGIAR Research Centers and CRPs have gender frameworks in place, although these vary in scope and degree of implementation. A high proportion of survey respondents rated CGIAR’s performance on gender as excellent or very good (over 45%).<br>Gender equality indicators are integrated into the CGIAR SRF, which includes an IDO and set of three sub-IDOs as the basis for accountability. Gender is further set out as one of eight research priorities. There are additional gender specific targets under two of the SLOs on poverty and food and nutrition security. However, these indicators are at an outcome level and do not allow close tracking of how gender concerns are being integrated into the design and implementation of research and human resources policies.<br>There is an accountability system in place, which is broadly implemented, but it is fragmented and so tends to track gender-related projects and initiatives rather than progress towards gender integration. Data on the IDOs and sub-IDOS reported by CRPs are disaggregated by gender, while the CGIAR Annual Performance Report for 2017 includes a section on Integrating Gender and Equity into CGIAR Research for Development. Interviews suggest that the gender accountability system does not work consistently, hence the renewed focus on it. Evidence from interviews expressed an expectation that there will be more regular quality data and progress reporting on gender in the future, as gender reporting is also one of the new performance management standards being implemented in 2019-21.<br>There are no gender screening checklists or similar tools for new interventions. Gender is required to be included in the annual research programme Plans of Work and Budget (POWBs), but interviews suggest that this is inconsistent. A number of Research Centers have gender focal points, while on the programme side, expertise is mobilised via the CGIAR Collaborative Platform for Gender Research. The Platform serves a wider community of researchers integrating gender analysis into<br>their research and of those who are interested in collaborating on gender research, methods, tools and knowledge.<br>Currently, resources available to address gender are sub-optimal, as noted in the 2017 Gender Evaluation. In the research programmes, Phase 1 of the CRPs saw a small amount of funding dedicated to gender research, but this was not a feature of Phase 2 CRPs. Currently, gender expertise and funding is channelled through the Collaborative Platform for Gender Research, which is now in the process of being elevated to a stand-alone strategic platform with considerable funding. The Gender Platform will have an enhanced ability to receive and manage larger flows of resources across the System, so the situation should improve in the future, from early 2020.<br>Capacity development of staff in gender issues has not been implemented systematically or strategically in CGIAR. The Evaluation of Gender in CGIAR (2017) recommended a comprehensive system-wide training programme on gender and diversity, which was not supported by the management response and was left to Research Centers to manage. Interviews suggest that there has been variability on how Research Centers have addressed this.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI2_1a;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI2_1a;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI2_1a;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI2_1a;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'NARRATIVE',
+    'value': 'The 2018 Desk Study for the Evaluation of Gender Mainstreaming in the Montreal Protocol identifies several weaknesses in the MLF’s approach to gender, including the fact that the MLF does not have a dedicated policy statement on gender. However, all the IAs do have such a statement. The 2018 desk evaluation acknowledged that some MLF projects may have important gender dimensions. A gender mainstreaming policy has since been adopted by the EXCOM, in December 2019 (outside the time period for this assessment).<br>The MLF has no gender equality indicators or targets within its business plans. Gender is not included in mandatory reporting. No gender disaggregated data are collected on projects and programmes. A 2018 evaluation survey found no formal gender screening checklists but recognised that more efforts might be happening in practice. <br>The 2018 desk study reported a scarcity of dedicated resources for gender. The 2018 desk study on gender reports that “the scarcity of dedicated resources makes the gender impact of MLF projects unaccounted for, even if the MLF projects may have some important gender dimensions such as the creation of job opportunities for both men and women; the training of farmers exposed to toxic chemicals to better handle such unhealthy conditions; and the introduction of better occupational practices for both men and women”. There is no gender training for project staff and little or no collaboration with IA gender focal points/advisers.<br>The survey found that the majority of respondents knew “just a little” or ”almost nothing” about the gender equality strategy of the MLF.<br>A gender analysis of the MP conducted in three countries in 2019 found similar issues regarding the role of women in the refrigeration sector and the constraints women face at entry points in projects design.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI2_1a;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'RATING',
+    'value': 'Highly unsatisfactory',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI2_1a;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'SCORE',
+    'value': '0.33',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI2_1a;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI2_1a;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'NARRATIVE',
+    'value': 'Over the past years, UNCTAD has made notable progress in developing policy aimed to promote mainstreaming of gender equality and women’s empowerment in TC, a development that is recognised by the Joint Inspection Unit of the United Nations (JIU) and UN Women through the UN-System-Wide Action Plan on Gender Equality and the Empowerment of Women (GEEW) exercise.<br>The Nairobi Maafikiano and subsequent strategic frameworks state that UNCTAD will continue efforts in all its work to mainstream cross‐cutting issues of gender equality and the empowerment of women, and the promotion of sustainable development and full and productive employment. Leadership and executive management are very engaged and committed. A gender strategy was developed in 2011 covering six areas of UN-SWAP policy. This was complemented by UNCTAD’s gender parity strategy 2018-21. The gender strategy will be updated with a view to incorporate the 2020 UNCTAD XV conference outcomes.<br>In 2016, gender became an explicit component in the design and screening of new TC interventions. All new interventions are now assessed by the gender focal points as part of the formal secretariat-wide approval process. Guidance, including a checklist for gender mainstreaming, has been developed and made available through the secretariat’s intranet. In its gender parity strategy, UNCTAD commits itself inter alia to review all UNCTAD’s technical assistance programme and mainstream gender in them.<br>Substantively, UNCTAD has identified two GEEW goals in the 2018-19 biennium programme and budget proposal, namely: improvement in the mainstreaming of gender perspective into the work of UNCTAD; and increased number of initiatives mainstreaming a gender perspective into the work of UNCTAD.<br>Organisationally, UNCTAD has appointed gender focal points within each division. In March 2018, the Deputy Secretary-General (DSG) created a special Gender Task Force, building on the work of the pre-existing Network of Gender Focal Points. Its purpose is to reinforce and broaden the scope of UNCTAD’s activities for women’s economic empowerment through trade, investment, innovation, technology and all other areas under the three pillars of work of UNCTAD. The Task Force emphasises the importance of cross-institutional and cross-divisional implementation of gender-mainstreaming aspects. It is chaired by the DSG and meets at irregular intervals, as a result of which momentum at the operational level is said to have decreased.<br>The gender parity strategy 2018-21 sets targets in priority areas of human resource management. Presently, there is a mandatory training on gender; standards of practice regarding recruitment and gender; and a deliberate policy to establish a conducive enabling environment that promotes internal mobility opportunities, flexible working arrangements, and capacity building and training for female employees. An online training module on Trade and Gender developed together with UN Women in 2017 is still active and available for all UN staff through the UN Women Training Centre. In collaboration with the ILO Training Centre in Turin, Italy, a training session on gender mainstreaming in publications and TC projects was held in February 2017 for TC Gender Focal Points. Funding for tailored in-person training, however, is very limited.<br>Progress on gender within UNCTAD has been acknowledged by the JIU and reflected in the annual UN-SWAP reports. UN Women has commended UNCTAD for its continuous efforts to strengthen gender equality and women’s empowerment, both in TC activities and within the secretariat itself, e.g. by adopting the UNCTAD gender parity strategy 2018-21. The 2018 UN-SWAP report appreciates a consistent trend of satisfactory performance across various indicators: policy and planning, gender responsive performance management, results-based management, oversight and coherence. In other areas, such as human and financial resource management, organisational culture, and capacity assessments, UNCTAD was seen as approaching the requirements. This is corroborated by evidence from evaluations, that demonstrate a solid commitment to improving gender outcomes.<br>There is less evidence of impact on gender equality and continued reference to the need to strengthen gender mainstreaming and training, however. The independent external evaluation of subprogramme 5, in 2018, recommended that UNCTAD and the division should increase current efforts and integrate human rights and gender equality issues into interventions, to better deliver on the mandates and commitments of the United Nation. In a similar vein, the 2018 synthesis of subprogramme evaluations concluded that “with the exception of the trade and gender programme under subprogramme 3, the integration of gender and human rights considerations in UNCTAD programmes and projects has been weak”. It should be noted that these subprogramme evaluations span from 2013 to 2018, but the overall trajectory is positive.<br>Survey responses indicate that 41% of member states are (very) familiar with UNCTAD’s stance on gender equality and empowerments of women; 59% knew little to nothing about it.',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI2_1a;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI2_1a;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI2_1a;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI2_1a;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'NARRATIVE',
+    'value': 'UNIDO has a dedicated Policy on Gender Equality and the Empowerment of Women as well as a Gender Strategy (2016-19) and a Gender Parity Action Plan (2018-21). The strategy indicates that “[w]hile important goals in their own right, gender equality and women’s empowerment are key to UNIDO’s goal of achieving inclusive and sustainable industrial development (ISID)” (29) and notes gender parity, gender sensitive culture and accountability as three organisational priority areas. These are widely cited by staff in relation to issues on gender, although there is also an acknowledgement (from interviews) that the organisation still has room to improve performance in relation to gender equality.<br>The MTPF describes gender equality as “a central priority of UNIDO’s strategic framework for the 2018-2021 period” (1), and the IRPF includes targets and indicators for gender and gender equality under its Tier 2 (organisational performance) results, and for gender mainstreaming and gender partnership building under Level 3 (programme management and effectiveness). UNIDO reports in their annual report on the KPIs related to gender equality. <br>UNIDO established a senior level mechanism in 2015 to ensure accountability through the Gender Mainstreaming Steering Board, chaired by the DG and comprising directorate heads. The organisation also created an Office for Gender Mainstreaming, Ethics and Accountability (ODG/GEA) in 2015. Documentation indicates that ultimate authority and responsibility for achieving results rests with the DG but is the responsibility of all staff. UNIDO reports on its gender-related results to member states including through reporting on the UN-SWAP. One function of the Office of Evaluation and Internal Oversight is to “ensure human rights and gender issues are duly considered in the conduct of evaluation and evaluation reports” (29). A sample of evaluations reviewed has confirmed this is the case for gender, but the evaluation findings in themselves suggest gender is not always actually addressed well in practice with there being “no systematic consideration of gender equality issues”.<br>The mid-term review (MTR) found good progress has been made in ensuring gender-responsive designs, institutional arrangements for gender and resource tracking through the gender marker system. Less progress was noted in mainstreaming gender-related responsibilities and ensuring accountability across the organisation. The Gender Strategy indicates that all new projects ought to systematically include gender perspectives. Gender equality is now a mandatory part of the project approval and compliance process with its own gender checklist. Interviews at HQ explained that two staff acting as Gender Focal Points look through every project proposal and discuss it with project managers<br>Regarding human resources, a network of Gender Focal Points (GFPs) has been established with representatives from all branches and field offices. Working alongside a gender co-ordinator and rotating gender officer, these personnel increase the capacity and human resourcing for gender within UNIDO, but it not always sufficient, especially at the country level where regional and country capacity is limited. The network of GFPs are effectively responsible for gender work on top of their existing roles, so that there has not in practice been additional resourcing. Regarding financial resources, the PB 2020-21 has a budget line under Major Programme D for “Human Resource Management and Gender Mainstreaming” which shows EUR 6 639 335 from the regular and operational budget for this and 11 professional positions and 19 general staff positions. The previous PB 2018-19 had a dedicated component D.1.1 for Gender Equality and the Empowerment of Women.<br>Interviewees at HQ indicated that participation in training on gender equality is now tracked systematically. They also suggested that increased staff capacity on gender equality issues is indirectly reflected through increased quality on gender mainstreaming of projects, as reported in the Annual Report 2018 and as found in the 2018 Mid-Term Review of the Gender Equality Policy (2015) and Strategy (2016-19) on Gender Equality and the Empowerment of Women. <br>The percentage of programmes/projects whose design quality was rated satisfactory at entry in relation to gender equality has increased from 59% in 2015 to 89% in 2018. A system of recognition to reward gender champions has been put in place with the gender equality mobilisation (GEM) award.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI2_1a;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI2_1a;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI2_1a;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'EV_CONF',
+    'value': 'Medium Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI2_1a;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'NARRATIVE',
+    'value': 'UNODC has a clear policy and strategy on gender equality (Document number 17). It was approved in December 2017 and is still in the early stages of being implemented. The Action Plan to operationalise the strategy was adopted in December 2018 – leaving just six months for implementation in the assessment period (January to June 2019). Because there has been insufficient time to drive delivery of the plan, there is not yet consolidated evidence showing use. <br>Reflecting UNODC’s lack of core funding, its gender equality and mainstreaming work (staff and activities) is funded by extrabudgetary funds and is framed as a “global programme”. UNODC’s dependence on donor funding for its gender equality work means it is dependent on future donor commitments, and therefore its sustainability is not guaranteed. The gender unit and programme have been placed within the Office of the Executive Director. <br>Gender equality indicators and targets have recently been integrated into the organisation’s strategic plan and corporate objectives. UNODC aims to deliver against 14 targets (or strategic performance areas) with 2019 as the mid-term and 2021 as the end of term targets. The targets are based on the five-level rating system of the UN System-wide Action Plan framework, which allows UN entities to assess themselves and report against each performance indicator. Specific actions for reaching the targets and monitoring implementation are outlined in an action plan for 2018-19. Accountability systems (including corporate reporting and evaluation) that reflect gender equality indicators and targets are now being put in place, but there is not yet evidence of their use. The Executive Director is responsible for delivering and accomplishing the implementation plans’ goals and targets, and senior management is responsible for reviewing results and strengthening implementation. UNODC’s strategy provides for a mid-term review and final independent evaluation. Gender screening checklists have been developed and have begun to be used in relation to new interventions. Capacity development of staff on gender equality is underway, and a system of gender focal points has been established. But, as with UNODC’s policy and implementation, this is in the early stages of implementation.<br>The element scores in this micro-indicator reflect that UNODC’s gender policy and implementation plan are so recent that there has not been adequate time to demonstrate results: they are either partially implemented or implemented only in some cases. It is important to note that this score is not a reflection on the quality of either the policy or the systems that have been put in place: these appear of high quality.',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI2_1a;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI2_1a;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a',
+    'y2code': 'SCORE',
+    'value': '2.33',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI2_1a;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_1',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_1',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_1',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_1',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_2',
+    'y2code': 'RATING',
+    'value': 'Does not meet conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_2',
+    'y2code': 'SCORE',
+    'value': '0',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_3',
+    'y2code': 'RATING',
+    'value': 'Does not meet conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_3',
+    'y2code': 'SCORE',
+    'value': '0',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_3',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_3',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_4',
+    'y2code': 'RATING',
+    'value': 'Partially meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_4',
+    'y2code': 'SCORE',
+    'value': '1',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_4',
+    'y2code': 'RATING',
+    'value': 'Does not meet conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_4',
+    'y2code': 'SCORE',
+    'value': '0',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_5',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_5',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_5',
+    'y2code': 'RATING',
+    'value': 'Does not meet conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_5',
+    'y2code': 'SCORE',
+    'value': '0',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_5',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_5',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_5',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_5',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_6',
+    'y2code': 'RATING',
+    'value': 'Partially meets conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_6',
+    'y2code': 'SCORE',
+    'value': '1',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:2_1a_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_6',
+    'y2code': 'RATING',
+    'value': 'Does not meet conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_6',
+    'y2code': 'SCORE',
+    'value': '0',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:2_1a_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_6',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_6',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:2_1a_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_6',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1a|2_1a_6',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:2_1a_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI2_1b;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'NARRATIVE',
+    'value': 'There is no stand-alone policy on environment and climate change, but CGIAR’s commitment to environmental sustainability and climate change is explicitly expressed in the CGIAR SRF and other strategic documents, and it is widely implemented across the System. Implementation efforts are integrated and co-ordinated by the cross-cutting CCAFS. A collaboration between all 15 Research Centers, CCAFS seeks to address the increasing challenge of global warming and declining food security on agricultural practices, policies and measures through strategic, broad-based global partnerships. A high proportion of survey respondents rated CGIAR’s performance on environmental sustainability as excellent or very good (just short of 50%).  <br>There is no stand-alone policy on environment and climate change, but CGIAR’s commitment to environmental sustainability and climate change is explicitly expressed in the CGIAR SRF and other strategic documents, and it is widely implemented across the System. Implementation efforts are integrated and co-ordinated by the cross-cutting CCAFS. A collaboration between all<br>15 Research Centers, CCAFS seeks to address the increasing challenge of global warming and declining food security on agricultural practices, policies and measures through strategic, broad-based global partnerships. A high proportion of survey respondents rated CGIAR’s performance on environmental sustainability as excellent or very good (just short of 50%).  <br>Environmental sustainability and climate change indicators are fully integrated into CGIAR’s accountability systems. Improved natural resources and ecosystem services is the third SLO (of 3), with 4 underlying IDOs and 11 underpinning specific outcome targets covering a range of climate and sustainability areas. Climate change is also one of four key cross-cutting themes that are critical to attaining the goals and targets. The accountability system for environmental sustainability and climate change is substantially implemented. The CGIAR Annual Performance Report for 2017 includes a wide range of examples where research is making a contribution to adapting to and mitigating climate change. The reporting is at the SLO level and for the Common Results Reporting Indicators. There is also reporting against the climate sub-IDOs in the CRP annual reports.<br>There are no specific environmental screening checklists/impact assessments used for new interventions. Annual POWBs are required to indicate which components of the work programme contribute to climate change and environmental efforts. Interviews suggest that CCAFS is asked to provide climate change advice to other programmes, as well drawing on the extensive climate change experience in the Research Centers. There do not seem to be other procedures or tools in place to assist in the integration of climate change into the design of new interventions. <br>In terms of human and financial resources to address climate change and environmental issues, the CCAFS programme represents a substantial concentration of leadership, expertise and resources in the System. All 15 Research Centers have a stake in CCAFS, and interviews indicate that this collaboration means that efforts can be co-ordinated across all parts of the System and made more strategic. This somewhat balances the minimal capacity building of staff to support integration of climate change and environmental issues. Interviews suggest that there may be an ongoing need to build the capacity of scientists to integrate climate change more strategically and consistently into projects and Flagship portfolios.',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI2_1b;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI2_1b;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'SCORE',
+    'value': '2.67',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:MI2_1b;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'NARRATIVE',
+    'value': 'Environmental sustainability and climate change are core to the mandate and objectives of the MP and MLF, particularly since the Kigali Amendment. This cross-cutting issue is therefore considered to be not applicable.',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI2_1b;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'RATING',
+    'value': 'Not applicable',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI2_1b;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'SCORE',
+    'value': 'N/A',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:MI2_1b;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI2_1b;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'NARRATIVE',
+    'value': 'From a policy perspective, the Nairobi Maafikiano explicitly states the importance of “integrating (economic, social and) environmental dimensions of sustainable development and creating an enabling environment at all levels for inclusive development” (pp. 2-3). It recognises all the principles of the Rio Declaration on Environment and Development, including, inter alia, the principle of common but differentiated responsibilities, as set out in principle 7 thereof. For the 2018-19 programme and budget biennium, subprogramme 3 identifies as one of its objectives, “enhanced design and implementation by developing countries […] according to their needs, of trade, environment and sustainable development objectives and creative economy strategies at all levels.” Aside from these high-level commitments, there is no dedicated policy on environmental sustainability and climate change for TC.<br>UNCTAD is showing a growing interest in climate change and trade, as witnessed during the Trade, Climate Change and SDG week that UNCTAD organised in September 2019. Interviewees also point to numerous efforts recorded at the corporate level to comply with environmental sustainability and to highlight the nexus between trade and climate change, which fall beyond the scope of this assessment.<br>In terms of TC, one of UNCTAD’s TC Toolbox products is “Sustainable Trade and the Environment”, managed by the Division for International Trade and Commodities (subprogramme 3).<br>At the project level, there are an increasing number of projects that focus on environmental sustainability and climate change. One major initiative is the BioTrade approach that was developed to consider the implementation of the BioTrade Initiative that has been promoting sustainable BioTrade in support of the objectives of the Convention on Biological Diversity. This has resulted in a range of projects and policy initiatives. However, there is no evidence to show that environmental sustainability and climate change are being mainstreamed in UNCTAD’s TC.<br>Although the Maafikiano regards environmental sustainability and climate change as an important cross-cutting issue, within TC, this has not yet been operationalised in terms of specific guidance to TC interventions, nor has it been given the same weight and attention as, for example, gender equality. While UNCTAD’s project screening checklist and project management handbook do make reference to ensuring alignment with SDGs, there is no evidence that UNCTAD’s TC guidelines, systems and tools address the issue of sustainable development and climate change in any explicit manner. Processes and mechanisms to incorporate these considerations throughout the project cycle are lacking. Staff have not been trained, nor has any bespoke guidance for UNCTAD staff been developed.<br>Survey responses indicate that member states are not that familiar with UNCTAD’s stance on environmental sustainability and climate change. One-third of the respondents claimed to know it well or by a fair amount; two-thirds knew little to nothing about it.',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI2_1b;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'RATING',
+    'value': 'Unsatisfactory',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI2_1b;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNCTAD',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNCTAD;CYCLE:2019;KPI:MI2_1b;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'EV_CONF',
+    'value': 'High Confidence',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI2_1b;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'NARRATIVE',
+    'value': 'There is no dedicated policy statement on environment and climate change; however, “safeguarding the environment” is one of UNIDO’s four strategic priorities (it is an integral part of UNIDO’s work rather than a cross-cutting issue per se). This is to be done through advancing environmentally sustainable growth, building institutional capacities for greening industries through cleaner production technologies and resource efficiency methodologies, and creating green industries, including in fields of waste management and recycling. Implementation of Global Environment Facility (GEF) standards is a dominant aspect of the extra-budgetary project portfolio. The mid-term review of the MTPF highlights the cross-cutting causal relationship between environment, on the one hand, and poverty, food, health, and other SDG-related results. The partner survey identified more positive views on UNIDO’s work on the environment and climate change than for other cross-cutting issues. While UNIDO, particularly given the dominance of GEF and Montreal Protocol funded projects, has a clear agenda for the environment, there is no clear statement of UNIDO’s organisational intent on the environment.<br>The IRPF includes targets and indicators for environmental sustainability and climate change. Under Level 1 (global development results) there are indicators for CO2 emissions and energy intensity. Under Level 2 (country results with UNIDO ISID support) there are indicators for multilateral environmental agreements (MEAs). There are no organisational performance indicators for environmental sustainability.<br>To strengthen accountability to supporting environmentally sound and sustainable development in their project activities, UNIDO has adopted a set of Environmental and Social Safeguard Policies and Procedures (ESSPP). These strengthen UNIDO’s accountability to the countries and communities it aims to support as well as stakeholders in the development processes and the broader development co-operation and donor community. The ESSPP state that whenever<br>appropriate the organisation engages “in innovative investments and technical assistance to support no/low-carbon investments and climate change mitigation and adaptation opportunities while also working with the project development team to ensure that supported projects enhance climate resiliency and avoid unwarranted increases in greenhouse gas emissions”. The ESSPP draw on the safeguard requirements and policies of the GEF and Green Climate Fund (GCF), as well as United Nations Environment Management Group guidance; however, given their recent introduction in February 2019, they have only been rolled out for new projects so it is not yet possible to assess their impact.<br>The ESSPP (since 2019) act as an environmental and social screening and assessment tool for UNIDO interventions and consist of four interrelated components as follows:<br>Integrated Safeguard Policy Statement<br>Operational Safeguards<br>Environmental and Social Safeguard Steps along the Project Cycle<br>Environment and Social Safeguard Tools. <br><br>The “Environmental and Social Safeguard Steps along the Project Cycle” provides guidance on the specific procedures that the project development team should follow to ensure that operations meet the requirements of the Operational Safeguards at each stage of the UNIDO project cycle, and the Environment and Social Safeguard Tools are designed to screen projects for environmental and social risks and develop the environmental and social studies required by the ESSPP. GEF projects are screened using a similar tool, on which the ESSPP are based.<br>Both human and financial resources are available to address environmental sustainability and climate change issues for projects and programmes; UNIDO has a dedicated Department of Energy and Department of Environment. Programme C.3 of the Programme and Budget document 2018-2019 covers UNIDO services in the area of safeguarding the environment. In terms of financial resources, close to EUR 10 million of UNIDO’s resources the released budget for 2019 was mostly for personnel costs. There are no dedicated resources for supporting organisational environmental sustainability.<br>The ESSPP compliance regime is managed by the Partnership Coordination Division (PCD). UNIDO is currently engaged with the GCF and has other partnerships such as with the Global Mercury Partnership and the United Nations Partnership for Action on Green Economy (PAGE).<br>Personnel at HQ explained how training on ESSPP compliance, originally developed for GEF projects to be compliant with GEF requirements, was conducted for the energy and environment departments staff during the initial rollout of the policy in 2015, due to their involvement in GEF projects. Since then, all GEF/GCF training includes ESSPP elements.<br>Interviewees at HQ explained how UNIDO is aspiring to “Green Procurement”. UNIDO is working towards its travel policy becoming climate neutral, and has revised it. All travel is monitored, checking that face-to-face meetings are necessary, and there is now a cap on travel days and budget, although this is also for cost management purposes. The organisation has increased the amount of telecoms equipment and spaces in HQ, and all Country Offices have IP phones to encourage remote connection.',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI2_1b;MEASURE:NARRATIVE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'RATING',
+    'value': 'Satisfactory',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI2_1b;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'SCORE',
+    'value': '2.83',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:MI2_1b;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '1|KPI2|MI2_1b',
+    'y2code': 'EV_CONF',
+    'value': 'Little to no Confidence',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:MI2_1b;MEASURE:EV_CONF'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_1',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_6_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_1',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_6_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_1',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_6_1;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_1',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_6_1;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_2',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_2',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_6_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_6_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_2',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_6_2;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_2',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_6_2;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_3',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_3',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_3',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_3',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_3',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_6_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_3',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_6_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_3',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_6_3;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_3',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_6_3;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_4',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_4',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_6_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_6_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_4',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_6_4;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_4',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_6_4;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_5',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_5',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_5',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_5',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_5',
+    'y2code': 'RATING',
+    'value': 'Exceeds conditions/Good practice',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_6_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNIDO',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_5',
+    'y2code': 'SCORE',
+    'value': '4',
+    'coordinate': 'ORG:UNIDO;CYCLE:2019;KPI:4_6_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_5',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_6_5;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'UNODC',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_5',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:UNODC;CYCLE:2019;KPI:4_6_5;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_6',
+    'y2code': 'RATING',
+    'value': 'Approaches conditions',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'CGIAR',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_6',
+    'y2code': 'SCORE',
+    'value': '2',
+    'coordinate': 'ORG:CGIAR;CYCLE:2019;KPI:4_6_6;MEASURE:SCORE'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_6',
+    'y2code': 'RATING',
+    'value': 'Meets conditions',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_6;MEASURE:RATING'
+}, {
+    'metadataid': null,
+    'x1code': 'MLF',
+    'x2code': '2019',
+    'y1path': '2|KPI4|MI4_6|4_6_6',
+    'y2code': 'SCORE',
+    'value': '3',
+    'coordinate': 'ORG:MLF;CYCLE:2019;KPI:4_6_6;MEASURE:SCORE'
+}];
