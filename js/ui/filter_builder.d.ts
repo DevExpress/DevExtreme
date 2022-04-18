@@ -331,10 +331,7 @@ export interface dxFilterBuilderCustomOperation {
     caption?: string;
     /**
      * @docid
-     * @type_function_param1_field1 value:string|number|Date:optional
-     * @type_function_param1_field2 valueText:string:optional
      * @type_function_param1_field3 field:dxFilterBuilderField:optional
-     * @type_function_param1_field1 value:string|number|date
      * @public
      */
     customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: Field }) => string);
