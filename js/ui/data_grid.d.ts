@@ -3769,12 +3769,12 @@ export type Export<TRowData = any, TKey = any> = {
 export type ExportTexts = {
   /**
    * @docid dxDataGridOptions.export.texts.exportAll
-   * @default "Export all data to Excel"
+   * @default "Export all data to {0}"
    */
   exportAll?: string;
   /**
    * @docid dxDataGridOptions.export.texts.exportSelectedRows
-   * @default "Export selected rows to Excel"
+   * @default "Export selected rows to {0}"
    */
   exportSelectedRows?: string;
   /**
