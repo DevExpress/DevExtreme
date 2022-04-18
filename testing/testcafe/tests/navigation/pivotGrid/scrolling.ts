@@ -23,7 +23,9 @@ fixture`PivotGrid_scrolling`
     const pivotGrid = new PivotGrid('#container');
 
     await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(100);
     await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(100);
     await pivotGrid.scrollTo({ top: 300000 });
 
     await pivotGrid.scrollBy({ top: -150 });
@@ -84,7 +86,9 @@ fixture`PivotGrid_scrolling`
     const pivotGrid = new PivotGrid('#container');
 
     await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(100);
     await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(100);
     await pivotGrid.scrollTo({ top: 300000 });
 
     await pivotGrid.scrollBy({ top: -150 });
