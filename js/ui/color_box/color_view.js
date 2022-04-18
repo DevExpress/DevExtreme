@@ -741,9 +741,16 @@ const ColorView = Editor.inherit({
             transparency = transparency.toFixed(2);
         }
 
+        const previousTransparency = this._alphaChannelInput.option('value');
         transparency = Math.max(transparency, 0);
         transparency = Math.min(transparency, 1);
-        this._alphaChannelInput.option('value', transparency);
+
+        if(transparency === previousTransparency) {
+            this._updateByDrag = false;
+        } else {
+            this._alphaChannelInput.option('value', transparency);
+        }
+
     },
 
     _placeAlphaChannelHandle: function() {
@@ -762,10 +769,15 @@ const ColorView = Editor.inherit({
     },
 
     applyColor: function() {
+        const previousValue = this.option('value');
         const colorValue = this.option('editAlphaChannel') ? this._makeRgba(this._currentColor) : this._currentColor.toHex();
         this._makeTransparentBackground(this._$currentColor, this._currentColor);
 
-        this.option('value', colorValue);
+        if(colorValue === previousValue) {
+            this._updateByDrag = false;
+        } else {
+            this.option('value', colorValue);
+        }
     },
 
     cancelColor: function() {

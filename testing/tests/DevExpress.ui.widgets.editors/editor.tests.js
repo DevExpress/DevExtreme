@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { Component } from 'core/component';
 import OldEditor from 'ui/editor/editor';
-import NewEditor from 'renovation/ui/editors/internal/editor.j';
+import NewEditor from 'renovation/ui/editors/common/editor.j';
 import Class from 'core/class';
 import ValidationEngine from 'ui/validation_engine';
 import hoverEvents from 'events/hover';

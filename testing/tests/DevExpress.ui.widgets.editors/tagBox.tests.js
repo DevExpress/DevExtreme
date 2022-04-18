@@ -5530,6 +5530,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
 QUnit.module('the \'onSelectAllValueChanged\' option', {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         this.items = [1, 2, 3];
 
         this._init = (options) => {
@@ -5556,6 +5557,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         });
     },
     afterEach: function() {
+        this.clock.restore();
         this.$element.remove();
     }
 }, () => {
@@ -5621,6 +5623,49 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         $selectAllElement.trigger('dxclick');
 
         assert.equal(spy.callCount, 1, 'count is correct');
+    });
+
+    QUnit.test('only all filtered items are selected if popup is closed on selectAllValueChanged (T1066477)', function(assert) {
+        const loadTimeout = 200;
+
+        this.reinit({
+            opened: false,
+            dataSource: {
+                load: ({ searchValue, filter }) => {
+                    const deferred = $.Deferred();
+
+                    setTimeout(() => {
+                        if(searchValue || filter) {
+                            deferred.resolve({ data: [1], totalCount: 1 });
+                        } else {
+                            deferred.resolve({ data: [1, 2, 3], totalCount: 3 });
+                        }
+                    }, loadTimeout);
+
+                    return deferred.promise();
+                }
+            },
+            onSelectAllValueChanged: (e) => {
+                if(e.value) {
+                    e.component.close();
+                }
+            },
+            selectAllMode: 'allPages',
+            searchTimeout: 0,
+            searchEnabled: true,
+            animation: null
+        });
+
+        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        keyboardMock($input).type('1').change();
+
+        this.clock.tick(loadTimeout);
+        const $list = getList(this.instance);
+
+        $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
+        this.clock.tick(loadTimeout);
+
+        assert.deepEqual(this.instance.option('selectedItems'), [1], 'selected items are correct');
     });
 });
 

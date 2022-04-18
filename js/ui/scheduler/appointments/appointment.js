@@ -51,7 +51,7 @@ export class Appointment extends DOMComponent {
             reduced: null,
             isCompact: false,
             direction: 'vertical',
-            resizableConfig: {},
+            resizableConfig: { keepAspectRatio: false },
             cellHeight: 0,
             cellWidth: 0,
             isDragSource: false

@@ -42,26 +42,32 @@ $material-dropdownbutton-horizontal-padding: 8px;
 .dx-dropdownbutton {
   height: $material-button-height;
 
-  .dx-button-has-icon,
-  .dx-button-has-text,
-  .dx-button-has-icon.dx-button-has-text {
-    min-width: 0;
+  &.dx-dropdownbutton-has-arrow {
+    .dx-button-has-icon,
+    .dx-button-has-text,
+    .dx-button-has-icon.dx-button-has-text {
+      &.dx-buttongroup-last-item {
+        .dx-button-content {
+          padding-right: 0;
 
-    &.dx-buttongroup-last-item {
-      .dx-button-content {
-        padding-right: 0;
+          .dx-icon-spindown {
+            @include dx-icon-sizing($material-button-icon-size);
 
-        .dx-icon-spindown {
-          @include dx-icon-sizing($material-button-icon-size);
+            width: 26px;
 
-          width: 26px;
-
-          &.dx-icon-right {
-            margin-left: 4px;
+            &.dx-icon-right {
+              margin-left: 4px;
+            }
           }
         }
       }
     }
+  }
+
+  .dx-button-has-icon,
+  .dx-button-has-text,
+  .dx-button-has-icon.dx-button-has-text {
+    min-width: 0;
 
     .dx-button-content {
       padding-right: 8px;

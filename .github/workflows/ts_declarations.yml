@@ -1,7 +1,7 @@
 name: TS Declarations
 
 concurrency:
-  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   check-ts-bundle:
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -42,13 +42,14 @@ jobs:
         if ! diff $target.current $target -U 5 > $target.diff; then
             echo "FAIL: $target is outdated:"
             cat $target.diff | sed "1,2d"
+            echo "Execute 'npm run update-ts' to update dx.all.d.ts"
             exit 1
         else
             echo "TS is up-to-date"
         fi
   
   validate-declarations:
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -73,7 +74,7 @@ jobs:
       run: npm run validate-declarations
 
   check-ts-compilation:
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -101,7 +102,7 @@ jobs:
       run: npm run test-typescript
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [check-ts-bundle, validate-declarations, check-ts-compilation]
     if: always() && contains(needs.*.result, 'failure')

@@ -9,7 +9,7 @@ import {
 import {
   CheckBox, CheckBoxProps, viewFunction,
 } from '../check_box';
-import { Editor } from '../../internal/editor';
+import { Editor } from '../../common/editor';
 import { CheckBoxIcon } from '../check_box_icon';
 
 interface Mock extends jest.Mock {}

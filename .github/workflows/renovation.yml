@@ -1,7 +1,7 @@
 name: Renovation
 
 concurrency:
-  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   jest-tests:
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -38,7 +38,7 @@ jobs:
         npx gulp localization
         npm run test-jest
   generation:
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -65,7 +65,7 @@ jobs:
         npx gulp native-components-compilation-check
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
+    runs-on: ubuntu-latest
     name: Send notifications
     needs: [jest-tests, generation]
     if: always() && contains(needs.*.result, 'failure')

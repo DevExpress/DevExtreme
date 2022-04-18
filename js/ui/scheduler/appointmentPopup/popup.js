@@ -1,40 +1,22 @@
-import { getWidth } from '../../../core/utils/size';
 import devices from '../../../core/devices';
 import $ from '../../../core/renderer';
 import dateUtils from '../../../core/utils/date';
 import { Deferred, when } from '../../../core/utils/deferred';
-import { getWindow, hasWindow } from '../../../core/utils/window';
 import { triggerResizeEvent } from '../../../events/visibility_change';
-import messageLocalization from '../../../localization/message';
 import Popup from '../../popup';
 import { hide as hideLoading, show as showLoading } from '../loading';
 import { createAppointmentAdapter } from '../appointmentAdapter';
-import { each } from '../../../core/utils/iterator';
-import { isResourceMultiple } from '../resources/utils';
-import { wrapToArray } from '../../../core/utils/array';
+import { getNormalizedResources } from '../resources/utils';
+
+import {
+    isPopupFullScreenNeeded,
+    getMaxWidth,
+    getPopupToolbarItems,
+} from '../../../renovation/ui/scheduler/appointment_edit_form/popup_config';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
-
-const isMobile = () => devices.current().deviceType !== 'desktop';
-const isIOSPlatform = () => devices.current().platform === 'ios';
-
-const POPUP_WIDTH = {
-    DEFAULT: 485,
-    RECURRENCE: 970,
-    FULLSCREEN: 1000,
-
-    MOBILE: {
-        DEFAULT: 350,
-        FULLSCREEN: 500
-    }
-};
-
-const TOOLBAR_LOCATION = {
-    AFTER: 'after',
-    BEFORE: 'before'
-};
 
 const DAY_IN_MS = toMs('day');
 
@@ -51,26 +33,6 @@ const POPUP_CONFIG = {
             }
         }
     ]
-};
-
-const createDoneButtonConfig = () => ({
-    shortcut: 'done',
-    options: { text: messageLocalization.format('Done') },
-    location: TOOLBAR_LOCATION.AFTER,
-});
-
-const createCancelButtonConfig = () => ({
-    shortcut: 'cancel',
-    location: isIOSPlatform() ? TOOLBAR_LOCATION.BEFORE : TOOLBAR_LOCATION.AFTER
-});
-
-const modifyResourceFields = (rawAppointment, dataAccessors, resources, returnedObject) => {
-    each(dataAccessors.resources.getter, (fieldName) => {
-        const value = dataAccessors.resources.getter[fieldName](rawAppointment);
-        const isMultiple = isResourceMultiple(resources, fieldName);
-
-        returnedObject[fieldName] = isMultiple ? wrapToArray(value) : value;
-    });
 };
 
 export const ACTION_TO_APPOINTMENT = {
@@ -109,7 +71,14 @@ export class AppointmentPopup {
             this.popup = this._createPopup(popupConfig);
         }
 
-        this.popup.option('toolbarItems', this._createPopupToolbarItems(config.isToolbarVisible));
+        this.popup.option(
+            'toolbarItems',
+            getPopupToolbarItems(
+                config.isToolbarVisible,
+                (e) => this._doneButtonClickHandler(e),
+            )
+        );
+
         this.popup.show();
     }
 
@@ -169,15 +138,13 @@ export class AppointmentPopup {
         const appointment = this._createAppointmentAdapter(rawAppointment);
         const dataAccessors = this.scheduler.getDataAccessors();
         const resources = this.scheduler.getResources();
+        const normalizedResources = getNormalizedResources(rawAppointment, dataAccessors, resources);
 
-        const result = {
+        return {
             ...rawAppointment,
-            repeat: !!appointment.recurrenceRule
+            ...normalizedResources,
+            repeat: !!appointment.recurrenceRule,
         };
-
-        modifyResourceFields(rawAppointment, dataAccessors, resources, result);
-
-        return result;
     }
 
     _createForm() {
@@ -227,43 +194,20 @@ export class AppointmentPopup {
         this.form.updateFormData(formData);
     }
 
-    _isPopupFullScreenNeeded() {
-        const width = this._tryGetWindowWidth();
-        if(width) {
-            return isMobile() ? width < POPUP_WIDTH.MOBILE.FULLSCREEN : width < POPUP_WIDTH.FULLSCREEN;
-        }
-        return false;
-    }
-
-    _tryGetWindowWidth() {
-        if(hasWindow()) {
-            const window = getWindow();
-            return getWidth(window);
-        }
-    }
-
     triggerResize() {
         if(this.popup) {
             triggerResizeEvent(this.popup.$element());
         }
     }
 
-    _getMaxWidth(isRecurrence) {
-        if(isMobile()) {
-            return POPUP_WIDTH.MOBILE.DEFAULT;
-        }
-        return isRecurrence ? POPUP_WIDTH.RECURRENCE : POPUP_WIDTH.DEFAULT;
-    }
-
     changeSize(isRecurrence) {
         if(this.popup) {
-            const fullScreen = this._isPopupFullScreenNeeded();
-            this.popup.option({
-                fullScreen,
-                maxWidth: fullScreen
-                    ? '100%'
-                    : this._getMaxWidth(isRecurrence),
-            });
+            const isFullScreen = isPopupFullScreenNeeded();
+            const maxWidth = isFullScreen
+                ? '100%'
+                : getMaxWidth(isRecurrence);
+            this.popup.option('fullScreen', isFullScreen);
+            this.popup.option('maxWidth', maxWidth);
         }
     }
 
@@ -276,20 +220,6 @@ export class AppointmentPopup {
                 this.changeSize(isRecurrence);
             }
         }
-    }
-
-    _createPopupToolbarItems(isVisible) {
-        const result = [];
-
-        if(isVisible) {
-            result.push({
-                ...createDoneButtonConfig(),
-                onClick: e => this._doneButtonClickHandler(e)
-            });
-        }
-        result.push(createCancelButtonConfig());
-
-        return result;
     }
 
     saveChangesAsync(isShowLoadPanel) {
@@ -352,13 +282,12 @@ export class AppointmentPopup {
 
                     const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
 
-                    const resources = {};
                     const dataAccessors = this.scheduler.getDataAccessors();
                     const resourceList = this.scheduler.getResources();
 
-                    modifyResourceFields(this.state.lastEditData, dataAccessors, resourceList, resources);
+                    const normalizedResources = getNormalizedResources(this.state.lastEditData, dataAccessors, resourceList);
 
-                    this.scheduler.updateScrollPosition(startDate, resources, inAllDayRow);
+                    this.scheduler.updateScrollPosition(startDate, normalizedResources, inAllDayRow);
                     this.state.lastEditData = null;
                 }
 

@@ -16,6 +16,7 @@ import combineRemoteFilter from '../utils/filtering/remote';
 import { getAppointmentsConfig, getAppointmentsModel } from '../model/appointments';
 import { getAppointmentsViewModel } from '../view_model/appointments/appointments';
 import { AppointmentsContextProvider } from '../appointments_context_provider';
+import { AppointmentEditForm } from '../appointment_edit_form/layout';
 
 jest.mock('../model/appointments', () => ({
   ...jest.requireActual('../model/appointments'),
@@ -248,6 +249,25 @@ describe('Scheduler', () => {
       const schedulerToolbar = tree.find(SchedulerToolbar);
 
       expect(schedulerToolbar.exists()).toBe(false);
+    });
+
+    describe('AppointmentEditForm', () => {
+      [true, false].forEach((needCreate) => {
+        it(`should correctly render AppointmentEditForm if needCreateAppointmentEditForm = ${needCreate}`, () => {
+          const scheduler = renderComponent({
+            needCreateAppointmentEditForm: needCreate,
+            appointmentPopupSize: {
+              fullScreen: false,
+              maxWidth: 1000,
+            },
+          });
+
+          const editForm = scheduler.find(AppointmentEditForm);
+
+          expect(editForm.exists())
+            .toBe(needCreate);
+        });
+      });
     });
   });
 
@@ -774,6 +794,21 @@ describe('Scheduler', () => {
 
           expect(scheduler.reducedIconTooltipVisible)
             .toBe(false);
+        });
+      });
+
+      describe('changeAppointmentEditFormVisible', () => {
+        [true, false].forEach((visibility) => {
+          it(`should correctly set appointmentEditFormVisible if visibility=${visibility}`, () => {
+            const scheduler = new Scheduler({
+              ...new SchedulerProps(),
+            });
+
+            scheduler.changeAppointmentEditFormVisible(visibility);
+
+            expect(scheduler.appointmentEditFormVisible)
+              .toBe(visibility);
+          });
         });
       });
     });
@@ -1540,6 +1575,7 @@ describe('Scheduler', () => {
             appointmentTemplate,
             overflowIndicatorTemplate: appointmentCollectorTemplate,
             onAppointmentClick: expect.any(Function),
+            onAppointmentDoubleClick: expect.any(Function),
             showReducedIconTooltip: expect.any(Function),
             hideReducedIconTooltip: expect.any(Function),
           });
@@ -1574,6 +1610,56 @@ describe('Scheduler', () => {
 
         expect(scheduler.reducedIconTooltipVisible)
           .toBe(false);
+      });
+
+      describe('onAppointmentDoubleClick', () => {
+        it('should return correct data', () => {
+          const appointmentTemplate = jest.fn();
+          const appointmentCollectorTemplate = jest.fn();
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            appointmentTemplate,
+            appointmentCollectorTemplate,
+          });
+
+          jest.spyOn(scheduler, 'mergedGroups', 'get')
+            .mockReturnValue(['mock-groups']);
+
+          jest.spyOn(scheduler, 'dataAccessors', 'get')
+            .mockReturnValue('dataAccessors-test' as any);
+
+          const hideTooltip = jest.spyOn(scheduler, 'hideTooltip');
+          const changeAppointmentEditFormVisible = jest.spyOn(scheduler, 'changeAppointmentEditFormVisible');
+
+          const data = [{
+            info: {
+              isRecurrent: true,
+            },
+          }];
+          scheduler.appointmentsContextValue.onAppointmentDoubleClick({
+            data,
+          } as any);
+
+          expect(scheduler.appointmentPopupSize)
+            .toEqual({
+              fullScreen: false,
+              maxWidth: expect.anything(),
+            });
+          expect(scheduler.appointmentData)
+            .toEqual(data[0]);
+          expect(scheduler.needCreateAppointmentEditForm)
+            .toBe(true);
+
+          expect(hideTooltip)
+            .toBeCalledTimes(1);
+
+          expect(changeAppointmentEditFormVisible)
+            .toBeCalledTimes(1);
+
+          expect(changeAppointmentEditFormVisible)
+            .toBeCalledWith(true);
+        });
       });
     });
   });

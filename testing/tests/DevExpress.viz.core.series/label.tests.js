@@ -122,6 +122,31 @@ QUnit.test('Label format object, financial series', function(assert) {
     assert.strictEqual(data.totalText, undefined);
 });
 
+QUnit.module('Label displayFormat', {
+    format: labelModule.Label._DEBUG_formatText
+});
+
+QUnit.test('Numeric label displayFormat', function(assert) {
+    const pointValues = { argument: 30.135, value: 1.615 };
+    assert.equal(this.format(pointValues, { displayFormat: '{argument} : {value}' }), '30.135 : 1.615');
+    assert.equal(this.format(pointValues, { displayFormat: 'Argument = {argument:#}, Value = {value:#.#}' }), 'Argument = 30, Value = 1.6');
+    assert.equal(this.format(pointValues, { format: '0#.##', argumentFormat: '0#.#', displayFormat: '{argumentText} : {valueText}' }), '30.1 : 1.62');
+    assert.equal(this.format(pointValues, { format: '0#.##', argumentFormat: '0#.#', displayFormat: '{argumentText:#.###} : {valueText:#.###}' }), '30.1 : 1.62');
+});
+
+QUnit.test('Date label displayFormat', function(assert) {
+    const pointValues = { argument: new Date(2022, 1, 16), value: 1.615 };
+    assert.equal(this.format(pointValues, { displayFormat: 'Argument = {argument:yyyy}, Value = {value:#.#}' }), 'Argument = 2022, Value = 1.6');
+    assert.equal(this.format(pointValues, { format: '0#.##', argumentFormat: 'year', displayFormat: '{argumentText} : {valueText}' }), '2022 : 1.62');
+    assert.equal(this.format(pointValues, { format: '0#.##', argumentFormat: 'year', displayFormat: '{argumentText:yyyy} : {valueText:#.###}' }), '2022 : 1.62');
+});
+
+QUnit.test('Label formatting order', function(assert) {
+    const pointValues = { value: 2 };
+    assert.equal(this.format(pointValues, { format: 'format', displayFormat: '' }), 'format');
+    assert.equal(this.format(pointValues, { format: 'format', displayFormat: 'displayFormat', customizeText: function() { return 'customizeText'; } }), 'customizeText');
+});
+
 QUnit.module('Draw Label', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
@@ -387,6 +412,15 @@ QUnit.test('Draw label with undefined custom string', function(assert) {
 
     assert.equal(this.renderer.stub('text').callCount, 0);
     assert.equal(this.renderer.stub('rect').callCount, 0);
+});
+
+QUnit.test('Draw label with displayFormat', function(assert) {
+    this.options.displayFormat = '{value}test{argument}';
+    this.createAndDrawLabel();
+
+    assert.equal(this.renderer.stub('text').callCount, 1);
+
+    assert.equal(this.renderer.stub('text').firstCall.returnValue.attr.firstCall.args[0].text, '15test25');
 });
 
 QUnit.test('Draw labelBackground (fill is specified)', function(assert) {

@@ -247,12 +247,12 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFilterBuilder
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 value:any
-     * @type_function_param1_field5 setValue(newValue):any
-     * @type_function_param1_field6 cancel:boolean
+     * @type_function_param1_field1 cancel:boolean
+     * @type_function_param1_field2 component:dxFilterBuilder
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 model:any
+     * @type_function_param1_field5 value:any
+     * @type_function_param1_field6 setValue(newValue):any
      * @type_function_param1_field7 editorElement:DxElement
      * @type_function_param1_field8 editorName:string
      * @type_function_param1_field9 editorOptions:object
@@ -331,10 +331,7 @@ export interface dxFilterBuilderCustomOperation {
     caption?: string;
     /**
      * @docid
-     * @type_function_param1_field1 value:string|number|Date:optional
-     * @type_function_param1_field2 valueText:string:optional
      * @type_function_param1_field3 field:dxFilterBuilderField:optional
-     * @type_function_param1_field1 value:string|number|date
      * @public
      */
     customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: Field }) => string);
