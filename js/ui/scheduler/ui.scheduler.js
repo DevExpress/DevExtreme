@@ -2313,7 +2313,7 @@ class Scheduler extends Widget {
         } else {
             this._processActionResult(arg, canceled => {
                 !canceled && this._appointmentTooltip.show(
-                    target, data, extend(this._getExtraAppointmentTooltipOptions(), options)
+                    target, data, { ...this._getExtraAppointmentTooltipOptions(), ...options }
                 );
             });
         }
