@@ -22,6 +22,23 @@ test('allowExportSelectedData: false, menu: false', async (t) => {
   },
 }));
 
+test('allowExportSelectedData: false, menu: false, PDF', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .expect(await takeScreenshot('grid-export-one-button-pdf.png', dataGrid.getHeaderPanel().element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{ id: 1, value: 2 }],
+  export: {
+    enabled: true,
+    formats: ['pdf'],
+  },
+}));
+
 test('allowExportSelectedData: true, menu: false', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -38,6 +55,7 @@ test('allowExportSelectedData: true, menu: false', async (t) => {
   export: {
     enabled: true,
     allowExportSelectedData: true,
+    formats: ['xlsx', 'pdf'],
   },
 }));
 
@@ -74,6 +92,7 @@ test('allowExportSelectedData: true, menu: true', async (t) => {
   export: {
     enabled: true,
     allowExportSelectedData: true,
+    formats: ['xlsx', 'pdf'],
   },
   width: 30,
 }));
