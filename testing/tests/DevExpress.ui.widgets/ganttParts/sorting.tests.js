@@ -110,7 +110,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(500);
 
         let treeListIdText1 = $(this.instance._treeList.getCellElement(0, 0)).text();
         let treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
