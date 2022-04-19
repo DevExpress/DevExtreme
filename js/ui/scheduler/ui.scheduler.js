@@ -2288,26 +2288,35 @@ class Scheduler extends Widget {
         const arg = {
             cancel: false,
             appointments: data.map(item => {
-                return {
+                const result = {
                     appointmentData: item.appointment,
-                    currentAppointmentData: item.targetedAppointment,
+                    currentAppointmentData: { ...item.targetedAppointment },
                     color: item.color
                 };
+
+                if(item.settings.info) {
+                    const { startDate, endDate } = item.settings.info.appointment;
+
+                    result.currentAppointmentData.displayStartDate = startDate;
+                    result.currentAppointmentData.displayEndDate = endDate;
+                }
+
+                return result;
             }),
             targetElement: target
         };
 
         this._createActionByOption('onAppointmentTooltipShowing')(arg);
 
-        this._processActionResult(arg, canceled => {
-            if(this._appointmentTooltip.isAlreadyShown(target)) {
-                this.hideAppointmentTooltip();
-            } else if(!canceled) {
-                this._appointmentTooltip.show(
+        if(this._appointmentTooltip.isAlreadyShown(target)) {
+            this.hideAppointmentTooltip();
+        } else {
+            this._processActionResult(arg, canceled => {
+                !canceled && this._appointmentTooltip.show(
                     target, data, extend(this._getExtraAppointmentTooltipOptions(), options)
                 );
-            }
-        });
+            });
+        }
     }
 
     hideAppointmentTooltip() {

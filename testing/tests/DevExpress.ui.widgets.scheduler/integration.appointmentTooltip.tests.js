@@ -1348,3 +1348,106 @@ QUnit.module('New common tooltip for compact and cell appointments', moduleConfi
         scheduler.appointmentPopup.dialog.hide();
     });
 });
+
+QUnit.module('onAppointmentTooltipShowing event', moduleConfig, () => {
+    const data = [{
+        text: '1',
+        priorityId: [2],
+        startDate: new Date(2021, 3, 26),
+        endDate: new Date(2021, 3, 27),
+    }, {
+        text: '2',
+        priorityId: [2],
+        startDate: new Date(2021, 3, 26),
+        endDate: new Date(2021, 3, 27),
+    }, {
+        text: '3',
+        priorityId: [2],
+        startDate: new Date(2021, 3, 26),
+        endDate: new Date(2021, 3, 27),
+    }, {
+        text: '4',
+        priorityId: [2],
+        startDate: new Date(2021, 3, 26),
+        endDate: new Date(2021, 3, 27),
+    }];
+
+    const priorities = [{
+        text: 'High',
+        id: 1,
+        color: '#cc5c53',
+    }, {
+        text: 'Low',
+        id: 2,
+        color: '#ff9747',
+    }];
+
+
+    test('Arguments should be valid on a single appointment', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2021, 3, 27),
+            resources: [{
+                fieldExpr: 'priorityId',
+                dataSource: priorities,
+                label: 'Priority',
+            }],
+            height: 600,
+            onAppointmentTooltipShowing: (e) => {
+                const appointment = e.appointments[0];
+
+                assert.deepEqual(appointment.appointmentData, data[0]);
+                assert.deepEqual({
+                    ...appointment.appointmentData,
+                    displayStartDate: appointment.appointmentData.startDate,
+                    displayEndDate: new Date(appointment.appointmentData.endDate),
+                }, appointment.currentAppointmentData);
+
+                e.cancel = true;
+            }
+        });
+
+        scheduler.appointments.click(0);
+
+        assert.notOk(scheduler.tooltip.isVisible());
+    });
+
+    test('Arguments should be valid on a compact button', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2021, 3, 27),
+            resources: [{
+                fieldExpr: 'priorityId',
+                dataSource: priorities,
+                label: 'Priority',
+            }],
+            height: 600,
+            onAppointmentTooltipShowing: (e) => {
+                const appointment3 = e.appointments[0];
+                const appointment4 = e.appointments[1];
+
+                assert.deepEqual(appointment3.appointmentData, data[2]);
+                assert.deepEqual({
+                    ...appointment3.appointmentData,
+                    displayStartDate: appointment3.appointmentData.startDate,
+                    displayEndDate: appointment3.appointmentData.endDate,
+                }, appointment3.currentAppointmentData);
+
+                assert.deepEqual(appointment4.appointmentData, data[3]);
+                assert.deepEqual({
+                    ...appointment4.appointmentData,
+                    displayStartDate: appointment4.appointmentData.startDate,
+                    displayEndDate: appointment4.appointmentData.endDate,
+                }, appointment4.currentAppointmentData);
+            }
+        });
+
+        scheduler.appointments.compact.click(0);
+
+        assert.ok(scheduler.tooltip.isVisible());
+    });
+});
