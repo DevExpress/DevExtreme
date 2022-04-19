@@ -21,7 +21,6 @@ const DATAGRID_EXPORT_TOOLBAR_BUTTON_NAME = 'exportButton';
 const DATAGRID_EXPORT_ICON = 'export-to';
 const DATAGRID_EXPORT_EXCEL_ICON = 'xlsxfile';
 const DATAGRID_EXPORT_SELECTED_ICON = 'exportselected';
-const DATAGRID_EXPORT_EXCEL_BUTTON_ICON = 'export-excel-button';
 
 const DATAGRID_PDF_EXPORT_ICON = 'pdffile';
 const DATAGRID_PDF_EXPORT_SELECTED_ICON = 'exportselected';
@@ -837,29 +836,6 @@ dataGridCore.registerModule('export', {
 
                 _isExportButtonVisible: function() {
                     return this.option('export.enabled');
-                },
-
-                _getButtonOptions: function(allowExportSelected) {
-                    const that = this;
-                    const texts = that.option('export.texts');
-                    let options;
-
-                    if(allowExportSelected) {
-                        options = {
-                            hint: texts.exportTo,
-                            icon: DATAGRID_EXPORT_ICON
-                        };
-                    } else {
-                        options = {
-                            hint: texts.exportAll,
-                            icon: DATAGRID_EXPORT_EXCEL_BUTTON_ICON,
-                            onClick: function() {
-                                that._exportController.exportToExcel();
-                            }
-                        };
-                    }
-
-                    return options;
                 },
 
                 optionChanged: function(args) {
