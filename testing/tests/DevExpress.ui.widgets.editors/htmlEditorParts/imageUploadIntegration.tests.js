@@ -14,6 +14,7 @@ const CHECKBOX_CLASS = 'dx-checkbox';
 const TEXTBOX_CLASS = 'dx-textbox';
 const FORM_CLASS = 'dx-form';
 const POPUP_TITLE_CLASS = 'dx-popup-title';
+const FILEUPLOADER_INPUT_CLASS = 'dx-fileuploader-input';
 
 const DIALOG_OK_BUTTON_SELECTOR = '.dx-formdialog .dx-toolbar .dx-button';
 const ASPECT_RATIO_BUTTON_SELECTOR = '.dx-buttongroup .dx-button';
@@ -254,6 +255,35 @@ module('Image uploading integration', {
             this.checkFileTabConfigs(assert, { formItems, formInstance });
         });
 
+        test('apply one tab config after second tab selection', function(assert) {
+            this.createWidget({ imageUpload: { tabs: ['url', 'file'], fileUploadMode: 'base64' } });
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.getFormElement();
+
+            $('.dx-tabs-wrapper > .dx-tab').eq(1).trigger('dxclick');
+
+            this.clickCancelDialogButton();
+
+            this.instance.option({ imageUpload: { tabs: ['image'] } });
+
+            const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
+
+            const quillUploadSpy = sinon.spy(this.instance.getQuillInstance().getModule('uploader'), 'upload');
+
+            try {
+                const $form = this.getFormElement([1, 2]);
+                const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+
+                fileUploader.option('value', [fakeFileBlob]);
+                this.clock.tick(TIME_TO_WAIT);
+
+                assert.strictEqual(quillUploadSpy.callCount, 1, 'file uploader upload method is called');
+            } catch(e) {
+                assert.ok(false);
+            }
+        });
+
         test('the popup and form is correctly rendered for both tabs if imageUpload option was changed', function(assert) {
             this.createWidget({ imageUpload: { tabs: ['file'] } });
             this.clock.tick(TIME_TO_WAIT);
@@ -359,7 +389,7 @@ module('Image uploading integration', {
             this.clock.tick(TIME_TO_WAIT);
             const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
 
-            const uploadSpy = sinon.spy(this.quillInstance.getModule('uploader'), 'upload');
+            const quillUploadSpy = sinon.spy(this.quillInstance.getModule('uploader'), 'upload');
             const $form = this.getFormElement([1, 2]);
             const $base64Editor = this.getBase64EditorElement($form);
             const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
@@ -370,9 +400,31 @@ module('Image uploading integration', {
             fileUploader.option('value', [fakeFileBlob]);
             this.clock.tick(TIME_TO_WAIT);
 
-            assert.strictEqual(uploadSpy.callCount, 1, 'file uploader upload method is called');
-            assert.strictEqual(uploadSpy.getCall(0).args[0].index, 1, 'first upload arg index is correct');
-            assert.deepEqual(uploadSpy.getCall(0).args[1], [fakeFileBlob], 'file upload arg is correct');
+            assert.strictEqual(quillUploadSpy.callCount, 1, 'file uploader upload method is called');
+            assert.strictEqual(quillUploadSpy.getCall(0).args[0].index, 1, 'first upload arg index is correct');
+            assert.deepEqual(quillUploadSpy.getCall(0).args[1], [fakeFileBlob], 'file upload arg is correct');
+        });
+
+        test('check file uploading in base64 format if fileUploadMode is not defined', function(assert) {
+            this.instance = this.$element
+                .dxHtmlEditor({
+                    toolbar: { items: ['image'] },
+                    imageUpload: {
+                        tabs: ['file'],
+                    },
+                    value: markup
+                }).dxHtmlEditor('instance');
+            this.clock.tick(TIME_TO_WAIT);
+            const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
+
+            const quillUploadSpy = sinon.spy(this.instance.getQuillInstance().getModule('uploader'), 'upload');
+            const $form = this.getFormElement([1, 2]);
+            const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+
+            fileUploader.option('value', [fakeFileBlob]);
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(quillUploadSpy.callCount, 1, 'file uploader upload method is called');
         });
 
         function prepareImageUpdateTest(caretPosition, selectionLength) {
@@ -622,7 +674,8 @@ module('Image uploading integration', {
 
             fileUploader.option('value', [fakeFile]);
 
-            fileUploader.upload(fileUploader.option('value[0]'));
+            $form.find(`.${FILEUPLOADER_INPUT_CLASS}`).trigger('change');
+
             this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
 
             const request = this.xhrMock.getInstanceAt();

@@ -112,6 +112,10 @@ $transparent-border: 1px solid transparent;
     .dx-fileuploader-wrapper {
       padding: 0;
     }
+
+    .dx-fileuploader-upload-button {
+      display: none;
+    }
   }
 
   .dx-popup-title {

@@ -4,6 +4,7 @@ import { map } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 import { getHeight, getWidth } from '../../../core/utils/size';
 import devices from '../../../core/devices';
+import { isDefined } from '../../../core/utils/type';
 const isMobile = devices.current().deviceType === 'phone';
 
 const DIALOG_IMAGE_CAPTION = 'dxHtmlEditor-dialogImageCaption';
@@ -33,16 +34,17 @@ import ButtonGroup from '../../button_group';
 import FileUploader from '../../file_uploader';
 import TextBox from '../../text_box';
 
+
 export class ImageUploader {
     constructor(module, config) {
         this.module = module;
         this.config = config ?? {};
         this.quill = this.module.quill;
         this.editorInstance = this.module.editorInstance;
-        this.tabPanelIndex = 0;
     }
 
     render() {
+        this.tabPanelIndex = 0;
         this.formData = this.getFormData();
         this.isUpdating = this.isImageUpdating();
         this.actualTabs = this.config.tabs?.slice();
@@ -374,7 +376,7 @@ class FileStrategy extends BaseStrategy {
     constructor(module, config) {
         super(module, config);
 
-        this.useBase64 = this.config.fileUploadMode === 'base64';
+        this.useBase64 = !isDefined(this.config.fileUploadMode) || this.config.fileUploadMode === 'base64';
     }
 
     closeDialogPopup(data) {
@@ -411,6 +413,10 @@ class FileStrategy extends BaseStrategy {
             onValueChanged: (data) => {
                 if(this.useBase64) {
                     this.base64Upload(data);
+                } else {
+                    if(data.value.length) {
+                        data.component.upload();
+                    }
                 }
             },
             onUploaded: (data) => {
@@ -462,7 +468,7 @@ export function getFileUploaderBaseOptions() {
         value: [],
         name: FILE_UPLOADER_NAME,
         accept: 'image/*',
-        uploadMode: 'instantly'
+        uploadMode: 'useButtons'
     };
 }
 
