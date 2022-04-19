@@ -52,6 +52,7 @@ test('allowExportSelectedData: true, menu: false', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, value: 2 }],
+  height: 300,
   export: {
     enabled: true,
     allowExportSelectedData: true,
