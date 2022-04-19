@@ -499,7 +499,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.timeZoneCalculator,
       this.dataAccessors,
       this.workSpaceViewModel!.viewDataProvider,
-      this.currentViewConfig.allDayPanelMode,
+      this.appointmentsConfig.allDayPanelMode,
     );
 
     return filterStrategy.filter(this.preparedDataItems);

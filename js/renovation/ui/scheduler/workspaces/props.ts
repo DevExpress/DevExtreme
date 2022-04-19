@@ -103,7 +103,7 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
 
-  @OneWay() allDayPanelMode: AllDayPanelModeType = 'all';
+  @OneWay() allDayPanelMode: AllDayPanelModeType = 'hidden';
 
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 

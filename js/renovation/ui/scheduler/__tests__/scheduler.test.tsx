@@ -1292,6 +1292,7 @@ describe('Scheduler', () => {
             groupCount: 234,
             loadedResources: 'resources',
             isVirtualScrolling: true,
+            allDayPanelMode: 'all',
           };
 
           jest.spyOn(scheduler, 'appointmentsConfig', 'get')
@@ -1320,10 +1321,22 @@ describe('Scheduler', () => {
 
           expect(getFilterStrategy)
             .toHaveBeenCalledWith(
-              ...Object.values(mockAppointmentsConfig),
+              mockAppointmentsConfig.resources,
+              mockAppointmentsConfig.startDayHour,
+              mockAppointmentsConfig.endDayHour,
+              mockAppointmentsConfig.cellDurationInMinutes,
+              mockAppointmentsConfig.showAllDayPanel,
+              mockAppointmentsConfig.supportAllDayRow,
+              mockAppointmentsConfig.firstDayOfWeek,
+              mockAppointmentsConfig.viewType,
+              mockAppointmentsConfig.dateRange,
+              mockAppointmentsConfig.groupCount,
+              mockAppointmentsConfig.loadedResources,
+              mockAppointmentsConfig.isVirtualScrolling,
               'Test_timeZoneCalculator',
               'Test_dataAccessors',
               'Test_viewDataProvider',
+              mockAppointmentsConfig.allDayPanelMode,
             );
 
           expect(preparedDataItems)

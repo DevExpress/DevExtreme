@@ -391,7 +391,7 @@ describe('Appointments view model', () => {
         const viewModel = getAppointmentsViewModel(
           {
             ...appointmentsModel,
-            showAllDayPanel: true,
+            allDayPanelMode: 'all',
             supportAllDayRow: true,
             allDayHeight: 75,
           },

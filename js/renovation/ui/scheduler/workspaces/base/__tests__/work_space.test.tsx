@@ -2051,7 +2051,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             currentDate: new Date(),
             isAllDayPanelSupported: true,
-            showAllDayPanel: false,
+            allDayPanelMode: 'hidden',
             type: 'week',
           } as any);
 
@@ -2130,7 +2130,7 @@ describe('WorkSpace', () => {
             endDayHour: 1,
             onViewRendered: () => {},
             type: 'day',
-            showAllDayPanel: true,
+            allDayPanelMode: 'all',
           });
 
           expect(workSpace.completeViewDataMap)
@@ -2175,7 +2175,7 @@ describe('WorkSpace', () => {
             endDayHour: 1,
             onViewRendered: () => {},
             type: 'day',
-            showAllDayPanel: true,
+            allDayPanelMode: 'all',
           });
 
           expect(workSpace.viewDataMap)
@@ -2241,7 +2241,7 @@ describe('WorkSpace', () => {
             endDayHour: 1,
             onViewRendered: () => {},
             type: 'day',
-            showAllDayPanel: true,
+            allDayPanelMode: 'all',
           });
 
           expect(workSpace.viewDataMapWithSelection)
@@ -2305,7 +2305,7 @@ describe('WorkSpace', () => {
             endDayHour: 2,
             onViewRendered: () => {},
             type: 'day',
-            showAllDayPanel: true,
+            allDayPanelMode: 'all',
           });
 
           workSpace.cellsSelectionState = {
@@ -2453,7 +2453,7 @@ describe('WorkSpace', () => {
             endDayHour: 1,
             onViewRendered: () => {},
             type: 'day',
-            showAllDayPanel: true,
+            allDayPanelMode: 'all',
           });
 
           expect(workSpace.viewData)
@@ -3184,8 +3184,8 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             groups,
             groupOrientation: 'horizontal',
-            showAllDayPanel: false,
             type: 'week',
+            allDayPanelMode: 'hidden',
           } as any);
 
           const result = workSpace.isStandaloneAllDayPanel;
@@ -3358,7 +3358,7 @@ describe('WorkSpace', () => {
           intervalCount: 35,
           type: 'day',
           hoursInterval: 0.5,
-          showAllDayPanel: true,
+          allDayPanelMode: 'all',
           groupByDate: true,
           groups,
           groupOrientation: 'vertical',
@@ -3396,7 +3396,7 @@ describe('WorkSpace', () => {
           groups,
           groupOrientation: 'vertical',
           allDayPanelExpanded: true,
-          showAllDayPanel: true,
+          allDayPanelMode: 'all',
         } as any);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -3427,7 +3427,7 @@ describe('WorkSpace', () => {
           ...new WorkSpaceProps(),
           type: 'day',
           intervalCount: 35,
-          showAllDayPanel: false,
+          allDayPanelMode: 'hidden',
           groupByDate: true,
           groups,
           groupOrientation: 'vertical',
@@ -3461,7 +3461,7 @@ describe('WorkSpace', () => {
           ...new WorkSpaceProps(),
           type: 'day',
           intervalCount: 35,
-          showAllDayPanel: true,
+          allDayPanelMode: 'all',
           groupByDate: false,
           groups: [],
           groupOrientation: 'horizontal',
@@ -3495,7 +3495,7 @@ describe('WorkSpace', () => {
           ...new WorkSpaceProps(),
           type: 'day',
           intervalCount: 35,
-          showAllDayPanel: true,
+          allDayPanelMode: 'all',
           groupByDate: false,
           groups: [],
           groupOrientation: 'vertical',
