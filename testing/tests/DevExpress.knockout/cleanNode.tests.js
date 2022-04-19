@@ -9,6 +9,7 @@ const FIXTURE_ELEMENT = $('#qunit-fixture');
 const setTestData = function($element) {
     dataUtils.data($element.get(0), '__test_key__', { key: 'value' });
     ko.utils.domData.set($element.get(0), '__test_key__', { key: 'value ' });
+    dataUtils.data($element.get(0), 'dxKoCreation', true);
 };
 
 const hasKOTestData = function($element) {
@@ -141,7 +142,6 @@ if($.fn.jquery[0] !== '1') {
             dataUtils.data($(this)[0], 'dxTestData', true);
             ko.utils.domData.set(this, 'dxTestData', true);
         });
-
         const cleanDataLog = [];
         const dataUtilsStrategy = dataUtils.getDataStrategy();
         const originalCleanData = dataUtilsStrategy.cleanData;
