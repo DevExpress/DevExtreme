@@ -330,7 +330,8 @@ class Gantt extends Widget {
         if(!this.isSieving) {
             const setters = GanttHelper.compileSettersByOption(this.option(GANTT_TASKS));
             const treeDataSource = this._customFieldsManager.appendCustomFields(data.map(GanttHelper.prepareSetterMapHandler(setters)));
-            this._ganttTreeList?.setOption('dataSource', treeDataSource);
+            // split threads for treelist filter|sort and datasource update (T1082108)
+            setTimeout(() => this._ganttTreeList?.setDataSource(treeDataSource));
         }
         this.isSieving = false;
     }
