@@ -24,7 +24,7 @@ const DATAGRID_EXPORT_SELECTED_ICON = 'exportselected';
 const DATAGRID_EXPORT_EXCEL_BUTTON_ICON = 'export-excel-button';
 
 const DATAGRID_PDF_EXPORT_ICON = 'pdffile';
-const DATAGRID_PDF_EXPORT_SELECTED_ICON = 'pdffile';
+const DATAGRID_PDF_EXPORT_SELECTED_ICON = 'exportselected';
 
 export const DataProvider = Class.inherit({
     ctor: function(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
@@ -798,7 +798,7 @@ dataGridCore.registerModule('export', {
                         if(exportOptions.allowExportSelectedData) {
                             items.push({
                                 text: format(texts.exportSelectedRows, 'Excel'),
-                                icon: pdfEnabled ? DATAGRID_EXPORT_EXCEL_ICON : DATAGRID_EXPORT_SELECTED_ICON,
+                                icon: DATAGRID_EXPORT_SELECTED_ICON,
                                 onClick: () => {
                                     this._exportController.exportToExcel(true);
                                 },
