@@ -7225,7 +7225,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
-        fileName: string;
+        fileName?: string;
         selectedRowsOnly: boolean;
         format: 'xlsx' | 'pdf';
       };
