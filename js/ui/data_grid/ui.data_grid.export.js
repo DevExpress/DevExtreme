@@ -642,6 +642,8 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
         }, excel.getData);
     },
     exportTo: function(selectedRowsOnly, format) {
+        that._selectionOnly = selectedRowsOnly;
+
         const onExporting = this.getAction('onExporting');
         const eventArgs = {
             selectedRowsOnly: !!selectedRowsOnly,
