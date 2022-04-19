@@ -12,7 +12,7 @@ import {
     ///#ENDDEBUG
 } from './exporter/image_creator';
 import { svgCreator, getData as getSvgData } from './exporter/svg_creator';
-import { isFunction as _isFunction } from './core/utils/type';
+import { isFunction as _isFunction, isBoolean } from './core/utils/type';
 import { Deferred } from './core/utils/deferred';
 import formatConverter from './exporter/excel_format_converter';
 import { getData } from './exporter/pdf_creator';
@@ -26,12 +26,16 @@ function _export(data, options, getData) {
     const exportingAction = options.exportingAction;
     const exportedAction = options.exportedAction;
     const fileSavingAction = options.fileSavingAction;
+
     const eventArgs = {
         fileName: options.fileName,
         format: options.format,
-        selectedRowsOnly: !!options.selectedRowsOnly,
         cancel: false
     };
+
+    if(isBoolean(options.selectedRowsOnly)) {
+        eventArgs.selectedRowsOnly = options.selectedRowsOnly;
+    }
 
     _isFunction(exportingAction) && exportingAction(eventArgs);
 
@@ -45,7 +49,8 @@ function _export(data, options, getData) {
             }
 
             if(!eventArgs.cancel) {
-                fileSaver.saveAs(eventArgs.fileName, 'EXCEL', blob, options.proxyUrl, options.forceProxy);
+                const format = options.format === 'xlsx' ? 'EXCEL' : options.format;
+                fileSaver.saveAs(eventArgs.fileName, format, blob, options.proxyUrl, options.forceProxy);
             }
         });
     }
