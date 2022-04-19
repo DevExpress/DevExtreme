@@ -101,7 +101,7 @@ if(Quill) {
 
             const uploads = files;
 
-            if(uploads.length > 0) {
+            if(uploads.length) {
                 e.preventDefault();
                 e.stopPropagation();
                 this._fileUploader.option('value', uploads);
