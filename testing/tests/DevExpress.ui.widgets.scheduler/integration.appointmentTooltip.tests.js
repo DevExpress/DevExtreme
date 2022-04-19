@@ -1382,6 +1382,25 @@ QUnit.module('onAppointmentTooltipShowing event', moduleConfig, () => {
         color: '#ff9747',
     }];
 
+    test('e.cancel argument should be prevent showing tooltip', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2021, 3, 27),
+            resources: [{
+                fieldExpr: 'priorityId',
+                dataSource: priorities,
+                label: 'Priority',
+            }],
+            height: 600,
+            onAppointmentTooltipShowing: (e) => e.cancel = true
+        });
+
+        scheduler.appointments.click(0);
+
+        assert.notOk(scheduler.tooltip.isVisible());
+    });
 
     test('Arguments should be valid on a single appointment', function(assert) {
         const scheduler = createWrapper({
@@ -1404,14 +1423,10 @@ QUnit.module('onAppointmentTooltipShowing event', moduleConfig, () => {
                     displayStartDate: appointment.appointmentData.startDate,
                     displayEndDate: new Date(appointment.appointmentData.endDate),
                 }, appointment.currentAppointmentData);
-
-                e.cancel = true;
             }
         });
 
         scheduler.appointments.click(0);
-
-        assert.notOk(scheduler.tooltip.isVisible());
     });
 
     test('Arguments should be valid on a compact button', function(assert) {
