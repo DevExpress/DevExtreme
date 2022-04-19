@@ -297,7 +297,7 @@ class AddUrlStrategy extends BaseStrategy {
 
                 this.editorInstance._createComponent($ratioEditor, ButtonGroup, {
                     items: [{
-                        icon: 'link',
+                        icon: 'img_ar_lock',
                         value: 'keepRatio',
                     }],
                     hint: localizationMessage.format(DIALOG_IMAGE_KEEP_ASPECT_RATIO),
