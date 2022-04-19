@@ -28,7 +28,7 @@ import {
     Item as dxToolbarItem,
 } from './toolbar';
 
-import dxFileUploaderOptions from './file_uploader';
+import { Properties as fileUploaderProperties } from './file_uploader';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
@@ -415,7 +415,7 @@ export interface dxHtmlEditorTableResizing {
   uploadDirectory?: string;
   /**
    * @docid
-   * @default 'base64'
+   * @default "base64"
    * @type Enums.HtmlEditorImageUploadFileUploadMode
    * @public
    */
@@ -429,9 +429,11 @@ export interface dxHtmlEditorTableResizing {
     tabs?: Array<dxHtmlEditorImageUploadTabItem | 'url' | 'file'>;
     /**
     * @docid
+    * @default null
+    * @type dxFileUploaderOptions
     * @public
     */
-    fileUploaderOptions?: dxFileUploaderOptions;
+    fileUploaderOptions?: fileUploaderProperties;
  }
 
  export interface dxHtmlEditorImageUploadTabItem {
