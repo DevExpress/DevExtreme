@@ -663,6 +663,14 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             return result;
         },
 
+        _handleDataChanged: function(e) {
+            this.callBase.apply(this, arguments);
+
+            if(e.operationTypes.filtering) {
+                this.updateLookupDataSource();
+            }
+        },
+
         updateLookupDataSource: function() {
             if(!this.option('syncLookupFilterValues')) {
                 return;
@@ -734,11 +742,6 @@ const DataControllerFilterRowExtender = {
         });
 
         return gridCoreUtils.combineFilters(filters);
-    },
-
-    _applyFilter: function() {
-        this.callBase.apply(this, arguments);
-        this.component.getView('columnHeadersView')?.updateLookupDataSource();
     },
 };
 
