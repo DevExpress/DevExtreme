@@ -573,8 +573,7 @@ export default {
             load: (loadOptions) => {
                 const d = new Deferred();
                 dataSource.load({
-                    ...loadOptions,
-                    filter: this.combineFilters([filter, loadOptions.filter], 'and'),
+                    filter,
                     group,
                     isExpanded: false,
                 }).done((items) => {
@@ -595,10 +594,13 @@ export default {
 
                         (new DataSource({
                             ...lookupDataSourceOptions,
+                            ...loadOptions,
                             filter: this.combineFilters([filter, lookupDataSourceOptions.filter], 'and'),
                         }))
                             .load(loadOptions)
-                            .done(d.resolve)
+                            .done((items) => {
+                                d.resolve(items);
+                            })
                             .fail(d.fail);
                     }
 
@@ -606,6 +608,16 @@ export default {
                 return d;
             },
             key: column.lookup.valueExpr,
+            byKey(key) {
+                const d = Deferred();
+                this.load({
+                    filter: [column.lookup.valueExpr, '=', key],
+                }).done(arr => {
+                    d.resolve(arr[0]);
+                });
+
+                return d.promise();
+            }
         };
 
         return lookupDataSource;

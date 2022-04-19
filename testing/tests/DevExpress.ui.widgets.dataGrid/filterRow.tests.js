@@ -2269,6 +2269,49 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
     });
 
+    QUnit.test('Lookup select box should show only relevant values after initialization', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            },
+            filterValue: 1,
+        }, {
+            dataField: 'column2',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [
+            { column1: 1, column2: 1 },
+            { column1: 2, column2: 2 },
+        ];
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const dropDown = $('.dx-dropdowneditor-button:eq(1)');
+        dropDown.trigger('dxclick');
+        const dropDownList = $('.dx-list');
+
+        // assert
+        assert.strictEqual(dropDownList.find('.dx-item').length, 2);
+        assert.strictEqual(dropDownList.find('.dx-item:eq(1)').text(), 'value1');
+    });
+
     QUnit.test('Lookup select box should not show only relevant values if syncLookupFilterValues = false', function(assert) {
         // arrange
         const $testElement = $('#container');
