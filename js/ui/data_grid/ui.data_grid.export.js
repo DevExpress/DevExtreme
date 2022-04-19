@@ -23,7 +23,6 @@ const DATAGRID_EXPORT_EXCEL_ICON = 'xlsxfile';
 const DATAGRID_EXPORT_SELECTED_ICON = 'exportselected';
 
 const DATAGRID_PDF_EXPORT_ICON = 'pdffile';
-const DATAGRID_PDF_EXPORT_SELECTED_ICON = 'exportselected';
 
 export const DataProvider = Class.inherit({
     ctor: function(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
@@ -644,11 +643,11 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
             fileSavingAction: that.getAction('onFileSaving')
         }, excel.getData);
     },
-    exportToPdf: function(selectedRowsOnly) {
+    exportTo: function(selectedRowsOnly, format) {
         const onExporting = this.getAction('onExporting');
         const eventArgs = {
             selectedRowsOnly: !!selectedRowsOnly,
-            format: 'pdf',
+            format,
             fileName: this.option('export.fileName'),
             cancel: false,
         };
@@ -780,50 +779,46 @@ dataGridCore.registerModule('export', {
                     const texts = this.option('export.texts');
                     const formats = this.option('export.formats') ?? [];
 
-                    const excelEnabled = exportOptions.enabled && formats.includes('xlsx');
-                    const pdfEnabled = exportOptions.enabled && formats.includes('pdf');
+                    if(!exportOptions.enabled) {
+                        return [];
+                    }
 
                     const items = [];
 
-                    if(excelEnabled) {
+                    formats.forEach((formatType) => {
+                        let exportMethod = 'exportTo';
+                        let formatName = formatType.toUpperCase();
+                        let exportAllIcon = DATAGRID_EXPORT_ICON;
+                        const exportSelectedIcon = DATAGRID_EXPORT_SELECTED_ICON;
+
+                        if(formatType === 'xlsx') {
+                            exportMethod = 'exportToExcel';
+                            formatName = 'Excel';
+                            exportAllIcon = DATAGRID_EXPORT_EXCEL_ICON;
+                        }
+
+                        if(formatType === 'pdf') {
+                            exportAllIcon = DATAGRID_PDF_EXPORT_ICON;
+                        }
+
                         items.push({
-                            text: format(texts.exportAll, 'Excel'),
-                            icon: DATAGRID_EXPORT_EXCEL_ICON,
+                            text: format(texts.exportAll, formatName),
+                            icon: exportAllIcon,
                             onClick: () => {
-                                this._exportController.exportToExcel();
+                                this._exportController[exportMethod](false, formatType);
                             },
                         });
 
                         if(exportOptions.allowExportSelectedData) {
                             items.push({
-                                text: format(texts.exportSelectedRows, 'Excel'),
-                                icon: DATAGRID_EXPORT_SELECTED_ICON,
+                                text: format(texts.exportSelectedRows, formatName),
+                                icon: exportSelectedIcon,
                                 onClick: () => {
-                                    this._exportController.exportToExcel(true);
+                                    this._exportController[exportMethod](true, formatType);
                                 },
                             });
                         }
-                    }
-
-                    if(pdfEnabled) {
-                        items.push({
-                            text: format(texts.exportAll, 'PDF'),
-                            icon: DATAGRID_PDF_EXPORT_ICON,
-                            onClick: () => {
-                                this._exportController.exportToPdf();
-                            },
-                        });
-
-                        if(exportOptions.allowExportSelectedData) {
-                            items.push({
-                                text: format(texts.exportSelectedRows, 'PDF'),
-                                icon: DATAGRID_PDF_EXPORT_SELECTED_ICON,
-                                onClick: () => {
-                                    this._exportController.exportToPdf(true);
-                                },
-                            });
-                        }
-                    }
+                    });
 
                     return items;
                 },

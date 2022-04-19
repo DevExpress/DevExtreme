@@ -2297,7 +2297,7 @@ QUnit.module('Export menu', {
         const $container = $('#container');
         this.headerPanel.render($container);
 
-        this.headerPanel._exportController.exportToPdf = sinon.spy();
+        this.headerPanel._exportController.exportTo = sinon.spy();
 
         // assert
         assert.ok(this.headerPanel.isVisible(), 'is visible');
@@ -2318,8 +2318,8 @@ QUnit.module('Export menu', {
         $exportSelectedRows.trigger('dxclick');
 
         // assert
-        assert.strictEqual(this.headerPanel._exportController.exportToPdf.getCall(0).args[0], undefined, 'called with selectedOnly=false');
-        assert.strictEqual(this.headerPanel._exportController.exportToPdf.getCall(1).args[0], true, 'called with selectedOnly=true');
+        assert.strictEqual(this.headerPanel._exportController.exportTo.getCall(0).args[0], false, 'called with selectedOnly=false');
+        assert.strictEqual(this.headerPanel._exportController.exportTo.getCall(1).args[0], true, 'called with selectedOnly=true');
     });
 
     ['pdf', 'xlsx'].forEach((format) => {
