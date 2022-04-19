@@ -610,8 +610,6 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
         return ['selectionOnlyChanged'];
     },
 
-    getExportFormat: function() { return ['EXCEL']; },
-
     getDataProvider: function(selectedRowsOnly) {
         const columnWidths = this._getColumnWidths(this._headersView, this._rowsView);
         let initialColumnWidthsByColumnIndex;
@@ -656,7 +654,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
     },
 
     publicMethods: function() {
-        return ['getDataProvider', 'getExportFormat', 'exportToExcel'];
+        return ['getDataProvider', 'exportToExcel'];
     },
 
     selectionOnly: function(value) {

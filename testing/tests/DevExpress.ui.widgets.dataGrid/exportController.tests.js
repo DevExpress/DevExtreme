@@ -357,13 +357,6 @@ QUnit.module('ExportController', {
         assert.ok(columnCompare(columnsByRow[3], { width: 90, dataType: 'boolean', alignment: 'center', caption: 'Test Field 4' }), 'column 4');
     });
 
-    QUnit.test('Get export format', function(assert) {
-        this.setupModules({});
-
-        // act, assert
-        assert.deepEqual(this.exportController.getExportFormat(), ['EXCEL'], 'export format');
-    });
-
     QUnit.test('Get cell value', function(assert) {
         this.setupModules({
             dataSource: [

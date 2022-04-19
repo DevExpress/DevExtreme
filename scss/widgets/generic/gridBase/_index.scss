@@ -631,18 +631,6 @@ $grid-masterdetail-padding: 20px;
     }
   }
 
-  .dx-#{$widget-name}-export-button {
-    .dx-icon-export-to {
-      @include dx-icon(export);
-      @include dx-icon-sizing($generic-base-icon-size);
-    }
-
-    .dx-icon-export-excel-button {
-      @include dx-icon(xlsxfile);
-      @include dx-icon-sizing($generic-base-icon-size);
-    }
-  }
-
   .dx-#{$widget-name}-adaptive-more {
     @include dx-icon-sizing($generic-base-more-adaptive-icon-size);
   }
