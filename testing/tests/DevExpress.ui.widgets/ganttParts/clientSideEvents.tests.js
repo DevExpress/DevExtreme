@@ -710,14 +710,14 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             'CustomText': customText
         };
         let treeListTaskCustomText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(0).text();
-        const treeListDataSourceOld = this.instance._treeList.option('dataSource');
+        const treeListDataSourceOld = this.instance._treeList.option('dataSource').store()._array;
         assert.equal(treeListTaskCustomText, 'c1');
         assert.equal(treeListDataSourceOld[0].CustomText, 'c1');
 
         this.instance.updateTask('1', data);
         this.clock.tick(500);
         treeListTaskCustomText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(0).text();
-        const treeListDataSourceNew = this.instance._treeList.option('dataSource');
+        const treeListDataSourceNew = this.instance._treeList.option('dataSource').store()._array;
         assert.equal(treeListTaskCustomText, customText);
         assert.equal(treeListDataSourceNew[0].CustomText, customText);
         assert.equal(treeListDataSourceOld[0].start, treeListDataSourceNew[0].start);

@@ -15,9 +15,11 @@ const GANTT_VIEW_CLASS = GANTT_CLASS + '-view';
 QUnit.module('rendering', {
     beforeEach: function() {
         this.element = $('<div></div>').appendTo('body');
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         this.element.remove();
+        this.clock.restore();
     }
 }, () => {
     QUnit.test('base elements should be rendered correctly', function(assert) {

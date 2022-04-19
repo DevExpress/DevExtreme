@@ -87,7 +87,7 @@ export type IncidentOccurredEvent = EventInfo<dxPolarChart> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxPolarChart>;
 
 /** @public */
-export type LegendClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
+export type LegendClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
     readonly target: polarChartSeriesObject;
 };
 
@@ -95,7 +95,7 @@ export type LegendClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | Pointe
 export type OptionChangedEvent = EventInfo<dxPolarChart> & ChangedOptionInfo;
 
 /** @public */
-export type PointClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & PointInteractionInfo;
+export type PointClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
 /** @public */
 export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;

@@ -39,7 +39,6 @@ import EdgesOption from './diagram.edges_option';
 
 const DIAGRAM_CLASS = 'dx-diagram';
 const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
-const DIAGRAM_OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + '-content-wrapper';
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + '-content';
@@ -333,8 +332,7 @@ class Diagram extends Widget {
                     {
                         shapeIconSpacing: DIAGRAM_TOOLBOX_SHAPE_SPACING,
                         shapeIconCountInRow: this.option('toolbox.shapeIconsPerRow'),
-                        shapeIconAttributes: { 'data-toggle': e.dataToggle },
-                        toolboxClass: DIAGRAM_OVERLAY_CONTENT_CLASS
+                        shapeIconAttributes: { 'data-toggle': e.dataToggle }
                     }
                 );
             },
@@ -1285,9 +1283,8 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
         this.toggleFullscreenLock--;
     }
-    _onShowContextMenu(x, y, isTouchMode, selection) {
+    _onShowContextMenu(x, y, selection) {
         if(this._contextMenu) {
-            this._contextMenu._isTouchMode = isTouchMode;
             this._contextMenu._show(x, y, selection);
         }
     }
@@ -2077,7 +2074,7 @@ class Diagram extends Widget {
     }
 
     _optionChanged(args) {
-        if(this.optionsUpdateBar.isUpdateLocked()) return;
+        if(!this.optionsUpdateBar || this.optionsUpdateBar.isUpdateLocked()) return;
 
         this.optionsUpdateBar.beginUpdate();
         try {

@@ -16431,6 +16431,10 @@ declare module DevExpress.ui {
      */
     showClearButton?: boolean;
     /**
+     * [descr:dxLookupOptions.searchStartEvent]
+     */
+    searchStartEvent?: string;
+    /**
      * [descr:dxLookupOptions.useNativeScrolling]
      */
     useNativeScrolling?: boolean;
@@ -16438,6 +16442,11 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.usePopover]
      */
     usePopover?: boolean;
+    /**
+     * [descr:dxLookupOptions.valueChangeEvent]
+     * @deprecated [depNote:dxLookupOptions.valueChangeEvent]
+     */
+    valueChangeEvent?: string;
     /**
      * [descr:dxLookupOptions.dropDownCentered]
      */
@@ -25219,7 +25228,15 @@ declare module DevExpress.ui {
      * [descr:Stack.position]
      */
     position?:
-      | StackPosition
+      | 'top left'
+      | 'top right'
+      | 'bottom left'
+      | 'bottom right'
+      | 'top center'
+      | 'bottom center'
+      | 'left center'
+      | 'right center'
+      | 'center'
       | {
           /**
            * [descr:Stack.position.top]
@@ -25241,27 +25258,16 @@ declare module DevExpress.ui {
     /**
      * [descr:Stack.direction]
      */
-    direction?: StackDirection;
+    direction?:
+      | 'down'
+      | 'up'
+      | 'left'
+      | 'right'
+      | 'down-reverse'
+      | 'up-reverse'
+      | 'left-reverse'
+      | 'right-reverse';
   }
-  type StackDirection =
-    | 'down'
-    | 'up'
-    | 'left'
-    | 'right'
-    | 'down-reverse'
-    | 'up-reverse'
-    | 'left-reverse'
-    | 'right-reverse';
-  type StackPosition =
-    | 'top left'
-    | 'top right'
-    | 'bottom left'
-    | 'bottom right'
-    | 'top center'
-    | 'bottom center'
-    | 'left center'
-    | 'right center'
-    | 'center';
   /**
    * [descr:StringLengthRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -27954,18 +27960,14 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxChart>;
-    export type LegendClickEvent = DevExpress.events.NativeEventInfo<
-      dxChart,
-      MouseEvent | PointerEvent
-    > & {
-      readonly target: chartSeriesObject;
-    };
+    export type LegendClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
+        readonly target: chartSeriesObject;
+      };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.events.ChangedOptionInfo;
-    export type PointClickEvent = DevExpress.events.NativeEventInfo<
-      dxChart,
-      MouseEvent | PointerEvent
-    > &
+    export type PointClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<dxChart, MouseEvent | PointerEvent> &
       DevExpress.viz.BaseChart.PointInteractionInfo;
     export type PointHoverChangedEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseChart.PointInteractionInfo;
@@ -32822,18 +32824,20 @@ declare module DevExpress.viz {
         DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxPolarChart>;
-    export type LegendClickEvent = DevExpress.events.NativeEventInfo<
-      dxPolarChart,
-      MouseEvent | PointerEvent
-    > & {
-      readonly target: polarChartSeriesObject;
-    };
+    export type LegendClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<
+        dxPolarChart,
+        MouseEvent | PointerEvent
+      > & {
+        readonly target: polarChartSeriesObject;
+      };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPolarChart> &
       DevExpress.events.ChangedOptionInfo;
-    export type PointClickEvent = DevExpress.events.NativeEventInfo<
-      dxPolarChart,
-      MouseEvent | PointerEvent
-    > &
+    export type PointClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<
+        dxPolarChart,
+        MouseEvent | PointerEvent
+      > &
       DevExpress.viz.BaseChart.PointInteractionInfo;
     export type PointHoverChangedEvent =
       DevExpress.events.EventInfo<dxPolarChart> &

@@ -7,9 +7,40 @@ const isPlaceholderVisible = ClientFunction(() => $('.dx-sortable-placeholder').
 
 const getPlaceholderOffset = ClientFunction(() => $('.dx-sortable-placeholder').offset());
 
+const getRowsViewLeftOffset = ClientFunction(() => $('#container .dx-datagrid-rowsview').offset()?.left);
+
+const getDraggingElementLeftOffset = ClientFunction(() => $('.dx-sortable-dragging').offset()?.left);
+
+const getDraggingElementScrollPosition = ClientFunction(() => {
+  const $dataGrid = $('.dx-sortable-dragging').find('.dx-datagrid').first().parent();
+  const dataGridInstance = $dataGrid.data('dxDataGrid');
+  const scrollableInstance = dataGridInstance.getScrollable();
+
+  return {
+    left: scrollableInstance.scrollLeft(),
+    top: scrollableInstance.scrollTop(),
+  };
+});
+
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
 });
+
+const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
+  const items: Record<string, unknown>[] = [];
+
+  for (let i = 0; i < rowCount; i += 1) {
+    const item = {};
+
+    for (let j = 0; j < columnCount; j += 1) {
+      item[`field${j + 1}`] = `${i + 1}-${j + 1}`;
+    }
+
+    items.push(item);
+  }
+
+  return items;
+};
 
 fixture`Row dragging`
   .page(url(__dirname, '../container.html'))
@@ -454,3 +485,45 @@ test('Footer should not be hidden during auto scrolling when virtual scrollling 
     },
   },
 }));
+
+// T1082538
+test('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.scrollTo({ x: 2500 });
+
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(2500);
+
+  await dataGrid.moveRow(0, 0, 25, true);
+  await dataGrid.moveRow(0, 0, 50, false);
+
+  const rowsViewLeftOffset = await getRowsViewLeftOffset();
+
+  await t
+    .expect(getDraggingElementLeftOffset())
+    .eql(rowsViewLeftOffset)
+    .expect(getDraggingElementScrollPosition())
+    .eql({
+      left: 2500,
+      top: 0,
+    });
+}).before(async (t) => {
+  await t.maximizeWindow();
+
+  return createWidget('dxDataGrid', {
+    width: 600,
+    height: 500,
+    dataSource: generateData(10, 50),
+    columnWidth: 100,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+      useNative: false,
+    },
+    rowDragging: {
+      allowReordering: true,
+      showDragIcons: false,
+    },
+  });
+});
