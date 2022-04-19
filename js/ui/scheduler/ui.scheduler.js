@@ -76,6 +76,7 @@ import { getAppointmentTakesAllDay } from '../../renovation/ui/scheduler/appoint
 import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
+import { excludeFromRecurrence } from '../../renovation/ui/scheduler/utils/recurrence/excludeFromRecurrence';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -1723,21 +1724,21 @@ class Scheduler extends Widget {
         this._appointmentPopup?.dispose();
     }
 
-    _checkRecurringAppointment(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
-        const recurrenceRule = ExpressionUtils.getField(this._dataAccessors, 'recurrenceRule', targetAppointment);
+    _checkRecurringAppointment(rawAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent, recurrenceEditMode) {
+        const recurrenceRule = ExpressionUtils.getField(this._dataAccessors, 'recurrenceRule', rawAppointment);
 
         if(!getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
             callback();
             return;
         }
 
-        const editMode = this.option('recurrenceEditMode');
+        const editMode = recurrenceEditMode || this.option('recurrenceEditMode');
         switch(editMode) {
             case 'series':
                 callback();
                 break;
             case 'occurrence':
-                this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+                this._excludeAppointmentFromSeries(rawAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
                 break;
             default:
                 if(dragEvent) {
@@ -1748,7 +1749,7 @@ class Scheduler extends Widget {
                         editingMode === RECURRENCE_EDITING_MODE.SERIES && callback();
 
                         editingMode === RECURRENCE_EDITING_MODE.OCCURENCE && this._excludeAppointmentFromSeries(
-                            targetAppointment, singleAppointment, exceptionDate,
+                            rawAppointment, singleAppointment, exceptionDate,
                             isDeleted, isPopupEditing, dragEvent,
                         );
                     })
@@ -1757,12 +1758,12 @@ class Scheduler extends Widget {
     }
 
     _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        const appointment = createAppointmentAdapter(
-            { ...rawAppointment },
+        const appointment = excludeFromRecurrence(
+            rawAppointment,
+            exceptionDate,
             this._dataAccessors,
-            this.timeZoneCalculator
+            this._timeZoneCalculator,
         );
-        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
         const singleRawAppointment = { ...newRawAppointment };
         delete singleRawAppointment[this._dataAccessors.expr.recurrenceExceptionExpr];
@@ -2390,18 +2391,25 @@ class Scheduler extends Widget {
         });
     }
 
-    addRecurrenceException(rawAppointment, targetedAppointment) {
-        const targetedAdapter = createAppointmentAdapter(
-            targetedAppointment,
-            this._dataAccessors,
-            this.timeZoneCalculator
-        );
-
-        this._excludeAppointmentFromSeries(
-            rawAppointment,
-            targetedAppointment,
-            targetedAdapter.startDate,
+    deleteRecurrence(
+        appointment,
+        date,
+        recurrenceEditMode,
+    ) {
+        this._checkRecurringAppointment(
+            appointment,
+            { },
+            date,
+            () => {
+                this.processDeleteAppointment(
+                    appointment,
+                    { cancel: false },
+                );
+            },
             true,
+            false,
+            null,
+            recurrenceEditMode,
         );
     }
 
