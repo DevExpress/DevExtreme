@@ -56,7 +56,7 @@ test('allowExportSelectedData: true, menu: false', async (t) => {
   export: {
     enabled: true,
     allowExportSelectedData: true,
-    formats: ['xlsx', 'pdf'],
+    formats: ['xlsx', 'pdf', 'csv'],
   },
 }));
 

@@ -2869,7 +2869,7 @@ export type ExportedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRo
 export type ExportingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & {
   fileName?: string;
   selectedRowsOnly: boolean;
-  format: 'xlsx' | 'pdf';
+  format: 'xlsx' | 'pdf' | string;
 };
 
 /** @public */
@@ -3739,7 +3739,7 @@ export type Export<TRowData = any, TKey = any> = {
    * @docid dxDataGridOptions.export.formats
    * @default "DataGrid"
    */
-  formats?: ('xlsx' | 'pdf')[];
+  formats?: ('xlsx' | 'pdf' | string)[];
   /**
    * @docid dxDataGridOptions.export.fileName
    * @default "DataGrid"

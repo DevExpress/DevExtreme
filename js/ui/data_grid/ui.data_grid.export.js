@@ -18,7 +18,7 @@ import { when, Deferred } from '../../core/utils/deferred';
 const DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu';
 const DATAGRID_EXPORT_BUTTON_CLASS = 'dx-datagrid-export-button';
 const DATAGRID_EXPORT_TOOLBAR_BUTTON_NAME = 'exportButton';
-const DATAGRID_EXPORT_ICON = 'export-to';
+const DATAGRID_EXPORT_ICON = 'export';
 const DATAGRID_EXPORT_EXCEL_ICON = 'xlsxfile';
 const DATAGRID_EXPORT_SELECTED_ICON = 'exportselected';
 
