@@ -181,7 +181,7 @@ export type ResourceManagerDialogShowingEvent = Cancelable & EventInfo<dxGantt> 
 
 /** @public */
 export type TaskInsertedEvent = EventInfo<dxGantt> & {
-    readonly value?: any;
+    readonly values?: any;
     readonly key: any;
 };
 
