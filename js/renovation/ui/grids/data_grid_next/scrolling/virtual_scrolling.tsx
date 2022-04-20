@@ -74,10 +74,30 @@ export class VirtualScrolling extends JSXComponent(VirtualScrollingProps) {
   @Mutable()
   visibleRowHeights: number[] = [];
 
+  @Mutable()
+  viewportSkipValue = 0;
+
+  @Mutable()
+  viewportTakeValue = 0;
+
   @Effect()
   watchTotalCount(): () => void {
     return this.plugins.watch(TotalCount, () => {
       this.loadViewport();
+    });
+  }
+
+  @Effect()
+  watchViewportSkipValue(): () => void {
+    return this.plugins.watch(ViewportSkipValue, (skipValue) => {
+      this.viewportSkipValue = skipValue;
+    });
+  }
+
+  @Effect()
+  watchViewportTakeValue(): () => void {
+    return this.plugins.watch(ViewportTakeValue, (takeValue) => {
+      this.viewportTakeValue = takeValue;
     });
   }
 
@@ -94,12 +114,11 @@ export class VirtualScrolling extends JSXComponent(VirtualScrollingProps) {
   loadViewport(): void {
     let pageSize = this.plugins.getValue(PageSize) ?? 0;
     pageSize = typeof pageSize !== 'number' ? 0 : pageSize;
-    const skip = this.plugins.getValue(ViewportSkipValue) ?? 0;
-    const take = this.plugins.getValue(ViewportTakeValue) ?? 0;
-    const pageIndex = Math.floor(pageSize > 0 ? skip / pageSize : 0);
+    const pageIndex = Math.floor(pageSize > 0 ? this.viewportSkipValue / pageSize : 0);
     const pageOffset = pageIndex * pageSize;
-    const skipForCurrentPage = skip - pageOffset;
-    const loadPageCount = Math.ceil(pageSize > 0 ? (take + skipForCurrentPage) / pageSize : 0);
+    const skipForCurrentPage = this.viewportSkipValue - pageOffset;
+    const loadPageCount = Math.ceil(pageSize > 0
+      ? (this.viewportTakeValue + skipForCurrentPage) / pageSize : 0);
 
     this.plugins.callAction(SetPageIndex, pageIndex);
     this.plugins.callAction(SetLoadPageCount, loadPageCount);
