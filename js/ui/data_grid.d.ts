@@ -2868,6 +2868,8 @@ export type ExportedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRo
 /** @public */
 export type ExportingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & {
   fileName?: string;
+  selectedRowsOnly: boolean;
+  format: 'xlsx' | 'pdf' | string;
 };
 
 /** @public */
@@ -3407,6 +3409,8 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type_function_param1_field3 element:DxElement
      * @type_function_param1_field4 model:any
      * @type_function_param1_field5 fileName:string
+     * @type_function_param1_field6 format:string
+     * @type_function_param1_field7 selectedRowsOnly:boolean
      * @default null
      * @action
      * @public
@@ -3732,6 +3736,11 @@ export type Export<TRowData = any, TKey = any> = {
    */
   excelWrapTextEnabled?: boolean;
   /**
+   * @docid dxDataGridOptions.export.formats
+   * @default "DataGrid"
+   */
+  formats?: ('xlsx' | 'pdf' | string)[];
+  /**
    * @docid dxDataGridOptions.export.fileName
    * @default "DataGrid"
    * @deprecated
@@ -3760,12 +3769,12 @@ export type Export<TRowData = any, TKey = any> = {
 export type ExportTexts = {
   /**
    * @docid dxDataGridOptions.export.texts.exportAll
-   * @default "Export all data"
+   * @default "Export all data to {0}"
    */
   exportAll?: string;
   /**
    * @docid dxDataGridOptions.export.texts.exportSelectedRows
-   * @default "Export selected rows"
+   * @default "Export selected rows to {0}"
    */
   exportSelectedRows?: string;
   /**

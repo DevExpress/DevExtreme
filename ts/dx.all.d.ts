@@ -7193,6 +7193,10 @@ declare module DevExpress.ui {
        */
       excelWrapTextEnabled?: boolean;
       /**
+       * [descr:dxDataGridOptions.export.formats]
+       */
+      formats?: ('xlsx' | 'pdf' | string)[];
+      /**
        * [descr:dxDataGridOptions.export.fileName]
        * @deprecated [depNote:dxDataGridOptions.export.fileName]
        */
@@ -7222,6 +7226,8 @@ declare module DevExpress.ui {
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
         fileName?: string;
+        selectedRowsOnly: boolean;
+        format: 'xlsx' | 'pdf' | string;
       };
     export type ExportTexts = {
       /**
