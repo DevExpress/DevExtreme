@@ -7,7 +7,7 @@ import { each } from '../../core/utils/iterator';
 import { compileGetter } from '../../core/utils/data';
 
 const MENU_INVISIBLE_CLASS = 'dx-state-invisible';
-const TOOLBAR_dropDownMenu_CONTAINER_CLASS = 'dx-toolbar-menu-container';
+const TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
 const POPOVER_BOUNDARY_OFFSET = 10;
 
 class ToolbarDropDownMenu {
@@ -45,7 +45,7 @@ class ToolbarDropDownMenu {
 
         this._$menuButtonContainer = $('<div>').appendTo($afterSection)
             .addClass(this._toolbar._buttonClass())
-            .addClass(TOOLBAR_dropDownMenu_CONTAINER_CLASS);
+            .addClass(TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS);
     }
 
 
