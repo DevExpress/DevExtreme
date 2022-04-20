@@ -1,0 +1,23 @@
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.caption {
+  font-weight: 600;
+  font-size: 22px;
+  text-align: center;
+}
+
+.section {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}

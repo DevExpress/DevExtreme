@@ -1,0 +1,1 @@
+Zdes' morzet byt' vasze opisanie

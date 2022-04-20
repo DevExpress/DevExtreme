@@ -5708,6 +5708,12 @@
               "/Models/ListProduct.cs",
               "/Models/SampleData/ListProducts.cs"
             ]
+          },
+          {
+            "Title": "Stack",
+            "Name": "Stack",
+            "DocUrl": "Guide/UI_Components/Toast/Stack/",
+            "Widget": "Toast"
           }
         ]
       },

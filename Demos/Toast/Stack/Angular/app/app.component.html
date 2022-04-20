@@ -1,0 +1,71 @@
+<div class="options">
+  <div class="caption">Notify stack</div>
+  <div>position by</div>
+  <dx-radio-group
+    layout="horizontal"
+    [items]="['alias', 'coordinates']"
+    value="alias"
+    (onValueChanged)="radioGroupValueChanged($event)"
+  >
+  </dx-radio-group>
+  <dx-select-box
+    [items]="positions"
+    [(value)]="aliasPosition"
+    [visible]="isAlias"
+  >
+  </dx-select-box>
+  <div class="section">
+    <dx-number-box
+      [visible]="!isAlias"
+      label="top"
+      [(value)]="coordinatePosition.top"
+      width="48%"
+      valueChangeEvent="keyup"
+      [disabled]="!!coordinatePosition.bottom"
+    >
+    </dx-number-box>
+    <dx-number-box
+      [visible]="!isAlias"
+      label="bottom"
+      [(value)]="coordinatePosition.bottom"
+      width="48%"
+      valueChangeEvent="keyup"
+      [disabled]="!!coordinatePosition.top"
+    >
+    </dx-number-box>
+  </div>
+  <div class="section">
+    <dx-number-box
+      [visible]="!isAlias"
+      label="left"
+      [(value)]="coordinatePosition.left"
+      width="48%"
+      valueChangeEvent="keyup"
+      [disabled]="!!coordinatePosition.right"
+    >
+    </dx-number-box>
+    <dx-number-box
+      [visible]="!isAlias"
+      label="right"
+      [(value)]="coordinatePosition.right"
+      width="48%"
+      valueChangeEvent="keyup"
+      [disabled]="!!coordinatePosition.left"
+    >
+    </dx-number-box>
+  </div>
+  <div>direction</div>
+  <dx-select-box [items]="directions" [(value)]="direction"> </dx-select-box>
+  <div class="section">
+    <dx-button
+      text="Show"
+      width="48%"
+      (onClick)="showNotify($event)"
+    ></dx-button>
+    <dx-button
+      text="Hide all"
+      width="48%"
+      (onClick)="hideAll($event)"
+    ></dx-button>
+  </div>
+</div>
