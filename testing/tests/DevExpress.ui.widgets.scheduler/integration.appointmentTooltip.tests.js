@@ -885,7 +885,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 });
 
 
-QUnit.module('Appointment tooltip template', moduleConfig, () => {
+module('Appointment tooltip template', moduleConfig, () => {
     const checkAppointmentDataInTooltipTemplate = (assert, dataSource, currentDate) => {
         const scheduler = createWrapper({
             dataSource: dataSource,
@@ -934,9 +934,61 @@ QUnit.module('Appointment tooltip template', moduleConfig, () => {
 
         checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
+
+    module('isButtonClicked argument in appointmentTooltipTemplate', () => {
+        const data = [{
+            text: '1',
+            priorityId: [2],
+            startDate: new Date(2021, 3, 26),
+            endDate: new Date(2021, 3, 27),
+        }, {
+            text: '2',
+            priorityId: [2],
+            startDate: new Date(2021, 3, 26),
+            endDate: new Date(2021, 3, 27),
+        }, {
+            text: '3',
+            priorityId: [2],
+            startDate: new Date(2021, 3, 26),
+            endDate: new Date(2021, 3, 27),
+        }, {
+            text: '4',
+            priorityId: [2],
+            startDate: new Date(2021, 3, 26),
+            endDate: new Date(2021, 3, 27),
+        }];
+
+        test('should be false if clicked on single appointment', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: data,
+                views: ['month'],
+                currentView: 'month',
+                currentDate: new Date(2021, 3, 27),
+                height: 600,
+                appointmentTooltipTemplate: (model) => assert.notOk(model.isButtonClicked)
+            });
+
+            scheduler.appointments.click(0);
+            assert.expect(1);
+        });
+
+        test('should be true if clicked on compact button', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: data,
+                views: ['month'],
+                currentView: 'month',
+                currentDate: new Date(2021, 3, 27),
+                height: 600,
+                appointmentTooltipTemplate: (model) => assert.ok(model.isButtonClicked)
+            });
+
+            scheduler.appointments.compact.click(0);
+            assert.expect(2);
+        });
+    });
 });
 
-QUnit.module('New common tooltip for compact and cell appointments', moduleConfig, () => {
+module('New common tooltip for compact and cell appointments', moduleConfig, () => {
     const createScheduler = (options, data) => {
         const defaultOption = {
             dataSource: data || getSimpleDataArray(),
@@ -1349,7 +1401,7 @@ QUnit.module('New common tooltip for compact and cell appointments', moduleConfi
     });
 });
 
-QUnit.module('onAppointmentTooltipShowing event', moduleConfig, () => {
+module('onAppointmentTooltipShowing event', moduleConfig, () => {
     const data = [{
         text: '1',
         priorityId: [2],
@@ -1372,27 +1424,12 @@ QUnit.module('onAppointmentTooltipShowing event', moduleConfig, () => {
         endDate: new Date(2021, 3, 27),
     }];
 
-    const priorities = [{
-        text: 'High',
-        id: 1,
-        color: '#cc5c53',
-    }, {
-        text: 'Low',
-        id: 2,
-        color: '#ff9747',
-    }];
-
     test('e.cancel argument should be prevent showing tooltip', function(assert) {
         const scheduler = createWrapper({
             dataSource: data,
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2021, 3, 27),
-            resources: [{
-                fieldExpr: 'priorityId',
-                dataSource: priorities,
-                label: 'Priority',
-            }],
             height: 600,
             onAppointmentTooltipShowing: (e) => e.cancel = true
         });
@@ -1408,11 +1445,6 @@ QUnit.module('onAppointmentTooltipShowing event', moduleConfig, () => {
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2021, 3, 27),
-            resources: [{
-                fieldExpr: 'priorityId',
-                dataSource: priorities,
-                label: 'Priority',
-            }],
             height: 600,
             onAppointmentTooltipShowing: (e) => {
                 const appointment = e.appointments[0];
@@ -1427,6 +1459,7 @@ QUnit.module('onAppointmentTooltipShowing event', moduleConfig, () => {
         });
 
         scheduler.appointments.click(0);
+        assert.expect(2);
     });
 
     test('Arguments should be valid on a compact button', function(assert) {
@@ -1435,11 +1468,6 @@ QUnit.module('onAppointmentTooltipShowing event', moduleConfig, () => {
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2021, 3, 27),
-            resources: [{
-                fieldExpr: 'priorityId',
-                dataSource: priorities,
-                label: 'Priority',
-            }],
             height: 600,
             onAppointmentTooltipShowing: (e) => {
                 const appointment3 = e.appointments[0];
@@ -1462,7 +1490,6 @@ QUnit.module('onAppointmentTooltipShowing event', moduleConfig, () => {
         });
 
         scheduler.appointments.compact.click(0);
-
-        assert.ok(scheduler.tooltip.isVisible());
+        assert.expect(4);
     });
 });
