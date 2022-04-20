@@ -5519,6 +5519,63 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok(visibleRows[visibleRows.length - 1].key > 999993, 'bottom row key');
         assert.strictEqual(translator.getTranslate($fixedTable).y, 0, 'no offset');
     });
+
+    ['Row', 'Batch'].forEach(mode => {
+        QUnit.test(`${mode} - Inserted rows should be at the top of the viewport when repaint mode is enabled (T1082889)`, function(assert) {
+            // arrange
+            const getData = function() {
+                const items = [];
+                for(let i = 0; i < 12; i++) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`
+                    });
+                }
+                return items;
+            };
+
+            const dataGrid = createDataGrid({
+                dataSource: getData(),
+                keyExpr: 'id',
+                columns: ['name'],
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowAdding: true,
+                    refreshMode: 'repaint',
+                },
+                height: 440,
+                scrolling: {
+                    mode: 'virtual'
+                }
+            });
+
+            this.clock.tick(300);
+            let names = dataGrid.getVisibleRows().map(it => it.data.name).slice(0, 3);
+
+            // assert
+            assert.deepEqual(names, ['Name 1', 'Name 2', 'Name 3']);
+
+            // act
+            for(let i = 0; i < 3; i++) {
+                dataGrid.addRow();
+                this.clock.tick(300);
+                dataGrid.cellValue(0, 0, `test ${i + 1}`);
+                this.clock.tick(300);
+                if(mode === 'Row') {
+                    dataGrid.saveEditData();
+                    this.clock.tick(300);
+                }
+            }
+            if(mode === 'Batch') {
+                dataGrid.saveEditData();
+                this.clock.tick(300);
+            }
+            names = dataGrid.getVisibleRows().map(it => it.data.name).slice(0, 3);
+
+            // assert
+            assert.deepEqual(names, ['test 3', 'test 2', 'test 1']);
+        });
+    });
 });
 
 
@@ -6660,5 +6717,62 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(dataGrid.getScrollable().scrollTop(), 500, 'scroll position is not reset');
+    });
+
+    ['Row', 'Batch'].forEach(mode => {
+        QUnit.test(`${mode} - Inserted rows should be at the top of the viewport when repaint mode is enabled (T1082889)`, function(assert) {
+            // arrange
+            const getData = function() {
+                const items = [];
+                for(let i = 0; i < 12; i++) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`
+                    });
+                }
+                return items;
+            };
+
+            const dataGrid = createDataGrid({
+                dataSource: getData(),
+                keyExpr: 'id',
+                columns: ['name'],
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowAdding: true,
+                    refreshMode: 'repaint',
+                },
+                height: 440,
+                scrolling: {
+                    mode: 'infinite'
+                }
+            });
+
+            this.clock.tick(300);
+            let names = dataGrid.getVisibleRows().map(it => it.data.name).slice(0, 3);
+
+            // assert
+            assert.deepEqual(names, ['Name 1', 'Name 2', 'Name 3']);
+
+            // act
+            for(let i = 0; i < 3; i++) {
+                dataGrid.addRow();
+                this.clock.tick(300);
+                dataGrid.cellValue(0, 0, `test ${i + 1}`);
+                this.clock.tick(300);
+                if(mode === 'Row') {
+                    dataGrid.saveEditData();
+                    this.clock.tick(300);
+                }
+            }
+            if(mode === 'Batch') {
+                dataGrid.saveEditData();
+                this.clock.tick(300);
+            }
+            names = dataGrid.getVisibleRows().map(it => it.data.name).slice(0, 3);
+
+            // assert
+            assert.deepEqual(names, ['test 3', 'test 2', 'test 1']);
+        });
     });
 });
