@@ -1634,7 +1634,7 @@ QUnit.module('Custom operations', {
                 }]
             }
         };
-        const dataSource = [{ field: '2014/1/1' }, { field: '2014/1/3' }, { field: '2014/2/4' }];
+        const dataSource = [{ field: 'California' }, { field: 'Nevada' }, { field: 'Colorado' }];
         const anyOfOperation = this.getAnyOfOperation(field, dataSource);
 
         // act
