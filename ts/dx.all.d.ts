@@ -13783,7 +13783,7 @@ declare module DevExpress.ui {
         readonly hiddenFields?: Array<string>;
       };
     export type TaskInsertedEvent = DevExpress.events.EventInfo<dxGantt> & {
-      readonly value?: any;
+      readonly values?: any;
       readonly key: any;
     };
     export type TaskInsertingEvent = DevExpress.events.Cancelable &
