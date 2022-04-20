@@ -92,34 +92,6 @@ describe('Virtual scrolling', () => {
         expect(virtualScrolling.loadViewport).toHaveBeenCalled();
       });
     });
-
-    describe('watchViewportSkipValue', () => {
-      it('should update viewportSkipValue', () => {
-        const virtualScrolling = new VirtualScrolling(new VirtualScrollingProps());
-        virtualScrolling.plugins = new Plugins();
-        virtualScrolling.plugins.extend(ViewportSkipValue, -1, () => 5);
-
-        expect(virtualScrolling.viewportSkipValue).toEqual(0);
-
-        virtualScrolling.watchViewportSkipValue();
-
-        expect(virtualScrolling.viewportSkipValue).toEqual(5);
-      });
-    });
-
-    describe('watchViewportTakeValue', () => {
-      it('should update viewportTakeValue', () => {
-        const virtualScrolling = new VirtualScrolling(new VirtualScrollingProps());
-        virtualScrolling.plugins = new Plugins();
-        virtualScrolling.plugins.extend(ViewportTakeValue, -1, () => 10);
-
-        expect(virtualScrolling.viewportTakeValue).toEqual(0);
-
-        virtualScrolling.watchViewportTakeValue();
-
-        expect(virtualScrolling.viewportTakeValue).toEqual(10);
-      });
-    });
   });
 
   describe('Methods', () => {
@@ -189,6 +161,8 @@ describe('Virtual scrolling', () => {
         const setLoadPageCount = jest.fn();
         virtualScrolling.plugins.set(SetPageIndex, setPageIndex);
         virtualScrolling.plugins.set(SetLoadPageCount, setLoadPageCount);
+        virtualScrolling.plugins.extend(ViewportSkipValue, -1, () => undefined);
+        virtualScrolling.plugins.extend(ViewportTakeValue, -1, () => undefined);
 
         virtualScrolling.loadViewport();
 
@@ -217,7 +191,7 @@ describe('Virtual scrolling', () => {
         const setPageIndex = jest.fn();
         const setLoadPageCount = jest.fn();
         virtualScrolling.plugins.set(PageSize, 20);
-        virtualScrolling.viewportSkipValue = 10;
+        virtualScrolling.plugins.extend(ViewportSkipValue, -1, () => 10);
         virtualScrolling.plugins.set(SetPageIndex, setPageIndex);
         virtualScrolling.plugins.set(SetLoadPageCount, setLoadPageCount);
 
@@ -233,8 +207,8 @@ describe('Virtual scrolling', () => {
         const setPageIndex = jest.fn();
         const setLoadPageCount = jest.fn();
         virtualScrolling.plugins.set(PageSize, 20);
-        virtualScrolling.viewportSkipValue = 25;
-        virtualScrolling.viewportTakeValue = 35;
+        virtualScrolling.plugins.extend(ViewportSkipValue, -1, () => 25);
+        virtualScrolling.plugins.extend(ViewportTakeValue, -1, () => 35);
         virtualScrolling.plugins.set(SetPageIndex, setPageIndex);
         virtualScrolling.plugins.set(SetLoadPageCount, setLoadPageCount);
 
