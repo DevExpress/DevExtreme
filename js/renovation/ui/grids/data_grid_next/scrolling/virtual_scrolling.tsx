@@ -113,7 +113,7 @@ export class VirtualScrolling extends JSXComponent(VirtualScrollingProps) {
 
   loadViewport(): void {
     let pageSize = this.plugins.getValue(PageSize) ?? 0;
-    pageSize = pageSize === 'all' ? 0 : pageSize;
+    pageSize = typeof pageSize !== 'number' ? 0 : pageSize;
     const pageIndex = Math.floor(pageSize > 0 ? this.viewportSkipValue / pageSize : 0);
     const pageOffset = pageIndex * pageSize;
     const skipForCurrentPage = this.viewportSkipValue - pageOffset;
