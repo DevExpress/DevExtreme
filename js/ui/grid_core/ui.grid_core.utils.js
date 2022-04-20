@@ -15,6 +15,7 @@ import formatHelper from '../../format_helper';
 import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import { DataSource } from '../../data/data_source/data_source';
+import ArrayStore from '../../data/array_store';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 import variableWrapper from '../../core/utils/variable_wrapper';
 
@@ -583,7 +584,18 @@ export default {
                             [column.lookup.displayExpr]: item.items[0].key
                         }));
 
-                        d.resolve(lookupItems);
+                        const newDataSource = new DataSource({
+                            ...loadOptions,
+                            store: new ArrayStore({
+                                data: lookupItems,
+                                key: column.lookup.valueExpr,
+                            })
+                        });
+
+                        return newDataSource
+                            .load(loadOptions)
+                            .done(d.resolve)
+                            .fail(d.fail);
                     } else {
                         const filter = this.combineFilters(
                             items.map((data => [
@@ -595,12 +607,10 @@ export default {
                         (new DataSource({
                             ...lookupDataSourceOptions,
                             ...loadOptions,
-                            filter: this.combineFilters([filter, lookupDataSourceOptions.filter], 'and'),
+                            filter: this.combineFilters([filter, loadOptions.filter], 'and'),
                         }))
                             .load(loadOptions)
-                            .done((items) => {
-                                d.resolve(items);
-                            })
+                            .done(d.resolve)
                             .fail(d.fail);
                     }
 
