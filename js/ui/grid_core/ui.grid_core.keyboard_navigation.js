@@ -277,16 +277,17 @@ const KeyboardNavigationController = core.ViewController.inherit({
     // #region Key_Handlers
     _keyDownHandler: function(e) {
         let needStopPropagation = true;
+        this._isNeedFocus = true;
+        this._isNeedScroll = true;
         let isHandled = this._processOnKeyDown(e);
         const isEditing = this._editingController.isEditing();
         const originalEvent = e.originalEvent;
 
         if(originalEvent.isDefaultPrevented()) {
+            this._isNeedFocus = false;
+            this._isNeedScroll = false;
             return;
         }
-
-        this._isNeedFocus = true;
-        this._isNeedScroll = true;
 
         FUNCTIONAL_KEYS.indexOf(e.keyName) < 0 && this._updateFocusedCellPositionByTarget(originalEvent.target);
 
