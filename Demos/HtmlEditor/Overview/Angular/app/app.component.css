@@ -20,4 +20,16 @@
 
 ::ng-deep .option {
   margin-top: 10px;
+  display: inline-block;
+  margin-right: 40px;
+}
+
+::ng-deep .option > .dx-selectbox,
+::ng-deep .option > .label {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+::ng-deep .option > .label {
+  margin-right: 10px;
 }

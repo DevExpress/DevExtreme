@@ -1,9 +1,9 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxHtmlEditorModule, DxCheckBoxModule } from 'devextreme-angular';
+import { DxHtmlEditorModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 
-import { Service } from './app.service';
+import { Service, TabConfig } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,8 +21,14 @@ export class AppComponent {
 
   valueContent: string;
 
+  tabs: TabConfig[];
+
+  currentTab: string[];
+
   constructor(service: Service) {
     this.valueContent = service.getMarkup();
+    this.tabs = service.getTabsData();
+    this.currentTab = this.tabs[2].value;
   }
 }
 
@@ -31,6 +37,7 @@ export class AppComponent {
     BrowserModule,
     DxHtmlEditorModule,
     DxCheckBoxModule,
+    DxSelectBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

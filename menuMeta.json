@@ -1951,7 +1951,8 @@
             "Name": "Overview",
             "DocUrl": "Guide/UI_Components/HtmlEditor/Overview/",
             "Widget": "HtmlEditor",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "Badge": "Updated"
           }
         ]
       },

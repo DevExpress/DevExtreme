@@ -1,3 +1,5 @@
+const tabs = [{ name: 'From Your Device', value: ['file'] }, { name: 'From the Web', value: ['url'] }, { name: 'Both', value: ['file', 'url'] }];
+
 const markup = `
     <h2>
         <img src="../../../../images/widgets/HtmlEditor.svg" alt="HtmlEditor">

@@ -2,10 +2,12 @@ const DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', ($scope) => {
   $scope.multilineToolbar = true;
+  $scope.currentTabs = tabs[2].value;
 
   $scope.htmlEditorOptions = {
     bindingOptions: {
       'toolbar.multiline': 'multilineToolbar',
+      'imageUpload.tabs': 'currentTabs',
     },
     height: 725,
     value: markup,
@@ -38,6 +40,9 @@ DemoApp.controller('DemoController', ($scope) => {
     mediaResizing: {
       enabled: true,
     },
+    imageUpload: {
+      fileUploadMode: 'base64',
+    },
   };
 
   $scope.multilineSwitcherOptions = {
@@ -45,5 +50,14 @@ DemoApp.controller('DemoController', ($scope) => {
       value: 'multilineToolbar',
     },
     text: 'Multiline toolbar',
+  };
+
+  $scope.imageUploadTabsOptions = {
+    items: tabs,
+    bindingOptions: {
+      value: 'currentTabs',
+    },
+    valueExpr: 'value',
+    displayExpr: 'name',
   };
 });

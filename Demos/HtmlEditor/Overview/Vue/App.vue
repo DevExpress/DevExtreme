@@ -5,6 +5,10 @@
       height="725px"
     >
       <DxMediaResizing :enabled="true"/>
+      <DxImageUpload
+        :tabs="currentTabs"
+        file-upload-mode="base64"
+      />
       <DxToolbar :multiline="isMultiline">
         <DxItem name="undo"/>
         <DxItem name="redo"/>
@@ -64,6 +68,15 @@
           text="Multiline toolbar"
         />
       </div>
+      <div class="option">
+        <div class="label">Image upload tabs:</div>
+        <DxSelectBox
+          :items="tabs"
+          v-model:value="currentTabs"
+          display-expr="name"
+          value-expr="value"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -73,12 +86,16 @@ import {
   DxHtmlEditor,
   DxToolbar,
   DxMediaResizing,
+  DxImageUpload,
   DxItem,
 } from 'devextreme-vue/html-editor';
 import {
   DxCheckBox,
 } from 'devextreme-vue/check-box';
-import { markup } from './data.js';
+import {
+  DxSelectBox,
+} from 'devextreme-vue/select-box';
+import { markup, tabs } from './data.js';
 
 export default {
   components: {
@@ -86,14 +103,18 @@ export default {
     DxMediaResizing,
     DxToolbar,
     DxItem,
+    DxImageUpload,
     DxCheckBox,
+    DxSelectBox,
   },
   data() {
     return {
       markup,
+      tabs,
       sizeValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
       fontValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
       headerValues: [false, 1, 2, 3, 4, 5],
+      currentTabs: tabs[2].value,
       isMultiline: true,
     };
   },
@@ -122,5 +143,17 @@ export default {
 
 .option {
   margin-top: 10px;
+  display: inline-block;
+  margin-right: 40px;
+}
+
+.option > .dx-selectbox,
+.option > .label {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.option > .label {
+  margin-right: 10px;
 }
 </style>

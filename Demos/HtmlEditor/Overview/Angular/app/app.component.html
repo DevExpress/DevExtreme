@@ -59,6 +59,8 @@
     <dxi-item name="deleteColumn"></dxi-item>
   </dxo-toolbar>
   <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
+  <dxo-image-upload [tabs]="currentTab" fileUploadMode="base64">
+  </dxo-image-upload>
 </dx-html-editor>
 
 <div class="options">
@@ -68,5 +70,15 @@
       text="Multiline toolbar"
       [(value)]="isMultiline"
     ></dx-check-box>
+  </div>
+  <div class="option">
+    <div class="label">Image upload tabs:</div>
+    <dx-select-box
+      [items]="tabs"
+      [(value)]="currentTab"
+      valueExpr="value"
+      displayExpr="name"
+    >
+    </dx-select-box>
   </div>
 </div>

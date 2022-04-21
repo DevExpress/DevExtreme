@@ -1,8 +1,12 @@
 import React from 'react';
 
-import HtmlEditor, { Toolbar, MediaResizing, Item } from 'devextreme-react/html-editor';
+import HtmlEditor, {
+  Toolbar, MediaResizing, ImageUpload, Item,
+} from 'devextreme-react/html-editor';
 import CheckBox from 'devextreme-react/check-box';
-import { markup } from './data.js';
+import SelectBox from 'devextreme-react/select-box';
+
+import { markup, tabs } from './data.js';
 
 const sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];
 const fontValues = ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'];
@@ -14,9 +18,12 @@ class App extends React.Component {
 
     this.state = {
       isMultiline: true,
+      currentTab: tabs[2].value,
     };
 
+    this.tabs = tabs;
     this.multilineChanged = this.multilineChanged.bind(this);
+    this.currentTabChanged = this.currentTabChanged.bind(this);
   }
 
   render() {
@@ -27,6 +34,7 @@ class App extends React.Component {
           defaultValue={markup}
         >
           <MediaResizing enabled={true} />
+          <ImageUpload tabs={this.state.currentTab} fileUploadMode="base64" />
           <Toolbar multiline={this.state.isMultiline}>
             <Item name="undo" />
             <Item name="redo" />
@@ -87,6 +95,16 @@ class App extends React.Component {
               onValueChanged={this.multilineChanged}
             />
           </div>
+          <div className="option">
+            <div className="label">Image upload tabs:</div>
+            <SelectBox
+              items={this.tabs}
+              value={this.state.currentTab}
+              valueExpr="value"
+              displayExpr="name"
+              onValueChanged={this.currentTabChanged}
+            />
+          </div>
         </div>
       </div>
     );
@@ -95,6 +113,12 @@ class App extends React.Component {
   multilineChanged(e) {
     this.setState({
       isMultiline: e.value,
+    });
+  }
+
+  currentTabChanged(e) {
+    this.setState({
+      currentTab: e.value,
     });
   }
 }

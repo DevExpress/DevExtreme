@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
 
+export class TabConfig {
+  name: string;
+
+  value: string[];
+}
+
 const markup = `
     <h2>
         <img src="../../../../images/widgets/HtmlEditor.svg" alt="HtmlEditor">
@@ -54,9 +60,19 @@ const markup = `
     </table>
 `;
 
+const tabsData: TabConfig[] = [
+  { name: 'From Your Device', value: ['file'] },
+  { name: 'From the Web', value: ['url'] },
+  { name: 'Both', value: ['file', 'url'] },
+];
+
 @Injectable()
 export class Service {
   getMarkup(): string {
     return markup;
+  }
+
+  getTabsData(): TabConfig[] {
+    return tabsData;
   }
 }
