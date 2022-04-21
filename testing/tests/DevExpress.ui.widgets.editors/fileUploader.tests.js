@@ -3740,7 +3740,7 @@ QUnit.module('Drag and drop', moduleConfig, () => {
     });
 
     QUnit.test('Default label text must be shown if upload mode is useForm and native drop is supported (T936087)', function(assert) {
-        const defaultLabelText = 'or Drop file here';
+        const defaultLabelText = 'or Drop a file here';
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'useForm',
             nativeDropSupported: true
@@ -3995,14 +3995,14 @@ QUnit.module('disabled option', () => {
 
         $fileUploader.dxFileUploader('option', 'disabled', false);
         assert.ok($inputContainer.is(':visible'), 'input container is visible');
-        assert.strictEqual($inputLabel.text(), 'or Drop file here', 'label has default text');
+        assert.strictEqual($inputLabel.text(), 'or Drop a file here', 'label has default text');
     });
 });
 
 QUnit.module('readOnly option', moduleConfig, () => {
     QUnit.test('file input container should be shown but text empty', function(assert) {
         // behavior changed beacause of T936087
-        const defaultLabelText = 'or Drop file here';
+        const defaultLabelText = 'or Drop a file here';
         const $fileUploader = $('#fileuploader').dxFileUploader({
             readOnly: false,
             useDragOver: true,
