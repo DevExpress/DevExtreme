@@ -10,12 +10,6 @@
   gap: 5px;
 }
 
-.caption {
-  font-weight: 600;
-  font-size: 22px;
-  text-align: center;
-}
-
 .section {
   width: 100%;
   display: flex;

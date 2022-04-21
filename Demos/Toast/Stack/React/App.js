@@ -24,8 +24,7 @@ function App() {
 
   return <React.Fragment>
     <div className='options'>
-      <div className='caption'>Notify stack</div>
-      <div>position by</div>
+      <div>Position by</div>
       <RadioGroup
         layout='horizontal'
         defaultValue='alias'
@@ -39,14 +38,14 @@ function App() {
       <div className='section'>
         <NumberBox
           visible={!isAlias}
-          label='top'
+          placeholder='top'
           defaultValue=''
           valueChangeEvent='keyup'
           disabled={!!coordinatePosition.bottom}
           onValueChange={topNumberBoxValueChanged} />
         <NumberBox
           visible={!isAlias}
-          label='bottom'
+          placeholder='bottom'
           defaultValue=''
           valueChangeEvent='keyup'
           disabled={!!coordinatePosition.top}
@@ -55,20 +54,20 @@ function App() {
       <div className='section'>
         <NumberBox
           visible={!isAlias}
-          label='left'
+          placeholder='left'
           defaultValue=''
           valueChangeEvent='keyup'
           disabled={!!coordinatePosition.right}
           onValueChange={leftNumberBoxValueChanged} />
         <NumberBox
           visible={!isAlias}
-          label='right'
+          placeholder='right'
           defaultValue=''
           valueChangeEvent='keyup'
           disabled={!!coordinatePosition.left}
           onValueChange={rightNumberBoxValueChanged} />
       </div>
-      <div>direction</div>
+      <div>Direction</div>
       <SelectBox
         items={directions}
         value={direction}

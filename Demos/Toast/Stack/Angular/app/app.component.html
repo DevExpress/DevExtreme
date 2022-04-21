@@ -1,6 +1,5 @@
 <div class="options">
-  <div class="caption">Notify stack</div>
-  <div>position by</div>
+  <div>Position by</div>
   <dx-radio-group
     layout="horizontal"
     [items]="['alias', 'coordinates']"
@@ -17,7 +16,7 @@
   <div class="section">
     <dx-number-box
       [visible]="!isAlias"
-      label="top"
+      placeholder="top"
       [(value)]="coordinatePosition.top"
       width="48%"
       valueChangeEvent="keyup"
@@ -26,7 +25,7 @@
     </dx-number-box>
     <dx-number-box
       [visible]="!isAlias"
-      label="bottom"
+      placeholder="bottom"
       [(value)]="coordinatePosition.bottom"
       width="48%"
       valueChangeEvent="keyup"
@@ -37,7 +36,7 @@
   <div class="section">
     <dx-number-box
       [visible]="!isAlias"
-      label="left"
+      placeholder="left"
       [(value)]="coordinatePosition.left"
       width="48%"
       valueChangeEvent="keyup"
@@ -46,7 +45,7 @@
     </dx-number-box>
     <dx-number-box
       [visible]="!isAlias"
-      label="right"
+      placeholder="right"
       [(value)]="coordinatePosition.right"
       width="48%"
       valueChangeEvent="keyup"
@@ -54,7 +53,7 @@
     >
     </dx-number-box>
   </div>
-  <div>direction</div>
+  <div>Direction</div>
   <dx-select-box [items]="directions" [(value)]="direction"> </dx-select-box>
   <div class="section">
     <dx-button

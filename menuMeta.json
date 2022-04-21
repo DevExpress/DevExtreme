@@ -2005,7 +2005,6 @@
           {
             "Title": "Tables",
             "Name": "Tables",
-            "Badge": "Updated",
             "Widget": "HtmlEditor",
             "MvcDescription": "",
             "NetCoreDescription": "",
@@ -4192,7 +4191,6 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "CheckBox",
-            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Controllers/CheckBoxController.cs",
               "/Views/CheckBox/Overview.cshtml"
@@ -4467,7 +4465,6 @@
           {
             "Title": "Editor Appearance Variants",
             "Name": "EditorAppearanceVariants",
-            "Badge": "New",
             "DocUrl": "",
             "Widget": "Common",
             "DemoType": "Web"
@@ -5711,6 +5708,7 @@
           {
             "Title": "Stack",
             "Name": "Stack",
+            "Badge": "New",
             "DocUrl": "Guide/UI_Components/Toast/Stack/",
             "Widget": "Toast"
           }

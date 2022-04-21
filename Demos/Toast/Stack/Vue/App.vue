@@ -1,8 +1,7 @@
 <template>
   <div>
     <div class="options">
-      <div class="caption">Notify stack</div>
-      <div>position by</div>
+      <div>Position by</div>
       <DxRadioGroup
         layout="horizontal"
         :items="['alias', 'coordinates']"
@@ -17,7 +16,7 @@
       <div class="section">
         <DxNumberBox
           :visible="!isAlias"
-          label="top"
+          placeholder="top"
           v-model:value="coordinatePosition.top"
           width="48%"
           value-change-event="keyup"
@@ -25,7 +24,7 @@
         />
         <DxNumberBox
           :visible="!isAlias"
-          label="bottom"
+          placeholder="bottom"
           v-model:value="coordinatePosition.bottom"
           width="48%"
           value-change-event="keyup"
@@ -35,7 +34,7 @@
       <div class="section">
         <DxNumberBox
           :visible="!isAlias"
-          label="left"
+          placeholder="left"
           v-model:value="coordinatePosition.left"
           width="48%"
           value-change-event="keyup"
@@ -43,14 +42,14 @@
         />
         <DxNumberBox
           :visible="!isAlias"
-          label="right"
+          placeholder="right"
           v-model:value="coordinatePosition.right"
           width="48%"
           value-change-event="keyup"
           :disabled="!!coordinatePosition.left"
         />
       </div>
-      <div>direction</div>
+      <div>Direction</div>
       <DxSelectBox
         :items="directions"
         v-model:value="direction"
@@ -152,12 +151,6 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 5px;
-}
-
-.caption {
-  font-weight: 600;
-  font-size: 22px;
-  text-align: center;
 }
 
 .section {

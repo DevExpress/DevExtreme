@@ -85,25 +85,25 @@ $(() => {
 
   const topNumberBox = $('#positionTop').dxNumberBox({
     ...commonNumberBoxOptions,
-    label: 'top',
+    placeholder: 'top',
     onValueChanged: ({ value }) => numberBoxValueChange(value, 'top', bottomNumberBox),
   }).dxNumberBox('instance');
 
   const bottomNumberBox = $('#positionBottom').dxNumberBox({
     ...commonNumberBoxOptions,
-    label: 'bottom',
+    placeholder: 'bottom',
     onValueChanged: ({ value }) => numberBoxValueChange(value, 'bottom', topNumberBox),
   }).dxNumberBox('instance');
 
   const leftNumberBox = $('#positionLeft').dxNumberBox({
     ...commonNumberBoxOptions,
-    label: 'left',
+    placeholder: 'left',
     onValueChanged: ({ value }) => numberBoxValueChange(value, 'left', rightNumberBox),
   }).dxNumberBox('instance');
 
   const rightNumberBox = $('#positionRight').dxNumberBox({
     ...commonNumberBoxOptions,
-    label: 'right',
+    placeholder: 'right',
     onValueChanged: ({ value }) => numberBoxValueChange(value, 'right', leftNumberBox),
   }).dxNumberBox('instance');
 });
