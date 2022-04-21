@@ -666,7 +666,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
         _handleDataChanged: function(e) {
             this.callBase.apply(this, arguments);
 
-            if(e.operationTypes?.filtering) {
+            if(e.operationTypes?.filtering || e.operationTypes?.reload) {
                 this.updateLookupDataSource();
             }
         },

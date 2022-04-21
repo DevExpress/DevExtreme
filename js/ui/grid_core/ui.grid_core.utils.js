@@ -581,7 +581,7 @@ export default {
                     if(hasLookupOptimization) {
                         const lookupItems = items.map(item => ({
                             [column.lookup.valueExpr]: item.key,
-                            [column.lookup.displayExpr]: item.items[0].key
+                            [column.lookup.displayExpr]: column.displayValueMap[item.key] ?? item.items[0].key
                         }));
 
                         const newDataSource = new DataSource({
