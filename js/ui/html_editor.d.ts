@@ -426,7 +426,7 @@ export interface dxHtmlEditorTableResizing {
    * @type Array<dxHtmlEditorImageUploadTabItem, Enums.HtmlEditorImageUploadTab>
    * @public
    */
-    tabs?: Array<dxHtmlEditorImageUploadTabItem | 'url' | 'file'>;
+    tabs?: Array<ImageUploadTab | 'url' | 'file'>;
     /**
     * @docid
     * @default null
@@ -436,6 +436,16 @@ export interface dxHtmlEditorTableResizing {
     fileUploaderOptions?: fileUploaderProperties;
  }
 
+/**
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+ export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
+
+ /**
+  * @deprecated Use ImageUploadTab instead
+  * @namespace DevExpress.ui
+  */
  export interface dxHtmlEditorImageUploadTabItem {
     /**
      * @docid
