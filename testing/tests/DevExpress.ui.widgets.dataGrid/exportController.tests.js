@@ -19,7 +19,7 @@ import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import ArrayStore from 'data/array_store';
 import clientExporter from 'exporter';
 import messageLocalization from 'localization/message';
-import exportMixin from 'ui/grid_core/ui.grid_core.export_mixin';
+import { prepareItems } from 'ui/grid_core/ui.grid_core.export';
 
 QUnit.module('ExportController', {
     beforeEach: function() {
@@ -2915,7 +2915,7 @@ QUnit.module('Real dataGrid ExportController tests', {
 
         items.test = function() { }; // As appending prototype method to array
 
-        const resultItems = exportMixin._prepareItems(items);
+        const resultItems = prepareItems(items);
 
         assert.deepEqual(resultItems, [
             [{

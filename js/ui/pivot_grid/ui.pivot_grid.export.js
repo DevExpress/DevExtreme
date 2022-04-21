@@ -7,13 +7,13 @@ import { getDefaultAlignment } from '../../core/utils/position';
 import formatHelper from '../../format_helper';
 import localizationNumber from '../../localization/number';
 import { excel as excelExporter, export as exportMethod } from '../../exporter';
-import exportMixin from '../grid_core/ui.grid_core.export_mixin';
+import { prepareItems } from '../grid_core/ui.grid_core.export';
 import { when, Deferred } from '../../core/utils/deferred';
 
 const DEFAULT_DATA_TYPE = 'string';
 const DEFAUL_COLUMN_WIDTH = 100;
 
-export const ExportController = extend({}, exportMixin, {
+export const ExportController = {
     exportToExcel: function() {
         const that = this;
 
@@ -58,6 +58,15 @@ export const ExportController = extend({}, exportMixin, {
         return result;
     },
 
+    _getEmptyCell: function() {
+        return {
+            text: '',
+            value: undefined,
+            colspan: 1,
+            rowspan: 1
+        };
+    },
+
     _getAllItems: function(columnsInfo, rowsInfoItems, cellsInfo) {
         let cellIndex;
         let rowIndex;
@@ -91,13 +100,13 @@ export const ExportController = extend({}, exportMixin, {
                 rowspan: headerRowsCount
             }));
 
-        return this._prepareItems(sourceItems);
+        return prepareItems(sourceItems, this._getEmptyCell());
     },
 
     getDataProvider: function() {
         return new DataProvider(this);
     }
-});
+};
 
 export const DataProvider = Class.inherit({
     ctor: function(exportController) {
