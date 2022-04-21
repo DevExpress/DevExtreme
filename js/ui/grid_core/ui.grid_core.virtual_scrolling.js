@@ -1329,9 +1329,11 @@ export const virtualScrollingModule = {
                         const currentPageIndex = dataSourceAdapter?.pageIndex() ?? 0;
                         const pageIndexNotChanged = changedParams?.pageIndex === currentPageIndex;
                         const allLoadedInAppendMode = isAppendMode(this) && this.totalItemsCount() < lastRequiredItemCount;
+                        const isRepaintMode = this.option('editing.refreshMode') === 'repaint';
+                        const pageIndexIncreased = changedParams?.pageIndex > currentPageIndex;
                         let result = false;
 
-                        if(!dataSourceAdapter || (virtualPaging && checkLoading && (changedParams?.pageIndex > currentPageIndex || pageIndexNotChanged && allLoadedInAppendMode))) {
+                        if(!dataSourceAdapter || (virtualPaging && checkLoading && (isRepaintMode || (pageIndexIncreased || pageIndexNotChanged && allLoadedInAppendMode)))) {
                             return result;
                         }
 
