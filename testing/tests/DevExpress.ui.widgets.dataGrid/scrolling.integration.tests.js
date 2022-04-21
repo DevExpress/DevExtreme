@@ -1169,6 +1169,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.strictEqual(parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight')), dataGrid.getView('rowsView').getScrollbarWidth(), 'padding-right');
     });
 
+    // T1083488
     QUnit.testInActiveWindow('Virtual scrolling should work with validation and fixed columns', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
