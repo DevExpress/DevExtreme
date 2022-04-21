@@ -306,7 +306,7 @@
         "dxHtmlEditor-dialogImageUpdateButton": "Update",
         "dxHtmlEditor-dialogImageAddButton": "Add",
         "dxHtmlEditor-dialogImageSpecifyUrl": "From the Web",
-        "dxHtmlEditor-dialogImageSelectFile": "From this Computer",
+        "dxHtmlEditor-dialogImageSelectFile": "From Your Device",
         "dxHtmlEditor-dialogImageKeepAspectRatio": "Keep Aspect Ratio",
         "dxHtmlEditor-dialogImageEncodeToBase64": "Encode to Base64",
         "dxHtmlEditor-heading": "Heading",

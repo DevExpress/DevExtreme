@@ -15096,15 +15096,6 @@ declare module DevExpress.ui {
   module dxHtmlEditor {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface dxHtmlEditorImageUploadTabItem {
-      /**
-       * [descr:dxHtmlEditorImageUploadTabItem.name]
-       */
-      name?: 'url' | 'file';
-    }
     export type FocusInEvent = DevExpress.events.NativeEventInfo<
       dxHtmlEditor,
       FocusEvent
@@ -15149,13 +15140,21 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorImageUpload.tabs]
      */
-    tabs?: Array<
-      DevExpress.ui.dxHtmlEditor.dxHtmlEditorImageUploadTabItem | 'url' | 'file'
-    >;
+    tabs?: Array<DevExpress.ui.dxHtmlEditor.ImageUploadTab | 'url' | 'file'>;
     /**
      * [descr:dxHtmlEditorImageUpload.fileUploaderOptions]
      */
     fileUploaderOptions?: DevExpress.ui.dxFileUploader.Properties;
+  }
+  /**
+   * @deprecated Use ImageUploadTab instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxHtmlEditorImageUploadTabItem {
+    /**
+     * [descr:dxHtmlEditorImageUploadTabItem.name]
+     */
+    name?: 'url' | 'file';
   }
   /**
    * [descr:dxHtmlEditorMediaResizing]
@@ -25547,6 +25546,7 @@ declare module DevExpress.ui.dxGantt {
 }
 declare module DevExpress.ui.dxHtmlEditor {
   export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
+  export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
   export type ToolbarItem = dxHtmlEditorToolbarItem;
 }
 declare module DevExpress.ui.dxList {
