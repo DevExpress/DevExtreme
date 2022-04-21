@@ -1380,6 +1380,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         $('#dataGrid').css('max-height', '');
     });
 
+    // T1083488
     QUnit.testInActiveWindow('Virtual scrolling should work with validation and fixed columns', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
