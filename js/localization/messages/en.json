@@ -56,8 +56,8 @@
         "dxDateBox-simulatedDataPickerTitleDateTime": "Select date and time",
         "dxDateBox-validation-datetime": "Value must be a date or time",
 
-        "dxFileUploader-selectFile": "Select file",
-        "dxFileUploader-dropFile": "or Drop file here",
+        "dxFileUploader-selectFile": "Select a file",
+        "dxFileUploader-dropFile": "or Drop a file here",
         "dxFileUploader-bytes": "bytes",
         "dxFileUploader-kb": "kb",
         "dxFileUploader-Mb": "Mb",
@@ -519,7 +519,7 @@
         "dxDiagram-dialogInsertShapeImageTitle": "Insert Image",
         "dxDiagram-dialogEditShapeImageTitle": "Change Image",
         "dxDiagram-dialogEditShapeImageSelectButton": "Select image",
-        "dxDiagram-dialogEditShapeImageLabelText": "or drop file here",
+        "dxDiagram-dialogEditShapeImageLabelText": "or drop a file here",
 
         "dxDiagram-uiExport": "Export",
         "dxDiagram-uiProperties": "Properties",
