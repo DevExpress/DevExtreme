@@ -5,7 +5,7 @@ import { extend } from '../../core/utils/extend';
 import { getDefaultAlignment } from '../../core/utils/position';
 import { merge } from '../../core/utils/array';
 import dataGridCore from './ui.data_grid.core';
-import exportMixin from '../grid_core/ui.grid_core.export_mixin';
+import { prepareItems } from '../grid_core/ui.grid_core.export';
 import { export as clientExport, excel } from '../../exporter';
 import { format } from '../../core/utils/string';
 import messageLocalization from '../../localization/message';
@@ -328,7 +328,7 @@ export const DataProvider = Class.inherit({
     }
 });
 
-export const ExportController = dataGridCore.ViewController.inherit({}).include(exportMixin).inherit({
+export const ExportController = dataGridCore.ViewController.inherit({}).inherit({
     _getEmptyCell: function() {
         return {
             caption: '',
@@ -386,7 +386,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
         }
 
         columns = result[rowCount];
-        result = this._prepareItems(result.slice(0, -1));
+        result = prepareItems(result.slice(0, -1), this._getEmptyCell());
         result.push(columns);
 
         return result;
