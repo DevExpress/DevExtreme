@@ -3409,7 +3409,7 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type_function_param1_field3 element:DxElement
      * @type_function_param1_field4 model:any
      * @type_function_param1_field5 fileName:string
-     * @type_function_param1_field6 format:string
+     * @type_function_param1_field6 format:Enums.DataGridExportFormat|string
      * @type_function_param1_field7 selectedRowsOnly:boolean
      * @default null
      * @action
@@ -3737,6 +3737,7 @@ export type Export<TRowData = any, TKey = any> = {
   excelWrapTextEnabled?: boolean;
   /**
    * @docid dxDataGridOptions.export.formats
+   * @type Array<Enums.DataGridExportFormat,string>
    * @default "DataGrid"
    */
   formats?: ('xlsx' | 'pdf' | string)[];

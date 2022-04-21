@@ -1277,3 +1277,8 @@
  * @typedef {string} Enums.TreeListToolbarItem
  * @enum {'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel'}
  */
+
+/**
+ * @typedef {string} Enums.DataGridExportFormat
+ * @enum {'pdf' | 'xlsx'}
+ */
