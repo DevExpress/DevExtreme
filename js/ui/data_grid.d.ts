@@ -3737,6 +3737,7 @@ export type Export<TRowData = any, TKey = any> = {
   excelWrapTextEnabled?: boolean;
   /**
    * @docid dxDataGridOptions.export.formats
+   * @type Enums.DataGridExportFormat|string
    * @default "DataGrid"
    */
   formats?: ('xlsx' | 'pdf' | string)[];
