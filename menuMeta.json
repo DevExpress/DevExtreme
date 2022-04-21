@@ -3907,7 +3907,6 @@
           {
             "Title": "Top or Bottom Position",
             "Name": "TopOrBottomPosition",
-            "DocUrl": "ApiReference/UI_Components/dxDrawer/Configuration/#openedStateMode",
             "Widget": "Drawer",
             "Modules": "html-react-parser",
             "MvcAdditionalFiles": [
