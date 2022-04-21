@@ -20,20 +20,18 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
-
   employees: Employees[];
 
   constructor(private service: Service) {
     this.employees = service.getEmployess();
   }
 
-  exportGrid(e) {
+  onExporting(e) {
     const doc = new jsPDF();
 
     exportDataGrid({
       jsPDFDocument: doc,
-      component: this.dataGrid.instance,
+      component: e.component,
       margin: {
         top: 10,
         right: 10,
@@ -64,7 +62,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxDataGridModule,
-    DxButtonModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

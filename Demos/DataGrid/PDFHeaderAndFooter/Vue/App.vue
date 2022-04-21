@@ -2,12 +2,14 @@
   <DxDataGrid
     id="grid"
     key-expr="ID"
-    :ref="dataGridRef"
     :data-source="countries"
     :show-borders="true"
     @exporting="onExporting"
   >
-    <DxExport :enabled="true"/>
+    <DxExport
+      :enabled="true"
+      :formats="['pdf']"
+    />
     <DxColumn data-field="Country"/>
     <DxColumn data-field="Area"/>
     <DxColumn caption="Population">
@@ -50,39 +52,23 @@
         />
       </DxColumn>
     </DxColumn>
-
-    <DxToolbar>
-      <DxItem name="groupPanel"/>
-      <DxItem location="after">
-        <DxButton
-          icon="exportpdf"
-          text="Export to PDF"
-          @click="exportGrid()"
-        />
-      </DxItem>
-    </DxToolbar>
   </DxDataGrid>
 </template>
 
 <script>
 
-import DxButton from 'devextreme-vue/button';
-import DxDataGrid, { DxColumn, DxToolbar, DxItem } from 'devextreme-vue/data-grid';
+import DxDataGrid, { DxColumn, DxExport } from 'devextreme-vue/data-grid';
 
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 
 import { countries } from './data.js';
 
-const dataGridRef = 'dataGrid';
-
 export default {
   components: {
-    DxButton,
     DxDataGrid,
     DxColumn,
-    DxToolbar,
-    DxItem,
+    DxExport,
   },
   data() {
     return {
@@ -93,19 +79,14 @@ export default {
       },
     };
   },
-  computed: {
-    dataGrid() {
-      return this.$refs[dataGridRef].instance;
-    },
-  },
   methods: {
-    exportGrid() {
+    onExporting(e) {
       // eslint-disable-next-line new-cap
       const doc = new jsPDF();
       const lastPoint = { x: 0, y: 0 };
       exportDataGrid({
         jsPDFDocument: doc,
-        component: this.dataGrid,
+        component: e.component,
         topLeft: { x: 1, y: 15 },
         columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
         customDrawCell({ rect }) {

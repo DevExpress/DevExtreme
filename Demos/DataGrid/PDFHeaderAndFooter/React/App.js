@@ -1,7 +1,6 @@
 import React from 'react';
 
-import DataGrid, { Column, Toolbar, Item } from 'devextreme-react/data-grid';
-import Button from 'devextreme-react/button';
+import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 
@@ -12,18 +11,17 @@ const gdpFormat = {
   precision: 1,
 };
 
-export default function App() {
-  const dataGridRef = React.createRef();
+const exportFormats = ['pdf'];
 
-  const exportGrid = React.useCallback(() => {
+export default function App() {
+  const onExporting = React.useCallback((e) => {
     // eslint-disable-next-line new-cap
     const doc = new jsPDF();
-    const dataGrid = dataGridRef.current.instance;
 
     const lastPoint = { x: 0, y: 0 };
     exportDataGrid({
       jsPDFDocument: doc,
-      component: dataGrid,
+      component: e.component,
       topLeft: { x: 1, y: 15 },
       columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
       customDrawCell({ rect }) {
@@ -53,11 +51,12 @@ export default function App() {
 
   return (
     <DataGrid
-      ref={dataGridRef}
       dataSource={countries}
       keyExpr="ID"
-      showBorders={true}>
+      showBorders={true}
+      onExporting={onExporting}>
 
+      <Export enabled={true} formats={exportFormats} />
       <Column dataField="Country" />
       <Column dataField="Area" />
       <Column caption="Population">
@@ -100,17 +99,6 @@ export default function App() {
           />
         </Column>
       </Column>
-
-      <Toolbar>
-        <Item name="groupPanel" />
-        <Item location="after">
-          <Button
-            icon='exportpdf'
-            text='Export to PDF'
-            onClick={exportGrid}
-          />
-        </Item>
-      </Toolbar>
     </DataGrid>
   );
 }

@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule, DxButtonModule, DxDataGridComponent } from 'devextreme-angular';
+import { DxDataGridModule, DxDataGridComponent } from 'devextreme-angular';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 import { Service, Customer } from './app.service';
@@ -19,19 +19,17 @@ if (!/localhost/.test(document.location.host)) {
   providers: [Service],
 })
 export class AppComponent {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
-
   customers: Customer[];
 
   constructor(service: Service) {
     this.customers = service.getCustomers();
   }
 
-  exportGrid() {
+  onExporting(e) {
     const doc = new jsPDF();
     exportDataGrid({
       jsPDFDocument: doc,
-      component: this.dataGrid.instance,
+      component: e.component,
       indent: 5,
     }).then(() => {
       doc.save('Companies.pdf');
@@ -43,7 +41,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxDataGridModule,
-    DxButtonModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

@@ -3,10 +3,14 @@
     <DxDataGrid
       id="gridContainer"
       key-expr="ID"
-      :ref="dataGridRef"
       :data-source="companies"
       :show-borders="true"
+      @exporting="onExporting"
     >
+      <DxExport
+        :enabled="true"
+        :formats="['pdf']"
+      />
       <DxGroupPanel :visible="true"/>
       <DxGrouping :auto-expand-all="true"/>
       <DxSortByGroupSummaryInfo summary-item="count"/>
@@ -52,30 +56,16 @@
           display-format="Total count: {0}"
         />
       </DxSummary>
-
-      <DxToolbar>
-        <DxItem name="groupPanel"/>
-        <DxItem location="after">
-          <DxButton
-            icon="exportpdf"
-            text="Export to PDF"
-            @click="exportGrid()"
-          />
-        </DxItem>
-      </DxToolbar>
     </DxDataGrid>
   </div>
 </template>
 <script>
-import DxButton from 'devextreme-vue/button';
 import {
   DxDataGrid,
   DxColumn,
   DxGrouping,
   DxGroupPanel,
-  DxPaging,
-  DxToolbar,
-  DxItem,
+  DxExport,
   DxSummary,
   DxSortByGroupSummaryInfo,
   DxTotalItem,
@@ -86,18 +76,13 @@ import { exportDataGrid } from 'devextreme/pdf_exporter';
 
 import service from './data.js';
 
-const dataGridRef = 'dataGrid';
-
 export default {
   components: {
-    DxButton,
     DxColumn,
     DxGroupPanel,
     DxGrouping,
-    DxPaging,
     DxDataGrid,
-    DxToolbar,
-    DxItem,
+    DxExport,
     DxSummary,
     DxSortByGroupSummaryInfo,
     DxTotalItem,
@@ -105,21 +90,15 @@ export default {
   data() {
     return {
       companies: service.getCompanies(),
-      dataGridRef,
     };
   },
-  computed: {
-    dataGrid() {
-      return this.$refs[dataGridRef].instance;
-    },
-  },
   methods: {
-    exportGrid() {
+    onExporting(e) {
       // eslint-disable-next-line new-cap
       const doc = new jsPDF();
       exportDataGrid({
         jsPDFDocument: doc,
-        component: this.dataGrid,
+        component: e.component,
         columnWidths: [40, 40, 30, 30, 40],
         customizeCell({ gridCell, pdfCell }) {
           if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Phone') {
@@ -160,9 +139,5 @@ export default {
 <style scoped>
 #gridContainer {
   height: 436px;
-}
-
-#exportButton {
-  margin-bottom: 10px;
 }
 </style>

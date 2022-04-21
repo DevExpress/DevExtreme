@@ -3,6 +3,7 @@
   keyExpr="ID"
   [allowColumnReordering]="true"
   [showBorders]="true"
+  (onExporting)="onExporting($event)"
 >
   <dxi-column dataField="CompanyName"></dxi-column>
   <dxi-column dataField="Phone"></dxi-column>
@@ -10,20 +11,12 @@
   <dxi-column dataField="City"></dxi-column>
   <dxi-column dataField="State" [groupIndex]="0"></dxi-column>
 
-  <dxo-search-panel [visible]="true"></dxo-search-panel>
+  <dxo-selection mode="multiple"></dxo-selection>
   <dxo-paging [pageSize]="10"></dxo-paging>
-  <dxo-group-panel [visible]="true"></dxo-group-panel>
   <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-  <dxo-toolbar>
-    <dxi-item name="groupPanel"></dxi-item>
-    <dxi-item location="after">
-      <dx-button
-        icon="exportpdf"
-        text="Export to PDF"
-        (onClick)="exportGrid($event)"
-      >
-      </dx-button>
-    </dxi-item>
-    <dxi-item name="searchPanel"></dxi-item>
-  </dxo-toolbar>
+  <dxo-export
+    [enabled]="true"
+    [formats]="['pdf']"
+    [allowExportSelectedData]="true"
+  ></dxo-export>
 </dx-data-grid>

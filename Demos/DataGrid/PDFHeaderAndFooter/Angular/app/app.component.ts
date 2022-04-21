@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import {
-  DxDataGridModule, DxTemplateModule, DxButtonModule, DxDataGridComponent,
+  DxDataGridModule, DxTemplateModule, DxButtonModule,
 } from 'devextreme-angular';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
@@ -22,20 +22,18 @@ if (!/localhost/.test(document.location.host)) {
   providers: [Service],
 })
 export class AppComponent {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
-
   countries: Country[];
 
   constructor(service: Service) {
     this.countries = service.getCountries();
   }
 
-  exportGrid() {
+  onExporting(e) {
     const doc = new jsPDF();
     const lastPoint = { x: 0, y: 0 };
     exportDataGrid({
       jsPDFDocument: doc,
-      component: this.dataGrid.instance,
+      component: e.component,
       topLeft: { x: 1, y: 15 },
       columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
       customDrawCell({ rect }) {
@@ -69,7 +67,6 @@ export class AppComponent {
     BrowserModule,
     DxDataGridModule,
     DxTemplateModule,
-    DxButtonModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

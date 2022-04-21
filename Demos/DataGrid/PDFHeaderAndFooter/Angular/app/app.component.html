@@ -8,7 +8,7 @@
   [showBorders]="true"
   (onExporting)="onExporting($event)"
 >
-  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-export [enabled]="true" [formats]="['pdf']"></dxo-export>
 
   <dxi-column dataField="Country"></dxi-column>
   <dxi-column dataField="Area"> </dxi-column>
@@ -46,16 +46,4 @@
       </dxi-column>
     </dxi-column>
   </dxi-column>
-
-  <dxo-toolbar>
-    <dxi-item name="groupPanel"></dxi-item>
-    <dxi-item location="after">
-      <dx-button
-        icon="exportpdf"
-        text="Export to PDF"
-        (onClick)="exportGrid($event)"
-      >
-      </dx-button>
-    </dxi-item>
-  </dxo-toolbar>
 </dx-data-grid>

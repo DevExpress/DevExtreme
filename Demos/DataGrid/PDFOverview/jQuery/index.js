@@ -3,7 +3,7 @@
 window.jsPDF = window.jspdf.jsPDF;
 
 $(() => {
-  const dataGrid = $('#gridContainer').dxDataGrid({
+  $('#gridContainer').dxDataGrid({
     dataSource: customers,
     keyExpr: 'ID',
     allowColumnReordering: true,
@@ -11,14 +11,11 @@ $(() => {
     grouping: {
       autoExpandAll: true,
     },
-    searchPanel: {
-      visible: true,
+    selection: {
+      mode: 'multiple',
     },
     paging: {
       pageSize: 10,
-    },
-    groupPanel: {
-      visible: true,
     },
     columns: [
       'CompanyName',
@@ -30,30 +27,22 @@ $(() => {
         groupIndex: 0,
       },
     ],
-    toolbar: {
-      items: [
-        'groupPanel',
-        {
-          widget: 'dxButton',
-          location: 'after',
-          options: {
-            icon: 'exportpdf',
-            text: 'Export to PDF',
-            onClick() {
-              // eslint-disable-next-line new-cap
-              const doc = new jsPDF();
-              DevExpress.pdfExporter.exportDataGrid({
-                jsPDFDocument: doc,
-                component: dataGrid,
-                indent: 5,
-              }).then(() => {
-                doc.save('Companies.pdf');
-              });
-            },
-          },
-        },
-        'searchPanel',
-      ],
+    export: {
+      enabled: true,
+      formats: ['pdf'],
+      allowExportSelectedData: true,
     },
-  }).dxDataGrid('instance');
+    onExporting(e) {
+      // eslint-disable-next-line new-cap
+      const doc = new jsPDF();
+
+      DevExpress.pdfExporter.exportDataGrid({
+        jsPDFDocument: doc,
+        component: e.component,
+        indent: 5,
+      }).then(() => {
+        doc.save('Companies.pdf');
+      });
+    },
+  });
 });

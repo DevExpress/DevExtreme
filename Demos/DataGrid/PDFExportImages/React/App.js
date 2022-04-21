@@ -1,59 +1,21 @@
 import React from 'react';
-import DataGrid, { Column, Toolbar, Item } from 'devextreme-react/data-grid';
-import Button from 'devextreme-react/button';
+import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 import service from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+const exportFormats = ['pdf'];
 
-    this.dataGridRef = React.createRef();
-    this.employees = service.getEmployees();
-  }
+export default function App() {
+  const employees = service.getEmployees();
 
-  render() {
-    return (
-      <div>
-        <DataGrid
-          id="gridContainer"
-          ref={this.dataGridRef}
-          dataSource={this.employees}
-          keyExpr="ID"
-          showBorders={true}
-          showRowLines={true}
-          showColumnLines={false}>
-
-          <Column dataField="Picture" width={90} cellRender={this.renderGridCell} />
-          <Column dataField="FirstName" />
-          <Column dataField="LastName" />
-          <Column dataField="Position" />
-          <Column dataField="BirthDate" dataType="date" />
-          <Column dataField="HireDate" dataType="date" />
-
-          <Toolbar>
-            <Item location="after">
-              <Button
-                text='Export to PDF'
-                icon='exportpdf'
-                onClick={this.exportGrid}
-              />
-            </Item>
-          </Toolbar>
-        </DataGrid>
-      </div>
-    );
-  }
-
-  exportGrids() {
+  const onExporting = React.useCallback((e) => {
     // eslint-disable-next-line new-cap
     const doc = new jsPDF();
-    const dataGrid = this.dataGridRef.current.instance;
 
     exportDataGrid({
       jsPDFDocument: doc,
-      component: dataGrid,
+      component: e.component,
       margin: {
         top: 10,
         right: 10,
@@ -77,11 +39,33 @@ class App extends React.Component {
     }).then(() => {
       doc.save('DataGrid.pdf');
     });
-  }
+  }, []);
 
-  renderGridCell(cellData) {
-    return (<div><img src={cellData.value}></img></div>);
-  }
+  const renderGridCell = React.useCallback((cellData) => (
+    <div>
+      <img src={cellData.value}></img>
+    </div>
+  ));
+
+  return (
+    <div>
+      <DataGrid
+        id="gridContainer"
+        dataSource={employees}
+        keyExpr="ID"
+        showBorders={true}
+        showRowLines={true}
+        showColumnLines={false}
+        onExporting={onExporting}>
+
+        <Export enabled={true} formats={exportFormats} />
+        <Column dataField="Picture" width={90} cellRender={renderGridCell} />
+        <Column dataField="FirstName" />
+        <Column dataField="LastName" />
+        <Column dataField="Position" />
+        <Column dataField="BirthDate" dataType="date" />
+        <Column dataField="HireDate" dataType="date" />
+      </DataGrid>
+    </div>
+  );
 }
-
-export default App;

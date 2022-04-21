@@ -7,7 +7,12 @@
       :show-borders="true"
       :show-row-lines="true"
       :show-column-lines="false"
+      @exporting="onExporting"
     >
+      <DxExport
+        :enabled="true"
+        :formats="['pdf']"
+      />
       <DxColumn
         data-field="Picture"
         :width="90"
@@ -32,53 +37,34 @@
           >
         </div>
       </template>
-
-      <DxToolbar>
-        <DxItem location="after">
-          <DxButton
-            text="Export to PDF"
-            icon="exportpdf"
-            @click="exportGrid()"
-          />
-        </DxItem>
-      </DxToolbar>
     </DxDataGrid>
   </div>
 </template>
 <script>
-import DxButton from 'devextreme-vue/button';
 import {
-  DxDataGrid, DxColumn, DxExport, DxToolbar, DxItem,
+  DxDataGrid, DxColumn, DxExport,
 } from 'devextreme-vue/data-grid';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 import service from './data.js';
 
-const dataGridRef = 'dataGrid';
-
 export default {
   components: {
-    DxButton, DxDataGrid, DxColumn, DxExport, DxToolbar, DxItem,
+    DxDataGrid, DxColumn, DxExport,
   },
   data() {
     return {
       employees: service.getEmployees(),
-      dataGridRef,
     };
   },
-  computed: {
-    dataGrid() {
-      return this.$refs[dataGridRef].instance;
-    },
-  },
   methods: {
-    exportGrid() {
+    onExporting(e) {
       // eslint-disable-next-line new-cap
       const doc = new jsPDF();
 
       exportDataGrid({
         jsPDFDocument: doc,
-        component: this.dataGrid,
+        component: e.component,
         margin: {
           top: 10,
           right: 10,

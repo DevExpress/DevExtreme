@@ -4,55 +4,45 @@ window.jsPDF = window.jspdf.jsPDF;
 
 $(() => {
   const lastPoint = { x: 0, y: 0 };
-  const dataGrid = $('#gridContainer').dxDataGrid({
+  $('#gridContainer').dxDataGrid({
     dataSource: countries,
     keyExpr: 'ID',
     showBorders: true,
-    toolbar: {
-      items: [
-        'groupPanel',
-        {
-          widget: 'dxButton',
-          location: 'after',
-          options: {
-            icon: 'exportpdf',
-            text: 'Export to PDF',
-            onClick() {
-              // eslint-disable-next-line new-cap
-              const doc = new jsPDF();
-              DevExpress.pdfExporter.exportDataGrid({
-                jsPDFDocument: doc,
-                component: dataGrid,
-                topLeft: { x: 1, y: 15 },
-                columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
-                customDrawCell({ rect }) {
-                  if (lastPoint.x < rect.x + rect.w) {
-                    lastPoint.x = rect.x + rect.w;
-                  }
-                  if (lastPoint.y < rect.y + rect.h) {
-                    lastPoint.y = rect.y + rect.h;
-                  }
-                },
-              }).then(() => {
-                const header = 'Country Area, Population, and GDP Structure';
-                const pageWidth = doc.internal.pageSize.getWidth();
-                doc.setFontSize(15);
-                const headerWidth = doc.getTextDimensions(header).w;
-                doc.text(header, (pageWidth - headerWidth) / 2, 20);
-
-                const footer = 'www.wikipedia.org';
-                doc.setFontSize(9);
-                doc.setTextColor('#cccccc');
-                const footerWidth = doc.getTextDimensions(footer).w;
-                doc.text(footer, (lastPoint.x - footerWidth), lastPoint.y + 5);
-
-                doc.save('Companies.pdf');
-              });
-            },
-          },
+    export: {
+      enabled: true,
+      formats: ['pdf'],
+    },
+    onExporting(e) {
+      // eslint-disable-next-line new-cap
+      const doc = new jsPDF();
+      DevExpress.pdfExporter.exportDataGrid({
+        jsPDFDocument: doc,
+        component: e.component,
+        topLeft: { x: 1, y: 15 },
+        columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
+        customDrawCell({ rect }) {
+          if (lastPoint.x < rect.x + rect.w) {
+            lastPoint.x = rect.x + rect.w;
+          }
+          if (lastPoint.y < rect.y + rect.h) {
+            lastPoint.y = rect.y + rect.h;
+          }
         },
-        'searchPanel',
-      ],
+      }).then(() => {
+        const header = 'Country Area, Population, and GDP Structure';
+        const pageWidth = doc.internal.pageSize.getWidth();
+        doc.setFontSize(15);
+        const headerWidth = doc.getTextDimensions(header).w;
+        doc.text(header, (pageWidth - headerWidth) / 2, 20);
+
+        const footer = 'www.wikipedia.org';
+        doc.setFontSize(9);
+        doc.setTextColor('#cccccc');
+        const footerWidth = doc.getTextDimensions(footer).w;
+        doc.text(footer, (lastPoint.x - footerWidth), lastPoint.y + 5);
+
+        doc.save('Companies.pdf');
+      });
     },
     columns: [
       'Country',
@@ -106,5 +96,5 @@ $(() => {
         }],
       },
     ],
-  }).dxDataGrid('instance');
+  });
 });

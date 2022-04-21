@@ -5,7 +5,9 @@
   [showBorders]="true"
   [showRowLines]="true"
   [showColumnLines]="false"
+  (onExporting)="onExporting($event)"
 >
+  <dxo-export [enabled]="true" [formats]="['pdf']"></dxo-export>
   <dxi-column
     dataField="Picture"
     cellTemplate="cellTemplate"
@@ -20,15 +22,4 @@
   <div *dxTemplate="let cell of 'cellTemplate'">
     <img src="{{ cell.value }}" />
   </div>
-
-  <dxo-toolbar>
-    <dxi-item location="after">
-      <dx-button
-        text="Export to PDF"
-        icon="exportpdf"
-        (onClick)="exportGrid($event)"
-      >
-      </dx-button>
-    </dxi-item>
-  </dxo-toolbar>
 </dx-data-grid>

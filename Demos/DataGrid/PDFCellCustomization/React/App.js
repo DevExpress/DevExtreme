@@ -1,25 +1,22 @@
 import React from 'react';
 import DataGrid, {
-  Column, Summary, GroupPanel, Grouping, SortByGroupSummaryInfo, TotalItem, Toolbar,
-  Item,
+  Column, Summary, GroupPanel, Grouping, SortByGroupSummaryInfo, TotalItem, Export,
 } from 'devextreme-react/data-grid';
-import Button from 'devextreme-react/button';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 
 import { companies } from './data.js';
 
-export default function App() {
-  const dataGridRef = React.createRef();
+const exportFormats = ['pdf'];
 
-  const exportGrid = React.useCallback(() => {
+export default function App() {
+  const onExporting = React.useCallback((e) => {
     // eslint-disable-next-line new-cap
     const doc = new jsPDF();
-    const dataGrid = dataGridRef.current.instance;
 
     exportDataGrid({
       jsPDFDocument: doc,
-      component: dataGrid,
+      component: e.component,
       columnWidths: [40, 40, 30, 30, 40],
       customizeCell({ gridCell, pdfCell }) {
         if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Phone') {
@@ -49,24 +46,25 @@ export default function App() {
     });
   });
 
-  function renderGridCell(data) {
-    return <a href={ data.text } target='_blank' rel='noopener noreferrer'>Website</a>;
-  }
+  const renderGridCell = React.useCallback((data) => (
+    <a href={ data.text } target='_blank' rel='noopener noreferrer'>Website</a>
+  ), []);
 
-  function phoneNumberFormat(value) {
+  const phoneNumberFormat = React.useCallback((value) => {
     const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/);
     return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
-  }
+  }, []);
 
   return (
     <div>
       <DataGrid
-        ref={dataGridRef}
         id="gridContainer"
         dataSource={companies}
         keyExpr="ID"
-        showBorders={true}>
+        showBorders={true}
+        onExporting={onExporting}>
 
+        <Export enabled={true} formats={exportFormats} />
         <GroupPanel visible={true} />
         <Grouping autoExpandAll={true} />
         <SortByGroupSummaryInfo summaryItem="count" />
@@ -85,17 +83,6 @@ export default function App() {
             displayFormat="Total count: {0}"
           />
         </Summary>
-
-        <Toolbar>
-          <Item name="groupPanel" />
-          <Item location="after">
-            <Button
-              icon='exportpdf'
-              text='Export to PDF'
-              onClick={exportGrid}
-            />
-          </Item>
-        </Toolbar>
       </DataGrid>
     </div>
   );

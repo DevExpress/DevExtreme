@@ -6,8 +6,8 @@
       :data-source="customers"
       key-expr="ID"
       :show-borders="true"
+      @exporting="onExporting"
     >
-
       <DxColumn data-field="CompanyName"/>
       <DxColumn data-field="Phone"/>
       <DxColumn data-field="Fax"/>
@@ -17,21 +17,14 @@
         data-field="State"
       />
 
-      <DxGroupPanel :visible="true"/>
       <DxGrouping :auto-expand-all="true"/>
       <DxPaging :page-size="10"/>
-      <DxSearchPanel :visible="true"/>
-      <DxToolbar>
-        <DxItem name="groupPanel"/>
-        <DxItem location="after">
-          <DxButton
-            icon="exportpdf"
-            text="Export to PDF"
-            @click="exportGrid()"
-          />
-        </DxItem>
-        <DxItem name="searchPanel"/>
-      </DxToolbar>
+      <DxSelection mode="multiple"/>
+      <DxExport
+        :enabled="true"
+        :formats="['pdf']"
+        :allow-export-selected-data="true"
+      />
     </DxDataGrid>
   </div>
 </template>
@@ -41,10 +34,9 @@ import {
   DxDataGrid,
   DxColumn,
   DxGrouping,
-  DxGroupPanel,
-  DxSearchPanel,
+  DxExport,
+  DxSelection,
   DxPaging,
-  DxToolbar,
   DxItem,
 } from 'devextreme-vue/data-grid';
 
@@ -53,38 +45,29 @@ import { exportDataGrid } from 'devextreme/pdf_exporter';
 
 import { customers } from './data.js';
 
-const dataGridRef = 'dataGrid';
-
 export default {
   components: {
     DxButton,
     DxColumn,
-    DxGroupPanel,
+    DxSelection,
     DxGrouping,
     DxPaging,
-    DxSearchPanel,
+    DxExport,
     DxDataGrid,
-    DxToolbar,
     DxItem,
   },
   data() {
     return {
       customers,
-      dataGridRef,
     };
   },
-  computed: {
-    dataGrid() {
-      return this.$refs[dataGridRef].instance;
-    },
-  },
   methods: {
-    exportGrid() {
+    onExporting(e) {
       // eslint-disable-next-line new-cap
       const doc = new jsPDF();
       exportDataGrid({
         jsPDFDocument: doc,
-        component: this.dataGrid,
+        component: e.component,
         indent: 5,
       }).then(() => {
         doc.save('Companies.pdf');
@@ -93,9 +76,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-#exportButton {
-  margin-bottom: 10px;
-}
-</style>
