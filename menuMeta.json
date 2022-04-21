@@ -3878,7 +3878,7 @@
         "Name": "Slideout",
         "Hidden": true,
         "Breadcrumb": true,
-        "Equivalents": "Navigarion Drawer, dxSlideOut, dx-slide-out",
+        "Equivalents": "Navigation Drawer, dxSlideOut, dx-slide-out",
         "Demos": [
           {
             "Title": "Overview",
@@ -3896,7 +3896,6 @@
           {
             "Title": "Left or Right Position",
             "Name": "LeftOrRightPosition",
-            "DocUrl": "ApiReference/UI_Components/dxDrawer/Configuration/#position",
             "Widget": "Drawer",
             "Modules": "html-react-parser",
             "MvcAdditionalFiles": [
