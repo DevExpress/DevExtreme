@@ -423,7 +423,7 @@ export interface dxHtmlEditorTableResizing {
      /**
    * @docid
    * @default ["url"]
-   * @type Array<Enums.HtmlEditorImageUploadTab>
+   * @type Array<dxHtmlEditorImageUploadTabItem, Enums.HtmlEditorImageUploadTab>
    * @public
    */
     tabs?: Array<dxHtmlEditorImageUploadTabItem | 'url' | 'file'>;
