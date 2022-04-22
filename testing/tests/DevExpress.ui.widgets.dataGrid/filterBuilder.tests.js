@@ -351,7 +351,7 @@ QUnit.module('Real dataGrid', {
     QUnit.test('the \'any of\' doesn\'t throw exception when column is lookup', function(assert) {
         // arrange, act
         this.initDataGrid({
-            dataSource: [{ field: 1 }],
+            dataSource: [{ field: 1 }, { field: 2 }],
             loadingTimeout: null,
             columns: [{ dataField: 'field',
                 lookup: {

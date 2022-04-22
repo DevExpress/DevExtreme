@@ -1065,6 +1065,10 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @public
      */
     wordWrapEnabled?: boolean;
+
+    // private
+
+    syncLookupFilterValues?: boolean;
 }
 
 export interface ColumnChooser {
