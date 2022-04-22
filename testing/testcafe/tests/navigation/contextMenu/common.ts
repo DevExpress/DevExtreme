@@ -1,10 +1,12 @@
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import ContextMenu from '../../../model/contextMenu';
-import { Item } from '../../../../../js/ui/context_menu.d';
+// import { Item } from '../../../../../js/ui/context_menu.d';
+import { deleteStylesheetRule, insertStylesheetRule } from '../helpers/domUtils';
 
 fixture`ContextMenu_common`
   .page(url(__dirname, '../../container.html'));
@@ -16,25 +18,35 @@ fixture`ContextMenu_common`
 
     await contextMenu.apiShow();
 
+    const stylesheet = await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
+
+    await t.click(Selector('.dx-icon-remove'));
+
     await t
       .expect(await takeScreenshot(`ContextMenu_items,theme=${theme.replace(/\./g, '-')}.png`))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
+
+    await deleteStylesheetRule(stylesheet, 0);
   }).before(async (t) => {
     await t.resizeWindow(300, 400);
     await changeTheme(theme);
 
     const menuItems = [
-      { text: 'remove', icon: 'remove' },
+      { text: 'remove', icon: 'remove', items: [{ text: 'item_1' }, { text: 'item_2' }] },
       { text: 'user', icon: 'user' },
       { text: 'coffee', icon: 'coffee' },
-    ] as Item[];
+    ] as any[];
 
-    return createWidget('dxContextMenu', { elementAttr: { id: 'contextMenu' }, items: menuItems, target: 'body' });
-  }).after(async () => {
-    await changeTheme('generic.light');
+    return createWidget('dxContextMenu', {
+      cssClass: 'custom-class',
+      elementAttr: { id: 'contextMenu' },
+      items: menuItems,
+      target: 'body',
+    });
   }).after(async (t) => {
     await restoreBrowserSize(t);
+    await changeTheme('generic.light');
   });
 });
