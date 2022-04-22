@@ -1752,20 +1752,20 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
             text: '1',
             onItemClick: itemClick
         };
-        // act
+
         this.setup({
             fields: this.fields,
             columnFields: [this.fields[1]],
         }, {
             onContextMenuPreparing: function(e) {
+                e.component._contextMenu.option('elementAttr', { class: 'context-menu' });
                 e.items.push(itemData);
             }
         });
 
         this.$container.find('[group=\'column\']').eq(0).trigger('dxcontextmenu');
-        // assert
 
-        const contextMenu = this.$container.find('.dx-pivotgridfieldchooser-context-menu').dxContextMenu('instance');
+        const contextMenu = this.$container.find('.context-menu').dxContextMenu('instance');
         const items = contextMenu.option('items');
 
         assert.ok(contextMenu.option('visible'));
