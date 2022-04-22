@@ -1168,4 +1168,57 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // assert
         assert.strictEqual(parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight')), dataGrid.getView('rowsView').getScrollbarWidth(), 'padding-right');
     });
+
+    // T1083488
+    QUnit.testInActiveWindow('Virtual scrolling should work with validation and fixed columns', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [],
+            editing: {
+                mode: 'batch',
+            },
+            scrolling: {
+                mode: 'virtual',
+            },
+            columnFixing: {
+                enabled: true,
+            },
+            columns: [
+                {
+                    dataField: '1',
+                    fixed: true,
+                    validationRules: [
+                        {
+                            type: 'required',
+                            message: 'Product is required'
+                        }
+                    ],
+                },
+                {
+                    dataField: '2',
+                },
+            ],
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.addRow();
+        this.clock.tick();
+
+        dataGrid.getController('validating').validate(true);
+        this.clock.tick();
+
+        $('td').trigger('focus');
+        this.clock.tick();
+
+        dataGrid.addRow();
+        this.clock.tick();
+
+        // assert
+        const table = $('.dx-datagrid-rowsview .dx-datagrid-content:not(.dx-datagrid-content-fixed) tbody');
+        const tableFixed = $('.dx-datagrid-rowsview .dx-datagrid-content.dx-datagrid-content-fixed tbody');
+
+        assert.strictEqual(table.find('tr').length, 3);
+        assert.strictEqual(tableFixed.find('tr').length, 3);
+    });
 });
