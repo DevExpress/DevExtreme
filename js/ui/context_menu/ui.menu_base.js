@@ -243,7 +243,6 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     _initMarkup() {
         super._initMarkup();
-        this._addCustomCssClass(this.$element());
         this.option('useInkRipple') && this._renderInkRipple();
     }
 

@@ -261,6 +261,8 @@ class Menu extends MenuBase {
         this.$element().addClass(DX_MENU_CLASS);
 
         super._initMarkup();
+        this._addCustomCssClass(this.$element());
+
         this.setAria('role', 'menubar');
     }
 
@@ -461,7 +463,7 @@ class Menu extends MenuBase {
             .appendTo($rootItem);
 
         const items = this._getChildNodes(node);
-        const result = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
+        const subMenu = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
             _dataAdapter: this._dataAdapter,
             _parentKey: node.internalFields.key,
             items: items,
@@ -469,9 +471,9 @@ class Menu extends MenuBase {
             position: this.getSubmenuPosition($rootItem)
         }));
 
-        this._attachSubmenuHandlers($rootItem, result);
+        this._attachSubmenuHandlers($rootItem, subMenu);
 
-        return result;
+        return subMenu;
     }
 
     _getSubmenuOptions() {

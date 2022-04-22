@@ -357,7 +357,6 @@ class ContextMenu extends MenuBase {
         const $overlayContent = this._overlay.$content();
         $overlayContent.addClass(DX_CONTEXT_MENU_CLASS);
 
-        this._addCustomCssClass($overlayContent);
         this._addPlatformDependentClass($overlayContent);
         this._attachContextMenuEvent();
     }
@@ -449,6 +448,8 @@ class ContextMenu extends MenuBase {
             .appendTo($holder)
             .addClass(DX_SUBMENU_CLASS)
             .css('visibility', submenuContainer ? 'hidden' : 'visible');
+
+        this._addCustomCssClass($wrapper);
 
         const $itemsContainer = super._renderContainer($wrapper);
 
