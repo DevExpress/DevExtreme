@@ -1119,73 +1119,6 @@ declare module DevExpress {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface PdfCell {
-    /**
-     * [descr:PdfCell.backgroundColor]
-     */
-    backgroundColor?: string;
-    /**
-     * [descr:PdfCell.font]
-     */
-    font?: {
-      /**
-       * [descr:PdfCell.font.size]
-       */
-      size?: number;
-      /**
-       * [descr:PdfCell.font.name]
-       */
-      name?: string;
-      /**
-       * [descr:PdfCell.font.style]
-       */
-      style?: 'normal' | 'bold' | 'italic';
-    };
-    /**
-     * [descr:PdfCell.horizontalAlign]
-     */
-    horizontalAlign?: 'left' | 'center' | 'right';
-    /**
-     * [descr:PdfCell.padding]
-     */
-    padding?: {
-      /**
-       * [descr:PdfCell.padding.top]
-       */
-      top?: number;
-      /**
-       * [descr:PdfCell.padding.left]
-       */
-      left?: number;
-      /**
-       * [descr:PdfCell.padding.right]
-       */
-      right?: number;
-      /**
-       * [descr:PdfCell.padding.bottom]
-       */
-      bottom?: number;
-    };
-    /**
-     * [descr:PdfCell.text]
-     */
-    text?: string;
-    /**
-     * [descr:PdfCell.textColor]
-     */
-    textColor?: string;
-    /**
-     * [descr:PdfCell.verticalAlign]
-     */
-    verticalAlign?: 'top' | 'middle' | 'bottom';
-    /**
-     * [descr:PdfCell.wordWrapEnabled]
-     */
-    wordWrapEnabled?: boolean;
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export interface PdfExportGanttFont {
     /**
      * [descr:PdfExportGanttFont.fontObject]
@@ -4146,48 +4079,79 @@ declare module DevExpress.pdfExporter {
     options: PdfExportGanttProps
   ): DevExpress.core.utils.DxPromise<any>;
   /**
-   * [descr:PdfDataGridCell]
+   * [descr:PdfCell]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface PdfDataGridCell {
+  export interface PdfCell {
     /**
-     * [descr:PdfDataGridCell.column]
+     * [descr:PdfCell.backgroundColor]
      */
-    column?: DevExpress.ui.dxDataGrid.Column;
+    backgroundColor?: string;
     /**
-     * [descr:PdfDataGridCell.data]
+     * [descr:PdfCell.font]
      */
-    data?: any;
-    /**
-     * [descr:PdfDataGridCell.groupIndex]
-     */
-    groupIndex?: number;
-    /**
-     * [descr:PdfDataGridCell.groupSummaryItems]
-     */
-    groupSummaryItems?: Array<{
+    font?: {
       /**
-       * [descr:PdfDataGridCell.groupSummaryItems.name]
+       * [descr:PdfCell.font.size]
+       */
+      size?: number;
+      /**
+       * [descr:PdfCell.font.name]
        */
       name?: string;
       /**
-       * [descr:PdfDataGridCell.groupSummaryItems.value]
+       * [descr:PdfCell.font.style]
        */
-      value?: any;
-    }>;
+      style?: 'normal' | 'bold' | 'italic';
+    };
     /**
-     * [descr:PdfDataGridCell.rowType]
+     * [descr:PdfCell.horizontalAlign]
      */
-    rowType?: string;
+    horizontalAlign?: 'left' | 'center' | 'right';
     /**
-     * [descr:PdfDataGridCell.totalSummaryItemName]
+     * [descr:PdfCell.padding]
      */
-    totalSummaryItemName?: string;
+    padding?: {
+      /**
+       * [descr:PdfCell.padding.top]
+       */
+      top?: number;
+      /**
+       * [descr:PdfCell.padding.left]
+       */
+      left?: number;
+      /**
+       * [descr:PdfCell.padding.right]
+       */
+      right?: number;
+      /**
+       * [descr:PdfCell.padding.bottom]
+       */
+      bottom?: number;
+    };
     /**
-     * [descr:PdfDataGridCell.value]
+     * [descr:PdfCell.text]
      */
-    value?: any;
+    text?: string;
+    /**
+     * [descr:PdfCell.textColor]
+     */
+    textColor?: string;
+    /**
+     * [descr:PdfCell.verticalAlign]
+     */
+    verticalAlign?: 'top' | 'middle' | 'bottom';
+    /**
+     * [descr:PdfCell.wordWrapEnabled]
+     */
+    wordWrapEnabled?: boolean;
   }
+  /**
+   * [descr:PdfDataGridCell]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface PdfDataGridCell
+    extends DevExpress.excelExporter.DataGridCell {}
   /**
    * [descr:PdfExportDataGridProps]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
