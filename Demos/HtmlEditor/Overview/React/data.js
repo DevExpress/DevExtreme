@@ -32,7 +32,7 @@ export const markup = `
         <li>HTML and Markdown support</li>
         <li>Mail-merge placeholders (for example, %username%)</li>
         <li>Adaptive toolbar for working images, links, and color formats</li>
-        <li>Insert images as a link or base64 (drag and drop images to convert them to base64)</li>
+        <li>Image upload: drag-and-drop images onto the form, select files from the file system, or specify a URL.</li>
         <li>Copy-paste rich content (unsupported formats are removed)</li>
         <li>Tables support</li>
     </ul>
