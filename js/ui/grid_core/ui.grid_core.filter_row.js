@@ -666,7 +666,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
         _handleDataChanged: function(e) {
             this.callBase.apply(this, arguments);
 
-            if(e.operationTypes?.filtering || e.operationTypes?.reload) {
+            if(e.operationTypes?.filtering) {
                 this.updateLookupDataSource();
             }
         },
@@ -872,6 +872,27 @@ export const filterRowModule = {
                     }
 
                     that.callBase.apply(that, arguments);
+                }
+            },
+            editing: {
+                updateFieldValue(options) {
+                    if(options.column.lookup) {
+                        this._needUpdateLookupDataSource = true;
+                    }
+
+                    return this.callBase.apply(this, arguments);
+                },
+                _afterSaveEditData(cancel) {
+                    if(this._needUpdateLookupDataSource && !cancel) {
+                        this.getView('columnHeadersView')?.updateLookupDataSource();
+                    }
+                    this._needUpdateLookupDataSource = false;
+
+                    return this.callBase.apply(this, arguments);
+                },
+                _afterCancelEditData() {
+                    this._needUpdateLookupDataSource = false;
+                    return this.callBase.apply(this, arguments);
                 }
             }
         },
