@@ -14,8 +14,6 @@ fixture`Menu_common`
   test(`Menu_items,theme=${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const stylesheet = await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
-
     await t.click(Selector('.dx-icon-remove'));
     await t.click(Selector('.dx-icon-save'));
 
@@ -24,11 +22,10 @@ fixture`Menu_common`
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-
-    await deleteStylesheetRule(stylesheet, 0);
   }).before(async (t) => {
     await t.resizeWindow(300, 400);
     await changeTheme(theme);
+    await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
 
     const menuItems = [
       {
@@ -52,6 +49,7 @@ fixture`Menu_common`
 
     return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' });
   }).after(async (t) => {
+    await deleteStylesheetRule(0);
     await restoreBrowserSize(t);
     await changeTheme('generic.light');
   });

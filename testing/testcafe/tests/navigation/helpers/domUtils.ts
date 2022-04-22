@@ -41,18 +41,19 @@ export const insertElementBefore = ClientFunction((
 export const insertStylesheetRule = ClientFunction((
   rule: string,
   index: number,
-): CSSStyleSheet => {
+): void => {
   const styleEl = document.createElement('style');
+  styleEl.setAttribute('id', 'styleElement');
   document.head.appendChild(styleEl);
 
   styleEl.sheet!.insertRule(rule, index);
-
-  return styleEl.sheet!;
 }, { dependencies: { } });
 
 export const deleteStylesheetRule = ClientFunction((
-  stylesheet: CSSStyleSheet,
   index: number,
-) => {
-  stylesheet.deleteRule(index);
+): void => {
+  const styleElement = document.getElementById('styleElement');
+  (styleElement as HTMLStyleElement).sheet!.deleteRule(index);
+
+  styleElement?.remove();
 }, { dependencies: { } });

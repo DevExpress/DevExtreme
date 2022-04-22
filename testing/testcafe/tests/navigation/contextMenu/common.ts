@@ -18,8 +18,6 @@ fixture`ContextMenu_common`
 
     await contextMenu.apiShow();
 
-    const stylesheet = await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
-
     await t.click(Selector('.dx-icon-remove'));
 
     await t
@@ -27,11 +25,10 @@ fixture`ContextMenu_common`
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-
-    await deleteStylesheetRule(stylesheet, 0);
   }).before(async (t) => {
     await t.resizeWindow(300, 400);
     await changeTheme(theme);
+    await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
 
     const menuItems = [
       { text: 'remove', icon: 'remove', items: [{ text: 'item_1' }, { text: 'item_2' }] },
@@ -46,6 +43,7 @@ fixture`ContextMenu_common`
       target: 'body',
     });
   }).after(async (t) => {
+    await deleteStylesheetRule(0);
     await restoreBrowserSize(t);
     await changeTheme('generic.light');
   });
