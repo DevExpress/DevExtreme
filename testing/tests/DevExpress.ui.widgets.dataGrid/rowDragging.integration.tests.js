@@ -155,6 +155,34 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
         assert.strictEqual($dataGridContent.width(), $fixedDataGridContent.width(), 'fixed content has correct width');
     });
 
+    // T1083805
+    QUnit.test('Fixed content should have correct height when columnFixed and rowDragging are enabled', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: generateItems(100),
+            height: 300,
+            columnAutoWidth: true,
+            width: 200,
+            rowDragging: {
+                allowReordering: true,
+                showDragIcons: true
+            },
+            columnFixing: {
+                enabled: true
+            },
+            scrolling: {
+                useNative: true
+            }
+        });
+        this.clock.tick(100);
+
+        // assert
+        const $rowsView = $('.dx-datagrid-rowsview');
+        const $fixedDataGridContent = $('.dx-datagrid-rowsview .dx-datagrid-content.dx-datagrid-content-fixed');
+
+        assert.strictEqual(Math.round($fixedDataGridContent.height()), Math.round($rowsView.height()) - dataGrid.getScrollbarWidth(true), 'fixed content has correct height');
+    });
+
     QUnit.test('Focused cell should be reseted on drag start (T1050509)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
