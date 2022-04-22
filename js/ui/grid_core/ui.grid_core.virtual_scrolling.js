@@ -574,10 +574,11 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 $tables.each((index, element) => {
                     const isFixed = index > 0;
+                    const prevFixed = this._isFixedTableRendering;
                     this._isFixedTableRendering = isFixed;
                     this._addVirtualRow($(element), isFixed, 'top', top);
                     this._addVirtualRow($(element), isFixed, 'bottom', bottom);
-                    this._isFixedTableRendering = false;
+                    this._isFixedTableRendering = prevFixed;
                 });
             }
         },
