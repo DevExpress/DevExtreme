@@ -25,6 +25,12 @@ QUnit.module('ContextMenu markup', moduleConfig, () => {
         assert.ok(this.$element.hasClass(DX_HAS_CONTEXT_MENU_CLASS), 'context menu have correct class');
     });
 
+    QUnit.test('context menu should have custom css class on root element', function(assert) {
+        new ContextMenu(this.$element, { cssClass: 'custom' });
+
+        assert.equal(this.$element.hasClass('custom'), false, 'context menu does not has custom class');
+    });
+
     QUnit.test('aria role', function(assert) {
         new ContextMenu(this.$element, {});
 
