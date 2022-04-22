@@ -4131,6 +4131,54 @@ QUnit.module('View\'s focus', {
             assert.ok($row.hasClass('dx-row-focused'));
         });
     });
+
+    QUnit.testInActiveWindow('Keydown should work after deleting a row in the batch editing mode (T1083644)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [
+                { id: 1, name: 'name 1' },
+                { id: 2, name: 'name 2' },
+                { id: 3, name: 'name 3' }
+            ],
+            keyExpr: 'id',
+            editing: {
+                mode: 'batch',
+                allowDeleting: true,
+            },
+            focusedRowEnabled: true,
+            onKeyDown: function(e) {
+                if(e.event.key === 'Delete') {
+                    e.component.deleteRow(0);
+                }
+            }
+        });
+        this.clock.tick(300);
+
+        // act
+        $(this.dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(this.dataGrid.option('focusedRowKey'), 1, 'row key is defined');
+        assert.ok($(this.dataGrid.getRowElement(0)).hasClass('dx-row-focused'), 'first row is focused');
+
+        // act
+        let keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
+        keyboard.keyDown('del');
+        this.clock.tick(300);
+
+        // assert
+        assert.ok($(this.dataGrid.getRowElement(0)).hasClass('dx-row-removed'), 'first row is marked as removed');
+
+        // act
+        keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
+        keyboard.keyDown('down');
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(this.dataGrid.option('focusedRowKey'), 2, 'row key is changed');
+        assert.ok($(this.dataGrid.getRowElement(1)).hasClass('dx-row-focused'), 'second row is focused');
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
