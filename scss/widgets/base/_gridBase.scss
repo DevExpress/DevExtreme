@@ -861,6 +861,10 @@
       &.dx-scrollable-container {
         width: auto;
       }
+
+      &.dx-#{$widget-name}-content-fixed.dx-scrollable-container {
+        height: auto;
+      }
     }
 
 
