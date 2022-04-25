@@ -4067,26 +4067,37 @@ declare module DevExpress.localization {
 }
 declare module DevExpress.pdfExporter {
   /**
-   * [descr:pdfExporter.exportDataGrid(options)]
-   */
-  export function exportDataGrid(
-    options: PdfExportDataGridProps
-  ): DevExpress.core.utils.DxPromise<void>;
-  /**
-   * [descr:pdfExporter.exportGantt(options)]
-   */
-  export function exportGantt(
-    options: PdfExportGanttProps
-  ): DevExpress.core.utils.DxPromise<any>;
-  /**
    * [descr:PdfCell]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface PdfCell {
+  export interface Cell {
     /**
      * [descr:PdfCell.backgroundColor]
      */
     backgroundColor?: string;
+    /**
+     * [descr:PdfCell.borderColor]
+     */
+    borderColor?: string;
+    /**
+     * [descr:PdfCell.borderWidth]
+     */
+    borderWidth?: number;
+    /**
+     * [descr:PdfCell.drawLeftBorder]
+     */
+    drawLeftBorder?: boolean;
+    /**
+     * [descr:PdfCell.drawTopBorder]
+     */
+    drawTopBorder?: boolean;
+    /**
+     * [descr:PdfCell.drawRightBorder]
+     */
+    drawRightBorder?: boolean;
+    /**
+     * [descr:PdfCell.drawBottomBorder]
+     */
+    drawBottomBorder?: boolean;
     /**
      * [descr:PdfCell.font]
      */
@@ -4146,8 +4157,21 @@ declare module DevExpress.pdfExporter {
      */
     wordWrapEnabled?: boolean;
   }
+  export type DataGridCell = PdfDataGridCell;
   /**
-   * [descr:PdfDataGridCell]
+   * [descr:pdfExporter.exportDataGrid(options)]
+   */
+  export function exportDataGrid(
+    options: PdfExportDataGridProps
+  ): DevExpress.core.utils.DxPromise<void>;
+  /**
+   * [descr:pdfExporter.exportGantt(options)]
+   */
+  export function exportGantt(
+    options: PdfExportGanttProps
+  ): DevExpress.core.utils.DxPromise<any>;
+  /**
+   * @deprecated Use DataGridCell instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PdfDataGridCell
@@ -4178,14 +4202,6 @@ declare module DevExpress.pdfExporter {
        */
       y?: number;
     };
-    /**
-     * [descr:PdfExportDataGridProps.borderColor]
-     */
-    borderColor?: string;
-    /**
-     * [descr:PdfExportDataGridProps.borderWidth]
-     */
-    borderWidth?: number;
     /**
      * [descr:PdfExportDataGridProps.columnWidths]
      */
@@ -4227,8 +4243,8 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportDataGridProps.customDrawCell]
      */
     customDrawCell?: (options: {
-      gridCell?: PdfDataGridCell;
-      pdfCell?: PdfCell;
+      gridCell?: DataGridCell;
+      pdfCell?: Cell;
       doc?: any;
       rect?: { x: number; y: number; h: number; w: number };
       cancel?: boolean;
@@ -4237,14 +4253,14 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportDataGridProps.customizeCell]
      */
     customizeCell?: (options: {
-      gridCell?: PdfDataGridCell;
-      pdfCell?: PdfCell;
+      gridCell?: DataGridCell;
+      pdfCell?: Cell;
     }) => void;
     /**
      * [descr:PdfExportDataGridProps.onRowExporting]
      */
     onRowExporting?: (options: {
-      rowCells?: Array<PdfCell>;
+      rowCells?: Array<Cell>;
       rowHeight?: number;
     }) => void;
     /**
