@@ -140,8 +140,8 @@ export class AppointmentForm {
                 if(this.form && e.itemType === 'group') {
                     const dataExprs = this.scheduler.getDataAccessors().expr;
 
-                    const startDate = new Date(formData[dataExprs.startDateExpr]);
-                    const endDate = new Date(formData[dataExprs.endDateExpr]);
+                    const startDate = new Date(this.formData[dataExprs.startDateExpr]);
+                    const endDate = new Date(this.formData[dataExprs.endDateExpr]);
 
                     const startTimeZoneEditor = e.items.find(i => i.dataField === dataExprs.startDateTimeZoneExpr);
                     const endTimeZoneEditor = e.items.find(i => i.dataField === dataExprs.endDateTimeZoneExpr);
@@ -406,6 +406,8 @@ export class AppointmentForm {
     updateFormData(formData) {
         this.semaphore.take();
 
+        this.form.option('formData', formData);
+
         const dataExprs = this.scheduler.getDataAccessors().expr;
 
         const allDay = formData[dataExprs.allDayExpr];
@@ -413,7 +415,7 @@ export class AppointmentForm {
 
         this.updateRecurrenceEditorStartDate(startDate, dataExprs.recurrenceRuleExpr);
 
-        this.form.option('formData', formData);
+        // this.form.option('formData', formData);
         this.setEditorsType(allDay);
 
         this.semaphore.release();
