@@ -147,7 +147,7 @@
     "looks-same": "^7.2.3",
     "map-stream": "0.0.7",
     "merge-stream": "^2.0.0",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.6",
     "mustache": "4.0.1",
     "nconf": "^0.10.0",
     "normalize-path": "^3.0.0",
