@@ -4066,6 +4066,7 @@ declare module DevExpress.localization {
   ): number;
 }
 declare module DevExpress.pdfExporter {
+  export type DataGridCell = PdfDataGridCell;
   /**
    * [descr:pdfExporter.exportDataGrid(options)]
    */
@@ -4147,7 +4148,7 @@ declare module DevExpress.pdfExporter {
     wordWrapEnabled?: boolean;
   }
   /**
-   * [descr:PdfDataGridCell]
+   * @deprecated Use DataGridCell instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PdfDataGridCell
@@ -4227,7 +4228,7 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportDataGridProps.customDrawCell]
      */
     customDrawCell?: (options: {
-      gridCell?: PdfDataGridCell;
+      gridCell?: DataGridCell;
       pdfCell?: PdfCell;
       doc?: any;
       rect?: { x: number; y: number; h: number; w: number };
@@ -4237,7 +4238,7 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportDataGridProps.customizeCell]
      */
     customizeCell?: (options: {
-      gridCell?: PdfDataGridCell;
+      gridCell?: DataGridCell;
       pdfCell?: PdfCell;
     }) => void;
     /**

@@ -8,6 +8,11 @@ import { exportGantt } from './exporter/jspdf/export_gantt';
  */
 
 /**
+ * @name PdfDataGridCell
+ * @inherits ExcelDataGridCell
+ */
+
+/**
 * @name pdfExporter
 * @section utils
 */
