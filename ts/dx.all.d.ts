@@ -4066,23 +4066,10 @@ declare module DevExpress.localization {
   ): number;
 }
 declare module DevExpress.pdfExporter {
-  export type DataGridCell = PdfDataGridCell;
-  /**
-   * [descr:pdfExporter.exportDataGrid(options)]
-   */
-  export function exportDataGrid(
-    options: PdfExportDataGridProps
-  ): DevExpress.core.utils.DxPromise<void>;
-  /**
-   * [descr:pdfExporter.exportGantt(options)]
-   */
-  export function exportGantt(
-    options: PdfExportGanttProps
-  ): DevExpress.core.utils.DxPromise<any>;
   /**
    * [descr:PdfCell]
    */
-  export interface PdfCell {
+  export interface Cell {
     /**
      * [descr:PdfCell.backgroundColor]
      */
@@ -4170,6 +4157,19 @@ declare module DevExpress.pdfExporter {
      */
     wordWrapEnabled?: boolean;
   }
+  export type DataGridCell = PdfDataGridCell;
+  /**
+   * [descr:pdfExporter.exportDataGrid(options)]
+   */
+  export function exportDataGrid(
+    options: PdfExportDataGridProps
+  ): DevExpress.core.utils.DxPromise<void>;
+  /**
+   * [descr:pdfExporter.exportGantt(options)]
+   */
+  export function exportGantt(
+    options: PdfExportGanttProps
+  ): DevExpress.core.utils.DxPromise<any>;
   /**
    * @deprecated Use DataGridCell instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -4244,7 +4244,7 @@ declare module DevExpress.pdfExporter {
      */
     customDrawCell?: (options: {
       gridCell?: DataGridCell;
-      pdfCell?: PdfCell;
+      pdfCell?: Cell;
       doc?: any;
       rect?: { x: number; y: number; h: number; w: number };
       cancel?: boolean;
@@ -4254,13 +4254,13 @@ declare module DevExpress.pdfExporter {
      */
     customizeCell?: (options: {
       gridCell?: DataGridCell;
-      pdfCell?: PdfCell;
+      pdfCell?: Cell;
     }) => void;
     /**
      * [descr:PdfExportDataGridProps.onRowExporting]
      */
     onRowExporting?: (options: {
-      rowCells?: Array<PdfCell>;
+      rowCells?: Array<Cell>;
       rowHeight?: number;
     }) => void;
     /**

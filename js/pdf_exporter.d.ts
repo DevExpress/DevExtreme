@@ -20,121 +20,121 @@ export interface PdfDataGridCell extends ExcelCell {}
 
 /**
  * @public
- * @docid
+ * @docid PdfCell
  * @namespace DevExpress.pdfExporter
  */
-export interface PdfCell {
+export interface Cell {
   /**
-   * @docid
+   * @docid PdfCell.backgroundColor
    * @default '#FFFFFF'
    * @public
    */
   backgroundColor?: string;
   /**
-   * @docid
+   * @docid PdfCell.borderColor
    * @default '#979797'
    * @public
    */
   borderColor?: string;
   /**
-   * @docid
+   * @docid PdfCell.borderWidth
    * @default 0.5
    * @public
    */
   borderWidth?: number;
   /**
-   * @docid
+   * @docid PdfCell.drawLeftBorder
    * @public
    */
   drawLeftBorder?: boolean;
   /**
-   * @docid
+   * @docid PdfCell.drawTopBorder
    * @public
    */
   drawTopBorder?: boolean;
   /**
-   * @docid
+   * @docid PdfCell.drawRightBorder
    * @public
    */
   drawRightBorder?: boolean;
   /**
-   * @docid
+   * @docid PdfCell.drawBottomBorder
    * @public
    */
   drawBottomBorder?: boolean;
   /**
-   * @docid
+   * @docid PdfCell.font
    * @public
    */
   font?: {
     /**
-     * @docid
+     * @docid PdfCell.font.size
      * @default 10
      * @public
      */
     size?: number;
     /**
-     * @docid
+     * @docid PdfCell.font.name
      * @public
      */
     name?: string;
     /**
-     * @docid
+     * @docid PdfCell.font.style
      * @default 'normal'
      * @public
      */
     style?: 'normal' | 'bold' | 'italic';
   };
   /**
-   * @docid
+   * @docid PdfCell.horizontalAlign
    * @public
    */
   horizontalAlign?: 'left' | 'center' | 'right';
   /**
-   * @docid
+   * @docid PdfCell.padding
    * @public
    */
   padding?: {
     /**
-     * @docid
+     * @docid PdfCell.padding.top
      * @public
      */
     top?: number;
     /**
-     * @docid
+     * @docid PdfCell.padding.left
      * @public
      */
     left?: number;
     /**
-      * @docid
+      * @docid PdfCell.padding.right
       * @public
       */
     right?: number;
     /**
-      * @docid
+      * @docid PdfCell.padding.bottom
       * @public
       */
     bottom?: number;
   };
   /**
-   * @docid
+   * @docid PdfCell.text
    * @public
    */
   text?: string;
   /**
-   * @docid
+   * @docid PdfCell.textColor
    * @default '#000000'
    * @public
    */
   textColor?: string;
   /**
-   * @docid
+   * @docid PdfCell.verticalAlign
    * @default 'middle'
    * @public
    */
   verticalAlign?: 'top' | 'middle' | 'bottom';
   /**
-   * @docid
+   * @docid PdfCell.wordWrapEnabled
    * @public
    */
   wordWrapEnabled?: boolean;
@@ -235,7 +235,7 @@ export interface PdfExportDataGridProps {
       * @type_function_param1_field5 cancel:boolean
       * @public
       */
-    customDrawCell?: ((options: { gridCell?: DataGridCell; pdfCell?: PdfCell; doc?: any; rect?: { x: number; y: number; h: number; w: number }; cancel?: boolean }) => void);
+    customDrawCell?: ((options: { gridCell?: DataGridCell; pdfCell?: Cell; doc?: any; rect?: { x: number; y: number; h: number; w: number }; cancel?: boolean }) => void);
     /**
      * @docid
      * @type_function_param1 options:Object
@@ -243,7 +243,7 @@ export interface PdfExportDataGridProps {
      * @type_function_param1_field2 pdfCell:PdfCell
      * @public
      */
-    customizeCell?: ((options: { gridCell?: DataGridCell; pdfCell?: PdfCell }) => void);
+    customizeCell?: ((options: { gridCell?: DataGridCell; pdfCell?: Cell }) => void);
     /**
      * @docid
      * @type_function_param1 options:Object
@@ -251,7 +251,7 @@ export interface PdfExportDataGridProps {
      * @type_function_param1_field2 rowHeight:number
      * @public
      */
-    onRowExporting?: ((options: { rowCells?: Array<PdfCell>; rowHeight?: number }) => void);
+    onRowExporting?: ((options: { rowCells?: Array<Cell>; rowHeight?: number }) => void);
     /**
      * @docid
      * @public
