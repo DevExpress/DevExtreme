@@ -2,54 +2,6 @@ import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 import { moduleConfig, createMockPdfDoc, createDataGrid } from './jspdf.dataGrid_utils.js';
 
 QUnit.module('Styles - Border widths', moduleConfig, () => {
-    QUnit.test('[{f1, f2, f3] - tableBorderWidth = 1.5', function(assert) {
-        const done = assert.async();
-        const doc = createMockPdfDoc();
-        doc.__logOptions.textOptions = false;
-
-        const dataGrid = createDataGrid({
-            columns: [
-                { dataField: 'f1' },
-                { dataField: 'f2' },
-                { dataField: 'f3' },
-            ],
-            dataSource: [
-                { f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' },
-            ],
-        });
-
-        const customizeCell = ({ pdfCell }) => {
-            pdfCell.drawLeftBorder = false;
-            pdfCell.drawTopBorder = false;
-            pdfCell.drawRightBorder = false;
-            pdfCell.drawBottomBorder = false;
-        };
-
-        const expectedLog = [
-            'setTextColor,#979797',
-            'setFontSize,10',
-            'text,F1,55,65.75,',
-            'text,F2,145,65.75,',
-            'text,F3,225,65.75,',
-            'setTextColor,#000000',
-            'text,f1_1,55,87.25,',
-            'text,f1_2,145,87.25,',
-            'text,f1_3,225,87.25,',
-            'setLineWidth,1.5',
-            'setDrawColor,#979797',
-            'rect,50,55,260,43',
-            'setFontSize,16',
-            'setLineWidth,0.200025',
-            'setDrawColor,#000000'
-        ];
-
-        exportDataGrid({ jsPDFDocument: doc, component: dataGrid, topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80, 90 ], customizeCell, drawTableBorder: true, borderWidth: 1.5 }).then(() => {
-            // doc.save(assert.test.testName + '.pdf');
-            assert.deepEqual(doc.__log, expectedLog);
-            done();
-        });
-    });
-
     QUnit.test('[{f1, f2, f3] - rowType = header, borderWidth = 1.5', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
