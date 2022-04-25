@@ -9,13 +9,13 @@ const exportFormats = ['pdf'];
 export default function App() {
   const employees = service.getEmployees();
 
-  const onExporting = React.useCallback((e) => {
+  const onExporting = React.useCallback(({ component }) => {
     // eslint-disable-next-line new-cap
     const doc = new jsPDF();
 
     exportDataGrid({
       jsPDFDocument: doc,
-      component: e.component,
+      component,
       margin: {
         top: 10,
         right: 10,
@@ -24,16 +24,16 @@ export default function App() {
       },
       topLeft: { x: 0, y: 5 },
       columnWidths: [30, 30, 30, 30, 30, 30],
-      onRowExporting: (arg) => {
-        const isHeader = arg.rowCells[0].text === 'Picture';
+      onRowExporting: (e) => {
+        const isHeader = e.rowCells[0].text === 'Picture';
         if (!isHeader) {
-          arg.rowHeight = 40;
+          e.rowHeight = 40;
         }
       },
-      customDrawCell: (arg) => {
-        if (arg.gridCell.rowType === 'data' && arg.gridCell.column.dataField === 'Picture') {
-          doc.addImage(arg.gridCell.value, 'PNG', arg.rect.x, arg.rect.y, arg.rect.w, arg.rect.h);
-          arg.cancel = true;
+      customDrawCell: (e) => {
+        if (e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'Picture') {
+          doc.addImage(e.gridCell.value, 'PNG', e.rect.x, e.rect.y, e.rect.w, e.rect.h);
+          e.cancel = true;
         }
       },
     }).then(() => {

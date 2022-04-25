@@ -17,8 +17,8 @@ export default function App() {
   const onExporting = React.useCallback((e) => {
     // eslint-disable-next-line new-cap
     const doc = new jsPDF();
-
     const lastPoint = { x: 0, y: 0 };
+
     exportDataGrid({
       jsPDFDocument: doc,
       component: e.component,

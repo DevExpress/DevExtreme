@@ -84,6 +84,7 @@ export default {
       // eslint-disable-next-line new-cap
       const doc = new jsPDF();
       const lastPoint = { x: 0, y: 0 };
+
       exportDataGrid({
         jsPDFDocument: doc,
         component: e.component,

@@ -3,7 +3,6 @@
 window.jsPDF = window.jspdf.jsPDF;
 
 $(() => {
-  const lastPoint = { x: 0, y: 0 };
   $('#gridContainer').dxDataGrid({
     dataSource: countries,
     keyExpr: 'ID',
@@ -15,6 +14,8 @@ $(() => {
     onExporting(e) {
       // eslint-disable-next-line new-cap
       const doc = new jsPDF();
+      const lastPoint = { x: 0, y: 0 };
+
       DevExpress.pdfExporter.exportDataGrid({
         jsPDFDocument: doc,
         component: e.component,
