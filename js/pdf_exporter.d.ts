@@ -1,61 +1,23 @@
 import { DxPromise } from './core/utils/deferred';
-import dxDataGrid, { Column } from './ui/data_grid';
+import dxDataGrid from './ui/data_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 import dxGantt from './ui/gantt';
+import {
+  DataGridCell,
+} from './excel_exporter';
 
 /**
  * @docid
  * @namespace DevExpress.pdfExporter
  * @type object
  */
-export interface PdfDataGridCell {
-    /**
-     * @docid
-     * @public
-     * @type dxDataGridColumn
-     */
-    column?: Column;
-    /**
-     * @docid
-     * @public
-     */
-    data?: any;
-    /**
-     * @docid
-     * @public
-     */
-    groupIndex?: number;
-    /**
-     * @docid
-     * @public
-     */
-    groupSummaryItems?: Array<{
-      /**
-       * @docid
-       */
-      name?: string;
-      /**
-       * @docid
-       */
-      value?: any;
-    }>;
-    /**
-     * @docid
-     * @public
-     */
-    rowType?: string;
-    /**
-     * @docid
-     * @public
-     */
-    totalSummaryItemName?: string;
-    /**
-     * @docid
-     * @public
-     */
-    value?: any;
-}
+export interface PdfDataGridCell extends DataGridCell {}
 
+/**
+ * @docid
+ * @namespace DevExpress.pdfExporter
+ * @type object
+ */
 export interface PdfCell {
   /**
    * @docid
