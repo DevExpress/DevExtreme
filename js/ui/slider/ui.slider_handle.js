@@ -75,7 +75,7 @@ const SliderHandle = Widget.inherit({
                 this._updateTooltipOptions(args);
                 break;
             default:
-                this.callBase(arguments);
+                this.callBase(args);
         }
     },
 
