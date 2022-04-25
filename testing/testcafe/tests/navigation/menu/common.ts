@@ -4,7 +4,8 @@ import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
-import { Item } from '../../../../../js/ui/menu.d';
+// import { Item } from '../../../../../js/ui/menu.d';
+import { deleteStylesheetRule, insertStylesheetRule } from '../helpers/domUtils';
 
 fixture`Menu_common`
   .page(url(__dirname, '../../container.html'));
@@ -24,6 +25,7 @@ fixture`Menu_common`
   }).before(async (t) => {
     await t.resizeWindow(300, 400);
     await changeTheme(theme);
+    await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
 
     const menuItems = [
       {
@@ -43,10 +45,11 @@ fixture`Menu_common`
       },
       { text: 'user', icon: 'user' },
       { text: 'coffee', icon: 'coffee' },
-    ] as Item[];
+    ] as any[];
 
-    return createWidget('dxMenu', { items: menuItems });
+    return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' });
   }).after(async (t) => {
+    await deleteStylesheetRule(0);
     await restoreBrowserSize(t);
     await changeTheme('generic.light');
   });
