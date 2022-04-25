@@ -45,6 +45,26 @@ export interface PdfCell {
    * @docid
    * @public
    */
+  drawLeftBorder?: boolean;
+  /**
+   * @docid
+   * @public
+   */
+  drawTopBorder?: boolean;
+  /**
+   * @docid
+   * @public
+   */
+  drawRightBorder?: boolean;
+  /**
+   * @docid
+   * @public
+   */
+  drawBottomBorder?: boolean;
+  /**
+   * @docid
+   * @public
+   */
   font?: {
     /**
      * @docid
@@ -73,18 +93,22 @@ export interface PdfCell {
   padding?: {
     /**
      * @docid
+     * @public
      */
     top?: number;
     /**
      * @docid
+     * @public
      */
     left?: number;
     /**
       * @docid
+      * @public
       */
     right?: number;
     /**
       * @docid
+      * @public
       */
     bottom?: number;
   };
@@ -137,11 +161,13 @@ export interface PdfExportDataGridProps {
       /**
        * @docid
        * @default 0
+       * @public
        */
       x?: number;
       /**
        * @docid
        * @default 0
+       * @public
        */
       y?: number;
     };
@@ -164,18 +190,22 @@ export interface PdfExportDataGridProps {
     margin?: {
       /**
        * @docid
+       * @public
        */
       top?: number;
       /**
        * @docid
+       * @public
        */
       left?: number;
       /**
         * @docid
+        * @public
         */
       right?: number;
       /**
         * @docid
+        * @public
         */
       bottom?: number;
     };

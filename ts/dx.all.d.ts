@@ -4097,6 +4097,22 @@ declare module DevExpress.pdfExporter {
      */
     borderWidth?: number;
     /**
+     * [descr:PdfCell.drawLeftBorder]
+     */
+    drawLeftBorder?: boolean;
+    /**
+     * [descr:PdfCell.drawTopBorder]
+     */
+    drawTopBorder?: boolean;
+    /**
+     * [descr:PdfCell.drawRightBorder]
+     */
+    drawRightBorder?: boolean;
+    /**
+     * [descr:PdfCell.drawBottomBorder]
+     */
+    drawBottomBorder?: boolean;
+    /**
      * [descr:PdfCell.font]
      */
     font?: {
