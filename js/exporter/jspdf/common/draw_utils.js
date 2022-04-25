@@ -176,7 +176,7 @@ function trySetColor(doc, target, color) {
 
     const normalizedColor = doc.__private__.decodeColorString(doc.__private__.encodeColorString({ ch1, ch2, ch3, ch4, precision: target === 'text' ? 3 : 2 }));
 
-    if(normalizedColor !== doc[getterName]()) {
+    if(normalizedColor !== doc[getterName]() || target === 'fill') {
         doc[setterName].apply(doc, [ch1, ch2, ch3, ch4].filter(item => item !== undefined));
     }
 }
