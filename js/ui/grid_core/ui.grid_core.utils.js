@@ -578,6 +578,10 @@ export default {
                     group,
                     isExpanded: false,
                 }).done((items) => {
+                    if(items.length === 0) {
+                        d.resolve([]);
+                    }
+
                     if(hasLookupOptimization) {
                         const lookupItems = items.map(item => ({
                             [column.lookup.valueExpr]: item.key,
@@ -592,7 +596,7 @@ export default {
                             })
                         });
 
-                        return newDataSource
+                        newDataSource
                             .load(loadOptions)
                             .done(d.resolve)
                             .fail(d.fail);
