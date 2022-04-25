@@ -3,7 +3,7 @@ import { extend } from '../../../core/utils/extend';
 import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
-import { generateRowsInfo, getBaseTableStyle } from './rows_generator';
+import { generateRowsInfo } from './rows_generator';
 import { splitByPages } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, addNewPage } from './draw_utils';
 import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils';
@@ -28,12 +28,6 @@ function _getFullOptions(options) {
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
 
-    if(!isDefined(fullOptions.borderWidth)) {
-        fullOptions.borderWidth = getBaseTableStyle().borderWidth;
-    }
-    if(!isDefined(fullOptions.borderColor)) {
-        fullOptions.borderColor = getBaseTableStyle().borderColor;
-    }
     if(!isDefined(fullOptions.loadPanel)) {
         fullOptions.loadPanel = {};
     }
