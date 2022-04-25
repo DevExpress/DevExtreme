@@ -4089,6 +4089,14 @@ declare module DevExpress.pdfExporter {
      */
     backgroundColor?: string;
     /**
+     * [descr:PdfCell.borderColor]
+     */
+    borderColor?: string;
+    /**
+     * [descr:PdfCell.borderWidth]
+     */
+    borderWidth?: number;
+    /**
      * [descr:PdfCell.font]
      */
     font?: {
@@ -4179,14 +4187,6 @@ declare module DevExpress.pdfExporter {
        */
       y?: number;
     };
-    /**
-     * [descr:PdfExportDataGridProps.borderColor]
-     */
-    borderColor?: string;
-    /**
-     * [descr:PdfExportDataGridProps.borderWidth]
-     */
-    borderWidth?: number;
     /**
      * [descr:PdfExportDataGridProps.columnWidths]
      */

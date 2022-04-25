@@ -31,6 +31,18 @@ export interface PdfCell {
   backgroundColor?: string;
   /**
    * @docid
+   * @default '#979797'
+   * @public
+   */
+  borderColor?: string;
+  /**
+   * @docid
+   * @default 0.5
+   * @public
+   */
+  borderWidth?: number;
+  /**
+   * @docid
    * @public
    */
   font?: {
@@ -133,18 +145,6 @@ export interface PdfExportDataGridProps {
        */
       y?: number;
     };
-    /**
-     * @docid
-     * @default '#979797'
-     * @public
-     */
-    borderColor?: string;
-    /**
-     * @docid
-     * @default 0.5
-     * @public
-     */
-    borderWidth?: number;
     /**
      * @docid
      * @default undefined
