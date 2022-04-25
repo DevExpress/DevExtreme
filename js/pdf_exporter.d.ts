@@ -19,6 +19,7 @@ import {
 export interface PdfDataGridCell extends ExcelCell {}
 
 /**
+ * @public
  * @docid
  * @namespace DevExpress.pdfExporter
  */
@@ -69,15 +70,18 @@ export interface PdfCell {
     /**
      * @docid
      * @default 10
+     * @public
      */
     size?: number;
     /**
      * @docid
+     * @public
      */
     name?: string;
     /**
      * @docid
      * @default 'normal'
+     * @public
      */
     style?: 'normal' | 'bold' | 'italic';
   };
