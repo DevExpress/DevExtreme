@@ -3,7 +3,7 @@ import { extend } from '../../../core/utils/extend';
 import { normalizeRowsInfo, normalizeBoundaryValue } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
-import { generateRowsInfo } from './rows_generator';
+import { generateRowsInfo, getBaseTableStyle } from './rows_generator';
 import { splitByPages } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, addNewPage } from './draw_utils';
 import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils';
@@ -229,8 +229,9 @@ function exportDataGrid(options) {
 
                 const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
                 if(isEmptyPdfCellsInfoSpecified) {
-                    const tableRect = calculateTableSize(jsPDFDocument, pdfCellsInfo, options);
-                    drawGridLines(jsPDFDocument, tableRect, options, docStyles);
+                    const tableRect = calculateTableSize(jsPDFDocument, pdfCellsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
+                    const baseStyle = getBaseTableStyle();
+                    drawGridLines(jsPDFDocument, tableRect, baseStyle, docStyles);
                 }
             });
 
