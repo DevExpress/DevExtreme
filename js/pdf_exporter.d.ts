@@ -9,14 +9,13 @@ import {
 /**
  * @docid
  * @namespace DevExpress.pdfExporter
- * @type object
+ * @inherits DataGridCell
  */
 export interface PdfDataGridCell extends DataGridCell {}
 
 /**
  * @docid
  * @namespace DevExpress.pdfExporter
- * @type object
  */
 export interface PdfCell {
   /**

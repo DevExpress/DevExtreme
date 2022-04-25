@@ -3,6 +3,11 @@ import { exportDataGrid as exportDataGridWithAutoTable } from './exporter/jspdf/
 import { exportGantt } from './exporter/jspdf/export_gantt';
 
 /**
+ * @name PDFCell
+ * @type object
+ */
+
+/**
 * @name pdfExporter
 * @section utils
 */
