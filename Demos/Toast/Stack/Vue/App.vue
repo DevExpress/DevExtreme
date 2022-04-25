@@ -117,6 +117,7 @@ export default {
         message: `Toast ${this.id}`,
         height: 45,
         width: 150,
+        minWidth: 150,
         type: this.types[Math.floor(Math.random() * 4)],
         displayTime: 3500,
         animation: {
