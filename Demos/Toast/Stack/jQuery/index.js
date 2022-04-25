@@ -62,13 +62,13 @@ $(() => {
   const positionSelect = $('#position').dxSelectBox({
     items: positions,
     value: position,
-    onSelectionChanged: (value) => { position = value; },
+    onSelectionChanged: ({ selectedItem }) => { position = selectedItem; },
   }).dxSelectBox('instance');
 
   $('#direction').dxSelectBox({
     items: directions,
     value: direction,
-    onSelectionChanged: (value) => { direction = value; },
+    onSelectionChanged: ({ selectedItem }) => { direction = selectedItem; },
   });
 
   const numberBoxValueChange = (value, pos, componentToDisable) => {
