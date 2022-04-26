@@ -40,7 +40,7 @@ QUnit.performanceTest('render with columnAutoWidth', function(assert) {
         columnAutoWidth: true
     });
 
-    assert.measureStyleRecalculation(measureFunction, 12);
+    assert.measureStyleRecalculation(measureFunction, 13);
 });
 
 QUnit.performanceTest('render with columnFixing', function(assert) {
@@ -52,7 +52,7 @@ QUnit.performanceTest('render with columnFixing', function(assert) {
         }
     });
 
-    assert.measureStyleRecalculation(measureFunction, 13);
+    assert.measureStyleRecalculation(measureFunction, 14);
 });
 
 QUnit.performanceTest('render with virtual scrolling', function(assert) {
