@@ -69,7 +69,7 @@ export class TimeZoneCalculator {
 
     return new Date(resultDate);
 
-    // TODO Previous date calculation engine. Engine was be changed after fix T1080932.
+    // TODO Previous date calculation engine. Engine was be changed after fix T1078292.
     // TODO This code block commented and placed for history.
     // eslint-disable-next-line max-len
     // const utcDate = date.getTime() - direction * clientOffset * dateUtils.dateToMilliseconds('hour');
