@@ -1,32 +1,26 @@
-import { isDefined } from '../../../core/utils/type';
+import { isDefined, isNumeric } from '../../../core/utils/type';
 import { calculateRowHeight, getPageWidth, toPdfUnit } from './pdf_utils';
 
-function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
-    const DEFAULT_WIDTH = toPdfUnit(doc, 150);
+function calculateColumnWidths(doc, dataProvider, topLeftX, margin, customerColumnWidths) {
+    const DEFAULT_WIDTH = 150;
+    const resultWidths = dataProvider.getColumnsWidths().map(width => toPdfUnit(doc, width ?? DEFAULT_WIDTH));
 
-    const columnsWidths = dataProvider
-        .getColumnsWidths()
-        .map(width => width ?? DEFAULT_WIDTH);
+    const totalAutoColumnsWidth = resultWidths.reduce((total, width, index) => isDefined(customerColumnWidths[index]) ? total : total + width, 0);
+    const totalCustomerColumnsWidth = customerColumnWidths.reduce((total, width) => isNumeric(width) ? total + width : total, 0);
 
-    if(!columnsWidths.length) {
-        return [];
-    }
+    const availablePageWidth = getAvailablePageAreaWidth(doc, topLeftX, margin);
+    const ratio = totalCustomerColumnsWidth < availablePageWidth ? (availablePageWidth - totalCustomerColumnsWidth) / totalAutoColumnsWidth : 1;
 
-    const summaryGridWidth = columnsWidths
-        .reduce((accumulator, width) => accumulator + width);
+    return resultWidths.map((width, index) => customerColumnWidths[index] ?? width * ratio);
+}
 
-    const availablePageWidth = getPageWidth(doc) - (topLeft?.x ?? 0)
-        - margin.left - margin.right;
-
-    const ratio = availablePageWidth >= summaryGridWidth
-        ? 1
-        : availablePageWidth / summaryGridWidth;
-
-    return columnsWidths.map(width => width * ratio);
+function getAvailablePageAreaWidth(doc, topLeftX, margin) {
+    return getPageWidth(doc) - topLeftX - margin.left - margin.right;
 }
 
 function initializeCellsWidth(doc, dataProvider, rows, options) {
-    const columnWidths = options?.columnWidths ?? calculateColumnsWidths(doc, dataProvider, options?.topLeft, options?.margin);
+    const columnWidths = calculateColumnWidths(doc, dataProvider, options.topLeft.x, options.margin, options.columnWidths);
+
     rows.forEach(row => {
         row.cells.forEach(({ gridCell, pdfCell }, index) => {
             pdfCell._rect.w = columnWidths[index];
