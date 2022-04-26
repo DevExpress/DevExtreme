@@ -18804,12 +18804,6 @@ declare module DevExpress.ui {
     export interface ResizeInfo {
       readonly width: number;
       readonly height: number;
-      handles: {
-        readonly left: boolean;
-        readonly top: boolean;
-        readonly right: boolean;
-        readonly bottom: boolean;
-      };
     }
     export type ResizeStartEvent = DevExpress.events.NativeEventInfo<
       dxResizable,
