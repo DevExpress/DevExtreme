@@ -11,6 +11,7 @@ import {
   RowClassesGetter, RowClassesGetterType, RowPropertiesGetter, RowPropertiesGetterType,
 } from '../widgets/row_base';
 import CLASSES from '../classes';
+import { combineClasses } from '../../../../utils/combine_classes';
 
 const getKey = createGetKey('Selection');
 
@@ -114,7 +115,10 @@ export const AddSelectionColumnToVisibleColumns = createSelector(
     const selectColumn: ColumnInternal = {
       alignment: 'center',
       cellTemplate: selectionCheckboxTemplate,
-      cssClass: 'dx-editor-cell dx-editor-inline-block',
+      cssClass: combineClasses({
+        [CLASSES.editorCell]: true,
+        [CLASSES.editorInlineBlock]: true,
+      }),
       width: 30,
     };
 

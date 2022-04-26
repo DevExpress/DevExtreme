@@ -41,4 +41,7 @@ export default {
   expand: 'dx-datagrid-expand',
   groupOpened: 'dx-datagrid-group-opened',
   groupClosed: 'dx-datagrid-group-closed',
+
+  editorCell: 'dx-editor-cell',
+  editorInlineBlock: 'dx-editor-inline-block',
 };
