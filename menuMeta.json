@@ -179,7 +179,6 @@
             "Title": "Cell Editing and Editing API",
             "Name": "CellEditingAndEditingAPI",
             "Widget": "DataGrid",
-            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
               "/Controllers/ApiControllers/DataGridEmployeesController.cs",
@@ -371,8 +370,7 @@
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
             "Modules": "devextreme-aspnet-data-nojquery",
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -601,7 +599,6 @@
             "Name": "CommandColumnCustomization",
             "Widget": "DataGrid",
             "Equivalents": "button column",
-            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Scripts/data/employeeData.js"
             ],
@@ -617,7 +614,6 @@
             "Title": "State Persistence",
             "Name": "StatePersistence",
             "Widget": "DataGrid",
-            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Models/Order.cs",
               "/Models/SampleData/Orders.cs"
@@ -673,7 +669,6 @@
             "Title": "Row Template",
             "Name": "RowTemplate",
             "Widget": "DataGrid",
-            "Badge": "Updated",
             "Modules": "globalize--vue&react",
             "MvcAdditionalFiles": [
               "/Models/DataGrid/Employee.cs",
@@ -710,7 +705,6 @@
           {
             "Title": "Toolbar Customization",
             "Name": "ToolbarCustomization",
-            "Badge": "Updated",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/Order.cs",
@@ -1565,7 +1559,6 @@
             "Title": "State Persistence",
             "Name": "StatePersistence",
             "Widget": "TreeList",
-            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/TreeListEmployeesController.cs",
               "/Models/TreeList/Employee.cs",
@@ -3340,7 +3333,6 @@
       },
       {
         "Name": "Data",
-        "Badge": "Updated",
         "Equivalents": "",
         "Demos": [
           {
@@ -3360,7 +3352,6 @@
           {
             "Title": "Validation",
             "Name": "Validation",
-            "Badge": "Updated",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,
@@ -3377,12 +3368,10 @@
       {
         "Name": "UI Customization",
         "Equivalents": "",
-        "Badge": "Updated",
         "Demos": [
           {
             "Title": "Chart Appearance",
             "Name": "ChartAppearance",
-            "Badge": "Updated",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,
@@ -3411,7 +3400,6 @@
           {
             "Title": "Toolbar",
             "Name": "Toolbar",
-            "Badge": "Updated",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,
@@ -3465,7 +3453,6 @@
         "Demos": [
           {
             "Title": "Export To PDF",
-            "Badge": "Updated",
             "Name": "ExportToPDF",
             "Widget": "Gantt",
             "DemoType": "Web",
@@ -3483,12 +3470,10 @@
       },
       {
         "Name": "Sorting",
-        "Badge": "New",
         "Equivalents": "",
         "Demos": [
           {
             "Title": "Sorting",
-            "Badge": "New",
             "Name": "Sorting",
             "Widget": "Gantt",
             "DemoType": "Web",
@@ -3505,12 +3490,10 @@
       },
       {
         "Name": "Filtering",
-        "Badge": "New",
         "Equivalents": "",
         "Demos": [
           {
             "Title": "Filter Row",
-            "Badge": "New",
             "Name": "FilterRow",
             "Widget": "Gantt",
             "DemoType": "Web",
@@ -3525,7 +3508,6 @@
           },
           {
             "Title": "Header Filter",
-            "Badge": "New",
             "Name": "HeaderFilter",
             "Widget": "Gantt",
             "DemoType": "Web",
@@ -4571,7 +4553,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Badge": "Updated",
             "Widget": "Form",
             "MvcAdditionalFiles": [
               "/Models/ActiveCompany.cs",
