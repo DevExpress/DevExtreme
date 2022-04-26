@@ -17,6 +17,7 @@ const CONTENT_CLASS = 'content';
 const FREESPACE_CLASS = 'dx-freespace-row';
 const COLUMN_LINES_CLASS = 'dx-column-lines';
 const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
+const ROW_INSERTED_IN_POPUP = 'dx-row-inserted-popup';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
@@ -510,9 +511,12 @@ const VirtualScrollingRowsViewExtender = (function() {
             this._appendEmptyRow($table, $virtualRow, location);
         },
         _getRowHeights: function() {
-            const rowHeights = this._getRowElements(this._tableElement).toArray().map(function(row) {
-                return getBoundingRect(row).height;
-            });
+            const rowHeights = this._getRowElements(this._tableElement)
+                .toArray()
+                .filter(row => !$(row).hasClass(ROW_INSERTED_IN_POPUP))
+                .map(function(row) {
+                    return getBoundingRect(row).height;
+                });
             return rowHeights;
         },
         _correctRowHeights: function(rowHeights) {
@@ -1069,17 +1073,20 @@ export const virtualScrollingModule = {
                                 const rowType = item.rowType;
                                 const itemCountable = isItemCountableByDataSource(item, dataSource);
 
+                                const isNextGroupItem = rowType === 'group' && (prevCountable || itemCountable || (prevRowType !== 'group' && currentIndex > 0));
+                                const isNextDataItem = rowType === 'data' && itemCountable && (prevCountable || prevRowType !== 'group');
+
                                 if(!item.isNewRow && isDefined(prevCountable)) {
-                                    const isNextGroupItem = rowType === 'group' && (prevCountable || itemCountable || (prevRowType !== 'group' && currentIndex > 0));
-                                    const isNextDataItem = rowType === 'data' && itemCountable && (prevCountable || prevRowType !== 'group');
                                     const isPrevNewRowFirst = isPrevRowNew && !wasCountableItem;
-                                    if((isNextGroupItem || isNextDataItem)) {
-                                        wasCountableItem = true;
-                                        if(!isPrevNewRowFirst) {
-                                            currentIndex++;
-                                        }
+                                    if((isNextGroupItem || isNextDataItem) && !isPrevNewRowFirst) {
+                                        currentIndex++;
                                     }
                                 }
+
+                                if(isNextGroupItem || isNextDataItem) {
+                                    wasCountableItem = true;
+                                }
+
                                 item.loadIndex = currentIndex;
                                 prevCountable = itemCountable;
                                 prevRowType = rowType;
