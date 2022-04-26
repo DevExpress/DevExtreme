@@ -798,19 +798,17 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     _updateColumnsWidthIfNeeded: function(posX) {
         let deltaX;
         let needUpdate = false;
-        let nextCellWidth;
+        let contentWidth = this._rowsView.contentWidth();
         const resizingInfo = this._resizingInfo;
         const columnsController = this._columnsController;
         const visibleColumns = columnsController.getVisibleColumns();
         const columnsSeparatorWidth = this._columnsSeparatorView.width();
-        let contentWidth = this._rowsView.contentWidth();
         const isNextColumnMode = isNextColumnResizingMode(this);
         const adaptColumnWidthByRatio = isNextColumnMode && this.option('adaptColumnWidthByRatio') && !this.option('columnAutoWidth');
-        let minWidth;
-        let nextColumn;
-        let cellWidth;
         const rtlEnabled = this.option('rtlEnabled');
         const isRtlParentStyle = this._isRtlParentStyle();
+        const column = visibleColumns[resizingInfo.currentColumnIndex];
+        const nextColumn = visibleColumns[resizingInfo.nextColumnIndex];
 
         function isPercentWidth(width) {
             return isString(width) && width.slice(-1) === '%';
@@ -852,21 +850,49 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             return contentWidth;
         }
 
+        function calculateCellWidths(delta) {
+            let nextMinWidth;
+            let nextCellWidth;
+            let needCorrectionNextCellWidth;
+            const cellWidth = resizingInfo.currentColumnWidth + delta;
+            const minWidth = column && column.minWidth || columnsSeparatorWidth;
+            const result = {};
+
+            if(cellWidth >= minWidth) {
+                result.cellWidth = cellWidth;
+            } else {
+                result.cellWidth = minWidth;
+                needCorrectionNextCellWidth = true;
+            }
+
+            if(isNextColumnMode) {
+                nextCellWidth = resizingInfo.nextColumnWidth - delta;
+                nextMinWidth = nextColumn && nextColumn.minWidth || columnsSeparatorWidth;
+
+                if(nextCellWidth >= nextMinWidth) {
+                    if(needCorrectionNextCellWidth) {
+                        result.nextCellWidth = resizingInfo.nextColumnWidth - (delta + minWidth - cellWidth);
+                    } else {
+                        result.nextCellWidth = nextCellWidth;
+                    }
+                } else {
+                    result.nextCellWidth = nextMinWidth;
+                    result.cellWidth = resizingInfo.currentColumnWidth + (delta - nextMinWidth + nextCellWidth);
+                }
+            }
+
+            return result;
+        }
+
         deltaX = posX - resizingInfo.startPosX;
+
         if((isNextColumnMode || isRtlParentStyle) && rtlEnabled) {
             deltaX = -deltaX;
         }
-        cellWidth = resizingInfo.currentColumnWidth + deltaX;
-        const column = visibleColumns[resizingInfo.currentColumnIndex];
-        minWidth = column && column.minWidth || columnsSeparatorWidth;
-        needUpdate = cellWidth >= minWidth;
 
-        if(isNextColumnMode) {
-            nextCellWidth = resizingInfo.nextColumnWidth - deltaX;
-            nextColumn = visibleColumns[resizingInfo.nextColumnIndex];
-            minWidth = nextColumn && nextColumn.minWidth || columnsSeparatorWidth;
-            needUpdate = needUpdate && nextCellWidth >= minWidth;
-        }
+        let { cellWidth, nextCellWidth } = calculateCellWidths(deltaX);
+
+        needUpdate = column.width !== cellWidth;
 
         if(needUpdate) {
             columnsController.beginUpdate();
