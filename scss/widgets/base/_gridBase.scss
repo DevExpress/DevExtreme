@@ -427,12 +427,11 @@
       & > tr > td {
         vertical-align: top;
 
-        &:first-child,
-        &.dx-first-child {
+        &:first-child {
           border-left: 0;
         }
 
-        &.dx-last-child {
+        &:last-of-type {
           border-right: 0;
         }
 

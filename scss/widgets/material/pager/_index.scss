@@ -77,8 +77,7 @@
   }
 
   .dx-page-sizes .dx-page-size {
-    &:first-child,
-    &.dx-first-child {
+    &:first-of-type {
       margin-left: 0;
     }
 

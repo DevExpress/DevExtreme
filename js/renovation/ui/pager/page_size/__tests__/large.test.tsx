@@ -11,7 +11,7 @@ describe('Pager size selector', () => {
     expect(tree.children()).toHaveLength(2);
     expect(tree.children().map((c) => c.props())).toEqual([
       {
-        children: '5', className: 'dx-page-size dx-selection dx-first-child', label: 'Display 5 items on page', onClick: expect.any(Function),
+        children: '5', className: 'dx-page-size dx-selection', label: 'Display 5 items on page', onClick: expect.any(Function),
       },
       {
         children: '10', className: 'dx-page-size', label: 'Display 10 items on page', onClick: expect.any(Function),

@@ -12,9 +12,6 @@ export default {
   noData: 'dx-datagrid-nodata',
   empty: 'dx-empty',
 
-  firstChild: 'dx-first-child',
-  lastChild: 'dx-last-child',
-
   row: 'dx-row',
   dataRow: 'dx-data-row',
   headerRow: 'dx-header-row',

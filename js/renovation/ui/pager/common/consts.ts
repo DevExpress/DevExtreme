@@ -7,4 +7,3 @@ export const PAGER_SELECTION_CLASS = 'dx-selection';
 export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 export const PAGER_SELECTED_PAGE_SIZE_CLASS = `${PAGER_PAGE_SIZE_CLASS} ${PAGER_SELECTION_CLASS}`;
-export const FIRST_CHILD_CLASS = 'dx-first-child';

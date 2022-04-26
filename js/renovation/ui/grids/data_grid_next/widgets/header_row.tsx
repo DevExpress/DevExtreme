@@ -14,7 +14,6 @@ export const viewFunction = (viewModel: HeaderRow): JSX.Element => (
         key={index}
         column={column}
         headerTemplate={column.headerCellTemplate}
-        columnCount={viewModel.props.columns.length}
         columnIndex={index}
       />
     ))}

@@ -4,7 +4,6 @@ import {
 import { ColumnInternal, Row, RowData } from '../types';
 import { combineClasses } from '../../../../utils/combine_classes';
 
-import CLASSES from '../classes';
 import formatHelper from '../../../../../format_helper';
 
 export const viewFunction = (viewModel: DataCell): JSX.Element => {
@@ -51,9 +50,6 @@ export class DataCellProps {
   columnIndex = 0;
 
   @OneWay()
-  columnCount = 0;
-
-  @OneWay()
   column!: ColumnInternal;
 
   @Template()
@@ -75,11 +71,9 @@ export class DataCell extends JSXComponent<DataCellProps, 'column' | 'row'>(Data
   }
 
   get classes(): string {
-    const { columnIndex, columnCount, column } = this.props;
+    const { column } = this.props;
 
     const classesMap = {
-      [CLASSES.firstChild]: columnIndex === 0,
-      [CLASSES.lastChild]: columnIndex === columnCount - 1,
       [column.cssClass ?? '']: true,
     };
 

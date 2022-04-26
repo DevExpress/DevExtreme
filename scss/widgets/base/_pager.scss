@@ -68,8 +68,7 @@ $pager-info-paddings: 9px;
     float: left;
 
     .dx-page-size {
-      &:first-child,
-      &.dx-first-child {
+      &:first-of-type {
         margin-left: 1px;
       }
 

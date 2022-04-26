@@ -38,9 +38,6 @@ export class HeaderCellProps {
   @OneWay()
   columnIndex = 0;
 
-  @OneWay()
-  columnCount = 0;
-
   @Template()
   headerTemplate?: JSXTemplate;
 }
@@ -51,13 +48,9 @@ export class HeaderCellProps {
 })
 export class HeaderCell extends JSXComponent<HeaderCellProps, 'column'>(HeaderCellProps) {
   get classes(): string {
-    const { columnIndex, columnCount } = this.props;
-
     const classesMap = {
       [CLASSES.action]: true,
       [CLASSES.cellFocusDisabled]: true,
-      [CLASSES.firstChild]: columnIndex === 0,
-      [CLASSES.lastChild]: columnIndex === columnCount - 1,
       [this.props.column.cssClass ?? '']: true,
       [this.props.column.headerCssClass ?? '']: true,
     };
