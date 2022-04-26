@@ -427,7 +427,7 @@
       & > tr > td {
         vertical-align: top;
 
-        &:first-child {
+        &:first-of-type {
           border-left: 0;
         }
 
