@@ -311,6 +311,8 @@ const HtmlEditor = Editor.inherit({
             resizing: this._getModuleConfigByOption('mediaResizing'),
             tableResizing: this._getModuleConfigByOption('tableResizing'),
             tableContextMenu: this._getModuleConfigByOption('tableContextMenu'),
+            imageUpload: this._getModuleConfigByOption('imageUpload'),
+            imageCursor: this._getBaseModuleConfig(),
             mentions: this._getModuleConfigByOption('mentions'),
             uploader: {
                 onDrop: (e) => this._saveValueChangeEvent(dxEvent(e)),
@@ -434,15 +436,24 @@ const HtmlEditor = Editor.inherit({
         return this._$htmlContainer;
     },
 
+    _prepareModuleOptions(args) {
+        const optionData = args.fullName?.split('.');
+        let value = args.value;
+        const optionName = optionData.length >= 2 ? optionData[1] : args.name;
+
+        if(optionData.length === 3) {
+            value = { [optionData[2]]: value };
+        }
+
+        return [ optionName, value ];
+    },
+
     _moduleOptionChanged: function(moduleName, args) {
         const moduleInstance = this._quillInstance?.getModule(moduleName);
         const shouldPassOptionsToModule = Boolean(moduleInstance);
 
         if(shouldPassOptionsToModule) {
-            const optionData = args.fullName?.split('.');
-            const optionName = optionData.length === 2 ? optionData[1] : args.name;
-
-            moduleInstance.option(optionName, args.value);
+            moduleInstance.option(...this._prepareModuleOptions(args));
         } else {
             this._invalidate();
         }
@@ -514,6 +525,7 @@ const HtmlEditor = Editor.inherit({
                 this._repaintToolbar();
                 break;
             case 'imageUpload':
+                this._moduleOptionChanged('imageUpload', args);
                 break;
             default:
                 this.callBase(args);

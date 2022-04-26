@@ -1119,73 +1119,6 @@ declare module DevExpress {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface PdfCell {
-    /**
-     * [descr:PdfCell.backgroundColor]
-     */
-    backgroundColor?: string;
-    /**
-     * [descr:PdfCell.font]
-     */
-    font?: {
-      /**
-       * [descr:PdfCell.font.size]
-       */
-      size?: number;
-      /**
-       * [descr:PdfCell.font.name]
-       */
-      name?: string;
-      /**
-       * [descr:PdfCell.font.style]
-       */
-      style?: 'normal' | 'bold' | 'italic';
-    };
-    /**
-     * [descr:PdfCell.horizontalAlign]
-     */
-    horizontalAlign?: 'left' | 'center' | 'right';
-    /**
-     * [descr:PdfCell.padding]
-     */
-    padding?: {
-      /**
-       * [descr:PdfCell.padding.top]
-       */
-      top?: number;
-      /**
-       * [descr:PdfCell.padding.left]
-       */
-      left?: number;
-      /**
-       * [descr:PdfCell.padding.right]
-       */
-      right?: number;
-      /**
-       * [descr:PdfCell.padding.bottom]
-       */
-      bottom?: number;
-    };
-    /**
-     * [descr:PdfCell.text]
-     */
-    text?: string;
-    /**
-     * [descr:PdfCell.textColor]
-     */
-    textColor?: string;
-    /**
-     * [descr:PdfCell.verticalAlign]
-     */
-    verticalAlign?: 'top' | 'middle' | 'bottom';
-    /**
-     * [descr:PdfCell.wordWrapEnabled]
-     */
-    wordWrapEnabled?: boolean;
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export interface PdfExportGanttFont {
     /**
      * [descr:PdfExportGanttFont.fontObject]
@@ -4134,6 +4067,98 @@ declare module DevExpress.localization {
 }
 declare module DevExpress.pdfExporter {
   /**
+   * [descr:PdfCell]
+   */
+  export interface Cell {
+    /**
+     * [descr:PdfCell.backgroundColor]
+     */
+    backgroundColor?: string;
+    /**
+     * [descr:PdfCell.borderColor]
+     */
+    borderColor?: string;
+    /**
+     * [descr:PdfCell.borderWidth]
+     */
+    borderWidth?: number;
+    /**
+     * [descr:PdfCell.drawLeftBorder]
+     */
+    drawLeftBorder?: boolean;
+    /**
+     * [descr:PdfCell.drawTopBorder]
+     */
+    drawTopBorder?: boolean;
+    /**
+     * [descr:PdfCell.drawRightBorder]
+     */
+    drawRightBorder?: boolean;
+    /**
+     * [descr:PdfCell.drawBottomBorder]
+     */
+    drawBottomBorder?: boolean;
+    /**
+     * [descr:PdfCell.font]
+     */
+    font?: {
+      /**
+       * [descr:PdfCell.font.size]
+       */
+      size?: number;
+      /**
+       * [descr:PdfCell.font.name]
+       */
+      name?: string;
+      /**
+       * [descr:PdfCell.font.style]
+       */
+      style?: 'normal' | 'bold' | 'italic';
+    };
+    /**
+     * [descr:PdfCell.horizontalAlign]
+     */
+    horizontalAlign?: 'left' | 'center' | 'right';
+    /**
+     * [descr:PdfCell.padding]
+     */
+    padding?: {
+      /**
+       * [descr:PdfCell.padding.top]
+       */
+      top?: number;
+      /**
+       * [descr:PdfCell.padding.left]
+       */
+      left?: number;
+      /**
+       * [descr:PdfCell.padding.right]
+       */
+      right?: number;
+      /**
+       * [descr:PdfCell.padding.bottom]
+       */
+      bottom?: number;
+    };
+    /**
+     * [descr:PdfCell.text]
+     */
+    text?: string;
+    /**
+     * [descr:PdfCell.textColor]
+     */
+    textColor?: string;
+    /**
+     * [descr:PdfCell.verticalAlign]
+     */
+    verticalAlign?: 'top' | 'middle' | 'bottom';
+    /**
+     * [descr:PdfCell.wordWrapEnabled]
+     */
+    wordWrapEnabled?: boolean;
+  }
+  export type DataGridCell = PdfDataGridCell;
+  /**
    * [descr:pdfExporter.exportDataGrid(options)]
    */
   export function exportDataGrid(
@@ -4146,48 +4171,11 @@ declare module DevExpress.pdfExporter {
     options: PdfExportGanttProps
   ): DevExpress.core.utils.DxPromise<any>;
   /**
-   * [descr:PdfDataGridCell]
+   * @deprecated Use DataGridCell instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface PdfDataGridCell {
-    /**
-     * [descr:PdfDataGridCell.column]
-     */
-    column?: DevExpress.ui.dxDataGrid.Column;
-    /**
-     * [descr:PdfDataGridCell.data]
-     */
-    data?: any;
-    /**
-     * [descr:PdfDataGridCell.groupIndex]
-     */
-    groupIndex?: number;
-    /**
-     * [descr:PdfDataGridCell.groupSummaryItems]
-     */
-    groupSummaryItems?: Array<{
-      /**
-       * [descr:PdfDataGridCell.groupSummaryItems.name]
-       */
-      name?: string;
-      /**
-       * [descr:PdfDataGridCell.groupSummaryItems.value]
-       */
-      value?: any;
-    }>;
-    /**
-     * [descr:PdfDataGridCell.rowType]
-     */
-    rowType?: string;
-    /**
-     * [descr:PdfDataGridCell.totalSummaryItemName]
-     */
-    totalSummaryItemName?: string;
-    /**
-     * [descr:PdfDataGridCell.value]
-     */
-    value?: any;
-  }
+  export interface PdfDataGridCell
+    extends DevExpress.excelExporter.DataGridCell {}
   /**
    * [descr:PdfExportDataGridProps]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -4214,14 +4202,6 @@ declare module DevExpress.pdfExporter {
        */
       y?: number;
     };
-    /**
-     * [descr:PdfExportDataGridProps.borderColor]
-     */
-    borderColor?: string;
-    /**
-     * [descr:PdfExportDataGridProps.borderWidth]
-     */
-    borderWidth?: number;
     /**
      * [descr:PdfExportDataGridProps.columnWidths]
      */
@@ -4263,8 +4243,8 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportDataGridProps.customDrawCell]
      */
     customDrawCell?: (options: {
-      gridCell?: PdfDataGridCell;
-      pdfCell?: PdfCell;
+      gridCell?: DataGridCell;
+      pdfCell?: Cell;
       doc?: any;
       rect?: { x: number; y: number; h: number; w: number };
       cancel?: boolean;
@@ -4273,14 +4253,14 @@ declare module DevExpress.pdfExporter {
      * [descr:PdfExportDataGridProps.customizeCell]
      */
     customizeCell?: (options: {
-      gridCell?: PdfDataGridCell;
-      pdfCell?: PdfCell;
+      gridCell?: DataGridCell;
+      pdfCell?: Cell;
     }) => void;
     /**
      * [descr:PdfExportDataGridProps.onRowExporting]
      */
     onRowExporting?: (options: {
-      rowCells?: Array<PdfCell>;
+      rowCells?: Array<Cell>;
       rowHeight?: number;
     }) => void;
     /**
@@ -7193,6 +7173,10 @@ declare module DevExpress.ui {
        */
       excelWrapTextEnabled?: boolean;
       /**
+       * [descr:dxDataGridOptions.export.formats]
+       */
+      formats?: ('xlsx' | 'pdf' | string)[];
+      /**
        * [descr:dxDataGridOptions.export.fileName]
        * @deprecated [depNote:dxDataGridOptions.export.fileName]
        */
@@ -7222,6 +7206,8 @@ declare module DevExpress.ui {
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
         fileName?: string;
+        selectedRowsOnly: boolean;
+        format: 'xlsx' | 'pdf' | string;
       };
     export type ExportTexts = {
       /**
@@ -13971,7 +13957,7 @@ declare module DevExpress.ui {
         readonly hiddenFields?: Array<string>;
       };
     export type TaskInsertedEvent = DevExpress.events.EventInfo<dxGantt> & {
-      readonly value?: any;
+      readonly values?: any;
       readonly key: any;
     };
     export type TaskInsertingEvent = DevExpress.events.Cancelable &
@@ -15134,7 +15120,21 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorImageUpload.tabs]
      */
-    tabs?: Array<'url' | 'file'>;
+    tabs?: Array<DevExpress.ui.dxHtmlEditor.ImageUploadTab | 'url' | 'file'>;
+    /**
+     * [descr:dxHtmlEditorImageUpload.fileUploaderOptions]
+     */
+    fileUploaderOptions?: DevExpress.ui.dxFileUploader.Properties;
+  }
+  /**
+   * @deprecated Use ImageUploadTab instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxHtmlEditorImageUploadTabItem {
+    /**
+     * [descr:dxHtmlEditorImageUploadTabItem.name]
+     */
+    name?: 'url' | 'file';
   }
   /**
    * [descr:dxHtmlEditorMediaResizing]
@@ -16416,6 +16416,10 @@ declare module DevExpress.ui {
      */
     showClearButton?: boolean;
     /**
+     * [descr:dxLookupOptions.searchStartEvent]
+     */
+    searchStartEvent?: string;
+    /**
      * [descr:dxLookupOptions.useNativeScrolling]
      */
     useNativeScrolling?: boolean;
@@ -16423,6 +16427,11 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.usePopover]
      */
     usePopover?: boolean;
+    /**
+     * [descr:dxLookupOptions.valueChangeEvent]
+     * @deprecated [depNote:dxLookupOptions.valueChangeEvent]
+     */
+    valueChangeEvent?: string;
     /**
      * [descr:dxLookupOptions.dropDownCentered]
      */
@@ -24974,6 +24983,8 @@ declare module DevExpress.ui {
      * [descr:GridBaseOptions.wordWrapEnabled]
      */
     wordWrapEnabled?: boolean;
+
+    syncLookupFilterValues?: boolean;
   }
   /**
    * @deprecated 
@@ -25204,7 +25215,15 @@ declare module DevExpress.ui {
      * [descr:Stack.position]
      */
     position?:
-      | StackPosition
+      | 'top left'
+      | 'top right'
+      | 'bottom left'
+      | 'bottom right'
+      | 'top center'
+      | 'bottom center'
+      | 'left center'
+      | 'right center'
+      | 'center'
       | {
           /**
            * [descr:Stack.position.top]
@@ -25226,27 +25245,16 @@ declare module DevExpress.ui {
     /**
      * [descr:Stack.direction]
      */
-    direction?: StackDirection;
+    direction?:
+      | 'down'
+      | 'up'
+      | 'left'
+      | 'right'
+      | 'down-reverse'
+      | 'up-reverse'
+      | 'left-reverse'
+      | 'right-reverse';
   }
-  type StackDirection =
-    | 'down'
-    | 'up'
-    | 'left'
-    | 'right'
-    | 'down-reverse'
-    | 'up-reverse'
-    | 'left-reverse'
-    | 'right-reverse';
-  type StackPosition =
-    | 'top left'
-    | 'top right'
-    | 'bottom left'
-    | 'bottom right'
-    | 'top center'
-    | 'bottom center'
-    | 'left center'
-    | 'right center'
-    | 'center';
   /**
    * [descr:StringLengthRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25520,6 +25528,7 @@ declare module DevExpress.ui.dxGantt {
 }
 declare module DevExpress.ui.dxHtmlEditor {
   export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
+  export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
   export type ToolbarItem = dxHtmlEditorToolbarItem;
 }
 declare module DevExpress.ui.dxList {
@@ -27939,18 +27948,14 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxChart>;
-    export type LegendClickEvent = DevExpress.events.NativeEventInfo<
-      dxChart,
-      MouseEvent | PointerEvent
-    > & {
-      readonly target: chartSeriesObject;
-    };
+    export type LegendClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
+        readonly target: chartSeriesObject;
+      };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.events.ChangedOptionInfo;
-    export type PointClickEvent = DevExpress.events.NativeEventInfo<
-      dxChart,
-      MouseEvent | PointerEvent
-    > &
+    export type PointClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<dxChart, MouseEvent | PointerEvent> &
       DevExpress.viz.BaseChart.PointInteractionInfo;
     export type PointHoverChangedEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseChart.PointInteractionInfo;
@@ -32807,18 +32812,20 @@ declare module DevExpress.viz {
         DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxPolarChart>;
-    export type LegendClickEvent = DevExpress.events.NativeEventInfo<
-      dxPolarChart,
-      MouseEvent | PointerEvent
-    > & {
-      readonly target: polarChartSeriesObject;
-    };
+    export type LegendClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<
+        dxPolarChart,
+        MouseEvent | PointerEvent
+      > & {
+        readonly target: polarChartSeriesObject;
+      };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPolarChart> &
       DevExpress.events.ChangedOptionInfo;
-    export type PointClickEvent = DevExpress.events.NativeEventInfo<
-      dxPolarChart,
-      MouseEvent | PointerEvent
-    > &
+    export type PointClickEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<
+        dxPolarChart,
+        MouseEvent | PointerEvent
+      > &
       DevExpress.viz.BaseChart.PointInteractionInfo;
     export type PointHoverChangedEvent =
       DevExpress.events.EventInfo<dxPolarChart> &

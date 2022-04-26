@@ -28,6 +28,8 @@ import {
     Item as dxToolbarItem,
 } from './toolbar';
 
+import { Properties as fileUploaderProperties } from './file_uploader';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
 
@@ -413,7 +415,7 @@ export interface dxHtmlEditorTableResizing {
   uploadDirectory?: string;
   /**
    * @docid
-   * @default 'base64'
+   * @default "base64"
    * @type Enums.HtmlEditorImageUploadFileUploadMode
    * @public
    */
@@ -421,10 +423,37 @@ export interface dxHtmlEditorTableResizing {
      /**
    * @docid
    * @default ["url"]
-   * @type Array<Enums.HtmlEditorImageUploadTab>
+   * @type Array<dxHtmlEditorImageUploadTabItem, Enums.HtmlEditorImageUploadTab>
    * @public
    */
-    tabs?: Array<'url' | 'file'>;
+    tabs?: Array<ImageUploadTab | 'url' | 'file'>;
+    /**
+    * @docid
+    * @default null
+    * @type dxFileUploaderOptions
+    * @public
+    */
+    fileUploaderOptions?: fileUploaderProperties;
+ }
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+ export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
+
+ /**
+  * @deprecated Use ImageUploadTab instead
+  * @namespace DevExpress.ui
+  */
+ export interface dxHtmlEditorImageUploadTabItem {
+    /**
+     * @docid
+     * @default undefined
+     * @type Enums.HtmlEditorImageUploadTab
+     * @public
+     */
+    name?: 'url' | 'file';
  }
 
 /**

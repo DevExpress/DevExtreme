@@ -37,3 +37,23 @@ export const insertElementBefore = ClientFunction((
 
   containerElement?.insertBefore(element, document.querySelector(referenceSelector));
 }, { dependencies: { createElement } });
+
+export const insertStylesheetRule = ClientFunction((
+  rule: string,
+  index: number,
+): void => {
+  const styleEl = document.createElement('style');
+  styleEl.setAttribute('id', 'styleElement');
+  document.head.appendChild(styleEl);
+
+  styleEl.sheet!.insertRule(rule, index);
+}, { dependencies: { } });
+
+export const deleteStylesheetRule = ClientFunction((
+  index: number,
+): void => {
+  const styleElement = document.getElementById('styleElement');
+  (styleElement as HTMLStyleElement).sheet!.deleteRule(index);
+
+  styleElement?.remove();
+}, { dependencies: { } });

@@ -833,8 +833,8 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         this.clock.tick();
 
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
-        const taskMoveCommand = getGanttViewCore(this.instance).commandManager.taskMoveCommand;
-        taskMoveCommand.execute(taskData.internalId, newStart, newEnd);
+        const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
+        taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
         this.clock.tick();
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -895,8 +895,8 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         this.clock.tick();
 
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
-        const taskMoveCommand = getGanttViewCore(this.instance).commandManager.taskMoveCommand;
-        taskMoveCommand.execute(taskData.internalId, newStart, newEnd);
+        const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
+        taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
         this.clock.tick();
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -957,8 +957,8 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         this.clock.tick();
 
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
-        const taskMoveCommand = getGanttViewCore(this.instance).commandManager.taskMoveCommand;
-        taskMoveCommand.execute(taskData.internalId, newStart, newEnd);
+        const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
+        taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
         this.clock.tick();
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -1019,8 +1019,8 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         this.clock.tick();
         getGanttViewCore(this.instance).validationController.lockPredecessorToSuccessor = false;
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
-        const taskMoveCommand = getGanttViewCore(this.instance).commandManager.taskMoveCommand;
-        taskMoveCommand.execute(taskData.internalId, newStart, newEnd);
+        const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
+        taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
         this.clock.tick();
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);

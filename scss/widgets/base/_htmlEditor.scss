@@ -87,6 +87,10 @@ $transparent-border: 1px solid transparent;
   padding: 0;
 }
 
+.dx-htmleditor-hidden-content {
+  display: none;
+}
+
 .dx-htmleditor-add-image-popup > .dx-overlay-content {
   > .dx-popup-content {
     .dx-multiview-wrapper {
@@ -103,6 +107,14 @@ $transparent-border: 1px solid transparent;
       .dx-buttongroup {
         vertical-align: top;
       }
+    }
+
+    .dx-fileuploader-wrapper {
+      padding: 0;
+    }
+
+    .dx-fileuploader-upload-button {
+      display: none;
     }
   }
 

@@ -70,7 +70,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.ok(isValidStartTextBox, 'not empty start validation');
         assert.ok(isValidEndTextBox, 'not empty end validation');
         $okButton.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         const firstTreeListTitleText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
         assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
 
@@ -122,6 +122,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
 
         this.instance.option('editing.enabled', false);
         this.instance.showTaskDetailsDialog(1);
+        this.clock.tick(10);
         assert.equal($dialog.find('.dx-popup-bottom').find('.dx-button').length, 1, 'only cancel button in toolbar');
         $dialog = $('body').find(Consts.POPUP_SELECTOR);
         const inputs = $dialog.find('.dx-texteditor-input');

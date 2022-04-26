@@ -4,7 +4,7 @@ import Toolbar from '../toolbar';
 import ContextMenu from '../context_menu';
 import DiagramBar from './diagram.bar';
 import { extend } from '../../core/utils/extend';
-import { hasWindow, getWindow } from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 
 import DiagramPanel from './ui.diagram.panel';
 import DiagramMenuHelper from './ui.diagram.menu_helper';
@@ -323,14 +323,7 @@ class DiagramToolbar extends DiagramPanel {
     }
     _isTouchMode() {
         const { Browser } = getDiagram();
-        if(Browser.TouchUI) {
-            return true;
-        }
-        if(!hasWindow()) {
-            return false;
-        }
-        const window = getWindow();
-        return window.navigator && window.navigator.maxTouchPoints > 0;
+        return Browser.TouchUI;
     }
     _onContextMenuInitialized(widget, item, rootWidget) {
         this._contextMenuList.push(widget);

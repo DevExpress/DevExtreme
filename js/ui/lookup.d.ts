@@ -197,9 +197,9 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:object
+     * @type_function_param1_field6 value:object
      * @type_function_param1_field5 previousValue:object
-     * @type_function_param1_field6 event:event
+     * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:dxLookup
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
@@ -280,6 +280,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     showClearButton?: boolean;
     /**
      * @docid
+     * @default "input change keyup"
+     * @public
+     */
+    searchStartEvent?: string;
+    /**
+     * @docid
      * @default true
      * @default false &for(desktop except Mac)
      * @public
@@ -294,6 +300,13 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      */
     usePopover?: boolean;
+    /**
+     * @docid
+     * @deprecated
+     * @default "input change keyup"
+     * @public
+     */
+    valueChangeEvent?: string;
     /**
      * @docid
      * @default false

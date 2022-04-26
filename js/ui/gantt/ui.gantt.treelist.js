@@ -4,6 +4,8 @@ import dxTreeList from '../tree_list';
 import { getBoundingRect } from '../../core/utils/position';
 import { isDefined } from '../../core/utils/type';
 import { GanttHelper } from './ui.gantt.helper';
+import { DataSource } from '../../data/data_source/data_source';
+import ArrayStore from '../../data/array_store';
 
 const GANTT_TASKS = 'tasks';
 const GANTT_COLLAPSABLE_ROW = 'dx-gantt-collapsable-row';
@@ -18,7 +20,7 @@ export class GanttTreeList {
     getTreeList() {
         const { keyExpr, parentIdExpr } = this._gantt.option(GANTT_TASKS);
         this._treeList = this._gantt._createComponent(this._$treeList, dxTreeList, {
-            dataSource: this._gantt._tasksRaw,
+            dataSource: this.createDataSource(this._gantt._tasksRaw),
             keyExpr: keyExpr,
             parentIdExpr: parentIdExpr,
             columns: this.getColumns(),
@@ -162,12 +164,18 @@ export class GanttTreeList {
     updateDataSource(data, forceUpdate = false, forceCustomData = false) {
         const expandedRowKeys = this.getOption('expandedRowKeys');
         if(!this._skipUpdateTreeListDataSource() || forceUpdate) {
-            this.setOption('dataSource', data);
+            this.setDataSource(data);
         } else if(forceCustomData) {
             const data = this._treeList.option('dataSource');
             this._gantt._onParentTasksRecalculated(data);
         }
         this.setOption('expandedRowKeys', expandedRowKeys);
+    }
+    setDataSource(data) {
+        this.setOption('dataSource', this.createDataSource(data));
+    }
+    createDataSource(data) {
+        return data && new DataSource({ store: new ArrayStore(data) });
     }
 
     onRowClick(e) {

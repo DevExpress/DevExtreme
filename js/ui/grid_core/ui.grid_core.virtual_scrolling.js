@@ -574,10 +574,11 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 $tables.each((index, element) => {
                     const isFixed = index > 0;
+                    const prevFixed = this._isFixedTableRendering;
                     this._isFixedTableRendering = isFixed;
                     this._addVirtualRow($(element), isFixed, 'top', top);
                     this._addVirtualRow($(element), isFixed, 'bottom', bottom);
-                    this._isFixedTableRendering = false;
+                    this._isFixedTableRendering = prevFixed;
                 });
             }
         },
@@ -1329,9 +1330,11 @@ export const virtualScrollingModule = {
                         const currentPageIndex = dataSourceAdapter?.pageIndex() ?? 0;
                         const pageIndexNotChanged = changedParams?.pageIndex === currentPageIndex;
                         const allLoadedInAppendMode = isAppendMode(this) && this.totalItemsCount() < lastRequiredItemCount;
+                        const isRepaintMode = this.option('editing.refreshMode') === 'repaint';
+                        const pageIndexIncreased = changedParams?.pageIndex > currentPageIndex;
                         let result = false;
 
-                        if(!dataSourceAdapter || (virtualPaging && checkLoading && (changedParams?.pageIndex > currentPageIndex || pageIndexNotChanged && allLoadedInAppendMode))) {
+                        if(!dataSourceAdapter || (virtualPaging && checkLoading && (isRepaintMode || (pageIndexIncreased || pageIndexNotChanged && allLoadedInAppendMode)))) {
                             return result;
                         }
 

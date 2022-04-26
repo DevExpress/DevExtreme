@@ -12,7 +12,6 @@ import { getDefaultAlignment } from '../../core/utils/position';
 import { extend } from '../../core/utils/extend';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 import dateLocalization from '../../localization/date';
-import variableWrapper from '../../core/utils/variable_wrapper';
 import { Deferred } from '../../core/utils/deferred';
 import { restoreFocus } from '../shared/accessibility';
 import dataQuery from '../../data/query';
@@ -193,15 +192,14 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
         },
 
         getDataSource: function(column) {
-            const that = this;
-            const dataSource = that._dataController.dataSource();
+            const dataSource = this._dataController.dataSource();
             const remoteGrouping = dataSource?.remoteOperations().grouping;
             const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
             const headerFilterDataSource = column.headerFilter?.dataSource;
-            const headerFilterOptions = that.option('headerFilter');
+            const headerFilterOptions = this.option('headerFilter');
             let isLookup = false;
             const options = {
-                component: that.component
+                component: this.component
             };
 
             if(!dataSource) return;
@@ -210,28 +208,28 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                 options.dataSource = normalizeDataSourceOptions(headerFilterDataSource);
             } else if(column.lookup) {
                 isLookup = true;
-                let lookupDataSourceOptions;
-                if(column.lookup.items) {
-                    lookupDataSourceOptions = column.lookup.items;
+
+                if(this.option('syncLookupFilterValues')) {
+                    this._currentColumn = column;
+                    const filter = this._dataController.getCombinedFilter();
+                    this._currentColumn = null;
+
+                    options.dataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
                 } else {
-                    lookupDataSourceOptions = column.lookup.dataSource;
-                    if(isFunction(lookupDataSourceOptions) && !variableWrapper.isWrapped(lookupDataSourceOptions)) {
-                        lookupDataSourceOptions = lookupDataSourceOptions({});
-                    }
+                    options.dataSource = gridCoreUtils.normalizeLookupDataSource(column.lookup);
                 }
-                options.dataSource = normalizeDataSourceOptions(lookupDataSourceOptions);
             } else {
                 const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
 
-                that._currentColumn = column;
-                const filter = that._dataController.getCombinedFilter();
-                that._currentColumn = null;
+                this._currentColumn = column;
+                const filter = this._dataController.getCombinedFilter();
+                this._currentColumn = null;
 
                 options.dataSource = {
                     filter: filter,
                     group: group,
                     useDefaultSearch: true,
-                    load: function(options) {
+                    load: (options) => {
                         const d = new Deferred();
                         // TODO remove in 16.1
                         options.dataField = column.dataField || column.name;
@@ -259,6 +257,7 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
             }
 
             const origPostProcess = options.dataSource.postProcess;
+            const that = this;
             options.dataSource.postProcess = function(data) {
                 let items = data;
 
@@ -505,6 +504,7 @@ const DataControllerFilterRowExtender = {
 export const headerFilterModule = {
     defaultOptions: function() {
         return {
+            syncLookupFilterValues: true,
             headerFilter: {
                 visible: false,
                 width: 252,

@@ -181,7 +181,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._setRowsViewAttributes();
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
-                needUpdateFocus = this._isNeedFocus ? !isAppend : this._isHiddenFocus && isFullUpdate;
+                needUpdateFocus = this._isNeedFocus ? !isAppend : this._isHiddenFocus && isFullUpdate && !e?.virtualColumnsScrolling;
                 needUpdateFocus && this._updateFocus(true);
             }
         });
@@ -278,16 +278,17 @@ const KeyboardNavigationController = core.ViewController.inherit({
     // #region Key_Handlers
     _keyDownHandler: function(e) {
         let needStopPropagation = true;
+        this._isNeedFocus = true;
+        this._isNeedScroll = true;
         let isHandled = this._processOnKeyDown(e);
         const isEditing = this._editingController.isEditing();
         const originalEvent = e.originalEvent;
 
         if(originalEvent.isDefaultPrevented()) {
+            this._isNeedFocus = false;
+            this._isNeedScroll = false;
             return;
         }
-
-        this._isNeedFocus = true;
-        this._isNeedScroll = true;
 
         FUNCTIONAL_KEYS.indexOf(e.keyName) < 0 && this._updateFocusedCellPositionByTarget(originalEvent.target);
 
@@ -1142,9 +1143,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     $cell = this._getNextCell(direction);
                 }
                 if(isElementDefined($cell)) {
-                    if(isRenderView && !isEditing && this._checkCellOverlapped($cell)) {
-                        return;
-                    }
                     if($cell.is('td') || $cell.hasClass(this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
                         const $focusedElementInsideCell = $cell.find(':focus');
@@ -1167,21 +1165,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 }
             }
         });
-    },
-    _checkCellOverlapped: function($cell) {
-        const cellOffset = $cell.offset();
-        const hasScrollable = this.component.getScrollable && this.component.getScrollable();
-        let isOverlapped = false;
-
-        if(hasScrollable) {
-            if(cellOffset.left < 0) {
-                isOverlapped = getWidth($cell) + cellOffset.left <= 0;
-            } else if(cellOffset.top < 0) {
-                isOverlapped = getHeight($cell) + cellOffset.top <= 0;
-            }
-        }
-
-        return isOverlapped;
     },
 
     _getFocusedCell: function() {
@@ -1860,13 +1843,14 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return scrollable.scrollBy({ left, top });
     },
     _isInsideEditForm: function(element) {
-        return $(element).closest('.' + this.addWidgetPrefix(EDIT_FORM_CLASS)).length > 0;
+        const $editForm = $(element).closest('.' + this.addWidgetPrefix(EDIT_FORM_CLASS));
+
+        return $editForm.length && this.elementIsInsideGrid($editForm);
     },
     _isMasterDetailCell: function(element) {
         const $masterDetailCell = $(element).closest('.' + MASTER_DETAIL_CELL_CLASS);
-        const $masterDetailGrid = $masterDetailCell.closest('.' + this.getWidgetContainerClass()).parent();
 
-        return $masterDetailCell.length && $masterDetailGrid.is(this.component.$element());
+        return $masterDetailCell.length && this.elementIsInsideGrid($masterDetailCell);
     },
     _processNextCellInMasterDetail: function($nextCell) {
         if(!this._isInsideEditForm($nextCell) && $nextCell) {

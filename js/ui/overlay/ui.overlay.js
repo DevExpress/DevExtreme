@@ -195,7 +195,7 @@ const Overlay = Widget.inherit({
         this.callBase();
         extend(this._deprecatedOptions, {
             'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' },
-            'closeOnOutsideClick': { since: '22.2', alias: 'hideOnOutsideClick' }
+            'closeOnOutsideClick': { since: '22.1', alias: 'hideOnOutsideClick' }
         });
     },
 
@@ -210,7 +210,7 @@ const Overlay = Widget.inherit({
     _init: function() {
         this.callBase();
         this._initActions();
-        this._initCloseOnOutsideClickHandler();
+        this._initHideOnOutsideClickHandler();
         this._initTabTerminatorHandler();
 
         this._customWrapperClass = null;
@@ -264,7 +264,7 @@ const Overlay = Widget.inherit({
         });
     },
 
-    _initCloseOnOutsideClickHandler: function() {
+    _initHideOnOutsideClickHandler: function() {
         this._proxiedDocumentDownHandler = (...args) => {
             return this._documentDownHandler(...args);
         };
@@ -306,15 +306,13 @@ const Overlay = Widget.inherit({
     },
 
     _shouldHideOnOutsideClick: function(e) {
-        const { closeOnOutsideClick, hideOnOutsideClick } = this.option();
+        const { hideOnOutsideClick } = this.option();
 
         if(isFunction(hideOnOutsideClick)) {
             return hideOnOutsideClick(e);
-        } else if(isFunction(closeOnOutsideClick)) {
-            return closeOnOutsideClick(e);
-        } else {
-            return hideOnOutsideClick || closeOnOutsideClick;
         }
+
+        return hideOnOutsideClick;
     },
 
     _outsideClickHandler(e) {

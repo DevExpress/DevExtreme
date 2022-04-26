@@ -1,15 +1,20 @@
 import $ from '../../../core/renderer';
 import localizationMessage from '../../../localization/message';
 import { map } from '../../../core/utils/iterator';
+import { extend } from '../../../core/utils/extend';
+import { getHeight, getWidth } from '../../../core/utils/size';
 import devices from '../../../core/devices';
+import { isDefined } from '../../../core/utils/type';
 const isMobile = devices.current().deviceType === 'phone';
 
 const DIALOG_IMAGE_CAPTION = 'dxHtmlEditor-dialogImageCaption';
+const DIALOG_UPDATE_IMAGE_CAPTION = 'dxHtmlEditor-dialogUpdateImageCaption';
 const DIALOG_IMAGE_FIELD_URL = 'dxHtmlEditor-dialogImageUrlField';
 const DIALOG_IMAGE_FIELD_ALT = 'dxHtmlEditor-dialogImageAltField';
 const DIALOG_IMAGE_FIELD_WIDTH = 'dxHtmlEditor-dialogImageWidthField';
 const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
 const DIALOG_IMAGE_ADD_BUTTON = 'dxHtmlEditor-dialogImageAddButton';
+const DIALOG_IMAGE_UPDATE_BUTTON = 'dxHtmlEditor-dialogImageUpdateButton';
 const DIALOG_IMAGE_SPECIFY_URL = 'dxHtmlEditor-dialogImageSpecifyUrl';
 const DIALOG_IMAGE_SELECT_FILE = 'dxHtmlEditor-dialogImageSelectFile';
 const DIALOG_IMAGE_KEEP_ASPECT_RATIO = 'dxHtmlEditor-dialogImageKeepAspectRatio';
@@ -23,9 +28,12 @@ const FORM_DIALOG_CLASS = 'dx-formdialog';
 const USER_ACTION = 'user';
 const SILENT_ACTION = 'silent';
 
+const FILE_UPLOADER_NAME = 'dx-htmleditor-image';
+
 import ButtonGroup from '../../button_group';
 import FileUploader from '../../file_uploader';
 import TextBox from '../../text_box';
+
 
 export class ImageUploader {
     constructor(module, config) {
@@ -33,12 +41,13 @@ export class ImageUploader {
         this.config = config ?? {};
         this.quill = this.module.quill;
         this.editorInstance = this.module.editorInstance;
-
-        this.tabPanelIndex = 0;
     }
 
     render() {
+        this.tabPanelIndex = 0;
         this.formData = this.getFormData();
+        this.isUpdating = this.isImageUpdating();
+        this.actualTabs = this.config.tabs?.slice();
         this.tabs = this.createTabs(this.formData);
         const formConfig = this.getFormConfig();
 
@@ -55,7 +64,7 @@ export class ImageUploader {
     }
 
     getActiveTabIndex() {
-        return this.tabPanelIndex;
+        return this.isUpdating ? 0 : this.tabPanelIndex;
     }
 
     getFormData() {
@@ -73,19 +82,37 @@ export class ImageUploader {
     createTabs(formData) {
         const result = [];
 
-        if(!this.config.tabs) {
-            this.config.tabs = ['url'];
+        if(!this.actualTabs || this.isUpdating) {
+            this.actualTabs = ['url'];
         }
 
-        this.config.tabs.forEach((tabName) => {
+        this.actualTabs = this.normalizeTabs(this.actualTabs);
+
+        this.actualTabs.forEach((tabName) => {
             const newTab = tabName === 'url'
-                ? new UrlTab(this.module, this.config, formData)
-                : new FileTab(this.module, this.config);
+                ? new UrlTab(this.module, {
+                    config: this.config,
+                    formData,
+                    isUpdating: this.isUpdating
+                })
+                : new FileTab(this.module, {
+                    config: this.config
+                });
 
             result.push(newTab);
         });
 
         return result;
+    }
+
+    normalizeTabs(tabsConfig) {
+        return tabsConfig.map((item) => {
+            return typeof item === 'object' ? item.name : item;
+        });
+    }
+
+    isImageUpdating() {
+        return Object.prototype.hasOwnProperty.call(this.module.quill.getFormat() ?? {}, 'imageSrc');
     }
 
     modifyDialogPopupOptions() {
@@ -95,21 +122,33 @@ export class ImageUploader {
         }
 
         this.editorInstance.formDialogOption({
-            title: localizationMessage.format(DIALOG_IMAGE_CAPTION),
-            'toolbarItems[0].options.text': localizationMessage.format(DIALOG_IMAGE_ADD_BUTTON),
+            title: localizationMessage.format(
+                this.isUpdating
+                    ? DIALOG_UPDATE_IMAGE_CAPTION
+                    : DIALOG_IMAGE_CAPTION),
+            'toolbarItems[0].options.text': localizationMessage.format(
+                this.isUpdating
+                    ? DIALOG_IMAGE_UPDATE_BUTTON
+                    : DIALOG_IMAGE_ADD_BUTTON),
+            'toolbarItems[0].options.visible': !this.shouldHideAddButton(),
             'wrapperAttr': { class: wrapperClasses }
         });
+    }
+
+    shouldHideAddButton() {
+        return !this.isUpdating && this.actualTabs.length === 1 && this.actualTabs[0] !== 'url';
     }
 
     resetDialogPopupOptions() {
         this.editorInstance.formDialogOption({
             'toolbarItems[0].options.text': localizationMessage.format('OK'),
+            'toolbarItems[0].options.visible': true,
             wrapperAttr: { class: FORM_DIALOG_CLASS }
         });
     }
 
     useTabbedItems() {
-        return this.config.tabs.length > 1;
+        return this.actualTabs.length > 1;
     }
 
     getFormWidth() {
@@ -156,10 +195,11 @@ export class ImageUploader {
 }
 
 class BaseTab {
-    constructor(module, config, formData) {
+    constructor(module, { config, formData, isUpdating }) {
         this.module = module;
         this.config = config;
         this.formData = formData;
+        this.isUpdating = isUpdating;
         this.strategy = this.getStrategy();
     }
 
@@ -173,12 +213,8 @@ class UrlTab extends BaseTab {
         return localizationMessage.format(DIALOG_IMAGE_SPECIFY_URL);
     }
 
-    isImageUpdating() {
-        return Object.prototype.hasOwnProperty.call(this.module.quill.getFormat() ?? {}, 'imageSrc');
-    }
-
     getStrategy() {
-        return this.isImageUpdating()
+        return this.isUpdating
             ? new UpdateUrlStrategy(this.module, this.config, this.formData)
             : new AddUrlStrategy(this.module, this.config);
     }
@@ -239,13 +275,13 @@ class AddUrlStrategy extends BaseStrategy {
     }
 
     createKeepAspectRatioEditor($container, data, dependentEditorDataField) {
-        return this.editorInstance._createComponent($container, TextBox, {
+        return this.editorInstance._createComponent($container, TextBox, extend(true, data.editorOptions, {
             value: data.component.option('formData')[data.dataField],
             onEnterKey: data.component.option('onEditorEnterKey').bind(this.editorInstance._formDialog, data),
             onValueChanged: (e) => {
                 this.keepAspectRatio(data, { dependentEditor: this[dependentEditorDataField + 'Editor'], e });
             }
-        });
+        }));
     }
 
     getItemsConfig() {
@@ -261,10 +297,11 @@ class AddUrlStrategy extends BaseStrategy {
 
                 this.editorInstance._createComponent($ratioEditor, ButtonGroup, {
                     items: [{
-                        icon: 'link',
+                        icon: 'imgarlock',
                         value: 'keepRatio',
                     }],
                     hint: localizationMessage.format(DIALOG_IMAGE_KEEP_ASPECT_RATIO),
+                    focusStateEnabled: false,
                     keyExpr: 'value',
                     stylingMode: 'outlined',
                     selectionMode: 'multiple',
@@ -306,6 +343,12 @@ class UpdateUrlStrategy extends AddUrlStrategy {
             };
             this.quill.setSelection(this.selection.index, this.selection.length, SILENT_ACTION);
         }
+
+        const imgElement = this.quill.getLeaf(this.selection.index)[0].domNode;
+        if(imgElement) {
+            this.formData.width = this.formData.width ?? getWidth($(imgElement));
+            this.formData.height = this.formData.height ?? getHeight($(imgElement));
+        }
     }
 
     pasteImage(formData, event) {
@@ -333,20 +376,25 @@ class FileStrategy extends BaseStrategy {
     constructor(module, config) {
         super(module, config);
 
-        this.useBase64 = this.config.fileUploadMode === 'base64';
+        this.useBase64 = !isDefined(this.config.fileUploadMode) || this.config.fileUploadMode === 'base64';
     }
 
-    closeDialogPopup(editorInstance, data) {
-        editorInstance._formDialog.hide({ file: data.value ? data.value[0] : data.file }, data.event);
+    closeDialogPopup(data) {
+        this.editorInstance._formDialog.hide({ file: data.value ? data.value[0] : data.file }, data.event);
     }
 
     serverUpload(data) {
         if(!this.useBase64) {
-            const imageUrl = this.config.uploadDirectory + data.file.name;
+            const imageUrl = correctSlashesInUrl(this.config.uploadDirectory) + data.file.name;
 
             urlUpload(this.quill, this.selection.index, { src: imageUrl });
-            this.closeDialogPopup(this.editorInstance, data);
+            this.closeDialogPopup(data);
         }
+    }
+
+    base64Upload(data) {
+        this.quill.getModule('uploader').upload(this.selection, data.value, true);
+        this.closeDialogPopup(data);
     }
 
     pasteImage(formData, event) {
@@ -359,6 +407,26 @@ class FileStrategy extends BaseStrategy {
         return this.config.fileUploadMode === 'both';
     }
 
+    getFileUploaderOptions() {
+        const fileUploaderOptions = {
+            uploadUrl: this.config.uploadUrl,
+            onValueChanged: (data) => {
+                if(this.useBase64) {
+                    this.base64Upload(data);
+                } else {
+                    if(data.value.length) {
+                        data.component.upload();
+                    }
+                }
+            },
+            onUploaded: (data) => {
+                this.serverUpload(data);
+            }
+        };
+
+        return extend({}, getFileUploaderBaseOptions(), fileUploaderOptions, this.config.fileUploaderOptions);
+    }
+
     getItemsConfig() {
         return [
             {
@@ -368,23 +436,7 @@ class FileStrategy extends BaseStrategy {
                 label: { visible: false },
                 template: () => {
                     const $content = $('<div>');
-                    this.editorInstance._createComponent($content, FileUploader, {
-                        multiple: false,
-                        value: [],
-                        name: 'dx-htmleditor-image',
-                        accept: 'image/*',
-                        uploadUrl: this.config.uploadUrl,
-                        uploadMode: 'instantly',
-                        onValueChanged: (data) => {
-                            if(this.useBase64) {
-                                base64Upload(this.quill, data.value);
-                                this.closeDialogPopup(this.editorInstance, data);
-                            }
-                        },
-                        onUploaded: (data) => {
-                            this.serverUpload(data);
-                        }
-                    });
+                    this.module.editorInstance._createComponent($content, FileUploader, this.getFileUploaderOptions());
                     return $content;
                 }
             }, {
@@ -394,7 +446,7 @@ class FileStrategy extends BaseStrategy {
                 editorType: 'dxCheckBox',
                 editorOptions: {
                     value: this.useBase64,
-                    disabled: !this.isBase64Editable(),
+                    visible: this.isBase64Editable(),
                     text: localizationMessage.format(DIALOG_IMAGE_ENCODE_TO_BASE64),
                     onValueChanged: (e) => {
                         if(this.isBase64Editable()) {
@@ -407,9 +459,17 @@ class FileStrategy extends BaseStrategy {
     }
 }
 
-export function base64Upload(quill, files) {
-    const range = quill.getSelection();
-    quill.getModule('uploader').upload(range, files);
+export function correctSlashesInUrl(url) {
+    return url[url.length - 1] !== '/' ? (url + '/') : url;
+}
+
+export function getFileUploaderBaseOptions() {
+    return {
+        value: [],
+        name: FILE_UPLOADER_NAME,
+        accept: 'image/*',
+        uploadMode: 'useButtons'
+    };
 }
 
 export function urlUpload(quill, index, attributes) {

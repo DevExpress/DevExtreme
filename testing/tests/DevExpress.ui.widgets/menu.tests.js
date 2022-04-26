@@ -2137,6 +2137,7 @@ QUnit.module('adaptivity: render', {
 
         const $overlay = this.$element.find('.dx-overlay-content').first();
 
+        assert.ok(this.$element.hasClass('custom-class'), 'element has custom class');
         assert.ok($overlay.hasClass('custom-class'), 'content has custom class');
     });
 

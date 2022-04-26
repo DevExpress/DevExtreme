@@ -36,6 +36,8 @@ const DX_STATE_DISABLED_CLASS = 'dx-state-disabled';
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+
 const FOCUS_UP = 'up';
 const FOCUS_DOWN = 'down';
 const FOCUS_LEFT = 'left';
@@ -449,6 +451,10 @@ class ContextMenu extends MenuBase {
             .appendTo($holder)
             .addClass(DX_SUBMENU_CLASS)
             .css('visibility', submenuContainer ? 'hidden' : 'visible');
+
+        if(!$wrapper.parent().hasClass(OVERLAY_CONTENT_CLASS)) {
+            this._addCustomCssClass($wrapper);
+        }
 
         const $itemsContainer = super._renderContainer($wrapper);
 

@@ -261,6 +261,8 @@
         "dxHtmlEditor-dialogInsertTableRowsField": "!TODO",
         "dxHtmlEditor-dialogInsertTableColumnsField": "!TODO",
         "dxHtmlEditor-dialogInsertTableCaption": "!TODO",
+        "dxHtmlEditor-dialogUpdateImageCaption": "!TODO",
+        "dxHtmlEditor-dialogImageUpdateButton": "!TODO",
         "dxHtmlEditor-dialogImageAddButton": "!TODO",
         "dxHtmlEditor-dialogImageSpecifyUrl": "!TODO",
         "dxHtmlEditor-dialogImageSelectFile": "!TODO",
