@@ -22,7 +22,7 @@ $(() => {
           bottom: 10,
           left: 10,
         },
-        topLeft: { x: 0, y: 5 },
+        topLeft: { x: 5, y: 5 },
         columnWidths: [30, 30, 30, 30, 30, 30],
         onRowExporting: (e) => {
           const isHeader = e.rowCells[0].text === 'Picture';

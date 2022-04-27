@@ -66,37 +66,37 @@ class App extends React.Component {
     );
   }
 
+  setAlternatingRowsBackground = (dataGrid, gridCell, pdfCell) => {
+    if (gridCell.rowType === 'data') {
+      const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
+      if (rowIndex % 2 === 0) {
+        pdfCell.backgroundColor = '#D3D3D3';
+      }
+    }
+  }
+
   exportGrids = () => {
     const context = this;
     // eslint-disable-next-line new-cap
     const doc = new jsPDF();
 
-    function setAlternatingRowsBackground(dataGrid, gridCell, pdfCell) {
-      if (gridCell.rowType === 'data') {
-        const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
-        if (rowIndex % 2 === 0) {
-          pdfCell.backgroundColor = '#D3D3D3';
-        }
-      }
-    }
-
     exportDataGrid({
       jsPDFDocument: doc,
       component: context.priceDataGrid,
-      topLeft: { x: 0, y: 5 },
-      columnWidths: [20, 40, 40, 40],
+      topLeft: { x: 7, y: 5 },
+      columnWidths: [20, 50, 50, 50],
       customizeCell: ({ gridCell, pdfCell }) => {
-        setAlternatingRowsBackground(context.priceDataGrid, gridCell, pdfCell);
+        context.setAlternatingRowsBackground(context.priceDataGrid, gridCell, pdfCell);
       },
     }).then(() => {
       doc.addPage();
       exportDataGrid({
         jsPDFDocument: doc,
         component: context.ratingDataGrid,
-        topLeft: { x: 0, y: 5 },
-        columnWidths: [20, 40, 40, 40],
+        topLeft: { x: 7, y: 5 },
+        columnWidths: [20, 50, 50, 50],
         customizeCell: ({ gridCell, pdfCell }) => {
-          setAlternatingRowsBackground(context.ratingDataGrid, gridCell, pdfCell);
+          context.setAlternatingRowsBackground(context.ratingDataGrid, gridCell, pdfCell);
         },
       }).then(() => {
         doc.save('MultipleGrids.pdf');

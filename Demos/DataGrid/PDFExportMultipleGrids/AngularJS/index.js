@@ -4,42 +4,42 @@ DemoApp.controller('DemoController', ($scope) => {
   const priceCaption = 'Price';
   const ratingCaption = 'Rating';
 
+  function setAlternatingRowsBackground(dataGrid, gridCell, pdfCell) {
+    if (gridCell.rowType === 'data') {
+      const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
+      if (rowIndex % 2 === 0) {
+        pdfCell.backgroundColor = '#D3D3D3';
+      }
+    }
+  }
+
   $scope.buttonOptions = {
     text: 'Export multiple grids',
     icon: 'exportpdf',
     onClick() {
-      const dataGrid1 = $('#priceDataGrid').dxDataGrid('instance');
-      const dataGrid2 = $('#ratingDataGrid').dxDataGrid('instance');
-
       // eslint-disable-next-line new-cap
       const doc = new jsPDF();
 
-      function setAlternatingRowsBackground(dataGrid, gridCell, pdfCell) {
-        if (gridCell.rowType === 'data') {
-          const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
-          if (rowIndex % 2 === 0) {
-            pdfCell.backgroundColor = '#D3D3D3';
-          }
-        }
-      }
-
+      const priceDataGrid = $('#priceDataGrid').dxDataGrid('instance');
       DevExpress.pdfExporter.exportDataGrid({
         jsPDFDocument: doc,
-        component: dataGrid1,
-        topLeft: { x: 0, y: 5 },
-        columnWidths: [20, 40, 40, 40],
+        component: priceDataGrid,
+        topLeft: { x: 7, y: 5 },
+        columnWidths: [20, 50, 50, 50],
         customizeCell: ({ gridCell, pdfCell }) => {
-          setAlternatingRowsBackground(dataGrid1, gridCell, pdfCell);
+          setAlternatingRowsBackground(priceDataGrid, gridCell, pdfCell);
         },
       }).then(() => {
         doc.addPage();
+
+        const ratingDataGrid = $('#ratingDataGrid').dxDataGrid('instance');
         DevExpress.pdfExporter.exportDataGrid({
           jsPDFDocument: doc,
-          component: dataGrid2,
-          topLeft: { x: 0, y: 5 },
-          columnWidths: [20, 40, 40, 40],
+          component: ratingDataGrid,
+          topLeft: { x: 7, y: 5 },
+          columnWidths: [20, 50, 50, 50],
           customizeCell: ({ gridCell, pdfCell }) => {
-            setAlternatingRowsBackground(dataGrid2, gridCell, pdfCell);
+            setAlternatingRowsBackground(ratingDataGrid, gridCell, pdfCell);
           },
         }).then(() => {
           doc.save('MultipleGrids.pdf');

@@ -139,8 +139,8 @@ export default {
       exportDataGrid({
         jsPDFDocument: doc,
         component: context.priceGridInstance,
-        topLeft: { x: 0, y: 5 },
-        columnWidths: [20, 40, 40, 40],
+        topLeft: { x: 7, y: 5 },
+        columnWidths: [20, 50, 50, 50],
         customizeCell: ({ gridCell, pdfCell }) => {
           setAlternatingRowsBackground(context.priceGridInstance, gridCell, pdfCell);
         },
@@ -149,8 +149,8 @@ export default {
         exportDataGrid({
           jsPDFDocument: doc,
           component: context.ratingGridInstance,
-          topLeft: { x: 0, y: 5 },
-          columnWidths: [20, 40, 40, 40],
+          topLeft: { x: 7, y: 5 },
+          columnWidths: [20, 50, 50, 50],
           customizeCell: ({ gridCell, pdfCell }) => {
             setAlternatingRowsBackground(context.ratingGridInstance, gridCell, pdfCell);
           },

@@ -52,36 +52,36 @@ export class AppComponent {
     };
   }
 
+  setAlternatingRowsBackground(dataGrid, gridCell, pdfCell) {
+    if (gridCell.rowType === 'data') {
+      const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
+      if (rowIndex % 2 === 0) {
+        pdfCell.backgroundColor = '#D3D3D3';
+      }
+    }
+  }
+
   exportGrids() {
     const context = this;
     const doc = new jsPDF();
 
-    function setAlternatingRowsBackground(dataGrid, gridCell, pdfCell) {
-      if (gridCell.rowType === 'data') {
-        const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
-        if (rowIndex % 2 === 0) {
-          pdfCell.backgroundColor = '#D3D3D3';
-        }
-      }
-    }
-
     exportDataGrid({
       jsPDFDocument: doc,
       component: context.priceDataGrid.instance,
-      topLeft: { x: 0, y: 5 },
-      columnWidths: [20, 40, 40, 40],
+      topLeft: { x: 7, y: 5 },
+      columnWidths: [20, 50, 50, 50],
       customizeCell: ({ gridCell, pdfCell }) => {
-        setAlternatingRowsBackground(context.priceDataGrid.instance, gridCell, pdfCell);
+        context.setAlternatingRowsBackground(context.priceDataGrid.instance, gridCell, pdfCell);
       },
     }).then(() => {
       doc.addPage();
       exportDataGrid({
         jsPDFDocument: doc,
         component: context.ratingDataGrid.instance,
-        topLeft: { x: 0, y: 5 },
-        columnWidths: [20, 40, 40, 40],
+        topLeft: { x: 7, y: 5 },
+        columnWidths: [20, 50, 50, 50],
         customizeCell: ({ gridCell, pdfCell }) => {
-          setAlternatingRowsBackground(context.ratingDataGrid.instance, gridCell, pdfCell);
+          context.setAlternatingRowsBackground(context.ratingDataGrid.instance, gridCell, pdfCell);
         },
       }).then(() => {
         doc.save('MultipleGrids.pdf');
