@@ -1,12 +1,19 @@
 import { isDefined, isNumeric } from '../../../core/utils/type';
 import { calculateRowHeight, getPageWidth, toPdfUnit } from './pdf_utils';
 
+const getSum = (a, b) => a + b;
+
 function calculateColumnWidths(doc, dataProvider, topLeftX, margin, customerColumnWidths) {
     const DEFAULT_WIDTH = 150;
-    const resultWidths = dataProvider.getColumnsWidths().map(width => toPdfUnit(doc, width ?? DEFAULT_WIDTH));
+    const resultWidths = dataProvider.getColumnsWidths()
+        .map(width => toPdfUnit(doc, width ?? DEFAULT_WIDTH));
 
-    const totalAutoColumnsWidth = resultWidths.reduce((total, width, index) => isDefined(customerColumnWidths[index]) ? total : total + width, 0);
-    const totalCustomerColumnsWidth = customerColumnWidths.reduce((total, width) => isNumeric(width) ? total + width : total, 0);
+    const totalAutoColumnsWidth = resultWidths
+        .filter((width, index) => !isDefined(customerColumnWidths[index]))
+        .reduce(getSum, 0);
+    const totalCustomerColumnsWidth = customerColumnWidths
+        .filter((width) => isNumeric(width))
+        .reduce(getSum, 0);
 
     const availablePageWidth = getAvailablePageAreaWidth(doc, topLeftX, margin);
     const ratio = totalCustomerColumnsWidth < availablePageWidth ? (availablePageWidth - totalCustomerColumnsWidth) / totalAutoColumnsWidth : 1;
