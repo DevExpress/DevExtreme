@@ -907,6 +907,10 @@ QUnit.module('Draw buttons in header panel', {
         $.each($toolbarItemElements, (_, toolbarItemElement) => {
             assert.ok($(toolbarItemElement).hasClass('dx-state-invisible'), 'button is hidden');
         });
+
+        this.options.toolbar.items.forEach(item => {
+            assert.strictEqual(item.visible, undefined, 'visible option should not be changed in user props');
+        });
     });
 
     QUnit.test('Toolbar item with custom name should be visible', function(assert) {
