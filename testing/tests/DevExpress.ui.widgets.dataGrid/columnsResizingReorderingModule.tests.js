@@ -1444,6 +1444,22 @@ QUnit.module('Columns resizing', {
         }));
 
         // assert
+        assert.deepEqual(resizeController._columnsController.updateOptions, [
+            { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+            { columnIndex: 0, optionName: 'width', optionValue: 3 },
+            { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
+            { columnIndex: 1, optionName: 'width', optionValue: 297 },
+        ], 'update column widths');
+
+        // act
+        resizeController._columnsController.updateOptions = [];
+        resizeController._moveSeparator(getEvent({
+            data: resizeController,
+            type: 'mousemove',
+            pageX: -10100
+        }));
+
+        // assert
         assert.strictEqual(resizeController._columnsController.updateOptions.length, 0, 'cancel moving');
     });
 
@@ -2105,7 +2121,7 @@ QUnit.module('Columns resizing', {
         resizeController._isResizing = true;
         resizeController.pointsByColumns();
         resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
-        resizeController._resizingInfo = { startPosX: -9747 };
+        resizeController._setupResizingInfo(-9747);
         resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
@@ -2134,7 +2150,7 @@ QUnit.module('Columns resizing', {
         this.renderViews($container);
         resizeController.pointsByColumns();
         resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
-        resizeController._resizingInfo = { startPosX: -9747 };
+        resizeController._setupResizingInfo(-9747);
         resizeController._isHeadersRowArea = function() {
             return true;
         };
@@ -2921,6 +2937,117 @@ QUnit.module('Columns resizing', {
         const separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find('.dx-header-row')[0].getBoundingClientRect().height;
         assert.strictEqual(this.component._controllers.columns.columnOption(2, 'width'), 75, 'width of the first banded column');
         assert.strictEqual($(resizeController._columnsSeparatorView.element()).offset().top, separatorOffsetTop, 'separator offset top');
+    });
+
+    // T1084283
+    ['nextColumn', 'widget'].forEach((columnResizingMode) => {
+        QUnit.test(`The column width should be equal to the minWidth when fast resizing to the left (columnResizingMode is ${columnResizingMode})`, function(assert) {
+            // arrange
+            this.options.columnResizingMode = columnResizingMode;
+            const resizeController = this.createColumnsResizerViewController([
+                { caption: 'Column 1', visible: true, width: 100, minWidth: 50, index: 0 },
+                { caption: 'Column 2', visible: true, width: 100, minWidth: 50, index: 1 },
+                { caption: 'Column 3', visible: true, width: 100, minWidth: 50, index: 2 }
+            ]);
+
+            // act
+            this.renderViews($('#container'));
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 0 };
+            resizeController._setupResizingInfo(-9900);
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -9970
+            }));
+
+            // assert
+            let updateOptions;
+
+            if(columnResizingMode === 'nextColumn') {
+                updateOptions = [
+                    { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+                    { columnIndex: 0, optionName: 'width', optionValue: 50 },
+                    { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
+                    { columnIndex: 1, optionName: 'width', optionValue: 150 }
+                ];
+            } else {
+                updateOptions = [
+                    { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+                    { columnIndex: 0, optionName: 'width', optionValue: 50 },
+                    { columnIndex: 2, optionName: 'visibleWidth', optionValue: 'auto' }
+                ];
+            }
+            assert.deepEqual(resizeController._columnsController.updateOptions, updateOptions, 'column widths were updated');
+
+            // act
+            resizeController._columnsController.updateOptions = [];
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -10000
+            }));
+
+            // assert
+            assert.strictEqual(resizeController._columnsController.updateOptions.length, 0, 'column widths were not updated');
+        });
+
+        QUnit.test(`The column width should be equal to the minWidth when fast resizing to the right (columnResizingMode is ${columnResizingMode})`, function(assert) {
+            // arrange
+            this.options.columnResizingMode = columnResizingMode;
+            const resizeController = this.createColumnsResizerViewController([
+                { caption: 'Column 1', visible: true, width: 100, minWidth: 50, index: 0 },
+                { caption: 'Column 2', visible: true, width: 100, minWidth: 50, index: 1 },
+                { caption: 'Column 3', visible: true, width: 100, minWidth: 50, index: 2 }
+            ]);
+
+            // act
+            this.renderViews($('#container'));
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 0 };
+            resizeController._setupResizingInfo(-9900);
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -9830
+            }));
+
+            // assert
+            let updateOptions;
+
+            if(columnResizingMode === 'nextColumn') {
+                updateOptions = [
+                    { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+                    { columnIndex: 0, optionName: 'width', optionValue: 150 },
+                    { columnIndex: 1, optionName: 'visibleWidth', optionValue: null },
+                    { columnIndex: 1, optionName: 'width', optionValue: 50 }
+                ];
+            } else {
+                updateOptions = [
+                    { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+                    { columnIndex: 0, optionName: 'width', optionValue: 170 }
+                ];
+            }
+            assert.deepEqual(resizeController._columnsController.updateOptions, updateOptions, 'column widths were updated');
+
+            // act
+            resizeController._columnsController.updateOptions = [];
+            resizeController._moveSeparator(getEvent({
+                data: resizeController,
+                type: 'mousemove',
+                pageX: -9800
+            }));
+
+            // assert
+            if(columnResizingMode === 'nextColumn') {
+                assert.strictEqual(resizeController._columnsController.updateOptions.length, 0, 'column widths were not updated');
+            } else {
+                assert.deepEqual(resizeController._columnsController.updateOptions, [
+                    { columnIndex: 0, optionName: 'visibleWidth', optionValue: null },
+                    { columnIndex: 0, optionName: 'width', optionValue: 200 }
+                ], 'column widths were updated');
+            }
+        });
     });
 
     QUnit.module('RTL mode', {
