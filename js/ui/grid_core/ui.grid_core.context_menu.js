@@ -49,7 +49,7 @@ const ContextMenuController = modules.ViewController.inherit({
                     rowIndex: rowIndex,
                     row: view._getRows()[rowIndex],
                     columnIndex: columnIndex,
-                    column: rowOptions && rowOptions.cells[columnIndex].column
+                    column: rowOptions?.cells?.[columnIndex]?.column
                 };
 
                 options.items = view.getContextMenuItems && view.getContextMenuItems(options);
