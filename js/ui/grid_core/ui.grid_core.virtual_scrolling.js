@@ -511,7 +511,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             this._appendEmptyRow($table, $virtualRow, location);
         },
         _getRowHeights: function() {
-            const isPopupEditMode = this.getController('editing').isPopupEditMode();
+            const isPopupEditMode = this.getController('editing').isPopupEditMode?.();
 
             let rowElements = this._getRowElements(this._tableElement).toArray();
 
