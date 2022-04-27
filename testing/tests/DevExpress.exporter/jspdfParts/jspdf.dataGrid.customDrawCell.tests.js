@@ -13,8 +13,8 @@ QUnit.module('Custom draw cell event', moduleConfig, () => {
 
         const customDrawCell = ({ doc, rect, pdfCell, gridCell, cancel }) => {
             const expectedRect = pdfCell.text === 'f1'
-                ? { h: 21.5, w: 250, x: 50, y: 50 }
-                : { h: 21.5, w: 250, x: 300, y: 50 };
+                ? { h: 21.5, w: 252.64, x: 50, y: 50 }
+                : { h: 21.5, w: 252.64, x: 302.64, y: 50 };
 
             assert.equal(doc, pdfDoc, 'doc object is correct');
             assert.deepEqual(rect, expectedRect, 'rect is correct');
@@ -71,11 +71,11 @@ QUnit.module('Custom draw cell event', moduleConfig, () => {
         const expectedLog = [
             'setTextColor,#979797',
             'setFontSize,10',
-            'text,f2,305,60.75,{baseline:middle}',
+            'text,f2,307.64,60.75,{baseline:middle}',
             'setLineWidth,0.5',
             'setDrawColor,#979797',
-            'rect,50,50,250,21.5',
-            'rect,300,50,250,21.5',
+            'rect,50,50,252.64,21.5',
+            'rect,302.64,50,252.64,21.5',
             'setFontSize,16',
             'setLineWidth,0.200025',
             'setDrawColor,#000000',
@@ -107,8 +107,8 @@ QUnit.module('Custom draw cell event', moduleConfig, () => {
             'text,f1,55,60.75,{baseline:middle}',
             'setLineWidth,0.5',
             'setDrawColor,#979797',
-            'rect,50,50,250,21.5',
-            'rect,300,50,250,21.5',
+            'rect,50,50,252.64,21.5',
+            'rect,302.64,50,252.64,21.5',
             'setFontSize,16',
             'setLineWidth,0.200025',
             'setDrawColor,#000000',
@@ -136,11 +136,11 @@ QUnit.module('Custom draw cell event', moduleConfig, () => {
             'setTextColor,#979797',
             'setFontSize,10',
             'text,f1,55,60.75,{baseline:middle}',
-            'text,f2,305,60.75,{baseline:middle}',
+            'text,f2,307.64,60.75,{baseline:middle}',
             'setLineWidth,0.5',
             'setDrawColor,#979797',
-            'rect,50,50,250,21.5',
-            'rect,300,50,250,21.5',
+            'rect,50,50,252.64,21.5',
+            'rect,302.64,50,252.64,21.5',
             'setFontSize,16',
             'setLineWidth,0.200025',
             'setDrawColor,#000000',
@@ -176,19 +176,19 @@ QUnit.module('Custom draw cell event', moduleConfig, () => {
 
         const expectedLog = [
             'setFillColor,#880000',
-            'rect,50,50,250,21.5,F',
+            'rect,50,50,252.64,21.5,F',
             'setFillColor,#808080',
-            'rect,50,50,250,21.5,F',
+            'rect,50,50,252.64,21.5,F',
             'setTextColor,#979797',
             'setFontSize,10',
             'text,f1,55,60.75,{baseline:middle}',
             'setFillColor,#880000',
-            'rect,300,50,250,21.5,F',
-            'text,f2,305,60.75,{baseline:middle}',
+            'rect,302.64,50,252.64,21.5,F',
+            'text,f2,307.64,60.75,{baseline:middle}',
             'setLineWidth,0.5',
             'setDrawColor,#979797',
-            'rect,50,50,250,21.5',
-            'rect,300,50,250,21.5',
+            'rect,50,50,252.64,21.5',
+            'rect,302.64,50,252.64,21.5',
             'setFontSize,16',
             'setLineWidth,0.200025',
             'setDrawColor,#000000',
@@ -225,11 +225,11 @@ QUnit.module('Custom draw cell event', moduleConfig, () => {
             'setFillColor,#880000',
             'setTextColor,#880000',
             'setTextColor,#979797',
-            'text,f2,305,60.75,{baseline:middle}',
+            'text,f2,307.64,60.75,{baseline:middle}',
             'setLineWidth,0.5',
             'setDrawColor,#979797',
-            'rect,50,50,250,21.5',
-            'rect,300,50,250,21.5',
+            'rect,50,50,252.64,21.5',
+            'rect,302.64,50,252.64,21.5',
             'setFontSize,16',
             'setLineWidth,0.200025',
             'setDrawColor,#000000',
