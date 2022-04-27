@@ -96,7 +96,7 @@ const HeaderPanel = ColumnsView.inherit({
                 if(isDefined(defaultButtonsByNames[button.name])) {
                     button = extend(true, {}, defaultButtonsByNames[button.name], button);
                 } else if(DEFAULT_TOOLBAR_ITEM_NAMES.includes(button.name)) {
-                    button.visible = false;
+                    button = { ...button, visible: false };
                 }
             }
 
