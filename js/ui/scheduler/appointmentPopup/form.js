@@ -403,6 +403,11 @@ export class AppointmentForm {
         editor && this.form.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
     }
 
+    setTimeZoneEditorDataSource(date, path) {
+        const dataSource = this.createTimeZoneDataSource(date);
+        this.setEditorOptions(path, 'Main', { dataSource: dataSource });
+    }
+
     updateFormData(formData) {
         this.semaphore.take();
 
@@ -411,11 +416,15 @@ export class AppointmentForm {
         const dataExprs = this.scheduler.getDataAccessors().expr;
 
         const allDay = formData[dataExprs.allDayExpr];
+
         const startDate = new Date(formData[dataExprs.startDateExpr]);
+        const endDate = new Date(formData[dataExprs.endDateExpr]);
+
+        this.setTimeZoneEditorDataSource(startDate, dataExprs.startDateTimeZoneExpr);
+        this.setTimeZoneEditorDataSource(endDate, dataExprs.endDateTimeZoneExpr);
 
         this.updateRecurrenceEditorStartDate(startDate, dataExprs.recurrenceRuleExpr);
 
-        // this.form.option('formData', formData);
         this.setEditorsType(allDay);
 
         this.semaphore.release();
