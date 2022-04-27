@@ -511,13 +511,15 @@ const VirtualScrollingRowsViewExtender = (function() {
             this._appendEmptyRow($table, $virtualRow, location);
         },
         _getRowHeights: function() {
-            const rowHeights = this._getRowElements(this._tableElement)
-                .toArray()
-                .filter(row => !this.getController('editing').isPopupEditMode() || !$(row).hasClass(ROW_INSERTED))
-                .map(function(row) {
-                    return getBoundingRect(row).height;
-                });
-            return rowHeights;
+            const isPopupEditMode = this.getController('editing').isPopupEditMode();
+
+            let rowElements = this._getRowElements(this._tableElement).toArray();
+
+            if(isPopupEditMode) {
+                rowElements = rowElements.filter(row => !$(row).hasClass(ROW_INSERTED));
+            }
+
+            return rowElements.map((row) => getBoundingRect(row).height);
         },
         _correctRowHeights: function(rowHeights) {
             const dataController = this._dataController;
