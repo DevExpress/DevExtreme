@@ -908,6 +908,7 @@ QUnit.module('Draw buttons in header panel', {
             assert.ok($(toolbarItemElement).hasClass('dx-state-invisible'), 'button is hidden');
         });
 
+        // T1085151
         this.options.toolbar.items.forEach(item => {
             assert.strictEqual(item.visible, undefined, 'visible option should not be changed in user props');
         });
