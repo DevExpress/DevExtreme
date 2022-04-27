@@ -28,7 +28,6 @@ const EDIT_POPUP_CLASS = 'edit-popup';
 const EDIT_POPUP_FORM_CLASS = 'edit-popup-form';
 const FOCUSABLE_ELEMENT_CLASS = isRenovatedScrollable ? 'dx-scrollable' : 'dx-scrollable-container';
 const BUTTON_CLASS = 'dx-button';
-const ROW_INSERTED_IN_POPUP = 'dx-row-inserted-popup';
 
 const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
 
@@ -476,15 +475,6 @@ export const editingFormBasedModule = {
         },
         views: {
             rowsView: {
-                _createRow(row) {
-                    const $row = this.callBase.apply(this, arguments);
-
-                    if(row && this.getController('editing').isPopupEditMode()) {
-                        row.isNewRow && $row.addClass(ROW_INSERTED_IN_POPUP);
-                    }
-                    return $row;
-                },
-
                 _renderCellContent: function($cell, options) {
                     if(options.rowType === 'data' && this._editingController.isPopupEditMode() && options.row.visible === false) {
                         return;

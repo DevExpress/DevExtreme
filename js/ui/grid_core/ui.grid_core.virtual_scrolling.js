@@ -17,7 +17,7 @@ const CONTENT_CLASS = 'content';
 const FREESPACE_CLASS = 'dx-freespace-row';
 const COLUMN_LINES_CLASS = 'dx-column-lines';
 const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
-const ROW_INSERTED_IN_POPUP = 'dx-row-inserted-popup';
+const ROW_INSERTED = 'dx-row-inserted';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
@@ -513,7 +513,7 @@ const VirtualScrollingRowsViewExtender = (function() {
         _getRowHeights: function() {
             const rowHeights = this._getRowElements(this._tableElement)
                 .toArray()
-                .filter(row => !$(row).hasClass(ROW_INSERTED_IN_POPUP))
+                .filter(row => !this.getController('editing').isPopupEditMode() || !$(row).hasClass(ROW_INSERTED))
                 .map(function(row) {
                     return getBoundingRect(row).height;
                 });
