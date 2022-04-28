@@ -136,9 +136,36 @@ export class AppointmentForm {
             formData,
             showColonAfterLabel: false,
             labelLocation: 'top',
+            customizeItem: (e) => {
+                if(this.form && e.itemType === 'group') {
+                    const dataExprs = this.scheduler.getDataAccessors().expr;
+
+                    const startDate = new Date(this.formData[dataExprs.startDateExpr]);
+                    const endDate = new Date(this.formData[dataExprs.endDateExpr]);
+
+                    const startTimeZoneEditor = e.items.find(i => i.dataField === dataExprs.startDateTimeZoneExpr);
+                    const endTimeZoneEditor = e.items.find(i => i.dataField === dataExprs.endDateTimeZoneExpr);
+
+                    if(startTimeZoneEditor) {
+                        startTimeZoneEditor.editorOptions.dataSource = this.createTimeZoneDataSource(startDate);
+                    }
+
+                    if(endTimeZoneEditor) {
+                        endTimeZoneEditor.editorOptions.dataSource = this.createTimeZoneDataSource(endDate);
+                    }
+                }
+            },
             screenByWidth: (width) => {
                 return width < SCREEN_SIZE_OF_SINGLE_COLUMN || devices.current().deviceType !== 'desktop' ? 'xs' : 'lg';
             }
+        });
+    }
+
+    createTimeZoneDataSource(date) {
+        return new DataSource({
+            store: timeZoneDataUtils.getDisplayedTimeZones(date),
+            paginate: true,
+            pageSize: 10
         });
     }
 
@@ -363,18 +390,6 @@ export class AppointmentForm {
         }
     }
 
-    updateTimeZoneEditorDataSource(date, expression) {
-        const timeZoneDataSource = new DataSource({
-            store: timeZoneDataUtils.getDisplayedTimeZones(date),
-            paginate: true,
-            pageSize: 10
-        });
-
-        const options = { dataSource: timeZoneDataSource };
-
-        this.setEditorOptions(expression, 'Main', options);
-    }
-
     updateRecurrenceEditorStartDate(date, expression) {
         const options = { startDate: date };
 
@@ -388,20 +403,28 @@ export class AppointmentForm {
         editor && this.form.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
     }
 
+    setTimeZoneEditorDataSource(date, path) {
+        const dataSource = this.createTimeZoneDataSource(date);
+        this.setEditorOptions(path, 'Main', { dataSource: dataSource });
+    }
+
     updateFormData(formData) {
         this.semaphore.take();
+
+        this.form.option('formData', formData);
 
         const dataExprs = this.scheduler.getDataAccessors().expr;
 
         const allDay = formData[dataExprs.allDayExpr];
+
         const startDate = new Date(formData[dataExprs.startDateExpr]);
         const endDate = new Date(formData[dataExprs.endDateExpr]);
 
-        this.updateTimeZoneEditorDataSource(startDate, dataExprs.startDateTimeZoneExpr);
-        this.updateTimeZoneEditorDataSource(endDate, dataExprs.endDateTimeZoneExpr);
+        this.setTimeZoneEditorDataSource(startDate, dataExprs.startDateTimeZoneExpr);
+        this.setTimeZoneEditorDataSource(endDate, dataExprs.endDateTimeZoneExpr);
+
         this.updateRecurrenceEditorStartDate(startDate, dataExprs.recurrenceRuleExpr);
 
-        this.form.option('formData', formData);
         this.setEditorsType(allDay);
 
         this.semaphore.release();
