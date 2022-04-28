@@ -227,21 +227,29 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('no action cursor for column header when sorting and dragging not allowed', function(assert) {
         // act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
-            columns: [{ dataField: 'field1', allowSorting: false }, { dataField: 'field2' }],
+            loadingTimeout: null,
+            columns: [
+                { dataField: 'field1', allowSorting: false },
+                { dataField: 'field2', allowSorting: false, sortOrder: 'asc' }, // T1032991
+                { dataField: 'field3' }
+            ],
             dataSource: []
         });
 
+        const $grid = $(dataGrid.$element());
+
         // assert
-        assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
-        assert.equal($(dataGrid.$element()).find('.dx-datagrid-action').length, 1, 'one action');
-        assert.ok($(dataGrid.$element()).find('.dx-header-row > td').eq(1).hasClass('dx-datagrid-action'));
+        assert.equal($grid.find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
+        assert.equal($grid.find('.dx-datagrid-action').length, 1, 'one action');
+        assert.notOk($grid.find('.dx-header-row > td').eq(0).hasClass('dx-datagrid-action'));
+        assert.notOk($grid.find('.dx-header-row > td').eq(1).hasClass('dx-datagrid-action'));
+        assert.ok($grid.find('.dx-header-row > td').eq(2).hasClass('dx-datagrid-action'));
 
         // act
         dataGrid.showColumnChooser();
 
         // assert
-        assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 2, 'two drag actions for hiding columns');
+        assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 3, 'two drag actions for hiding columns');
     });
 });
 

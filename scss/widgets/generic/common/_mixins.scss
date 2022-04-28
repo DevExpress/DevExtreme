@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
@@ -28,7 +29,7 @@ $generic-dropdownlist-min-height:
   font-weight: bold;
   position: absolute;
   top: 50%;
-  margin-top: -$generic-invalid-badge-size / 2;
+  margin-top: math.div(-$generic-invalid-badge-size, 2);
   width: $generic-invalid-badge-size;
   height: $generic-invalid-badge-size;
   text-align: center;

@@ -603,6 +603,10 @@
         display: inline-block;
         white-space: normal;
         vertical-align: top;
+
+        &:not(.dx-sort-indicator):not(.dx-header-filter-indicator) {
+          max-width: 100%;
+        }
       }
     }
 
@@ -853,6 +857,10 @@
 
       &:not(.dx-#{$widget-name}-content-fixed) {
         min-height: 100%; /* IE, Edge */
+      }
+
+      &.dx-scrollable-container {
+        width: auto;
       }
     }
 

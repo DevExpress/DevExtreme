@@ -1500,7 +1500,8 @@ export default {
                         let isPlain = true;
 
                         columns.forEach(function(column) {
-                            let parentIndex = column.ownerBand;
+                            const ownerBand = column.ownerBand;
+                            let parentIndex = isObject(ownerBand) ? ownerBand.index : ownerBand;
                             const parent = columns[parentIndex];
 
                             if(column.hasColumns) {
@@ -1874,10 +1875,16 @@ export default {
 
                     each(['calculateSortValue', 'calculateGroupValue', 'calculateDisplayValue'], function(_, calculateCallbackName) {
                         const calculateCallback = column[calculateCallbackName];
-                        if(isFunction(calculateCallback) && !calculateCallback.originalCallback) {
-                            column[calculateCallbackName] = function(data) { return calculateCallback.call(column, data); };
-                            column[calculateCallbackName].originalCallback = calculateCallback;
-                            column[calculateCallbackName].columnIndex = columnIndex;
+                        if(isFunction(calculateCallback)) {
+                            if(!calculateCallback.originalCallback) {
+                                const context = { column };
+                                column[calculateCallbackName] = function(data) { return calculateCallback.call(context.column, data); };
+                                column[calculateCallbackName].originalCallback = calculateCallback;
+                                column[calculateCallbackName].columnIndex = columnIndex;
+                                column[calculateCallbackName].context = context;
+                            } else {
+                                column[calculateCallbackName].context.column = column;
+                            }
                         }
                     });
 
@@ -2081,6 +2088,9 @@ export default {
                         const groupParameters = gridCoreUtils.normalizeSortingInfo(dataSource.group());
                         const columnsGroupParameters = that.getGroupDataSourceParameters();
                         const columnsSortParameters = that.getSortDataSourceParameters();
+                        const groupingChanged = !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters, true);
+                        const groupExpandingChanged = !groupingChanged && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters);
+
                         if(!that._columns.length) {
                             each(groupParameters, function(index, group) {
                                 that._columns.push(group.selector);
@@ -2090,13 +2100,15 @@ export default {
                             });
                             assignColumns(that, createColumnsFromOptions(that, that._columns));
                         }
-                        if((fromDataSource || (!columnsGroupParameters && !that._hasUserState)) && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters)) {
+
+                        if((fromDataSource || (!columnsGroupParameters && !that._hasUserState)) && (groupingChanged || groupExpandingChanged)) {
                             ///#DEBUG
                             that.__groupingUpdated = true;
                             ///#ENDDEBUG
                             updateSortGroupParameterIndexes(that._columns, groupParameters, 'groupIndex');
                             if(fromDataSource) {
-                                updateColumnChanges(that, 'grouping');
+                                groupingChanged && updateColumnChanges(that, 'grouping');
+                                groupExpandingChanged && updateColumnChanges(that, 'groupExpanding');
                                 isColumnsChanged = true;
                             }
                         }
@@ -2284,11 +2296,7 @@ export default {
                     return result;
                 },
                 setName: function(column) {
-                    const dataField = column.dataField;
-
-                    if(!isDefined(column.name) && isDefined(dataField)) {
-                        column.name = dataField;
-                    }
+                    column.name = column.name || column.dataField || column.type;
                 },
                 setUserState: function(state) {
                     const that = this;

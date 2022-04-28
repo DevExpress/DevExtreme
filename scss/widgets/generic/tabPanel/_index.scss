@@ -70,7 +70,7 @@ $generic-tabpanel-inset-shadow-bottom: inset 0 (-$generic-tabs-border-width);
     }
   }
 
-  .dx-multiview-wrapper {
+  & > .dx-tabpanel-container > .dx-multiview-wrapper {
     border-color: $accent-color;
   }
 }

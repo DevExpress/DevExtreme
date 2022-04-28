@@ -68,7 +68,8 @@ const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
 
 const CALENDAR_HOURS_NUMBERBOX_SELECTOR = '.dx-numberbox-spin-down';
-const CALENDAR_APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
+const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
+const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 
 const widgetName = 'dxDateBox';
 const { module: testModule, test } = QUnit;
@@ -313,7 +314,7 @@ QUnit.module('datebox tests', moduleConfig, () => {
 
         this.clock.tick();
         const dateBox = $dateBox.dxDateBox('instance');
-        const $done = $(dateBox.content()).parent().find(CALENDAR_APPLY_BUTTON_SELECTOR);
+        const $done = $(dateBox.content()).parent().find(APPLY_BUTTON_SELECTOR);
         const $hourDown = $(dateBox.content()).parent().find(CALENDAR_HOURS_NUMBERBOX_SELECTOR).eq(0);
 
         $hourDown.trigger('dxpointerdown');
@@ -1162,7 +1163,7 @@ QUnit.module('dateView integration', {
             'opened': false
         });
         this.instance.open();
-        $(this.popup().$overlayContent()).find(CALENDAR_APPLY_BUTTON_SELECTOR).trigger('dxclick');
+        $(this.popup().$overlayContent()).find(APPLY_BUTTON_SELECTOR).trigger('dxclick');
 
         assert.deepEqual(this.instance.option('value'), new Date(2000, 1, 1));
     });
@@ -1221,7 +1222,7 @@ QUnit.module('dateView integration', {
         rollers.month.option('selectedIndex', 10);
         rollers.year.option('selectedIndex', 2);
 
-        $(this.popup().$overlayContent()).find(CALENDAR_APPLY_BUTTON_SELECTOR).trigger('dxclick');
+        $(this.popup().$overlayContent()).find(APPLY_BUTTON_SELECTOR).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), new Date(2002, 10, 13));
 
         this.instance.open();
@@ -1417,7 +1418,7 @@ QUnit.module('dateView integration', {
             opened: true
         }).dxDateBox('instance');
 
-        $('.' + DATEBOX_WRAPPER_CLASS).find(CALENDAR_APPLY_BUTTON_SELECTOR).trigger('dxclick');
+        $('.' + DATEBOX_WRAPPER_CLASS).find(APPLY_BUTTON_SELECTOR).trigger('dxclick');
 
         const value = instance.option('value');
         assert.equal(value.getHours(), 0, 'hours component is 0');
@@ -2318,7 +2319,7 @@ QUnit.module('datebox w/ calendar', {
             .dxDateBox('instance');
 
         $(`.${CALENDAR_CELL_CLASS}`).eq(0).trigger('dxclick');
-        $(CALENDAR_APPLY_BUTTON_SELECTOR).trigger('dxclick');
+        $(APPLY_BUTTON_SELECTOR).trigger('dxclick');
 
         assert.notOk(dateBox.option('opened'));
         assert.ok(validationCallbackStub.calledOnce);
@@ -2373,7 +2374,7 @@ QUnit.module('datebox w/ calendar', {
         });
         this.fixture.dateBox.open();
         getInstanceWidget(this.fixture.dateBox).option('value', newDate);
-        $(CALENDAR_APPLY_BUTTON_SELECTOR).eq(0).trigger('dxclick');
+        $(APPLY_BUTTON_SELECTOR).eq(0).trigger('dxclick');
         assert.equal(this.fixture.dateBox.option('opened'), false);
         assert.deepEqual(this.fixture.dateBox.option('value'), newDate);
         assert.ok(onValueChangedHandler.calledOnce);
@@ -2473,7 +2474,7 @@ QUnit.module('datebox w/ calendar', {
 
         dateBox.open();
         const calendar = getInstanceWidget(dateBox);
-        const $applyButton = dateBox._popup.$wrapper().find(CALENDAR_APPLY_BUTTON_SELECTOR).eq(0);
+        const $applyButton = dateBox._popup.$wrapper().find(APPLY_BUTTON_SELECTOR).eq(0);
 
         calendar.option('value', newValue);
         assert.deepEqual(dateBox.option('value'), value, 'value is not changed yet');
@@ -3000,49 +3001,6 @@ QUnit.module('datebox with time component', {
         }
     });
 
-    QUnit.test('datebox value is bound to time view value', function(assert) {
-        const $element = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendar',
-            opened: true
-        });
-
-        const instance = $element.dxDateBox('instance');
-        const $content = $(instance._popup.$content());
-        const timeView = $content.find('.' + TIMEVIEW_CLASS).dxTimeView('instance');
-
-        let date = new Date(2014, 2, 1, 14, 33);
-        instance.option('value', date);
-        assert.equal(timeView.option('value').getTime(), date.getTime(), 'timeView value is set');
-
-        date = new Date(2014, 2, 1, 17, 47);
-        timeView.option('value', date);
-
-        $(CALENDAR_APPLY_BUTTON_SELECTOR).eq(0).trigger('dxclick');
-
-        assert.equal(instance.option('value').toString(), date.toString(), 'dateBox value is set');
-    });
-
-    QUnit.test('time value should be updated after select date', function(assert) {
-        const $element = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendar',
-            opened: true
-        });
-
-        const dateBox = $element.dxDateBox('instance');
-        const $content = $(dateBox._popup.$content());
-        const calendar = $content.find('.' + CALENDAR_CLASS).dxCalendar('instance');
-        const timeView = $content.find('.' + TIMEVIEW_CLASS).dxTimeView('instance');
-
-        calendar.option('value', new Date(2014, 2, 1, 11, 15));
-        timeView.option('value', new Date(2014, 1, 1, 12, 16));
-
-        $(CALENDAR_APPLY_BUTTON_SELECTOR).eq(0).trigger('dxclick');
-
-        assert.equal(dateBox.option('value').toString(), (new Date(2014, 2, 1, 12, 16)).toString(), 'dateBox value is set');
-    });
-
     QUnit.test('buttons are rendered after \'type\' option was changed', function(assert) {
         const $element = $('#dateBox').dxDateBox({
             pickerType: 'calendar',
@@ -3065,95 +3023,6 @@ QUnit.module('datebox with time component', {
 
         $buttons = $('.dx-datebox-wrapper .dx-toolbar .dx-button');
         assert.equal($buttons.length, 3, 'buttons are rendered after option was changed');
-    });
-
-    QUnit.test('T208853 - time is reset when calendar value is changed', function(assert) {
-        const $element = $('#dateBox').dxDateBox({
-            pickerType: 'calendar',
-            type: 'datetime',
-            applyValueMode: 'useButtons',
-            value: new Date(2015, 1, 16, 11, 20)
-        });
-
-        const dateBox = $element.dxDateBox('instance');
-
-        dateBox.open();
-
-        const $dateBoxOverlay = $('.dx-datebox-wrapper');
-        const $applyButton = $dateBoxOverlay.find('.dx-toolbar .dx-popup-done.dx-button');
-        const calendar = $dateBoxOverlay.find('.dx-calendar').dxCalendar('instance');
-
-        calendar.option('value', new Date(2014, 1, 16));
-        $($applyButton).trigger('dxclick');
-
-        assert.deepEqual(dateBox.option('value'), new Date(2014, 1, 16, 11, 20), 'date and time are correct');
-    });
-
-    QUnit.test('T231015 - widget should set default date if only one widget\'s value is chosen', function(assert) {
-        const clock = sinon.useFakeTimers(new Date(2001, 1, 1, 1, 1, 0, 0).valueOf());
-
-        try {
-            const $element = $('#dateBox').dxDateBox({
-                pickerType: 'calendar',
-                type: 'datetime',
-                value: null
-            });
-
-            const dateBox = $element.dxDateBox('instance');
-            const date = new Date(2002, 2, 2, 1, 1);
-
-            dateBox.open();
-            dateBox._strategy._widget.option('value', new Date(2002, 2, 2, 2, 2));
-            $(dateBox._popup.$wrapper()).find('.dx-popup-done').trigger('dxclick');
-            assert.strictEqual(dateBox.option('value').getTime(), date.getTime(), 'value is correct if only calendar value is changed');
-        } finally {
-            clock.restore();
-        }
-    });
-
-    QUnit.test('T231015 - widget should set default time if only one widget\'s value is chosen', function(assert) {
-        const clock = sinon.useFakeTimers(new Date(2001, 1, 1, 1, 1, 0, 0).valueOf());
-
-        try {
-            const $element = $('#dateBox').dxDateBox({
-                pickerType: 'calendar',
-                type: 'datetime',
-                value: null
-            });
-
-            const dateBox = $element.dxDateBox('instance');
-            const date = new Date(2001, 1, 1, 2, 2);
-
-            dateBox.open();
-            dateBox._strategy._timeView.option('value', new Date(2002, 2, 2, 2, 2));
-            $(dateBox._popup.$wrapper()).find('.dx-popup-done').trigger('dxclick');
-            assert.strictEqual(dateBox.option('value').getTime(), date.getTime(), 'value is correct if only timeView value is changed');
-        } finally {
-            clock.restore();
-        }
-    });
-
-    QUnit.test('T253298 - widget should set default date and time if value is null and the \'OK\' button is clicked', function(assert) {
-        const clock = sinon.useFakeTimers(new Date(2001, 1, 1, 1, 1, 1, 1).valueOf());
-
-        try {
-            const $element = $('#dateBox').dxDateBox({
-                pickerType: 'calendar',
-                type: 'datetime',
-                value: null
-            });
-
-            const dateBox = $element.dxDateBox('instance');
-
-            dateBox.open();
-            const date = new Date(2001, 1, 1, 1, 1, 0, 0);
-            $(dateBox._popup.$wrapper()).find('.dx-popup-done').trigger('dxclick');
-
-            const value = dateBox.option('value');
-            assert.equal(value.getTime(), date.getTime(), 'value is correct');
-        } finally {
-            clock.restore();
-        }
     });
 
     QUnit.test('DateBox should have time part when pickerType is rollers', function(assert) {
@@ -3206,7 +3075,6 @@ QUnit.module('datebox with time component', {
         assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
     });
 
-
     QUnit.test('dateview selectedIndex should not be changed after dateBox reopen (T934663)', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'device is not desktop');
@@ -3257,105 +3125,6 @@ QUnit.module('datebox with time component', {
         }
     });
 
-    QUnit.test('Reset seconds and milliseconds when DateBox has no value for datetime view', function(assert) {
-        const dateBox = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendar',
-            min: new Date('2015/1/25'),
-            max: new Date('2015/2/10')
-        }).dxDateBox('instance');
-
-        dateBox.open();
-
-        $(`.${CALENDAR_CELL_CLASS}`).first().trigger('dxclick');
-        $(CALENDAR_APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
-
-        assert.equal(dateBox.option('value').getSeconds(), 0, 'seconds has zero value');
-        assert.equal(dateBox.option('value').getMilliseconds(), 0, 'milliseconds has zero value');
-    });
-
-    QUnit.test('invalid (by internal validation) value should be displayed if it is selected by time numberboxes (T939117)', function(assert) {
-        const date = new Date('2015/1/25 14:00:00');
-        const $dateBox = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendar',
-            opened: true,
-            min: date,
-            displayFormat: 'HH:mm',
-            value: date
-        });
-        const dateBox = $dateBox.dxDateBox('instance');
-        const $hourDownButton = $(dateBox.content()).find(CALENDAR_HOURS_NUMBERBOX_SELECTOR).first();
-        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        $hourDownButton.trigger('dxpointerdown');
-        $(CALENDAR_APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
-
-        assert.strictEqual($input.val(), '13:00', 'input displays a correct value');
-        assert.strictEqual(dateBox.option('text'), '13:00', 'text is invalid');
-        assert.notOk(dateBox.option('isValid'), 'widget is invalid');
-        assert.deepEqual(dateBox.option('value'), date, 'value does not changed');
-    });
-
-    QUnit.test('Submit value should not be changed when apply button clicked and an invalid (by internal validation) value is selected', function(assert) {
-        const dateBox = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendar',
-            opened: true,
-            min: new Date('2015/1/25 13:00:00'),
-            value: new Date('2015/1/25 13:00:00')
-        }).dxDateBox('instance');
-        const $submitElement = $('#dateBox').find('input[type=hidden]');
-        const $hourDownButton = $(dateBox.content()).find(CALENDAR_HOURS_NUMBERBOX_SELECTOR).first();
-
-        $hourDownButton.trigger('dxpointerdown');
-        $(CALENDAR_APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
-
-        assert.notOk(dateBox.option('isValid'), 'editor is invalid');
-        assert.equal($submitElement.val(), '2015-01-25T13:00:00', 'submit element has correct value');
-    });
-
-    QUnit.test('Submit value should be changed when apply button clicked and an invalid (by validator) value is selected', function(assert) {
-        const $dateBox = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendar',
-            opened: true,
-            value: new Date('2015/1/25 13:00:00')
-        }).dxValidator({
-            validationRules: [{
-                type: 'custom',
-                reevaluate: true,
-                validationCallback: function(e) {
-                    return false;
-                }
-            }]
-        });
-
-        const dateBox = $dateBox.dxDateBox('instance');
-        const $submitElement = $('#dateBox').find('input[type=hidden]');
-        const $hourDownButton = $(dateBox.content()).find(CALENDAR_HOURS_NUMBERBOX_SELECTOR).first();
-
-        $hourDownButton.trigger('dxpointerdown');
-        $(CALENDAR_APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
-
-        assert.notOk(dateBox.option('isValid'), 'editor is invalid');
-        assert.equal($submitElement.val(), '2015-01-25T12:00:00', 'submit element has correct value');
-    });
-
-    QUnit.test('Reset seconds and milliseconds when DateBox has no value for time view', function(assert) {
-        const dateBox = $('#dateBox').dxDateBox({
-            pickerType: 'list',
-            type: 'time'
-        }).dxDateBox('instance');
-
-        dateBox.open();
-
-        $('.dx-list-item').first().trigger('dxclick');
-
-        assert.equal(dateBox.option('value').getSeconds(), 0, 'seconds has zero value');
-        assert.equal(dateBox.option('value').getMilliseconds(), 0, 'milliseconds has zero value');
-    });
-
     QUnit.test('DateBox renders the right stylingMode for editors in time view overlay (default)', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
@@ -3399,62 +3168,236 @@ QUnit.module('datebox with time component', {
         assert.ok(amPmEditor.hasClass('dx-editor-underlined'));
     });
 
-    QUnit.test('dateBox should update time on enter pressing (T969012)', function(assert) {
-        const date = new Date('2015/1/25');
-        const expectedDate = new Date(date);
-        expectedDate.setHours(11, 28);
+    QUnit.test('Reset seconds and milliseconds when DateBox has no value for time view', function(assert) {
+        const dateBox = $('#dateBox').dxDateBox({
+            pickerType: 'list',
+            type: 'time'
+        }).dxDateBox('instance');
 
-        const $dateBox = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            value: date,
-            opened: true,
-            pickerType: 'calendar'
-        });
-        const dateBox = $dateBox.dxDateBox('instance');
-        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
-        const $content = $(dateBox.content());
-        const timeView = $content
-            .find(`.${TIMEVIEW_CLASS}`)
-            .dxTimeView('instance');
+        dateBox.open();
 
-        timeView.option('value', expectedDate);
-        keyboard
-            .focus()
-            .press('enter');
+        $('.dx-list-item').first().trigger('dxclick');
 
-        assert.deepEqual(dateBox.option('value'), expectedDate, 'dateBox value was updated');
+        assert.equal(dateBox.option('value').getSeconds(), 0, 'seconds has zero value');
+        assert.equal(dateBox.option('value').getMilliseconds(), 0, 'milliseconds has zero value');
     });
 
-    QUnit.test('dateBox should update date and time on enter pressing after navigation using arrows', function(assert) {
-        const date = new Date('2015/1/25');
-        const time = new Date(date);
-        time.setHours(11, 28);
+    QUnit.module('value change', {
+        beforeEach: function() {
+            this.currentDateTime = new Date(2001, 1, 1, 1, 1, 0, 0);
+            this.clock = sinon.useFakeTimers(this.currentDateTime.valueOf());
 
-        const $dateBox = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            value: date,
-            opened: true,
-            pickerType: 'calendar'
+            this.date = new Date('2015/1/25');
+            this.init = (options) => {
+                this.$dateBox = $('#dateBox').dxDateBox($.extend({}, {
+                    type: 'datetime',
+                    value: this.date,
+                    opened: true,
+                    pickerType: 'calendar',
+                }, options));
+                this.dateBox = this.$dateBox.dxDateBox('instance');
+                this.$input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                this.$submitInput = this.$dateBox.find('input[type=hidden]');
+                this.$content = $(this.dateBox.content());
+                this.keyboard = keyboardMock(this.$input);
+                this.timeView = this.$content
+                    .find(`.${TIMEVIEW_CLASS}`)
+                    .dxTimeView('instance');
+                this.calendar = this.$content
+                    .find(`.${CALENDAR_CLASS}`)
+                    .dxCalendar('instance');
+                this.$hourBox = this.$content.find(CALENDAR_HOURS_NUMBERBOX_SELECTOR).first();
+            };
+            this.reinit = (options = {}) => {
+                this.dateBox.dispose();
+                this.init(options);
+            };
+            this.clickApplyButton = () => {
+                $(APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
+            };
+            this.clickCalendarCell = () => {
+                $(`.${CALENDAR_CELL_CLASS}`).first().trigger('dxclick');
+            };
+
+            this.init({});
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    }, () => {
+        QUnit.test('dateBox should update time on enter pressing (T969012)', function(assert) {
+            const expectedDate = new Date(this.date);
+            expectedDate.setHours(11, 28);
+
+            this.timeView.option('value', expectedDate);
+            this.keyboard
+                .focus()
+                .press('enter');
+
+            assert.deepEqual(this.dateBox.option('value'), expectedDate, 'dateBox value was updated');
         });
-        const dateBox = $dateBox.dxDateBox('instance');
-        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
-        const $content = $(dateBox.content());
-        const timeView = $content
-            .find(`.${TIMEVIEW_CLASS}`)
-            .dxTimeView('instance');
 
-        keyboard.press('up');
-        timeView.option('value', time);
-        keyboard
-            .focus()
-            .press('enter')
-            .press('enter');
+        QUnit.test('dateBox should update date and time on enter pressing after time value change using arrows', function(assert) {
+            const time = new Date(this.date);
+            time.setHours(11, 28);
 
-        const expectedDate = new Date(time);
-        expectedDate.setDate(18);
-        assert.deepEqual(dateBox.option('value'), expectedDate, 'dateBox value was updated');
+            this.keyboard.press('up');
+            this.timeView.option('value', time);
+            this.keyboard
+                .focus()
+                .press('enter')
+                .press('enter');
+
+            const expectedDate = new Date(time);
+            expectedDate.setDate(18);
+
+            assert.deepEqual(this.dateBox.option('value'), expectedDate, 'dateBox value was updated');
+        });
+
+        QUnit.test('submit value should be updated after apply button click if internal validation is failed', function(assert) {
+            this.reinit({
+                min: new Date('2015/1/25 13:00:00'),
+                value: new Date('2015/1/25 13:00:00')
+            });
+
+            this.$hourBox.trigger('dxpointerdown');
+            this.clickApplyButton();
+
+            assert.notOk(this.dateBox.option('isValid'), 'editor is invalid');
+            assert.strictEqual(this.$submitInput.val(), '2015-01-25T13:00:00', 'submit element has correct value');
+        });
+
+        QUnit.test('submit value should be updated after apply button click if external validation is failed', function(assert) {
+            this.date = new Date('2015/1/25 13:00:00');
+            this.reinit();
+            this.$dateBox.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    reevaluate: true,
+                    validationCallback: function(e) {
+                        return false;
+                    }
+                }]
+            });
+
+            this.$hourBox.trigger('dxpointerdown');
+            this.clickApplyButton();
+
+            assert.notOk(this.dateBox.option('isValid'), 'editor is invalid');
+            assert.strictEqual(this.$submitInput.val(), '2015-01-25T12:00:00', 'submit element has correct value');
+        });
+
+        QUnit.test('invalid (by internal validation) value should be displayed if it is selected by time numberboxes (T939117)', function(assert) {
+            this.date = new Date('2015/1/25 14:00:00');
+            this.reinit({
+                min: this.date,
+                displayFormat: 'HH:mm',
+                value: this.date
+            });
+
+            this.$hourBox.trigger('dxpointerdown');
+            this.clickApplyButton();
+
+            assert.strictEqual(this.$input.val(), '13:00', 'input displays a correct value');
+            assert.strictEqual(this.dateBox.option('text'), '13:00', 'text is invalid');
+            assert.notOk(this.dateBox.option('isValid'), 'widget is invalid');
+            assert.deepEqual(this.dateBox.option('value'), this.date, 'value does not changed');
+        });
+
+        QUnit.test('datebox value is bound to time view value', function(assert) {
+            let date = new Date(2014, 2, 1, 14, 33);
+            this.dateBox.option('value', date);
+            assert.equal(this.timeView.option('value').getTime(), date.getTime(), 'timeView value is set');
+
+            date = new Date(2014, 2, 1, 17, 47);
+            this.timeView.option('value', date);
+
+            this.clickApplyButton();
+
+            assert.strictEqual(this.dateBox.option('value').toString(), date.toString(), 'dateBox value is set');
+        });
+
+        QUnit.test('time value should be updated after select date', function(assert) {
+            this.calendar.option('value', new Date(2014, 2, 1, 11, 15));
+            this.timeView.option('value', new Date(2014, 1, 1, 12, 16));
+
+            this.clickApplyButton();
+
+            const expectedValue = (new Date(2014, 2, 1, 12, 16)).toString();
+            assert.strictEqual(this.dateBox.option('value').toString(), expectedValue, 'dateBox value is set');
+        });
+
+        QUnit.test('Reset seconds and milliseconds when DateBox has no value for datetime view', function(assert) {
+            this.reinit({
+                min: new Date('2015/1/25'),
+                max: new Date('2015/2/10')
+            });
+
+            this.clickCalendarCell();
+            this.clickApplyButton();
+
+            assert.strictEqual(this.dateBox.option('value').getSeconds(), 0, 'seconds has zero value');
+            assert.strictEqual(this.dateBox.option('value').getMilliseconds(), 0, 'milliseconds has zero value');
+        });
+
+        QUnit.test('time is reset when calendar value is changed (T208853)', function(assert) {
+            this.date = new Date(2015, 1, 16, 11, 20);
+            this.reinit();
+
+            this.calendar.option('value', new Date(2014, 1, 16));
+            this.clickApplyButton();
+
+            assert.deepEqual(this.dateBox.option('value'), new Date(2014, 1, 16, 11, 20), 'date and time are correct');
+        });
+
+        QUnit.module('partial datetime selecting when value=null', {
+            beforeEach: function() {
+                this.reinit({
+                    value: null
+                });
+            }
+        }, () => {
+            QUnit.test('updated value time should be equal to current time if only date is selected (T231015)', function(assert) {
+                const newDateTime = new Date(2002, 2, 2, 1, 1, 0, 0);
+
+                this.calendar.option('value', new Date(2002, 2, 2, 14, 17, 22, 34)); // updates only date
+                this.clickApplyButton();
+
+                assert.strictEqual(this.dateBox.option('value').getTime(), newDateTime.getTime(), 'value is correct if only calendar value is changed');
+            });
+
+            QUnit.test('updated value time should be equal to selected time if only time is selected (T231015)', function(assert) {
+                const newDateTime = new Date(2001, 1, 1, 2, 2, 0, 0);
+
+                this.timeView.option('value', new Date(2002, 2, 2, 2, 2)); // updated only time
+                this.clickApplyButton();
+
+                assert.strictEqual(this.dateBox.option('value').getTime(), newDateTime.getTime(), 'value is correct if only timeView value is changed');
+            });
+
+            QUnit.test('updated value should have date and time equal to current date and time after apply button click if value is null (T253298)', function(assert) {
+                this.clickApplyButton();
+
+                assert.strictEqual(this.dateBox.option('value').getDate(), this.currentDateTime.getDate(), 'value date is correct');
+                assert.strictEqual(this.dateBox.option('value').getTime(), this.currentDateTime.getTime(), 'value time is correct');
+            });
+
+            QUnit.test('updated value should have date equal to calendar controured date after apply button click if value is null (T1039021)', function(assert) {
+                const minDate = new Date(2050, 10, 10);
+                this.reinit({
+                    value: null,
+                    min: minDate
+                });
+
+                this.clickApplyButton();
+
+                const expectedDateTime = new Date(minDate);
+                expectedDateTime.setHours(this.currentDateTime.getHours(), this.currentDateTime.getMinutes());
+
+                assert.strictEqual(this.dateBox.option('value').getDate(), expectedDateTime.getDate(), 'value date is correct');
+                assert.strictEqual(this.dateBox.option('value').getTime(), expectedDateTime.getTime(), 'value time is correct');
+            });
+        });
     });
 });
 
@@ -3924,6 +3867,64 @@ QUnit.module('datebox w/ time list', {
         this.dateBox.open();
         $items.eq(3).trigger('dxclick');
         assert.strictEqual($input.val(), $items.eq(3).text(), 'new time is applied');
+    });
+
+    QUnit.module('applyValueMode = useButtons', {
+        beforeEach: function() {
+            this.date = new Date(2020, 1, 1);
+            this.dateBox.option({
+                value: this.date,
+                opened: true,
+                applyValueMode: 'useButtons'
+            });
+            this.$items = $(this.dateBox.content()).find(LIST_ITEM_SELECTOR);
+            this.$firstItem = this.$items.eq(1);
+        }
+    }, () => {
+        QUnit.test('should not close popup on list item click', function(assert) {
+            this.$firstItem.trigger('dxclick');
+
+            assert.ok(this.dateBox.option('opened'), 'dateBox is still opened');
+        });
+
+        QUnit.test('should not instantly select value on list item click (T1005111)', function(assert) {
+            this.$firstItem.trigger('dxclick');
+
+            assert.deepEqual(this.dateBox.option('value'), this.date, 'item is not selected');
+        });
+
+        QUnit.test('should not raise validation error on "Ok" button click without item selecting (T1005111)', function(assert) {
+            $(APPLY_BUTTON_SELECTOR).trigger('dxclick');
+
+            assert.ok(this.dateBox.option('isValid'), 'dateBox is still valid');
+        });
+
+        QUnit.test('should update value on "Ok" button click', function(assert) {
+            const expectedDate = new Date(this.date);
+            expectedDate.setHours(0, 30);
+            this.$firstItem.trigger('dxclick');
+            $(APPLY_BUTTON_SELECTOR).trigger('dxclick');
+
+            assert.deepEqual(this.dateBox.option('value'), expectedDate, 'value is updated');
+        });
+
+        QUnit.test('should not update value on "Cancel" button click', function(assert) {
+            this.$firstItem.trigger('dxclick');
+            $(CANCEL_BUTTON_SELECTOR).trigger('dxclick');
+
+            assert.deepEqual(this.dateBox.option('value'), this.date, 'value is not updated');
+        });
+
+        QUnit.testInActiveWindow('should not close on "tab" press', function(assert) {
+            const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input);
+
+            keyboard
+                .focus()
+                .keyDown('tab');
+
+            assert.ok(this.dateBox.option('opened'), 'dateBox is still opened');
+        });
     });
 });
 
@@ -4979,7 +4980,7 @@ QUnit.module('datebox validation', {}, () => {
             });
             clock.tick();
             const dateBox = $dateBox.dxDateBox('instance');
-            const $done = $(dateBox.content()).parent().find(CALENDAR_APPLY_BUTTON_SELECTOR);
+            const $done = $(dateBox.content()).parent().find(APPLY_BUTTON_SELECTOR);
 
             $done.trigger('dxclick');
 
@@ -5906,11 +5907,14 @@ QUnit.module('valueChanged handler should receive correct event', {
         ['date', 'datetime', 'time'].forEach(type => {
             QUnit.test(`on click on apply button if pickerType=${pickerType} and type=${type}`, function(assert) {
                 this.reinit({ applyValueMode: 'useButtons', pickerType, type });
-                const $applyButton = $(this.instance.content()).parent().find(CALENDAR_APPLY_BUTTON_SELECTOR);
+                const $applyButton = $(this.instance.content()).parent().find(APPLY_BUTTON_SELECTOR);
 
-                if(pickerType === 'calendar' && type === 'date') {
+                if(pickerType === 'calendar' && /date/.test(type)) {
                     $(`.${CALENDAR_CELL_CLASS}`).eq(0).trigger('dxclick');
+                } else if(pickerType === 'calendar' && type === 'time') {
+                    $(this.instance.content()).find(LIST_ITEM_SELECTOR).eq(1).trigger('dxclick');
                 }
+
                 $applyButton.trigger('dxclick');
 
                 this.checkEvent(assert, 'dxclick', $applyButton);
@@ -6018,5 +6022,87 @@ QUnit.module('validation', {
 
             assert.ok(this.dateBox.option('isValid'), 'datebox is valid after clear button click');
         });
+    });
+
+    ['change', 'input', 'keydown', 'keyup', 'focusout', 'blur'].forEach(valueChangeEvent => {
+        QUnit.test(`enter handler should raise custom validation when valueChangeEvent=${valueChangeEvent}(T999607)`, function(assert) {
+            this.dateBox.option({ valueChangeEvent });
+            this.$dateBox.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    message: 'custom',
+                    validationCallback: () => false
+                }]
+            });
+
+            this.keyboard
+                .type('1/1/2021')
+                .press('enter')
+                .change();
+
+            assert.notOk(this.dateBox.option('isValid'), 'dateBox is invalid');
+            assert.strictEqual(this.dateBox.option('validationError').message, 'custom', 'validation callback is failed');
+        });
+
+        QUnit.test(`enter handler should raise custom validation after invalid character remove when valueChangeEvent=${valueChangeEvent}`, function(assert) {
+            this.dateBox.option({ valueChangeEvent });
+            this.$dateBox.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    message: 'custom',
+                    validationCallback: () => false
+                }]
+            });
+
+            this.keyboard
+                .type('1/1/2021')
+                .press('enter')
+                .change()
+                .type('d')
+                .change()
+                .press('backspace')
+                .press('enter')
+                .change();
+
+            assert.notOk(this.dateBox.option('isValid'), 'dateBox is invalid');
+            assert.strictEqual(this.dateBox.option('validationError').message, 'custom', 'validation callback is failed');
+        });
+
+        QUnit.test(`custom validation should be raised only once after enter press when valueChangeEvent=${valueChangeEvent}`, function(assert) {
+            this.dateBox.option({ valueChangeEvent });
+            const validationCallbackStub = sinon.stub();
+
+            this.keyboard.type('1/1/2021');
+            this.$dateBox.dxValidator({
+                validationRules: [{
+                    reevaluate: true,
+                    type: 'custom',
+                    message: 'custom',
+                    validationCallback: validationCallbackStub
+                }]
+            });
+            this.keyboard
+                .press('enter')
+                .change();
+
+            assert.ok(validationCallbackStub.calledOnce, 'custom validation was called only once');
+        });
+    });
+
+    QUnit.test('custom validation should get actual value as parameter if value was not changed (T1024043)', function(assert) {
+        const value = '2021-08-24';
+        this.dateBox.option({ value });
+        const validationCallbackStub = sinon.stub();
+
+        this.$dateBox.dxValidator({
+            validationRules: [{
+                type: 'custom',
+                validationCallback: validationCallbackStub
+            }]
+        });
+
+        this.keyboard.press('enter');
+
+        assert.strictEqual(validationCallbackStub.getCall(0).args[0].value, value, 'validation callback value parameter is correct');
     });
 });

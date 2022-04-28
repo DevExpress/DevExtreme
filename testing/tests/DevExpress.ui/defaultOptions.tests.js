@@ -271,7 +271,7 @@ testComponentDefaults(DropDownButton, {}, {
     deferRendering: true,
     text: '',
     keyExpr: 'this',
-    displayExpr: 'this',
+    displayExpr: undefined,
     useSelectMode: false,
     wrapItemText: false,
     opened: false,

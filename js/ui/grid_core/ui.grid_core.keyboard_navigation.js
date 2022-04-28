@@ -41,7 +41,8 @@ const REVERT_BUTTON_CLASS = 'dx-revert-button';
 
 const FAST_EDITING_DELETE_KEY = 'delete';
 
-const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex], .dx-dropdowneditor-icon';
+const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex], .dx-checkbox';
+const NON_FOCUSABLE_ELEMENTS_SELECTOR = `${INTERACTIVE_ELEMENTS_SELECTOR}, .dx-dropdowneditor-icon`;
 
 const EDIT_MODE_ROW = 'row';
 const EDIT_MODE_FORM = 'form';
@@ -945,11 +946,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 this._isNeedFocus = false;
                 this._isHiddenFocus = false;
             } else {
-                const $target = event && $(event.target).closest(INTERACTIVE_ELEMENTS_SELECTOR + ', td');
-                const isInteractiveTarget = $target && $target.not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR);
+                const $target = event && $(event.target).closest(NON_FOCUSABLE_ELEMENTS_SELECTOR + ', td');
+                const skipFocusEvent = $target && $target.not($cell).is(NON_FOCUSABLE_ELEMENTS_SELECTOR);
                 const isEditor = !!column && !column.command && $cell.hasClass(EDITOR_CELL_CLASS);
-                const isDisabled = !isEditor && (!args.isHighlighted || isInteractiveTarget);
-                this._focus($cell, isDisabled, isInteractiveTarget);
+                const isDisabled = !isEditor && (!args.isHighlighted || skipFocusEvent);
+                this._focus($cell, isDisabled, skipFocusEvent);
             }
         } else {
             this.setRowFocusType();
@@ -1053,7 +1054,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         gridCoreUtils.focusAndSelectElement(this, $focusedElement);
     },
 
-    _focus: function($cell, disableFocus, isInteractiveElement) {
+    _focus: function($cell, disableFocus, skipFocusEvent) {
         const $row = ($cell && !$cell.hasClass(ROW_CLASS)) ? $cell.closest(`.${ROW_CLASS}`) : $cell;
 
         if($row && isNotFocusedRow($row)) {
@@ -1066,7 +1067,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
         this._isHiddenFocus = disableFocus;
 
-        if(isGroupRow($row) || this.isRowFocusType()) {
+        const isRowFocus = isGroupRow($row) || this.isRowFocusType();
+
+        if(isRowFocus) {
             $focusElement = $row;
             if(focusedView) {
                 this.setFocusedRowIndex(this._getRowIndex($row));
@@ -1089,12 +1092,15 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS);
                 }
             });
-            if(!isInteractiveElement) {
+            if(!skipFocusEvent) {
                 this._applyTabIndexToElement($focusElement);
                 eventsEngine.trigger($focusElement, 'focus');
             }
             if(disableFocus) {
                 $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
+                if(isRowFocus) {
+                    $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
+                }
             } else {
                 this._editorFactory.focus($focusElement);
             }
@@ -1105,8 +1111,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._updateFocusTimeout = setTimeout(() => {
             const editingController = this._editingController;
             const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
+            const isBatchEditMode = editingController.getEditMode() === EDIT_MODE_BATCH;
 
-            if(!this.option('repaintChangesOnly') && isCellEditMode && editingController.hasChanges()) {
+            if((isCellEditMode && editingController.hasChanges()) || (isBatchEditMode && editingController.isNewRowInEditMode())) {
                 editingController._focusEditingCell();
                 return;
             }
@@ -1364,10 +1371,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return this._isCellValid($cell);
     },
     _isLastRow: function(rowIndex) {
+        const dataController = this._dataController;
+
         if(this._isVirtualRowRender()) {
-            return rowIndex >= this._dataController.totalItemsCount() - 1;
+            return rowIndex >= dataController.getMaxRowIndex();
         }
-        return rowIndex === this._dataController.items().length - 1;
+        return rowIndex === dataController.items().length - 1;
     },
     _isFirstValidCell: function(cellPosition) {
         let isFirstValidCell = false;
@@ -1573,18 +1582,28 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
     _editingCellHandler: function(eventArgs, editorValue) {
-        const $input = this._getFocusedCell().find('.dx-texteditor-input').eq(0);
+        const $input = this._getFocusedCell().find(INTERACTIVE_ELEMENTS_SELECTOR).eq(0);
         const keyDownEvent = createEvent(eventArgs, { type: 'keydown', target: $input.get(0) });
         const keyPressEvent = createEvent(eventArgs, { type: 'keypress', target: $input.get(0) });
         const inputEvent = createEvent(eventArgs, { type: 'input', target: $input.get(0) });
 
+        $input.get(0).select?.();
         eventsEngine.trigger($input, keyDownEvent);
+
         if(!keyDownEvent.isDefaultPrevented()) {
             eventsEngine.trigger($input, keyPressEvent);
             if(!keyPressEvent.isDefaultPrevented()) {
                 const timeout = browser.mozilla ? 25 : 0; // T882996
+
                 setTimeout(() => {
                     $input.val(editorValue);
+
+                    if(browser.msie) {
+                        gridCoreUtils.setSelectionRange($input.get(0), {
+                            selectionStart: editorValue.length,
+                            selectionEnd: editorValue.length
+                        });
+                    }
 
                     const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
                     eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
@@ -2185,6 +2204,16 @@ export default {
                             editorFactory.refocus();
                         }
                     }
+                },
+                getMaxRowIndex: function() {
+                    let result = this.items().length - 1;
+                    const virtualItemsCount = this.virtualItemsCount();
+
+                    if(virtualItemsCount) {
+                        result += (virtualItemsCount.begin + virtualItemsCount.end);
+                    }
+
+                    return result;
                 }
             },
             adaptiveColumns: {

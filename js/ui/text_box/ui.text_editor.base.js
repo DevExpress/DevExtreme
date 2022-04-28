@@ -229,13 +229,14 @@ const TextEditorBase = Editor.inherit({
     },
 
     _render: function() {
+        this.callBase();
+
         this._renderPlaceholder();
         this._refreshValueChangeEvent();
         this._renderEvents();
 
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
-        this.callBase();
     },
 
     _renderInput: function() {
@@ -302,6 +303,12 @@ const TextEditorBase = Editor.inherit({
         this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, this._$buttonsContainer);
     },
 
+    _cleanButtonContainers: function() {
+        this._$beforeButtonsContainer?.remove();
+        this._$afterButtonsContainer?.remove();
+        this._buttonCollection.clean();
+    },
+
     _clean() {
         this._buttonCollection.clean();
         this._disposePendingIndicator();
@@ -351,9 +358,9 @@ const TextEditorBase = Editor.inherit({
     },
 
     _updateButtonsStyling: function(editorStylingMode) {
-        each(this.option('buttons'), (_, buttonOptions) => {
-            if(buttonOptions.options && !buttonOptions.options.stylingMode) {
-                const buttonInstance = this.getButton(buttonOptions.name);
+        each(this.option('buttons'), (_, { options, name: buttonName }) => {
+            if(options && !options.stylingMode && this.option('visible')) {
+                const buttonInstance = this.getButton(buttonName);
                 buttonInstance.option && buttonInstance.option('stylingMode', editorStylingMode === 'underlined' ? 'text' : 'contained');
             }
         });
@@ -645,6 +652,9 @@ const TextEditorBase = Editor.inherit({
     },
 
     _valueChangeEventHandler: function(e, formattedValue) {
+        if(this.option('readOnly')) {
+            return;
+        }
         this._saveValueChangeEvent(e);
         this.option('value', arguments.length > 1 ? formattedValue : this._input().val());
         this._saveValueChangeEvent(undefined);
@@ -740,11 +750,17 @@ const TextEditorBase = Editor.inherit({
                 if(fullName === name) {
                     checkButtonsOptionType(value);
                 }
-                this._$beforeButtonsContainer && this._$beforeButtonsContainer.remove();
-                this._$afterButtonsContainer && this._$afterButtonsContainer.remove();
-                this._buttonCollection.clean();
+                this._cleanButtonContainers();
                 this._renderButtonContainers();
                 this._updateButtonsStyling(this.option('stylingMode'));
+                break;
+            case 'visible':
+                this.callBase(args);
+                if(value && this.option('buttons')) {
+                    this._cleanButtonContainers();
+                    this._renderButtonContainers();
+                    this._updateButtonsStyling(this.option('stylingMode'));
+                }
                 break;
             case 'displayValueFormatter':
                 this._invalidate();

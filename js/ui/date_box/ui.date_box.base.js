@@ -1,6 +1,5 @@
 import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
-import registerComponent from '../../core/component_registrator';
 import { isDate as isDateType, isString, isNumeric } from '../../core/utils/type';
 import { createTextElementHiddenCopy } from '../../core/utils/dom';
 import { each } from '../../core/utils/iterator';
@@ -478,17 +477,19 @@ const DateBox = DropDownEditor.inherit({
     },
 
     _valueChangeEventHandler: function(e) {
-        const text = this.option('text');
+        const { text, type, validationError } = this.option();
         const currentValue = this.dateOption('value');
 
         if(text === this._getDisplayedText(currentValue)) {
-            this._applyInternalValidation(currentValue);
+            if(!validationError || validationError.editorSpecific) {
+                this._applyInternalValidation(currentValue);
+                this._applyCustomValidation(currentValue);
+            }
             return;
         }
 
         const parsedDate = this._getParsedDate(text);
         const value = currentValue ?? this._getDateByDefault();
-        const type = this.option('type');
         const newValue = uiDateUtils.mergeDates(value, parsedDate, type);
         const date = parsedDate && type === 'time' ? newValue : parsedDate;
 
@@ -599,11 +600,6 @@ const DateBox = DropDownEditor.inherit({
         return '';
     },
 
-    _renderPlaceholder: function() {
-        this._popup && this._popup.option('title', this._getPopupTitle());
-        this.callBase();
-    },
-
     _refreshStrategy: function() {
         this._strategy.dispose();
         this._initStrategy();
@@ -633,6 +629,10 @@ const DateBox = DropDownEditor.inherit({
         return this._pickerType === PICKER_TYPE['native'];
     },
 
+    _updatePopupTitle: function() {
+        this._popup?.option('title', this._getPopupTitle());
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'showClearButton':
@@ -655,7 +655,8 @@ const DateBox = DropDownEditor.inherit({
                 this._updateValue();
                 break;
             case 'placeholder':
-                this._renderPlaceholder();
+                this.callBase.apply(this, arguments);
+                this._updatePopupTitle();
                 break;
             case 'min':
             case 'max': {
@@ -775,7 +776,5 @@ const DateBox = DropDownEditor.inherit({
         }
     }
 });
-
-registerComponent('dxDateBox', DateBox);
 
 export default DateBox;

@@ -146,7 +146,8 @@ export const HeaderFilterView = modules.View.inherit({
 
     updatePopup: function($element, options) {
         const that = this;
-        const alignment = options.alignment === 'right' ? 'left' : 'right';
+        const showColumnLines = this.option('showColumnLines');
+        const alignment = (options.alignment === 'right' ^ !showColumnLines) ? 'left' : 'right';
 
         if(that._popupContainer) {
             that._cleanPopupContent();

@@ -530,7 +530,7 @@ export function getCurrentLookupValueText(field, value, handler) {
     }
 }
 
-function getPrimitiveValueText(field, value, customOperation, target) {
+function getPrimitiveValueText(field, value, customOperation, target, options) {
     let valueText;
     if(value === true) {
         valueText = field.trueText || messageLocalization.format('dxDataGrid-trueText');
@@ -552,13 +552,14 @@ function getPrimitiveValueText(field, value, customOperation, target) {
             valueText: valueText,
             field: field,
             target: target
-        });
+        }, options);
     }
     return valueText;
 }
 
 function getArrayValueText(field, value, customOperation, target) {
-    return value.map(v => getPrimitiveValueText(field, v, customOperation, target));
+    const options = { values: value };
+    return value.map(v => getPrimitiveValueText(field, v, customOperation, target, options));
 }
 
 function checkDefaultValue(value) {

@@ -1415,8 +1415,50 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual(onAddSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
         assert.strictEqual(onAddSpy.getCall(0).args[0].fromData, 'x', 'fromData');
         assert.strictEqual(onAddSpy.getCall(0).args[0].toData, 'y', 'toData');
+        assert.strictEqual(onAddSpy.getCall(0).args[0].event.type, 'dxdragend', 'event');
         assert.strictEqual($(onAddSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
         assert.strictEqual($(sortable2.element()).children('#item2').length, 1, 'item is added');
+    });
+
+    QUnit.test('onAdd on drop under empty sortable if scroll exists (T1034893)', function(assert) {
+        $('#container').css({
+            overflow: 'auto',
+            width: 200
+        });
+
+        const onAddSpy = sinon.spy();
+
+        const sortable1 = this.createSortable({
+            filter: '.draggable',
+            data: 'x',
+            moveItemOnDrop: true,
+            group: 'shared'
+        }, $('#items'));
+
+
+        $('#items2').children().remove();
+
+        const sortable2 = this.createSortable({
+            filter: '.draggable',
+            group: 'shared',
+            data: 'y',
+            moveItemOnDrop: true,
+            onAdd: onAddSpy
+        }, $('#items2'));
+            // act
+        const $sourceElement = sortable1.$element().children().eq(1);
+        pointerMock($sourceElement).start({ x: 5, y: 5 }).down().move(0, 400).move(50, 0).up();
+
+        // assert
+        assert.strictEqual(onAddSpy.callCount, 1, 'onAdd is called');
+        assert.deepEqual(onAddSpy.getCall(0).args[0].fromComponent, sortable1, 'sourceComponent');
+        assert.deepEqual(onAddSpy.getCall(0).args[0].toComponent, sortable2, 'component');
+        assert.strictEqual(onAddSpy.getCall(0).args[0].fromIndex, 1, 'fromIndex');
+        assert.strictEqual(onAddSpy.getCall(0).args[0].toIndex, 0, 'toIndex');
+        assert.strictEqual(onAddSpy.getCall(0).args[0].fromData, 'x', 'fromData');
+        assert.strictEqual(onAddSpy.getCall(0).args[0].toData, 'y', 'toData');
+        assert.strictEqual($(onAddSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
+        assert.strictEqual($(sortable2.element()).children().length, 1, 'item is added');
     });
 
     QUnit.test('onAdd - not add item when eventArgs.cancel is true', function(assert) {
@@ -1496,6 +1538,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual(onRemoveSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
         assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromData, 'x', 'fromData');
         assert.strictEqual(onRemoveSpy.getCall(0).args[0].toData, 'y', 'toData');
+        assert.strictEqual(onRemoveSpy.getCall(0).args[0].event.type, 'dxdragend', 'event');
         assert.strictEqual($(onRemoveSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
         assert.strictEqual($(sortable1.element()).children('#item2').length, 0, 'item is removed');
     });
@@ -1573,6 +1616,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual(onReorderSpy.getCall(0).args[0].toIndex, 1, 'toIndex');
         assert.strictEqual(onReorderSpy.getCall(0).args[0].fromData, 'x', 'fromData');
         assert.strictEqual(onReorderSpy.getCall(0).args[0].toData, 'x', 'toData');
+        assert.strictEqual(onReorderSpy.getCall(0).args[0].event.type, 'dxdragend', 'event');
         assert.strictEqual($(onReorderSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
     });
 
@@ -2853,7 +2897,7 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
         $('.draggable').css('margin-left', '0px');
     });
 
-    QUnit.test('onReorder should not be called if item was dropped under the sortable', function(assert) {
+    QUnit.test('onReorder should not be called if item was dropped under the sortable when scroll position at the top', function(assert) {
         // arrange
         $('#bothScrolls').height(300);
         const onReorder = sinon.spy();
@@ -2868,6 +2912,153 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
 
         // assert
         assert.equal(onReorder.callCount, 0, 'onReorder call count');
+    });
+
+    QUnit.test('onReorder should be called if item was dropped above the sortable when scroll position at the top', function(assert) {
+        // arrange
+        $('#bothScrolls').height(300);
+        const onReorder = sinon.spy();
+
+        this.createSortable({
+            filter: '.draggable',
+            onReorder
+        });
+
+        // act
+        pointerMock(this.$element.children().last()).start().down().move(0, -450).up();
+
+        // assert
+        assert.equal(onReorder.callCount, 1, 'onReorder call count');
+    });
+
+    QUnit.test('onReorder should be called if item was dropped under the sortable when scroll position at the bottom', function(assert) {
+        // arrange
+        $('#bothScrolls').height(300);
+        $('#bothScrolls').scrollTop(1000);
+        const onReorder = sinon.spy();
+
+        this.createSortable({
+            filter: '.draggable',
+            onReorder
+        });
+
+        // act
+        pointerMock(this.$element.children().eq(0)).start().down().move(0, 450).up();
+
+        // assert
+        assert.equal(onReorder.callCount, 1, 'onReorder call count');
+    });
+
+    QUnit.test('onReorder should not be called if item was dropped above the sortable when scroll position at the bottom', function(assert) {
+        // arrange
+        $('#bothScrolls').height(300);
+        $('#bothScrolls').scrollTop(1000);
+        const onReorder = sinon.spy();
+
+        this.createSortable({
+            filter: '.draggable',
+            onReorder
+        });
+
+        // act
+        pointerMock(this.$element.children().last()).start().down().move(0, -450).up();
+
+        // assert
+        assert.equal(onReorder.callCount, 0, 'onReorder call count');
+    });
+
+    QUnit.test('onReorder should be called if item was dropped before the sortable when scroll position at the left', function(assert) {
+        // arrange
+        $('#bothScrolls').height(300);
+        $('#bothScrolls').width(200);
+        $('#bothScrolls .draggable').css({
+            width: 100,
+            display: 'inline-block'
+        });
+        const onReorder = sinon.spy();
+
+        this.createSortable({
+            filter: '.draggable',
+            itemOrientation: 'horizontal',
+            onReorder
+        });
+
+        // act
+        pointerMock(this.$element.children().eq(0)).start().down().move(-50, 0).up();
+
+        // assert
+        assert.equal(onReorder.callCount, 1, 'onReorder call count');
+    });
+
+    QUnit.test('onReorder should not be called if item was dropped after the sortable when scroll position at the left', function(assert) {
+        // arrange
+        $('#bothScrolls').height(300);
+        $('#bothScrolls').width(200);
+        $('#bothScrolls .draggable').css({
+            width: 100,
+            display: 'inline-block'
+        });
+        const onReorder = sinon.spy();
+
+        this.createSortable({
+            filter: '.draggable',
+            itemOrientation: 'horizontal',
+            onReorder
+        });
+
+        // act
+        pointerMock(this.$element.children().eq(0)).start().down().move(350, 0).up();
+
+        // assert
+        assert.equal(onReorder.callCount, 0, 'onReorder call count');
+    });
+
+    QUnit.test('onReorder should not be called if item was dropped before the sortable when scroll position at the right', function(assert) {
+        // arrange
+        $('#bothScrolls').height(300);
+        $('#bothScrolls').width(200);
+        $('#bothScrolls .draggable').css({
+            width: 100,
+            display: 'inline-block'
+        });
+        $('#bothScrolls').scrollLeft(1000);
+        const onReorder = sinon.spy();
+
+        this.createSortable({
+            filter: '.draggable',
+            itemOrientation: 'horizontal',
+            onReorder
+        });
+
+        // act
+        pointerMock(this.$element.children().eq(0)).start().down().move(-50, 0).up();
+
+        // assert
+        assert.equal(onReorder.callCount, 0, 'onReorder call count');
+    });
+
+    QUnit.test('onReorder should be called if item was dropped after the sortable when scroll position at the right', function(assert) {
+        // arrange
+        $('#bothScrolls').height(300);
+        $('#bothScrolls').width(200);
+        $('#bothScrolls draggable').css({
+            width: 100,
+            display: 'inline-block'
+        });
+        $('#bothScrolls').scrollLeft(1000);
+        const onReorder = sinon.spy();
+
+        this.createSortable({
+            filter: '.draggable',
+            itemOrientation: 'horizontal',
+            onReorder
+        });
+
+        // act
+        pointerMock(this.$element.children().eq(0)).start().down().move(350, 0).up();
+
+        // assert
+        assert.equal(onReorder.callCount, 1, 'onReorder call count');
     });
 });
 
@@ -2890,8 +3081,8 @@ QUnit.module('Dragging between sortables with scroll', {
         };
 
         this.createSortable = (options) => {
-            this.$elements.forEach(($element) => {
-                this.createOneSortable(options, $element);
+            return this.$elements.map(($element) => {
+                return this.createOneSortable(options, $element);
             });
         };
     },
@@ -2952,6 +3143,45 @@ QUnit.module('Dragging between sortables with scroll', {
         assert.equal(this.$elements[1].children().length, 11, 'children count');
         assert.equal(onRemove.callCount, 1, 'onRemove call count');
         assert.equal(onAdd.callCount, 1, 'onAdd call count');
+    });
+
+    QUnit.test('Dragging between two sortables with scroll should update itemPoints (T1035958)', function(assert) {
+        // arrange
+        const done = assert.async();
+        let scrollTimes = 0;
+
+        const sortable = this.createSortable({
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+        });
+
+        $('.draggable').width(280);
+        this.$elements[0].width(280);
+        this.$elements[1].width(280);
+        this.$elements[1].height(280);
+
+        $('#bothScrolls2').css('top', 0);
+        $('#bothScrolls2').css('left', 300);
+
+        this.$scrolls[1].on('scroll', () => {
+            // assert
+            const itemPoints = sortable[1].option('itemPoints');
+
+            if(scrollTimes === 0) {
+                // first scroll event, itemPoints must be the same
+                assert.equal(itemPoints[1].top, 50);
+            } else if(scrollTimes === 1) {
+                // second scroll event, itemPoints must be the same
+                assert.equal(itemPoints[1].top, 49);
+                done();
+            }
+
+            scrollTimes++;
+        });
+
+        // act
+        pointerMock(this.$elements[0].children().eq(0)).start().down().move(300, 200).move(0, 50);
     });
 
     // T872379
@@ -3596,7 +3826,6 @@ QUnit.module('autoscroll', getModuleConfigForTestsWithScroll('#itemsWithScroll',
             done();
         });
     });
-
 });
 
 // T971119
@@ -3615,12 +3844,12 @@ QUnit.module('Check bounds for container with padding', crossComponentModuleConf
         const startPosition = { x: $sourceElement.offset().left, y: $sourceElement.offset().top };
         pointerMock($sourceElement).start(startPosition).down().move(0, 100).move(-1, 10).up();
         // assert
-        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
 
         // act
         pointerMock($sourceElement).start(startPosition).down().move(0, 100).move(0, 10).up();
         // assert
-        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
+        assert.strictEqual(onReorderSpy.callCount, 2, 'onReorder event is called');
     });
     QUnit.test('after right', function(assert) {
         const onReorderSpy = sinon.spy();
@@ -3637,12 +3866,12 @@ QUnit.module('Check bounds for container with padding', crossComponentModuleConf
         const startPosition = { x: $sourceElement.offset().left, y: $sourceElement.offset().top };
         pointerMock($sourceElement).start(startPosition).down().move(0, 100).move($sourceElement.width() + 1, 10).up();
         // assert
-        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
 
         // act
         pointerMock($sourceElement).start(startPosition).down().move(0, 100).move($sourceElement.width(), 10).up();
         // assert
-        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
+        assert.strictEqual(onReorderSpy.callCount, 2, 'onReorder event is called');
     });
     QUnit.test('above top', function(assert) {
         // arrange
@@ -3661,12 +3890,12 @@ QUnit.module('Check bounds for container with padding', crossComponentModuleConf
         const startPosition = { x: 50, y: 50 };
         pointerMock($sourceElement).start(startPosition).down().move(50, 0).move(10, -1).up();
         // assert
-        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
 
         // act
         pointerMock($sourceElement).start(startPosition).down().move(50, 0).move(10, 0).up();
         // assert
-        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
+        assert.strictEqual(onReorderSpy.callCount, 2, 'onReorder event is called');
     });
     QUnit.test('under bottom', function(assert) {
         // arrange
@@ -3685,12 +3914,12 @@ QUnit.module('Check bounds for container with padding', crossComponentModuleConf
         pointerMock($firstElement).start({ x: 50, y: 0 }).down().move(50, 0).move(10, 500 + 50 + 1).up();
 
         // assert
-        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
 
         // act
         pointerMock($firstElement).start({ x: 50, y: 0 }).down().move(50, 0).move(10, 500 + 50).up();
         // assert
-        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
+        assert.strictEqual(onReorderSpy.callCount, 2, 'onReorder event is called');
     });
 
 });

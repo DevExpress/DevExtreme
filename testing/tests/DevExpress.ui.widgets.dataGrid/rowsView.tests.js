@@ -649,6 +649,54 @@ QUnit.module('Rows view', {
         assert.equal(getNormalizeMarkup(cells.eq(1)), '11', 'cell 1');
         assert.equal(getNormalizeMarkup(cells.eq(2)), '1/01/2001', 'cell 2');
     });
+
+    QUnit.test('Highlight searchText for non-first text node if encodeHtml is false (T1037909)', function(assert) {
+        this.items = [
+            { data: { name: 'test1a<br>test1b' }, values: ['test1a<br>test1b'], rowType: 'data', dataIndex: 0 },
+            { data: { name: 'test2' }, values: ['test2'], rowType: 'data', dataIndex: 1 },
+            { data: { name: 'test3' }, values: ['test3'], rowType: 'data', dataIndex: 2 }
+        ];
+        const columns = [
+            { allowFiltering: true, dataType: 'string', encodeHtml: false }
+        ];
+        const dataController = new MockDataController({ items: this.items });
+        const rowsView = this.createRowsView(this.items, dataController, columns);
+        const $testElement = $('#container');
+        const searchTextClass = 'dx-datagrid-search-text';
+
+        // act
+        this.options.searchPanel = { highlightSearchText: true, text: '1b' };
+
+        rowsView.render($testElement);
+        const cells = $testElement.find('td');
+
+        // assert
+        assert.equal(getNormalizeMarkup(cells.eq(0)), 'test1a<br>test<span class=' + searchTextClass + '>1b</span>', 'cell 0');
+    });
+
+    QUnit.test('Highlight searchText in bold text node if encodeHtml is false (T1040425)', function(assert) {
+        this.items = [
+            { data: { name: '<b>Super</b>Super' }, values: ['<b>Super</b>Super'], rowType: 'data', dataIndex: 0 },
+        ];
+        const columns = [
+            { allowFiltering: true, dataType: 'string', encodeHtml: false }
+        ];
+        const dataController = new MockDataController({ items: this.items });
+        const rowsView = this.createRowsView(this.items, dataController, columns);
+        const $testElement = $('#container');
+        const searchTextClass = 'dx-datagrid-search-text';
+
+        // act
+        this.options.searchPanel = { highlightSearchText: true, text: 'p' };
+
+        rowsView.render($testElement);
+        const cells = $testElement.find('td');
+
+        // assert
+        const searchHtml = '<span class=' + searchTextClass + '>p</span>';
+        assert.equal(getNormalizeMarkup(cells.eq(0)), `<b>Su${searchHtml}er</b>Su${searchHtml}er`, 'cell 0');
+    });
+
     function getNormalizeMarkup($element) {
         const quoteRE = new RegExp('"', 'g');
         const spanRE = new RegExp('span', 'gi');
@@ -3912,9 +3960,14 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render($testElement);
+        const columnWidths = rowsView.getColumnWidths();
+        const values = [30, 100, 100];
 
         // assert
-        assert.deepEqual(rowsView.getColumnWidths(), [30, 100, 100], 'calculate widths');
+        assert.strictEqual(columnWidths.length, values.length, 'number of widths');
+        columnWidths.forEach((width, index) => {
+            assert.roughEqual(width, values[index], 0.02, `calculate width of the ${index} column`);
+        });
     });
 
     QUnit.test('GetRowsElements method is called once when opacity is applied to rows', function(assert) {
@@ -6954,7 +7007,7 @@ QUnit.module('Scrollbar', {
         rowsView.resize();
 
         // assert
-        assert.strictEqual(rowsView.getScrollable().$content().outerHeight(), rowsView.getScrollable()._container().outerHeight(), 'No vertical scroll');
+        assert.roughEqual(rowsView.getScrollable().$content().outerHeight(), rowsView.getScrollable()._container().outerHeight(), 0.7, 'No vertical scroll');
     });
 });
 

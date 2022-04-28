@@ -139,6 +139,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
  * @module ui/slide_out
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @deprecated dxDrawer
  * @public
  */
 export default class dxSlideOut extends CollectionWidget {
@@ -163,12 +164,12 @@ export default class dxSlideOut extends CollectionWidget {
     /**
      * @docid dxSlideOutMethods.toggleMenuVisibility
      * @publicName toggleMenuVisibility(showing)
-     * @param1 showing:boolean
+     * @param1 showing:boolean|undefined
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggleMenuVisibility(showing: boolean): Promise<void> & JQueryPromise<void>;
+    toggleMenuVisibility(showing?: boolean): Promise<void> & JQueryPromise<void>;
 }
 
 export interface dxSlideOutItem extends CollectionWidgetItem {

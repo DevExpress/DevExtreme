@@ -13,12 +13,12 @@ import { hasWindow } from '../core/utils/window';
 import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
+import browser from '../core/utils/browser';
 import messageLocalization from '../localization/message';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/utils/index';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
-import getScrollRtlBehavior from '../core/utils/scroll_rtl_behavior';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -245,15 +245,20 @@ const TagBox = SelectBox.inherit({
             : this._getBorderPosition('end');
     },
 
+    _getScrollRtlBehavior: function() {
+        return (browser.msie && browser.version < 12)
+            ? { decreasing: false, positive: true }
+            : { decreasing: true, positive: false };
+    },
+
     _getBorderPosition: function(direction) {
         const rtlEnabled = this.option('rtlEnabled');
         const isScrollLeft = (direction === 'end') ^ rtlEnabled;
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = rtlEnabled && (scrollBehavior.decreasing ^ scrollBehavior.positive);
+        const scrollBehavior = this._getScrollRtlBehavior();
         const scrollSign = !rtlEnabled || scrollBehavior.positive ? 1 : -1;
 
-        return (isScrollLeft ^ !isScrollInverted)
+        return (isScrollLeft ^ !rtlEnabled)
             ? 0
             : scrollSign * (this._$tagsContainer.get(0).scrollWidth - this._$tagsContainer.outerWidth());
     },
@@ -269,7 +274,7 @@ const TagBox = SelectBox.inherit({
         }
 
         if(isScrollLeft ^ (scrollOffset < 0)) {
-            const scrollBehavior = getScrollRtlBehavior();
+            const scrollBehavior = this._getScrollRtlBehavior();
             const scrollCorrection = rtlEnabled && !scrollBehavior.decreasing && scrollBehavior.positive ? -1 : 1;
             scrollLeft += scrollOffset * scrollCorrection;
         }
@@ -522,8 +527,6 @@ const TagBox = SelectBox.inherit({
         eventsEngine.on(this._$tagsContainer, eventName, `.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`, (event) => {
             tagRemoveAction({ event });
         });
-
-        this._renderTypingEvent();
     },
 
     _renderSingleLineScroll: function() {
@@ -555,10 +558,11 @@ const TagBox = SelectBox.inherit({
         }
     },
 
-    _renderTypingEvent: function() {
+    _renderEvents: function() {
+        this.callBase();
+
         const input = this._input();
         const namespace = addNamespace('keydown', this.NAME);
-        eventsEngine.off(input, namespace);
         eventsEngine.on(input, namespace, (e) => {
             const keyName = normalizeKeyName(e);
             if(!this._isControlKey(keyName) && this._isEditable()) {
@@ -758,6 +762,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _getFilteredItems: function(values) {
+        this._loadFilteredItemsPromise?.reject();
         const creator = new FilterCreator(values);
 
         const listSelectedItems = this._list?.option('selectedItems');
@@ -794,6 +799,7 @@ const TagBox = SelectBox.inherit({
                 })
                 .fail(d.reject);
 
+            this._loadFilteredItemsPromise = d;
             return d.promise();
         }
     },
@@ -863,10 +869,20 @@ const TagBox = SelectBox.inherit({
 
     _getFilteredGroupedItems: function(values) {
         const selectedItems = new Deferred();
+        if(this._filteredGroupedItemsLoadPromise) {
+            this._dataSource.cancel(this._filteredGroupedItemsLoadPromise.operationId);
+        }
         if(!this._dataSource.items().length) {
-            this._dataSource.load().done(function() {
-                selectedItems.resolve(this._getItemsByValues(values));
-            }.bind(this)).fail(selectedItems.resolve([]));
+            this._filteredGroupedItemsLoadPromise = this._dataSource.load()
+                .done(() => {
+                    selectedItems.resolve(this._getItemsByValues(values));
+                })
+                .fail(() => {
+                    selectedItems.resolve([]);
+                })
+                .always(() => {
+                    this._filteredGroupedItemsLoadPromise = undefined;
+                });
         } else {
             selectedItems.resolve(this._getItemsByValues(values));
         }
@@ -1286,7 +1302,7 @@ const TagBox = SelectBox.inherit({
 
     _searchHandler: function(e) {
         if(this.option('searchEnabled') && !!e && !this._isTagRemoved) {
-            this.callBase(e);
+            this.callBase(arguments);
             this._setListDataSourceFilter();
         }
 
@@ -1501,7 +1517,7 @@ const TagBox = SelectBox.inherit({
             case 'readOnly':
             case 'disabled':
                 this.callBase(args);
-                !args.value && this._renderTypingEvent();
+                !args.value && this._refreshEvents();
                 break;
             case 'value':
                 this._valuesToUpdate = args?.value;

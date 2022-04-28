@@ -324,7 +324,7 @@ export const ListBase = CollectionWidget.inherit({
             return;
         }
 
-        this.callBase(e);
+        return this.callBase(e);
     },
 
     _allowDynamicItemsAppend: function() {
@@ -765,8 +765,8 @@ export const ListBase = CollectionWidget.inherit({
             .addClass(LIST_GROUP_BODY_CLASS)
             .appendTo($groupElement);
 
-        each(groupItemsGetter(group) || [], (function(index, item) {
-            this._renderItem(index, item, $groupBody);
+        each(groupItemsGetter(group) || [], (function(itemIndex, item) {
+            this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
         }).bind(this));
 
         this._groupRenderAction({
@@ -1049,6 +1049,10 @@ export const ListBase = CollectionWidget.inherit({
         const $item = this._editStrategy.getItemElement(itemElement);
 
         this._scrollView.scrollToElement($item);
+    },
+
+    _dimensionChanged: function() {
+        this.updateDimensions();
     }
 
 }).include(DataConverterMixin);

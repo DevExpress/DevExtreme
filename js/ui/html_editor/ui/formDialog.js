@@ -7,7 +7,9 @@ import domAdapter from '../../../core/dom_adapter';
 import { resetActiveElement } from '../../../core/utils/dom';
 import { Deferred } from '../../../core/utils/deferred';
 import localizationMessage from '../../../localization/message';
+import { getCurrentScreenFactor, hasWindow } from '../../../core/utils/window';
 import browser from '../../../core/utils/browser';
+import devices from '../../../core/devices';
 
 const getActiveElement = domAdapter.getActiveElement;
 
@@ -40,6 +42,11 @@ class FormDialog {
         e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
     }
 
+    _isSmallScreen() {
+        const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
+        return devices.real().deviceType === 'phone' || screenFactor === 'xs';
+    }
+
     _getPopupConfig() {
         return extend({
             onInitialized: (e) => {
@@ -50,6 +57,7 @@ class FormDialog {
             deferRendering: false,
             focusStateEnabled: false,
             showCloseButton: false,
+            fullScreen: this._isSmallScreen(),
             contentTemplate: (contentElem) => {
                 const $formContainer = $('<div>').appendTo(contentElem);
 

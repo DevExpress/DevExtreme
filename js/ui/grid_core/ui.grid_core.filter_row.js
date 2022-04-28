@@ -157,7 +157,12 @@ const ColumnHeadersViewFilterRowExtender = (function() {
         if(!isDefined(filterValue) && !isDefined(value)) return;
 
         that._applyFilterViewController.setHighLight($editorContainer, filterValue !== value);
-        that._columnsController.columnOption(column.index, isOnClickApplyFilterMode(that) ? 'bufferedFilterValue' : 'filterValue', normalizeFilterValue(that, value, column, $editorContainer), options.notFireEvent);
+
+        const columnOptionName = isOnClickApplyFilterMode(that) ? 'bufferedFilterValue' : 'filterValue';
+        const normalizedValue = normalizeFilterValue(that, value, column, $editorContainer);
+        const isBetween = getColumnSelectedFilterOperation(that, column) === 'between';
+        const notFireEvent = options.notFireEvent || isBetween && Array.isArray(normalizedValue) && normalizedValue.indexOf(undefined) >= 0;
+        that._columnsController.columnOption(column.index, columnOptionName, normalizedValue, notFireEvent);
     };
 
     return {

@@ -1,4 +1,5 @@
 import { isDefined } from 'core/utils/type';
+import { Export } from 'exporter/exceljs/export';
 
 const { assert } = QUnit;
 
@@ -38,13 +39,15 @@ class ExcelJSTestHelper {
         });
     }
 
-    checkColumnWidths(expectedWidths, startColumnIndex, tolerance) {
+    checkColumnWidths(expectedWidths, startColumnIndex) {
+        const tolerance = 0.2;
+
         for(let i = 0; i < expectedWidths.length; i++) {
             const actual = this.worksheet.getColumn(startColumnIndex + i).width;
             const expected = expectedWidths[i];
             const message = `worksheet.getColumns(${i}).width`;
 
-            if(tolerance && isFinite(expected)) {
+            if(isFinite(expected)) {
                 assert.roughEqual(actual, expected, tolerance, message);
             } else {
                 assert.equal(actual, expected, message);
@@ -178,6 +181,36 @@ class ExcelJSPivotGridTestHelper extends ExcelJSTestHelper {
                 cellArgs.pivotCell.value = cellArgs.excelCell.value;
             }
         });
+    }
+
+    getAllRealColumnWidths(component) {
+        return [...this.getRowsAreaColumnWidths(component), ...this.getColumnsAreaColumnWidths(component)];
+    }
+
+    getColumnsAreaColumnWidths(component) {
+        const columnWidths = [];
+
+        const showTotalsPrior = component.option('showTotalsPrior');
+        const columnsAreaColumns = component.$element().find('.dx-pivotgrid-horizontal-headers tr')[showTotalsPrior === 'columns' || showTotalsPrior === 'both' ? 'first' : 'last']().find('td');
+
+        columnsAreaColumns.each((_, element) => columnWidths.push(element.getBoundingClientRect().width));
+
+        return columnWidths;
+    }
+
+    getRowsAreaColumnWidths(component) {
+        const columnWidths = [];
+
+        const rowsAreaColumns = component.$element().find('.dx-pivotgrid-vertical-headers tr').first().find('td');
+
+
+        rowsAreaColumns.each((_, element) => columnWidths.push(element.getBoundingClientRect().width));
+
+        return columnWidths;
+    }
+
+    toExcelWidths(widths) {
+        return widths.map(width => Math.floor(width / Export.__internals.MAX_DIGIT_WIDTH_IN_PIXELS * 100) / 100);
     }
 }
 

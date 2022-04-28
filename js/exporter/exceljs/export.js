@@ -1,8 +1,9 @@
+
 import { isDefined, isString, isDate, isObject, isFunction } from '../../core/utils/type';
-import messageLocalization from '../../localization/message';
 import { ExportFormat } from './export_format';
 import { MergedRangesManager } from './export_merged_ranges_manager';
 import { extend } from '../../core/utils/extend';
+import { ExportLoadPanel } from '../common/export_load_panel';
 import { hasWindow } from '../../core/utils/window';
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
@@ -32,9 +33,6 @@ export const Export = {
         }
         if(!isDefined(fullOptions.loadPanel.enabled)) {
             fullOptions.loadPanel.enabled = true;
-        }
-        if(!isDefined(fullOptions.loadPanel.text)) {
-            fullOptions.loadPanel.text = messageLocalization.format('dxDataGrid-exporting');
         }
 
         return fullOptions;
@@ -100,15 +98,6 @@ export const Export = {
         }
     },
 
-    setLoadPanelOptions(component, options, renderLoadPanel) {
-        if(!hasWindow()) {
-            return;
-        }
-
-        component._setOptionWithoutOptionChange('loadPanel', options);
-        renderLoadPanel(component);
-    },
-
     export(options, helpers) {
         const {
             customizeCell,
@@ -123,12 +112,16 @@ export const Export = {
             mergeColumnFieldValues,
         } = options;
 
-        const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
-        if('animation' in component.option('loadPanel')) {
-            loadPanel.animation = null;
-        }
+        const initialLoadPanelEnabledOption = component.option('loadPanel').enabled;
 
-        this.setLoadPanelOptions(component, loadPanel, helpers._renderLoadPanel);
+        component.option('loadPanel.enabled', false);
+        if(loadPanel.enabled && hasWindow()) {
+            const $targetElement = helpers._getLoadPanelTargetElement(component);
+            const $container = helpers._getLoadPanelContainer(component);
+
+            this._loadPanel = new ExportLoadPanel(component, $targetElement, $container, loadPanel);
+            this._loadPanel.show();
+        }
 
         const wrapText = !!component.option('wordWrapEnabled');
 
@@ -190,7 +183,11 @@ export const Export = {
 
                 resolve(cellRange);
             }).always(() => {
-                this.setLoadPanelOptions(component, initialLoadPanelOptions, helpers._renderLoadPanel);
+                component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
+
+                if(loadPanel.enabled && hasWindow()) {
+                    this._loadPanel.dispose();
+                }
             });
         });
     },

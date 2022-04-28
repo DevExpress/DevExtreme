@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -80,7 +81,7 @@
     vertical-align: middle;
 
     @include dx-icon-sizing($generic-base-icon-size);
-    @include dx-icon-margin($generic-base-icon-size / 2);
+    @include dx-icon-margin(math.div($generic-base-icon-size, 2));
   }
 
   &.dx-state-hover {

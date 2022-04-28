@@ -1,6 +1,8 @@
 // adduse
 
 
+@use "sass:math";
+
 $list-style: decimal lower-alpha lower-roman;
 $list-style-width: 1.2em;
 $list-style-margin: 0.3em;
@@ -8,8 +10,8 @@ $list-style-outer-width: $list-style-margin + $list-style-width;
 $max-indent: 9;
 $resize-handle-size: 11px;
 $touch-resize-handle-size: 15px;
-$half-resize-handle-size: $resize-handle-size / 2;
-$half-touch-resize-handle-size: $touch-resize-handle-size / 2;
+$half-resize-handle-size: math.div($resize-handle-size, 2);
+$half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2);
 
 $transparent-border: 1px solid transparent;
 
@@ -258,6 +260,11 @@ $transparent-border: 1px solid transparent;
     font-family: monospace;
   }
 
+  code,
+  .ql-code-block-container {
+    background-color: rgba(191, 191, 191, 0.15);
+  }
+
   .ql-video {
     display: block;
     max-width: 100%;
@@ -304,11 +311,6 @@ $transparent-border: 1px solid transparent;
 
   // stylelint-enable selector-class-pattern
 
-  pre {
-    white-space: pre-wrap;
-    background-color: rgba(191, 191, 191, 0.15);
-  }
-
   blockquote {
     padding-left: 12px;
     border-left: 4px solid;
@@ -347,6 +349,14 @@ $transparent-border: 1px solid transparent;
 
 .dx-formdialog-form {
   min-width: 360px;
+}
+
+.dx-overlay-content {
+  &.dx-popup-fullscreen {
+    .dx-formdialog-form {
+      min-width: 0;
+    }
+  }
 }
 
 .dx-formdialog-field-target .dx-field-item-content {

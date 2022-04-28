@@ -3,6 +3,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from 'core/devices';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 
 import 'generic_light.css!';
 import 'ui/text_area';
@@ -478,6 +479,22 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         container.scrollTop(20);
         keyboardMock($input).type('\n\n');
         assert.strictEqual(container.scrollTop(), 20);
+    });
+
+    QUnit.test('widget is resized on window dimension changed', function(assert) {
+        const $element = $('#textarea').dxTextArea({
+            autoResizeEnabled: true
+        });
+
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        $input.val('\n\n');
+        resizeCallbacks.fire();
+
+        const inputHeight = $input.outerHeight();
+        $input.height(0);
+
+        assert.equal(inputHeight, $input[0].scrollHeight, 'widget height is correct');
     });
 });
 

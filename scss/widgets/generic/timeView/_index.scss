@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -27,7 +28,7 @@
 
 .dx-timeview-minutearrow {
   background-image: $timeview-minutearrow-bg;
-  background-size: 5px 79px - $generic-timeview-arrow-height-reduce / 2;
+  background-size: 5px 79px - math.div($generic-timeview-arrow-height-reduce, 2);
 }
 
 .dx-timeview-format12 {

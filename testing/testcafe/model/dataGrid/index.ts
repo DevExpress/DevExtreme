@@ -28,6 +28,29 @@ const CLASS = {
   revertButton: 'dx-revert-button',
 };
 
+const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
+  if ($element?.length) {
+    const offset = $element.offset();
+
+    if (offset) {
+      if (isStart) {
+        $element
+          .trigger($.Event('dxpointerdown', {
+            pageX: offset.left,
+            pageY: offset.top,
+            pointers: [{ pointerId: 1 }],
+          }));
+      }
+
+      $element.trigger($.Event('dxpointermove', {
+        pageX: offset.left + x,
+        pageY: offset.top + y,
+        pointers: [{ pointerId: 1 }],
+      }));
+    }
+  }
+};
+
 export default class DataGrid extends Widget {
   dataRows: Selector;
 
@@ -49,7 +72,7 @@ export default class DataGrid extends Widget {
     );
   }
 
-  addWidgetPrefix(className: string) {
+  addWidgetPrefix(className: string): string {
     return Widget.addClassPrefix(this.name, className);
   }
 
@@ -111,6 +134,15 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  getScrollRight(): Promise<number> {
+    const { getGridInstance } = this;
+    return ClientFunction(() => {
+      const dataGrid = getGridInstance() as any;
+      const scrollable = dataGrid.getScrollable();
+      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft();
+    }, { dependencies: { getGridInstance } })();
+  }
+
   getScrollWidth(): Promise<number> {
     const { getGridInstance } = this;
 
@@ -170,6 +202,22 @@ export default class DataGrid extends Widget {
         return value !== 'undefined' ? dataGrid.option(name, value) : dataGrid.option(name);
       },
       { dependencies: { getGridInstance, name, value } },
+    )();
+  }
+
+  apiColumnOption(id: any, name: any, value: any = 'empty'): Promise<any> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const dataGrid = getGridInstance() as any;
+        return value !== 'empty' ? dataGrid.columnOption(id, name, value === 'undefined' ? undefined : value) : dataGrid.columnOption(id, name);
+      },
+      {
+        dependencies: {
+          getGridInstance, id, name, value,
+        },
+      },
     )();
   }
 
@@ -242,5 +290,50 @@ export default class DataGrid extends Widget {
       const result = dataGrid.getController('validating').getCellValidationResult({ rowKey: dataGrid.getKeyByRowIndex(rowIndex), columnIndex });
       return result ? result.status : null;
     }, { dependencies: { getGridInstance, rowIndex, columnIndex } })();
+  }
+
+  apiGetVisibleRows(): Promise<any> {
+    const { getGridInstance } = this;
+    return ClientFunction(() => {
+      const dataGrid = getGridInstance() as any;
+      return dataGrid.getVisibleRows().map((r) => ({
+        key: r.key,
+        rowType: r.rowType,
+      }));
+    }, { dependencies: { getGridInstance } })();
+  }
+
+  moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(() => {
+      const gridInstance = getGridInstance() as any;
+      const $row = $(gridInstance.getRowElement(rowIndex));
+      const $cell = $row.children('.dx-command-drag');
+
+      moveElement($cell, x, y, isStart);
+    },
+    {
+      dependencies: {
+        getGridInstance, rowIndex, x, y, isStart, moveElement,
+      },
+    })();
+  }
+
+  moveHeader(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(() => {
+      const gridInstance = getGridInstance() as any;
+      const columnHeadersView = gridInstance.getView('columnHeadersView');
+      const $header = $(columnHeadersView.getHeaderElement(columnIndex));
+
+      moveElement($header, x, y, isStart);
+    },
+    {
+      dependencies: {
+        getGridInstance, columnIndex, x, y, isStart, moveElement,
+      },
+    })();
   }
 }

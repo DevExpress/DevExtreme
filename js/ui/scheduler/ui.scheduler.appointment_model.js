@@ -47,7 +47,7 @@ class FilterMaker {
 
                 this._filterRegistry.date = [
                     [
-                        [endDate, '>', min],
+                        [endDate, '>=', min],
                         [startDate, '<', max]
                     ],
                     'or',
@@ -261,7 +261,9 @@ class AppointmentModel {
         const that = this;
 
         return [[(appointment) => {
-            let result = true;
+            const appointmentVisible = appointment.visible ?? true;
+            let result = appointmentVisible;
+
             const startDate = new Date(dataAccessors.getter.startDate(appointment));
             const endDate = new Date(dataAccessors.getter.endDate(appointment));
             const appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);

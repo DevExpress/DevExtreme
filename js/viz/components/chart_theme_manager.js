@@ -63,8 +63,8 @@ export const ThemeManager = BaseThemeManager.inherit((function() {
     const applyParticularAxisOptions = function(name, userOptions, rotated) {
         const theme = this._theme;
         const position = !(rotated ^ (name === 'valueAxis')) ? 'horizontalAxis' : 'verticalAxis';
-        const processedUserOptions = processAxisOptions(userOptions, name);
-        const commonAxisSettings = processAxisOptions(this._userOptions['commonAxisSettings'], name);
+        const processedUserOptions = processAxisOptions(userOptions);
+        const commonAxisSettings = processAxisOptions(this._userOptions['commonAxisSettings']);
         const mergeOptions = extend(true, {}, theme.commonAxisSettings, theme[position], theme[name], commonAxisSettings, processedUserOptions);
 
         mergeOptions.workWeek = processedUserOptions.workWeek || theme[name].workWeek;

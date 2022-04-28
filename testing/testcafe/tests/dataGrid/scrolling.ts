@@ -1,6 +1,10 @@
+import { Selector } from 'testcafe';
+import { createScreenshotsComparer } from '../../helpers/screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
+
+const groupRow = Selector('.dx-group-row');
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -202,6 +206,193 @@ test('DataGrid should not reset its top scroll position after cell modification 
       $('<div>')
         .css('height', '200px')
         .appendTo(container);
+    },
+  },
+}));
+
+test('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await dataGrid.scrollTo({ top: 500 });
+  await dataGrid.apiColumnOption('group', 'groupIndex', 0);
+  let visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows.length)
+    .eql(8)
+    .expect(visibleRows[0].rowType)
+    .eql('group')
+    .expect(visibleRows[0].key)
+    .eql(['group1'])
+    .expect(visibleRows[7].rowType)
+    .eql('group')
+    .expect(visibleRows[7].key)
+    .eql(['group8']);
+
+  // act
+  await dataGrid.apiColumnOption('group', 'groupIndex', 'undefined');
+
+  // assert
+  await t
+    .expect(groupRow.exists)
+    .notOk();
+
+  visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows[0].rowType)
+    .eql('data')
+    .expect(visibleRows[0].key)
+    .eql(1);
+}).before(async () => {
+  const getItems = function (): Record<string, unknown>[] {
+    const items: Record<string, unknown>[] = [];
+    for (let i = 1; i <= 25; i += 1) {
+      const groupIndex = (i % 8) + 1;
+      items.push({
+        id: i,
+        group: `group${groupIndex}`,
+      });
+    }
+    return items;
+  };
+  return createWidget('dxDataGrid', {
+    height: 400,
+    loadingTimeout: null,
+    keyExpr: 'id',
+    dataSource: getItems(),
+    scrolling: {
+      mode: 'virtual',
+      rowRenderingMode: 'virtual',
+      updateTimeout: 0,
+      useNative: false,
+    },
+    grouping: {
+      autoExpandAll: false,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    paging: {
+      pageSize: 10,
+    },
+  });
+});
+
+test('Scroll position after grouping when RTL (T388508)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // assert
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(300);
+
+  // act
+  await dataGrid.scrollTo({ x: 100 });
+  const scrollRight = await dataGrid.getScrollRight();
+  await dataGrid.apiColumnOption('field1', 'groupIndex', 0);
+
+  // assert
+  await t
+    .expect(groupRow.exists)
+    .ok();
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+  const scrollRightAfterGrouping = await dataGrid.getScrollRight();
+
+  // assert
+  await t
+    .expect(visibleRows[0].rowType)
+    .eql('group')
+    .expect(Math.floor(scrollRightAfterGrouping))
+    .eql(Math.floor(scrollRight));
+}).before(async () => createWidget('dxDataGrid', {
+  width: 200,
+  rtlEnabled: true,
+  columns: [
+    { dataField: 'field1', width: 100 },
+    { dataField: 'field2', width: 100 },
+    { dataField: 'field3', width: 100 },
+    { dataField: 'field4', width: 100 },
+    { dataField: 'field5', width: 100 },
+  ],
+  dataSource: [{
+    field1: '1',
+    field2: '2',
+    field3: '3',
+    field4: '4',
+  }],
+}));
+
+test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  async function getRightPadding() {
+    const padding = await dataGrid.getHeaders().element.getStyleProperty('padding-right');
+    return parseFloat(padding);
+  }
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).isExpanded).ok();
+
+  // act
+  await dataGrid.scrollTo({ x: 180 });
+  await dataGrid.scrollTo({ x: 210 });
+  const scrollBarWidth = await dataGrid.getScrollbarWidth(false);
+
+  // assert
+  await t
+    .expect(await getRightPadding())
+    .eql(scrollBarWidth)
+    .expect(await takeScreenshot('grid-column-lines-alignment-master-grid-horizontal-scrolling.png', '#container'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  width: 150,
+  height: 300,
+  columnMinWidth: 100,
+  dataSource: [{
+    id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+  }],
+  keyExpr: 'id',
+  columns: ['field1', 'field2', 'field3'],
+  scrolling: {
+    useNative: true,
+  },
+  masterDetail: {
+    enabled: true,
+    template(): any {
+      return ($('<div>') as any).dxDataGrid({
+        dataSource: [
+          {
+            id: 0, field1: 'test11', field2: 'test21', field3: 'test31',
+          },
+          {
+            id: 1, field1: 'test12', field2: 'test22', field3: 'test32',
+          },
+          {
+            id: 2, field1: 'test13', field2: 'test23', field3: 'test33',
+          },
+          {
+            id: 3, field1: 'test14', field2: 'test24', field3: 'test34',
+          },
+          {
+            id: 4, field1: 'test15', field2: 'test25', field3: 'test35',
+          },
+        ],
+        columns: ['field1', 'field2', 'field3'],
+        columnMinWidth: 100,
+        keyExpr: 'id',
+      });
     },
   },
 }));

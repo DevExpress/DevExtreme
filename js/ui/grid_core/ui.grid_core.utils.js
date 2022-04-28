@@ -457,14 +457,14 @@ export default {
     },
 
     focusAndSelectElement: function(component, $element) {
+        const isFocused = $element.is(':focus');
+
         eventsEngine.trigger($element, 'focus');
 
         const isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart');
-        const keyboardController = component.getController('keyboardNavigation');
-        const isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
         const element = $element.get(0);
 
-        if(isSelectTextOnEditingStart && !isEditingNavigationMode && $element.is('.dx-texteditor-input') && !$element.is('[readonly]')) {
+        if(!isFocused && isSelectTextOnEditingStart && $element.is('.dx-texteditor-input') && !$element.is('[readonly]')) {
             const editor = getWidgetInstance($element.closest('.dx-texteditor'));
 
             when(editor && editor._loadItemDeferred).done(function() {

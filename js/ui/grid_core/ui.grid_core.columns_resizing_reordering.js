@@ -247,7 +247,7 @@ const ColumnsSeparatorView = SeparatorView.inherit({
     moveByX: function(outerX) {
         const $element = this.element();
         if($element) {
-            $element.css('left', outerX - this._parentElement().offset().left);
+            $element.css('left', outerX === null ? 0 : outerX - this._parentElement().offset().left);
             ///#DEBUG
             this._testPosX = outerX;
             ///#ENDDEBUG
@@ -629,6 +629,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         const eventData = getEventData(e);
         const rtlEnabled = that.option('rtlEnabled');
         const isRtlParentStyle = this._isRtlParentStyle();
+        const isDragging = that._draggingHeaderView?.isDragging();
 
         if(that._isResizing && that._resizingInfo) {
             if((parentOffsetLeft <= eventData.x || !isNextColumnMode && isRtlParentStyle) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
@@ -643,7 +644,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
                     }
                 }
             }
-        } else {
+        } else if(!isDragging) {
             if(that._isHeadersRowArea(eventData.y)) {
                 if(that._previousParentOffset) {
                     if(that._previousParentOffset.left !== parentOffset.left || that._previousParentOffset.top !== parentOffset.top) {
@@ -663,11 +664,13 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
                     e.preventDefault();
                 } else {
                     that._columnsSeparatorView.changeCursor();
+                    that._columnsSeparatorView.moveByX(null);
                 }
             } else {
                 that.pointsByColumns(null);
                 that._isReadyResizing = false;
                 that._columnsSeparatorView.changeCursor();
+                that._columnsSeparatorView.moveByX(null);
             }
         }
     },
@@ -952,6 +955,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         that._columnsController = that.getController('columns');
         that._tablePositionController = that.getController('tablePosition');
         that._$parentContainer = that.component.$element();
+        that._draggingHeaderView = that.component.getView('draggingHeaderView');
 
         that._subscribeToCallback(that._columnHeadersView.renderCompleted, generatePointsByColumnsHandler);
         that._subscribeToCallback(that._columnHeadersView.resizeCompleted, generatePointsByColumnsHandler);

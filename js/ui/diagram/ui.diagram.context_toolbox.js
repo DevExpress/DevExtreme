@@ -4,6 +4,7 @@ import Widget from '../widget/ui.widget';
 import Popover from '../popover';
 
 import { getDiagram } from './diagram.importer';
+import { hasWindow, getWindow } from '../../core/utils/window';
 
 const DIAGRAM_CONTEXT_TOOLBOX_TARGET_CLASS = 'dx-diagram-context-toolbox-target';
 const DIAGRAM_CONTEXT_TOOLBOX_CLASS = 'dx-diagram-context-toolbox';
@@ -48,9 +49,8 @@ class DiagramContextToolbox extends Widget {
         const $popoverElement = $('<div>')
             .appendTo(this.$element());
 
-        const { Browser } = getDiagram();
         let popoverClass = DIAGRAM_CONTEXT_TOOLBOX_CLASS;
-        if(Browser.TouchUI) {
+        if(this._isTouchMode()) {
             popoverClass += ' ' + DIAGRAM_TOUCH_CONTEXT_TOOLBOX_CLASS;
         }
         this._popoverInstance = this._createComponent($popoverElement, Popover, {
@@ -58,6 +58,17 @@ class DiagramContextToolbox extends Widget {
             container: this.$element(),
             elementAttr: { class: popoverClass }
         });
+    }
+    _isTouchMode() {
+        const { Browser } = getDiagram();
+        if(Browser.TouchUI) {
+            return true;
+        }
+        if(!hasWindow()) {
+            return false;
+        }
+        const window = getWindow();
+        return window.navigator && window.navigator.maxTouchPoints > 0;
     }
     _show(x, y, side, category, callback) {
         this._popoverInstance.hide();
@@ -73,6 +84,15 @@ class DiagramContextToolbox extends Widget {
                 top: y + this._popoverPositionData[side].offset.y
             })
             .show();
+
+        // correct offset when parent has position absolute, relative, etc (T1010677)
+        const window = getWindow();
+        const targetDiv = this._$popoverTargetElement.get(0);
+        this._$popoverTargetElement.css({
+            left: targetDiv.offsetLeft - ((targetDiv.getBoundingClientRect().left + window.scrollX) - targetDiv.offsetLeft),
+            top: targetDiv.offsetTop - ((targetDiv.getBoundingClientRect().top + window.scrollY) - targetDiv.offsetTop)
+        });
+
         this._popoverInstance.option({
             position: {
                 my: this._popoverPositionData[side].my,

@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -24,18 +25,18 @@ $material-slider-disabled-tooltip-top-margin: 5px;
 
 .dx-slider-bar,
 .dx-slider-range {
-  margin-top: ($material-slider-wrapper-height - $material-slider-bar-height) / 2;
+  margin-top: math.div($material-slider-wrapper-height - $material-slider-bar-height, 2);
   height: $material-slider-bar-height;
 }
 
 .dx-slider-bar {
-  margin-right: $material-slider-handle-size / 2 + $material-slider-handle-active-border-width;
-  margin-left: $material-slider-handle-size / 2 + $material-slider-handle-active-border-width;
+  margin-right: math.div($material-slider-handle-size, 2) + $material-slider-handle-active-border-width;
+  margin-left: math.div($material-slider-handle-size, 2) + $material-slider-handle-active-border-width;
   background: $material-slider-bar-bg;
 }
 
 .dx-slider-range {
-  top: $material-slider-bar-height / 2 - $material-slider-handle-size / 2;
+  top: math.div($material-slider-bar-height, 2) - math.div($material-slider-handle-size, 2);
 
   &.dx-slider-range-visible {
     background: $material-slider-bg;
@@ -43,8 +44,8 @@ $material-slider-disabled-tooltip-top-margin: 5px;
 }
 
 .dx-slider-handle {
-  margin-top: $material-slider-bar-height / 2 - $material-slider-handle-size / 2;
-  margin-right: -$material-slider-handle-size / 2;
+  margin-top: math.div($material-slider-bar-height, 2) - math.div($material-slider-handle-size, 2);
+  margin-right: math.div(-$material-slider-handle-size, 2);
   width: $material-slider-handle-size;
   height: $material-slider-handle-size;
   border-radius: $material-slider-radius;
@@ -54,8 +55,8 @@ $material-slider-disabled-tooltip-top-margin: 5px;
     top: 50%;
     left: 50%;
     display: block;
-    margin-top: -$material-slider-handle-inner-size / 2;
-    margin-left: -$material-slider-handle-inner-size / 2;
+    margin-top: math.div(-$material-slider-handle-inner-size, 2);
+    margin-left: math.div(-$material-slider-handle-inner-size, 2);
     width: $material-slider-handle-inner-size;
     height: $material-slider-handle-inner-size;
     background: $material-slider-bg;
@@ -93,7 +94,7 @@ $material-slider-disabled-tooltip-top-margin: 5px;
         min-width: $material-slider-tooltip-width-without-paddings;
         width: $material-slider-tooltip-width-without-paddings;
         text-overflow: ellipsis;
-        padding: $material-slider-tooltip-width / 2 - $material-slider-disabled-tooltip-top-margin - 1 $material-slider-tooltip-popup-content-horizontal-padding 5px;
+        padding: math.div($material-slider-tooltip-width, 2) - $material-slider-disabled-tooltip-top-margin - 1 $material-slider-tooltip-popup-content-horizontal-padding 5px;
         color: $material-slider-tooltip-color;
         position: relative;
 
@@ -112,11 +113,11 @@ $material-slider-disabled-tooltip-top-margin: 5px;
         }
 
         .dx-popup-content {
-          padding-top: $material-slider-tooltip-width / 2;
+          padding-top: math.div($material-slider-tooltip-width, 2);
 
           .dx-slider-tooltip-position-top & {
             padding-top: 6px;
-            padding-bottom: $material-slider-tooltip-width / 2;
+            padding-bottom: math.div($material-slider-tooltip-width, 2);
           }
         }
       }
@@ -175,8 +176,8 @@ $material-slider-disabled-tooltip-top-margin: 5px;
     border: 2px solid $base-bg;
 
     &::after {
-      margin-top: -$material-slider-handle-inner-disabled-size / 2 - $material-slider-handle-inner-border-width - 2px;
-      margin-left: -$material-slider-handle-inner-disabled-size / 2 - $material-slider-handle-inner-border-width - 2px;
+      margin-top: math.div(-$material-slider-handle-inner-disabled-size, 2) - $material-slider-handle-inner-border-width - 2px;
+      margin-left: math.div(-$material-slider-handle-inner-disabled-size, 2) - $material-slider-handle-inner-border-width - 2px;
       width: 8px;
       height: 8px;
       background: grey;
@@ -205,7 +206,7 @@ $material-slider-disabled-tooltip-top-margin: 5px;
 
 .dx-rtl {
   .dx-slider-handle {
-    margin-left: -$material-slider-handle-size / 2;
+    margin-left: math.div(-$material-slider-handle-size, 2);
   }
 
   &.dx-state-disabled {

@@ -44,10 +44,15 @@ class FileManagerNameEditorDialog extends FileManagerDialogBase {
 
         this._nameTextBox = this._createComponent($('<div>'), TextBox, {
             value: this._initialNameValue,
-            onEnterKey: this._applyDialogChanges.bind(this)
+            onEnterKey: () => this._hasCompositionJustEnded && this._applyDialogChanges(),
+            onKeyDown: e => this._checkCompositionEnded(e)
         });
 
         this._$contentElement.append(this._nameTextBox.$element());
+    }
+
+    _checkCompositionEnded({ event }) {
+        this._hasCompositionJustEnded = event.which !== 229;
     }
 
     _getDialogResult() {

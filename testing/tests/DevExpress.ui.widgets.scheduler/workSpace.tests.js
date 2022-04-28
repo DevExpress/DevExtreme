@@ -355,13 +355,13 @@ QUnit.testStart(function() {
             }
         ]);
 
-        this.instance.$element().find('.' + CELL_CLASS).eq(5).addClass('dx-scheduler-date-table-droppable-cell');
+        this.instance.$element().find('.' + CELL_CLASS).eq(3).addClass('dx-scheduler-date-table-droppable-cell');
 
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             allDay: false,
-            startDate: new Date(2015, 1, 18, 1),
-            endDate: undefined,
+            startDate: new Date(2015, 1, 18, 0, 30),
+            endDate: new Date(2015, 1, 18, 1),
             groups: {
                 res: 2
             }
@@ -396,7 +396,7 @@ QUnit.testStart(function() {
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             startDate: new Date(2015, 1, 18, 0, 30),
-            endDate: undefined,
+            endDate: new Date(2015, 1, 18, 1, 0),
             allDay: false,
             groups: {
                 one: 2,
@@ -4363,13 +4363,13 @@ QUnit.module('Renovated Render', {
     QUnit.test('getDataByDroppableCell should work correctly', function(assert) {
         this.createInstance();
 
-        this.instance.$element().find('.' + CELL_CLASS).eq(1).addClass('dx-scheduler-date-table-droppable-cell');
+        this.instance.$element().find('.' + CELL_CLASS).eq(0).addClass('dx-scheduler-date-table-droppable-cell');
 
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             allDay: false,
-            startDate: new Date(2020, 6, 29, 0, 30),
-            endDate: undefined,
+            startDate: new Date(2020, 6, 29, 0, 0),
+            endDate: new Date(2020, 6, 29, 0, 30),
             groups: undefined,
         }, 'Cell Data is correct');
     });

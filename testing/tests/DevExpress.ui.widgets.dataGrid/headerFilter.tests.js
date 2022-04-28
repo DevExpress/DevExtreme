@@ -491,6 +491,35 @@ QUnit.module('Header Filter', {
         devices._currentDevice = null;
     });
 
+    [
+        { showColumnLines: false, alignment: 'left', position: 'left' },
+        { showColumnLines: false, alignment: 'center', position: 'left' },
+        { showColumnLines: false, alignment: 'right', position: 'right' },
+        { showColumnLines: true, alignment: 'left', position: 'right' },
+        { showColumnLines: true, alignment: 'center', position: 'right' },
+        { showColumnLines: true, alignment: 'right', position: 'left' },
+    ].forEach(({ showColumnLines, alignment, position }) => {
+        QUnit.test(`Header filter position (column.alignment=${alignment}, showColumnLines=${showColumnLines}) (T1033810)`, function(assert) {
+            // arrange
+            const that = this;
+            const testElement = $('#container');
+
+            that.options.showColumnLines = showColumnLines;
+            that.columns[0].alignment = alignment;
+            that.setupDataGrid();
+            that.columnHeadersView.render(testElement);
+            that.headerFilterView.render(testElement);
+
+            // act
+            that.headerFilterController.showHeaderFilterMenu(0);
+
+
+            // assert
+            assert.strictEqual(that.headerFilterView.getPopupContainer().option('position.my'), `${position} top`, 'my position');
+            assert.strictEqual(that.headerFilterView.getPopupContainer().option('position.at'), `${position} bottom`, 'at position');
+        });
+    });
+
     QUnit.test('Show header filter when column with dataType date', function(assert) {
     // arrange
         const that = this;

@@ -26,6 +26,12 @@ const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
 const BUTTON_CLASS = 'dx-button';
 
 export const DataProvider = Class.inherit({
+    ctor: function(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
+        this._exportController = exportController;
+        this._initialColumnWidthsByColumnIndex = initialColumnWidthsByColumnIndex;
+        this._selectedRowsOnly = selectedRowsOnly;
+    },
+
     _getGroupValue: function(item) {
         const { key, data, rowType, groupIndex, summaryCells } = item;
         const groupColumn = this._options.groupColumns[groupIndex];
@@ -75,12 +81,6 @@ export const DataProvider = Class.inherit({
             }
             this._options.customizeExcelCell(e);
         }
-    },
-
-    ctor: function(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
-        this._exportController = exportController;
-        this._initialColumnWidthsByColumnIndex = initialColumnWidthsByColumnIndex;
-        this._selectedRowsOnly = selectedRowsOnly;
     },
 
     getHeaderStyles() {

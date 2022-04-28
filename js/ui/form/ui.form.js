@@ -7,7 +7,6 @@ import { isDefined, isEmptyObject, isObject, isString } from '../../core/utils/t
 import { each } from '../../core/utils/iterator';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
-import { isEmpty } from '../../core/utils/string';
 import browser from '../../core/utils/browser';
 import { triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { getPublicElement } from '../../core/element';
@@ -32,8 +31,13 @@ import {
     getTextWithoutSpaces,
     isExpectedItem,
     isFullPathContainsTabs,
-    getItemPath
+    getItemPath,
 } from './ui.form.utils';
+
+import { convertToLabelMarkOptions } from './ui.form.layout_manager.utils.js'; // TODO: remove reference to 'ui.form.layout_manager.utils.js'
+import {
+    setLabelWidthByMaxLabelWidth
+} from './components/label';
 
 import '../validation_summary';
 import '../validation_group';
@@ -43,16 +47,12 @@ import '../validation_group';
 import {
     FORM_CLASS,
     FIELD_ITEM_CLASS,
-    FIELD_ITEM_LABEL_TEXT_CLASS,
     FORM_GROUP_CLASS,
     FORM_GROUP_CONTENT_CLASS,
     FIELD_ITEM_CONTENT_HAS_GROUP_CLASS,
     FIELD_ITEM_CONTENT_HAS_TABS_CLASS,
     FORM_GROUP_WITH_CAPTION_CLASS,
     FORM_GROUP_CAPTION_CLASS,
-    HIDDEN_LABEL_CLASS,
-    FIELD_ITEM_LABEL_CLASS,
-    FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_TAB_CLASS,
     FORM_FIELD_ITEM_COL_CLASS,
     GROUP_COL_COUNT_CLASS,
@@ -63,7 +63,6 @@ import {
 
 import { TOOLBAR_CLASS } from '../toolbar/constants';
 
-const WIDGET_CLASS = 'dx-widget';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
@@ -260,74 +259,15 @@ const Form = Widget.inherit({
         return parseInt($element.attr(GROUP_COL_COUNT_ATTR));
     },
 
-    _createHiddenElement: function(rootLayoutManager) {
-        this._$hiddenElement = $('<div>')
-            .addClass(WIDGET_CLASS)
-            .addClass(HIDDEN_LABEL_CLASS)
-            .appendTo('body');
-
-        const $hiddenLabel = rootLayoutManager._renderLabel({
-            text: ' ',
-            location: this._labelLocation()
-        }).appendTo(this._$hiddenElement);
-
-        this._hiddenLabelText = $hiddenLabel.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
-    },
-
-    _removeHiddenElement: function() {
-        this._$hiddenElement.remove();
-        this._hiddenLabelText = null;
-    },
-
-    _getLabelWidthByText: function(text) {
-        // this code has slow performance
-        this._hiddenLabelText.innerHTML = text;
-        return this._hiddenLabelText.offsetWidth;
-    },
-
-    _getLabelsSelectorByCol: function(index, options) {
-        options = options || {};
-
+    _applyLabelsWidthByCol: function($container, index, options = {}, labelMarkOptions) {
         const fieldItemClass = options.inOneColumn ? FIELD_ITEM_CLASS : FORM_FIELD_ITEM_COL_CLASS + index;
-        const cssExcludeTabbedSelector = options.excludeTabbed ? ':not(.' + FIELD_ITEM_TAB_CLASS + ')' : '';
-        const childLabelContentSelector = '> .' + FIELD_ITEM_LABEL_CLASS + ' > .' + FIELD_ITEM_LABEL_CONTENT_CLASS;
+        const cssExcludeTabbedSelector = options.excludeTabbed ? `:not(.${FIELD_ITEM_TAB_CLASS})` : '';
 
-        return '.' + fieldItemClass + cssExcludeTabbedSelector + childLabelContentSelector;
+        setLabelWidthByMaxLabelWidth($container, `.${fieldItemClass}${cssExcludeTabbedSelector}`, labelMarkOptions);
+        return;
     },
 
-    _getLabelText: function(labelText) {
-        const length = labelText.children.length;
-        let child;
-        let result = '';
-        let i;
-
-        for(i = 0; i < length; i++) {
-            child = labelText.children[i];
-            result = result + (!isEmpty(child.innerText) ? child.innerText : child.innerHTML);
-        }
-
-        return result;
-    },
-
-    _applyLabelsWidthByCol: function($container, index, options) {
-        const $labelTexts = $container.find(this._getLabelsSelectorByCol(index, options));
-        const $labelTextsLength = $labelTexts.length;
-        let labelWidth;
-        let i;
-        let maxWidth = 0;
-
-        for(i = 0; i < $labelTextsLength; i++) {
-            labelWidth = this._getLabelWidthByText(this._getLabelText($labelTexts[i]));
-            if(labelWidth > maxWidth) {
-                maxWidth = labelWidth;
-            }
-        }
-        for(i = 0; i < $labelTextsLength; i++) {
-            $labelTexts[i].style.width = maxWidth + 'px';
-        }
-    },
-
-    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn, colCount) {
+    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn, colCount, labelMarkOptions) {
         colCount = inOneColumn ? 1 : colCount || this._getGroupColCount($container);
         const applyLabelsOptions = {
             excludeTabbed: excludeTabbed,
@@ -336,7 +276,7 @@ const Form = Widget.inherit({
         let i;
 
         for(i = 0; i < colCount; i++) {
-            this._applyLabelsWidthByCol($container, i, applyLabelsOptions);
+            this._applyLabelsWidthByCol($container, i, applyLabelsOptions, labelMarkOptions);
         }
     },
 
@@ -347,31 +287,30 @@ const Form = Widget.inherit({
         return $container.find(groupSelector);
     },
 
-    _applyLabelsWidthWithGroups: function($container, colCount, excludeTabbed) {
-        if(this.option('alignRootItemLabels') === true) {
-            this._alignRootSimpleItems($container, colCount, excludeTabbed);
+    _applyLabelsWidthWithGroups: function($container, colCount, excludeTabbed, labelMarkOptions) {
+        if(this.option('alignRootItemLabels') === true) { // TODO: private option
+            const $rootSimpleItems = $container.find(`.${ROOT_SIMPLE_ITEM_CLASS}`);
+            for(let colIndex = 0; colIndex < colCount; colIndex++) {
+                // TODO: root items are aligned with root items only
+                // this code doesn't align root items with grouped items in the same column
+                // (see T942517)
+                this._applyLabelsWidthByCol($rootSimpleItems, colIndex, excludeTabbed, labelMarkOptions);
+            }
         }
 
         const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
         if(alignItemLabelsInAllGroups) {
-            this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed);
+            this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed, labelMarkOptions);
         } else {
             const $groups = this.$element().find('.' + FORM_GROUP_CLASS);
             let i;
             for(i = 0; i < $groups.length; i++) {
-                this._applyLabelsWidth($groups.eq(i), excludeTabbed);
+                this._applyLabelsWidth($groups.eq(i), excludeTabbed, undefined, undefined, labelMarkOptions);
             }
         }
     },
 
-    _alignRootSimpleItems: function($container, colCount, excludeTabbed) {
-        const $rootSimpleItems = $container.find(`.${ROOT_SIMPLE_ITEM_CLASS}`);
-        for(let colIndex = 0; colIndex < colCount; colIndex++) {
-            this._applyLabelsWidthByCol($rootSimpleItems, colIndex, excludeTabbed);
-        }
-    },
-
-    _applyLabelsWidthWithNestedGroups: function($container, colCount, excludeTabbed) {
+    _applyLabelsWidthWithNestedGroups: function($container, colCount, excludeTabbed, labelMarkOptions) {
         const applyLabelsOptions = { excludeTabbed: excludeTabbed };
         let colIndex;
         let groupsColIndex;
@@ -380,14 +319,14 @@ const Form = Widget.inherit({
 
         for(colIndex = 0; colIndex < colCount; colIndex++) {
             $groupsByCol = this._getGroupElementsInColumn($container, colIndex);
-            this._applyLabelsWidthByCol($groupsByCol, 0, applyLabelsOptions);
+            this._applyLabelsWidthByCol($groupsByCol, 0, applyLabelsOptions, labelMarkOptions);
 
             for(groupsColIndex = 0; groupsColIndex < this._groupsColCount.length; groupsColIndex++) {
                 $groupsByCol = this._getGroupElementsInColumn($container, colIndex, this._groupsColCount[groupsColIndex]);
                 const groupColCount = this._getGroupColCount($groupsByCol);
 
                 for(groupColIndex = 1; groupColIndex < groupColCount; groupColIndex++) {
-                    this._applyLabelsWidthByCol($groupsByCol, groupColIndex, applyLabelsOptions);
+                    this._applyLabelsWidthByCol($groupsByCol, groupColIndex, applyLabelsOptions, labelMarkOptions);
                 }
             }
         }
@@ -399,20 +338,21 @@ const Form = Widget.inherit({
 
     _alignLabelsInColumn: function({ layoutManager, inOneColumn, $container, excludeTabbed, items }) {
         if(!hasWindow() || this._labelLocation() === 'top') {
+            // TODO: label location can be changed to 'left/right' for some labels
+            // but this condition disables alignment for such items
             return;
         }
 
-        this._createHiddenElement(layoutManager);
+        const labelMarkOptions = convertToLabelMarkOptions(layoutManager._getMarkOptions());
         if(inOneColumn) {
-            this._applyLabelsWidth($container, excludeTabbed, true);
+            this._applyLabelsWidth($container, excludeTabbed, true, undefined, labelMarkOptions);
         } else {
             if(this._checkGrouping(items)) {
-                this._applyLabelsWidthWithGroups($container, layoutManager._getColCount(), excludeTabbed);
+                this._applyLabelsWidthWithGroups($container, layoutManager._getColCount(), excludeTabbed, labelMarkOptions);
             } else {
-                this._applyLabelsWidth($container, excludeTabbed, false, layoutManager._getColCount());
+                this._applyLabelsWidth($container, excludeTabbed, false, layoutManager._getColCount(), labelMarkOptions);
             }
         }
-        this._removeHiddenElement();
     },
 
     _prepareFormData: function() {
@@ -837,9 +777,10 @@ const Form = Widget.inherit({
                     this._resetValues();
                 }
                 break;
+            case 'onFieldDataChanged':
+                break;
             case 'items':
             case 'colCount':
-            case 'onFieldDataChanged':
             case 'onEditorEnterKey':
             case 'labelLocation':
             case 'alignItemLabels':

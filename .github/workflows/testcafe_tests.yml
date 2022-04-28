@@ -6,11 +6,16 @@ jobs:
   testcafe:
     strategy:
       matrix:
-        ARGS: [ --componentFolder=dataGrid --quarantineMode=true, --componentFolder=scheduler --quarantineMode=true, --componentFolder=editors, --componentFolder=navigation ]
+        ARGS: [--componentFolder=scheduler --quarantineMode=true, --componentFolder=dataGrid --quarantineMode=true, --componentFolder=editors, --componentFolder=navigation ]
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        
     - name: Get sources
       uses: actions/checkout@v2
 
@@ -37,6 +42,7 @@ jobs:
         all_args="--browsers=chrome:headless ${ARGS}"
         echo "$all_args"
         npm run test-testcafe -- $all_args
+
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v2

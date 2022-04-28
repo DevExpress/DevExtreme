@@ -933,4 +933,107 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // T650963
         assert.equal($(dataGrid.getCellElement(1, 0)).css('maxWidth'), 'none', 'max width style for detail cell');
     });
+
+    QUnit.test('Master grid should scroll its content properly when rows in nested detail grids are expanded (T1010839)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 1; i <= 10; i++) {
+                items.push({
+                    id: i,
+                    name: `item_${i}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            columnFixing: {
+                enabled: true
+            },
+            customizeColumns: function(columns) {
+                columns[0].fixed = true;
+            },
+            scrolling: {
+                useNative: false
+            },
+            masterDetail: {
+                enabled: true,
+                template: function(container, options) {
+                    $('<div>')
+                        .addClass('nested')
+                        .dxDataGrid({
+                            dataSource: getData(),
+                            keyExpr: 'id',
+                            columnFixing: {
+                                enabled: true
+                            },
+                            customizeColumns: function(columns) {
+                                columns[0].fixed = true;
+                            },
+                            masterDetail: {
+                                enabled: true,
+                                template: function(container, options) {
+                                    $('<div>')
+                                        .dxDataGrid({
+                                            dataSource: getData(),
+                                            keyExpr: 'id',
+                                            columnFixing: {
+                                                enabled: true
+                                            },
+                                            customizeColumns: function(columns) {
+                                                columns[0].fixed = true;
+                                            },
+                                        }).appendTo(container);
+                                }
+                            }
+                        }).appendTo(container);
+                }
+            }
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(2);
+        this.clock.tick();
+        dataGrid.expandRow(1);
+        this.clock.tick();
+        dataGrid.getScrollable().scrollTo({ top: 400 });
+
+
+        // assert
+        assert.strictEqual(dataGrid.getScrollable().scrollTop(), 400, 'scroll top1');
+
+
+        // act
+        const nestedGrid = $(dataGrid.getRowElement(3)).eq(1).find('.nested').dxDataGrid('instance');
+        nestedGrid.expandRow(1);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(nestedGrid.getRowElement(1)).hasClass('dx-master-detail-row'), 'detail row of the nested grid');
+        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 1653, 5, 'scroll height1');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 1290 });
+
+        // assert
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 1289, 5, 'scroll top2');
+
+        // act
+        dataGrid.expandRow(10);
+        this.clock.tick();
+
+        // assert
+        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 2090, 5, 'scroll height2');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 1728 });
+        this.clock.tick();
+
+        // assert
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 1725, 5, 'scroll top3');
+    });
 });

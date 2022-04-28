@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -268,7 +269,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     }
 
     .dx-icon-toggle-delete {
-      margin: $generic-list-item-vertical-padding / 2 $item-horizontal-padding / 2 $generic-list-item-vertical-padding / 2 $item-horizontal-padding;
+      margin: math.div($generic-list-item-vertical-padding, 2) math.div($item-horizontal-padding, 2) math.div($generic-list-item-vertical-padding, 2) $item-horizontal-padding;
       width: 9px + $generic-list-item-vertical-padding;
       height: 9px + $generic-list-item-vertical-padding;
     }
@@ -360,7 +361,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
     .dx-list-item-before-bag {
       .dx-icon-toggle-delete {
-        margin: $generic-list-item-vertical-padding / 2 $item-horizontal-padding $generic-list-item-vertical-padding / 2 $item-horizontal-padding / 2;
+        margin: math.div($generic-list-item-vertical-padding, 2) $item-horizontal-padding math.div($generic-list-item-vertical-padding, 2) math.div($item-horizontal-padding, 2);
       }
 
       .dx-list-select-checkbox,

@@ -113,6 +113,49 @@ QUnit.module('live update', {
         assert.strictEqual(listGroups.length, 3, 'new group is added');
     });
 
+    QUnit.test('insert new group with empty items array should work correct if grouping and repaintChangesOnly (T1035520)', function(assert) {
+        const listInstance = $('#templated-list').dxList({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    data: [{ key: 1, items: ['1'] }],
+                    key: 'key'
+                }
+            },
+            grouped: true,
+            repaintChangesOnly: true
+        }).dxList('instance');
+
+        listInstance.getDataSource().store().insert({
+            key: 2,
+            items: []
+        });
+        listInstance.getDataSource().reload();
+
+        const $list = $(listInstance.element());
+        const listGroups = $list.find(`.${LIST_GROUP_CLASS}`);
+
+        assert.strictEqual(listGroups.length, 2, 'new group is added');
+    });
+
+    QUnit.test('insert new group should work correct if grouping and repaintChangesOnly and store has no key (T1035520)', function(assert) {
+        const listInstance = $('#templated-list').dxList({
+            dataSource: {
+                store: new ArrayStore(['1', '2'])
+            },
+            grouped: true,
+            repaintChangesOnly: true
+        }).dxList('instance');
+
+        listInstance.getDataSource().store().insert('3');
+        listInstance.getDataSource().reload();
+
+        const $list = $(listInstance.element());
+        const listGroups = $list.find(`.${LIST_GROUP_CLASS}`);
+
+        assert.strictEqual(listGroups.length, 3, 'new group is added');
+    });
+
     QUnit.test('insert item to specific position', function(assert) {
         const store = this.createList().getDataSource().store();
 

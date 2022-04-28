@@ -160,7 +160,7 @@ export default class ResizingModule {
 
     _deleteImage() {
         if(this._isAllowedTarget(this._$target)) {
-            Quill.find(this._$target).deleteAt(0);
+            Quill.find(this._$target)?.deleteAt(0);
         }
     }
 

@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../sizes" as *;
 
 // adduse
@@ -14,5 +15,5 @@ $generic-dropdownlist-min-height: null !default;
 }
 
 $generic-pending-indicator-size: $generic-invalid-badge-size + 4px !default;
-$generic-invalid-badge-horizontal-padding: ($generic-base-inline-borderedwidget-inner-size - $generic-invalid-badge-size) / 2 !default;
-$generic-invalid-badge-halfhorizontal-padding: $generic-invalid-badge-horizontal-padding / 2 !default;
+$generic-invalid-badge-horizontal-padding: math.div($generic-base-inline-borderedwidget-inner-size - $generic-invalid-badge-size, 2) !default;
+$generic-invalid-badge-halfhorizontal-padding: math.div($generic-invalid-badge-horizontal-padding, 2) !default;

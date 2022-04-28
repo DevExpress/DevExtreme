@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -88,15 +89,15 @@
 
 .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
   .dx-calendar {
-    margin-right: $material-datebox-overlay-item-margin / 2;
-    margin-bottom: $material-datebox-overlay-item-margin / 2;
+    margin-right: math.div($material-datebox-overlay-item-margin, 2);
+    margin-bottom: math.div($material-datebox-overlay-item-margin, 2);
   }
 
   .dx-timeview {
     padding: $material-datebox-overlay-item-margin;
 
     @at-root #{selector-append(".dx-datebox-adaptivity-mode", &)} {
-      margin: 0 $material-datebox-overlay-item-margin / 2 $material-datebox-overlay-item-margin / 2;
+      margin: 0 math.div($material-datebox-overlay-item-margin, 2) math.div($material-datebox-overlay-item-margin, 2);
     }
   }
 
@@ -126,12 +127,12 @@
 
   .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
     .dx-calendar {
-      margin-left: $material-datebox-overlay-item-margin / 2;
+      margin-left: math.div($material-datebox-overlay-item-margin, 2);
       margin-right: $material-datebox-overlay-item-margin;
     }
 
     .dx-timeview {
-      margin-right: $material-datebox-overlay-item-margin / 2;
+      margin-right: math.div($material-datebox-overlay-item-margin, 2);
       margin-left: $material-datebox-overlay-item-margin;
     }
   }

@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -45,7 +46,7 @@ $generic-slider-radius: 2px;
 }
 
 .dx-slider-bar {
-  margin: $generic-slider-height / 2 $generic-slider-width / 2;
+  margin: math.div($generic-slider-height, 2) math.div($generic-slider-width, 2);
   height: $generic-slider-track-height;
   background: $slider-bar-bg;
   border-radius: $generic-slider-radius;
@@ -77,8 +78,8 @@ $generic-slider-radius: 2px;
 
 
 .dx-slider-handle {
-  margin-top: -$generic-slider-height / 2;
-  margin-right: -$generic-slider-width / 2;
+  margin-top: math.div(-$generic-slider-height, 2);
+  margin-right: math.div(-$generic-slider-width, 2);
   width: $generic-slider-width;
   height: $generic-slider-height;
   border: 1px solid $slider-handle-border-color;
@@ -119,6 +120,6 @@ $generic-slider-radius: 2px;
 }
 
 .dx-rtl .dx-slider-handle {
-  margin-left: -($generic-slider-width + 1px) / 2;
+  margin-left: math.div(-($generic-slider-width + 1px), 2);
 }
 

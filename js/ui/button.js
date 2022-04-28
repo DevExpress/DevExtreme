@@ -383,7 +383,9 @@ class Button extends Widget {
         const $element = this.$element();
 
         ['contained', 'text', 'outlined'].map(mode => `dx-button-mode-${mode}`)
-            .forEach($element.removeClass.bind($element));
+            .forEach((className) => {
+                $element.removeClass(className);
+            });
 
         this._renderStylingMode();
     }
@@ -392,7 +394,9 @@ class Button extends Widget {
         const $element = this.$element();
 
         ['back', 'danger', 'default', 'normal', 'success'].map(type => `dx-button-${type}`)
-            .forEach($element.removeClass.bind($element));
+            .forEach((className) => {
+                $element.removeClass(className);
+            });
 
         this._renderType();
     }

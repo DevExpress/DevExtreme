@@ -520,7 +520,8 @@ const Overlay = Widget.inherit({
     _normalizeAnimation: function(animation, prop) {
         if(animation) {
             animation = extend({
-                type: 'slide'
+                type: 'slide',
+                skipElementInitialStyles: true, // NOTE: for fadeIn animation
             }, animation);
 
             if(animation[prop] && typeof animation[prop] === 'object') {
@@ -1214,8 +1215,11 @@ const Overlay = Widget.inherit({
 
             resetPosition(this._$content);
 
+            const wrapperOverflow = this._$wrapper.css('overflow');
+            this._$wrapper.css('overflow', 'hidden');
             const position = this._transformStringPosition(this._position, POSITION_ALIASES);
             const resultPosition = positionUtils.setup(this._$content, position);
+            this._$wrapper.css('overflow', wrapperOverflow);
 
             forceRepaint(this._$content);
 

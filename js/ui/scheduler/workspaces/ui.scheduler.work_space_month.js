@@ -5,6 +5,7 @@ import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 import dateUtils from '../../../core/utils/date';
 import { getBoundingRect } from '../../../core/utils/position';
 import dateLocalization from '../../../localization/date';
+import { getViewStartByOptions } from './utils/month';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -135,26 +136,12 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     _getViewStartByOptions() {
-        if(!this.option('startDate')) {
-            return new Date(this.option('currentDate').getTime());
-        } else {
-            let startDate = this._getStartViewDate();
-            const currentDate = this.option('currentDate');
-            const diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1;
-            let endDate = new Date(new Date(this._getStartViewDate().setMonth(this._getStartViewDate().getMonth() + diff * this.option('intervalCount'))));
-
-            while(!this._dateInRange(currentDate, startDate, endDate, diff)) {
-                startDate = new Date(endDate);
-
-                if(diff > 0) {
-                    startDate.setDate(1);
-                }
-
-                endDate = new Date(new Date(endDate.setMonth(endDate.getMonth() + diff * this.option('intervalCount'))));
-            }
-
-            return diff > 0 ? startDate : endDate;
-        }
+        return getViewStartByOptions(
+            this.option('startDate'),
+            this.option('currentDate'),
+            this.option('intervalCount'),
+            this._getStartViewDate(),
+        );
     }
 
     _getStartViewDate() {

@@ -44,7 +44,6 @@ class FileManagerContextMenu extends Widget {
             cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
             showEvent: '',
             onItemClick: (args) => this._onContextMenuItemClick(args.itemData.name, args),
-            onShowing: () => this._actions.onContextMenuShowing(),
             onHidden: () => this._onContextMenuHidden()
         });
 
@@ -187,7 +186,6 @@ class FileManagerContextMenu extends Widget {
     _initActions() {
         this._actions = {
             onContextMenuHidden: this._createActionByOption('onContextMenuHidden'),
-            onContextMenuShowing: this._createActionByOption('onContextMenuShowing'),
             onItemClick: this._createActionByOption('onItemClick')
         };
     }
@@ -223,7 +221,6 @@ class FileManagerContextMenu extends Widget {
                 }
                 break;
             case 'onItemClick':
-            case 'onContextMenuShowing':
             case 'onContextMenuHidden':
                 this._actions[name] = this._createActionByOption(name);
                 break;

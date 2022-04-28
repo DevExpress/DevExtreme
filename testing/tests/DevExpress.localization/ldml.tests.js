@@ -8,6 +8,7 @@ const defaultDateNames = require('localization/default_date_names');
 const numberLocalization = require('localization/number');
 const dateLocalization = require('localization/date');
 const extend = require('core/utils/extend').extend;
+const console = require('core/utils/console').logger;
 
 require('localization/currency');
 
@@ -383,6 +384,38 @@ QUnit.module('number formatter', () => {
         ]);
     });
 
+    QUnit.test('getRegExpInfo should return correct regexp for the single time separator (for special locals)', function(assert) {
+        const parts = extend({}, defaultDateNames, {
+            getTimeSeparator: function() {
+                return 'h';
+            }
+        });
+
+        let regExpInfo = getRegExpInfo('HH \'h\' mm', parts);
+        assert.deepEqual(regExpInfo.patterns, [
+            'HH', '\' h \'', 'mm'
+        ]);
+        // eslint-disable-next-line no-useless-escape
+        assert.deepEqual(regExpInfo.regexp, /^(2[0-3]|1[0-9]|0?[0-9])(\ h\ )([1-5][0-9]|0?[0-9])$/i);
+
+        regExpInfo = getRegExpInfo('HH:mm', parts);
+        assert.deepEqual(regExpInfo.patterns, [
+            'HH', ':', 'mm'
+        ]);
+        // eslint-disable-next-line no-useless-escape
+        assert.deepEqual(regExpInfo.regexp, /^(2[0-3]|1[0-9]|0?[0-9])(h|:)([1-5][0-9]|0?[0-9])$/i);
+
+        parts.getTimeSeparator = function() {
+            return '[.]';
+        };
+        regExpInfo = getRegExpInfo('HH:mm', parts);
+        assert.deepEqual(regExpInfo.patterns, [
+            'HH', ':', 'mm'
+        ]);
+        // eslint-disable-next-line no-useless-escape
+        assert.deepEqual(regExpInfo.regexp, /^(2[0-3]|1[0-9]|0?[0-9])(\[\.\]|:)([1-5][0-9]|0?[0-9])$/i);
+    });
+
     QUnit.test('getRegExpInfo should return correct regex for multiple adjacent time separators', function(assert) {
         const regExpInfo = getRegExpInfo('HH:::mm', dateParts);
         assert.deepEqual(regExpInfo.patterns, [
@@ -411,5 +444,95 @@ QUnit.module('number formatter', () => {
             dateLocalization.getTimeSeparator = baseGetTimeSeparator;
         }
 
+    });
+
+    QUnit.test('getRegExpInfo should return correct regular expression for unambiguous not separated `formats`(T1008667)', function(assert) {
+        const formatsTestsData = {
+            'yyyyMMdd': {
+                text: '11111111',
+                expected: ['1111', '11', '11']
+            },
+            'ddMMyyyy': {
+                text: '11121212',
+                expected: ['11', '12', '1212']
+            },
+            'MMdyy': {
+                text: '11212',
+                expected: ['11', '2', '12']
+            },
+            'dMMyy': {
+                text: '11111',
+                expected: ['1', '11', '11']
+            },
+            'MMddyy': {
+                text: '111111',
+                expected: ['11', '11', '11']
+            },
+            'wwhhmms': {
+                text: '10101012',
+                expected: ['10', '10', '10', '12']
+            },
+            'wwHHmms': {
+                text: '1012100',
+                expected: ['10', '12', '10', '0']
+            },
+            'hhmmsSSS': {
+                text: '12100001',
+                expected: ['12', '10', '0', '001']
+            },
+            'HHmmsSSS': {
+                text: '121001001',
+                expected: ['12', '10', '01', '001']
+            },
+            'hhmmsSS': {
+                text: '12101201',
+                expected: ['12', '10', '12', '01']
+            },
+            'HHmmsSS': {
+                text: '1210001',
+                expected: ['12', '10', '0', '01']
+            },
+            'HHmms.SSS': {
+                text: '121010.34',
+                expected: ['12', '10', '10', '.', '34']
+            }
+        };
+
+        Object.keys(formatsTestsData).forEach((format) => {
+            const { text, expected } = formatsTestsData[format];
+            const regExpInfo = getRegExpInfo(format);
+            const parenthesizedResult = regExpInfo.regexp.exec(text).slice(1);
+            assert.deepEqual(parenthesizedResult, expected, `Fromat '${format}' parse dateString '${text}' - ok.`);
+        });
+    });
+
+    QUnit.test('getRegExpInfo should throw a warning message if there are two or more ambiguous patterns at the sequence of non separated digit patterns in the `format`!', function(assert) {
+        const spy = sinon.spy(console, 'warn');
+        const expectedWarningsCount = {
+            'd': 0,
+            'dd': 0,
+            'dm': 1,
+            'dmm': 0,
+            'dMMy': 1,
+            'dMMyy': 0,
+            'dMMMy': 0,
+            'ddMMyy': 0,
+            'dMMyyyy': 1,
+            'MMddyyyy': 0,
+            'QQQdMMM hm': 1,
+            'EEEdMMM hmm': 0,
+            'ydMMM aaahhm': 1,
+            'hhmmS': 0,
+            'hhmmsSS': 0,
+            'QQQyMMMdHHs': 1,
+            'QQQ y MMM d HHs': 0,
+        };
+
+        Object.keys(expectedWarningsCount).forEach((format) => {
+            const warningCalls = expectedWarningsCount[format];
+            spy.callCount = 0;
+            getRegExpInfo(format, dateLocalization);
+            assert.equal(spy.callCount, warningCalls, `Format '${format}' calls ${warningCalls} warnings.`);
+        });
     });
 });

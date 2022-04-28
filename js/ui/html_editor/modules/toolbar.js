@@ -28,7 +28,6 @@ if(Quill) {
     const TOOLBAR_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-separator';
     const TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-menu-separator';
     const ACTIVE_FORMAT_CLASS = 'dx-format-active';
-    const BOX_ITEM_CONTENT_CLASS = 'dx-box-item-content';
 
     const ICON_CLASS = 'dx-icon';
 
@@ -546,12 +545,8 @@ if(Quill) {
                     items: [{
                         dataField: formatName,
                         editorType: 'dxColorView',
+                        _forceItemFlexSizeCorrectionInIE: true, // WA for the T702531 (IE only)
                         editorOptions: {
-                            onContentReady: (e) => {
-                                $(e.element)
-                                    .closest(`.${BOX_ITEM_CONTENT_CLASS}`)
-                                    .css('flexBasis', 'auto'); // WA for the T590137
-                            },
                             focusStateEnabled: false
                         },
                         label: { visible: false }

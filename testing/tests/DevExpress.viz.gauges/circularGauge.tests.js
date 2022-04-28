@@ -237,7 +237,7 @@ const TestPointerElement = TestElement.inherit({
             }
         });
 
-        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -40, 'indent');
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -50, 'indent');
     });
 
     QUnit.test('Ticks indent with negative value. Center orientation of ticks', function(assert) {
@@ -250,7 +250,7 @@ const TestPointerElement = TestElement.inherit({
             }
         });
 
-        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -42.5, 'indent');
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -47.5, 'indent');
     });
 
     QUnit.test('Ticks indent with zero value', function(assert) {

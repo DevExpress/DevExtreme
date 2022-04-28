@@ -19,7 +19,7 @@ const getGridConfig = (config) => {
     legacyRendering: false,
   };
 
-  return config ? ({ ...defaultConfig, ...config }) : defaultConfig;
+  return config ? { ...defaultConfig, ...config } : defaultConfig;
 };
 
 const getElementCount = (gridInstance: DataGrid, elementSelector: string): Promise<number> => {
@@ -1630,70 +1630,6 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
   },
 }));
 
-test('Batch - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async (t) => {
-  const dataGrid = new DataGrid('#container');
-  const detailGrid = new DataGrid('#detailContainer');
-
-  // act
-  await t
-    .click(dataGrid.getDataRow(0).getCommandCell(0).element)
-    .click(detailGrid.getHeaderPanel().getAddRowButton())
-    .click(detailGrid.getHeaderPanel().getSaveButton())
-    .click(detailGrid.getDataCell(0, 0).element);
-
-  // assert
-  await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
-
-  // act
-  await t
-    .click(detailGrid.getDataCell(0, 1).element);
-
-  // assert
-  await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
-
-  // act
-  await t
-    .click(detailGrid.getDataCell(0, 0).element);
-
-  // assert
-  await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
-}).before(() => createWidget('dxDataGrid', {
-  dataSource: [{ id: 1, field: 'field' }],
-  keyExpr: 'id',
-  loadingTimeout: undefined,
-  masterDetail: {
-    enabled: true,
-    template(): any {
-      return ($('<div id="detailContainer">') as any).dxDataGrid({
-        dataSource: [],
-        keyExpr: 'id',
-        focusedRowEnabled: true,
-        columns: [
-          {
-            dataField: 'id',
-            validationRules: [
-              { type: 'required' },
-            ],
-          },
-          {
-            dataField: 'field',
-            validationRules: [
-              { type: 'required' },
-            ],
-          }],
-        editing: {
-          mode: 'batch',
-          allowAdding: true,
-          allowUpdating: true,
-        },
-      });
-    },
-  },
-}));
-
 test('The "Cannot read property "brokenRules" of undefined" error occurs T978286', async (t) => {
   const dataGrid = new DataGrid('#container');
   const lastName0 = dataGrid.getDataCell(0, 1);
@@ -1770,6 +1706,44 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
       columns.forEach((col) => {
         col.showEditorAlways = true;
       });
+    },
+  }));
+});
+
+['Batch', 'Cell'].forEach((editMode) => {
+  test(`${editMode} - Cell value should not be reset when a checkbox in a neigboring cell is clicked (T1023809)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const firstCell = dataGrid.getDataCell(0, 0);
+    const secondCell = dataGrid.getDataCell(0, 1);
+
+    // act
+    await t
+      .click(firstCell.element);
+
+    // assert
+    await t
+      .expect(firstCell.isEditCell).ok()
+      .expect(firstCell.isFocused).ok()
+      .expect(firstCell.getEditor().element.focused)
+      .ok();
+
+    // act
+    await t
+      .typeText(firstCell.getEditor().element, '123', { replace: true })
+      .click(secondCell.getEditor().element);
+
+    // assert
+    await t
+      .expect(dataGrid.apiGetCellValue(0, 0)).eql('123');
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, field1: 'test', field2: true },
+    ],
+    keyExpr: 'id',
+    columns: ['field1', 'field2'],
+    editing: {
+      mode: editMode.toLowerCase(),
+      allowUpdating: true,
     },
   }));
 });

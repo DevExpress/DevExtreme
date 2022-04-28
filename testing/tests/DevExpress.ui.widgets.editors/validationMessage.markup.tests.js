@@ -7,7 +7,7 @@ const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const moduleSetup = {
     beforeEach: function() {
         this._$validationMessage = $('<div>').attr('id', 'validationMessageRootElement').appendTo('#qunit-fixture');
-        this._validationMessage = new ValidationMessage(this._$validationMessage);
+        this._validationMessage = new ValidationMessage(this._$validationMessage, { validationErrors: [{ message: 'error' }] });
     },
     afterEach: function() {
         this._$validationMessage.remove();

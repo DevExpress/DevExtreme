@@ -14,6 +14,8 @@ const getVisibleColumns = (gridInstance: DataGrid): Promise<string[]> => {
   )();
 };
 
+const getColumnsSeparatorOffset = ClientFunction(() => $('.dx-datagrid-columns-separator').offset());
+
 fixture`Column reordering`
   .page(url(__dirname, '../container.html'));
 
@@ -59,4 +61,69 @@ test('The column reordering should work correctly when there is a fixed column w
     },
   ],
   allowColumnReordering: true,
+}));
+
+// T1038094
+test('The separator should display correctly when dragging column', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.moveHeader(0, 200, 5, true);
+
+  await t
+    .expect(getColumnsSeparatorOffset())
+    .eql({
+      left: 8,
+      top: 8,
+    });
+
+  await dataGrid.moveHeader(0, 400, 5);
+
+  await t
+    .expect(getColumnsSeparatorOffset())
+    .eql({
+      left: 405,
+      top: 8,
+    });
+
+  await dataGrid.moveHeader(0, 600, 5);
+
+  await t
+    .expect(getColumnsSeparatorOffset())
+    .eql({
+      left: 605,
+      top: 8,
+    });
+
+  await dataGrid.moveHeader(0, 800, 5);
+
+  await t
+    .expect(getColumnsSeparatorOffset())
+    .eql({
+      left: 805,
+      top: 8,
+    });
+}).before(() => createWidget('dxDataGrid', {
+  width: 800,
+  dataSource: [
+    {
+      field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
+    },
+  ],
+  columns: [
+    {
+      dataField: 'field1',
+      width: 200,
+    }, {
+      dataField: 'field2',
+      width: 200,
+    }, {
+      dataField: 'field3',
+      width: 200,
+    }, {
+      dataField: 'field4',
+      width: 200,
+    },
+  ],
+  allowColumnReordering: true,
+  allowColumnResizing: true,
 }));

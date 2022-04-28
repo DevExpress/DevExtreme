@@ -11,10 +11,14 @@ test('Multi-day appointment should not overlap other appointments when specific 
   const appointment = scheduler.getAppointment('Appointment 1', 1);
 
   await t
-    .expect(scheduler.getAppointmentCollectorCount()).eql(3)
-    .expect(appointment.size.height).eql('350px')
-    .expect(appointment.size.width)
-    .eql('93px');
+    .expect(scheduler.getAppointmentCollectorCount())
+    .eql(3)
+
+    .expect(parseInt(await appointment.size.height, 10))
+    .eql(350)
+
+    .expect(parseInt(await appointment.size.width, 10))
+    .eql(93);
 }).before(() => createScheduler({
   dataSource: simpleData,
 }));

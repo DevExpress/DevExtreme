@@ -295,7 +295,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
 
         e.items = this._contextMenu.createContextMenuItems(fileItems, null, item);
-        this._raiseContextMenuShowing();
     }
 
     _onFilesViewSelectionChanged({ component, selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {

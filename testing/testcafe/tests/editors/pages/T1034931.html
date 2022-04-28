@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DropDownButton in bottom right</title>
+
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.light.css"/>
+
+        <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
+    </head>
+    <body>
+        <div id="dropDownButton"></div>
+
+        <script>
+            $(function(){
+                const editor = $('#dropDownButton').dxDropDownButton({
+                    items: [1, 2, 3, 4, 5, 6, 7],
+                    elementAttr: {style: 'position: absolute; right: 10px; bottom: 10px;'}
+                }).dxDropDownButton("instance");
+            });
+        </script>
+    </body>
+</html>

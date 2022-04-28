@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import Quill from 'devextreme-quill';
 
 import Resizing from 'ui/html_editor/modules/resizing';
 import devices from 'core/devices';
@@ -242,6 +243,30 @@ module('Resizing module', moduleConfig, () => {
 
             assert.strictEqual($(this.$element).find('img').length, 0, 'Image is removed');
         });
+    });
+
+    test('"Delete" keydown event should raise an error in case the target does not exists', function(assert) {
+        this.$element.prepend($(document.createTextNode('text')));
+        $(this.$element).dxHtmlEditor({
+            mediaResizing: {
+                enabled: true
+            }
+        });
+
+        this.options.enabled = true;
+        const $image = $(this.$element).find('img');
+        const findStub = sinon.stub(Quill, 'find');
+        let noError = true;
+        $image.trigger(clickEvent);
+
+        try {
+            $image.trigger($.Event('keydown', { key: 'Delete' }));
+        } catch(e) {
+            noError = false;
+        }
+
+        assert.ok(noError, 'Quill cannot find an image -> no error');
+        findStub.restore();
     });
 
 

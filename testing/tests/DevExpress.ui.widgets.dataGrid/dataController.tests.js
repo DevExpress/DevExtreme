@@ -947,6 +947,37 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(count, 1, 'Count');
     });
 
+    QUnit.test('Get page index by group key if there is no groouping and remoteOperations is true and data (T1042661)', function(assert) {
+        // arrange
+        let count = 0;
+        const loadingSpy = sinon.spy();
+        const dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Dan', age: 25 },
+            { team: 'internal', name: 'Bob', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
+        { key: 'name' },
+        { pageSize: 1, asyncLoadEnabled: false });
+
+        this.applyOptions({
+            remoteOperations: true,
+            dataSource: dataSource
+        });
+
+        dataSource.store().on('loading', loadingSpy);
+
+        // act
+        this.dataController._refreshDataSource();
+        assert.equal(loadingSpy.callCount, 1, 'loading count');
+
+        this.dataController.getPageIndexByKey(['Alice']).done(function(pageIndex) {
+            ++count;
+            assert.equal(pageIndex, -1);
+        });
+        assert.equal(count, 1, 'Count');
+        assert.equal(loadingSpy.callCount, 1, 'loading count is not changed');
+    });
+
     QUnit.test('Get page index by composite key', function(assert) {
     // arrange
         const dataSource = createDataSource([
@@ -1806,73 +1837,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(foundRowCount, 9, 'Found row count');
     });
 
-    QUnit.test('Get row index if group by two columns, simple key and virtual scrolling', function(assert) {
-    // arrange
-        let foundRowCount = 0;
-        const dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
-            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
-            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
-            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
-            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
-            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
-            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
-            { team: 'public', name: 'Alice', age: 19, g0: 3 },
-            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-        { key: 'name' },
-        { group: ['team', 'g0'], sort: 'name', pageSize: 3, asyncLoadEnabled: false, paginate: true }
-        );
-
-        this.applyOptions({
-            commonColumnSettings: { autoExpandGroup: true },
-            scrolling: { mode: 'virtual' },
-            dataSource: dataSource
-        });
-
-        // act
-        const dataController = this.dataController;
-        dataController._refreshDataSource();
-        // assert
-        dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 2, 'Alex');
-        });
-        dataController.getGlobalRowIndexByKey('Bob').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 4, 'Bob');
-        });
-        dataController.getGlobalRowIndexByKey('Mark').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 5, 'Mark');
-        });
-        dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 6, 'Sad');
-        });
-        dataController.getGlobalRowIndexByKey('Dan').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 9, 'Dan');
-        });
-        dataController.getGlobalRowIndexByKey('Den').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 10, 'Den');
-        });
-        dataController.getGlobalRowIndexByKey('Clark').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 13, 'Clark');
-        });
-        dataController.getGlobalRowIndexByKey('Alice').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 18, 'Alice');
-        });
-        dataController.getGlobalRowIndexByKey('Zeb').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 16, 'Zeb');
-        });
-
-        assert.equal(foundRowCount, 9, 'Found row count');
-    });
-
     // B254274
     QUnit.test('sortOrder in column options and group parameters in dataSource', function(assert) {
     // arrange
@@ -2101,6 +2065,40 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(this.dataController.pageIndex(), 0);
         assert.equal(this.dataController.items().length, 2);
         assert.deepEqual(this.dataController.items()[0].values, ['Dan', 25]);
+    });
+
+    QUnit.test('calculateSortValue should have correct context on sorting if customizeColumns is used (T1036411)', function(assert) {
+        const array = [
+            { name: 'Alex', age: 30 },
+            { name: 'Dan', age: 25 },
+            { name: 'Bob', age: 20 }
+        ];
+
+        const dataSource = createDataSource(array, { key: 'name' });
+
+        const ascOrder = ['Dan', 'Alex', 'Bob'];
+
+        this.applyOptions({
+            commonColumnSettings: { allowSorting: true },
+            customizeColumns: function() {},
+            columns: [{
+                dataField: 'name', calculateSortValue: function(data) {
+                    if(this.sortOrder === 'asc') {
+                        return $.inArray(data.name, ascOrder);
+                    }
+
+                    return data.name;
+                }
+            }, 'age'],
+            sorting: { mode: 'single' }
+        });
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        // act
+        this.columnsController.changeSortOrder(0, 'asc');
+
+        assert.deepEqual(this.dataController.items().map(item => item.key), ascOrder);
     });
 
     QUnit.test('sorting when sortingMethod is defined', function(assert) {
@@ -3633,7 +3631,7 @@ const setupVirtualRenderingModule = function() {
         dataSource: array
     };
 
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail'], {
+    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editorFactory', 'editing', 'grouping', 'headerFilter', 'masterDetail'], {
         initDefaultOptions: true,
         options: options
     });
@@ -9970,44 +9968,6 @@ QUnit.module('Summary', {
             showInGroupFooter: true,
             summaryType: 'custom'
         }]]);
-    });
-
-    QUnit.test('Several total summary items in different column', function(assert) {
-        this.options = {
-            dataSource: [
-                { name: 'Alex', age: 19 },
-                { name: 'Dan', age: 25 }
-            ],
-            summary: {
-                totalItems: [{
-                    column: 'name',
-                    summaryType: 'count'
-                },
-                {
-                    column: 'age',
-                    summaryType: 'max'
-                }]
-            }
-        };
-
-        // act
-        this.setupDataGridModules();
-        this.clock.tick();
-
-        // assert
-        assert.deepEqual(this.dataController.footerItems(), [{
-            rowType: 'totalFooter', summaryCells: [[{
-                value: 2,
-                column: 'name',
-                summaryType: 'count'
-            }], [{
-                value: 25,
-                column: 'age',
-                summaryType: 'max'
-            }]
-            ]
-        }]);
-        assert.ok(!this.dataController.isLoading());
     });
 
     QUnit.test('Changing total summary items', function(assert) {

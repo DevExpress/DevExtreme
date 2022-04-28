@@ -8,6 +8,8 @@ import config from 'core/config';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
 import { normalizeKeyName } from 'events/utils/index';
+import CustomStore from 'data/custom_store';
+import { DataSource } from 'data/data_source/data_source';
 
 import 'generic_light.css!';
 import 'ui/validator';
@@ -52,8 +54,8 @@ const moduleConfig = {
 const isIE11 = (browser.msie && parseInt(browser.version) === 11);
 
 QUnit.module('common', moduleConfig, () => {
-    QUnit.test('the widget should work without the dataSource', function(assert) {
-        this.$element.dxDropDownBox({ value: 1 });
+    QUnit.test('the widget should display custom value without the dataSource', function(assert) {
+        this.$element.dxDropDownBox({ value: 1, acceptCustomValue: true });
         const $input = this.$element.find('.dx-texteditor-input');
         const instance = this.$element.dxDropDownBox('instance');
 
@@ -65,6 +67,63 @@ QUnit.module('common', moduleConfig, () => {
         assert.equal(instance.option('value'), 'Test', 'value is correct');
         assert.equal(instance.option('text'), 'Test', 'text is correct');
         assert.equal($input.val(), 'Test', 'input value is correct');
+    });
+
+    QUnit.test('the widget should keep value', function(assert) {
+        this.$element.dxDropDownBox({ value: 1 });
+        const $input = this.$element.find('.dx-texteditor-input');
+        const instance = this.$element.dxDropDownBox('instance');
+
+        assert.equal(instance.option('value'), 1, 'value is correct');
+        assert.equal(instance.option('text'), '', 'text is correct');
+        assert.equal($input.val(), '', 'input value is correct');
+
+        instance.option('value', 'Test');
+        assert.equal(instance.option('value'), 'Test', 'value is correct');
+        assert.equal(instance.option('text'), '', 'text is correct');
+        assert.equal($input.val(), '', 'input value is correct');
+
+        instance.option('dataSource', ['Test', 'Data']);
+        assert.equal(instance.option('value'), 'Test', 'value is correct');
+        assert.equal(instance.option('text'), 'Test', 'text is correct');
+        assert.equal($input.val(), 'Test', 'input value is correct');
+    });
+
+    QUnit.test('value should be rendered if it is resolved after non-existent item resolve (T1017628)', function(assert) {
+        const item = { id: 1, name: 'test' };
+        const store = {
+            load: () => {
+                $.Deferred().resolve([item]).promise();
+            },
+            byKey: (key) => {
+                const d = $.Deferred();
+
+                if(key === 1) {
+                    setTimeout(() => {
+                        d.resolve(item);
+                    }, 500);
+                } else {
+                    d.resolve(null);
+                }
+
+                return d.promise();
+            }
+        };
+
+        this.$element.dxDropDownBox({
+            dataSource: store,
+            valueExpr: 'id',
+            displayExpr: 'name',
+            value: [1, 2]
+        });
+        const instance = this.$element.dxDropDownBox('instance');
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        this.clock.tick(500);
+
+        assert.deepEqual(instance.option('value'), [1, 2], 'value is correct');
+        assert.strictEqual(instance.option('text'), 'test', 'text is correct');
+        assert.strictEqual($input.val(), 'test', 'input value is correct');
     });
 
     QUnit.test('the widget should work when dataSource is set to null', function(assert) {
@@ -91,7 +150,8 @@ QUnit.module('common', moduleConfig, () => {
 
     QUnit.test('it should be possible to restore value after reset', function(assert) {
         const instance = new DropDownBox(this.$element, {
-            value: 2
+            value: 2,
+            acceptCustomValue: true
         });
 
         const $input = this.$element.find('.dx-texteditor-input');
@@ -178,6 +238,21 @@ QUnit.module('common', moduleConfig, () => {
         });
 
         assert.equal($(instance.content()).text(), 'Test content', 'content template has been rendered');
+    });
+
+    QUnit.test('click on inner DropDownEditor should not close parent DropDownEditor (T998926)', function(assert) {
+        const $contentTemplateEditor = $('<div>').dxDropDownBox({});
+        const onClosed = sinon.stub();
+        const dropDownBox = new DropDownBox(this.$element, {
+            onClosed,
+            deferRendering: false,
+            contentTemplate: () => $contentTemplateEditor,
+        });
+
+        dropDownBox.open();
+        $contentTemplateEditor.find(TEXTEDITOR_INPUT_CLASS).trigger('click');
+
+        assert.ok(onClosed.notCalled);
     });
 
     QUnit.test('anonymous content template should work', function(assert) {
@@ -323,6 +398,114 @@ QUnit.module('common', moduleConfig, () => {
         });
 
         assert.strictEqual(spy.callCount, 1, 'value has been applied');
+    });
+
+    QUnit.module('byKey call result should be ignored', {
+        beforeEach: function() {
+            this.callCount = 0;
+            this.items = [{ id: 1, text: 'first' }, { id: 2, text: 'second' }];
+            this.customStore = new CustomStore({
+                load: () => {
+                    const deferred = $.Deferred();
+                    setTimeout(() => {
+                        deferred.resolve({ data: this.items, totalCount: this.items.length });
+                    }, 100);
+                    return deferred.promise();
+                },
+
+                byKey: (key) => {
+                    const deferred = $.Deferred();
+                    const filter = () => this.items.filter(item => item.id === key)[0];
+                    if(this.callCount === 0) {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 2000);
+                    } else {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 1000);
+                    }
+                    ++this.callCount;
+                    return deferred.promise();
+                }
+            });
+
+            this.dataSource = new DataSource({
+                store: this.customStore
+            });
+
+            this.dropDownBox = this.$element.dxDropDownBox({
+                dataSource: this.dataSource,
+                displayExpr: 'text',
+                valueExpr: 'id',
+                value: 1
+            }).dxDropDownBox('instance');
+        }
+    }, () => {
+        QUnit.test('after new call', function(assert) {
+            this.dropDownBox.option('value', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownBox.option('text'), 'second', 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownBox.option('text'), 'second', 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after new call event when acceptCustomValue=true', function(assert) {
+            this.dropDownBox.option({ acceptCustomValue: true, displayExpr: undefined });
+            this.dropDownBox.option('value', 2);
+            assert.strictEqual(this.dropDownBox.option('text'), null, 'text is not changed on byKey reject');
+        });
+
+        QUnit.test('after value change to already loaded value', function(assert) {
+            this.dropDownBox.open();
+            this.clock.tick(100);
+
+            this.dropDownBox.option('value', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownBox.option('text'), 'second', 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownBox.option('text'), 'second', 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after change value to undefined', function(assert) {
+            this.dropDownBox.option('value', undefined);
+            this.clock.tick(2000);
+
+            assert.strictEqual(this.dropDownBox.option('text'), '', 'init byKey result is ignored');
+        });
+
+        QUnit.test('after value reset', function(assert) {
+            this.dropDownBox.reset();
+            this.clock.tick(2000);
+
+            assert.strictEqual(this.dropDownBox.option('text'), '', 'byKey result is ignored');
+        });
+    });
+
+    QUnit.test('value should be rendered if it is not in dataSource if acceptCustomValue=true (T1042773)', function(assert) {
+        new DropDownBox(this.$element, {
+            dataSource: [{
+                id: 1,
+                name: 'first'
+            }],
+            value: [1],
+            valueExpr: 'id',
+            displayExpr: 'name',
+            acceptCustomValue: true
+        });
+
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+        const customValue = 'custom';
+
+        keyboard
+            .caret({ start: 0, end: 5 })
+            .type(customValue)
+            .change();
+
+        assert.strictEqual($input.val(), customValue, 'custom value is rendered');
     });
 });
 

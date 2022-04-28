@@ -242,7 +242,8 @@ function parseResult(data, total, descriptions, result) {
         } else {
             item = {
                 value: parseValue(dataItem.key, field),
-                index: result[dimensionName + 'Index']++
+                index: result[dimensionName + 'Index']++,
+                displayText: dataItem.displayText
             };
 
             parentPathValue = path.slice(0, level).join('/');

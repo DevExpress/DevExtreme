@@ -2010,11 +2010,11 @@ class Scheduler extends Widget {
         newAppointment.recurrenceRule = '';
         newAppointment.recurrenceException = '';
 
+        const keyPropertyName = this._appointmentModel.keyName;
+        delete newRawAppointment[keyPropertyName];
+
         const canCreateNewAppointment = !isDeleted && !isPopupEditing;
         if(canCreateNewAppointment) {
-            const keyPropertyName = this._appointmentModel.keyName;
-            delete newRawAppointment[keyPropertyName];
-
             this.addAppointment(newRawAppointment);
         }
 

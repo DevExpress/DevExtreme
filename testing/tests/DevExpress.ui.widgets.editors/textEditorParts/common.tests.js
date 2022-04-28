@@ -642,6 +642,13 @@ QUnit.module('options changing', moduleConfig, () => {
         });
     });
 
+    QUnit.test('editor should not change value if it is readOnly (T1022447)', function(assert) {
+        this.instance.option({ value: null, readOnly: true });
+        this.keyboard.type('f').change();
+
+        assert.strictEqual(this.instance.option('value'), null);
+    });
+
     QUnit.test('Click on \'clear\' button', function(assert) {
         const $element = $('#texteditor').dxTextEditor({
             showClearButton: true,

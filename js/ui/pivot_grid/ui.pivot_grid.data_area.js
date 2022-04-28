@@ -1,5 +1,7 @@
 import $ from '../../core/renderer';
 import { AreaItem } from './ui.pivot_grid.area_item';
+import { nativeScrolling } from '../../core/utils/support';
+import { calculateScrollbarWidth } from './utils/calculate_scrollbar_width';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
 const PIVOTGRID_AREA_DATA_CLASS = 'dx-pivotgrid-area-data';
@@ -14,7 +16,8 @@ export const DataArea = AreaItem.inherit({
     _createGroupElement: function() {
         return $('<div>')
             .addClass(PIVOTGRID_AREA_CLASS)
-            .addClass(PIVOTGRID_AREA_DATA_CLASS);
+            .addClass(PIVOTGRID_AREA_DATA_CLASS)
+            .css('borderTopWidth', 0);
     },
 
     _applyCustomStyles: function(options) {
@@ -45,22 +48,42 @@ export const DataArea = AreaItem.inherit({
         this.callBase();
     },
 
-    processScroll: function(useNativeScrolling, horizontalScroll, verticalScroll) {
-        let direction = 'both';
-        if(horizontalScroll && !verticalScroll) {
-            direction = 'horizontal';
-        } else if(!horizontalScroll && verticalScroll) {
-            direction = 'vertical';
+    renderScrollable: function() {
+        this._groupElement.dxScrollable({
+            useNative: this.getUseNativeValue(),
+            useSimulatedScrollbar: false,
+            bounceEnabled: false,
+            updateManually: true,
+        });
+    },
+
+    getUseNativeValue: function() {
+        const { useNative } = this.component.option('scrolling');
+
+        return useNative === 'auto'
+            ? !!nativeScrolling
+            : !!useNative;
+    },
+
+    getScrollbarWidth: function() {
+        return this.getUseNativeValue() ? calculateScrollbarWidth() : 0;
+    },
+
+    updateScrollableOptions: function({ direction }) {
+        const scrollable = this._getScrollable();
+
+        scrollable.option('useNative', this.getUseNativeValue());
+        scrollable.option({ direction });
+    },
+
+    getScrollableDirection: function(horizontal, vertical) {
+        if(horizontal && !vertical) {
+            return 'horizontal';
+        } else if(!horizontal && vertical) {
+            return 'vertical';
         }
 
-        this._groupElement.css('borderTopWidth', 0)
-            .dxScrollable({
-                useNative: !!useNativeScrolling,
-                useSimulatedScrollbar: !useNativeScrolling,
-                direction,
-                bounceEnabled: false,
-                updateManually: true
-            });
+        return 'both';
     },
 
     reset: function() {

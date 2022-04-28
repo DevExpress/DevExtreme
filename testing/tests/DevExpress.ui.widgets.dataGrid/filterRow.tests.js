@@ -1877,7 +1877,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
     // T306826
     QUnit.test('Apply filter by range when entering the filter value quickly', function(assert) {
-    // arrange
+        // arrange
         const that = this;
         const $testElement = $('#container').addClass('dx-datagrid-borders');
 
@@ -1919,6 +1919,42 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         assert.strictEqual(filter[1], 'and');
         assert.strictEqual(filter[2][1], '<=', 'selectedFilterOperation of the second filter');
         assert.equal(filter[2][2], 18, 'value of the second filter');
+    });
+
+    // T1013123
+    QUnit.test('changed event should be fired once on entering filter by range', function(assert) {
+        // arrange
+        const that = this;
+        const $testElement = $('#container').addClass('dx-datagrid-borders');
+
+        that.options.columns[1] = { dataField: 'age', selectedFilterOperation: 'between' };
+        setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+
+        that.columnHeadersView.render($testElement);
+
+        $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
+        that.clock.tick();
+
+        const $startRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').first().find(TEXTEDITOR_INPUT_SELECTOR);
+        assert.equal($startRangeInput.length, 1, 'has input');
+        const $endRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').last().find(TEXTEDITOR_INPUT_SELECTOR);
+        assert.equal($endRangeInput.length, 1, 'has input');
+
+        const changedSpy = sinon.spy();
+        that.dataController.changed.add(changedSpy);
+
+        // act
+        $startRangeInput.val(17);
+        $($startRangeInput).trigger('change');
+        $endRangeInput.val(18);
+        $($endRangeInput).trigger('change');
+        that.clock.tick(750);
+
+        // assert
+        assert.strictEqual(changedSpy.callCount, 1, 'changed is called once');
+        assert.ok(that.getCombinedFilter(), 'has filter');
     });
 
     // T318603

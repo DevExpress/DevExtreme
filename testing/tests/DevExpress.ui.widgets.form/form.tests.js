@@ -14,6 +14,7 @@ import 'ui/drop_down_box';
 
 import windowModule from 'core/utils/window';
 import Form from 'ui/form/ui.form.js';
+import { renderLabel } from 'ui/form/components/label.js';
 
 import {
     FIELD_ITEM_CLASS,
@@ -21,14 +22,17 @@ import {
     FORM_LAYOUT_MANAGER_CLASS,
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FORM_FIELD_ITEM_COL_CLASS,
-    HIDDEN_LABEL_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
-    FIELD_ITEM_LABEL_TEXT_CLASS,
-    FIELD_ITEM_REQUIRED_MARK_CLASS,
-    FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_LABEL_CLASS,
     FORM_GROUP_CAPTION_CLASS
 } from 'ui/form/constants';
+
+import {
+    GET_LABEL_WIDTH_BY_TEXT_CLASS,
+    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_REQUIRED_MARK_CLASS,
+    FIELD_ITEM_LABEL_TEXT_CLASS,
+} from 'ui/form/components/label';
 
 import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
 
@@ -437,6 +441,43 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
 
+QUnit.test('field1.required -> form.validate() -> form.option("onFieldDataChanged", "newHandler") -> check form is not re-rendered (T1014577)', function(assert) {
+    const checkEditorIsInvalid = (form) => form.$element().find('.dx-textbox').hasClass(INVALID_CLASS);
+    const form = $('#form').dxForm({
+        formData: { field1: '' },
+        items: [ {
+            dataField: 'field1',
+            validationRules: [{ type: 'required' }]
+        } ]
+    }).dxForm('instance');
+
+    form.validate();
+    assert.equal(checkEditorIsInvalid(form), true, 'editor is invalid after validate');
+
+    form.option('onFieldDataChanged', () => {});
+    assert.equal(checkEditorIsInvalid(form), true, 'editor is still invalid after changing the onFieldDataChanged option');
+});
+
+QUnit.test('form.option("onFieldDataChanged", "newHandler") -> check new handler is called (T1014577)', function(assert) {
+    const form = $('#form').dxForm({
+        formData: { field1: '' },
+        items: [ {
+            dataField: 'field1',
+            validationRules: [{ type: 'required' }]
+        } ]
+    }).dxForm('instance');
+
+    const onFieldDataChangedStub = sinon.stub();
+    form.option('onFieldDataChanged', onFieldDataChangedStub);
+
+    form.updateData({ field1: 'some value 1' });
+    assert.equal(onFieldDataChangedStub.callCount, 1, 'new handler is called after formData is updated');
+
+    form.getEditor('field1').option('value', 'some value 2');
+    assert.equal(onFieldDataChangedStub.callCount, 2, 'new handler is called after editor value is changed');
+});
+
+
 [
     { editorType: 'dxTextBox' },
     { label: { text: 'label text' } },
@@ -559,6 +600,29 @@ QUnit.test('items aren\'t tiny', function(assert) {
             }]
     });
     assert.ok(testContainer.find('.dx-multiview-item .dx-textbox').first().width() / testContainer.width() > 0.5, 'Editors are not tiny');
+});
+
+QUnit.test('Show scroll buttons in tabpanel', function(assert) {
+    const $testContainer = $('#form');
+    $testContainer.width(250);
+
+    $testContainer.dxForm({
+        items: [
+            {
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    showNavButtons: true,
+                },
+                tabs: [
+                    { title: 'tabbed 1111111111111' },
+                    { title: 'tabbed 2222222222222' },
+                ]
+            }
+        ]
+    });
+
+    assert.strictEqual($testContainer.find('.dx-tabs-nav-button').length, 2, 'tabPanelNavButtons.length');
+    assert.strictEqual($testContainer.find('.dx-tabs-scrollable').length, 1, 'tabPanelNavButtons.length');
 });
 
 QUnit.test('Render tabs when formData is changed', function(assert) {
@@ -905,7 +969,7 @@ QUnit.module('Align labels', {
 });
 
 function getLabelWidth(container, form, text) {
-    const $label = form._rootLayoutManager._renderLabel({ text: text, location: 'left' }).appendTo(container);
+    const $label = renderLabel({ text: text, location: 'left' }).appendTo(container);
     const width = $label.children().first().width();
 
     $label.remove();
@@ -976,7 +1040,7 @@ QUnit.test('Align labels in column', function(assert) {
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col3 item ' + i);
     }
 
-    assert.equal($('.' + HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Align labels in column when labels text is identical', function(assert) {
@@ -1289,7 +1353,7 @@ QUnit.test('Align labels when layout is changed in responsive box_T306106', func
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'item ' + i);
     }
 
-    assert.equal($('.' + HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Align labels when layout is changed when small window size by default_T306106', function(assert) {
@@ -1329,7 +1393,7 @@ QUnit.test('Align labels when layout is changed when small window size by defaul
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'item ' + i);
     }
 
-    assert.equal($('.' + HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Labels are not aligned when labelLocation is top', function(assert) {
@@ -1392,6 +1456,74 @@ QUnit.test('required mark aligned', function(assert) {
 
     assert.roughEqual($labelsContent.offset().left + $requiredLabel.width(), $requiredMark.offset().left, 0.5, 'position of requared mark is right');
     assert.ok($requiredLabel.position().left < $requiredMark.position().left, 'required mark should be after of the text');
+});
+
+QUnit.test('Align with "" required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: '',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual($labelText.width(), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
+});
+
+QUnit.test('Align with " " required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: ' ',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual($labelText.width(), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 5, 'textBox.left');
+});
+
+QUnit.test('Align with "!" required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: '!',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual($labelText.width(), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 29, 3, 'textBox.left');
+});
+
+QUnit.test('Align with "×" required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: '×',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual($labelText.width(), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 35, 3, 'textBox.left');
 });
 
 QUnit.test('optional mark aligned', function(assert) {

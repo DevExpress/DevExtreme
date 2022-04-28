@@ -441,4 +441,35 @@ QUnit.module('State storing', baseModuleConfig, () => {
             assert.ok(false, 'the error is thrown');
         }
     });
+
+    QUnit.test('Command column should have correct location (T1032512)', function(assert) {
+        // arrange
+        const gridOptions = {
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad() {
+                    return {};
+                }
+            },
+            columns: [{
+                name: 'Avatar',
+                caption: '',
+                width: 50
+            }, 'ID', {
+                type: 'buttons',
+                buttons: ['edit', 'delete']
+            }]
+        };
+        const dataGrid = createDataGrid(gridOptions);
+        this.clock.tick();
+
+        // assert
+        const visibleColumns = dataGrid.getVisibleColumns();
+        assert.equal(visibleColumns.length, 3, 'visible column count');
+        assert.equal(visibleColumns[0].name, 'Avatar', 'column 0 name');
+        assert.equal(visibleColumns[1].name, 'ID', 'column 1 name');
+        assert.equal(visibleColumns[2].name, 'buttons', 'column 2 name');
+        assert.equal(visibleColumns[2].type, 'buttons', 'column 2 type');
+    });
 });

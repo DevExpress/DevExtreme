@@ -16,6 +16,10 @@ $base-accent: null !default;
   box-sizing: border-box;
   opacity: 0.9;
   z-index: $max-integer;
+
+  .dx-inkripple {
+    overflow: hidden;
+  }
 }
 
 .dx-sortable-dragging.dx-sortable-clone * {

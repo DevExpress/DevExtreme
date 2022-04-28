@@ -786,6 +786,35 @@ module('Events', setupModule, () => {
 
         assert.strictEqual(this.$input.val(), 'January 31 2019', 'value is correct');
     });
+
+    test('change event should be triggered before focusout event (T1026909)', function(assert) {
+        const valueChangedStub = sinon.stub();
+        const focusOutStub = sinon.stub();
+
+        this.instance.option({
+            onValueChanged: valueChangedStub,
+            onFocusOut: focusOutStub
+        });
+
+        this.keyboard
+            .focus()
+            .type('1')
+            .blur();
+
+        assert.ok(valueChangedStub.calledBefore(focusOutStub));
+    });
+
+    test('onInput event handler should be called even when useMaskBehavior option is true (T1023540)', function(assert) {
+        const onInput = sinon.stub();
+
+        this.instance.option({ onInput });
+
+        this.keyboard
+            .focus()
+            .type('1');
+
+        assert.ok(onInput.calledOnce);
+    });
 });
 
 
@@ -1376,6 +1405,17 @@ module('Caret moving', setupModule, () => {
 
         this.keyboard.type('01');
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret was moved to month');
+    });
+
+    test('Click on input should not change caret position to select date part if all text is selected (T988726)', function(assert) {
+        const text = this.instance.option('text');
+        const allSelectedCaret = { start: 0, end: text.length };
+
+        this.keyboard.caret(allSelectedCaret);
+
+        this.$input.trigger('dxclick');
+
+        assert.deepEqual(this.keyboard.caret(), allSelectedCaret, 'no date part is selected');
     });
 });
 

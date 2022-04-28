@@ -332,14 +332,13 @@ module('value', moduleConfig, () => {
         assert.notOk(isItemChecked(2));
     });
 
-    QUnit.test('null item should be selectable', function(assert) {
+    test('null item should be selectable', function(assert) {
         const radioGroupInstance = getInstance(
             createRadioGroup({
                 items: [
                     { id: null, name: 'null' },
                     { id: false, name: 'false' },
-                    { id: 0, name: '0' },
-                    { id: undefined, name: 'undefined' }
+                    { id: 0, name: '0' }
                 ],
                 valueExpr: 'id',
                 displayExpr: 'name'
@@ -355,9 +354,6 @@ module('value', moduleConfig, () => {
 
         radioGroupInstance.option('value', 0);
         assert.ok($radioButtons.eq(2).hasClass('dx-radiobutton-checked'), '0 item is selected');
-
-        radioGroupInstance.option('value', undefined);
-        assert.ok($radioButtons.eq(3).hasClass('dx-radiobutton-checked'), 'undefined item is selected');
     });
 
     test('repaint of widget shouldn\'t reset value option', function(assert) {
@@ -432,6 +428,33 @@ module('value', moduleConfig, () => {
         $firstItem.trigger('dxclick');
 
         assert.ok($firstItem.hasClass('dx-item-selected'), 'first item is selected');
+    });
+
+    test('widget should not try to load value if value=undefined and valueExpr is specified (T1006909)', function(assert) {
+        const loadStub = sinon.stub();
+        createRadioGroup({
+            dataSource: {
+                load: loadStub
+            },
+            valueExpr: 'id',
+            value: undefined
+        });
+
+        assert.ok(loadStub.calledOnce, 'load method was called only once');
+    });
+
+    test('widget should not try to load value if it is set to undefined on runtime and valueExpr is specified', function(assert) {
+        const loadStub = sinon.stub();
+        const radioGroup = createRadioGroup({
+            dataSource: { load: loadStub },
+            valueExpr: 'id'
+        }).dxRadioGroup('instance');
+
+
+        assert.strictEqual(loadStub.callCount, 2, 'load method was called to load items and "null" selected value');
+        radioGroup.option('value', undefined);
+
+        assert.strictEqual(loadStub.callCount, 2, 'no additional call to load "undefined" value');
     });
 
     QUnit.module('valueChanged handler should receive correct event parameter', {

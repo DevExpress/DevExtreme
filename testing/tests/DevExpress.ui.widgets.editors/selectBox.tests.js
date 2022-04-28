@@ -1545,6 +1545,25 @@ QUnit.module('clearButton', moduleSetup, () => {
         assert.strictEqual(selectBox.option('opened'), true, 'selectBox is opened after instant re-click');
     });
 
+    QUnit.test('search should not be prevented after reset method call (T1021888)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: [1, 2, 3],
+            searchEnabled: true,
+            value: 1,
+            searchTimeout: 0
+        });
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+        const $list = $selectBox.find(`.${LIST_CLASS}`);
+
+        selectBox.reset();
+
+        keyboard.type('1');
+
+        assert.strictEqual($list.find(toSelector(LIST_ITEM_CLASS)).length, 1, 'items are filtered');
+    });
+
     QUnit.test('drop down list should be still opened if click \'clear\' during the search', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
@@ -2728,6 +2747,31 @@ QUnit.module('search', moduleSetup, () => {
             });
         });
 
+        QUnit.test('item selection even if new search is in progress (T1027535)', function(assert) {
+            const clock = sinon.useFakeTimers();
+            fx.off = false;
+            const searchTimeout = 500;
+
+            try {
+                this.reinit({ searchTimeout });
+
+                this.keyboard.type('1');
+                clock.tick(searchTimeout);
+
+                this.keyboard.type('2');
+                const $firstItem = this.getListItems().eq(0);
+                $firstItem.trigger('dxclick');
+                clock.tick(searchTimeout);
+
+                const $overlayContent = $(this.instance.content()).parent();
+
+                assert.ok($overlayContent.hasClass('dx-state-invisible'), 'popup is not visible');
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            } finally {
+                clock.restore();
+            }
+        });
+
         QUnit.test('item adding when acceptCustomValue is true', function(assert) {
             this.reinit({ acceptCustomValue: true });
 
@@ -3304,7 +3348,7 @@ QUnit.module('search', moduleSetup, () => {
 
         keyboardMock($input)
             .focus()
-            .type('aa');
+            .type('a');
 
         instance.close();
 
@@ -3318,6 +3362,26 @@ QUnit.module('search', moduleSetup, () => {
         assert.ok(instance.option('opened'), 'selectBox is opened');
         assert.equal($items.length, 0, 'items is not rendered');
         assert.equal($emptyMessage.length, 1, 'empty message is rendered');
+    });
+
+    QUnit.test('selectBox opening after search should trigger search if minSearchLength is exceeded (T1027110)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: ['11'],
+            searchEnabled: true,
+            minSearchLength: 2,
+            searchTimeout: 0
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input)
+            .focus()
+            .type('11');
+
+        $input.trigger('dxclick');
+        $input.trigger('dxclick');
+
+        const $items = $(toSelector(LIST_ITEM_CLASS));
+        assert.strictEqual($items.length, 1, 'filtered item is shown');
     });
 
     QUnit.test('Input value should not be changed after dropdown click when \'startswith\' search mode is enabled', function(assert) {
@@ -3899,6 +3963,40 @@ QUnit.module('Async tests', {}, () => {
 
             done();
         });
+    });
+
+    QUnit.test('no items should be selected if selected item is not on the first page (T1025148)', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const data = [...new Array(26)].map((_, idx) => ({ id: idx + 1, name: String.fromCharCode(65 + idx) }));
+        const selectBox = $('#selectBox').dxSelectBox({
+            dataSource: {
+                pageSize: 10,
+                paginate: true,
+                store: new CustomStore({
+                    key: 'id',
+                    byKey: key => data.filter(el => el.id === key)[0],
+                    load: () => {
+                        const d = $.Deferred();
+                        setTimeout(() => {
+                            d.resolve(data.slice(0, 10));
+                        }, 50);
+                        return d.promise();
+                    }
+                })
+            },
+            displayExpr: 'name',
+            valueExpr: 'id',
+            value: 20,
+            opened: true
+        }).dxSelectBox('instance');
+        const $list = $(selectBox.content()).find('.dx-list');
+
+        clock.tick(50);
+
+        const $selectedItems = $list.find(toSelector(LIST_ITEM_SELECTED_CLASS));
+
+        assert.strictEqual($selectedItems.length, 0, 'no items are selected');
+        clock.restore();
     });
 
     QUnit.test('selectbox should not render own components if it was disposed (T517486)', function(assert) {
@@ -5380,6 +5478,54 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
 
         assert.ok(filterDataSourceStub.notCalled, 'dataSource didn\'t filter when widget disposed');
     });
+
+    QUnit.test('byKey call result should be ignored after new call even when acceptCustomValue=true', function(assert) {
+        let callCount = 0;
+        const items = [{ id: 1, text: 'first' }, { id: 2, text: 'second' }];
+        const customStore = new CustomStore({
+            load: () => {
+                const deferred = $.Deferred();
+                setTimeout(() => {
+                    deferred.resolve({ data: items, totalCount: items.length });
+                }, 100);
+                return deferred.promise();
+            },
+
+            byKey: (key) => {
+                const deferred = $.Deferred();
+                const filter = () => items.filter(item => item.id === key)[0];
+                if(callCount === 0) {
+                    setTimeout(() => {
+                        deferred.resolve(filter());
+                    }, 2000);
+                } else {
+                    setTimeout(() => {
+                        deferred.resolve(filter());
+                    }, 1000);
+                }
+                ++callCount;
+                return deferred.promise();
+            }
+        });
+        const dataSource = new DataSource({
+            store: customStore
+        });
+        const selectBox = $('#selectBox').dxSelectBox({
+            dataSource: dataSource,
+            displayExpr: 'text',
+            valueExpr: 'id',
+            value: 1,
+            acceptCustomValue: true
+        }).dxSelectBox('instance');
+
+        selectBox.option('value', 2);
+        assert.strictEqual(selectBox.option('text'), null, '"1" did not accepted as value');
+
+        this.clock.tick(1000);
+        assert.strictEqual(selectBox.option('text'), 'second', 'second request is resolved');
+        this.clock.tick(1000);
+        assert.strictEqual(selectBox.option('text'), 'second', 'first init byKey result is ignored');
+    });
 });
 
 
@@ -5557,6 +5703,7 @@ if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
             beforeEach: function() {
+                this.isMac = devices.real().mac;
                 helper = new ariaAccessibilityTestHelper({
                     createWidget: ($element, options) => new SelectBox($element,
                         $.extend({
@@ -5589,6 +5736,9 @@ if(devices.real().deviceType === 'desktop') {
 
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
+                }
+                if(this.isMac) {
+                    inputAttributes.placeholder = ' ';
                 }
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
@@ -5625,6 +5775,9 @@ if(devices.real().deviceType === 'desktop') {
                 };
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
+                }
+                if(this.isMac) {
+                    inputAttributes.placeholder = ' ';
                 }
                 helper.checkAttributes(helper.$widget, { }, 'widget');
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');

@@ -295,14 +295,6 @@ describe('Widget\'s container manipulations', () => {
     expect($('#attr-id').dxPreactTestWidget('getLastPreactReceivedProps').id).toBe('attr-id');
   });
 
-  it('merge unique css classes from elementAttr option with container class', () => {
-    $('#component').addClass('custom-css-class attr-class');
-
-    act(() => $('#component').dxPreactTestWidget({ elementAttr: { class: 'attr-css-class attr-class' } }));
-
-    expect($('#component').dxPreactTestWidget('getLastPreactReceivedProps').class).toBe('custom-css-class attr-class attr-css-class');
-  });
-
   it('keep elementAttr option untouched', () => {
     $('component').addClass('custom-css-class attr-class');
     $('#component').attr('data-custom-attr', 'attr-value');

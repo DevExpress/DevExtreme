@@ -12,7 +12,12 @@ import { FIELD_ITEM_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FORM_GROUP_CAPTION_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS } from 'ui/form/constants';
+} from 'ui/form/constants';
+
+import {
+    FIELD_ITEM_HELP_TEXT_CLASS,
+} from 'ui/form/components/field_item';
+
 import ValidationEngine from 'ui/validation_engine';
 
 import 'ui/text_area';
@@ -41,7 +46,7 @@ QUnit.testStart(() => {
 
 QUnit.module('Form', () => {
     test('Invalidate after option changed', function(assert) {
-        const testingOptions = ['formData', 'items', 'colCount', 'onFieldDataChanged', 'labelLocation',
+        const testingOptions = ['formData', 'items', 'colCount', 'labelLocation',
             'alignItemLabels', 'showColonAfterLabel', 'customizeItem', 'minColWidth', 'alignItemLabelsInAllGroups', 'onEditorEnterKey', 'scrollingEnabled', 'formID'];
         const form = $('#form').dxForm().dxForm('instance');
         let i;

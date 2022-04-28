@@ -46,7 +46,6 @@ export const Consts = {
     ITEMS_PANEL_CLASS: 'dx-filemanager-items-panel',
     ITEMS_GRID_VIEW_CLASS: 'dx-filemanager-files-view',
     FOCUSED_ITEM_CLASS: 'dx-filemanager-focused-item',
-    INACTIVE_AREA_CLASS: 'dx-filemanager-inactive-area',
     CUSTOM_THUMBNAIL_CLASS: 'dx-filemanager-item-custom-thumbnail',
     TOOLBAR_SEPARATOR_ITEM_CLASS: 'dx-filemanager-toolbar-separator-item',
     TOOLBAR_VIEWMODE_ITEM_CLASS: 'dx-filemanager-toolbar-viewmode-item',
@@ -147,9 +146,9 @@ export class FileManagerWrapper {
         return this.getFolderToggles(inDialog).eq(index);
     }
 
-    isFolderNodeToggleOpened(text) {
+    isFolderNodeToggleOpened(text, inDialog) {
         let result = null;
-        const targetNode = this.getFolderNodes().filter(function() { return $(this).text() === text; }).eq(0).parent();
+        const targetNode = this.getFolderNodes(inDialog).filter(function() { return $(this).text() === text; }).eq(0).parent();
         if(targetNode.length) {
             const itemToggle = targetNode.children(`.${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
             if(itemToggle.length) {
@@ -479,15 +478,15 @@ export class FileManagerWrapper {
     }
 
     getFolderChooserDialog() {
-        return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+        return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
     }
 
     getNameEditorDialog() {
-        return $(`.${Consts.NAME_EDITOR_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+        return $(`.${Consts.NAME_EDITOR_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
     }
 
     getDeleteItemDialog() {
-        return $(`.${Consts.DELETE_ITEM_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+        return $(`.${Consts.DELETE_ITEM_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
     }
 
     getDialogTextInput() {

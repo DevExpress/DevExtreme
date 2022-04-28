@@ -81,14 +81,6 @@ export interface CompareRule {
      */
     message?: string;
     /**
-     * @docid CompareRule.reevaluate
-     * @type boolean
-     * @default true
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    reevaluate?: boolean;
-    /**
      * @docid CompareRule.type
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui

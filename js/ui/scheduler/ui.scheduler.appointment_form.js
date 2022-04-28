@@ -35,10 +35,6 @@ const SchedulerAppointmentForm = {
         return new Date(new Date(startDate).setHours(0, 0, 0, 0));
     },
 
-    _getAllDayEndDate: function(startDate) {
-        return new Date(new Date(startDate).setDate(startDate.getDate() + 1));
-    },
-
     _getStartDateWithStartHour: function(startDate, startDayHour) {
         return new Date(new Date(startDate).setHours(startDayHour));
     },
@@ -147,6 +143,16 @@ const SchedulerAppointmentForm = {
         ];
     },
 
+    _changeFormItemDateType: function(itemPath, isAllDay) {
+        const itemEditorOptions = this._appointmentForm.itemOption(itemPath).editorOptions;
+
+        const type = isAllDay ? 'date' : 'datetime';
+
+        const newEditorOption = { ...itemEditorOptions, type };
+
+        this._appointmentForm.itemOption(itemPath, 'editorOptions', newEditorOption);
+    },
+
     _createMainItems: function(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing) {
         return [
             {
@@ -191,8 +197,8 @@ const SchedulerAppointmentForm = {
                             if(!this._appointmentForm._lockDateShiftFlag && startDate) {
                                 if(value) {
                                     const allDayStartDate = this._getAllDayStartDate(startDate);
-                                    startDateEditor.option('value', allDayStartDate);
-                                    endDateEditor.option('value', this._getAllDayEndDate(allDayStartDate));
+                                    startDateEditor.option('value', new Date(allDayStartDate));
+                                    endDateEditor.option('value', new Date(allDayStartDate));
                                 } else {
                                     const startDateWithStartHour = this._getStartDateWithStartHour(startDate, schedulerInst.option('startDayHour'));
                                     const endDate = schedulerInst._workSpace.calculateEndDate(startDateWithStartHour);
@@ -200,8 +206,12 @@ const SchedulerAppointmentForm = {
                                     endDateEditor.option('value', endDate);
                                 }
                             }
-                            startDateEditor.option('type', value ? 'date' : 'datetime');
-                            endDateEditor.option('type', value ? 'date' : 'datetime');
+
+                            const startDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${dataExprs.startDateExpr}`;
+                            const endDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${dataExprs.endDateExpr}`;
+
+                            this._changeFormItemDateType(startDateItemPath, value);
+                            this._changeFormItemDateType(endDateItemPath, value);
                         }
                     }
                 }, {

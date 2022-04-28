@@ -734,6 +734,26 @@ class BaseRenderingStrategy {
     _needHorizontalGroupBounds() {
         return false;
     }
+
+    getSkippedHoursInRange(startDate, endDate) {
+        const startTime = startDate.getTime();
+        const endTime = endDate.getTime();
+        const hoursInDay = 24;
+        const allDayIntervalDuration = hoursInDay * dateUtils.dateToMilliseconds('hour');
+        const workspace = this.instance.getWorkSpace();
+
+        let excludedHours = 0;
+
+        for(let time = startTime; time <= endTime; time += allDayIntervalDuration) {
+            const checkDate = new Date(time);
+
+            if(workspace._isSkippedData(checkDate)) {
+                excludedHours += hoursInDay;
+            }
+        }
+
+        return excludedHours;
+    }
 }
 
 export default BaseRenderingStrategy;

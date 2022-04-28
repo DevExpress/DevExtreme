@@ -474,7 +474,7 @@ export const DataController = Class.inherit((function() {
                 const dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0;
                 const dataField = dataFields[dataIndex];
 
-                if(columnInfo.isLast && dataField) {
+                if(columnInfo.isLast && dataField && dataField.visible !== false) {
                     let cell = dataRow[columnInfo.dataSourceIndex >= 0 ? columnInfo.dataSourceIndex : data.grandTotalColumnIndex];
 
                     if(!Array.isArray(cell)) {
@@ -532,46 +532,44 @@ export const DataController = Class.inherit((function() {
     }
 
     function createScrollController(dataController, component, dataAdapter) {
-        if(component && component.option('scrolling.mode') === 'virtual') {
-            return new VirtualScrollController(component, extend({
-                hasKnownLastPage: function() {
-                    return true;
-                },
-                pageCount: function() {
-                    return math.ceil(this.totalItemsCount() / this.pageSize());
-                },
-                updateLoading: function() {
+        return new VirtualScrollController(component, extend({
+            hasKnownLastPage: function() {
+                return true;
+            },
+            pageCount: function() {
+                return math.ceil(this.totalItemsCount() / this.pageSize());
+            },
+            updateLoading: function() {
 
-                },
-                itemsCount: function() {
-                    if(this.pageIndex() < this.pageCount() - 1) {
-                        return this.pageSize();
-                    } else {
-                        return this.totalItemsCount() % this.pageSize();
-                    }
-                },
-                items: function() {
-                    return [];
-                },
-                viewportItems: function() {
-                    return [];
-                },
-                onChanged: function() {
-
-                },
-                isLoading: function() {
-                    return dataController.isLoading();
-                },
-
-                changingDuration: function() {
-                    const dataSource = dataController._dataSource;
-                    if(dataSource.paginate()) {
-                        return CHANGING_DURATION_IF_PAGINATE;
-                    }
-                    return dataController._changingDuration || 0;
+            },
+            itemsCount: function() {
+                if(this.pageIndex() < this.pageCount() - 1) {
+                    return this.pageSize();
+                } else {
+                    return this.totalItemsCount() % this.pageSize();
                 }
-            }, dataAdapter));
-        }
+            },
+            items: function() {
+                return [];
+            },
+            viewportItems: function() {
+                return [];
+            },
+            onChanged: function() {
+
+            },
+            isLoading: function() {
+                return dataController.isLoading();
+            },
+
+            changingDuration: function() {
+                const dataSource = dataController._dataSource;
+                if(dataSource.paginate()) {
+                    return CHANGING_DURATION_IF_PAGINATE;
+                }
+                return dataController._changingDuration || 0;
+            }
+        }, dataAdapter));
     }
 
     function getHiddenTotals(dataFields) {
@@ -621,57 +619,59 @@ export const DataController = Class.inherit((function() {
             that.dataSourceChanged = Callbacks();
             that._dataSource = that._createDataSource(options);
 
-            that._rowsScrollController = createScrollController(that, options.component, {
-                totalItemsCount: function() {
-                    return that.totalRowCount();
-                },
-                pageIndex: function(index) {
-                    return that.rowPageIndex(index);
-                },
-                pageSize: function() {
-                    return that.rowPageSize();
-                },
+            if(options.component && options.component.option('scrolling.mode') === 'virtual') {
+                that._rowsScrollController = createScrollController(that, options.component, {
+                    totalItemsCount: function() {
+                        return that.totalRowCount();
+                    },
+                    pageIndex: function(index) {
+                        return that.rowPageIndex(index);
+                    },
+                    pageSize: function() {
+                        return that.rowPageSize();
+                    },
 
-                load: function() {
-                    if(that._rowsScrollController.pageIndex() >= this.pageCount()) {
-                        that._rowsScrollController.pageIndex(this.pageCount() - 1);
-                    }
-                    return that._rowsScrollController.handleDataChanged(function() {
-                        if(that._dataSource.paginate()) {
-                            that._dataSource.load();
-                        } else {
-                            virtualScrollControllerChanged.apply(this, arguments);
+                    load: function() {
+                        if(that._rowsScrollController.pageIndex() >= this.pageCount()) {
+                            that._rowsScrollController.pageIndex(this.pageCount() - 1);
                         }
-                    });
-                }
-            });
+                        return that._rowsScrollController.handleDataChanged(function() {
+                            if(that._dataSource.paginate()) {
+                                that._dataSource.load();
+                            } else {
+                                virtualScrollControllerChanged.apply(this, arguments);
+                            }
+                        });
+                    }
+                });
 
-            that._columnsScrollController = createScrollController(that, options.component, {
-                totalItemsCount: function() {
-                    return that.totalColumnCount();
-                },
-                pageIndex: function(index) {
-                    return that.columnPageIndex(index);
-                },
-                pageSize: function() {
-                    return that.columnPageSize();
-                },
+                that._columnsScrollController = createScrollController(that, options.component, {
+                    totalItemsCount: function() {
+                        return that.totalColumnCount();
+                    },
+                    pageIndex: function(index) {
+                        return that.columnPageIndex(index);
+                    },
+                    pageSize: function() {
+                        return that.columnPageSize();
+                    },
 
-                load: function() {
-                    if(that._columnsScrollController.pageIndex() >= this.pageCount()) {
-                        that._columnsScrollController.pageIndex(this.pageCount() - 1);
+                    load: function() {
+                        if(that._columnsScrollController.pageIndex() >= this.pageCount()) {
+                            that._columnsScrollController.pageIndex(this.pageCount() - 1);
+                        }
+
+                        return that._columnsScrollController.handleDataChanged(function() {
+                            if(that._dataSource.paginate()) {
+                                that._dataSource.load();
+                            } else {
+                                virtualScrollControllerChanged.apply(this, arguments);
+                            }
+                        });
                     }
 
-                    return that._columnsScrollController.handleDataChanged(function() {
-                        if(that._dataSource.paginate()) {
-                            that._dataSource.load();
-                        } else {
-                            virtualScrollControllerChanged.apply(this, arguments);
-                        }
-                    });
-                }
-
-            });
+                });
+            }
 
             that._stateStoringController = new StateStoringController(options.component).init();
 
@@ -1060,6 +1060,9 @@ export const DataController = Class.inherit((function() {
                 that._rowsInfo = rowsInfo;
 
                 if(that._rowsScrollController && that._columnsScrollController && that.changed && !that._dataSource.paginate()) {
+                    that._rowsScrollController.reset(true);
+                    that._columnsScrollController.reset(true);
+
                     that._lockChanged = true;
                     that._rowsScrollController.load();
                     that._columnsScrollController.load();

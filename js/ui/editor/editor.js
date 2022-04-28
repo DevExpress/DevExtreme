@@ -121,6 +121,7 @@ const Editor = Widget.inherit({
 
         this.callBase();
         this._renderValidationState();
+        this.option('_onMarkupRendered')?.();
     },
 
     _raiseValueChangeAction: function(value, previousValue) {

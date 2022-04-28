@@ -814,15 +814,16 @@ const CollectionWidget = Widget.inherit({
     },
 
     _renderItem: function(index, itemData, $container, $itemToReplace) {
+        const itemIndex = index?.item ?? index;
         $container = $container || this._itemContainer();
-        const $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
-        this._setElementData($itemFrame, itemData, index);
+        const $itemFrame = this._renderItemFrame(itemIndex, itemData, $container, $itemToReplace);
+        this._setElementData($itemFrame, itemData, itemIndex);
         $itemFrame.attr(this.option('_itemAttributes'));
         this._attachItemClickEvent(itemData, $itemFrame);
         const $itemContent = this._getItemContent($itemFrame);
 
         const renderContentPromise = this._renderItemContent({
-            index: index,
+            index: itemIndex,
             itemData: itemData,
             container: getPublicElement($itemContent),
             contentClass: this._itemContentClass(),
@@ -835,7 +836,7 @@ const CollectionWidget = Widget.inherit({
                 itemElement: $itemFrame,
                 itemContent: $itemContent,
                 itemData: itemData,
-                itemIndex: index
+                itemIndex: itemIndex
             });
 
             that._executeItemRenderAction(index, itemData, getPublicElement($itemFrame));

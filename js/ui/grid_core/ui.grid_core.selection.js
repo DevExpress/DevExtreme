@@ -118,6 +118,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
                 deferred: selectionOptions.deferred,
                 maxFilterLengthInRequest: selectionOptions.maxFilterLengthInRequest,
                 selectionFilter: that.option('selectionFilter'),
+                ignoreDisabledItems: true,
                 key: function() {
                     return dataController && dataController.key();
                 },
@@ -274,34 +275,34 @@ const SelectionController = gridCore.Controller.inherit((function() {
         },
 
         optionChanged: function(args) {
-            const that = this;
-
-            that.callBase(args);
+            this.callBase(args);
 
             switch(args.name) {
                 case 'selection': {
-                    const oldSelectionMode = that._selectionMode;
+                    const oldSelectionMode = this._selectionMode;
 
-                    that.init();
+                    this.init();
 
-                    const selectionMode = that._selectionMode;
-                    let selectedRowKeys = that.option('selectedRowKeys');
+                    if(args.fullName !== 'selection.showCheckBoxesMode') {
+                        const selectionMode = this._selectionMode;
+                        let selectedRowKeys = this.option('selectedRowKeys');
 
-                    if(oldSelectionMode !== selectionMode) {
-                        if(selectionMode === 'single') {
-                            if(selectedRowKeys.length > 1) {
-                                selectedRowKeys = [selectedRowKeys[0]];
+                        if(oldSelectionMode !== selectionMode) {
+                            if(selectionMode === 'single') {
+                                if(selectedRowKeys.length > 1) {
+                                    selectedRowKeys = [selectedRowKeys[0]];
+                                }
+                            } else if(selectionMode !== 'multiple') {
+                                selectedRowKeys = [];
                             }
-                        } else if(selectionMode !== 'multiple') {
-                            selectedRowKeys = [];
                         }
+
+                        this.selectRows(selectedRowKeys).always(() => {
+                            this._fireSelectionChanged();
+                        });
                     }
 
-                    that.selectRows(selectedRowKeys).always(function() {
-                        that._fireSelectionChanged();
-                    });
-
-                    that.getController('columns').updateColumns();
+                    this.getController('columns').updateColumns();
                     args.handled = true;
                     break;
                 }
@@ -311,8 +312,8 @@ const SelectionController = gridCore.Controller.inherit((function() {
                     break;
                 case 'selectedRowKeys': {
                     const value = args.value || [];
-                    if(Array.isArray(value) && !that._selectedItemsInternalChange && (that.component.getDataSource() || !value.length)) {
-                        that.selectRows(value);
+                    if(Array.isArray(value) && !this._selectedItemsInternalChange && (this.component.getDataSource() || !value.length)) {
+                        this.selectRows(value);
                     }
                     args.handled = true;
                     break;

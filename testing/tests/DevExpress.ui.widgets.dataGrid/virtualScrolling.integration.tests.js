@@ -1,4 +1,3 @@
-import browser from 'core/utils/browser';
 import devices from 'core/devices';
 import commonUtils from 'core/utils/common';
 import ArrayStore from 'data/array_store';
@@ -416,6 +415,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             { team: 'public', name: 'Zeb', age: 18 }
         ];
         const dataGrid = $('#dataGrid').dxDataGrid({
+            showRowLines: false,
             height: 80,
             dataSource: data,
             keyExpr: 'name',
@@ -615,7 +615,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 400,
+            height: 150,
             dataSource: array,
             keyExpr: 'id',
             onRowPrepared: function(e) {
@@ -1147,63 +1147,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     });
 
     const realSetTimeout = window.setTimeout;
-
-    QUnit.test('ungrouping after grouping should works correctly if row rendering mode is virtual', function(assert) {
-        if(browser.msie) {
-            assert.ok(true, 'This test is unstable in IE/Edge');
-            return;
-        }
-        this.clock.restore();
-        const done = assert.async();
-        // arrange, act
-        const array = [];
-
-        for(let i = 1; i <= 25; i++) {
-            array.push({ id: i, group: 'group' + (i % 8 + 1) });
-        }
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 400,
-            loadingTimeout: undefined,
-            keyExpr: 'id',
-            dataSource: array,
-            scrolling: {
-                mode: 'virtual',
-                rowRenderingMode: 'virtual',
-                updateTimeout: 0,
-                useNative: false
-            },
-            grouping: {
-                autoExpandAll: false,
-            },
-            groupPanel: {
-                visible: true
-            },
-            paging: {
-                pageSize: 10
-            }
-        }).dxDataGrid('instance');
-
-        // act
-        dataGrid.getScrollable().scrollTo({ top: 500 });
-        dataGrid.columnOption('group', 'groupIndex', 0);
-
-        // assert
-        let visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 8, 'visible row count');
-        assert.deepEqual(visibleRows[0].key, ['group1'], 'first visible row key');
-        assert.deepEqual(visibleRows[7].key, ['group8'], 'last visible row key');
-
-        // act
-        realSetTimeout(function() {
-            dataGrid.columnOption('group', 'groupIndex', undefined);
-
-            // assert
-            visibleRows = dataGrid.getVisibleRows();
-            assert.deepEqual(visibleRows[0].key, 1, 'first visible row key');
-            done();
-        });
-    });
 
     // T644981
     QUnit.test('ungrouping after grouping and scrolling should works correctly with large amount of data if row rendering mode is virtual', function(assert) {
@@ -3516,6 +3459,48 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 20, 'visible rows');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 6, 'top visible row');
+        assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'not bottom loading');
+    });
+
+    QUnit.test('Infinite scrolling should works correctly if row heights are different (T1013838)', function(assert) {
+        // arrange, act
+        const data = [];
+
+        for(let i = 0; i < 5; i++) {
+            data.push({ id: i + 1 });
+        }
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 200,
+            dataSource: data,
+            keyExpr: 'id',
+            loadingTimeout: null,
+            scrolling: {
+                updateTimeout: 0,
+                useNative: false,
+                mode: 'infinite',
+                rowRenderingMode: 'virtual'
+            },
+            paging: {
+                pageSize: 2
+            },
+            onRowPrepared: function(e) {
+                if(e.rowType === 'data' && e.key <= 2) {
+                    $(e.rowElement).css('height', 100);
+                }
+            }
+        }).dxDataGrid('instance');
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 2, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'top visible row');
+        assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 1, 'bottom loading exists');
+
+        // act
+        dataGrid.getScrollable().scrollTo(10000);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 5, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'not bottom loading');
     });
 

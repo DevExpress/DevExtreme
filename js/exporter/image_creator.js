@@ -242,7 +242,7 @@ function setFontStyle(context, options) {
     const fontParams = [];
 
     options.fontSize = options.fontSize || DEFAULT_FONT_SIZE;
-    options.fontFamily || DEFAULT_FONT_FAMILY;
+    options.fontFamily = options.fontFamily || DEFAULT_FONT_FAMILY;
     options.fill = options.fill || DEFAULT_TEXT_COLOR;
 
     options.fontStyle && fontParams.push(options.fontStyle);
@@ -720,7 +720,7 @@ function convertSvgToCanvas(svg, canvas, rootAppended) {
     });
 }
 
-function getCanvasFromSvg(markup, width, height, backgroundColor, margin, pixelRatio, svgToCanvas = convertSvgToCanvas) {
+function getCanvasFromSvg(markup, { width, height, backgroundColor, margin, pixelRatio, svgToCanvas = convertSvgToCanvas }) {
     const canvas = createCanvas(width, height, margin);
     const context = canvas.getContext('2d');
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
@@ -751,17 +751,13 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin, pixelR
 
 export const imageCreator = {
     getImageData: function(markup, options) {
-        const pixelRatio = window.devicePixelRatio || 1;
         const mimeType = 'image/' + options.format;
-        const width = options.width * pixelRatio;
-        const height = options.height * pixelRatio;
-        const backgroundColor = options.backgroundColor;
         // Injection for testing T403049
         if(isFunction(options.__parseAttributesFn)) {
             parseAttributes = options.__parseAttributesFn;
         }
 
-        return getCanvasFromSvg(markup, width, height, backgroundColor, options.margin, pixelRatio, options.svgToCanvas).then(canvas => getStringFromCanvas(canvas, mimeType));
+        return getCanvasFromSvg(markup, options).then(canvas => getStringFromCanvas(canvas, mimeType));
     },
 
     getData: function(markup, options) {

@@ -260,9 +260,47 @@ QUnit.module('Filter Panel', {
         assert.expect(3);
         this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
             assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
-            assert.equal(loadingSpy.callCount, 2, 'loadingSpy.callCount');
+            assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
             const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
-            assert.deepEqual(loadingFilters, [['key', '=', 1], ['key', '=', 2]]);
+            assert.deepEqual(loadingFilters, [[['key', '=', 1], 'or', ['key', '=', 2]]]);
+        });
+    });
+
+    QUnit.test('load all items once from headerFilte.dataSource for anyof operation and key is not defined (T1030763)', function(assert) {
+        // arrange
+        const filter = ['field', 'anyof', [1, 2]];
+        const lookupDataStore = new ArrayStore({
+            data: [
+                { key: 1, text: 'Text 1', value: 1 },
+                { key: 2, text: 'Text 2', value: 2 },
+                { key: 3, text: 'Text 3', value: 3 }
+            ]
+        });
+        this.initFilterPanelView({
+            filterValue: filter,
+            headerFilter: {
+                texts: {}
+            },
+            columns: [{
+                dataField: 'field',
+                headerFilter: { dataSource: lookupDataStore },
+                lookup: {
+                    dataSource: lookupDataStore,
+                    valueExpr: 'key',
+                    displayExpr: 'text'
+                }
+            }]
+        });
+        const loadingSpy = sinon.spy();
+        lookupDataStore.on('loading', loadingSpy);
+
+        // act
+        assert.expect(3);
+        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+            assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
+            const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
+            assert.deepEqual(loadingFilters, [undefined]);
         });
     });
 

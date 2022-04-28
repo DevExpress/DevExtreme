@@ -126,15 +126,18 @@ const REFRESH_ITEM_PROGRESS_MESSAGE_DELAY = 500;
 
 class FileManagerToolbar extends Widget {
 
+    _init() {
+        super._init();
+        this._generalToolbarVisible = true;
+    }
+
     _initMarkup() {
         this._commandManager = this.option('commandManager');
         this._createItemClickedAction();
 
-        this._generalToolbarVisible = true;
-
         this._$viewSwitcherPopup = $('<div>').addClass(FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS);
-        this._generalToolbar = this._createToolbar(this.option('generalItems'));
-        this._fileToolbar = this._createToolbar(this.option('fileItems'), true);
+        this._generalToolbar = this._createToolbar(this.option('generalItems'), !this._generalToolbarVisible);
+        this._fileToolbar = this._createToolbar(this.option('fileItems'), this._generalToolbarVisible);
         this._$viewSwitcherPopup.appendTo(this.$element());
 
         this.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS + ' ' + FILE_MANAGER_GENERAL_TOOLBAR_CLASS);
@@ -144,6 +147,15 @@ class FileManagerToolbar extends Widget {
         super._render();
         const toolbar = this._getVisibleToolbar();
         this._checkCompactMode(toolbar);
+    }
+
+    _clean() {
+        delete this._commandManager;
+        delete this._itemClickedAction;
+        delete this._$viewSwitcherPopup;
+        delete this._generalToolbar;
+        delete this._fileToolbar;
+        super._clean();
     }
 
     _dimensionChanged(dimension) {
@@ -450,14 +462,14 @@ class FileManagerToolbar extends Widget {
         };
     }
 
-    _ensureAvailableCommandsVisible(toolbar, fileItems) {
+    _ensureAvailableCommandsVisible(toolbar) {
         let hasModifications = false;
         const items = toolbar.option('items');
 
         items.forEach(item => {
             if(item.name !== 'separator') {
                 const itemVisible = item._available;
-                this._setItemVisibleAvailable(item, fileItems);
+                this._setItemVisibleAvailable(item);
                 if(item._available !== itemVisible) {
                     hasModifications = true;
                 }
@@ -472,22 +484,22 @@ class FileManagerToolbar extends Widget {
         this._updateSeparatorsVisibility(items, toolbar);
     }
 
-    _setItemVisibleAvailable(item, fileItems) {
+    _setItemVisibleAvailable(item) {
         const originalVisible = item.originalItemData?.visible;
-        item._available = this._isToolbarItemAvailable(item, fileItems);
+        item._available = this._isToolbarItemAvailable(item);
         item.visible = isDefined(originalVisible) ? originalVisible : item._available;
     }
 
-    _fileToolbarHasEffectiveItems(fileItems) {
+    _fileToolbarHasEffectiveItems() {
         const items = this._fileToolbar.option('items');
-        return items.some(item => this._isFileToolbarItemAvailable(item, fileItems));
+        return items.some(item => this._isFileToolbarItemAvailable(item));
     }
 
     _executeCommand(command) {
         this._commandManager.executeCommand(command);
     }
 
-    _isToolbarItemAvailable(toolbarItem, fileItems) {
+    _isToolbarItemAvailable(toolbarItem) {
         if(!this._isDefaultItem(toolbarItem.name) || !toolbarItem._autoHide) {
             return ensureDefined(toolbarItem.visible, true);
         }
@@ -499,12 +511,16 @@ class FileManagerToolbar extends Widget {
             return true;
         }
 
-        return this._commandManager.isCommandAvailable(toolbarItem.name, fileItems);
+        return this._isCommandAvailable(toolbarItem.name);
     }
 
-    _isFileToolbarItemAvailable({ name, visible }, fileItems) {
+    _isFileToolbarItemAvailable({ name, visible }) {
         return !this._isDefaultItem(name) && ensureDefined(visible, true) ||
-            name !== 'clearSelection' && name !== 'refresh' && this._commandManager.isCommandAvailable(name, fileItems);
+            name !== 'clearSelection' && name !== 'refresh' && this._isCommandAvailable(name);
+    }
+
+    _isCommandAvailable(name) {
+        return this._commandManager.isCommandAvailable(name, this.option('contextItems'));
     }
 
     _updateItemInToolbar(toolbar, commandName, options) {
@@ -537,6 +553,7 @@ class FileManagerToolbar extends Widget {
             commandManager: null,
             generalItems: [],
             fileItems: [],
+            contextItems: [],
             itemViewMode: 'details',
             onItemClick: null
         });
@@ -551,6 +568,9 @@ class FileManagerToolbar extends Widget {
             case 'generalItems':
             case 'fileItems':
                 this.repaint();
+                break;
+            case 'contextItems':
+                this._update();
                 break;
             case 'onItemClick':
                 this._itemClickedAction = this._createActionByOption(name);
@@ -618,10 +638,8 @@ class FileManagerToolbar extends Widget {
         this._updateItemInToolbar(this._fileToolbar, 'refresh', fileToolbarOptions);
     }
 
-    update(fileItems) {
-        fileItems = ensureDefined(fileItems, []);
-
-        const showGeneralToolbar = fileItems.length === 0 || !this._fileToolbarHasEffectiveItems(fileItems);
+    _update() {
+        const showGeneralToolbar = this.option('contextItems').length === 0 || !this._fileToolbarHasEffectiveItems();
         if(this._generalToolbarVisible !== showGeneralToolbar) {
             this._generalToolbar.option('visible', showGeneralToolbar);
             this._fileToolbar.option('visible', !showGeneralToolbar);
@@ -632,7 +650,7 @@ class FileManagerToolbar extends Widget {
         }
 
         const toolbar = this._getVisibleToolbar();
-        this._ensureAvailableCommandsVisible(toolbar, fileItems);
+        this._ensureAvailableCommandsVisible(toolbar);
         this._checkCompactMode(toolbar);
     }
 

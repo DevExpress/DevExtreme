@@ -429,6 +429,135 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.notOk(dataGrid.option('selectionFilter').length, 'no selection filter');
         assert.ok($selectAllElement.hasClass('dx-state-invisible'), 'select all is invisible');
     });
+
+    QUnit.test('Disabled item should be selected when single mode is enabled (T1015840)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1, disabled: false }, { id: 2, disabled: true }],
+            keyExpr: 'id',
+            columns: ['id'],
+            selection: {
+                mode: 'single'
+            }
+        });
+
+        this.clock.tick(100);
+
+        // act
+        $(dataGrid.getRowElement(0)).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'first row is selected');
+
+        // act
+        $(dataGrid.getRowElement(1)).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [2], 'second row is selected');
+    });
+
+    QUnit.test('Disabled item should be selected when single deferred mode is enabled (T1015840)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1, disabled: false }, { id: 2, disabled: true }],
+            keyExpr: 'id',
+            columns: ['id'],
+            selection: {
+                mode: 'single',
+                deferred: true
+            }
+        });
+
+        this.clock.tick(100);
+
+        let selectedRowKeys;
+
+        // act
+        $(dataGrid.getRowElement(0)).trigger('dxclick');
+        dataGrid.getSelectedRowKeys().done(keys => {
+            selectedRowKeys = keys;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(selectedRowKeys, [1], 'first row is selected');
+
+        // act
+        selectedRowKeys = null;
+        $(dataGrid.getRowElement(1)).trigger('dxclick');
+        dataGrid.getSelectedRowKeys().done(keys => {
+            selectedRowKeys = keys;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(selectedRowKeys, [2], 'second row is selected');
+    });
+
+    QUnit.test('Disabled item should be selected when multiple mode is enabled (T1015840)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1, disabled: false }, { id: 2, disabled: true }],
+            keyExpr: 'id',
+            columns: ['id'],
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'always'
+            }
+        });
+
+        this.clock.tick(100);
+
+        // act
+        $(dataGrid.getRowElement(0)).find('.dx-checkbox').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'first row is selected');
+
+        // act
+        $(dataGrid.getRowElement(1)).find('.dx-checkbox').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [1, 2], 'both rows are selected');
+    });
+
+    QUnit.test('Disabled item should be selected when multiple deferred mode is enabled (T1015840)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1, disabled: false }, { id: 2, disabled: true }],
+            keyExpr: 'id',
+            columns: ['id'],
+            selection: {
+                mode: 'multiple',
+                deferred: true,
+                showCheckBoxesMode: 'always'
+            }
+        });
+        let selectedRowKeys;
+
+        this.clock.tick(100);
+
+        // act
+        $(dataGrid.getRowElement(0)).find('.dx-checkbox').trigger('dxclick');
+        dataGrid.getSelectedRowKeys().done(keys => {
+            selectedRowKeys = keys;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(selectedRowKeys, [1], 'first row is selected');
+
+        // act
+        selectedRowKeys = null;
+        $(dataGrid.getRowElement(1)).find('.dx-checkbox').trigger('dxclick');
+        dataGrid.getSelectedRowKeys().done(keys => {
+            selectedRowKeys = keys;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(selectedRowKeys, [1, 2], 'both rows are selected');
+    });
 });
 
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {
@@ -883,6 +1012,37 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.strictEqual(selectionChangedSpy.callCount, 2, 'onSelectionChanged is called twice');
         assert.notOk($(dataGrid.getRowElement(0)).hasClass('dx-selection'), 'no dx-selection on the first row');
         assert.ok($(dataGrid.getRowElement(1)).hasClass('dx-selection'), 'dx-selection on the second row');
+    });
+
+    // T1008562
+    QUnit.test('selection.showCheckBoxesMode changing does not clear selection', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 1, field2: 1 }, { field1: 2, field2: 2 }],
+            keyExpr: 'field1',
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'onClick',
+                deferred: true
+            },
+        });
+        dataGrid.selectRows([1]);
+        this.clock.tick();
+
+        // assert
+        let selectedKeysBefore;
+        dataGrid.getSelectedRowKeys().done((keys) => selectedKeysBefore = keys);
+        this.clock.tick();
+        assert.deepEqual(selectedKeysBefore, [1]);
+
+        // act
+        dataGrid.option('selection.showCheckBoxesMode', 'none');
+
+        // assert
+        let selectedKeysAfter;
+        dataGrid.getSelectedRowKeys().done((keys) => selectedKeysAfter = keys);
+        this.clock.tick();
+        assert.deepEqual(selectedKeysAfter, [1]);
     });
 });
 

@@ -14,7 +14,7 @@ import { getFormat as getLDMLFormat } from '../../localization/ldml/number';
 import NumberBoxBase from './number_box.base';
 import { addNamespace, getChar, normalizeKeyName, isCommandKeyPressed } from '../../events/utils/index';
 import { ensureDefined, escapeRegExp } from '../../core/utils/common';
-import { getRealSeparatorIndex, getNthOccurrence, splitByIndex } from './utils';
+import { getRealSeparatorIndex, getNthOccurrence, splitByIndex, adjustPercentValue } from './utils';
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';
 const MOVE_FORWARD = 1;
@@ -70,7 +70,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         if(!this._preventNestedFocusEvent(e)) {
             this.clearCaretTimeout();
             this._caretTimeout = setTimeout(function() {
-                this._caretTimeout = null;
+                this._caretTimeout = undefined;
                 const caret = this._caret();
 
                 if(caret.start === caret.end && this._useMaskBehavior()) {
@@ -166,11 +166,9 @@ const NumberBoxMask = NumberBoxBase.inherit({
     _shouldMoveCaret: function(text, caret) {
         const decimalSeparator = number.getDecimalSeparator();
         const isDecimalSeparatorNext = text.charAt(caret.end) === decimalSeparator;
-        const isZeroNext = text.charAt(caret.end) === '0';
         const moveToFloat = (this._lastKey === decimalSeparator || this._lastKey === '.') && isDecimalSeparatorNext;
-        const zeroToZeroReplace = this._lastKey === '0' && isZeroNext;
 
-        return moveToFloat || zeroToZeroReplace;
+        return moveToFloat;
     },
 
     _getInputVal: function() {
@@ -314,10 +312,12 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _format: function(value, format) {
         const formatOption = this.option('format');
-        const isCustomFormatter = isFunction(formatOption?.formatter);
-        const formatter = isCustomFormatter ? formatOption.formatter : number.format;
+        const customFormatter = formatOption?.formatter || formatOption;
+        const formatter = isFunction(customFormatter) ? customFormatter : number.format;
 
-        return formatter(value, format);
+        const formattedValue = value === null ? '' : formatter(value, format);
+
+        return formattedValue;
     },
 
     _getFormatPattern: function() {
@@ -426,7 +426,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const value = parsedValue === null ? this._parsedValue : parsedValue;
         parsedValue = maxPrecision ? this._truncateToPrecision(value, maxPrecision) : parsedValue;
 
-        return !format.parser && this._isPercentFormat() ? (parsedValue && parsedValue / 100) : parsedValue;
+        return !format.parser && this._isPercentFormat() ? adjustPercentValue(parsedValue, maxPrecision) : parsedValue;
     },
 
     _getParsedValue: function(text, format) {
@@ -567,6 +567,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         eventsEngine.on($input, addNamespace('dxclick', NUMBER_FORMATTER_NAMESPACE), function() {
             if(!this._caretTimeout) {
                 this._caretTimeout = setTimeout(function() {
+                    this._caretTimeout = undefined;
                     this._caret(getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
                 }.bind(this), CARET_TIMEOUT_DURATION);
             }
@@ -579,7 +580,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     clearCaretTimeout: function() {
         clearTimeout(this._caretTimeout);
-        this._caretTimeout = null;
+        this._caretTimeout = undefined;
     },
 
     _forceRefreshInputValue: function() {

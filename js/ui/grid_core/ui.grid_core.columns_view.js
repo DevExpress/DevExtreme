@@ -270,7 +270,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const getOptions = function(event) {
             const $cell = $(event.currentTarget);
             const $fieldItemContent = $(event.target).closest('.' + FORM_FIELD_ITEM_CONTENT_CLASS);
-            const rowOptions = $cell.parent().data('options');
+            const $row = $cell.parent();
+            const rowOptions = $row.data('options');
             const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
 
             if(!$cell.closest('table').is(event.delegateTarget)) return;
@@ -280,6 +281,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 event: event,
                 eventType: event.type
             });
+
+            resultOptions.rowIndex = that.getRowIndex($row);
 
             if($fieldItemContent.length) {
                 const formItemOptions = $fieldItemContent.data('dx-form-item');
@@ -668,7 +671,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
                 if(JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
                     if(row) {
-                        updateFunc(newValue, oldValue);
+                        updateFunc(newValue, row);
                     }
                     oldValue = newValue;
                 }
@@ -686,14 +689,14 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             return stopWatch;
         };
 
-        source.update = source.update || function(row) {
+        source.update = source.update || function(row, keepRow) {
             if(row) {
                 this.data = options.data = row.data;
                 this.rowIndex = options.rowIndex = row.rowIndex;
                 this.dataIndex = options.dataIndex = row.dataIndex;
                 this.isExpanded = options.isExpanded = row.isExpanded;
 
-                if(options.row) {
+                if(options.row && !keepRow) {
                     options.row = row;
                 }
             }

@@ -55,9 +55,12 @@ const helpers = {
         return true;
     },
 
-    _renderLoadPanel(component) {
-        const rowsView = component.getView('rowsView');
-        rowsView._renderLoadPanel(rowsView.element(), rowsView.element().parent());
+    _getLoadPanelTargetElement(component) {
+        return component.getView('rowsView').element();
+    },
+
+    _getLoadPanelContainer(component) {
+        return component.getView('rowsView').element().parent();
     }
 };
 

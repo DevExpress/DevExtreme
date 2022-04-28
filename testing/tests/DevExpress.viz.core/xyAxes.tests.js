@@ -98,6 +98,7 @@ const environment = {
             discreteAxisDivisionMode: 'crossLabels'
         };
 
+        this.templateRender = sinon.spy();
         this.incidentOccurred = sinon.spy();
         this.renderSettings = {
             stripsGroup: this.renderer.g(),
@@ -110,7 +111,11 @@ const environment = {
             drawingType: 'linear',
             incidentOccurred: this.incidentOccurred,
             eventTrigger: () => { },
-            getTemplate() {}
+            getTemplate: sinon.spy(() => {
+                return {
+                    render: this.templateRender
+                };
+            })
         };
         this.range = new rangeModule.Range();
         this.range.min = 0;
@@ -5377,4 +5382,18 @@ QUnit.test('Resolve label overlapping by opposite label (other labels position)'
 
     assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateY: 246 });
     assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateX: 439 });
+});
+
+QUnit.module('Axis templates with overlapping behavior', overlappingEnvironment);
+
+QUnit.test('Axis template was removed before rendered', function(assert) {
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', template() {} } });
+
+    // act
+    const count = this.templateRender.callCount;
+    for(let i = 0; i < count; i++) {
+        this.templateRender.getCall(i).args[0].onRendered();
+    }
+
+    assert.ok(true); // no errors
 });

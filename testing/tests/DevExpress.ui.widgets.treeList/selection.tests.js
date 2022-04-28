@@ -913,6 +913,31 @@ QUnit.module('Recursive selection', {
         assert.notOk(items[3].isSelected, 'fourth item isn\'t selected');
     });
 
+    QUnit.test('Selecting row with preserve = false', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        this.options.expandedRowKeys = [1];
+        this.options.dataSource = [
+            { id: 1, field1: 'test1' },
+            { id: 2, parentId: 1, field1: 'test2' },
+            { id: 3, parentId: 1, field1: 'test3' }
+        ],
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.selectRows(2);
+        this.selectRows(3, false);
+
+        // assert
+        const items = this.dataController.items();
+        assert.deepEqual(this.option('selectedRowKeys'), [3], 'selected row keys');
+        assert.notOk(items[0].isSelected, 'first item is not selected');
+        assert.notOk(items[1].isSelected, 'second item is not selected');
+        assert.ok(items[2].isSelected, 'third item is selected');
+    });
+
     QUnit.test('Checking arguments of the \'onSelectionChanged\' event when select row', function(assert) {
     // arrange
         const selectionChangedArgs = [];

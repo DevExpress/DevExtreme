@@ -65,7 +65,7 @@ const createScheduler = async (groups: undefined | string[], rtlEnabled: boolean
       await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`)).ok();
     }).before(async () => createScheduler(testCase.groups, rtlEnabled))
       .after(async (t) => {
-        await t.resizeWindow(1200, 768);
+        await t.resizeWindow(1200, 800);
       });
   });
 });

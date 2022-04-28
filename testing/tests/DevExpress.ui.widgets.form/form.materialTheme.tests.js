@@ -5,7 +5,7 @@ import 'ui/form/ui.form';
 
 import 'material_blue_light.css!';
 import FormLayoutTestWrapper from '../../helpers/FormLayoutTestWrapper.js';
-import { FIELD_ITEM_CONTENT_WRAPPER_CLASS } from 'ui/form/constants';
+import { FIELD_ITEM_CONTENT_WRAPPER_CLASS } from 'ui/form/components/field_item';
 
 function testChromeOnly(name, callback) {
     if(!browser.chrome) {

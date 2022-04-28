@@ -122,7 +122,7 @@ const layout = {
             const nodesInCascade = Object.keys(cascade).length;
             const cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx) / this._weightPerPixel + nodePadding * (nodesInCascade - 1);
 
-            let cascadeAlign = _ALIGNMENT_DEFAULT;
+            let cascadeAlign;
 
             if(Array.isArray(options.nodeAlign)) {
                 cascadeAlign = cascadeIdx < options.nodeAlign.length ? options.nodeAlign[cascadeIdx] : _ALIGNMENT_DEFAULT;

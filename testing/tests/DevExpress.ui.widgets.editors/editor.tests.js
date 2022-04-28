@@ -837,6 +837,15 @@ QUnit.module('Validation overlay options', {
         assert.equal(instance.option('validationTooltipOptions.width'), 150, 'option has ben changed');
     });
 
+    QUnit.test('"onMarkupRendered" is called after markup render (for validator integration)', function(assert) {
+        const markupRenderedStub = sinon.stub();
+        this.fixture.createEditor({
+            _onMarkupRendered: markupRenderedStub
+        });
+
+        assert.ok(markupRenderedStub.calledOnce);
+    });
+
     QUnit.test('it should be possible to set validationTooltipOptions dynamically', function(assert) {
         const $element = this.fixture.createOnlyElement();
 

@@ -88,6 +88,9 @@ const showTaskEditDialog = (gantt) => {
     const task = ganttCore.viewModel.tasks.items[0];
     ganttCore.commandManager.showTaskEditDialog.execute(task);
 };
+const getDependencyElements = (mainElement, internalId) => {
+    return mainElement.find(`[dependency-id="${internalId}"]`);
+};
 
 const moduleConfig = {
     beforeEach: function() {
@@ -676,6 +679,27 @@ QUnit.module('Actions', moduleConfig, () => {
         assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
     });
 
+    test('collapse and check state after validation option changed (T997932)', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).eq(1);
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 2);
+
+        this.instance.option('validation.autoUpdateParentTasks', true);
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 2);
+        let $parentTasks = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.ok($parentTasks.length > 0, 'parent tasks has className');
+
+        this.instance.option('validation.autoUpdateParentTasks', false);
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 2);
+        $parentTasks = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.strictEqual($parentTasks.length, 0, 'not parent tasks');
+    });
+
     test('move splitter', function(assert) {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
@@ -1214,6 +1238,111 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal(tasks[1].CustomText, 'new custom text', 'task cust field  is updated');
         assert.equal(tasks[1].ItemName, 'new item text', 'task cust field  is updated');
         assert.equal(tasks[1].TaskColor, 'red', 'task color field  is updated');
+    });
+    test('updating with custom field shouldnt restore dependencies', function(assert) {
+        const dependenciesOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red', 'CustomText': 'c1' },
+                    { 'id': 2, 'parentId': 0, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60, 'CustomText': 'c2' }
+                ]
+            },
+            dependencies: { dataSource: [ { 'id': 0, 'predecessorId': 1, 'successorId': 2, 'type': 0 } ] }
+        };
+
+        this.createInstance(dependenciesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+
+        this.instance.option('onTaskUpdating', (e) => {
+            e.newValues['CustomText'] = 'new custom text';
+        });
+        this.clock.tick();
+
+        const data = {
+            title: 'new'
+        };
+        let dependencies = getDependencyElements(this.$element, 0);
+        assert.equal(dependencies.length, 6);
+        getGanttViewCore(this.instance).commandManager.removeDependencyCommand.execute('0', false);
+
+        this.clock.tick();
+        dependencies = getDependencyElements(this.$element, 0);
+        assert.equal(dependencies.length, 0, 'dependency has been deleted');
+        this.instance.updateTask('1', data);
+        this.clock.tick(500);
+        dependencies = getDependencyElements(this.$element, 0);
+        assert.equal(dependencies.length, 0, 'dependency is still deleted');
+
+    });
+    test('update task with only custom field shouldnt restore dependencies', function(assert) {
+        const dependenciesOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': '1', 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red', 'CustomText': 'c1' },
+                    { 'id': '2', 'parentId': 0, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60, 'CustomText': 'c2' }
+                ]
+            },
+            dependencies: { dataSource: [ { 'id': '1', 'predecessorId': '1', 'successorId': '1', 'type': '0' } ] },
+            validation: { autoUpdateParentTasks: true }
+        };
+
+        this.createInstance(dependenciesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+        this.clock.tick();
+
+        const data = {
+            'CustomText': 'new'
+        };
+        let dependencies = getDependencyElements(this.$element, '1');
+        assert.equal(dependencies.length, 6);
+        getGanttViewCore(this.instance).commandManager.removeDependencyCommand.execute('1', false);
+
+        this.clock.tick();
+        dependencies = getDependencyElements(this.$element, '1');
+        assert.equal(dependencies.length, 0, 'dependency has been deleted');
+        this.instance.updateTask('1', data);
+        this.clock.tick(500);
+        dependencies = getDependencyElements(this.$element, '1');
+        assert.equal(dependencies.length, 0, 'dependency is still deleted');
+    });
+    test('update task with only custom field should update treelist', function(assert) {
+        const taskOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': '1', 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red', 'CustomText': 'c1' },
+                    { 'id': '2', 'parentId': 1, 'title': 'Scope', 'start': new Date('2020-02-21T05:00:00.000Z'), 'end': new Date('2020-02-26T09:00:00.000Z'), 'progress': 60, 'CustomText': 'c2' }
+                ]
+            },
+            validation: { autoUpdateParentTasks: true },
+            editing: { enabled: true },
+            columns: [
+                { dataField: 'CustomText', caption: 'Task' },
+                { dataField: 'start', caption: 'Start' },
+                { dataField: 'end', caption: 'End' }
+            ]
+        };
+
+        this.createInstance(taskOptions);
+        this.clock.tick();
+        const customText = 'new';
+        const data = {
+            'CustomText': customText
+        };
+        let treeListTaskCustomText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(0).text();
+        const treeListDataSourceOld = this.instance._treeList.option('dataSource');
+        assert.equal(treeListTaskCustomText, 'c1');
+        assert.equal(treeListDataSourceOld[0].CustomText, 'c1');
+
+        this.instance.updateTask('1', data);
+        this.clock.tick(500);
+        treeListTaskCustomText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(0).text();
+        const treeListDataSourceNew = this.instance._treeList.option('dataSource');
+        assert.equal(treeListTaskCustomText, customText);
+        assert.equal(treeListDataSourceNew[0].CustomText, customText);
+        assert.equal(treeListDataSourceOld[0].start, treeListDataSourceNew[0].start);
+        assert.equal(treeListDataSourceOld[0].end, treeListDataSourceNew[0].end);
     });
     test('task deleting - canceling', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1887,6 +2016,51 @@ QUnit.module('Edit api', moduleConfig, () => {
 
         assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
         assert.equal(task.CustomText, values.CustomText, 'onTaskUpdated is triggrered');
+    });
+    test('taskUpdate with only custom field and update custom field in onTaskUpdating should trigger onTaskUpdated', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        let values = {};
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('onTaskUpdated', (e) => { values = e.values; });
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+        this.clock.tick();
+        const onTaskUpdatingText = 'new custom text';
+        this.instance.option('onTaskUpdating', (e) => {
+            e.newValues['CustomText'] = onTaskUpdatingText;
+        });
+        this.clock.tick();
+
+        const data = {
+            CustomText: 'new text'
+        };
+
+        this.instance.updateTask(task.Id, data);
+        this.clock.tick(300);
+        const taskData = this.instance.getTaskData(1);
+
+        assert.equal(taskData.CustomText, onTaskUpdatingText, 'task cust field  is updated');
+        assert.equal(values.CustomText, onTaskUpdatingText, 'onTaskUpdated is triggrered');
     });
     test('insertDependency', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -4361,5 +4535,191 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.notDeepEqual(task2.end, updatedTask2.end);
         assert.deepEqual(updatedTask1.start, updatedTask2.start);
         assert.deepEqual(updatedTask1.end, updatedTask2.end);
+    });
+    test('Move predecessor should NOT move successor when enablePredecessorGap = true', function(assert) {
+        let globalLastInsertedKey = 0;
+        let globalPrevInsertedKey = 0;
+        const globalDependencyType = 3;
+        const tasks = [];
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: tasks
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true, validateDependencies: true, enablePredecessorGap: true }
+        };
+        this.createInstance(options);
+        this.instance.option('onTaskInserted', (e) => {
+            globalPrevInsertedKey = globalLastInsertedKey;
+            globalLastInsertedKey = e.key;
+        });
+        this.clock.tick();
+
+        const task1 = {
+            'my_id': 1000,
+            'parentId': 0,
+            'title': 'Task' + new Date().getMilliseconds(),
+            'start': new Date('2019-02-21T05:00:00.000Z'),
+            'end': new Date('2019-02-24T09:00:00.000Z'),
+            'progress': 100
+        };
+        const task2 = {
+            'my_id': 2000,
+            'parentId': 0,
+            'title': 'Task' + new Date().getMilliseconds(),
+            'start': new Date('2019-02-21T05:00:00.000Z'),
+            'end': new Date('2019-02-24T09:00:00.000Z'),
+            'progress': 100
+        };
+
+        const newStart = new Date('2019-01-21T05:00:00.000Z');
+        const newEnd = new Date('2019-01-24T09:00:00.000Z');
+
+        this.instance.insertTask(task1);
+        this.clock.tick();
+        this.instance.insertTask(task2);
+        this.clock.tick();
+        const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
+        this.instance.insertDependency(dependency);
+        this.clock.tick();
+
+        const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
+        const taskMoveCommand = getGanttViewCore(this.instance).commandManager.taskMoveCommand;
+        taskMoveCommand.execute(taskData.internalId, newStart, newEnd);
+        this.clock.tick();
+        const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
+        const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
+
+        assert.notDeepEqual(task1.start, updatedTask1.start);
+        assert.notDeepEqual(task1.end, updatedTask1.end);
+        assert.deepEqual(task2.start, updatedTask2.start);
+        assert.deepEqual(task2.end, updatedTask2.end);
+        assert.notDeepEqual(updatedTask1.start, updatedTask2.start);
+        assert.notDeepEqual(updatedTask1.end, updatedTask2.end);
+    });
+    test('Move predecessor should move successor even if enablePredecessorGap = true when under validation already', function(assert) {
+        let globalLastInsertedKey = 0;
+        let globalPrevInsertedKey = 0;
+        const globalDependencyType = 1;
+        const tasks = [];
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: tasks
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true, validateDependencies: true, enablePredecessorGap: true }
+        };
+        this.createInstance(options);
+        this.instance.option('onTaskInserted', (e) => {
+            globalPrevInsertedKey = globalLastInsertedKey;
+            globalLastInsertedKey = e.key;
+        });
+        this.clock.tick();
+
+        const task1 = {
+            'my_id': 1000,
+            'parentId': 0,
+            'title': 'Task' + new Date().getMilliseconds(),
+            'start': new Date('2019-02-21T05:00:00.000Z'),
+            'end': new Date('2019-02-24T09:00:00.000Z'),
+            'progress': 100
+        };
+        const task2 = {
+            'my_id': 2000,
+            'parentId': 0,
+            'title': 'Task' + new Date().getMilliseconds(),
+            'start': new Date('2019-02-21T05:00:00.000Z'),
+            'end': new Date('2019-02-24T09:00:00.000Z'),
+            'progress': 100
+        };
+
+        const newStart = new Date('2019-01-21T05:00:00.000Z');
+        const newEnd = new Date('2019-01-24T09:00:00.000Z');
+
+        this.instance.insertTask(task1);
+        this.clock.tick();
+        this.instance.insertTask(task2);
+        this.clock.tick();
+        const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
+        this.instance.insertDependency(dependency);
+        this.clock.tick();
+
+        const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
+        const taskMoveCommand = getGanttViewCore(this.instance).commandManager.taskMoveCommand;
+        taskMoveCommand.execute(taskData.internalId, newStart, newEnd);
+        this.clock.tick();
+        const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
+        const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
+
+        assert.notDeepEqual(task1.start, updatedTask1.start);
+        assert.notDeepEqual(task1.end, updatedTask1.end);
+        assert.notDeepEqual(task2.start, updatedTask2.start);
+        assert.notDeepEqual(task2.end, updatedTask2.end);
+        assert.deepEqual(updatedTask1.start, updatedTask2.start);
+        assert.deepEqual(updatedTask1.end, updatedTask2.end);
+    });
+    test('Move predecessor should NOT move successor even if enablePredecessorGap = true and lockPredecessorToSuccessor = false  when under validation already', function(assert) {
+        let globalLastInsertedKey = 0;
+        let globalPrevInsertedKey = 0;
+        const globalDependencyType = 1;
+        const tasks = [];
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: tasks
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true, validateDependencies: true, enablePredecessorGap: true }
+        };
+        this.createInstance(options);
+        this.instance.option('onTaskInserted', (e) => {
+            globalPrevInsertedKey = globalLastInsertedKey;
+            globalLastInsertedKey = e.key;
+        });
+        this.clock.tick();
+
+        const task1 = {
+            'my_id': 1000,
+            'parentId': 0,
+            'title': 'Task' + new Date().getMilliseconds(),
+            'start': new Date('2019-02-21T05:00:00.000Z'),
+            'end': new Date('2019-02-24T09:00:00.000Z'),
+            'progress': 100
+        };
+        const task2 = {
+            'my_id': 2000,
+            'parentId': 0,
+            'title': 'Task' + new Date().getMilliseconds(),
+            'start': new Date('2019-02-21T05:00:00.000Z'),
+            'end': new Date('2019-02-24T09:00:00.000Z'),
+            'progress': 100
+        };
+
+        const newStart = new Date('2019-01-21T05:00:00.000Z');
+        const newEnd = new Date('2019-01-24T09:00:00.000Z');
+
+        this.instance.insertTask(task1);
+        this.clock.tick();
+        this.instance.insertTask(task2);
+        this.clock.tick();
+        const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
+        this.instance.insertDependency(dependency);
+        this.clock.tick();
+        getGanttViewCore(this.instance).validationController.lockPredecessorToSuccessor = false;
+        const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
+        const taskMoveCommand = getGanttViewCore(this.instance).commandManager.taskMoveCommand;
+        taskMoveCommand.execute(taskData.internalId, newStart, newEnd);
+        this.clock.tick();
+        const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
+        const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
+
+        assert.notDeepEqual(task1.start, updatedTask1.start);
+        assert.notDeepEqual(task1.end, updatedTask1.end);
+        assert.deepEqual(task2.start, updatedTask2.start);
+        assert.deepEqual(task2.end, updatedTask2.end);
+        assert.notDeepEqual(updatedTask1.start, updatedTask2.start);
+        assert.notDeepEqual(updatedTask1.end, updatedTask2.end);
     });
 });
