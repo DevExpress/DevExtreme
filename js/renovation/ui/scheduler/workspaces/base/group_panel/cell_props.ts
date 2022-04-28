@@ -13,7 +13,7 @@ export class GroupPanelCellProps {
 
   @OneWay() data: GroupItem = { id: 0 };
 
-  @OneWay() index?: number;
+  @OneWay() index!: number;
 
   @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 
