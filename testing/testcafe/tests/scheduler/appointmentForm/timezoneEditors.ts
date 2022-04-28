@@ -1,20 +1,21 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import Scheduler from '../../../../model/scheduler';
-import createWidget from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
+import createWidget from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import Scheduler from '../../../model/scheduler';
 
 fixture`Layout:AppointmentForm:TimezoneEditors(T1080932)`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('TimeZone editors should be have data after hide forms data(T1080932)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
+  const { appointmentPopup } = scheduler;
 
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element);
-  await t.expect(await takeScreenshot('time-zone-editors-after-hide-form-item.png'));
 
-  await t.expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  const startDateTimeZone = appointmentPopup.wrapper.find('.dx-texteditor-input').nth(1);
+  await t.expect(startDateTimeZone.value).eql('(GMT -10:00) Etc - GMT+10');
+
+  const endDateTimeZone = appointmentPopup.wrapper.find('.dx-texteditor-input').nth(3);
+  await t.expect(endDateTimeZone.value).eql('(GMT -08:00) US - Alaska');
 }).before(async () => {
   await createWidget('dxScheduler', {
     onAppointmentFormOpening: (e) => {
@@ -41,14 +42,19 @@ test('TimeZone editors should be have data after hide forms data(T1080932)', asy
 });
 
 test('TimeZone editors should be have data in default case(T1080932)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element);
-  await t.expect(await takeScreenshot('time-zone-editors-default-case.png'));
 
-  await t.expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  const { appointmentPopup } = scheduler;
+
+  await t.doubleClick(scheduler.getAppointmentByIndex(0).element);
+
+  const startDateTimeZone = appointmentPopup.wrapper.find('.dx-texteditor-input').nth(2);
+  await t.expect(startDateTimeZone.value).eql('(GMT -10:00) Etc - GMT+10');
+
+  const endDateTimeZone = appointmentPopup.wrapper.find('.dx-texteditor-input').nth(4);
+  await t.expect(endDateTimeZone.value).eql('(GMT -08:00) US - Alaska');
 }).before(async () => {
   await createWidget('dxScheduler', {
     editing: {
