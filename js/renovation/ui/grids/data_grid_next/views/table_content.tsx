@@ -3,6 +3,7 @@ import {
   Consumer, Effect, Ref, RefObject, Template, JSXTemplate,
 } from '@devextreme-generator/declarations';
 
+import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import { Table } from '../widgets/table';
 import { DataRow } from '../widgets/data_row';
 import { NoDataText } from '../widgets/no_data_text';
@@ -18,19 +19,28 @@ import { combineClasses } from '../../../../utils/combine_classes';
 import { Placeholder } from '../../../../utils/plugin/placeholder';
 import { Scrollable } from '../../../scroll_view/scrollable';
 import { ScrollEventArgs, ScrollOffset } from '../../../scroll_view/common/types';
+import {
+  TotalCount,
+} from '../plugins';
+
+type ScrollPositionAction = (offset: Partial<ScrollOffset>) => void;
 
 export const TopRowPlaceholder = createPlaceholder();
 export const BottomRowPlaceholder = createPlaceholder();
 export const RowClick = createValue<(row: Row, e: Event) => void>();
 export const RowsViewScroll = createValue<(offset: ScrollOffset) => void>();
 export const RowsViewHeight = createValue<number>();
-export const SetRowsViewScrollPositionAction = createValue<(offset: ScrollOffset) => void>();
+export const SetRowsViewScrollPositionAction = createValue<ScrollPositionAction>();
 export const RowsViewHeightValue = createValue<number>();
 export const SetRowsViewContentRenderAction = createValue<(element: HTMLElement) => void>();
+export const SetRowsViewOffsetAction = createValue<(offset: Partial<ScrollOffset>) => void>();
 
 export const viewFunction = (viewModel: TableContent): JSX.Element => (
   <div ref={viewModel.rowsViewRef} className={viewModel.classes} role="presentation">
-    <Scrollable onScroll={viewModel.onScrollContent}>
+    <Scrollable
+      ref={viewModel.scrollableRef}
+      onScroll={viewModel.onScrollContent}
+    >
       <div ref={viewModel.divRef} className={`${CLASSES.content}`}>
         <Table>
           <Fragment>
@@ -51,6 +61,7 @@ export const viewFunction = (viewModel: TableContent): JSX.Element => (
       </div>
     </Scrollable>
     { viewModel.isEmpty && <NoDataText template={viewModel.props.noDataTemplate} />}
+    <ValueSetter type={SetRowsViewOffsetAction} value={viewModel.scrollTo} />
   </div>
 );
 
@@ -77,6 +88,9 @@ export class TableContent extends JSXComponent(TableContentProps) {
 
   @Ref()
   divRef!: RefObject<HTMLDivElement>;
+
+  @Ref()
+  scrollableRef!: RefObject<Scrollable>;
 
   @Consumer(PluginsContext)
   plugins: Plugins = new Plugins();
@@ -125,10 +139,14 @@ export class TableContent extends JSXComponent(TableContentProps) {
   }
 
   get isEmpty(): boolean {
-    return this.props.visibleRows.length === 0;
+    return this.plugins.getValue(TotalCount) === 0;
   }
 
   onScrollContent(e: ScrollEventArgs): void {
     this.plugins.callAction(SetRowsViewScrollPositionAction, e.scrollOffset);
+  }
+
+  scrollTo(e: Partial<ScrollOffset>): void {
+    this.scrollableRef.current?.scrollTo(e);
   }
 }

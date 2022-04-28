@@ -1,45 +1,54 @@
 import {
   createValue, createGetter, createSelector,
 } from '../../../../utils/plugin/context';
-import { Row, ScrollingMode, DataState } from '../types';
+import {
+  Row, ScrollingMode, DataState, ViewportStateType,
+} from '../types';
 import {
   VisibleRows, TotalCount,
   DataStateValue,
 } from '../plugins';
+import { PageSize } from '../paging/plugins';
 import { RowsViewHeightValue } from '../views/table_content';
-import { ScrollOffset } from '../../../scroll_view/common/types';
-import { calculateViewportItemIndex, getVirtualContentOffset } from './utils';
+import {
+  calculateViewportItemIndex, getVirtualContentOffset,
+  getNormalizedPageSize, calculatePageIndexByItemIndex,
+} from './utils';
 
 export const ScrollingModeValue = createValue<ScrollingMode>();
-export const ScrollingPositionValue = createValue<ScrollOffset>();
+export const TopScrollingPositionValue = createValue<number>();
 export const ViewportSkipValue = createGetter<number>(0);
 export const ViewportTakeValue = createGetter<number>(0);
 export const ItemHeightsValue = createValue<Record<number, number>>();
 export const RowHeightValue = createValue<number>();
+export const ViewportStateValue = createValue<ViewportStateType>();
 export const TopVirtualRowHeightValue = createGetter<number>(0);
 export const BottomVirtualRowHeightValue = createGetter<number>(0);
+export const ViewportPageIndex = createGetter<number>(0);
+export const ViewportLoadPageCount = createGetter<number>(0);
 
 export const CalculateViewportSkipValue = createSelector<number>(
-  [ScrollingPositionValue, RowHeightValue, ItemHeightsValue],
-  (scrollingPosition: ScrollOffset, rowHeight, itemHeights) => {
-    const topScrollPosition = scrollingPosition?.top ?? 0;
+  [TopScrollingPositionValue, RowHeightValue, ItemHeightsValue, TotalCount],
+  (topScrollingPosition, rowHeight, itemHeights, totalCount) => {
+    const topScrollPosition = topScrollingPosition ?? 0;
     const topIndex = calculateViewportItemIndex(topScrollPosition, rowHeight, itemHeights);
-    return Math.floor(topIndex);
+    const skip = topIndex > totalCount ? totalCount : topIndex;
+    return Math.floor(skip);
   },
 );
 export const CalculateViewportTakeValue = createSelector<number>(
   [
-    ScrollingModeValue, TotalCount, RowsViewHeightValue, ScrollingPositionValue,
+    ScrollingModeValue, TotalCount, RowsViewHeightValue, TopScrollingPositionValue,
     ViewportSkipValue, RowHeightValue, ItemHeightsValue,
   ],
   (
-    scrollingMode, totalCount, rowsViewHeight: number, scrollingPosition: ScrollOffset,
+    scrollingMode, totalCount, rowsViewHeight: number, topScrollingPosition,
     skip, rowHeight, itemHeights,
   ) => {
     const virtualMode = scrollingMode === 'virtual';
     const totalItemsCount = totalCount ?? 0;
     const viewportHeight = rowsViewHeight ?? 0;
-    const topScrollPosition = scrollingPosition?.top ?? 0;
+    const topScrollPosition: number = topScrollingPosition ?? 0;
     const bottomIndex = calculateViewportItemIndex(topScrollPosition + viewportHeight,
       rowHeight, itemHeights);
     let take = Math.ceil(bottomIndex - skip);
@@ -69,12 +78,16 @@ export const AddLoadIndexToVisibleRows = createSelector<Row[]>(
 );
 export const CalculateVisibleRowsInViewport = createSelector<Row[]>(
   [VisibleRows, ViewportSkipValue, ViewportTakeValue],
-  (visibleRows: Row[], skip: number, take: number) => visibleRows.filter((row) => {
-    const isLoadIndexGreaterStart = row.loadIndex !== undefined && row.loadIndex >= skip;
-    const isLoadIndexLessEnd = row.loadIndex !== undefined && row.loadIndex < skip + take;
+  (visibleRows: Row[], skip: number, take: number) => {
+    const rows = visibleRows.filter((row) => {
+      const isLoadIndexGreaterStart = row.loadIndex !== undefined && row.loadIndex >= skip;
+      const isLoadIndexLessEnd = row.loadIndex !== undefined && row.loadIndex < skip + take;
 
-    return isLoadIndexGreaterStart && isLoadIndexLessEnd;
-  }),
+      return isLoadIndexGreaterStart && isLoadIndexLessEnd;
+    });
+
+    return rows;
+  },
 );
 export const CalculateTopVirtualRowHeight = createSelector<number>(
   [ViewportSkipValue, RowHeightValue, TotalCount, ItemHeightsValue],
@@ -92,5 +105,21 @@ export const CalculateBottomVirtualRowHeight = createSelector<number>(
   ) => {
     const rowCount = visibleRows.filter((r) => r.rowType === 'data').length;
     return getVirtualContentOffset('bottom', totalCount - skip - rowCount, totalCount, itemHeights, rowHeight);
+  },
+);
+export const CalculateViewportPageIndex = createSelector<number>(
+  [ViewportSkipValue, PageSize, TotalCount],
+  (skip: number, pageSize, totalCount) => {
+    const pSize = getNormalizedPageSize(pageSize);
+    return calculatePageIndexByItemIndex(skip, pSize, totalCount);
+  },
+);
+export const CalculateViewportLoadPageCount = createSelector<number>(
+  [ViewportSkipValue, ViewportTakeValue, PageSize, ViewportPageIndex],
+  (skip: number, take: number, pageSize, viewportPageIndex: number) => {
+    const pSize = getNormalizedPageSize(pageSize);
+    const pageOffset = viewportPageIndex * pSize;
+    const skipForCurrentPage = skip - pageOffset;
+    return Math.ceil(pageSize > 0 ? (take + skipForCurrentPage) / pageSize : 0);
   },
 );

@@ -31,11 +31,14 @@ export const VisibleDataRows = createSelector<Row[]>(
   ],
   (
     dataStateValue: DataState, keyExpr: KeyExprInternal,
-  ): Row[] => dataStateValue.data.map((data) => ({
-    key: keyExpr ? data[keyExpr] : data,
-    data,
-    rowType: 'data',
-  })),
+  ): Row[] => {
+    const rows = dataStateValue.data.map((data) => ({
+      key: keyExpr ? data[keyExpr] : data,
+      data,
+      rowType: 'data',
+    }));
+    return rows as Row[];
+  },
 );
 
 export const CalculateLocalDataState = createSelector(

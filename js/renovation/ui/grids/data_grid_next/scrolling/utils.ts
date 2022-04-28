@@ -3,11 +3,29 @@ import { Row, VirtualContentType } from '../types';
 export const DEFAULT_ROW_HEIGHT = 20;
 export const calculateRowHeight = (
   visibleRowHeights: number[],
-  visibleRowCount: number,
+  itemHeights: Record<number, number>,
 ): number => {
-  const itemsSize = visibleRowHeights.reduce((sum, item) => sum + item, 0);
-  const rowCount = visibleRowCount ?? 0;
-  return itemsSize > 0 && rowCount > 0 ? itemsSize / rowCount : DEFAULT_ROW_HEIGHT;
+  let itemsSize = 0;
+  let rowCount = 0;
+  let result = DEFAULT_ROW_HEIGHT;
+
+  if (visibleRowHeights.length) {
+    itemsSize = visibleRowHeights.reduce((sum, item) => sum + item, 0);
+    rowCount = visibleRowHeights.length;
+  } else {
+    const rowIndices = Object.keys(itemHeights);
+
+    if (rowIndices.length) {
+      itemsSize = rowIndices.reduce((sum, key) => sum + (itemHeights[key] as number), 0);
+      rowCount = rowIndices.length;
+    }
+  }
+
+  if (itemsSize > 0 && rowCount > 0) {
+    result = itemsSize / rowCount;
+  }
+
+  return result;
 };
 export const calculateItemHeights = (
   visibleRows: Row[], rowHeights: number[],
@@ -84,4 +102,32 @@ export const getVirtualContentOffset = (
     }
   });
   return Math.floor(offset + itemCount * rowHeight);
+};
+export const getTopScrollPosition = (
+  pageIndex: number,
+  pageSize: number,
+  itemHeights: Record<number, number>,
+  rowHeight: number,
+): number => {
+  let scrollPosition = 0;
+  const itemIndex = pageIndex * pageSize;
+
+  scrollPosition = itemIndex * rowHeight;
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const index in itemHeights) {
+    if (parseInt(index, 10) < itemIndex) {
+      scrollPosition += itemHeights[index] - rowHeight;
+    }
+  }
+
+  return scrollPosition;
+};
+export const getNormalizedPageSize = (pageSize: number | 'all'): number => (pageSize === 'all' ? 0 : pageSize);
+export const calculatePageIndexByItemIndex = (
+  itemIndex: number, pageSize: number, totalCount: number,
+): number => {
+  const maxPageIndex = pageSize > 0 ? Math.floor(totalCount / pageSize) : 0;
+  const pageIndex = pageSize > 0 ? Math.floor(itemIndex / pageSize) : 0;
+  return Math.min(maxPageIndex, pageIndex);
 };
