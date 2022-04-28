@@ -20688,7 +20688,7 @@ QUnit.module('Editing - new row position', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, isVirtualScrolling ? 8 : 11, 'row count');
+                assert.strictEqual(rows.length, isVirtualScrolling ? 9 : 11, 'row count');
                 assert.ok(rows[isVirtualScrolling ? 0 : 1].isNewRow, 'new row');
             });
 

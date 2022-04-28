@@ -4724,6 +4724,71 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($($virtualRowElement.get(1))), 'bottom virtual row is rendered outside viewport after timeout scrolling to top');
     });
 
+    // T1083874
+    QUnit.test('DataGrid should not raise exception on inserting new row in popup with virtual scrolling', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            focusedRowEnabled: true,
+            autoNavigateToFocusedRow: false,
+            keyExpr: 'id',
+            height: 400,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            editing: {
+                allowAdding: true,
+                mode: 'popup',
+            }
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 560 });
+        $(dataGrid.getScrollable().container()).trigger('scroll');
+        this.clock.tick(300);
+        dataGrid.addRow();
+        this.clock.tick(300);
+        dataGrid.cancelEditData();
+        this.clock.tick(300);
+
+        // assert
+        assert.ok(true, 'no errors');
+
+        // act;
+        dataGrid.getScrollable().scrollTo({ top: dataGrid.getScrollable().scrollHeight() });
+        $(dataGrid.getScrollable().container()).trigger('scroll');
+        this.clock.tick(300);
+
+        dataGrid.addRow();
+        this.clock.tick(300);
+
+        dataGrid.saveEditData();
+        this.clock.tick(300);
+
+        dataGrid.addRow();
+        this.clock.tick(300);
+
+        dataGrid.saveEditData();
+        this.clock.tick(300);
+
+        // assert
+        assert.ok(true, 'no errors');
+    });
+
     QUnit.test('Rows should be rendered properly when renderAsync = false', function(assert) {
         // arrange
         const getData = function() {
