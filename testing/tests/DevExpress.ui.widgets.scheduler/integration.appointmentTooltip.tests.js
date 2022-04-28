@@ -885,7 +885,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 });
 
 
-QUnit.module('Appointment tooltip template', moduleConfig, () => {
+module('Appointment tooltip template', moduleConfig, () => {
     const checkAppointmentDataInTooltipTemplate = (assert, dataSource, currentDate) => {
         const scheduler = createWrapper({
             dataSource: dataSource,
@@ -934,9 +934,61 @@ QUnit.module('Appointment tooltip template', moduleConfig, () => {
 
         checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
+
+    module('isButtonClicked argument in appointmentTooltipTemplate', () => {
+        const data = [{
+            text: '1',
+            priorityId: [2],
+            startDate: new Date(2021, 3, 26),
+            endDate: new Date(2021, 3, 27),
+        }, {
+            text: '2',
+            priorityId: [2],
+            startDate: new Date(2021, 3, 26),
+            endDate: new Date(2021, 3, 27),
+        }, {
+            text: '3',
+            priorityId: [2],
+            startDate: new Date(2021, 3, 26),
+            endDate: new Date(2021, 3, 27),
+        }, {
+            text: '4',
+            priorityId: [2],
+            startDate: new Date(2021, 3, 26),
+            endDate: new Date(2021, 3, 27),
+        }];
+
+        test('should be false if clicked on single appointment', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: data,
+                views: ['month'],
+                currentView: 'month',
+                currentDate: new Date(2021, 3, 27),
+                height: 600,
+                appointmentTooltipTemplate: (model) => assert.notOk(model.isButtonClicked)
+            });
+
+            scheduler.appointments.click(0);
+            assert.expect(1);
+        });
+
+        test('should be true if clicked on compact button', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: data,
+                views: ['month'],
+                currentView: 'month',
+                currentDate: new Date(2021, 3, 27),
+                height: 600,
+                appointmentTooltipTemplate: (model) => assert.ok(model.isButtonClicked)
+            });
+
+            scheduler.appointments.compact.click(0);
+            assert.expect(2);
+        });
+    });
 });
 
-QUnit.module('New common tooltip for compact and cell appointments', moduleConfig, () => {
+module('New common tooltip for compact and cell appointments', moduleConfig, () => {
     const createScheduler = (options, data) => {
         const defaultOption = {
             dataSource: data || getSimpleDataArray(),
@@ -1346,5 +1398,98 @@ QUnit.module('New common tooltip for compact and cell appointments', moduleConfi
         scheduler.appointments.compact.click(2);
         scheduler.tooltip.clickOnItem();
         scheduler.appointmentPopup.dialog.hide();
+    });
+});
+
+module('onAppointmentTooltipShowing event', moduleConfig, () => {
+    const data = [{
+        text: '1',
+        priorityId: [2],
+        startDate: new Date(2021, 3, 26),
+        endDate: new Date(2021, 3, 27),
+    }, {
+        text: '2',
+        priorityId: [2],
+        startDate: new Date(2021, 3, 26),
+        endDate: new Date(2021, 3, 27),
+    }, {
+        text: '3',
+        priorityId: [2],
+        startDate: new Date(2021, 3, 26),
+        endDate: new Date(2021, 3, 27),
+    }, {
+        text: '4',
+        priorityId: [2],
+        startDate: new Date(2021, 3, 26),
+        endDate: new Date(2021, 3, 27),
+    }];
+
+    test('e.cancel argument should be prevent showing tooltip', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2021, 3, 27),
+            height: 600,
+            onAppointmentTooltipShowing: (e) => e.cancel = true
+        });
+
+        scheduler.appointments.click(0);
+
+        assert.notOk(scheduler.tooltip.isVisible());
+    });
+
+    test('Arguments should be valid on a single appointment', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2021, 3, 27),
+            height: 600,
+            onAppointmentTooltipShowing: (e) => {
+                const appointment = e.appointments[0];
+
+                assert.deepEqual(appointment.appointmentData, data[0]);
+                assert.deepEqual({
+                    ...appointment.appointmentData,
+                    displayStartDate: appointment.appointmentData.startDate,
+                    displayEndDate: new Date(appointment.appointmentData.endDate),
+                }, appointment.currentAppointmentData);
+            }
+        });
+
+        scheduler.appointments.click(0);
+        assert.expect(2);
+    });
+
+    test('Arguments should be valid on a compact button', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2021, 3, 27),
+            height: 600,
+            onAppointmentTooltipShowing: (e) => {
+                const appointment3 = e.appointments[0];
+                const appointment4 = e.appointments[1];
+
+                assert.deepEqual(appointment3.appointmentData, data[2]);
+                assert.deepEqual({
+                    ...appointment3.appointmentData,
+                    displayStartDate: appointment3.appointmentData.startDate,
+                    displayEndDate: appointment3.appointmentData.endDate,
+                }, appointment3.currentAppointmentData);
+
+                assert.deepEqual(appointment4.appointmentData, data[3]);
+                assert.deepEqual({
+                    ...appointment4.appointmentData,
+                    displayStartDate: appointment4.appointmentData.startDate,
+                    displayEndDate: appointment4.appointmentData.endDate,
+                }, appointment4.currentAppointmentData);
+            }
+        });
+
+        scheduler.appointments.compact.click(0);
+        assert.expect(4);
     });
 });

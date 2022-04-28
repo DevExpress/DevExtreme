@@ -251,6 +251,8 @@ class Scheduler extends Widget {
 
             onAppointmentFormOpening: null,
 
+            onAppointmentTooltipShowing: null,
+
             appointmentTooltipTemplate: 'appointmentTooltip',
 
             /**
@@ -588,6 +590,7 @@ class Scheduler extends Widget {
             case StoreEventNames.DELETING:
             case StoreEventNames.DELETED:
             case 'onAppointmentFormOpening':
+            case 'onAppointmentTooltipShowing':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             case 'onAppointmentRendered':
@@ -1195,7 +1198,8 @@ class Scheduler extends Widget {
             'onAppointmentUpdated': this._createActionByOption(StoreEventNames.UPDATED),
             'onAppointmentDeleting': this._createActionByOption(StoreEventNames.DELETING),
             'onAppointmentDeleted': this._createActionByOption(StoreEventNames.DELETED),
-            'onAppointmentFormOpening': this._createActionByOption('onAppointmentFormOpening')
+            'onAppointmentFormOpening': this._createActionByOption('onAppointmentFormOpening'),
+            'onAppointmentTooltipShowing': this._createActionByOption('onAppointmentTooltipShowing'),
         };
     }
 
@@ -2281,12 +2285,37 @@ class Scheduler extends Widget {
     }
 
     showAppointmentTooltipCore(target, data, options) {
+        const arg = {
+            cancel: false,
+            appointments: data.map(item => {
+                const result = {
+                    appointmentData: item.appointment,
+                    currentAppointmentData: { ...item.targetedAppointment },
+                    color: item.color
+                };
+
+                if(item.settings.info) {
+                    const { startDate, endDate } = item.settings.info.appointment;
+
+                    result.currentAppointmentData.displayStartDate = startDate;
+                    result.currentAppointmentData.displayEndDate = endDate;
+                }
+
+                return result;
+            }),
+            targetElement: target
+        };
+
+        this._createActionByOption('onAppointmentTooltipShowing')(arg);
+
         if(this._appointmentTooltip.isAlreadyShown(target)) {
             this.hideAppointmentTooltip();
         } else {
-            this._appointmentTooltip.show(
-                target, data, extend(this._getExtraAppointmentTooltipOptions(), options)
-            );
+            this._processActionResult(arg, canceled => {
+                !canceled && this._appointmentTooltip.show(
+                    target, data, { ...this._getExtraAppointmentTooltipOptions(), ...options }
+                );
+            });
         }
     }
 
