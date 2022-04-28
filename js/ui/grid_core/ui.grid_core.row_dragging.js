@@ -56,9 +56,11 @@ const RowDraggingExtender = {
             // T929503
             this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
         };
+
+        const rowSelector = '.dx-row:not(.dx-freespace-row):not(.dx-virtual-row):not(.dx-header-row):not(.dx-footer-row)';
         const filter = this.option('dataRowTemplate')
-            ? '> table > tbody.dx-row:not(.dx-freespace-row):not(.dx-virtual-row)'
-            : '> table > tbody > .dx-row:not(.dx-freespace-row):not(.dx-virtual-row)';
+            ? `> table > tbody${rowSelector}`
+            : `> table > tbody > ${rowSelector}`;
 
         if((allowReordering || this[currentSortableName]) && $content.length) {
             this[currentSortableName] = this._createComponent($content, Sortable, extend({

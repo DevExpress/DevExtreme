@@ -3390,6 +3390,58 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
     });
 
+    ['Row', 'Form'].forEach(editMode => {
+        QUnit.test(`${editMode} - Modified value should not be saved when a new row is added (T1076827)`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'test2' },
+                ],
+                columns: ['field1', 'field2'],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true,
+                    allowAdding: true
+                }
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.editRow(0);
+            this.clock.tick();
+
+            // assert
+            assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-edit-row'), 'row is in editing mode');
+            if(editMode === 'Form') {
+                assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-datagrid-edit-form'), 'edit form in a row');
+            }
+
+            // act
+            $(dataGrid.getRowElement(0)).find('.dx-texteditor-input:eq(0)').val('123').trigger('change');
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 0), '123', 'cell value is modified');
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+
+            // assert
+            assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-row-inserted'), 'first inserted row');
+            if(editMode === 'Form') {
+                assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-datagrid-edit-form'), 'edit form in the first row');
+            }
+            assert.notOk($(dataGrid.getRowElement(1)).hasClass('dx-edit-row'), 'second row is not in editing mode');
+            assert.equal($(dataGrid.getRowElement(1)).find('.dx-cell-modified').length, 0, 'no modified cells in the second row');
+            assert.equal($(dataGrid.getRowElement(1)).find('.dx-texteditor-input').length, 0, 'no inputs in the second row');
+            if(editMode === 'Form') {
+                assert.notOk($(dataGrid.getRowElement(1)).hasClass('dx-datagrid-edit-form'), 'edit form not in the second row');
+            }
+            assert.strictEqual(dataGrid.cellValue(1, 0), 'test11', 'cell is not modified');
+            assert.equal(dataGrid.option('editing.changes').length, 1, 'one change');
+            assert.strictEqual(dataGrid.option('editing.changes')[0].type, 'insert', 'insert type');
+        });
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
@@ -6937,7 +6989,6 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             // act
             dataGrid.addRow();
             this.clock.tick(300);
-
 
             // assert
             assert.ok(dataGrid.getVisibleRows()[newRowVisibleIndex].isNewRow, 'row was added initially');

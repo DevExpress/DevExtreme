@@ -9,6 +9,7 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import config from 'core/config';
 import errors from 'ui/widget/ui.errors';
+import coreErrors from 'core/errors';
 import ajaxMock from '../../helpers/ajaxMock.js';
 
 import 'ui/data_grid';
@@ -6620,6 +6621,23 @@ QUnit.module('ParseValue', { beforeEach: setupModule, afterEach: teardownModule 
         assert.equal(column.parseValue('$12,000'), 12000, '$12,000');
         assert.equal(column.parseValue('12000'), 12000, '12000');
         assert.equal(column.parseValue(12), 12, '12 (number)');
+    });
+
+    QUnit.test('parseValue should not rise warning if column with number dataField and format with object (T1079297)', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [{ dataField: 'TestField', dataType: 'number', format: { type: 'fixedPoint', precision: 4 } }]
+        });
+
+        const column = this.columnsController.getColumns()[0];
+        const errorHandler = sinon.spy(coreErrors, 'log');
+
+        // act
+        const value = column.parseValue('123');
+
+        // assert
+        assert.equal(value, 123, '123');
+        assert.equal(errorHandler.callCount, 0, 'warning was not rised');
     });
 
     QUnit.test('parseValue for column with date dataField', function(assert) {

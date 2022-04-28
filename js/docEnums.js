@@ -245,6 +245,11 @@
  */
 
 /**
+ * @typedef {string} Enums.AggregatedPointsPosition
+ * @enum {'betweenTicks'|'crossTicks'}
+ */
+
+/**
  * @typedef {string} Enums.ScaleBreakLineStyle
  * @enum {'straight'|'waved'}
  */
