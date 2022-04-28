@@ -4766,7 +4766,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // assert
-        assert.ok(true, 'no error throwed');
+        assert.ok(true, 'no errors');
 
         // act;
         dataGrid.getScrollable().scrollTo({ top: dataGrid.getScrollable().scrollHeight() });
@@ -4786,7 +4786,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // assert
-        assert.ok(true, 'no error throwed');
+        assert.ok(true, 'no errors');
     });
 
     QUnit.test('Rows should be rendered properly when renderAsync = false', function(assert) {
