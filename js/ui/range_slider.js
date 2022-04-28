@@ -318,7 +318,8 @@ const RangeSlider = Slider.inherit({
                     start: start,
                     end: end,
                     value: [start, end],
-                    event: this._valueChangeEventInstance
+                    event: this._valueChangeEventInstance,
+                    previousValue: args.previousValue
                 });
 
                 this.validationRequest.fire({
