@@ -199,7 +199,7 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTre
 };
 
 /** @public */
-export type FocusedRowChangingEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
     readonly rowElement: DxElement;
     readonly prevRowIndex: number;
     newRowIndex: number;

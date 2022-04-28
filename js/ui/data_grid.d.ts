@@ -3489,15 +3489,14 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 cancel:boolean
-     * @type_function_param1_field2 component:dxDataGrid
-     * @type_function_param1_field3 element:DxElement
-     * @type_function_param1_field4 model:any
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 rowElement:DxElement
-     * @type_function_param1_field7 prevRowIndex:number
-     * @type_function_param1_field8 newRowIndex:number
-     * @type_function_param1_field9 rows:Array<dxDataGridRowObject>
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 rowElement:DxElement
+     * @type_function_param1_field6 prevRowIndex:number
+     * @type_function_param1_field7 newRowIndex:number
+     * @type_function_param1_field8 rows:Array<dxDataGridRowObject>
      * @default null
      * @action
      * @public
