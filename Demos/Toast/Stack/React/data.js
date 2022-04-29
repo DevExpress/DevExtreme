@@ -1,12 +1,12 @@
 export const directions = [
-  'down',
-  'down-reverse',
-  'up',
-  'up-reverse',
-  'left',
-  'left-reverse',
-  'right',
-  'right-reverse',
+  'down-push',
+  'down-stack',
+  'up-push',
+  'up-stack',
+  'left-push',
+  'left-stack',
+  'right-push',
+  'right-stack',
 ];
 
 export const positions = [

@@ -1,5 +1,5 @@
 let id = 1;
-let direction = 'up';
+let direction = 'up-push';
 let position = 'bottom center';
 
 $(() => {

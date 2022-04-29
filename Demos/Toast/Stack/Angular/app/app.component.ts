@@ -31,8 +31,8 @@ export class AppComponent {
   ];
 
   directions: string[] = [
-    'down', 'down-reverse', 'up', 'up-reverse',
-    'left', 'left-reverse', 'right', 'right-reverse',
+    'down-push', 'down-stack', 'up-push', 'up-stack',
+    'left-push', 'left-stack', 'right-push', 'right-stack',
   ];
 
   id = 1;
@@ -48,7 +48,7 @@ export class AppComponent {
     right: '',
   };
 
-  direction = 'up';
+  direction = 'up-push';
 
   showNotify() {
     const position: any = this.isAlias ? this.aliasPosition : this.coordinatePosition;

@@ -93,8 +93,8 @@ export default {
         'left center', 'center', 'right center',
       ],
       directions: [
-        'down', 'down-reverse', 'up', 'up-reverse',
-        'left', 'left-reverse', 'right', 'right-reverse',
+        'down-push', 'down-stack', 'up-push', 'up-stack',
+        'left-push', 'left-stack', 'right-push', 'right-stack',
       ],
       id: 1,
       isAlias: true,
@@ -105,7 +105,7 @@ export default {
         left: '',
         right: '',
       },
-      direction: 'up',
+      direction: 'up-push',
     };
   },
   methods: {

@@ -20,7 +20,7 @@ function App() {
     bottom: undefined,
     right: undefined,
   });
-  const [direction, setDirection] = React.useState('up');
+  const [direction, setDirection] = React.useState('up-push');
 
   return <React.Fragment>
     <div className='options'>
