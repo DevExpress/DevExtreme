@@ -6,13 +6,15 @@ import {
 import {
   RowClick, TableContent, TableContentProps, viewFunction as TableContentView, TopRowPlaceholder,
   BottomRowPlaceholder, RowsViewHeightValue, SetRowsViewContentRenderAction,
-  SetRowsViewScrollPositionAction,
+  SetRowsViewScrollPositionAction, SetRowsViewOffsetAction,
 } from '../table_content';
+import { NoDataText } from '../../widgets/no_data_text';
 import { Row, ColumnInternal } from '../../types';
 import { Scrollable } from '../../../../scroll_view/scrollable';
 import { Placeholder } from '../../../../../utils/plugin/placeholder';
 import { setWindow } from '../../../../../../core/utils/window';
 import { Plugins } from '../../../../../utils/plugin/context';
+import { ValueSetter } from '../../../../../utils/plugin/value_setter';
 
 describe('TableContent', () => {
   describe('View', () => {
@@ -59,6 +61,66 @@ describe('TableContent', () => {
       expect(tree.find('tr').hasClass('myRow')).toBe(true);
       expect(tree.find('tr').find('td').length).toBe(1);
       expect(tree.find('tr').find('td').text()).toBe('Test');
+    });
+
+    it('empty row', () => {
+      const rows: Row[] = [];
+      const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
+
+      const tableContent = new TableContent({
+        visibleRows: rows,
+        columns,
+      } as TableContentProps);
+
+      const tree = mount(
+        <TableContentView
+          rows={tableContent.rows}
+          isEmpty
+          {...tableContent as any}
+        />,
+      );
+
+      expect(tree.find(NoDataText).exists()).toBe(true);
+    });
+
+    it('no empty row', () => {
+      const rows: Row[] = [];
+      const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
+
+      const tableContent = new TableContent({
+        visibleRows: rows,
+        columns,
+      } as TableContentProps);
+
+      const tree = mount(
+        <TableContentView
+          rows={tableContent.rows}
+          isEmpty={false}
+          {...tableContent as any}
+        />,
+      );
+
+      expect(tree.find(NoDataText).exists()).toBe(false);
+    });
+
+    it('SetRowsViewOffsetAction rendered', () => {
+      const rows: Row[] = [];
+      const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
+
+      const tableContent = new TableContent({
+        visibleRows: rows,
+        columns,
+      } as TableContentProps);
+
+      const tree = mount(
+        <TableContentView
+          rows={tableContent.rows}
+          isEmpty
+          {...tableContent as any}
+        />,
+      );
+
+      expect(tree.find(ValueSetter).props().type).toBe(SetRowsViewOffsetAction);
     });
   });
 
@@ -172,6 +234,39 @@ describe('TableContent', () => {
         tableContent.onScrollContent(scrollEventsArg);
 
         expect(actionMock).toHaveBeenCalledWith(scrollEventsArg.scrollOffset);
+      });
+    });
+  });
+
+  describe('Actions', () => {
+    describe('SetRowsViewOffsetAction', () => {
+      it('should call ref scrollTo', () => {
+        const tableContent = new TableContent({});
+        tableContent.plugins = new Plugins();
+        const scrollToRef = jest.fn();
+        tableContent.scrollableRef = {
+          current: {
+            scrollTo: scrollToRef,
+          },
+        } as any;
+        tableContent.plugins.set(SetRowsViewOffsetAction, tableContent.scrollTo.bind(tableContent));
+
+        tableContent.plugins.callAction(SetRowsViewOffsetAction, { top: 10, left: 5 });
+
+        expect(scrollToRef).toHaveBeenCalledWith({ top: 10, left: 5 });
+      });
+
+      it('call SetRowsViewOffsetAction when ref is null', () => {
+        const tableContent = new TableContent({});
+        tableContent.plugins = new Plugins();
+        tableContent.scrollableRef = {
+          current: null,
+        } as any;
+        tableContent.plugins.set(SetRowsViewOffsetAction, tableContent.scrollTo.bind(tableContent));
+
+        expect(() => {
+          tableContent.plugins.callAction(SetRowsViewOffsetAction, { top: 10, left: 5 });
+        }).not.toThrowError();
       });
     });
   });

@@ -176,23 +176,25 @@ export class VirtualScrolling extends JSXComponent(VirtualScrollingProps) {
       }
       case 'paging': {
         const pageSize = getNormalizedPageSize(this.plugins.getValue(PageSize) ?? 0);
-        const calculatedTopScrollPosition = Math.round(
-          getTopScrollPosition(pageIndexPayload, pageSize,
-            this.visibleItemHeights, this.rowHeight),
-        );
-        const viewportItemIndex = calculateViewportItemIndex(
-          this.topScrollPosition, this.rowHeight, this.visibleItemHeights,
-        );
-        const totalCount = this.plugins.getValue(TotalCount) ?? 0;
+        if (pageSize > 0) {
+          const calculatedTopScrollPosition = Math.round(
+            getTopScrollPosition(pageIndexPayload, pageSize,
+              this.visibleItemHeights, this.rowHeight),
+          );
+          const viewportItemIndex = calculateViewportItemIndex(
+            this.topScrollPosition, this.rowHeight, this.visibleItemHeights,
+          );
+          const totalCount = this.plugins.getValue(TotalCount) ?? 0;
 
-        const calculatedPageIndex = calculatePageIndexByItemIndex(
-          viewportItemIndex, pageSize, totalCount,
-        );
+          const calculatedPageIndex = calculatePageIndexByItemIndex(
+            viewportItemIndex, pageSize, totalCount,
+          );
 
-        if ((isEqual.pageIndexPayloadToState && calculatedPageIndex !== pageIndexPayload)
-         || !isEqual.pageIndexPayloadToState) {
-          const offset = { top: calculatedTopScrollPosition };
-          this.plugins.callAction(SetRowsViewOffsetAction, offset);
+          if ((isEqual.pageIndexPayloadToState && calculatedPageIndex !== pageIndexPayload)
+           || !isEqual.pageIndexPayloadToState) {
+            const offset = { top: calculatedTopScrollPosition };
+            this.plugins.callAction(SetRowsViewOffsetAction, offset);
+          }
         }
         this.viewportState = 'synchronized';
         break;
@@ -203,11 +205,9 @@ export class VirtualScrolling extends JSXComponent(VirtualScrollingProps) {
             this.viewportPayload.topScrollPosition = topScrollPositionCurrent;
             this.viewportState = 'scrolling';
           }
-        } else if (action.type === 'paging') {
-          if (!isEqual.pageIndexPayloadToState || !isEqual.pageIndexCurrentToPayload) {
-            this.viewportPayload.pageIndex = pageIndexCurrent;
-            this.viewportState = 'paging';
-          }
+        } else if (!isEqual.pageIndexPayloadToState || !isEqual.pageIndexCurrentToPayload) {
+          this.viewportPayload.pageIndex = pageIndexCurrent;
+          this.viewportState = 'paging';
         }
         break;
       }

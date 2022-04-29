@@ -1,22 +1,23 @@
 import {
   calculateRowHeight, DEFAULT_ROW_HEIGHT, calculateItemHeights,
   calculateViewportItemIndex, getVirtualContentOffset,
+  getNormalizedPageSize, calculatePageIndexByItemIndex,
+  getTopScrollPosition,
 } from '../utils';
 import { Row, VirtualContentType } from '../../types';
 
 describe('Utils', () => {
   describe('calculateRowHeight', () => {
     it.each`
-          visibleRowHeights    | visibleRowCount    | result
-          ${[30, 30, 30]}      | ${3}               | ${30}
-          ${[]}                | ${0}               | ${DEFAULT_ROW_HEIGHT}
-          ${[30]}              | ${0}               | ${DEFAULT_ROW_HEIGHT}
-          ${[]}                | ${1}               | ${DEFAULT_ROW_HEIGHT}
-          ${[]}                | ${undefined}       | ${DEFAULT_ROW_HEIGHT}
-      `('visibleRowHeights: $visibleRowHeights, visibleRowCount: $visibleRowCount, result: $result', ({
-      visibleRowHeights, visibleRowCount, result,
+          visibleRowHeights    | itemHeights                 | result
+          ${[30, 30, 30]}      | ${{}}                       | ${30}
+          ${[]}                | ${{ 0: 50, 1: 30, 2: 40 }}  | ${40}
+          ${[30]}              | ${{ 0: 50 }}                | ${30}
+          ${[]}                | ${{}}}                      | ${DEFAULT_ROW_HEIGHT}
+      `('visibleRowHeights: $visibleRowHeights, itemHeights: $itemHeights, result: $result', ({
+      visibleRowHeights, itemHeights, result,
     }) => {
-      expect(calculateRowHeight(visibleRowHeights, visibleRowCount)).toEqual(result);
+      expect(calculateRowHeight(visibleRowHeights, itemHeights)).toEqual(result);
     });
   });
 
@@ -107,6 +108,37 @@ describe('Utils', () => {
       const contentType = type as VirtualContentType;
       expect(getVirtualContentOffset(contentType, itemIndex, totalCount, itemHeights, rowHeight))
         .toEqual(result);
+    });
+  });
+
+  describe('getTopScrollPosition', () => {
+    it.each([
+      [1, 20, { 0: 30, 2: 30, 3: 30 }, 30, 600],
+      [1, 20, {}, 30, 600],
+      [1, 20, { 0: 30, 2: 50, 3: 30 }, 30, 620],
+      [1, 20, { 50: 30 }, 30, 600],
+    ])('correct top scroll position', (pageIndex, pageSize, itemHeights, rowHeight, result) => {
+      expect(getTopScrollPosition(pageIndex, pageSize, itemHeights, rowHeight)).toEqual(result);
+    });
+  });
+
+  describe('getNormalizedPageSize', () => {
+    it.each([
+      ['all', 0],
+      [10, 10],
+    ])('correct pageSize', (pageSize, result) => {
+      expect(getNormalizedPageSize(pageSize as number | 'all')).toEqual(result);
+    });
+  });
+
+  describe('calculatePageIndexByItemIndex', () => {
+    it.each([
+      [0, 20, 100, 0],
+      [10, 20, 100, 0],
+      [25, 20, 100, 1],
+      [10, 0, 100, 0],
+    ])('correct pageIndex', (itemIndex, pageSize, totalCount, result) => {
+      expect(calculatePageIndexByItemIndex(itemIndex, pageSize, totalCount)).toEqual(result);
     });
   });
 });

@@ -1,6 +1,6 @@
 import {
   ScrollingModeValue,
-  ScrollingPositionValue,
+  TopScrollingPositionValue,
   ViewportSkipValue,
   ViewportTakeValue,
   ItemHeightsValue,
@@ -11,11 +11,18 @@ import {
   CalculateVisibleRowsInViewport,
   CalculateTopVirtualRowHeight,
   CalculateBottomVirtualRowHeight,
+  CalculateViewportPageIndex,
+  CalculateViewportLoadPageCount,
+  ViewportPageIndex,
+
 } from '../plugins';
 import {
   VisibleRows, TotalCount,
   DataStateValue,
 } from '../../plugins';
+import {
+  PageSize,
+} from '../../paging/plugins';
 import { RowsViewHeightValue } from '../../views/table_content';
 import { Plugins } from '../../../../../utils/plugin/context';
 import { Row } from '../../types';
@@ -29,20 +36,17 @@ describe('Plugins', () => {
   describe('CalculateViewportSkipValue', () => {
     beforeEach(reinitPlugins);
 
-    it('viewport skip value', () => {
-      plugins.set(ScrollingPositionValue, { top: 75, left: 0 });
-      plugins.set(RowHeightValue, 40);
-      plugins.set(ItemHeightsValue, { 0: 35, 1: 35, 2: 35 });
+    it.each([
+      [75, 40, { 0: 35, 1: 35, 2: 35 }, 100, 2],
+      [undefined, 40, { 0: 35, 1: 35, 2: 35 }, 100, 0],
+      [101, 40, { 0: 35, 1: 35, 2: 35 }, 1, 1],
+    ])('viewport skip value', (topScroll, rowHeight, itemHeights, totalCount, result) => {
+      plugins.set(TopScrollingPositionValue, topScroll);
+      plugins.set(RowHeightValue, rowHeight);
+      plugins.set(ItemHeightsValue, itemHeights);
+      plugins.set(TotalCount, totalCount);
 
-      expect(plugins.getValue(CalculateViewportSkipValue)).toEqual(2);
-    });
-
-    it('viewport skip value (scroll position not defined)', () => {
-      plugins.set(ScrollingPositionValue, undefined);
-      plugins.set(RowHeightValue, 40);
-      plugins.set(ItemHeightsValue, { 0: 35, 1: 35, 2: 35 });
-
-      expect(plugins.getValue(CalculateViewportSkipValue)).toEqual(0);
+      expect(plugins.getValue(CalculateViewportSkipValue)).toEqual(result);
     });
   });
 
@@ -50,30 +54,22 @@ describe('Plugins', () => {
     beforeEach(reinitPlugins);
 
     it.each([
-      ['standard', 4],
-      ['virtual', 4],
-    ])('viewport take value (mode: %s)', (mode, result) => {
+      ['standard', 10, 140, 75, 2, 40, { 0: 35, 1: 35, 2: 35 }, 4],
+      ['virtual', 10, 140, 75, 2, 40, { 0: 35, 1: 35, 2: 35 }, 4],
+      ['standard', undefined, undefined, undefined, 0, 40, { 0: 35, 1: 35, 2: 35 }, 0],
+    ])('viewport take value (mode: %s)', (
+      mode, totalCount, rowsViewHeight, topScroll,
+      skipValue, rowHeight, itemHeights, result,
+    ) => {
       plugins.set(ScrollingModeValue, mode);
-      plugins.set(TotalCount, 10);
-      plugins.set(RowsViewHeightValue, 140);
-      plugins.set(ScrollingPositionValue, { top: 75, left: 0 });
-      plugins.extend(ViewportSkipValue, -1, () => 2);
-      plugins.set(RowHeightValue, 40);
-      plugins.set(ItemHeightsValue, { 0: 35, 1: 35, 2: 35 });
+      plugins.set(TotalCount, totalCount);
+      plugins.set(RowsViewHeightValue, rowsViewHeight);
+      plugins.set(TopScrollingPositionValue, topScroll);
+      plugins.extend(ViewportSkipValue, -1, () => skipValue);
+      plugins.set(RowHeightValue, rowHeight);
+      plugins.set(ItemHeightsValue, itemHeights);
 
       expect(plugins.getValue(CalculateViewportTakeValue)).toEqual(result);
-    });
-
-    it('viewport take value with undefined values', () => {
-      plugins.set(ScrollingModeValue, 'standard');
-      plugins.set(TotalCount, undefined);
-      plugins.set(RowsViewHeightValue, undefined);
-      plugins.set(ScrollingPositionValue, undefined);
-      plugins.extend(ViewportSkipValue, -1, () => 0);
-      plugins.set(RowHeightValue, 40);
-      plugins.set(ItemHeightsValue, { 0: 35, 1: 35, 2: 35 });
-
-      expect(plugins.getValue(CalculateViewportTakeValue)).toEqual(0);
     });
   });
 
@@ -184,6 +180,35 @@ describe('Plugins', () => {
       ]);
 
       expect(plugins.getValue(CalculateBottomVirtualRowHeight)).toEqual(500);
+    });
+  });
+
+  describe('CalculateViewportPageIndex', () => {
+    beforeEach(reinitPlugins);
+
+    it('correct value', () => {
+      plugins.extend(ViewportSkipValue, -1, () => 35);
+      plugins.set(PageSize, 20);
+      plugins.set(TotalCount, 100);
+
+      expect(plugins.getValue(CalculateViewportPageIndex)).toEqual(1);
+    });
+  });
+
+  describe('CalculateViewportLoadPageCount', () => {
+    beforeEach(reinitPlugins);
+
+    it.each([
+      [10, 15, 20, 0, 2],
+      [0, 15, 20, 0, 1],
+      [25, 25, 'all', 2, 0],
+    ])('correct value', (skip, take, pageSize, viewportPageIndex, result) => {
+      plugins.extend(ViewportSkipValue, -1, () => skip);
+      plugins.extend(ViewportTakeValue, -1, () => take);
+      plugins.set(PageSize, pageSize);
+      plugins.extend(ViewportPageIndex, -1, () => viewportPageIndex);
+
+      expect(plugins.getValue(CalculateViewportLoadPageCount)).toEqual(result);
     });
   });
 });

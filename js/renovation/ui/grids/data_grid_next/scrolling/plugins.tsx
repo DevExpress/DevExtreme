@@ -78,16 +78,12 @@ export const AddLoadIndexToVisibleRows = createSelector<Row[]>(
 );
 export const CalculateVisibleRowsInViewport = createSelector<Row[]>(
   [VisibleRows, ViewportSkipValue, ViewportTakeValue],
-  (visibleRows: Row[], skip: number, take: number) => {
-    const rows = visibleRows.filter((row) => {
-      const isLoadIndexGreaterStart = row.loadIndex !== undefined && row.loadIndex >= skip;
-      const isLoadIndexLessEnd = row.loadIndex !== undefined && row.loadIndex < skip + take;
+  (visibleRows: Row[], skip: number, take: number) => visibleRows.filter((row) => {
+    const isLoadIndexGreaterStart = row.loadIndex !== undefined && row.loadIndex >= skip;
+    const isLoadIndexLessEnd = row.loadIndex !== undefined && row.loadIndex < skip + take;
 
-      return isLoadIndexGreaterStart && isLoadIndexLessEnd;
-    });
-
-    return rows;
-  },
+    return isLoadIndexGreaterStart && isLoadIndexLessEnd;
+  }),
 );
 export const CalculateTopVirtualRowHeight = createSelector<number>(
   [ViewportSkipValue, RowHeightValue, TotalCount, ItemHeightsValue],

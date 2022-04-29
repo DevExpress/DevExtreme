@@ -111,7 +111,6 @@ export const getTopScrollPosition = (
 ): number => {
   let scrollPosition = 0;
   const itemIndex = pageIndex * pageSize;
-
   scrollPosition = itemIndex * rowHeight;
 
   // eslint-disable-next-line no-restricted-syntax
