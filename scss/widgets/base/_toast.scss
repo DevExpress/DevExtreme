@@ -65,42 +65,42 @@
   /* stylelint-enable declaration-no-important */
 }
 
-.dx-toast-stack-down-direction {
+.dx-toast-stack-down-push-direction {
   flex-direction: column-reverse;
   justify-content: flex-end;
 }
 
-.dx-toast-stack-up-direction {
+.dx-toast-stack-up-push-direction {
   flex-direction: column;
   justify-content: flex-end;
 }
 
-.dx-toast-stack-left-direction {
+.dx-toast-stack-left-push-direction {
   flex-direction: row;
   justify-content: flex-end;
 }
 
-.dx-toast-stack-right-direction {
+.dx-toast-stack-right-push-direction {
   flex-direction: row-reverse;
   justify-content: flex-end;
 }
 
-.dx-toast-stack-down-reverse-direction {
+.dx-toast-stack-down-stack-direction {
   flex-direction: column;
   justify-content: flex-start;
 }
 
-.dx-toast-stack-up-reverse-direction {
+.dx-toast-stack-up-stack-direction {
   flex-direction: column-reverse;
   justify-content: flex-start;
 }
 
-.dx-toast-stack-left-reverse-direction {
+.dx-toast-stack-left-stack-direction {
   flex-direction: row-reverse;
   justify-content: flex-start;
 }
 
-.dx-toast-stack-right-reverse-direction {
+.dx-toast-stack-right-stack-direction {
   flex-direction: row;
   justify-content: flex-start;
 }

@@ -25240,14 +25240,14 @@ declare module DevExpress.ui {
      * [descr:Stack.direction]
      */
     direction?:
-      | 'down'
-      | 'up'
-      | 'left'
-      | 'right'
-      | 'down-reverse'
-      | 'up-reverse'
-      | 'left-reverse'
-      | 'right-reverse';
+      | 'down-push'
+      | 'up-push'
+      | 'left-push'
+      | 'right-push'
+      | 'down-stack'
+      | 'up-stack'
+      | 'left-stack'
+      | 'right-stack';
   }
   /**
    * [descr:StringLengthRule]
