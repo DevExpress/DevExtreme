@@ -56,7 +56,7 @@ function notify(message, /* optional */ typeOrStack, displayTime) {
 }
 
 const getDefaultDirection = (position) => {
-    return isString(position) && position.includes('top') ? 'down' : 'up';
+    return isString(position) && position.includes('top') ? 'down-push' : 'up-push';
 };
 
 const createStackContainer = (key) => {
@@ -124,7 +124,7 @@ const getCoordinatesByAlias = (alias, { toastWidth, toastHeight, windowHeight, w
 const getPositionStylesByCoordinates = (direction, coordinates, dimensions) => {
     const { toastWidth, toastHeight, windowHeight, windowWidth } = dimensions;
 
-    switch(direction.replace('-reverse', '')) {
+    switch(direction.replace(/-push|-stack/g, '')) {
         case 'up':
             return {
                 bottom: coordinates.bottom ?? windowHeight - toastHeight - coordinates.top,
