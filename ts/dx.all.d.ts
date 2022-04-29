@@ -22799,15 +22799,16 @@ declare module DevExpress.ui {
     export type FocusedRowChangingEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<
-      dxTreeList<TRowData, TKey>,
-      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
-    > & {
-      readonly rowElement: DevExpress.core.DxElement;
-      readonly prevRowIndex: number;
-      newRowIndex: number;
-      readonly rows: Array<Row<TRowData, TKey>>;
-    };
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<
+        dxTreeList<TRowData, TKey>,
+        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      > & {
+        readonly rowElement: DevExpress.core.DxElement;
+        readonly prevRowIndex: number;
+        newRowIndex: number;
+        readonly rows: Array<Row<TRowData, TKey>>;
+      };
     export type InitializedEvent<
       TRowData = any,
       TKey = any
