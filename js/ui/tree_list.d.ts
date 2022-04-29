@@ -199,7 +199,7 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTre
 };
 
 /** @public */
-export type FocusedRowChangingEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
     readonly rowElement: DxElement;
     readonly prevRowIndex: number;
     newRowIndex: number;
@@ -708,6 +708,7 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type_function_param1_field6 prevRowIndex:number
      * @type_function_param1_field7 newRowIndex:number
      * @type_function_param1_field8 rows:Array<dxTreeListRowObject>
+     * @type_function_param1_field9 cancel:boolean
      * @default null
      * @action
      * @public
