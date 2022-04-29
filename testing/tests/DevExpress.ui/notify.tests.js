@@ -105,22 +105,22 @@ QUnit.module('notify', {
             this.clock.tick(100);
         });
 
-        QUnit.test('add down direction class if stack do not have direction field and position is a top position alias', function(assert) {
+        QUnit.test('add down-push direction class if stack do not have direction field and position is a top position alias', function(assert) {
             notify(this.options, this.stack);
 
-            assert.equal($(`.${TOAST_STACK}-down-direction`).length, 1);
+            assert.equal($(`.${TOAST_STACK}-down-push-direction`).length, 1);
             this.clock.tick(100);
         });
 
-        QUnit.test('add up direction class if stack do not have direction field and position is not a top position alias', function(assert) {
+        QUnit.test('add up-push direction class if stack do not have direction field and position is not a top position alias', function(assert) {
             notify(this.options, { position: { top: 100, left: 100 } });
 
-            assert.equal($(`.${TOAST_STACK}-up-direction`).length, 1);
+            assert.equal($(`.${TOAST_STACK}-up-push-direction`).length, 1);
             this.clock.tick(100);
         });
 
         QUnit.test('add correct direction class if stack have direction field', function(assert) {
-            const direction = 'left-reverse';
+            const direction = 'left-stack';
             notify(this.options, { ...this.stack, direction });
 
             assert.equal($(`.${TOAST_STACK}-${direction}-direction`).length, 1);
@@ -128,8 +128,8 @@ QUnit.module('notify', {
         });
 
         QUnit.test('delete previous direction class on container', function(assert) {
-            const direction = 'up';
-            const newDirection = 'down';
+            const direction = 'up-push';
+            const newDirection = 'down-push';
             notify(this.options, { ...this.stack, direction });
             assert.equal($(`.${TOAST_STACK}-${direction}-direction`).length, 1);
 
@@ -150,10 +150,10 @@ QUnit.module('notify', {
         });
 
         [
-            { direction: 'up', style: 'bottom' },
-            { direction: 'down', style: 'top' },
-            { direction: 'left', style: 'right' },
-            { direction: 'right', style: 'left' }
+            { direction: 'up-push', style: 'bottom' },
+            { direction: 'down-push', style: 'top' },
+            { direction: 'left-push', style: 'right' },
+            { direction: 'right-push', style: 'left' }
         ].forEach(({ direction, style }) => {
             QUnit.test(`should set ${style} style if stack has ${direction} direction`, function(assert) {
                 notify(this.options, { ...this.stack, direction });
