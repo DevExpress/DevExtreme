@@ -1122,13 +1122,17 @@ QUnit.module('option value', () => {
     QUnit.test('onValueChanged event should be fired with correct arguments', function(assert) {
         const start = 15;
         const end = 45;
-        const $element = $('#slider').dxRangeSlider({
+        const expectedFields = [
+            'component', 'element', 'event', 'previousValue', 'value', 'start', 'end'
+        ];
+        const instance = $('#slider').dxRangeSlider({
             value: [0, end]
-        });
-        const instance = $element.dxRangeSlider('instance');
+        }).dxRangeSlider('instance');
 
         instance.option('onValueChanged', function(args) {
-            assert.deepEqual(args.value, [start, end], 'value argument got correct value');
+            expectedFields.forEach(field => {
+                assert.ok(field in args, `argument has ${field} field`);
+            });
         });
         instance.option('value', [start, end]);
     });
