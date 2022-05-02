@@ -487,9 +487,10 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $(tableElement).children('tbody').not('.dx-header').not('.dx-footer');
     },
 
-    _wrapRowIfNeed: function($table, $row) {
+    _wrapRowIfNeed: function($table, $row, isRefreshing) {
         const hasDataRowTemplate = this.option().rowTemplate || this.option('dataRowTemplate');
-        const $tBodies = hasDataRowTemplate && this._getBodies(this._tableElement || $table);
+        const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
+        const $tBodies = hasDataRowTemplate && this._getBodies($tableElement);
 
         if($tBodies && $tBodies.filter('.' + ROW_CLASS).length) {
             const $tbody = $('<tbody>').addClass($row.attr('class'));
