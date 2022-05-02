@@ -18,6 +18,7 @@ const priorityData = [{
 }];
 
 fixture`Resources`
+  .skip
   .page(url(__dirname, '../../container.html'));
 
 [
