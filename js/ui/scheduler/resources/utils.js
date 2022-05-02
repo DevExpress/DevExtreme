@@ -218,15 +218,17 @@ export const getPaintedResources = (resources, groups) => {
 export const getOrLoadResourceItem = (resources, resourceLoaderMap, field, value) => {
     const result = new Deferred();
 
-    resources.forEach(resource => {
-        const resourceField = getFieldExpr(resource);
-
-        if(resourceField === field) {
-            const dataSource = getWrappedDataSource(resource.dataSource);
+    resources
+        .filter(resource =>
+            getFieldExpr(resource) === field &&
+            isDefined(resource.dataSource)
+        )
+        .forEach(resource => {
+            const wrappedDataSource = getWrappedDataSource(resource.dataSource);
             const valueExpr = getValueExpr(resource);
 
             if(!resourceLoaderMap.has(field)) {
-                resourceLoaderMap.set(field, dataSource.load());
+                resourceLoaderMap.set(field, wrappedDataSource.load());
             }
 
             resourceLoaderMap.get(field)
@@ -241,8 +243,7 @@ export const getOrLoadResourceItem = (resources, resourceLoaderMap, field, value
                     resourceLoaderMap.delete(field);
                     result.reject();
                 });
-        }
-    });
+        });
 
     return result.promise();
 };
