@@ -25223,19 +25223,19 @@ declare module DevExpress.ui {
           /**
            * [descr:Stack.position.top]
            */
-          top?: number;
+          top?: number | undefined;
           /**
            * [descr:Stack.position.left]
            */
-          left?: number;
+          left?: number | undefined;
           /**
            * [descr:Stack.position.bottom]
            */
-          bottom?: number;
+          bottom?: number | undefined;
           /**
            * [descr:Stack.position.right]
            */
-          right?: number;
+          right?: number | undefined;
         };
     /**
      * [descr:Stack.direction]

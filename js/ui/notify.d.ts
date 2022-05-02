@@ -7,24 +7,24 @@ interface Stack {
     position?: 'top left' | 'top right' | 'bottom left' | 'bottom right' | 'top center' | 'bottom center' | 'left center' | 'right center' | 'center' | {
         /**
          * @docid
-         * @type number
+         * @type number | undefined
          */
-        top?: number;
+        top?: number | undefined;
         /**
          * @docid
-         * @type number
+         * @type number | undefined
          */
-        left?: number;
+        left?: number | undefined;
         /**
          * @docid
-         * @type number
+         * @type number | undefined
          */
-        bottom?: number;
+        bottom?: number | undefined;
         /**
          * @docid
-         * @type number
+         * @type number | undefined
          */
-        right?: number;
+        right?: number | undefined;
     };
     /**
      * @docid
