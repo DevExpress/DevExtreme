@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -28,83 +27,15 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
-
 <body>
-
-    <div class="dx-viewport demo-container">
-        <div id="btn"></div>
-        <div id="gridContainer"></div>
-    </div>
-
+    <div id="button"></div>
     <script>
-        $(() => {
-            $("#btn").dxButton({
-                text: "Reset state",
-                onClick(e) {
-                    grid.state(null);
-                }
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
-
-            const store = new DevExpress.data.ArrayStore(generateData(100000));
-
-            var grid = $('#gridContainer').dxDataGrid({
-                dataSource: generateData(100000),
-                keyExpr: 'id',
-                showBorders: true,
-                cacheEnabled: false,
-                scrolling: {
-                    mode: 'virtual',
-                    useNative: true
-                },
-                onInitialized(e) {
-                    window.grid = e.component;
-                    window.grid.option('paging.pageIndex', 1000)
-                }
-            }).dxDataGrid("instance");
         });
-
-
-        let s = 123456789;
-        const random = function () {
-            s = (1103515245 * s + 12345) % 2147483647;
-            return s % (10 - 1);
-        };
-
-        const generateData = function (count) {
-            let i;
-            const surnames = ['Smith', 'Johnson', 'Brown', 'Taylor', 'Anderson', 'Harris', 'Clark', 'Allen', 'Scott', 'Carter'];
-            const names = ['James', 'John', 'Robert', 'Christopher', 'George', 'Mary', 'Nancy', 'Sandra', 'Michelle', 'Betty'];
-            const gender = ['Male', 'Female'];
-            const items = [];
-            const startBirthDate = Date.parse('1/1/1975');
-            const endBirthDate = Date.parse('1/1/1992');
-
-            for (i = 0; i < count; i += 1) {
-                const birthDate = new Date(startBirthDate + Math.floor(
-                    (random() * (endBirthDate - startBirthDate)) / 10,
-                ));
-                birthDate.setHours(12);
-
-                const nameIndex = random();
-                const item = {
-                    id: i + 1,
-                    firstName: names[nameIndex],
-                    lastName: surnames[random()],
-                    gender: gender[Math.floor(nameIndex / 5)],
-                    birthDate,
-                };
-                items.push(item);
-            }
-            return items;
-        };
-
     </script>
-
-    <style>
-        #gridContainer {
-            height: 440px;
-        }
-    </style>
 </body>
-
 </html>
