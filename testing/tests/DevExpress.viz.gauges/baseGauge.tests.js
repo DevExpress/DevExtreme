@@ -511,6 +511,15 @@ QUnit.test('extra parameters for customizeText context', function(assert) {
     }, null), '200');
 });
 
+// T1085587
+QUnit.test('format negative zero', function(assert) {
+    assert.strictEqual(formatValue(-0, {
+        format: {
+            precision: 2, type: 'fixedPoint'
+        }
+    }), '0.00');
+});
+
 QUnit.module('util - getSampleText', {
     test_getSampleText: function(start, end) {
         return getSampleText(new translator1DModule.Translator1D(start, end, 0, 1), {
