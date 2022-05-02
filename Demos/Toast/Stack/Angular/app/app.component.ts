@@ -42,10 +42,10 @@ export class AppComponent {
   predefinedPosition = 'bottom center';
 
   coordinatePosition: object = {
-    top: null,
-    bottom: null,
-    left: null,
-    right: null,
+    top: undefined,
+    bottom: undefined,
+    left: undefined,
+    right: undefined,
   };
 
   direction = 'up-push';

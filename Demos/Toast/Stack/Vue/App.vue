@@ -100,10 +100,10 @@ export default {
       isPredefined: true,
       predefinedPosition: 'bottom center',
       coordinatePosition: {
-        top: null,
-        bottom: null,
-        left: null,
-        right: null,
+        top: undefined,
+        bottom: undefined,
+        left: undefined,
+        right: undefined,
       },
       direction: 'up-push',
     };
