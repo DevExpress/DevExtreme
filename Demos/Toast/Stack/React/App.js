@@ -12,8 +12,8 @@ import {
 
 function App() {
   const [id, setId] = React.useState(1);
-  const [isAlias, setIsAlias] = React.useState(true);
-  const [aliasPosition, setAliasPosition] = React.useState('bottom center');
+  const [isPredefined, setIsPredefined] = React.useState(true);
+  const [predefinedPosition, setPredefinedPosition] = React.useState('bottom center');
   const [coordinatePosition, setCoordinatePosition] = React.useState({
     top: undefined,
     left: undefined,
@@ -24,27 +24,27 @@ function App() {
 
   return <React.Fragment>
     <div className='options'>
-      <div>Position by</div>
+      <div>Position</div>
       <RadioGroup
         layout='horizontal'
-        defaultValue='alias'
+        defaultValue='predefined'
         items={radioGroupItems}
-        onValueChange={(value) => setIsAlias(value === 'alias')} />
+        onValueChange={(value) => setIsPredefined(value === 'predefined')} />
       <SelectBox
         items={positions}
-        value={aliasPosition}
-        onSelectionChanged={({ selectedItem }) => setAliasPosition(selectedItem)}
-        visible={isAlias} />
+        value={predefinedPosition}
+        onSelectionChanged={({ selectedItem }) => setPredefinedPosition(selectedItem)}
+        visible={isPredefined} />
       <div className='section'>
         <NumberBox
-          visible={!isAlias}
+          visible={!isPredefined}
           placeholder='top'
           defaultValue=''
           valueChangeEvent='keyup'
           disabled={!!coordinatePosition.bottom}
           onValueChange={topNumberBoxValueChanged} />
         <NumberBox
-          visible={!isAlias}
+          visible={!isPredefined}
           placeholder='bottom'
           defaultValue=''
           valueChangeEvent='keyup'
@@ -53,14 +53,14 @@ function App() {
       </div>
       <div className='section'>
         <NumberBox
-          visible={!isAlias}
+          visible={!isPredefined}
           placeholder='left'
           defaultValue=''
           valueChangeEvent='keyup'
           disabled={!!coordinatePosition.right}
           onValueChange={leftNumberBoxValueChanged} />
         <NumberBox
-          visible={!isAlias}
+          visible={!isPredefined}
           placeholder='right'
           defaultValue=''
           valueChangeEvent='keyup'
@@ -80,7 +80,7 @@ function App() {
   </React.Fragment>;
 
   function showNotify() {
-    const position = isAlias ? aliasPosition : coordinatePosition;
+    const position = isPredefined ? predefinedPosition : coordinatePosition;
 
     Notify({
       message: `Toast ${id}`,

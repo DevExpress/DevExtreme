@@ -1,21 +1,21 @@
 <div class="options">
-  <div>Position by</div>
+  <div>Position</div>
   <dx-radio-group
     layout="horizontal"
-    [items]="['alias', 'coordinates']"
-    value="alias"
+    [items]="['predefined', 'coordinates']"
+    value="predefined"
     (onValueChanged)="radioGroupValueChanged($event)"
   >
   </dx-radio-group>
   <dx-select-box
     [items]="positions"
-    [(value)]="aliasPosition"
-    [visible]="isAlias"
+    [(value)]="predefinedPosition"
+    [visible]="isPredefined"
   >
   </dx-select-box>
   <div class="section">
     <dx-number-box
-      [visible]="!isAlias"
+      [visible]="!isPredefined"
       placeholder="top"
       [(value)]="coordinatePosition.top"
       width="48%"
@@ -24,7 +24,7 @@
     >
     </dx-number-box>
     <dx-number-box
-      [visible]="!isAlias"
+      [visible]="!isPredefined"
       placeholder="bottom"
       [(value)]="coordinatePosition.bottom"
       width="48%"
@@ -35,7 +35,7 @@
   </div>
   <div class="section">
     <dx-number-box
-      [visible]="!isAlias"
+      [visible]="!isPredefined"
       placeholder="left"
       [(value)]="coordinatePosition.left"
       width="48%"
@@ -44,7 +44,7 @@
     >
     </dx-number-box>
     <dx-number-box
-      [visible]="!isAlias"
+      [visible]="!isPredefined"
       placeholder="right"
       [(value)]="coordinatePosition.right"
       width="48%"

@@ -39,17 +39,17 @@ $(() => {
 
   $('#radioGroup').dxRadioGroup({
     layout: 'horizontal',
-    value: 'alias',
-    items: ['alias', 'coordinates'],
+    value: 'predefined',
+    items: ['predefined', 'coordinates'],
     onValueChanged: ({ value }) => {
-      const aliasSelected = value === 'alias';
+      const predefinedSelected = value === 'predefined';
 
-      positionSelect.option('visible', aliasSelected);
-      topNumberBox.option('visible', !aliasSelected);
-      leftNumberBox.option('visible', !aliasSelected);
-      bottomNumberBox.option('visible', !aliasSelected);
-      rightNumberBox.option('visible', !aliasSelected);
-      position = aliasSelected
+      positionSelect.option('visible', predefinedSelected);
+      topNumberBox.option('visible', !predefinedSelected);
+      leftNumberBox.option('visible', !predefinedSelected);
+      bottomNumberBox.option('visible', !predefinedSelected);
+      rightNumberBox.option('visible', !predefinedSelected);
+      position = predefinedSelected
         ? positionSelect.option('value')
         : {
           top: topNumberBox.option('value') || undefined,

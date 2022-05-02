@@ -37,21 +37,21 @@ export class AppComponent {
 
   id = 1;
 
-  isAlias = true;
+  isPredefined = true;
 
-  aliasPosition = 'bottom center';
+  predefinedPosition = 'bottom center';
 
   coordinatePosition: object = {
-    top: '',
-    bottom: '',
-    left: '',
-    right: '',
+    top: null,
+    bottom: null,
+    left: null,
+    right: null,
   };
 
   direction = 'up-push';
 
   showNotify() {
-    const position: any = this.isAlias ? this.aliasPosition : this.coordinatePosition;
+    const position: any = this.isPredefined ? this.predefinedPosition : this.coordinatePosition;
     const direction: any = this.direction;
 
     notify({
@@ -77,7 +77,7 @@ export class AppComponent {
   }
 
   radioGroupValueChanged({ value }) {
-    this.isAlias = value === 'alias';
+    this.isPredefined = value === 'predefined';
   }
 }
 

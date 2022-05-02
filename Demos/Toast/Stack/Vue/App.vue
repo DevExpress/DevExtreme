@@ -1,21 +1,21 @@
 <template>
   <div>
     <div class="options">
-      <div>Position by</div>
+      <div>Position</div>
       <DxRadioGroup
         layout="horizontal"
-        :items="['alias', 'coordinates']"
-        value="alias"
+        :items="['predefined', 'coordinates']"
+        value="predefined"
         @value-changed="radioGroupValueChanged($event)"
       />
       <DxSelectBox
         :items="positions"
-        v-model:value="aliasPosition"
-        :visible="isAlias"
+        v-model:value="predefinedPosition"
+        :visible="isPredefined"
       />
       <div class="section">
         <DxNumberBox
-          :visible="!isAlias"
+          :visible="!isPredefined"
           placeholder="top"
           v-model:value="coordinatePosition.top"
           width="48%"
@@ -23,7 +23,7 @@
           :disabled="!!coordinatePosition.bottom"
         />
         <DxNumberBox
-          :visible="!isAlias"
+          :visible="!isPredefined"
           placeholder="bottom"
           v-model:value="coordinatePosition.bottom"
           width="48%"
@@ -33,7 +33,7 @@
       </div>
       <div class="section">
         <DxNumberBox
-          :visible="!isAlias"
+          :visible="!isPredefined"
           placeholder="left"
           v-model:value="coordinatePosition.left"
           width="48%"
@@ -41,7 +41,7 @@
           :disabled="!!coordinatePosition.right"
         />
         <DxNumberBox
-          :visible="!isAlias"
+          :visible="!isPredefined"
           placeholder="right"
           v-model:value="coordinatePosition.right"
           width="48%"
@@ -97,20 +97,20 @@ export default {
         'left-push', 'left-stack', 'right-push', 'right-stack',
       ],
       id: 1,
-      isAlias: true,
-      aliasPosition: 'bottom center',
+      isPredefined: true,
+      predefinedPosition: 'bottom center',
       coordinatePosition: {
-        top: '',
-        bottom: '',
-        left: '',
-        right: '',
+        top: null,
+        bottom: null,
+        left: null,
+        right: null,
       },
       direction: 'up-push',
     };
   },
   methods: {
     showNotify() {
-      const position = this.isAlias ? this.aliasPosition : this.coordinatePosition;
+      const position = this.isPredefined ? this.predefinedPosition : this.coordinatePosition;
       const direction = this.direction;
 
       notify({
@@ -136,7 +136,7 @@ export default {
     },
 
     radioGroupValueChanged({ value }) {
-      this.isAlias = value === 'alias';
+      this.isPredefined = value === 'predefined';
     },
   },
 };
