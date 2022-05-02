@@ -831,7 +831,7 @@ export const selectionModule = {
                     const $row = this.callBase.apply(this, arguments);
 
                     if(row) {
-                        const isSelected = !!row.isSelected;
+                        const isSelected = row.isSelected;
                         if(isSelected) {
                             $row.addClass(ROW_SELECTION_CLASS);
                         }
