@@ -188,7 +188,7 @@ export const dataControllerModule = {
                             dataSource = that.dataSource();
                             if(dataSource && that._setPagingOptions(dataSource)) {
                                 const pageIndex = dataSource.pageIndex();
-                                dataSource.load().always(() =>that.pageChanged.fire(pageIndex));
+                                dataSource.load().done(() =>that.pageChanged.fire(pageIndex));
                             }
                             handled();
                             break;
