@@ -225,6 +225,9 @@ export const BaseGauge = BaseWidget.inherit({
 
 //  TODO: find a better place for it
 export const formatValue = function(value, options, extra) {
+    if(Object.is(value, -0)) {
+        value = 0;
+    }
     options = options || {};
     const text = _format(value, options.format);
     let formatObject;

@@ -167,7 +167,7 @@ QUnit.test('index of tickInterval is not equal index of tick', function(assert) 
     this.testTickLabelFormat(assert, [1002], 2, ['1,002']);
 });
 
-QUnit.test('tiсk with a decimal point does not depend on the tickInterval', function(assert) {
+QUnit.test('tick with a decimal point does not depend on the tickInterval', function(assert) {
     this.testTickLabelFormat(assert, [0.25], 1, ['0.25']);
 });
 
@@ -980,6 +980,22 @@ QUnit.test('Currency format', function(assert) {
     assert.equal(this.renderer.text.getCall(0).args[0], '$0.000');
     assert.equal(this.renderer.text.getCall(1).args[0], '$1.000');
     assert.equal(this.renderer.text.getCall(2).args[0], '$2.000');
+});
+
+QUnit.test('Fixed point format. Negative zero', function(assert) {
+    this.createAxis({
+        label: {
+            format: { type: 'fixedPoint', precision: 3 },
+            visible: true
+        }
+    });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
+    this.generatedTicks = [-0, 1, 2];
+
+    this.axis.draw(this.canvas);
+
+    assert.equal(this.renderer.text.callCount, 3, 'number of rendered labels');
+    assert.equal(this.renderer.text.getCall(0).args[0], '0.000');
 });
 
 QUnit.test('Date format with custom', function(assert) {
