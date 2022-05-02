@@ -8,6 +8,6 @@ The DataGrid allows you to customize a header and a footer in the exported PDF f
     Use the [topLeft](/Documentation/ApiReference/Common/Object_Structures/PdfExportDataGridProps/topLeft/topLeft.md) object to specify a start position for DataGrid export. This position should be below the header.
     
     - For a footer    
-    Use the [customDrawCell](/Documentation/ApiReference/Common/Object_Structures/ExportDataGridProps/#customDrawCell) function to calculate the coordinates of the last right cell of the DataGrid.
+    Use the [customDrawCell](/Documentation/ApiReference/Common/Object_Structures/PdfExportDataGridProps/#customDrawCell) function to calculate the coordinates of the last right cell of the DataGrid.
 
-3. Execute a promise after the **exportDataGrid(options)** method. In this promise, specify position and appearance of the header/footer.
+3. Execute a promise after the [exportDataGrid(options)](/Documentation/ApiReference/Common/Utils/pdfExporter/#exportDataGridoptions) method. In this promise, specify position and appearance of the header/footer.
