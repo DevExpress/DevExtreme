@@ -4646,6 +4646,37 @@ QUnit.module('templates', baseModuleConfig, () => {
         // assert
         assert.equal(totalCount, 5, 'totalCount');
     });
+
+    QUnit.test('The freespace row should be as a tbody tag when dataRowTemplate is specified', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, text: 'text 1' },
+                { id: 2, text: 'text 2' },
+            ],
+            height: 600,
+            columns: ['text'],
+            dataRowTemplate: function(_, item) {
+                const { data } = item;
+                const markup = '<tr>'
+                    + `<td>${data.id}</td>`
+                    + `<td>${data.text}</td>`
+                + '</tr>';
+
+                return markup;
+            }
+        });
+
+        this.clock.tick();
+
+        // assert
+        const $rowElements = $(dataGrid.element()).find('.dx-datagrid-rowsview table > .dx-row');
+        const $freeSpaceRow = $rowElements.last();
+        assert.strictEqual($rowElements.length, 3, 'row count');
+        assert.strictEqual($rowElements.filter('.dx-freespace-row').length, 1, 'freespace row count');
+        assert.ok($freeSpaceRow.hasClass('dx-freespace-row'), 'freespace row is last');
+        assert.ok($freeSpaceRow.is('tbody'), 'freespace row as tbody tag');
+    });
 });
 
 QUnit.module('Modules', {

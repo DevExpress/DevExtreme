@@ -405,10 +405,10 @@ export const rowsModule = {
                     }
                 },
 
-                _renderFreeSpaceRow: function($tableElement) {
+                _renderFreeSpaceRow: function($tableElement, change) {
                     let $freeSpaceRowElement = this._createEmptyRow(FREE_SPACE_CLASS);
 
-                    $freeSpaceRowElement = this._wrapRowIfNeed($tableElement, $freeSpaceRowElement);
+                    $freeSpaceRowElement = this._wrapRowIfNeed($tableElement, $freeSpaceRowElement, change?.changeType === 'refresh');
 
                     this._appendEmptyRow($tableElement, $freeSpaceRowElement);
                 },
@@ -593,7 +593,7 @@ export const rowsModule = {
 
                     that._checkRowKeys(options.change);
 
-                    that._renderFreeSpaceRow($table);
+                    that._renderFreeSpaceRow($table, options.change);
                     if(!that._hasHeight) {
                         that.updateFreeSpaceRowHeight($table);
                     }
