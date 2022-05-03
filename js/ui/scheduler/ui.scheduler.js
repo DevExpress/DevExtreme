@@ -1402,7 +1402,7 @@ class Scheduler extends Widget {
 
         const result = extend({
             firstDayOfWeek: this.getFirstDayOfWeek(),
-            currentView: this.currentView,
+            currentView: this.option('currentView'),
             isAdaptive: this.option('adaptivityEnabled'),
             tabIndex: this.option('tabIndex'),
             focusStateEnabled: this.option('focusStateEnabled'),
@@ -1417,7 +1417,9 @@ class Scheduler extends Widget {
         result.min = new Date(this._dateOption('min'));
         result.max = new Date(this._dateOption('max'));
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
-        result.onCurrentViewChange = (name) => this.option('currentView', name);
+        result.onCurrentViewChange = (name) => {
+            this.option('currentView', name);
+        },
         result.onCurrentDateChange = (date) => {
             this.option('currentDate', date);
         };
