@@ -168,6 +168,7 @@ const Sortable = Draggable.inherit({
                 scrollTop: $scrollable.scrollTop()
             };
 
+            eventsEngine.off($scrollable, 'scroll', this._sourceScrollHandler);
             eventsEngine.on($scrollable, 'scroll', this._sourceScrollHandler);
         }
     },
@@ -196,11 +197,11 @@ const Sortable = Draggable.inherit({
     _dragEnterHandler: function(e) {
         this.callBase.apply(this, arguments);
 
-        this._subscribeToSourceScroll(e);
-
         if(this === this._getSourceDraggable()) {
             return;
         }
+
+        this._subscribeToSourceScroll(e);
 
         this._updateItemPoints();
         this.option('fromIndex', -1);
@@ -244,7 +245,9 @@ const Sortable = Draggable.inherit({
     _dragLeaveHandler: function() {
         this.callBase.apply(this, arguments);
 
-        this._unsubscribeFromSourceScroll();
+        if(this !== this._getSourceDraggable()) {
+            this._unsubscribeFromSourceScroll();
+        }
     },
 
     dragEnter: function() {
