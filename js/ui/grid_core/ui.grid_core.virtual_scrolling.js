@@ -653,6 +653,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             const zeroTopPosition = e.scrollOffset.top === 0;
 
             if((this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
+                this._scrollTop = e.scrollOffset.top;
                 this._dataController.setViewportPosition(e.scrollOffset.top);
             }
             this.callBase.apply(this, arguments);

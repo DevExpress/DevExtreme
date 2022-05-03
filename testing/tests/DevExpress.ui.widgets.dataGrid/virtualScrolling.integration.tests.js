@@ -6784,6 +6784,64 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.getScrollable().scrollTop(), 500, 'scroll position is not reset');
     });
 
+    [true, false].forEach((useRemoteData) => {
+        // T1085373
+        QUnit.test(`Virtual scrolling should work after setting state to null (remote data = ${useRemoteData})`, function(assert) {
+            // arrange
+            const getData = function(count) {
+                const items = [];
+                for(let i = 0; i < count; i++) {
+                    items.push({
+                        id: i + 1
+                    });
+                }
+                return items;
+            };
+
+            const dataSource = useRemoteData ? {
+                key: 'id',
+                load: () => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve(getData(1000));
+                    }, 100);
+
+                    return d.promise();
+                }
+            } : getData(1000);
+
+            const dataGrid = createDataGrid({
+                dataSource,
+                scrolling: {
+                    mode: 'virtual',
+                    useNative: true,
+                },
+                height: 200,
+            });
+
+            this.clock.tick(300);
+
+            // act
+            const scrollable = dataGrid.getScrollable();
+            scrollable.scrollTo({ top: 10000 });
+            $(scrollable.container()).trigger('scroll');
+            this.clock.tick(300);
+
+            dataGrid.state(null);
+            $(scrollable.container()).trigger('scroll');
+            this.clock.tick(300);
+
+            // assert
+            assert.strictEqual(dataGrid.getScrollable().scrollTop(), 0);
+            assert.strictEqual($('.dx-data-row').length, 5);
+            assert.deepEqual(
+                $('.dx-data-row').toArray().map(el => el.innerText),
+                ['1', '2', '3', '4', '5'],
+            );
+        });
+    });
+
     ['Row', 'Batch'].forEach(mode => {
         QUnit.test(`${mode} - Inserted rows should be at the top of the viewport when repaint mode is enabled (T1082889)`, function(assert) {
             // arrange
