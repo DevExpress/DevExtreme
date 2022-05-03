@@ -4011,6 +4011,44 @@ QUnit.module('autoscroll', getModuleConfigForTestsWithScroll('#itemsWithScroll',
             done();
         });
     });
+
+    // T1068082
+    QUnit.test('itemPoints should be corrected during browser autoscroll when a draggable element outside sortable', function(assert) {
+        let scrollEventCallCount = 0;
+        const done = assert.async();
+        const sortable = this.createSortable({
+            dropFeedbackMode: 'indicate',
+            itemOrientation: 'vertical',
+            group: 'test'
+        });
+        const pointer = pointerMock(getElement(0)).start();
+
+        pointer.down(25, 25).move(0, 100);
+
+        this.$scroll.on('scroll', () => {
+            scrollEventCallCount++;
+
+            // assert
+            const itemPoints = sortable.option('itemPoints');
+            assert.equal(itemPoints.length, itemCount + 1, 'item point count');
+            for(let i = 0; i < itemPoints.length; i++) {
+                assert.strictEqual(itemPoints[i].top, -scrollBy + i * itemHeight, `point ${i} height is corrected`);
+            }
+
+            if(scrollEventCallCount === 2) {
+                done();
+            } else {
+                // act
+                pointer.move(0, 135);
+                scrollBy = 100;
+                this.$scroll.scrollTop(scrollBy);
+            }
+        });
+
+        // act
+        let scrollBy = 50;
+        this.$scroll.scrollTop(scrollBy);
+    });
 });
 
 // T971119
