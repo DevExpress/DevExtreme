@@ -2,7 +2,7 @@ import {
   Component, JSXComponent, ComponentBindings, OneWay, Fragment,
   Consumer, Effect, Ref, RefObject, Template, JSXTemplate,
 } from '@devextreme-generator/declarations';
-
+import resizeObserverSingleton from '../../../../../core/resize_observer';
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import { Table } from '../widgets/table';
 import { DataRow } from '../widgets/data_row';
@@ -103,8 +103,16 @@ export class TableContent extends JSXComponent(TableContentProps) {
   }
 
   @Effect()
-  calculateRowsViewHeight(): void {
-    this.plugins.set(RowsViewHeightValue, getElementHeight(this.rowsViewRef.current));
+  calculateRowsViewHeight(): () => void {
+    this.onResize(this.rowsViewRef.current);
+
+    resizeObserverSingleton.observe(this.rowsViewRef.current, ({ target }) => {
+      this.onResize(target);
+    });
+
+    return (): void => {
+      resizeObserverSingleton.unobserve(this.rowsViewRef.current);
+    };
   }
 
   @Effect({ run: 'always' })
@@ -148,5 +156,9 @@ export class TableContent extends JSXComponent(TableContentProps) {
 
   scrollTo(e: Partial<ScrollOffset>): void {
     this.scrollableRef.current?.scrollTo(e);
+  }
+
+  onResize(target: HTMLDivElement | null): void {
+    this.plugins.set(RowsViewHeightValue, getElementHeight(target));
   }
 }

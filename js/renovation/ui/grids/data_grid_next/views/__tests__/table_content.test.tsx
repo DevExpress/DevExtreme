@@ -8,6 +8,7 @@ import {
   BottomRowPlaceholder, RowsViewHeightValue, SetRowsViewContentRenderAction,
   SetRowsViewScrollPositionAction, SetRowsViewOffsetAction,
 } from '../table_content';
+import resizeObserverSingleton from '../../../../../../core/resize_observer';
 import { NoDataText } from '../../widgets/no_data_text';
 import { Row, ColumnInternal } from '../../types';
 import { Scrollable } from '../../../../scroll_view/scrollable';
@@ -157,6 +158,54 @@ describe('TableContent', () => {
     });
 
     describe('calculateRowsViewHeight', () => {
+      it('should call onResize', () => {
+        const tableContent = new TableContent(new TableContentProps());
+        // resizeObserverSingleton.observe = jest.fn();
+        tableContent.plugins = new Plugins();
+        tableContent.rowsViewRef = {
+          current: {} as any,
+        } as any;
+        const onResizeMock = jest.fn();
+        tableContent.onResize = onResizeMock;
+
+        tableContent.calculateRowsViewHeight();
+
+        expect(onResizeMock).toBeCalled();
+        expect(onResizeMock.mock.calls[0][0]).toBe(tableContent.rowsViewRef.current);
+      });
+
+      it('should observe/unobserve', () => {
+        const tableContent = new TableContent(new TableContentProps());
+        const observeMock = jest.fn();
+        const unobserveMock = jest.fn();
+        const onResizeMock = jest.fn();
+        resizeObserverSingleton.observe = observeMock;
+        resizeObserverSingleton.unobserve = unobserveMock;
+        tableContent.plugins = new Plugins();
+        tableContent.rowsViewRef = {
+          current: {} as any,
+        } as any;
+        tableContent.onResize = onResizeMock;
+        const entry = {
+          target: tableContent.rowsViewRef.current,
+        };
+
+        const handle = tableContent.calculateRowsViewHeight();
+
+        expect(observeMock).toBeCalledTimes(1);
+        expect(observeMock.mock.calls[0][0]).toBe(tableContent.rowsViewRef.current);
+
+        observeMock.mock.calls[0][1].call(tableContent, entry);
+
+        expect(onResizeMock).toBeCalledTimes(2);
+        expect(onResizeMock.mock.calls[0][0]).toBe(tableContent.rowsViewRef.current);
+
+        handle.call(tableContent);
+
+        expect(unobserveMock).toBeCalled();
+        expect(unobserveMock.mock.calls[0][0]).toBe(tableContent.rowsViewRef.current);
+      });
+
       it('should update rows view height', () => {
         setWindow({ getComputedStyle: () => ({ height: '100px' }) }, true);
         const tableContent = new TableContent(new TableContentProps());
@@ -267,6 +316,23 @@ describe('TableContent', () => {
         expect(() => {
           tableContent.plugins.callAction(SetRowsViewOffsetAction, { top: 10, left: 5 });
         }).not.toThrowError();
+      });
+    });
+
+    describe('onResize', () => {
+      it('should change RowsViewHeightValue', () => {
+        setWindow({ getComputedStyle: () => ({ height: '500px' }) }, true);
+        const tableContent = new TableContent(new TableContentProps());
+        tableContent.plugins = new Plugins();
+        tableContent.rowsViewRef = {
+          current: {} as any,
+        } as any;
+
+        expect(tableContent.plugins.getValue(RowsViewHeightValue)).toBe(undefined);
+
+        tableContent.onResize(tableContent.rowsViewRef.current);
+
+        expect(tableContent.plugins.getValue(RowsViewHeightValue)).toEqual(500);
       });
     });
   });
