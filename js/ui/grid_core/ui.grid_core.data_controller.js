@@ -47,8 +47,12 @@ export const dataControllerModule = {
                             that.option('paging.' + optionName, value);
                             that._skipProcessingPagingChange = false;
                             const pageIndex = dataSource.pageIndex();
+                            that._isPaging = optionName === 'pageIndex';
                             return dataSource[optionName === 'pageIndex' ? 'load' : 'reload']()
-                                .done(() => that.pageChanged.fire(pageIndex));
+                                .done(() => {
+                                    that._isPaging = false;
+                                    that.pageChanged.fire(pageIndex);
+                                });
                         }
                         return Deferred().resolve().promise();
                     }
@@ -65,6 +69,7 @@ export const dataControllerModule = {
                     that._cachedProcessedItems = null;
                     that._columnsController = that.getController('columns');
 
+                    that._isPaging = false;
                     that._currentOperationTypes = null;
                     that._dataChangedHandler = (e) => {
                         that._currentOperationTypes = this._dataSource.operationTypes();

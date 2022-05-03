@@ -372,7 +372,13 @@ const VirtualScrollingRowsViewExtender = (function() {
             this.callBase();
 
             dataController.pageChanged.add((pageIndex) => {
+                const scrollTop = this._scrollTop;
+
                 this.scrollToPage(pageIndex ?? dataController.pageIndex());
+
+                if(this.option(LEGACY_SCROLLING_MODE) === false && this._scrollTop === scrollTop) {
+                    dataController.updateViewport();
+                }
             });
 
             dataController.dataSourceChanged.add(() => {
@@ -1233,6 +1239,7 @@ export const virtualScrollingModule = {
                     setViewportPosition: function() {
                         const rowsScrollController = this._rowsScrollController;
                         const dataSource = this._dataSource;
+                        this._isPaging = false;
 
                         if(rowsScrollController) {
                             rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments);
@@ -1400,7 +1407,7 @@ export const virtualScrollingModule = {
                         const rowsScrollController = this._rowsScrollController;
                         const newTake = rowsScrollController?.getViewportParams().take;
 
-                        (viewportIsNotFilled || currentTake < newTake) && itemCount && this.loadViewport({
+                        (viewportIsNotFilled || currentTake < newTake) && !this._isPaging && itemCount && this.loadViewport({
                             checkLoading: true
                         });
                     },
