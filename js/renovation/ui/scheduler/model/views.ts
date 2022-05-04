@@ -97,6 +97,8 @@ export const getCurrentViewConfig = (
       || restSchedulerProps.appointmentCollectorTemplate,
     appointmentTooltipTemplate: currentViewProps.appointmentTooltipTemplate
       || restSchedulerProps.appointmentTooltipTemplate,
+    showAllDayAppointments: currentViewProps.showAllDayAppointments
+      || restSchedulerProps.showAllDayAppointments,
   };
 
   return {

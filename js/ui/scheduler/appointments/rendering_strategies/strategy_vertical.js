@@ -5,8 +5,8 @@ import dateUtils from '../../../../core/utils/date';
 import timeZoneUtils from '../../utils.timeZone';
 import { ExpressionUtils } from '../../expressionUtils';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
-import { getAppointmentTakesAllDay } from '../dataProvider/utils';
 import getSkippedHoursInRange from '../../../../renovation/ui/scheduler/view_model/appointments/utils/getSkippedHoursInRange';
+import { getAppointmentTakesAllDay } from '../../../../renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -55,19 +55,21 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getItemPosition(appointment) {
-        const adapter = createAppointmentAdapter(appointment, this.dataAccessors, this.timeZoneCalculator);
-
         const allDay = this.isAllDay(appointment);
-        const isRecurring = !!adapter.recurrenceRule;
-
-        const appointmentStartDate = adapter.calculateStartDate('toGrid');
-        const appointmentEndDate = adapter.calculateEndDate('toGrid');
-
-        const isAppointmentTakesSeveralDays = !timeZoneUtils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
 
         if(allDay) {
             return super._getItemPosition(appointment);
         }
+
+        const adapter = createAppointmentAdapter(appointment, this.dataAccessors, this.timeZoneCalculator);
+        const isRecurring = !!adapter.recurrenceRule;
+
+        const appointmentStartDate = adapter.calculateStartDate('toGrid');
+        const appointmentEndDate = adapter.calculateEndDate('toGrid');
+        const appointmentDuration = appointmentEndDate - appointmentStartDate;
+
+        const appointmentBeginInCurrentView = this.options.startViewDate < appointmentStartDate;
+        const isAppointmentTakesSeveralDays = !timeZoneUtils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
 
         const settings = this.generateAppointmentSettings(appointment);
         let result = [];
@@ -83,8 +85,9 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             const currentMaxAllowedPosition = currentSetting.vMax;
 
             if(this._isMultiViewAppointment(currentSetting, height) || (isAppointmentTakesSeveralDays && !isRecurring)) {
-                const reduceHead = dateUtils.sameDate(appointmentStartDate, currentSetting.info.appointment.startDate) || isRecurring;
-
+                const trimmedStartDate = dateUtils.trimTime(appointmentStartDate);
+                const trimmedSettingStartDate = dateUtils.trimTime(currentSetting.info.appointment.startDate);
+                const reduceHead = (trimmedStartDate <= trimmedSettingStartDate) || isRecurring;
                 if(reduceHead) {
                     resultHeight = this._reduceMultiDayAppointment(height, {
                         top: currentSetting.top,
@@ -98,35 +101,34 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                     }, currentSetting);
                 }
 
-                const isMultiDay = this._isMultiDayAppointment(currentSetting, height);
-                if(isMultiDay) {
-                    appointmentReduced = reduceHead
-                        ? 'head'
-                        : 'tail';
-                }
+                const {
+                    startDate: currentSettingStartDate,
+                    normalizedEndDate: currentSettingNormalizedEndDate,
+                } = currentSetting.info.appointment;
+
+                const currentSettingDuration = currentSettingNormalizedEndDate - currentSettingStartDate;
+                const hasNextParts = currentSettingDuration < appointmentDuration;
+
+                appointmentReduced = hasNextParts
+                    ? appointmentBeginInCurrentView ? 'head' : 'body'
+                    : appointmentBeginInCurrentView ? 'head' : 'tail';
             }
 
             extend(currentSetting, {
                 height: resultHeight,
-                width: width,
-                allDay: allDay,
-                appointmentReduced: appointmentReduced
+                width,
+                allDay,
+                appointmentReduced,
             });
 
-            result = this._getAppointmentPartsPosition(multiDaysAppointmentParts, currentSetting, result);
+            result = this._getAppointmentPartsPosition(
+                multiDaysAppointmentParts,
+                currentSetting,
+                result
+            );
         }
 
         return result;
-    }
-
-    _isMultiDayAppointment(position, height) {
-        if(this.isVirtualScrolling) {
-            const maxTop = this._getGroupHeight() - this._getGroupTopOffset(position);
-
-            return height > maxTop;
-        }
-
-        return false;
     }
 
     _isMultiViewAppointment(position, height) {
@@ -134,9 +136,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _reduceMultiDayAppointment(sourceAppointmentHeight, bound) {
-        sourceAppointmentHeight = bound.bottom - Math.floor(bound.top);
-
-        return sourceAppointmentHeight;
+        return Math.min(sourceAppointmentHeight, bound.bottom - Math.floor(bound.top));
     }
 
     _getGroupHeight() {
@@ -175,7 +175,6 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getAppointmentParts(appointmentGeometry, appointmentSettings) {
-        let tailHeight = this._getTailHeight(appointmentGeometry, appointmentSettings);
         const width = appointmentGeometry.width;
         const result = [];
         let currentPartTop = Math.max(0, this.positionHelper.getGroupTop({
@@ -187,32 +186,47 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             ? this.groupCount
             : 1;
         const offset = this.cellWidth * cellsDiff;
-        const left = appointmentSettings.left + offset;
 
-        if(tailHeight > 0) {
-            const minHeight = this.getAppointmentMinSize();
+        const allDayPanelOffset = this.positionHelper.getOffsetByAllDayPanel({
+            groupIndex: appointmentSettings.groupIndex,
+            supportAllDayRow: this.allDaySupported(),
+            showAllDayPanel: this.showAllDayPanel
+        });
 
-            if(tailHeight < minHeight) {
-                tailHeight = minHeight;
-            }
+        currentPartTop += allDayPanelOffset;
 
-            const allDayPanelOffset = this.positionHelper.getOffsetByAllDayPanel({
-                groupIndex: appointmentSettings.groupIndex,
-                supportAllDayRow: this.allDaySupported(),
-                showAllDayPanel: this.showAllDayPanel
+        const minHeight = this.getAppointmentMinSize();
+        const {
+            vMax,
+            hMax
+        } = appointmentSettings;
+
+        const hasTailPart = this.options.endViewDate > appointmentSettings.info.appointment.endDate;
+        let left = Math.round(appointmentSettings.left + offset);
+        let tailHeight = this._getTailHeight(appointmentGeometry, appointmentSettings);
+
+        while(tailHeight > 0 && left < hMax) {
+            tailHeight = Math.max(minHeight, tailHeight);
+            const columnIndex = appointmentSettings.columnIndex + cellsDiff;
+            const height = Math.min(tailHeight, vMax);
+
+            result.push({
+                ...appointmentSettings,
+                top: currentPartTop,
+                left,
+                height,
+                width,
+                appointmentReduced: 'body',
+                rowIndex: 0,
+                columnIndex,
             });
 
-            currentPartTop += allDayPanelOffset;
+            left += offset;
+            tailHeight -= vMax;
+        }
 
-            result.push(extend(true, {}, appointmentSettings, {
-                top: currentPartTop,
-                left: left,
-                height: tailHeight,
-                width: width,
-                appointmentReduced: 'tail',
-                rowIndex: 0,
-                columnIndex: appointmentSettings.columnIndex + cellsDiff,
-            }));
+        if(hasTailPart && result.length > 0) {
+            result[result.length - 1].appointmentReduced = 'tail';
         }
 
         return result;
@@ -287,14 +301,12 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     isAllDay(appointmentData) {
-        const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointmentData);
-
-        if(allDay) {
-            return true;
-        }
-
-        const adapter = createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator);
-        return getAppointmentTakesAllDay(adapter, this.startDayHour, this.endDayHour);
+        return getAppointmentTakesAllDay(
+            createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator),
+            this.startDayHour,
+            this.endDayHour,
+            this.showAllDayAppointments
+        );
     }
 
     _getAppointmentMaxWidth() {
