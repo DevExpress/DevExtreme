@@ -1606,7 +1606,7 @@ class Scheduler extends Widget {
             schedulerHeight: this.option('height'),
             schedulerWidth: this.option('width'),
             onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
-            onVirtualScrollingUpdated: this._renderAppointments.bind(this),
+            onRenderAppointments: this._renderAppointments.bind(this),
             getHeaderHeight: () => utils.DOM.getHeaderHeight(this._header),
             onScrollEnd: () => this._appointments.updateResizableArea(),
 
