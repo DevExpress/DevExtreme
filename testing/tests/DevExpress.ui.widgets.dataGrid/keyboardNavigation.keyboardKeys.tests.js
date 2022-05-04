@@ -4175,4 +4175,35 @@ QUnit.module('Keyboard keys', {
             assert.notOk(setFocusedCellPositionSpy.called, `${key} not called`);
         });
     });
+
+    // T1086485
+    QUnit.testInActiveWindow('Keyboard navigation should not select next row when editing', function(assert) {
+        // arrange
+        this.options = {
+            keyboardNavigation: {
+                enabled: true,
+                enterKeyAction: 'startEdit',
+                enterKeyDirection: 'none',
+                editOnKeyPress: false
+            },
+            showColumnHeaders: true,
+            dataSource: [{ name: 1 }, { name: 2 }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            }
+        };
+
+        setupModules(this);
+
+        // act
+        this.gridView.render($('#container'));
+        this.focusCell(0, 0);
+        this.editingController.editCell(0, 0);
+        this.triggerKeyDown('downArrow', true);
+        this.clock.tick();
+
+        // assert
+        assert.equal($('.dx-editor-cell input:focus').length, 1);
+    });
 });
