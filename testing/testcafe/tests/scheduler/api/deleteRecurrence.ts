@@ -117,7 +117,9 @@ test('should show delete recurrence dialog if mode is "dialog"', async (t) => {
 
   await t
     .click(appointment.element)
-    .expect(appointmentTooltip.exists)
+    .expect(appointmentTooltip.isVisible())
+    .ok()
+    .expect(appointmentTooltip.deleteButton.visible)
     .ok()
     .click(appointmentTooltip.deleteButton)
     .expect(scheduler.getAppointmentCount())
@@ -126,7 +128,9 @@ test('should show delete recurrence dialog if mode is "dialog"', async (t) => {
     .expect(scheduler.getAppointmentCount())
     .eql(2)
     .click(appointment.element)
-    .expect(appointmentTooltip.exists)
+    .expect(appointmentTooltip.isVisible())
+    .ok()
+    .expect(appointmentTooltip.deleteButton.visible)
     .ok()
     .click(appointmentTooltip.deleteButton)
     .expect(deleteRecurrenceDialog.element.exists)
