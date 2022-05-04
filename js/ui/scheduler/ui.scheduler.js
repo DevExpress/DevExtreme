@@ -734,7 +734,7 @@ class Scheduler extends Widget {
                 this._updateOption('workSpace', args.fullName, value);
                 break;
             case 'showAllDayAppointments':
-                this._updateOption('showAllDayAppointments', name, value);
+                this._updateOption('workSpace', args.fullName, value);
                 break;
             case 'renovateRender':
                 this._updateOption('workSpace', name, value);

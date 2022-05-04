@@ -61,7 +61,7 @@ fixture`Scheduler - Multiday appointments`
   'month',
   'timelineMonth',
 ].forEach((currentView) => {
-  test(`it should not cut multiday appointment in ${currentView} view`, async (t) => {
+  test.skip(`it should not cut multiday appointment in ${currentView} view`, async (t) => {
     const {
       takeScreenshot,
       compareResults,
@@ -237,5 +237,54 @@ test('it should render all-day and multi-day appointments if showAllDayAppointme
     startDayHour: 8,
     endDayHour: 10,
     showAllDayAppointments: 'allDay',
+  },
+));
+
+test('it should correctly handle showAllDayAppointments for the wokrspace', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t
+    .expect(scheduler.getAppointmentCount())
+    .eql(2);
+
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 109);
+  await checkAllDayAppointment(t, scheduler, 'multiDay', 0, undefined, 451);
+
+  await t
+    .click(scheduler.toolbar.viewSwitcher.getButton('weekAllDay').element)
+    .expect(scheduler.getAppointmentCount())
+    .eql(5);
+
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 109);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 200);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 200);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 200);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 150);
+}).before(async () => createWidget(
+  'dxScheduler',
+  {
+    width: 900,
+    height: 400,
+    dataSource: [{
+      text: 'allDay',
+      startDate: new Date(2021, 2, 22),
+      allDay: true,
+    }, {
+      text: 'multiDay',
+      startDate: new Date(2021, 2, 22, 8),
+      endDate: new Date(2021, 2, 25, 9, 30),
+    }],
+    views: [
+      'week',
+      {
+        type: 'week',
+        name: 'weekAllDay',
+        showAllDayAppointments: 'allDay',
+      },
+    ],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 21),
+    startDayHour: 8,
+    endDayHour: 10,
   },
 ));
