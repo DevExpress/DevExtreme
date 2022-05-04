@@ -5,6 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import DxDataGrid from 'devextreme/ui/data_grid';
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import { lastValueFrom } from 'rxjs';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -39,12 +40,14 @@ export class AppComponent {
   }
 
   async processBatchRequest(url: string, changes: Array<{}>, component: DxDataGrid): Promise<any> {
-    await this.http.post(url, JSON.stringify(changes), {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).toPromise();
+    await lastValueFrom(
+      this.http.post(url, JSON.stringify(changes), {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
+    );
     await component.refresh(true);
     component.cancelEditData();
   }

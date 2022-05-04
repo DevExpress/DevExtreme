@@ -2,6 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 import { DxSparklineModule, DxSelectBoxModule } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -27,8 +28,7 @@ export class AppComponent {
   constructor(http: HttpClient) {
     this.source = new DataSource({
       store: new CustomStore({
-        load: () => http.get('../../../../data/resourceData.json')
-          .toPromise()
+        load: () => lastValueFrom(http.get('../../../../data/resourceData.json'))
           .catch((error) => { throw 'Data Loading Error'; }),
         loadMode: 'raw',
       }),

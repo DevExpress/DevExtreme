@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 import applyChanges from 'devextreme/data/apply_changes';
 
 export class Order {
@@ -46,9 +46,10 @@ export class Service {
   }
 
   getOrders(): Observable<Order[]> {
-    this.http.get(`${this.url}/Orders?skip=700`, { withCredentials: true }).toPromise().then((data: Response<Order>) => {
-      this.orders$.next(data.data);
-    });
+    lastValueFrom(this.http.get(`${this.url}/Orders?skip=700`, { withCredentials: true }))
+      .then((data: Response<Order>) => {
+        this.orders$.next(data.data);
+      });
 
     return this.orders$.asObservable();
   }
@@ -56,7 +57,7 @@ export class Service {
   async insert(change: Change<Order>): Promise<Order> {
     const httpParams = new HttpParams({ fromObject: { values: JSON.stringify(change.data) } });
     const httpOptions = { withCredentials: true, body: httpParams };
-    const data = await this.http.post<Order>(`${this.url}/InsertOrder`, httpParams, httpOptions).toPromise();
+    const data = await lastValueFrom(this.http.post<Order>(`${this.url}/InsertOrder`, httpParams, httpOptions));
 
     this.updateOrders(change, data);
 
@@ -66,7 +67,7 @@ export class Service {
   async update(change: Change<Order>): Promise<Order> {
     const httpParams = new HttpParams({ fromObject: { key: change.key, values: JSON.stringify(change.data) } });
     const httpOptions = { withCredentials: true, body: httpParams };
-    const data = await this.http.put<Order>(`${this.url}/UpdateOrder`, httpParams, httpOptions).toPromise();
+    const data = await lastValueFrom(this.http.put<Order>(`${this.url}/UpdateOrder`, httpParams, httpOptions));
 
     this.updateOrders(change, data);
 
@@ -76,7 +77,7 @@ export class Service {
   async remove(change: Change<Order>): Promise<Order> {
     const httpParams = new HttpParams({ fromObject: { key: change.key } });
     const httpOptions = { withCredentials: true, body: httpParams };
-    const data = await this.http.delete<Order>(`${this.url}/DeleteOrder`, httpOptions).toPromise();
+    const data = await lastValueFrom(this.http.delete<Order>(`${this.url}/DeleteOrder`, httpOptions));
 
     this.updateOrders(change, data);
 

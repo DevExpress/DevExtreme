@@ -2,6 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 import { DxDataGridModule } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
@@ -38,8 +39,7 @@ export class AppComponent {
         ].forEach((i) => {
           if (i in loadOptions && isNotEmpty(loadOptions[i])) { params = params.set(i, JSON.stringify(loadOptions[i])); }
         });
-        return httpClient.get('https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders', { params })
-          .toPromise()
+        return lastValueFrom(httpClient.get('https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders', { params }))
           .then((data: any) => ({
             data: data.data,
             totalCount: data.totalCount,

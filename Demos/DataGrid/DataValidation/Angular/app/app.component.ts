@@ -5,6 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import CustomStore from 'devextreme/data/custom_store';
+import { lastValueFrom } from 'rxjs';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -35,12 +36,12 @@ export class AppComponent {
   }
 
   asyncValidation(params) {
-    return this.httpClient.post('https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress', {
+    return lastValueFrom(this.httpClient.post('https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress', {
       id: params.data.ID,
       email: params.value,
     }, {
       responseType: 'json',
-    }).toPromise();
+    }));
   }
 }
 

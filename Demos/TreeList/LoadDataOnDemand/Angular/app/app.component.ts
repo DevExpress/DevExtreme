@@ -2,6 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 import { DxTreeListModule } from 'devextreme-angular';
 
@@ -26,9 +27,9 @@ export class AppComponent {
             params = params.append('parentIds', id);
           });
         }
-        return http
-          .get('https://js.devexpress.com/Demos/Mvc/api/treeListData', { params })
-          .toPromise();
+        return lastValueFrom(
+          http.get('https://js.devexpress.com/Demos/Mvc/api/treeListData', { params }),
+        );
       },
     };
   }

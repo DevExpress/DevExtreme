@@ -4,6 +4,7 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -33,8 +34,7 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.monthWeather = new DataSource({
       store: new CustomStore({
-        load: () => this.http.get('../../../../data/monthWeather.json')
-          .toPromise()
+        load: () => lastValueFrom(this.http.get('../../../../data/monthWeather.json'))
           .catch((error) => { throw 'Data Loading Error'; }),
         loadMode: 'raw',
       }),

@@ -4,6 +4,7 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 import { DxChartModule, DxChartComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -115,7 +116,9 @@ export class AppComponent {
     params += `&startBound=${args.startBound}`;
     params += `&endBound=${args.endBound}`;
 
-    return this.httpClient.get(`https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData${params}`).toPromise();
+    return lastValueFrom(
+      this.httpClient.get(`https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData${params}`),
+    );
   }
 
   getDateString(dateTime: Date) {

@@ -11,6 +11,8 @@ import { DxDataGridModule, DxSelectBoxModule, DxButtonModule } from 'devextreme-
 import CustomStore from 'devextreme/data/custom_store';
 import { formatDate } from 'devextreme/localization';
 
+import { lastValueFrom } from 'rxjs';
+
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
@@ -93,8 +95,7 @@ export class AppComponent {
         break;
     }
 
-    return result
-      .toPromise()
+    return lastValueFrom(result)
       .then((data: any) => (method === 'GET' ? data.data : data))
       .catch((e) => {
         throw e && e.error && e.error.Message;

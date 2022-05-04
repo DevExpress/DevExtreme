@@ -2,6 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 import { DxFileManagerModule, DxLoadPanelModule } from 'devextreme-angular';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
@@ -38,8 +39,7 @@ export class AppComponent {
   }
 
   checkAzureStatus(http: HttpClient) {
-    http.get<{ active: boolean }>('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager')
-      .toPromise()
+    lastValueFrom(http.get<{ active: boolean }>('https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-status?widgetType=fileManager'))
       .then((result) => {
         this.wrapperClassName = result.active ? 'show-widget' : 'show-message';
         this.loadPanelVisible = false;

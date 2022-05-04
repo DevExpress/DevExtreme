@@ -2,6 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 import { DxTreeViewModule } from 'devextreme-angular';
 
@@ -21,8 +22,9 @@ export class AppComponent {
     this.createChildren = (parent) => {
       const parentId = parent ? parent.itemData.id : '';
 
-      return http.get(`https://js.devexpress.com/Demos/Mvc/api/TreeViewData?parentId=${parentId}`)
-        .toPromise();
+      return lastValueFrom(
+        http.get(`https://js.devexpress.com/Demos/Mvc/api/TreeViewData?parentId=${parentId}`),
+      );
     };
   }
 }

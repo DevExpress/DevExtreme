@@ -30,10 +30,12 @@ const bundleConfig = {
   },
   map: {
     'devextreme.angular.systemjs.js': '../../../../../bundles/devextreme.angular.systemjs.js',
+    'rxjs': 'npm:rxjs/dist/bundles/rxjs.umd.js',
+    'rxjs/operators': 'npm:rxjs/dist/cjs/operators/index.js',
   },
   packages: {
-    'rxjs': { main: 'index.js', defaultExtension: 'js' },
-    'rxjs/operators': { main: 'index.js', defaultExtension: 'js' },
+    'rxjs': { defaultExtension: 'js' },
+    'rxjs/operators': { defaultExtension: 'js' },
   },
 };
 
