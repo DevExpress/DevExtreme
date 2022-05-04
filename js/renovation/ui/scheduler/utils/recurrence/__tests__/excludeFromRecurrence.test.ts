@@ -25,12 +25,12 @@ describe('excludeFromRecurrence', () => {
     {
       allDay: true,
       recurrenceException: undefined,
-      expected: '20220515T092500Z',
+      expected: '20220515T122500Z',
     },
     {
       allDay: true,
       recurrenceException: '20220615T181800Z',
-      expected: '20220615T181800Z,20220515T092500Z',
+      expected: '20220615T181800Z,20220515T122500Z',
     },
     {
       allDay: false,
@@ -43,14 +43,14 @@ describe('excludeFromRecurrence', () => {
       expected: '20220615T181800Z,20220515T181800Z',
     },
   ].forEach(({ allDay, recurrenceException, expected }) => {
-    it(`should return correct result if appointment allDay=${allDay}, recurrenceException=${recurrenceException}`, () => {
+    it(`should return correct result if "allDay"=${allDay}, "recurrenceException"=${recurrenceException}`, () => {
       const exceptionDate = new Date('2022-05-15T18:18:00.00Z');
       const result = excludeFromRecurrence(
         {
           text: 'test appointment',
           allDay,
-          startDate: new Date(2022, 3, 18, 12, 25),
-          endDate: new Date(2022, 3, 18, 13, 26),
+          startDate: new Date('2022-04-18T12:25:00.00Z'),
+          endDate: new Date('2022-03-18T13:26:00.00Z'),
           recurrenceException,
         },
         exceptionDate,
