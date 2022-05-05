@@ -911,7 +911,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         this.clock.tick();
 
         const $rows = $(dataGrid.element()).find('tbody.dx-row');
-        assert.equal($rows.length, 3, 'row count');
+        assert.equal($rows.length, 4, 'row count');
         assert.ok($rows.eq(0).hasClass('dx-data-row'), 'row 0 is data');
         assert.equal($rows.eq(0).find('.my-row').text(), 'text 1', 'row 0 is rendered from dataRowTemplate');
         assert.ok($rows.eq(1).hasClass('dx-master-detail-row'), 'row 1 is detail');

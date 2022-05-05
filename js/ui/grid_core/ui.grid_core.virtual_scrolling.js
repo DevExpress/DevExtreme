@@ -17,6 +17,7 @@ const CONTENT_CLASS = 'content';
 const FREESPACE_CLASS = 'dx-freespace-row';
 const COLUMN_LINES_CLASS = 'dx-column-lines';
 const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
+const ROW_INSERTED = 'dx-row-inserted';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
@@ -510,10 +511,15 @@ const VirtualScrollingRowsViewExtender = (function() {
             this._appendEmptyRow($table, $virtualRow, location);
         },
         _getRowHeights: function() {
-            const rowHeights = this._getRowElements(this._tableElement).toArray().map(function(row) {
-                return getBoundingRect(row).height;
-            });
-            return rowHeights;
+            const isPopupEditMode = this.getController('editing')?.isPopupEditMode?.();
+
+            let rowElements = this._getRowElements(this._tableElement).toArray();
+
+            if(isPopupEditMode) {
+                rowElements = rowElements.filter(row => !$(row).hasClass(ROW_INSERTED));
+            }
+
+            return rowElements.map((row) => getBoundingRect(row).height);
         },
         _correctRowHeights: function(rowHeights) {
             const dataController = this._dataController;
@@ -647,6 +653,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             const zeroTopPosition = e.scrollOffset.top === 0;
 
             if((this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
+                this._scrollTop = e.scrollOffset.top;
                 this._dataController.setViewportPosition(e.scrollOffset.top);
             }
             this.callBase.apply(this, arguments);
@@ -1069,17 +1076,20 @@ export const virtualScrollingModule = {
                                 const rowType = item.rowType;
                                 const itemCountable = isItemCountableByDataSource(item, dataSource);
 
+                                const isNextGroupItem = rowType === 'group' && (prevCountable || itemCountable || (prevRowType !== 'group' && currentIndex > 0));
+                                const isNextDataItem = rowType === 'data' && itemCountable && (prevCountable || prevRowType !== 'group');
+
                                 if(!item.isNewRow && isDefined(prevCountable)) {
-                                    const isNextGroupItem = rowType === 'group' && (prevCountable || itemCountable || (prevRowType !== 'group' && currentIndex > 0));
-                                    const isNextDataItem = rowType === 'data' && itemCountable && (prevCountable || prevRowType !== 'group');
                                     const isPrevNewRowFirst = isPrevRowNew && !wasCountableItem;
-                                    if((isNextGroupItem || isNextDataItem)) {
-                                        wasCountableItem = true;
-                                        if(!isPrevNewRowFirst) {
-                                            currentIndex++;
-                                        }
+                                    if((isNextGroupItem || isNextDataItem) && !isPrevNewRowFirst) {
+                                        currentIndex++;
                                     }
                                 }
+
+                                if(isNextGroupItem || isNextDataItem) {
+                                    wasCountableItem = true;
+                                }
+
                                 item.loadIndex = currentIndex;
                                 prevCountable = itemCountable;
                                 prevRowType = rowType;
