@@ -869,6 +869,7 @@ describe('Scheduler', () => {
                 showCurrentTimeIndicator: true,
                 indicatorUpdateInterval: 300000,
                 shadeUntilCurrentTime: false,
+                showAllDayAppointments: 'auto',
                 crossScrollingEnabled: false,
                 height: undefined,
                 width: undefined,

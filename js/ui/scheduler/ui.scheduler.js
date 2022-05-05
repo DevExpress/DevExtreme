@@ -72,7 +72,7 @@ import {
 import { renderAppointments } from './appointments/render';
 import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
 import { AppointmentDataProvider } from './appointments/dataProvider/appointmentDataProvider';
-import { getAppointmentTakesAllDay } from './appointments/dataProvider/utils';
+import { getAppointmentTakesAllDay } from '../../renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
 import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
@@ -303,6 +303,8 @@ class Scheduler extends Widget {
             scrolling: {
                 mode: 'standard'
             },
+
+            showAllDayAppointments: 'auto',
 
             renovateRender: true,
 
@@ -731,6 +733,9 @@ class Scheduler extends Widget {
 
                 this._updateOption('workSpace', args.fullName, value);
                 break;
+            case 'showAllDayAppointments':
+                this._updateOption('workSpace', args.fullName, value);
+                break;
             case 'renovateRender':
                 this._updateOption('workSpace', name, value);
                 break;
@@ -967,6 +972,7 @@ class Scheduler extends Widget {
             startDayHour: this._getCurrentViewOption('startDayHour'),
             endDayHour: this._getCurrentViewOption('endDayHour'),
             appointmentDuration: this._getCurrentViewOption('cellDuration'),
+            showAllDayAppointments: this._getCurrentViewOption('showAllDayAppointments'),
             showAllDayPanel: this.option('showAllDayPanel'),
             getLoadedResources: () => this.option('loadedResources'),
             getIsVirtualScrolling: () => this.isVirtualScrolling(),
@@ -975,7 +981,7 @@ class Scheduler extends Widget {
             getViewDirection: () => this._workSpace.viewDirection,
             getDateRange: () => this._workSpace.getDateRange(),
             getGroupCount: () => this._workSpace._getGroupCount(),
-            getViewDataProvider: () => this._workSpace.viewDataProvider
+            getViewDataProvider: () => this._workSpace.viewDataProvider,
         });
     }
 
@@ -1600,7 +1606,7 @@ class Scheduler extends Widget {
             schedulerHeight: this.option('height'),
             schedulerWidth: this.option('width'),
             onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
-            onVirtualScrollingUpdated: this._renderAppointments.bind(this),
+            onRenderAppointments: this._renderAppointments.bind(this),
             getHeaderHeight: () => utils.DOM.getHeaderHeight(this._header),
             onScrollEnd: () => this._appointments.updateResizableArea(),
 
@@ -2085,16 +2091,17 @@ class Scheduler extends Widget {
     }
 
     appointmentTakesAllDay(rawAppointment) {
-        const adapter = createAppointmentAdapter(
+        const appointment = createAppointmentAdapter(
             rawAppointment,
             this._dataAccessors,
             this.timeZoneCalculator
         );
 
         return getAppointmentTakesAllDay(
-            adapter,
+            appointment,
             this._getCurrentViewOption('startDayHour'),
-            this._getCurrentViewOption('endDayHour')
+            this._getCurrentViewOption('endDayHour'),
+            this._getCurrentViewOption('showAllDayAppointments'),
         );
     }
 

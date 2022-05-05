@@ -285,6 +285,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       appointmentTemplate, appointmentCollectorTemplate, appointmentTooltipTemplate,
       maxAppointmentsPerCell, currentDate, showAllDayPanel, showCurrentTimeIndicator,
       indicatorUpdateInterval, shadeUntilCurrentTime, crossScrollingEnabled, height, width,
+      showAllDayAppointments,
     } = this.props;
 
     return getCurrentViewConfig(
@@ -311,6 +312,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         crossScrollingEnabled,
         height,
         width,
+        showAllDayAppointments,
       },
       currentDate,
     );
@@ -457,6 +459,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         type: this.currentViewConfig.type,
         cellDuration: this.currentViewConfig.cellDuration,
         maxAppointmentsPerCell: this.currentViewConfig.maxAppointmentsPerCell,
+        showAllDayAppointments: this.currentViewConfig.showAllDayAppointments,
       },
       this.loadedResources,
       this.workSpaceViewModel!.viewDataProvider,
