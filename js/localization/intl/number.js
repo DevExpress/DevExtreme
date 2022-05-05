@@ -48,6 +48,7 @@ export default {
         } else if(format === 'currency') {
             config.style = 'currency';
             config.currency = formatConfig.currency || dxConfig().defaultCurrency;
+            config.currencySign = formatConfig.currencySign || dxConfig().defaultCurrencySign;
         }
 
         return config;
