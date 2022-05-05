@@ -1,5 +1,4 @@
 import { extend as _extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { each as _each, reverseEach as _reverseEach } from '../../core/utils/iterator';
 import { Range } from '../translators/range';
 import { Axis } from '../axes/base_axis';
@@ -210,7 +209,7 @@ export const AdvancedChart = BaseChart.inherit({
             let axisPanes = [];
             const name = axisOptions.name;
 
-            if(name && inArray(name, axisNames) !== -1) {
+            if(name && axisNames.includes(name)) {
                 that._incidentOccurred('E2102');
                 return;
             }
@@ -374,7 +373,7 @@ export const AdvancedChart = BaseChart.inherit({
         }
 
         _each(that.series, function(_, item) {
-            if(inArray(item.type, types) === -1) {
+            if(!types.includes(item.type)) {
                 types.push(item.type);
             }
         });

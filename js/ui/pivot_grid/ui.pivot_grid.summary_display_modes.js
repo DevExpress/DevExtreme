@@ -1,6 +1,5 @@
 import { isFunction, isDefined, isObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { findField, foreachTree, setFieldProperty } from './ui.pivot_grid.utils';
 
 const COLUMN = 'column';
@@ -131,7 +130,7 @@ function getFieldPos(descriptions, field, cache) {
         const area = field.area || 'data';
         fieldParams = cache.positions[field.index] = cache.positions[field.index] || {
             area: area,
-            index: inArray(field, descriptions[area === 'data' ? 'values' : area + 's'])
+            index: descriptions[area === 'data' ? 'values' : area + 's'].indexOf(field)
         };
     }
 
@@ -228,7 +227,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         let siblings;
 
         if(parent) {
-            const index = inArray(item, currentPath[1].children);
+            const index = currentPath[1].children.indexOf(item);
             siblings = parent.children(direction);
 
             if(siblings[index + 1]) {
@@ -257,7 +256,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         let siblings;
 
         if(parent) {
-            const index = inArray(item, currentPath[1].children);
+            const index = currentPath[1].children.indexOf(item);
             siblings = parent.children(direction);
 
             if(siblings[index - 1]) {

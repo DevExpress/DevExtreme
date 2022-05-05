@@ -5,7 +5,6 @@ import { applyServerDecimalSeparator, ensureDefined } from '../../core/utils/com
 import { isDefined } from '../../core/utils/type';
 import { fitIntoRange, inRange } from '../../core/utils/math';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import devices from '../../core/devices';
 import browser from '../../core/utils/browser';
 import TextEditor from '../text_box/ui.text_editor';
@@ -183,7 +182,7 @@ const NumberBoxBase = TextEditor.inherit({
         if(!isInputCharValid) {
             const keyName = normalizeKeyName(e);
             // NOTE: Additional check for Firefox control keys
-            if(isCommandKeyPressed(e) || keyName && (inArray(keyName, FIREFOX_CONTROL_KEYS) >= 0)) {
+            if(isCommandKeyPressed(e) || keyName && FIREFOX_CONTROL_KEYS.includes(keyName)) {
                 return;
             }
 

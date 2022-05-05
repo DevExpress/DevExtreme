@@ -7,7 +7,6 @@ import { noop } from '../../../core/utils/common';
 import { extend } from '../../../core/utils/extend';
 import { isFunction, isNumeric, isDefined, isString } from '../../../core/utils/type';
 import { map, each } from '../../../core/utils/iterator';
-import { inArray } from '../../../core/utils/array';
 import { sendRequest, getExpandedLevel, storeDrillDownMixin, foreachTree } from '../ui.pivot_grid.utils';
 import { when, Deferred } from '../../../core/utils/deferred';
 import { getLanguageId } from '../../../localization/language_codes';
@@ -604,7 +603,7 @@ export const XmlaStore = Class.inherit((function() {
         }, []));
         const firstChild = children && children[0];
 
-        if(firstChild && (visibleLevels[firstChild.hierarchyName] && (inArray(firstChild.levelName, visibleLevels[firstChild.hierarchyName]) !== -1) || !visibleLevels[firstChild.hierarchyName] || firstChild.level === 0)) {
+        if(firstChild && (visibleLevels[firstChild.hierarchyName] && visibleLevels[firstChild.hierarchyName].includes(firstChild.levelName) || !visibleLevels[firstChild.hierarchyName] || firstChild.level === 0)) {
             const newChildren = children.filter(child => child.hierarchyName === firstChild.hierarchyName);
             newChildren.grandTotalHash = children.grandTotalHash;
             return newChildren;

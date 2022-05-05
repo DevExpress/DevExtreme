@@ -1,6 +1,5 @@
 import errors from '../../core/errors';
 import { each } from '../../core/utils/iterator';
-import { inArray } from '../../core/utils/array';
 import { RRule, RRuleSet } from 'rrule';
 import dateUtils from '../../core/utils/date';
 import timeZoneUtils from './utils.timeZone';
@@ -302,7 +301,7 @@ class RecurrenceProcessor {
 class RecurrenceValidator {
     validateRRule(rule, recurrence) {
         if(this._brokenRuleNameExists(rule) ||
-            inArray(rule.freq, freqNames) === -1 ||
+            !freqNames.includes(rule.freq) ||
             this._wrongCountRule(rule) || this._wrongIntervalRule(rule) ||
             this._wrongDayOfWeek(rule) ||
             this._wrongByMonthDayRule(rule) || this._wrongByMonth(rule) ||
@@ -393,7 +392,7 @@ class RecurrenceValidator {
         let brokenRuleExists = false;
 
         each(rule, function(ruleName) {
-            if(inArray(ruleName, ruleNames) === -1) {
+            if(!ruleNames.includes(ruleName)) {
                 brokenRuleExists = true;
                 return false;
             }
@@ -403,7 +402,7 @@ class RecurrenceValidator {
     }
 
     _logBrokenRule(recurrence) {
-        if(inArray(recurrence, loggedWarnings) === -1) {
+        if(!loggedWarnings.includes(recurrence)) {
             errors.log('W0006', recurrence);
             loggedWarnings.push(recurrence);
         }

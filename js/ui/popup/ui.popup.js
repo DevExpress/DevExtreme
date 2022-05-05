@@ -3,7 +3,6 @@ import devices from '../../core/devices';
 import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
 import { EmptyTemplate } from '../../core/templates/empty_template';
-import { inArray } from '../../core/utils/array';
 import browser from '../../core/utils/browser';
 import { noop } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
@@ -498,7 +497,7 @@ const Popup = Overlay.inherit({
         const that = this;
         const itemType = data.shortcut;
 
-        if(inArray(itemType, ALLOWED_TOOLBAR_ITEM_ALIASES) < 0) {
+        if(!ALLOWED_TOOLBAR_ITEM_ALIASES.includes(itemType)) {
             return false;
         }
 
@@ -555,7 +554,7 @@ const Popup = Overlay.inherit({
         each(aliases, (_, alias) => {
             const className = POPUP_CLASS + '-' + alias;
 
-            if(inArray(className, this._toolbarItemClasses) >= 0) {
+            if(this._toolbarItemClasses.includes(className)) {
                 this.$wrapper().addClass(className + '-visible');
                 this._$bottom.addClass(className);
             } else {

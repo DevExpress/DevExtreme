@@ -6,7 +6,6 @@ import { deferRender, deferRenderer, noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { focusable as focusableSelector } from './selectors';
-import { inArray } from '../../core/utils/array';
 import { isPlainObject, isDefined } from '../../core/utils/type';
 import devices from '../../core/devices';
 import { compare as compareVersions } from '../../core/utils/version';
@@ -222,6 +221,11 @@ const Widget = DOMComponent.inherit({
         return this._getActiveElement();
     },
 
+    _isFocusTarget: function(element) {
+        const focusTargetElement = $(this._focusTarget()).get(0);
+        return element === focusTargetElement;
+    },
+
     _getActiveElement() {
         const activeElement = this._eventBindingTarget();
 
@@ -272,7 +276,7 @@ const Widget = DOMComponent.inherit({
     },
 
     _updateFocusState({ target }, isFocused) {
-        if(inArray(target, this._focusTarget()) !== -1) {
+        if(this._isFocusTarget(target)) {
             this._toggleFocusClass(isFocused, $(target));
         }
     },

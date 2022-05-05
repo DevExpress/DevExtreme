@@ -1,10 +1,9 @@
-import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
+
 const _round = Math.round;
 const _min = Math.min;
 const _max = Math.max;
 const _each = each;
-const _inArray = inArray;
 
 const horizontalAlignmentMap = {
     'left': 0,
@@ -230,7 +229,8 @@ LayoutControl.prototype = {
     },
 
     removeItem: function(item) {
-        this._items.splice(_inArray(item, this._items), 1);
+        const index = this._items.indexOf(item);
+        this._items.splice(index, 1);
         item.updateLayout = null;
     },
 

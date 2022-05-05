@@ -7,15 +7,6 @@ export const wrapToArray = function(entity) {
     return Array.isArray(entity) ? entity : [entity];
 };
 
-export const inArray = function(value, object) {
-    if(!object) {
-        return -1;
-    }
-    const array = Array.isArray(object) ? object : object.toArray();
-
-    return array.indexOf(value);
-};
-
 export const intersection = function(a, b) {
     if(!Array.isArray(a) || a.length === 0 ||
        !Array.isArray(b) || b.length === 0) {
@@ -25,7 +16,7 @@ export const intersection = function(a, b) {
     const result = [];
 
     each(a, function(_, value) {
-        const index = inArray(value, b);
+        const index = b.indexOf(value);
 
         if(index !== -1) {
             result.push(value);
@@ -51,7 +42,7 @@ export const removeDuplicates = function(from, what) {
     }
 
     each(what, function(_, value) {
-        const index = inArray(value, result);
+        const index = result.indexOf(value);
 
         result.splice(index, 1);
     });

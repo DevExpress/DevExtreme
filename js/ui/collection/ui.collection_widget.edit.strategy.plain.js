@@ -1,4 +1,3 @@
-import { inArray } from '../../core/utils/array';
 import EditStrategy from './ui.collection_widget.edit.strategy';
 
 
@@ -13,7 +12,7 @@ const PlainEditStrategy = EditStrategy.inherit({
         if(keyOf) {
             return this.getIndexByKey(keyOf(itemData));
         } else {
-            return inArray(itemData, this._getPlainItems());
+            return this._getPlainItems().indexOf(itemData);
         }
     },
 

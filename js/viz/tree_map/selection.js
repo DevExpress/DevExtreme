@@ -7,7 +7,6 @@ const proto = TreeMapBase.prototype;
 const nodeProto = Node.prototype;
 
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
-import { inArray as _inArray } from '../../core/utils/array';
 
 const MODE_NONE = 0;
 const MODE_SINGLE = 1;
@@ -38,7 +37,7 @@ expand(proto, '_extendProxyType', function(proto) {
         that._selectNode(this._id, !!state);
     };
     proto.isSelected = function() {
-        return _inArray(this._id, that._selectionList) >= 0;
+        return that._selectionList.includes(this._id);
     };
     that._selectionList = [];
 });
@@ -110,7 +109,7 @@ proto._selectNode = function(index, state) {
     if(that._selectionMode !== MODE_NONE) {
         that._context.suspend();
         selectionList = that._selectionList;
-        k = _inArray(index, selectionList);
+        k = selectionList.indexOf(index);
         if(state && k === -1) {
             if(that._selectionMode === MODE_SINGLE) {
                 if(selectionList.length) {

@@ -5,7 +5,6 @@ import Guid from '../../core/guid';
 import { ensureDefined } from '../../core/utils/common';
 import { isDefined, isEmptyObject, isObject, isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { isEmpty } from '../../core/utils/string';
 import { triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
@@ -562,7 +561,7 @@ const Form = Widget.inherit({
             this._itemsRunTimeInfo && this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(item.guid, { layoutManager });
 
             colCount = layoutManager._getColCount();
-            if(inArray(colCount, this._groupsColCount) === -1) {
+            if(!this._groupsColCount.includes(colCount)) {
                 this._groupsColCount.push(colCount);
             }
             $group.addClass(GROUP_COL_COUNT_CLASS + colCount);

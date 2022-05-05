@@ -2,7 +2,6 @@ import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { captionize } from '../../core/utils/inflector';
-import { inArray } from '../../core/utils/array';
 import Guid from '../../core/guid';
 
 import { SIMPLE_ITEM_TYPE } from './constants';
@@ -51,7 +50,7 @@ export function convertToRenderFieldItemOptions({
         (
             (!!item.helpText && !useFlexLayout)
             ||
-            inArray(item.editorType, ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1
+            ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'].includes(item.editorType)
         );
 
     const editorOptions = _convertToEditorOptions({
@@ -181,7 +180,7 @@ function _hasRequiredRuleInSet(rules) {
 }
 
 function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation, formLabelMode }) {
-    const isEditorWithoutLabels = inArray(item.editorType, EDITORS_WITHOUT_LABELS) !== -1;
+    const isEditorWithoutLabels = EDITORS_WITHOUT_LABELS.includes(item.editorType);
     const labelOptions = extend(
         {
             showColon: showColonAfterLabel,
@@ -195,7 +194,7 @@ function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, show
     );
 
     const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor']; // TODO: support "dxCalendar"
-    if(inArray(item.editorType, editorsRequiringIdForLabel) !== -1) {
+    if(editorsRequiringIdForLabel.includes(item.editorType)) {
         labelOptions.labelID = `dx-label-${new Guid()}`;
     }
 

@@ -32,7 +32,6 @@ import {
 
 import config from 'core/config';
 import { isFunction, isDefined, isRenderer } from 'core/utils/type';
-import { inArray } from 'core/utils/array';
 import windowUtils from 'core/utils/window';
 
 import 'ui/switch';
@@ -2367,7 +2366,7 @@ QUnit.module('Accessibility', () => {
             const $label = editor.$element().closest(`.${FIELD_ITEM_CLASS}`).children().first();
             const editorClassName = `dx-${editorType.toLowerCase().substr(2)}`;
 
-            if(inArray(editorClassName, editorClassesRequiringIdForLabel) !== -1) {
+            if(editorClassesRequiringIdForLabel.includes(editorClassName)) {
                 if(!(!windowUtils.hasWindow() && editorType === 'dxHtmlEditor')) {
                     assert.ok($ariaTarget.attr('aria-labelledby'), `aria-labeledby attribute ${editorClassName}`);
                     assert.ok($label.attr('id'), `label id attribute for ${editorClassName}`);

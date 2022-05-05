@@ -3,7 +3,7 @@ import Store from '../../data/abstract_store';
 import { executeAsync } from '../../core/utils/common';
 import { isFunction, isNumeric, isDefined, isString, isPlainObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { inArray, normalizeIndexes } from '../../core/utils/array';
+import { normalizeIndexes } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
 import { when, Deferred } from '../../core/utils/deferred';
 import Class from '../../core/class';
@@ -655,7 +655,7 @@ export default Class.inherit((function() {
 
             if(field && options) {
                 each(options, function(optionName, optionValue) {
-                    const isInitialization = inArray(optionName, STATE_PROPERTIES) < 0;
+                    const isInitialization = !STATE_PROPERTIES.includes(optionName);
 
                     setFieldProperty(field, optionName, optionValue, isInitialization);
 
@@ -1141,13 +1141,13 @@ export default Class.inherit((function() {
         collapseAll: function(id) {
             let dataChanged = false;
             const field = this.field(id) || {};
-            let areaOffsets = [inArray(field, this.getAreaFields(field.area))];
+            let areaOffsets = [this.getAreaFields(field.area).indexOf(field)];
 
             field.expanded = false;
             if(field && field.levels) {
                 areaOffsets = [];
                 field.levels.forEach(f => {
-                    areaOffsets.push(inArray(f, this.getAreaFields(field.area)));
+                    areaOffsets.push(this.getAreaFields(field.area).indexOf(f));
                     f.expanded = false;
                 });
             }

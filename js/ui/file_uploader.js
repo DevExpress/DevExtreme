@@ -8,7 +8,6 @@ import Callbacks from '../core/utils/callbacks';
 import { isDefined, isFunction, isNumeric } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
-import { inArray } from '../core/utils/array';
 import { Deferred, fromPromise } from '../core/utils/deferred';
 import ajax from '../core/utils/ajax';
 import Editor from './editor/editor';
@@ -697,10 +696,10 @@ class FileUploader extends Editor {
     _removeFile(file) {
         file.$file?.parent().remove();
 
-        this._files.splice(inArray(file, this._files), 1);
+        this._files.splice(this._files.indexOf(file), 1);
 
         const value = this.option('value').slice();
-        value.splice(inArray(file.value, value), 1);
+        value.splice(value.indexOf(file.value), 1);
 
         this._preventRecreatingFiles = true;
         this.option('value', value);

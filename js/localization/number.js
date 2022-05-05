@@ -1,5 +1,5 @@
 import dependencyInjector from '../core/utils/dependency_injector';
-import { inArray, find } from '../core/utils/array';
+import { find } from '../core/utils/array';
 import { escapeRegExp } from '../core/utils/common';
 import { each } from '../core/utils/iterator';
 import { isPlainObject } from '../core/utils/type';
@@ -46,7 +46,7 @@ const numberLocalization = dependencyInjector({
 
         const formatList = formatType.toLowerCase().split(' ');
         each(formatList, (index, value) => {
-            if(inArray(value, NUMERIC_FORMATS) > -1) {
+            if(NUMERIC_FORMATS.includes(value)) {
                 formatObject.formatType = value;
             } else if(value in LargeNumberFormatPowers) {
                 formatObject.power = LargeNumberFormatPowers[value];

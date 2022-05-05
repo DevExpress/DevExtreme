@@ -4,7 +4,6 @@ import eventsEngine from '../../events/core/events_engine';
 import { focused } from '../widget/selectors';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
 import { current, isMaterial } from '../themes';
 import devices from '../../core/devices';
@@ -739,7 +738,8 @@ const TextEditorBase = Editor.inherit({
     _optionChanged: function(args) {
         const { name, fullName, value } = args;
 
-        if(inArray(name.replace('on', ''), EVENTS_LIST) > -1) {
+        const eventName = name.replace('on', '');
+        if(EVENTS_LIST.includes(eventName)) {
             this._refreshEvents();
             return;
         }

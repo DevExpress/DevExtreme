@@ -10,7 +10,6 @@ import { each } from './utils/iterator';
 import { extend } from './utils/extend';
 import { getPublicElement } from '../core/element';
 import { grep, noop } from './utils/common';
-import { inArray } from './utils/array';
 import { isString, isDefined, isFunction } from './utils/type';
 import { hasWindow } from '../core/utils/window';
 import { resize as resizeEvent, visibility as visibilityEvents } from '../events/short';
@@ -298,7 +297,7 @@ const DOMComponent = Component.inherit({
 
         if(instance) {
             const optionChangedHandler = ({ name, value }) => {
-                if(inArray(name, synchronizableOptions) >= 0) {
+                if(synchronizableOptions.includes(name)) {
                     instance.option(name, value);
                 }
             };

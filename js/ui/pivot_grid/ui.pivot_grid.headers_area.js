@@ -1,7 +1,6 @@
 import { setWidth, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { isDefined } from '../../core/utils/type';
-import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
 import { AreaItem } from './ui.pivot_grid.area_item';
 import Scrollable from '../scroll_view/ui.scrollable';
@@ -269,7 +268,7 @@ export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
     },
 
     _getRowClassNames: function(rowIndex, cell, rowClassNames) {
-        if(rowIndex !== 0 & cell.expanded && inArray(PIVOTGRID_EXPAND_BORDER, rowClassNames) === -1) {
+        if(rowIndex !== 0 & cell.expanded && !rowClassNames.includes(PIVOTGRID_EXPAND_BORDER)) {
             rowClassNames.push(PIVOTGRID_EXPAND_BORDER);
         }
     },
