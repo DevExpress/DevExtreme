@@ -1,5 +1,4 @@
 import { isDefined } from './type';
-import { each } from './iterator';
 import { orderEach } from './object';
 import config from '../config';
 
@@ -20,13 +19,16 @@ export const removeDuplicates = function(from = [], toRemove = []) {
     return from.filter(value => !toRemoveMap[value]--);
 };
 
-export const normalizeIndexes = function(items, indexParameterName, currentItem, needIndexCallback) {
+export const normalizeIndexes = function(items, indexPropName, currentItem, needIndexCallback) {
     const indexedItems = {};
-    let parameterIndex = 0;
-    const useLegacyVisibleIndex = config().useLegacyVisibleIndex;
+    const { useLegacyVisibleIndex } = config();
+    let currentIndex = 0;
 
-    each(items, function(index, item) {
-        index = item[indexParameterName];
+    const shouldUpdateIndex = (item) => !isDefined(item[indexPropName])
+            && (!needIndexCallback || needIndexCallback(item));
+
+    items.forEach((item) => {
+        const index = item[indexPropName];
         if(index >= 0) {
             indexedItems[index] = indexedItems[index] || [];
 
@@ -36,41 +38,39 @@ export const normalizeIndexes = function(items, indexParameterName, currentItem,
                 indexedItems[index].push(item);
             }
         } else {
-            item[indexParameterName] = undefined;
+            item[indexPropName] = undefined;
         }
     });
 
     if(!useLegacyVisibleIndex) {
-        each(items, function() {
-            if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
-                while(indexedItems[parameterIndex]) {
-                    parameterIndex++;
+        items.forEach(item => {
+            if(shouldUpdateIndex(item)) {
+                while(indexedItems[currentIndex]) {
+                    currentIndex++;
                 }
-                indexedItems[parameterIndex] = [this];
-                parameterIndex++;
+                indexedItems[currentIndex] = [item];
+                currentIndex++;
             }
         });
     }
 
-    parameterIndex = 0;
+    currentIndex = 0;
 
     orderEach(indexedItems, function(index, items) {
-        each(items, function() {
+        items.forEach(item => {
             if(index >= 0) {
-                this[indexParameterName] = parameterIndex++;
+                item[indexPropName] = currentIndex++;
             }
         });
     });
 
     if(useLegacyVisibleIndex) {
-        each(items, function() {
-            if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
-                this[indexParameterName] = parameterIndex++;
+        items.forEach(item => {
+            if(shouldUpdateIndex(item)) {
+                item[indexPropName] = currentIndex++;
             }
         });
     }
-
-    return parameterIndex;
 };
 
 export const groupBy = (array, getGroupName) => {
