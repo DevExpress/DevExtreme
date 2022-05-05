@@ -286,7 +286,6 @@ export interface PivotGridDataSourceField {
     caption?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.customizeText
-     * @type_function_param1_field1 value:string|number|date
      * @public
      */
     customizeText?: ((cellInfo: { value?: string | number | Date; valueText?: string }) => string);
@@ -483,7 +482,6 @@ export default class PivotGridDataSource {
     /**
      * @docid
      * @publicName collapseHeaderItem(area, path)
-     * @param2 path:Array<string, number, Date>
      * @public
      */
     collapseHeaderItem(area: string, path: Array<string | number | Date>): void;

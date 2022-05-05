@@ -80,8 +80,6 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     /**
      * @docid
      * @type_function_param1 validatedInfo:Object
-     * @type_function_param1_field1 name:string
-     * @type_function_param1_field2 isValid:boolean
      * @type_function_param1_field3 value:Object
      * @type_function_param1_field4 validationRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @type_function_param1_field5 brokenRule:RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule

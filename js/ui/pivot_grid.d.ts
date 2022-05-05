@@ -414,16 +414,9 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @docid
      * @type_function_param1 e:Object
      * @default null
-     * @type_function_param1_field1 cancel:boolean
      * @type_function_param1_field2 component:dxPivotGrid
-     * @type_function_param1_field3 element:DxElement
-     * @type_function_param1_field4 model:any
      * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 area:string
-     * @type_function_param1_field7 cellElement:DxElement
      * @type_function_param1_field8 cell:dxPivotGridPivotGridCell
-     * @type_function_param1_field9 rowIndex:number
-     * @type_function_param1_field10 columnIndex:number
      * @type_function_param1_field11 columnFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field12 rowFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field13 dataFields:Array<PivotGridDataSourceOptions.fields>
@@ -434,15 +427,9 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 area:string
-     * @type_function_param1_field5 cellElement:DxElement
      * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
-     * @type_function_param1_field7 rowIndex:number
-     * @type_function_param1_field8 columnIndex:number
      * @default null
      * @type_function_param1_field1 component:dxPivotGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -451,13 +438,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @docid
      * @type_function_param1 e:Object
      * @type_function_param1_field1 component:dxPivotGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 area:string
      * @type_function_param1_field5 cell:dxPivotGridPivotGridCell
-     * @type_function_param1_field6 cellElement:DxElement
-     * @type_function_param1_field7 columnIndex:number
-     * @type_function_param1_field8 rowIndex:number
      * @type_function_param1_field9 dataFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field10 rowFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field11 columnFields:Array<PivotGridDataSourceOptions.fields>
@@ -473,8 +454,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPivotGrid
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      * @deprecated
@@ -483,12 +462,8 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 cancel:boolean
      * @default null
      * @type_function_param1_field2 component:dxPivotGrid
-     * @type_function_param1_field3 element:DxElement
-     * @type_function_param1_field4 model:any
-     * @type_function_param1_field5 fileName:string
      * @action
      * @public
      */
@@ -496,13 +471,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 cancel:boolean
      * @default null
-     * @type_function_param1_field2 component:dxPivotGrid
-     * @type_function_param1_field3 element:DxElement
-     * @type_function_param1_field4 data:BLOB
-     * @type_function_param1_field5 format:string
-     * @type_function_param1_field6 fileName:string
      * @action
      * @public
      * @deprecated
@@ -690,7 +659,6 @@ export default class dxPivotGrid extends Widget<dxPivotGridOptions> {
      * @param2_field5 processCell:function(cellData)
      * @param2_field6 customizeChart:function(chartOptions)
      * @param2_field7 customizeSeries:function(seriesName, seriesOptions)
-     * @return function | null
      * @public
      */
     bindChart(chart: string | DxElement | any, integrationOptions: { inverted?: boolean; dataFieldsDisplayMode?: string; putDataFieldsInto?: string; alternateDataFields?: boolean; processCell?: Function; customizeChart?: Function; customizeSeries?: Function }): Function & null;
@@ -739,7 +707,6 @@ export interface dxPivotGridPivotGridCell {
     columnPath?: Array<string | number | Date>;
     /**
      * @docid
-     * @acceptValues "D" | "T" | "GT"
      * @public
      */
     columnType?: 'D' | 'T' | 'GT';
@@ -765,7 +732,6 @@ export interface dxPivotGridPivotGridCell {
     rowPath?: Array<string | number | Date>;
     /**
      * @docid
-     * @acceptValues "D" | "T" | "GT"
      * @public
      */
     rowType?: 'D' | 'T' | 'GT';
@@ -776,7 +742,6 @@ export interface dxPivotGridPivotGridCell {
     text?: string;
     /**
      * @docid
-     * @acceptValues "D" | "T" | "GT"
      * @public
      */
     type?: 'D' | 'T' | 'GT';

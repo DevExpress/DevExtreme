@@ -146,12 +146,8 @@ export interface dxAccordionOptions<
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field6 itemElement:DxElement
-     * @type_function_param1_field7 itemIndex:number
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:dxAccordion
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */

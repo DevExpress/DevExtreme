@@ -27,8 +27,6 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @type_function_param1_field5 previousValue:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */

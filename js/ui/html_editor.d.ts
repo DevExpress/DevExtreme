@@ -122,8 +122,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:dxHtmlEditor
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -134,8 +132,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:dxHtmlEditor
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @action
      * @public
      */
@@ -559,9 +555,6 @@ export interface dxHtmlEditorMention {
      * @docid
      * @default null
      * @type_function_param1 mentionData:object
-     * @type_function_param1_field1 marker:string
-     * @type_function_param1_field2 id:string|number
-     * @type_function_param1_field3 value:any
      * @type_function_return string|Element|jQuery
      * @public
      */

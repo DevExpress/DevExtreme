@@ -52,8 +52,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:<DOMComponent>
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
      * @public
      */
     onDisposing?: ((e: EventInfo<TComponent>) => void);
@@ -63,11 +61,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:<DOMComponent>
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 name:string
-     * @type_function_param1_field5 fullName:string
-     * @type_function_param1_field6 value:any
      * @public
      */
     onOptionChanged?: ((e: OptionChangedEventInfo<TComponent>) => void);
