@@ -73,13 +73,12 @@ export const normalizeIndexes = function(items, indexParameterName, currentItem,
     return parameterIndex;
 };
 
-export const groupBy = (array, cb) => array.reduce(
-    (result, item) => ({
-        ...result,
-        [cb(item)]: [
-            ...(result[cb(item)] || []),
-            item,
-        ],
-    }),
-    {}
-);
+export const groupBy = (array, getGroupName) => {
+    return array.reduce((groupedResult, item) => {
+        const groupName = getGroupName(item);
+        groupedResult[groupName] = groupedResult[groupName] ?? [];
+        groupedResult[groupName].push(item);
+
+        return groupedResult;
+    }, {});
+};
