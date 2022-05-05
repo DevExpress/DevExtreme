@@ -255,7 +255,7 @@ const CollectionWidget = Widget.inherit({
     _focusInHandler: function(e) {
         this.callBase.apply(this, arguments);
 
-        if(!this._isFocusTarget(e.element)) {
+        if(!this._isFocusTarget(e.target)) {
             return;
         }
 
