@@ -11,14 +11,7 @@ export const getUniqueValues = function(values) {
     return [...new Set(values)];
 };
 
-export const removeDuplicates = function(from, toRemove) {
-    if(!Array.isArray(from) || from.length === 0) {
-        return [];
-    }
-    if(!Array.isArray(toRemove) || toRemove.length === 0) {
-        return from.slice();
-    }
-
+export const removeDuplicates = function(from = [], toRemove = []) {
     const toRemoveMap = toRemove.reduce((map, value) => {
         map[value] = (map[value] ?? 0) + 1;
         return map;
