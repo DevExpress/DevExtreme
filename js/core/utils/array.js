@@ -11,24 +11,20 @@ export const getUniqueValues = function(values) {
     return [...new Set(values)];
 };
 
-export const removeDuplicates = function(from, what) {
+export const removeDuplicates = function(from, toRemove) {
     if(!Array.isArray(from) || from.length === 0) {
         return [];
     }
-
-    const result = from.slice();
-
-    if(!Array.isArray(what) || what.length === 0) {
-        return result;
+    if(!Array.isArray(toRemove) || toRemove.length === 0) {
+        return from.slice();
     }
 
-    each(what, function(_, value) {
-        const index = result.indexOf(value);
+    const toRemoveMap = toRemove.reduce((map, value) => {
+        map[value] = (map[value] ?? 0) + 1;
+        return map;
+    }, {});
 
-        result.splice(index, 1);
-    });
-
-    return result;
+    return from.filter(value => !toRemoveMap[value]--);
 };
 
 export const normalizeIndexes = function(items, indexParameterName, currentItem, needIndexCallback) {
