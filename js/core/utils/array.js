@@ -3,10 +3,6 @@ import { each } from './iterator';
 import { orderEach } from './object';
 import config from '../config';
 
-export const isEmpty = function(entity) {
-    return Array.isArray(entity) && !entity.length;
-};
-
 export const wrapToArray = function(entity) {
     return Array.isArray(entity) ? entity : [entity];
 };
