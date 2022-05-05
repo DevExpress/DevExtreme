@@ -80,14 +80,6 @@ export const normalizeIndexes = function(items, indexParameterName, currentItem,
     return parameterIndex;
 };
 
-export const merge = function(array1, array2) {
-    for(let i = 0; i < array2.length; i++) {
-        array1[array1.length] = array2[i];
-    }
-
-    return array1;
-};
-
 export const find = function(array, condition) {
     for(let i = 0; i < array.length; i++) {
         if(condition(array[i])) {
