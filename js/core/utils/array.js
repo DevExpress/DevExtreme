@@ -3,31 +3,12 @@ import { each } from './iterator';
 import { orderEach } from './object';
 import config from '../config';
 
-export const wrapToArray = function(entity) {
-    return Array.isArray(entity) ? entity : [entity];
+export const wrapToArray = function(item) {
+    return Array.isArray(item) ? item : [item];
 };
 
-export const intersection = function(a, b) {
-    if(!Array.isArray(a) || a.length === 0 ||
-       !Array.isArray(b) || b.length === 0) {
-        return [];
-    }
-
-    const result = [];
-
-    each(a, function(_, value) {
-        const index = b.indexOf(value);
-
-        if(index !== -1) {
-            result.push(value);
-        }
-    });
-
-    return result;
-};
-
-export const uniqueValues = function(data) {
-    return [...new Set(data)];
+export const getUniqueValues = function(values) {
+    return [...new Set(values)];
 };
 
 export const removeDuplicates = function(from, what) {
