@@ -53,10 +53,7 @@ import Globalize from 'globalize';
 import config from '../../core/config';
 import numberLocalization from '../number';
 
-const CURRENCY_STYLE_TABLE = {
-    standard: 'symbol',
-    accounting: 'accounting'
-};
+const CURRENCY_STYLES = ['symbol', 'accounting'];
 
 if(Globalize && Globalize.formatCurrency) {
 
@@ -101,8 +98,8 @@ if(Globalize && Globalize.formatCurrency) {
             const normalizedConfig = this.callBase(format, formatConfig, value);
 
             if(format === 'currency') {
-                const currencySign = formatConfig.currencySign || config().defaultCurrencySign;
-                normalizedConfig.style = CURRENCY_STYLE_TABLE[currencySign];
+                const useAccountingStyle = formatConfig.useCurrencyAccountingStyle ?? config().defaultUseCurrencyAccountingStyle;
+                normalizedConfig.style = CURRENCY_STYLES[+useAccountingStyle];
             }
 
             return normalizedConfig;

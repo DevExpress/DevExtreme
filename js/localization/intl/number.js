@@ -4,6 +4,8 @@ import localizationCoreUtils from '../core';
 import openXmlCurrencyFormat from '../open_xml_currency_format';
 import accountingFormats from '../cldr-data/accounting_formats';
 
+const CURRENCY_STYLES = ['standard', 'accounting'];
+
 const detectCurrencySymbolRegex = /([^\s0]+)?(\s*)0*[.,]*0*(\s*)([^\s0]+)?/;
 const formattersCache = {};
 const getFormatter = format => {
@@ -46,9 +48,10 @@ export default {
         if(format === 'percent') {
             config.style = 'percent';
         } else if(format === 'currency') {
+            const useAccountingStyle = formatConfig.useCurrencyAccountingStyle ?? dxConfig().defaultUseCurrencyAccountingStyle;
             config.style = 'currency';
             config.currency = formatConfig.currency || dxConfig().defaultCurrency;
-            config.currencySign = formatConfig.currencySign || dxConfig().defaultCurrencySign;
+            config.currencySign = CURRENCY_STYLES[+useAccountingStyle];
         }
 
         return config;

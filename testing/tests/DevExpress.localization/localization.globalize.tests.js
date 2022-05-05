@@ -457,9 +457,9 @@ define(function(require, exports, module) {
 
         QUnit.test('format currency with sign/style (T1076906)', function(assert) {
             assert.equal(numberLocalization.format(-1.2, { currency: 'default', style: 'accounting' }), '($1.20)');
-            assert.equal(numberLocalization.format(-1.2, { type: 'currency', currencySign: 'accounting' }), '($1)');
+            assert.equal(numberLocalization.format(-1.2, { type: 'currency', useCurrencyAccountingStyle: true }), '($1)');
             assert.equal(numberLocalization.format(-12, { currency: 'default', style: 'symbol' }), '-$12.00');
-            assert.equal(numberLocalization.format(-12, { type: 'currency', currencySign: 'standard' }), '-$12');
+            assert.equal(numberLocalization.format(-12, { type: 'currency', useCurrencyAccountingStyle: false }), '-$12');
         });
 
         QUnit.test('format currency & power in RU locale', function(assert) {

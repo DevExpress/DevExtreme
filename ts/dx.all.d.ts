@@ -982,9 +982,9 @@ declare module DevExpress {
      */
     currency?: string;
     /**
-     * [descr:FormatObject.currencySign]
+     * [descr:FormatObject.useCurrencyAccountingStyle]
      */
-    currencySign?: 'standard' | 'accounting';
+    useCurrencyAccountingStyle?: boolean;
     /**
      * [descr:Format.formatter]
      */
