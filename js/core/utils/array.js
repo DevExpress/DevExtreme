@@ -80,14 +80,6 @@ export const normalizeIndexes = function(items, indexParameterName, currentItem,
     return parameterIndex;
 };
 
-export const find = function(array, condition) {
-    for(let i = 0; i < array.length; i++) {
-        if(condition(array[i])) {
-            return array[i];
-        }
-    }
-};
-
 export const groupBy = (array, cb) => array.reduce(
     (result, item) => ({
         ...result,
