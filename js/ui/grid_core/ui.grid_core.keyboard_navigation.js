@@ -427,7 +427,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const $event = eventArgs.originalEvent;
         const isUpArrow = eventArgs.keyName === 'upArrow';
         const dataSource = this._dataController.dataSource();
-        const isRowEditingInCurrentRow = this._editingController?._isEditRowByIndex?.(visibleRowIndex);
+        const isRowEditingInCurrentRow = this._editingController?.isEditRowByIndex?.(visibleRowIndex);
         const isEditingNavigationMode = this._isFastEditingStarted();
         const allowNavigate = (!isRowEditingInCurrentRow || !isEditing || isEditingNavigationMode) && $row && !isDetailRow($row);
 
