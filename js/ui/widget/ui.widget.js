@@ -222,8 +222,8 @@ const Widget = DOMComponent.inherit({
     },
 
     _isFocusTarget: function(element) {
-        const focusTargetElement = $(this._focusTarget()).get(0);
-        return element === focusTargetElement;
+        const focusTargets = $(this._focusTarget()).toArray();
+        return focusTargets.includes(element);
     },
 
     _getActiveElement() {
