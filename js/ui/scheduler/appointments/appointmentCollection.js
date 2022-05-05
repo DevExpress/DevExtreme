@@ -9,7 +9,7 @@ import { normalizeKey, grep } from '../../../core/utils/common';
 import { isDefined, isDeferred, isString, isPlainObject } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 import { deepExtendArraySafe } from '../../../core/utils/object';
-import { merge, wrapToArray } from '../../../core/utils/array';
+import { wrapToArray } from '../../../core/utils/array';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { getRecurrenceProcessor } from '../recurrence';
@@ -975,7 +975,7 @@ class SchedulerAppointments extends CollectionWidget {
 
     _combineAppointments(appointments, additionalAppointments) {
         if(additionalAppointments.length) {
-            merge(appointments, additionalAppointments);
+            appointments = [...appointments, ...additionalAppointments];
         }
         this._sortAppointmentsByStartDate(appointments);
     }
