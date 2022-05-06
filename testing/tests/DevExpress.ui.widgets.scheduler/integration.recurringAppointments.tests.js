@@ -952,7 +952,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             });
 
             scheduler.instance.option('currentDate', new Date(2015, 2, 23));
-            assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 7, 'appointments are OK');
+            assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 8, 'appointments are OK');
         });
 
         test('AllDay recurrence appointments should be rendered correctly after changing currentDate, day view', function(assert) {

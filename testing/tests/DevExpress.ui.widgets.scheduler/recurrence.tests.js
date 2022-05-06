@@ -54,7 +54,7 @@ QUnit.module('Recurrences', () => {
             max: new Date(2015, 5, 2)
         });
 
-        assert.deepEqual(dates, [new Date(2015, 4, 31), new Date(2015, 5, 1), new Date(2015, 5, 2)], 'dates are right');
+        assert.deepEqual(dates, [new Date(2015, 4, 30), new Date(2015, 4, 31), new Date(2015, 5, 1), new Date(2015, 5, 2)], 'dates are right');
     });
 
     QUnit.test('get date by week recurrence', function(assert) {

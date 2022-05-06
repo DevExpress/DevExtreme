@@ -47,8 +47,6 @@ class RecurrenceProcessor {
 
         const minTime = minDateUtc.getTime();
 
-        // const leftBorder = this._getLeftBorder(options, minDateUtc, duration); // TODO
-
         const newMinDate = new Date(minDateUtc.getTime() - duration);
 
         this.rRuleSet.between(newMinDate, maxDateUtc, true).forEach(date => {
@@ -229,14 +227,6 @@ class RecurrenceProcessor {
         this.rRule = new RRule(ruleOptions);
 
         this.rRuleSet.rrule(this.rRule);
-    }
-
-    _getLeftBorder(options, minDateUtc, appointmentDuration) {
-        if(options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end)) {
-            return new Date(minDateUtc.getTime() - appointmentDuration);
-        }
-
-        return minDateUtc;
     }
 
     _parseRecurrenceRule(recurrence) {
