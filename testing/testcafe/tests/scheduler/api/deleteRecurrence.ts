@@ -126,18 +126,7 @@ test('should show delete recurrence dialog if mode is "dialog"', async (t) => {
     .eql(3)
     .click(deleteRecurrenceDialog.appointment)
     .expect(scheduler.getAppointmentCount())
-    .eql(2)
-    .click(appointment.element)
-    .expect(appointmentTooltip.isVisible())
-    .ok()
-    .expect(appointmentTooltip.deleteButton.visible)
-    .ok()
-    .click(appointmentTooltip.deleteButton)
-    .expect(deleteRecurrenceDialog.element.exists)
-    .ok()
-    .click(deleteRecurrenceDialog.series)
-    .expect(scheduler.getAppointmentCount())
-    .eql(0);
+    .eql(2);
 }).before(async () => createWidget(
   'dxScheduler',
   {
