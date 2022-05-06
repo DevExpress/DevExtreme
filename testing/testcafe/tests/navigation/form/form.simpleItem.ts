@@ -29,3 +29,30 @@ fixture`Form`
     });
   });
 });
+
+test('widget alignment (T1086611)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .expect(await takeScreenshot('widget alignment (T1086611).png', '#container'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxForm', {
+  colCount: 2,
+  with: 1000,
+  formData: {},
+  items: [{
+    dataField: 'FirstName',
+    editorType: 'dxTextBox',
+  }, {
+    dataField: 'Position',
+    editorType: 'dxSelectBox',
+  }, {
+    dataField: 'BirthDate',
+    editorType: 'dxDateBox',
+  }, {
+    dataField: 'Notes',
+    editorType: 'dxTextArea',
+  }],
+}));
