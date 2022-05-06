@@ -1083,3 +1083,89 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
     mode: 'virtual',
   },
 }));
+
+[false, true].forEach((useNative) => {
+  test(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+
+    // assert
+    await t
+      .expect(dataGrid.isVirtualRowIntersectViewport())
+      .notOk();
+
+    for (let i = 0; i < 3; i += 1) {
+      // act
+      await t
+        .click(dataGrid.getPager().getNavPage('4').element)
+        .wait(2000);
+
+      const visibleRows = await dataGrid.apiGetVisibleRows();
+
+      // assert
+      await t
+        .expect(dataGrid.isVirtualRowIntersectViewport())
+        .notOk()
+        .expect(dataGrid.getPager().getNavPage('3').selected)
+        .ok()
+        .expect(visibleRows.length >= 12)
+        .ok()
+        .expect(visibleRows[0].key <= 54)
+        .ok()
+        .expect(visibleRows[visibleRows.length - 1].key)
+        .eql(65);
+    }
+  }).before(async () => {
+    const initStore = ClientFunction(() => {
+      const getItems = (): Record<string, unknown>[] => {
+        const items: Record<string, unknown>[] = [];
+        for (let i = 0; i < 65; i += 1) {
+          items.push({
+            ID: i + 1,
+            Name: `Name ${i + 1}`,
+          });
+        }
+        return items;
+      };
+
+      (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+        key: 'ID',
+        data: getItems(),
+      });
+    });
+
+    await initStore();
+
+    return createWidget('dxDataGrid', {
+      dataSource: {
+        key: 'ID',
+        load(loadOptions) {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              (window as any).myStore.load(loadOptions).done((data) => {
+                resolve(data);
+              });
+            }, 500);
+          });
+        },
+        totalCount(loadOptions) {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              (window as any).myStore.totalCount(loadOptions).done((count) => {
+                resolve(count);
+              });
+            }, 500);
+          });
+        },
+      },
+      height: 500,
+      remoteOperations: true,
+      scrolling: {
+        mode: 'virtual',
+        useNative,
+      },
+      pager: {
+        visible: true,
+      },
+    });
+  });
+});
