@@ -7133,6 +7133,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             assert.strictEqual($(dataGrid.getCellElement(newRowVisibleIndex, 1)).find('.dx-texteditor-input').val(), '111', 'cell value in a new row is not changed');
         });
 
+        // T1086921
         QUnit.test(`DataGrid should not throw error on adding row when height is not defined and newRowPosition is ${newRowPosition}`, function(assert) {
             // arrange
             const getData = () => {
