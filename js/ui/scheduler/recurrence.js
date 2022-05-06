@@ -46,9 +46,12 @@ class RecurrenceProcessor {
         this._initializeRRule(options, startDateUtc, rule.until);
 
         const minTime = minDateUtc.getTime();
-        const leftBorder = this._getLeftBorder(options, minDateUtc, duration);
 
-        this.rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
+        // const leftBorder = this._getLeftBorder(options, minDateUtc, duration); // TODO
+
+        const newMinDate = new Date(minDateUtc.getTime() - duration);
+
+        this.rRuleSet.between(newMinDate, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
             if(endAppointmentTime >= minTime) {
