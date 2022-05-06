@@ -11,17 +11,18 @@ createTestCafe('localhost', 1437, 1438)
 
         const args = getArgs();
         const testName = args.test.trim();
+        const meta = args.meta.trim();
+        const reporter = args.reporter.trim();
         let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
 
-
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
-        // eslint-disable-next-line spellcheck/spell-checker
             fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
         }
         const runner = testCafe.createRunner()
             .browsers(args.browsers.split(' '))
+            .reporter(reporter)
 
             .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
@@ -30,6 +31,11 @@ createTestCafe('localhost', 1437, 1438)
         }
         if(testName) {
             runner.filter(name => name === testName);
+        }
+        if(meta) {
+            runner.filter((testName, fixtureName, fixturePath, testMeta, fixtureMeta) => {
+                return testMeta[meta] || fixtureMeta[meta];
+            });
         }
         if(args.cache) {
             runner.cache = args.cache;
@@ -40,9 +46,7 @@ createTestCafe('localhost', 1437, 1438)
     })
     .then(failedCount => {
         testCafe.close();
-        if(failedCount !== 0) {
-            process.exit(failedCount);
-        }
+        process.exit(failedCount);
     });
 
 function getArgs() {
@@ -51,6 +55,8 @@ function getArgs() {
             concurrency: 0,
             browsers: 'chrome',
             test: '',
+            meta: '',
+            reporter: 'minimal',
             componentFolder: '',
             file: '*',
             cache: true,
