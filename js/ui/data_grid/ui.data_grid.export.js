@@ -487,7 +487,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
                 }
 
                 if(summaryValues.length > 0) {
-                    item.values = [...item.values, ...summaryValues];
+                    item.values.push(...summaryValues);
                     summaryValues = [];
                 }
             }

@@ -975,7 +975,7 @@ class SchedulerAppointments extends CollectionWidget {
 
     _combineAppointments(appointments, additionalAppointments) {
         if(additionalAppointments.length) {
-            appointments = [...appointments, ...additionalAppointments];
+            appointments.push(...additionalAppointments);
         }
         this._sortAppointmentsByStartDate(appointments);
     }

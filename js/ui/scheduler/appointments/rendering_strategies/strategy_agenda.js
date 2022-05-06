@@ -219,7 +219,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
             this.instance.getAppointmentsInstance()._reduceRecurrenceAppointments(appts.indexes, currentAppointments);
 
-            currentAppointments = [...currentAppointments, ...appts.parts];
+            currentAppointments.push(...appts.parts);
 
             const appointmentCount = currentAppointments.length;
             for(let i = 0; i < agendaDuration; i++) {
