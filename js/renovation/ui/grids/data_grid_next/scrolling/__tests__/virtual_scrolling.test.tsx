@@ -9,7 +9,6 @@ import {
   RowHeightValue, ItemHeightsValue,
   ViewportSkipValue,
   ViewportTakeValue,
-  ViewportStateValue,
   ViewportPageIndex,
   ViewportLoadPageCount,
 } from '../plugins';
@@ -38,13 +37,12 @@ describe('Virtual scrolling', () => {
       const tree = mount(<VirtualScrolling {...viewProps as any} />);
       const setters = tree.children(ValueSetter);
 
-      expect(setters).toHaveLength(6);
+      expect(setters).toHaveLength(5);
       expect(setters.at(0).props().type).toBe(SetRowsViewScrollPositionAction);
       expect(setters.at(1).props().type).toBe(SetRowsViewContentRenderAction);
       expect(setters.at(2).props().type).toBe(TopScrollingPositionValue);
       expect(setters.at(3).props().type).toBe(RowHeightValue);
       expect(setters.at(4).props().type).toBe(ItemHeightsValue);
-      expect(setters.at(5).props().type).toBe(ViewportStateValue);
     });
 
     it('should render getter exrtenders', () => {

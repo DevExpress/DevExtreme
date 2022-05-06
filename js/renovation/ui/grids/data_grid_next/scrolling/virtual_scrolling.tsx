@@ -23,7 +23,7 @@ import {
   AddLoadIndexToVisibleRows, CalculateVisibleRowsInViewport,
   TopScrollingPositionValue, RowHeightValue, ItemHeightsValue,
   ViewportSkipValue, ViewportTakeValue, CalculateViewportSkipValue,
-  CalculateViewportTakeValue, ViewportStateValue,
+  CalculateViewportTakeValue,
   ViewportPageIndex, ViewportLoadPageCount,
   CalculateViewportPageIndex, CalculateViewportLoadPageCount,
 } from './plugins';
@@ -34,7 +34,7 @@ import {
   DEFAULT_ROW_HEIGHT, calculateRowHeight, calculateItemHeights, getTopScrollPosition,
   calculateViewportItemIndex, getNormalizedPageSize, calculatePageIndexByItemIndex,
 } from './utils';
-import { Row, ViewportStateType, VirtualScrollingMode } from '../types';
+import { Row, VirtualScrollingMode } from '../types';
 
 interface StateAction {
   type: 'scrolling' | 'paging';
@@ -43,7 +43,7 @@ interface StateAction {
 
 export const viewFunction = ({
   onRowsScrollPositionChange, topScrollPosition, onRowsViewContentRender,
-  rowHeight, itemHeights, viewportState,
+  rowHeight, itemHeights,
 }: VirtualScrolling): JSX.Element => (
   <Fragment>
     <ValueSetter type={SetRowsViewScrollPositionAction} value={onRowsScrollPositionChange} />
@@ -51,7 +51,6 @@ export const viewFunction = ({
     <ValueSetter type={TopScrollingPositionValue} value={topScrollPosition} />
     <ValueSetter type={RowHeightValue} value={rowHeight} />
     <ValueSetter type={ItemHeightsValue} value={itemHeights} />
-    <ValueSetter type={ViewportStateValue} value={viewportState} />
     <GetterExtender type={ViewportSkipValue} order={0} value={CalculateViewportSkipValue} />
     <GetterExtender type={ViewportTakeValue} order={0} value={CalculateViewportTakeValue} />
     <GetterExtender type={VisibleRows} order={1} value={AddLoadIndexToVisibleRows} />
@@ -86,7 +85,7 @@ export class VirtualScrolling extends JSXComponent(VirtualScrollingProps) {
   visibleItemHeights: Record<number, number> = {};
 
   @InternalState()
-  viewportState: ViewportStateType = 'synchronized';
+  viewportState: 'paging' | 'scrolling' | 'synchronized' = 'synchronized';
 
   @Mutable()
   viewportPayload = { pageIndex: 0, topScrollPosition: 0 };

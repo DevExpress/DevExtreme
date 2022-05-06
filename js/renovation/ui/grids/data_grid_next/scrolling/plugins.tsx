@@ -2,7 +2,7 @@ import {
   createValue, createGetter, createSelector,
 } from '../../../../utils/plugin/context';
 import {
-  Row, ScrollingMode, DataState, ViewportStateType,
+  Row, ScrollingMode, DataState,
 } from '../types';
 import {
   VisibleRows, TotalCount,
@@ -21,7 +21,6 @@ export const ViewportSkipValue = createGetter<number>(0);
 export const ViewportTakeValue = createGetter<number>(0);
 export const ItemHeightsValue = createValue<Record<number, number>>();
 export const RowHeightValue = createValue<number>();
-export const ViewportStateValue = createValue<ViewportStateType>();
 export const TopVirtualRowHeightValue = createGetter<number>(0);
 export const BottomVirtualRowHeightValue = createGetter<number>(0);
 export const ViewportPageIndex = createGetter<number>(0);
