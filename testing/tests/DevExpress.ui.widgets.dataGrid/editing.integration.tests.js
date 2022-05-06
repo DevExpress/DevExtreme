@@ -7132,6 +7132,41 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             assert.ok(dataGridWrapper.rowsView.isRowVisible(newRowVisibleIndex), 'new row visible after adding repeatedly');
             assert.strictEqual($(dataGrid.getCellElement(newRowVisibleIndex, 1)).find('.dx-texteditor-input').val(), '111', 'cell value in a new row is not changed');
         });
+
+        QUnit.test(`DataGrid should not throw error on adding row when height is not defined and newRowPosition is ${newRowPosition}`, function(assert) {
+            // arrange
+            const getData = () => {
+                const items = [];
+                for(let i = 0; i < 100; i += 1) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`
+                    });
+                }
+                return items;
+            };
+            const dataGrid = createDataGrid({
+                dataSource: getData(),
+                keyExpr: 'id',
+                editing: {
+                    newRowPosition,
+                },
+                paging: {
+                    pageSize: 10
+                },
+                scrolling: {
+                    mode: 'virtual',
+                    useNative: false
+                }
+            });
+            this.clock.tick(300);
+
+            // act
+            dataGrid.addRow();
+
+            // assert
+            assert.ok(true, 'no errors');
+        });
     });
 
     ['first', 'last', 'viewportTop', 'viewportBottom'].forEach(newRowPosition => {
@@ -7233,40 +7268,5 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             checkNeighboringRow();
             assert.strictEqual($(dataGrid.getCellElement(newRowInfo.visibleIndex, 1)).find('.dx-texteditor-input').val(), '111', 'cell value in a new row is not changed');
         });
-    });
-
-    QUnit.test('DataGrid should not throw error on adding row when height is not defined and newRowPosition is set', function(assert) {
-        // arrange
-        const getData = () => {
-            const items = [];
-            for(let i = 0; i < 100; i += 1) {
-                items.push({
-                    id: i + 1,
-                    name: `Name ${i + 1}`
-                });
-            }
-            return items;
-        };
-        const dataGrid = createDataGrid({
-            dataSource: getData(),
-            keyExpr: 'id',
-            editing: {
-                newRowPosition: 'viewportBottom',
-            },
-            paging: {
-                pageSize: 10
-            },
-            scrolling: {
-                mode: 'virtual',
-                useNative: false
-            }
-        });
-        this.clock.tick(300);
-
-        // act
-        dataGrid.addRow();
-
-        // assert
-        assert.ok(true, 'no errors');
     });
 });
