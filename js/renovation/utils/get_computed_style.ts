@@ -1,8 +1,7 @@
 import { getWindow } from '../../core/utils/window';
 
-const window = getWindow();
-
 export default function getElementComputedStyle(el: Element | undefined | null):
 CSSStyleDeclaration | null {
+  const window = getWindow();
   return el ? window.getComputedStyle?.(el) : null;
 }
