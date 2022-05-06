@@ -1094,10 +1094,10 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
       .notOk();
 
     for (let i = 0; i < 3; i += 1) {
-      // act
+    // act
       await t
         .click(dataGrid.getPager().getNavPage('4').element)
-        .wait(2000);
+        .wait(3500);
 
       const visibleRows = await dataGrid.apiGetVisibleRows();
 
