@@ -47,6 +47,7 @@ fixture`Form`
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => createWidget('dxForm', {
+      labelLocation,
       colCount: 2,
       with: 1000,
       formData: {},
