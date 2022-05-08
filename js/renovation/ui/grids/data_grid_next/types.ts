@@ -17,6 +17,8 @@ export interface Row {
 
   rowType: 'data' | 'detail';
 
+  loadIndex?: number;
+
   template?: JSXTemplate<RowTemplateProps>;
 }
 export interface RowTemplateProps {
@@ -42,6 +44,11 @@ export type SelectAllMode = 'allPages' | 'page';
 export interface DataState {
   data: RowData[];
   totalCount?: number;
+  dataOffset?: number;
 }
 
 export type DataSource = RowData[] | Store | undefined;
+
+export type VirtualScrollingMode = 'virtual' | 'infinite';
+export type ScrollingMode = 'standard' | VirtualScrollingMode;
+export type VirtualContentType = 'top' | 'bottom';

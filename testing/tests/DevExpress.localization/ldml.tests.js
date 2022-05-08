@@ -1,3 +1,4 @@
+require('../../helpers/noIntl.js');
 const getNumberFormatter = require('localization/ldml/number').getFormatter;
 const getNumberFormat = require('localization/ldml/number').getFormat;
 const getDateParser = require('localization/ldml/date.parser').getParser;

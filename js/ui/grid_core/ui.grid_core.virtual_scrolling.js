@@ -372,7 +372,13 @@ const VirtualScrollingRowsViewExtender = (function() {
             this.callBase();
 
             dataController.pageChanged.add((pageIndex) => {
+                const scrollTop = this._scrollTop;
+
                 this.scrollToPage(pageIndex ?? dataController.pageIndex());
+
+                if(this.option(LEGACY_SCROLLING_MODE) === false && this._scrollTop === scrollTop) {
+                    dataController.updateViewport();
+                }
             });
 
             dataController.dataSourceChanged.add(() => {
@@ -653,6 +659,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             const zeroTopPosition = e.scrollOffset.top === 0;
 
             if((this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
+                this._scrollTop = e.scrollOffset.top;
                 this._dataController.setViewportPosition(e.scrollOffset.top);
             }
             this.callBase.apply(this, arguments);
@@ -1232,6 +1239,7 @@ export const virtualScrollingModule = {
                     setViewportPosition: function() {
                         const rowsScrollController = this._rowsScrollController;
                         const dataSource = this._dataSource;
+                        this._isPaging = false;
 
                         if(rowsScrollController) {
                             rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments);
@@ -1399,7 +1407,7 @@ export const virtualScrollingModule = {
                         const rowsScrollController = this._rowsScrollController;
                         const newTake = rowsScrollController?.getViewportParams().take;
 
-                        (viewportIsNotFilled || currentTake < newTake) && itemCount && this.loadViewport({
+                        (viewportIsNotFilled || currentTake < newTake) && !this._isPaging && itemCount && this.loadViewport({
                             checkLoading: true
                         });
                     },

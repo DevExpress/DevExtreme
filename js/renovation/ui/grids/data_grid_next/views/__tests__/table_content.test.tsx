@@ -3,8 +3,19 @@ import { mount } from 'enzyme';
 import {
   emit, fakeClickEvent, clear, EVENT,
 } from '../../../../../test_utils/events_mock';
-import { RowClick, TableContent, viewFunction as TableContentView } from '../table_content';
+import {
+  RowClick, TableContent, TableContentProps, viewFunction as TableContentView, TopRowPlaceholder,
+  BottomRowPlaceholder, RowsViewHeightValue, SetRowsViewContentRenderAction,
+  SetRowsViewScrollPositionAction, SetRowsViewOffsetAction,
+} from '../table_content';
+import resizeObserverSingleton from '../../../../../../core/resize_observer';
+import { NoDataText } from '../../widgets/no_data_text';
 import { Row, ColumnInternal } from '../../types';
+import { Scrollable } from '../../../../scroll_view/scrollable';
+import { Placeholder } from '../../../../../utils/plugin/placeholder';
+import { setWindow } from '../../../../../../core/utils/window';
+import { Plugins } from '../../../../../utils/plugin/context';
+import { ValueSetter } from '../../../../../utils/plugin/value_setter';
 
 describe('TableContent', () => {
   describe('View', () => {
@@ -13,12 +24,18 @@ describe('TableContent', () => {
       const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
 
       const tableContent = new TableContent({
-        dataSource: rows,
+        visibleRows: rows,
         columns,
       });
 
       const tree = mount(<TableContentView rows={tableContent.rows} {...tableContent as any} />);
+      const scrollable = tree.find(Scrollable);
+      const placeholders = scrollable.find(Placeholder);
 
+      expect(scrollable.exists()).toBe(true);
+      expect(placeholders).toHaveLength(2);
+      expect(placeholders.at(0).props().type).toBe(TopRowPlaceholder);
+      expect(placeholders.at(1).props().type).toBe(BottomRowPlaceholder);
       expect(tree.find('table').exists()).toBe(true);
       expect(tree.find('tr').length).toBe(1);
       expect(tree.find('tr').find('td').length).toBe(2);
@@ -34,7 +51,7 @@ describe('TableContent', () => {
       const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
 
       const tableContent = new TableContent({
-        dataSource: rows,
+        visibleRows: rows,
         columns,
       });
 
@@ -45,6 +62,66 @@ describe('TableContent', () => {
       expect(tree.find('tr').hasClass('myRow')).toBe(true);
       expect(tree.find('tr').find('td').length).toBe(1);
       expect(tree.find('tr').find('td').text()).toBe('Test');
+    });
+
+    it('empty row', () => {
+      const rows: Row[] = [];
+      const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
+
+      const tableContent = new TableContent({
+        visibleRows: rows,
+        columns,
+      } as TableContentProps);
+
+      const tree = mount(
+        <TableContentView
+          rows={tableContent.rows}
+          isEmpty
+          {...tableContent as any}
+        />,
+      );
+
+      expect(tree.find(NoDataText).exists()).toBe(true);
+    });
+
+    it('no empty row', () => {
+      const rows: Row[] = [];
+      const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
+
+      const tableContent = new TableContent({
+        visibleRows: rows,
+        columns,
+      } as TableContentProps);
+
+      const tree = mount(
+        <TableContentView
+          rows={tableContent.rows}
+          isEmpty={false}
+          {...tableContent as any}
+        />,
+      );
+
+      expect(tree.find(NoDataText).exists()).toBe(false);
+    });
+
+    it('SetRowsViewOffsetAction rendered', () => {
+      const rows: Row[] = [];
+      const columns: ColumnInternal[] = [{ dataField: 'id' }, { dataField: 'field' }];
+
+      const tableContent = new TableContent({
+        visibleRows: rows,
+        columns,
+      } as TableContentProps);
+
+      const tree = mount(
+        <TableContentView
+          rows={tableContent.rows}
+          isEmpty
+          {...tableContent as any}
+        />,
+      );
+
+      expect(tree.find(ValueSetter).props().type).toBe(SetRowsViewOffsetAction);
     });
   });
 
@@ -79,13 +156,96 @@ describe('TableContent', () => {
         expect(tableContent.onRowClick).not.toBeCalled();
       });
     });
+
+    describe('calculateRowsViewHeight', () => {
+      it('should call onResize', () => {
+        const tableContent = new TableContent(new TableContentProps());
+        // resizeObserverSingleton.observe = jest.fn();
+        tableContent.plugins = new Plugins();
+        tableContent.rowsViewRef = {
+          current: {} as any,
+        } as any;
+        const onResizeMock = jest.fn();
+        tableContent.onResize = onResizeMock;
+
+        tableContent.calculateRowsViewHeight();
+
+        expect(onResizeMock).toBeCalled();
+        expect(onResizeMock.mock.calls[0][0]).toBe(tableContent.rowsViewRef.current);
+      });
+
+      it('should observe/unobserve', () => {
+        const tableContent = new TableContent(new TableContentProps());
+        const observeMock = jest.fn();
+        const unobserveMock = jest.fn();
+        const onResizeMock = jest.fn();
+        resizeObserverSingleton.observe = observeMock;
+        resizeObserverSingleton.unobserve = unobserveMock;
+        tableContent.plugins = new Plugins();
+        tableContent.rowsViewRef = {
+          current: {} as any,
+        } as any;
+        tableContent.onResize = onResizeMock;
+        const entry = {
+          target: tableContent.rowsViewRef.current,
+        };
+
+        const handle = tableContent.calculateRowsViewHeight();
+
+        expect(observeMock).toBeCalledTimes(1);
+        expect(observeMock.mock.calls[0][0]).toBe(tableContent.rowsViewRef.current);
+
+        observeMock.mock.calls[0][1].call(tableContent, entry);
+
+        expect(onResizeMock).toBeCalledTimes(2);
+        expect(onResizeMock.mock.calls[0][0]).toBe(tableContent.rowsViewRef.current);
+
+        handle.call(tableContent);
+
+        expect(unobserveMock).toBeCalled();
+        expect(unobserveMock.mock.calls[0][0]).toBe(tableContent.rowsViewRef.current);
+      });
+
+      it('should update rows view height', () => {
+        setWindow({ getComputedStyle: () => ({ height: '100px' }) }, true);
+        const tableContent = new TableContent(new TableContentProps());
+        tableContent.plugins = new Plugins();
+        tableContent.rowsViewRef = {
+          current: {} as any,
+        } as any;
+
+        tableContent.calculateRowsViewHeight();
+
+        expect(tableContent.plugins.getValue(RowsViewHeightValue)).toEqual(100);
+      });
+    });
+
+    describe('rowsViewContentReady', () => {
+      it('should call view content ready action', () => {
+        const tableContent = new TableContent(new TableContentProps());
+        tableContent.plugins = new Plugins();
+        const actionMock = jest.fn();
+        tableContent.plugins.set(SetRowsViewContentRenderAction, actionMock);
+        tableContent.divRef = {
+          current: {
+            myVal: 1,
+          } as any,
+        } as any;
+
+        tableContent.rowsViewContentReady();
+
+        expect(actionMock).toHaveBeenCalledWith({
+          myVal: 1,
+        });
+      });
+    });
   });
 
   describe('Events', () => {
     describe('onRowClick', () => {
       it('should call RowClick', () => {
         const tableContent = new TableContent({});
-        tableContent.props.dataSource = [{ data: {}, rowType: 'data' }, { data: {}, rowType: 'data' }, { data: {}, rowType: 'data' }];
+        tableContent.props.visibleRows = [{ data: {}, rowType: 'data' }, { data: {}, rowType: 'data' }, { data: {}, rowType: 'data' }];
 
         const rowClick = jest.fn();
         tableContent.plugins.set(RowClick, rowClick);
@@ -100,10 +260,79 @@ describe('TableContent', () => {
 
         tableContent.onRowClick({ currentTarget: rows[0] } as any);
         expect(rowClick).toBeCalledTimes(1);
-        expect(rowClick.mock.calls[0][0]).toBe(tableContent.props.dataSource[0]);
+        expect(rowClick.mock.calls[0][0]).toBe(tableContent.props.visibleRows[0]);
 
         tableContent.onRowClick({ currentTarget: 'some other row' } as any);
         expect(rowClick).toBeCalledTimes(1);
+      });
+    });
+
+    describe('onScrollContent', () => {
+      it('should call setRowsViewContent action', () => {
+        const tableContent = new TableContent({});
+        tableContent.plugins = new Plugins();
+        const actionMock = jest.fn();
+        tableContent.plugins.set(SetRowsViewScrollPositionAction, actionMock);
+        const scrollEventsArg = {
+          scrollOffset: {
+            top: 10,
+            left: 20,
+          },
+        };
+
+        tableContent.onScrollContent(scrollEventsArg);
+
+        expect(actionMock).toHaveBeenCalledWith(scrollEventsArg.scrollOffset);
+      });
+    });
+  });
+
+  describe('Actions', () => {
+    describe('SetRowsViewOffsetAction', () => {
+      it('should call ref scrollTo', () => {
+        const tableContent = new TableContent({});
+        tableContent.plugins = new Plugins();
+        const scrollToRef = jest.fn();
+        tableContent.scrollableRef = {
+          current: {
+            scrollTo: scrollToRef,
+          },
+        } as any;
+        tableContent.plugins.set(SetRowsViewOffsetAction, tableContent.scrollTo.bind(tableContent));
+
+        tableContent.plugins.callAction(SetRowsViewOffsetAction, { top: 10, left: 5 });
+
+        expect(scrollToRef).toHaveBeenCalledWith({ top: 10, left: 5 });
+      });
+
+      it('call SetRowsViewOffsetAction when ref is null', () => {
+        const tableContent = new TableContent({});
+        tableContent.plugins = new Plugins();
+        tableContent.scrollableRef = {
+          current: null,
+        } as any;
+        tableContent.plugins.set(SetRowsViewOffsetAction, tableContent.scrollTo.bind(tableContent));
+
+        expect(() => {
+          tableContent.plugins.callAction(SetRowsViewOffsetAction, { top: 10, left: 5 });
+        }).not.toThrowError();
+      });
+    });
+
+    describe('onResize', () => {
+      it('should change RowsViewHeightValue', () => {
+        setWindow({ getComputedStyle: () => ({ height: '500px' }) }, true);
+        const tableContent = new TableContent(new TableContentProps());
+        tableContent.plugins = new Plugins();
+        tableContent.rowsViewRef = {
+          current: {} as any,
+        } as any;
+
+        expect(tableContent.plugins.getValue(RowsViewHeightValue)).toBe(undefined);
+
+        tableContent.onResize(tableContent.rowsViewRef.current);
+
+        expect(tableContent.plugins.getValue(RowsViewHeightValue)).toEqual(500);
       });
     });
   });

@@ -30,7 +30,7 @@ interface Stack {
      * @docid
      * @type Enums.StackDirection
      */
-    direction?: 'down' | 'up' | 'left' | 'right' | 'down-reverse' | 'up-reverse' | 'left-reverse' | 'right-reverse';
+    direction?: 'down-push' | 'up-push' | 'left-push' | 'right-push' | 'down-stack' | 'up-stack' | 'left-stack' | 'right-stack';
 }
 
 /**

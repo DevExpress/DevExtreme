@@ -12,7 +12,7 @@ import { PluginsContext, Plugins } from '../../../../utils/plugin/context';
 import { Row, RowTemplateProps } from '../types';
 import { RowBase, RowClassesGetter } from '../widgets/row_base';
 import { MasterDetailTemplate } from './plugins';
-import { VisibleColumns } from '../data_grid_next';
+import { VisibleColumns } from '../plugins';
 import CLASSES from '../classes';
 
 export const viewFunction = (viewModel: MasterDetailRow): JSX.Element => {

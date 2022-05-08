@@ -68,10 +68,6 @@
   }
 
   &.dx-label-v-align {
-    .dx-textarea {
-      margin-top: 6px;
-    }
-
     .dx-invalid-message > .dx-overlay-wrapper,
     .dx-invalid-message > .dx-overlay-content {
       transform: translate(0, 0) !important; // stylelint-disable-line declaration-no-important
