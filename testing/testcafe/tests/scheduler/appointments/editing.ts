@@ -15,28 +15,24 @@ test('Should correctly update appointment if dataSource is a simple array', asyn
   const { appointmentPopup } = scheduler;
 
   await t
-    .expect(scheduler.getAppointmentCount())
-    .eql(1)
     .doubleClick(appointment.element)
     .click(appointmentPopup.subjectElement)
     .typeText(appointmentPopup.subjectElement, 'updated')
     .expect(appointmentPopup.subjectElement.value)
     .eql(expectedSubject)
-    .click(appointmentPopup.doneButton);
-
-  await t
+    .click(appointmentPopup.doneButton)
     .expect(updatedAppointment.element.exists)
     .ok();
 }).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     id: 1,
     text: 'appt-01',
-    startDate: new Date('2021-03-29T05:30:00.000Z'),
-    endDate: new Date('2021-03-29T07:30:00.000Z'),
+    startDate: new Date(2021, 2, 29, 9, 30),
+    endDate: new Date(2021, 2, 29, 11, 30),
   }],
   views: ['day'],
   currentView: 'day',
-  currentDate: new Date('2021-03-29T00:00:00.000Z'),
+  currentDate: new Date(2021, 2, 29),
   startDayHour: 9,
   endDayHour: 14,
   height: 600,
@@ -50,16 +46,12 @@ test('Should correctly update appointment if dataSource is a Store with key arra
   const { appointmentPopup } = scheduler;
 
   await t
-    .expect(scheduler.getAppointmentCount())
-    .eql(1)
     .doubleClick(appointment.element)
     .click(appointmentPopup.subjectElement)
     .typeText(appointmentPopup.subjectElement, 'updated')
     .expect(appointmentPopup.subjectElement.value)
     .eql(expectedSubject)
-    .click(appointmentPopup.doneButton);
-
-  await t
+    .click(appointmentPopup.doneButton)
     .expect(updatedAppointment.element.exists)
     .ok();
 }).before(async () => ClientFunction(() => {
@@ -72,14 +64,14 @@ test('Should correctly update appointment if dataSource is a Store with key arra
           data: [{
             id: 1,
             text: 'appt-01',
-            startDate: new Date('2021-03-29T05:30:00.000Z'),
-            endDate: new Date('2021-03-29T07:30:00.000Z'),
+            startDate: new Date(2021, 2, 29, 9, 30),
+            endDate: new Date(2021, 2, 29, 11, 30),
           }],
         },
       }),
       views: ['day'],
       currentView: 'day',
-      currentDate: new Date('2021-03-29T00:00:00.000Z'),
+      currentDate: new Date(2021, 2, 29),
       startDayHour: 9,
       endDayHour: 14,
       height: 600,
