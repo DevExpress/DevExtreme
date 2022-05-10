@@ -20,7 +20,7 @@ import {
 } from '../plugins';
 import {
   LocalData, KeyExprPlugin, VisibleColumns, LocalVisibleItems,
-} from '../../data_grid_next';
+} from '../../plugins';
 import { Plugins } from '../../../../../utils/plugin/context';
 import { generateData } from '../../__tests__/test_data';
 

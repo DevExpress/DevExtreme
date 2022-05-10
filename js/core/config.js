@@ -6,6 +6,7 @@ import errors from './errors';
 const config = {
     rtlEnabled: false,
     defaultCurrency: 'USD',
+    defaultUseCurrencyAccountingStyle: true,
     oDataFilterToLower: true,
     serverDecimalSeparator: '.',
     decimalSeparator: '.',

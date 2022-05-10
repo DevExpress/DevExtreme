@@ -5,7 +5,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
-  createValue, createGetter, Plugins, PluginsContext, createSelector,
+  Plugins, PluginsContext,
 } from '../../../utils/plugin/context';
 import { ValueSetter } from '../../../utils/plugin/value_setter';
 import { GetterExtender } from '../../../utils/plugin/getter_extender';
@@ -25,43 +25,11 @@ import { Footer } from './views/footer';
 
 import CLASSES from './classes';
 
-export const LocalData = createValue<RowData[] | undefined>();
-export const LocalVisibleItems = createGetter<RowData[] | undefined>([]);
-export const VisibleRows = createGetter<Row[]>([]);
-export const RemoteOperations = createValue<boolean>();
-
-export const LoadOptionsValue = createGetter<LoadOptions>({});
-export const DataStateValue = createValue<DataState>();
-
-export const Columns = createValue<ColumnInternal[]>();
-export const VisibleColumns = createGetter<ColumnInternal[]>([]);
-
-export const KeyExprPlugin = createValue<KeyExprInternal>();
-export const TotalCount = createSelector<number>(
-  [DataStateValue],
-  (dataState: DataState) => dataState.totalCount ?? dataState.data.length,
-);
-
-export const VisibleDataRows = createSelector<Row[]>(
-  [
-    DataStateValue, KeyExprPlugin,
-  ],
-  (
-    dataStateValue: DataState, keyExpr: KeyExprInternal,
-  ): Row[] => dataStateValue.data.map((data) => ({
-    key: keyExpr ? data[keyExpr] : data,
-    data,
-    rowType: 'data',
-  })),
-);
-
-export const LocalDataState = createSelector(
-  [LocalVisibleItems, LocalData],
-  (visibleItems, localData): DataState | undefined => (Array.isArray(localData) ? {
-    data: visibleItems ?? [],
-    totalCount: localData.length,
-  } : undefined),
-);
+import {
+  LocalData, Columns, KeyExprPlugin, RemoteOperations, DataStateValue, VisibleColumns,
+  LocalVisibleItems, VisibleRows, LocalDataState, VisibleDataRows, CalculateLocalDataState,
+  LoadOptionsValue,
+} from './plugins';
 
 function isStore(dataSource: DataSource): dataSource is Store {
   return dataSource !== undefined && !Array.isArray(dataSource);
@@ -94,12 +62,13 @@ export const viewFunction = (viewModel: DataGridNext): JSX.Element => (
     <GetterExtender type={VisibleColumns} order={-1} value={Columns} />
     <GetterExtender type={LocalVisibleItems} order={-1} value={LocalData} />
     <GetterExtender type={VisibleRows} order={-1} value={VisibleDataRows} />
+    <GetterExtender type={LocalDataState} order={-1} value={CalculateLocalDataState} />
 
     <div className={`${CLASSES.dataGrid} ${CLASSES.gridBaseContainer}`} role="grid" aria-label="Data grid">
       <TableHeader columns={viewModel.visibleColumns} />
       <TableContent
         columns={viewModel.visibleColumns}
-        dataSource={viewModel.visibleRows}
+        visibleRows={viewModel.visibleRows}
         noDataTemplate={viewModel.props.noDataTemplate}
       />
       <Footer />
@@ -241,11 +210,12 @@ export class DataGridNext extends JSXComponent(DataGridNextProps) {
       if (this.props.remoteOperations) {
         if (Array.isArray(data)) {
           this.props.dataState = {
+            dataOffset: loadOptions.skip,
             data,
             ...extra,
           };
         } else {
-          this.props.dataState = data;
+          this.props.dataState = { ...data, dataOffset: loadOptions.skip };
         }
       } else {
         this.loadedData = data;
