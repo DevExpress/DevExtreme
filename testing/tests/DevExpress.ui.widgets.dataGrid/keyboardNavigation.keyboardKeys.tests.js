@@ -4176,34 +4176,41 @@ QUnit.module('Keyboard keys', {
         });
     });
 
+
     // T1086485
-    QUnit.testInActiveWindow('Keyboard navigation should not select next row when editing', function(assert) {
-        // arrange
-        this.options = {
-            keyboardNavigation: {
-                enabled: true,
-                enterKeyAction: 'startEdit',
-                enterKeyDirection: 'none',
-                editOnKeyPress: false
-            },
-            showColumnHeaders: true,
-            dataSource: [{ name: 1 }, { name: 2 }],
-            editing: {
-                mode: 'cell',
-                allowUpdating: true
+    ['batch', 'cell', 'row', 'form'].forEach(editingMode => {
+        QUnit.testInActiveWindow(`Keyboard navigation should not select next row when editing, editing.mode=${editingMode}`, function(assert) {
+            // arrange
+            this.options = {
+                keyboardNavigation: {
+                    enabled: true,
+                },
+                showColumnHeaders: true,
+                dataSource: [{ name: 1 }, { name: 2 }],
+                editing: {
+                    mode: editingMode,
+                    allowUpdating: true
+                },
+            };
+
+            setupModules(this);
+            this.gridView.render($('#container'));
+
+            // act
+            this.focusCell(0, 0);
+
+            if(['cell', 'batch'].includes(editingMode)) {
+                this.editingController.editCell(0, 0);
+            } else {
+                this.editingController.editRow(0);
             }
-        };
+            this.clock.tick();
 
-        setupModules(this);
+            this.triggerKeyDown('downArrow', true);
+            this.clock.tick();
 
-        // act
-        this.gridView.render($('#container'));
-        this.focusCell(0, 0);
-        this.editingController.editCell(0, 0);
-        this.triggerKeyDown('downArrow', true);
-        this.clock.tick();
-
-        // assert
-        assert.equal($('.dx-editor-cell input:focus').length, 1);
+            // assert
+            assert.equal($('.dx-editor-cell input:focus').length, 1);
+        });
     });
 });
