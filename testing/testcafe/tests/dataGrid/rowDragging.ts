@@ -22,6 +22,12 @@ const getDraggingElementScrollPosition = ClientFunction(() => {
   };
 });
 
+const getFreeSpaceRowOffset = ClientFunction(() => {
+  const $freeSpaceRow = $('#container').find('.dx-datagrid-rowsview table .dx-freespace-row').first();
+
+  return $freeSpaceRow?.offset();
+});
+
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
 });
@@ -523,6 +529,48 @@ test('The draggable element should be displayed correctly after horizontal scrol
     },
     rowDragging: {
       allowReordering: true,
+      showDragIcons: false,
+    },
+  });
+});
+
+// T1085143
+test('The placeholder should have correct position after dragging the row to the end when there is free space in grid and dataRowTemplate is set', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.moveRow(0, 0, 50, true);
+  await dataGrid.moveRow(0, 0, 550);
+
+  await t.expect(isPlaceholderVisible()).ok();
+
+  const freeSpaceRowOffset = await getFreeSpaceRowOffset();
+
+  await t
+    .expect(getPlaceholderOffset())
+    .eql(freeSpaceRowOffset);
+}).before(async (t) => {
+  await t.maximizeWindow();
+
+  return createWidget('dxDataGrid', {
+    width: 400,
+    height: 600,
+    dataSource: [
+      {
+        id: 1, name: 'Name 1', age: 19,
+      },
+      {
+        id: 2, name: 'Name 2', age: 11,
+      },
+    ],
+    columns: ['name', 'age'],
+    dataRowTemplate(_, { data }) {
+      return $(`<tr><td>${data.name}</td><td>${data.age}</td></tr>`);
+    },
+    rowDragging: {
+      allowReordering: true,
+      dragTemplate() {
+        return $('<div>test</div>');
+      },
       showDragIcons: false,
     },
   });

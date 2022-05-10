@@ -4,13 +4,17 @@ import each from 'jest-each';
 import { DataGridNextPaging, DataGridNextPagingProps, viewFunction as PagingView } from '../paging';
 import {
   PageIndex, PageSize, SetPageIndex, SetPageSize, PageCount, PagingEnabled,
-  ApplyPagingToVisibleItems, AddPagingToLoadOptions,
+  ApplyPagingToVisibleItems, AddPagingToLoadOptions, LoadPageCount, SetLoadPageCount,
+  AddPagingToLocalDataState,
 } from '../plugins';
 import { generateData } from '../../__tests__/test_data';
 import { Plugins } from '../../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../../utils/plugin/value_setter';
 import { GetterExtender } from '../../../../../utils/plugin/getter_extender';
-import { TotalCount, LocalVisibleItems, RemoteOperations } from '../../data_grid_next';
+import {
+  TotalCount, LocalVisibleItems, RemoteOperations, LoadOptionsValue, LocalDataState,
+} from '../../plugins';
+import { DataState } from '../../types';
 
 describe('Paging', () => {
   describe('View', () => {
@@ -18,6 +22,7 @@ describe('Paging', () => {
       const viewProps = {
         props: new DataGridNextPagingProps(),
         pageSize: 30,
+        loadPageCount: 1,
         setPageIndex: () => null,
         setPageSize: () => null,
         calculateVisibleItems: () => [],
@@ -39,8 +44,20 @@ describe('Paging', () => {
       expect(tree.find(ValueSetter).at(4).props()).toEqual({
         type: SetPageSize, value: viewProps.setPageSize,
       });
+      expect(tree.find(ValueSetter).at(5).props()).toEqual({
+        type: LoadPageCount, value: viewProps.loadPageCount,
+      });
+      expect(tree.find(ValueSetter).at(6).props()).toEqual({
+        type: SetLoadPageCount, value: viewProps.setLoadPageCount,
+      });
       expect(tree.find(GetterExtender).at(0).props()).toEqual({
         type: LocalVisibleItems, order: 1, value: ApplyPagingToVisibleItems,
+      });
+      expect(tree.find(GetterExtender).at(1).props()).toEqual({
+        type: LoadOptionsValue, order: 1, value: AddPagingToLoadOptions,
+      });
+      expect(tree.find(GetterExtender).at(2).props()).toEqual({
+        type: LocalDataState, order: 1, value: AddPagingToLocalDataState,
       });
     });
   });
@@ -83,11 +100,20 @@ describe('Paging', () => {
         expect(paging.props.pageSize).toEqual(10);
       });
     });
+
+    describe('setLoadpageCount', () => {
+      it('should update loadPageCount', () => {
+        const paging = new DataGridNextPaging({});
+        paging.setLoadPageCount(5);
+
+        expect(paging.loadPageCount).toEqual(5);
+      });
+    });
   });
 
   describe('Selectors', () => {
     each`
-        totalCount    | pageSize    | pageCount  
+        totalCount    | pageSize    | pageCount
         ${100}        | ${'all'}    | ${1}
         ${10}         | ${5}        | ${2}
         ${11}         | ${5}        | ${3}
@@ -118,6 +144,7 @@ describe('Paging', () => {
         plugins.set(PagingEnabled, true);
         plugins.set(PageIndex, 0);
         plugins.set(PageSize, 20);
+        plugins.set(LoadPageCount, 1);
       });
 
       it('should return full dataSource if paging is not enabled', () => {
@@ -173,6 +200,7 @@ describe('Paging', () => {
         plugins.set(PagingEnabled, true);
         plugins.set(PageIndex, 0);
         plugins.set(PageSize, 20);
+        plugins.set(LoadPageCount, 1);
       });
 
       it('should return empty object if remoteOperations is false', () => {
@@ -205,6 +233,39 @@ describe('Paging', () => {
           skip: 10,
           take: 5,
           requireTotalCount: true,
+        });
+      });
+    });
+
+    describe('AddPagingToLocalDataState', () => {
+      let plugins = new Plugins();
+      const reinitPlugins = () => {
+        plugins = new Plugins();
+      };
+
+      beforeEach(reinitPlugins);
+
+      it('should return undefined', () => {
+        plugins.extend(LocalDataState, -1, () => undefined);
+        plugins.set(PageIndex, 2);
+        plugins.set(PageSize, 10);
+
+        expect(plugins.getValue(AddPagingToLocalDataState)).toBe(undefined);
+      });
+
+      it('should return state with offset', () => {
+        const state: DataState = {
+          data: [],
+          totalCount: 50,
+        };
+        plugins.extend(LocalDataState, -1, () => state);
+        plugins.set(PageIndex, 2);
+        plugins.set(PageSize, 10);
+
+        expect(plugins.getValue(AddPagingToLocalDataState)).toEqual({
+          data: [],
+          totalCount: 50,
+          dataOffset: 20,
         });
       });
     });

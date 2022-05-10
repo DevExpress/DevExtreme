@@ -83,6 +83,13 @@ export interface FormatObject {
      */
    currency?: string;
    /**
+     * @docid
+     * @type boolean
+     * @default true
+     * @public
+     */
+    useCurrencyAccountingStyle?: boolean;
+   /**
     * @docid Format.formatter
     * @public
     * @type_function_param1 value:number|date

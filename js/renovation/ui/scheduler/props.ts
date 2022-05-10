@@ -44,6 +44,7 @@ import { ViewType } from './types';
 import { BaseWidgetProps } from '../common/base_props';
 import { DataCellTemplateProps, DateTimeCellTemplateProps, ResourceCellTemplateProps } from './workspaces/types';
 import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from './appointment/types';
+import { ShowAllDayAppointmentsType } from './appointment/utils/getAppointmentTakesAllDay';
 
 @ComponentBindings()
 export class ScrollingProps {
@@ -120,6 +121,9 @@ export class ViewProps {
 
   @OneWay()
   type?: ViewType;
+
+  @OneWay()
+  showAllDayAppointments?: ShowAllDayAppointmentsType;
 
   @Nested()
   scrolling?: ScrollingProps;
@@ -381,8 +385,10 @@ export class SchedulerProps extends BaseWidgetProps {
   allDayExpr = 'allDay';
 
   @OneWay()
-
   textExpr = 'text';
+
+  @OneWay()
+  showAllDayAppointments: ShowAllDayAppointmentsType = 'auto';
 
   // TODO: https://github.com/DevExpress/devextreme-renovation/issues/751
   /* Templates */
@@ -461,6 +467,7 @@ SchedulerProps,
 | 'crossScrollingEnabled'
 | 'height'
 | 'width'
+| 'showAllDayAppointments'
 >;
 
 // TODO: https://github.com/DevExpress/devextreme-renovation/issues/751

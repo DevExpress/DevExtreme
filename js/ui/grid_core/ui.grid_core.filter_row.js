@@ -683,12 +683,17 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             const columns = this.getController('columns').getVisibleColumns();
             const dataSource = this.getController('data').dataSource();
             const filterRowController = this.getController('applyFilter');
+            const rowIndex = this.element().find('.' + this.addWidgetPrefix(FILTER_ROW_CLASS)).index();
+
+            if(rowIndex === -1) {
+                return;
+            }
 
             columns.forEach((column) => {
                 if(!column.lookup) {
                     return;
                 }
-                const rowIndex = this.element().find('.' + this.addWidgetPrefix(FILTER_ROW_CLASS)).index();
+
                 const $cell = this._getCellElement(rowIndex, column.visibleIndex);
                 const editor = getEditorInstance($cell.find('.dx-editor-container'));
 

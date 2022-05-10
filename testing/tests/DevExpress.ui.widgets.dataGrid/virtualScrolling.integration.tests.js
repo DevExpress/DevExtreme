@@ -4724,6 +4724,71 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($($virtualRowElement.get(1))), 'bottom virtual row is rendered outside viewport after timeout scrolling to top');
     });
 
+    // T1083874
+    QUnit.test('DataGrid should not raise exception on inserting new row in popup with virtual scrolling', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            focusedRowEnabled: true,
+            autoNavigateToFocusedRow: false,
+            keyExpr: 'id',
+            height: 400,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            editing: {
+                allowAdding: true,
+                mode: 'popup',
+            }
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 560 });
+        $(dataGrid.getScrollable().container()).trigger('scroll');
+        this.clock.tick(300);
+        dataGrid.addRow();
+        this.clock.tick(300);
+        dataGrid.cancelEditData();
+        this.clock.tick(300);
+
+        // assert
+        assert.ok(true, 'no errors');
+
+        // act;
+        dataGrid.getScrollable().scrollTo({ top: dataGrid.getScrollable().scrollHeight() });
+        $(dataGrid.getScrollable().container()).trigger('scroll');
+        this.clock.tick(300);
+
+        dataGrid.addRow();
+        this.clock.tick(300);
+
+        dataGrid.saveEditData();
+        this.clock.tick(300);
+
+        dataGrid.addRow();
+        this.clock.tick(300);
+
+        dataGrid.saveEditData();
+        this.clock.tick(300);
+
+        // assert
+        assert.ok(true, 'no errors');
+    });
+
     QUnit.test('Rows should be rendered properly when renderAsync = false', function(assert) {
         // arrange
         const getData = function() {
@@ -6725,6 +6790,64 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(dataGrid.getScrollable().scrollTop(), 500, 'scroll position is not reset');
+    });
+
+    [true, false].forEach((useRemoteData) => {
+        // T1085373
+        QUnit.test(`Virtual scrolling should work after setting state to null (remote data = ${useRemoteData})`, function(assert) {
+            // arrange
+            const getData = function(count) {
+                const items = [];
+                for(let i = 0; i < count; i++) {
+                    items.push({
+                        id: i + 1
+                    });
+                }
+                return items;
+            };
+
+            const dataSource = useRemoteData ? {
+                key: 'id',
+                load: () => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve(getData(1000));
+                    }, 100);
+
+                    return d.promise();
+                }
+            } : getData(1000);
+
+            const dataGrid = createDataGrid({
+                dataSource,
+                scrolling: {
+                    mode: 'virtual',
+                    useNative: true,
+                },
+                height: 200,
+            });
+
+            this.clock.tick(300);
+
+            // act
+            const scrollable = dataGrid.getScrollable();
+            scrollable.scrollTo({ top: 10000 });
+            $(scrollable.container()).trigger('scroll');
+            this.clock.tick(300);
+
+            dataGrid.state(null);
+            $(scrollable.container()).trigger('scroll');
+            this.clock.tick(300);
+
+            // assert
+            assert.strictEqual(dataGrid.getScrollable().scrollTop(), 0);
+            assert.strictEqual($('.dx-data-row').length, 5);
+            assert.deepEqual(
+                $('.dx-data-row').toArray().map(el => el.innerText),
+                ['1', '2', '3', '4', '5'],
+            );
+        });
     });
 
     ['Row', 'Batch'].forEach(mode => {

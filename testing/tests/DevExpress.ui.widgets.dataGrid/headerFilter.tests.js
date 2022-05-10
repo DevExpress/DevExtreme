@@ -4214,6 +4214,53 @@ QUnit.module('Header Filter with real columnsController', {
     });
 
     [true, false].forEach((hasLookupOptimization) => {
+        QUnit.test(`Header filter should show only relevant values with syncLookupFilterValues = true, lookupOptimization = ${hasLookupOptimization}`, function(assert) {
+            // arrange
+            this.options.columns = [{
+                dataField: 'column1',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                    valueExpr: 'id',
+                    displayExpr: 'value',
+                },
+                calculateDisplayValue: hasLookupOptimization ? 'text' : undefined,
+                filterValues: [1],
+            }, {
+                dataField: 'column2',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                    valueExpr: 'id',
+                    displayExpr: 'value',
+                },
+                calculateDisplayValue: hasLookupOptimization ? 'text' : undefined,
+            }];
+
+            this.options.dataSource = [
+                { column1: 1, column2: 1, text: 'value1' },
+                { column1: 2, column2: 2, text: 'value2' },
+            ];
+
+            this.options.syncLookupFilterValues = true;
+
+            const $testElement = $('#container');
+
+            this.setupDataGrid();
+            this.columnHeadersView.render($testElement);
+            this.headerFilterView.render($testElement);
+
+            // act
+            this.headerFilterController.showHeaderFilterMenu(1);
+
+            // assert
+            const $popupContent = this.headerFilterView.getPopupContainer().$content();
+            const $listItemElements = $popupContent.find('.dx-list-item-content');
+            assert.equal($listItemElements.length, 2, 'count list item');
+            assert.strictEqual($listItemElements.eq(0).text(), '(Blanks)');
+            assert.strictEqual($listItemElements.eq(1).text(), 'value1');
+        });
+
         QUnit.test(`Header filter search should work with syncLookupFilterValues = true, lookupOptimization = ${hasLookupOptimization}`, function(assert) {
             // arrange
             this.options.columns = [{

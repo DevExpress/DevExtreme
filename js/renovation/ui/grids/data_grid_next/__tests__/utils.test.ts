@@ -2,7 +2,9 @@ import { Row } from '../types';
 import {
   createGetKey, getReactRowKey, getFormatByDataType,
   getAlignmentByDataType, getDeserializeValueByDataType, getDefaultCalculateCellValue,
+  getElementHeight,
 } from '../utils';
+import { setWindow } from '../../../../../core/utils/window';
 
 describe('getKey', () => {
   const getKey = createGetKey('(Module name)');
@@ -129,5 +131,13 @@ describe('getDefaultCalculateCellValue', () => {
   it('should return empty getter if dataField is not defined', () => {
     const calculateCellValue = getDefaultCalculateCellValue();
     expect(calculateCellValue({})).toEqual(null);
+  });
+});
+
+describe('getElementHeight', () => {
+  it('should have correct value', () => {
+    const el = {} as HTMLElement;
+    setWindow({ getComputedStyle: () => ({ height: '100px' }) }, true);
+    expect(getElementHeight(el)).toEqual(100);
   });
 });

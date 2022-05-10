@@ -6,6 +6,7 @@ import { isString, isNumeric } from '../../../../core/utils/type';
 import type { Format } from '../../../../localization';
 import dateSerialization from '../../../../core/utils/date_serialization';
 import { compileGetter } from '../../../../core/utils/data';
+import { getElementStyle } from '../../pager/utils/get_element_width';
 
 export const createGetKey = (featureName: string) => (
   rowData: RowData,
@@ -84,3 +85,5 @@ export const getDefaultCalculateCellValue = (
 
   return (): null => null;
 };
+
+export const getElementHeight = (element: Element | null | undefined): number => getElementStyle('height', element);

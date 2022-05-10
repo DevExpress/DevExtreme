@@ -16,7 +16,7 @@ import { Plugins, PluginsContext, createSelector } from '../../../../utils/plugi
 
 import {
   VisibleRows, VisibleColumns,
-} from '../data_grid_next';
+} from '../plugins';
 import {
   Row, Key, ColumnInternal, RowTemplateProps,
 } from '../types';

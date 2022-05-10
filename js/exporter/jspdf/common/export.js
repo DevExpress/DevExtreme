@@ -27,7 +27,9 @@ function _getFullOptions(options) {
         fullOptions.margin = toPdfUnit(jsPDFDocument, 40);
     }
     fullOptions.margin = normalizeBoundaryValue(fullOptions.margin);
-
+    if(!Array.isArray(fullOptions.columnWidths)) {
+        fullOptions.columnWidths = [];
+    }
     if(!isDefined(fullOptions.loadPanel)) {
         fullOptions.loadPanel = {};
     }
@@ -73,17 +75,6 @@ function exportDataGrid(options) {
 
             if(options.customizeCell) {
                 rowsInfo.forEach(rowInfo => rowInfo.cells.forEach(cellInfo =>
-                    // In 'customizeCell' callback you can change values of these properties:
-                    // - e.pdfCell.height - will be used instead of a calculated height
-                    // - e.pdfCell.text - the text that will be printed
-                    // - e.pdfCell.customDrawContent - will be called at the drawing stage
-                    //     you can introduce new properties to 'e.pdfCell' and use them in your callback
-                    //     TODO: e.pdfRow + e.gridCell ???
-                    // - e.pdfCell.wordWrapEnabled - will be used to split cell text by the width of its cell
-                    //
-                    // And, you can read values of these properties ('readonly'):
-                    // - e.gridCell (TODO: list of properties)
-                    // - e.pdfCell (TODO: list of properties)
                     options.customizeCell(cellInfo)
                 ));
             }

@@ -8,7 +8,7 @@ import { AppointmentSettingsGenerator } from '../settingsGenerator';
 
 import timeZoneUtils from '../../utils.timeZone';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
-import { getAppointmentTakesAllDay } from '../dataProvider/utils';
+import { getAppointmentTakesAllDay } from '../../../../renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -60,6 +60,7 @@ class BaseRenderingStrategy {
     get dataAccessors() { return this.options.dataAccessors; }
     get timeZoneCalculator() { return this.options.timeZoneCalculator; }
     get intervalCount() { return this.options.intervalCount; }
+    get showAllDayAppointments() { return this.options.showAllDayAppointments; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
@@ -244,7 +245,12 @@ class BaseRenderingStrategy {
 
     isAppointmentTakesAllDay(rawAppointment) {
         const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
-        return getAppointmentTakesAllDay(adapter, this.viewStartDayHour, this.viewEndDayHour);
+        return getAppointmentTakesAllDay(
+            adapter,
+            this.viewStartDayHour,
+            this.viewEndDayHour,
+            this.showAllDayAppointments,
+        );
     }
 
     _getAppointmentParts() {
@@ -773,47 +779,30 @@ class BaseRenderingStrategy {
         return false;
     }
 
-    getAppointmentDurationInMs(startDate, endDate, allDay) {
-        const appointmentDuration = endDate.getTime() - startDate.getTime();
-        const dayDuration = toMs('day');
-        const visibleDayDuration = this.visibleDayDuration;
-        let result = 0;
-
+    getAppointmentDurationInMs(apptStartDate, apptEndDate, allDay) {
         if(allDay) {
-            const ceilQuantityOfDays = Math.ceil(appointmentDuration / dayDuration);
+            const appointmentDuration = apptEndDate.getTime() - apptStartDate.getTime();
+            const ceilQuantityOfDays = Math.ceil(appointmentDuration / toMs('day'));
 
-            result = ceilQuantityOfDays * visibleDayDuration;
-        } else {
-            const isDifferentDates = !timeZoneUtils.isSameAppointmentDates(startDate, endDate);
-            const floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration);
-            let tailDuration;
-
-            if(isDifferentDates) {
-                const startDateEndHour = new Date(new Date(startDate).setHours(this.endDayHour, 0, 0));
-                const hiddenDayDuration = dayDuration - visibleDayDuration - (startDate.getTime() > startDateEndHour.getTime() ? startDate.getTime() - startDateEndHour.getTime() : 0);
-
-                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
-
-                const startDayTime = this.startDayHour * toMs('hour');
-                const endPartDuration = endDate - dateUtils.trimTime(endDate);
-
-                if(endPartDuration < startDayTime) {
-                    if(floorQuantityOfDays) {
-                        tailDuration -= hiddenDayDuration;
-                    }
-
-                    tailDuration += startDayTime - endPartDuration;
-                }
-            } else {
-                tailDuration = appointmentDuration % dayDuration;
-            }
-
-            if(tailDuration > visibleDayDuration) {
-                tailDuration = visibleDayDuration;
-            }
-
-            result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
+            return ceilQuantityOfDays * this.visibleDayDuration;
         }
+
+        const msInHour = toMs('hour');
+        const trimmedStartDate = dateUtils.trimTime(apptStartDate);
+        const trimmedEndDate = dateUtils.trimTime(apptEndDate);
+
+        const deltaDate = trimmedEndDate - trimmedStartDate;
+        const quantityOfDays = deltaDate / toMs('day') + 1;
+        const dayVisibleHours = this.endDayHour - this.startDayHour;
+        const appointmentDayHours = dayVisibleHours * quantityOfDays;
+
+        const startHours = (apptStartDate - trimmedStartDate) / msInHour;
+        const apptStartDelta = Math.max(0, startHours - this.startDayHour);
+
+        const endHours = Math.max(0, ((apptEndDate - trimmedEndDate) / msInHour - this.startDayHour));
+        const apptEndDelta = Math.max(0, dayVisibleHours - endHours);
+
+        const result = (appointmentDayHours - (apptStartDelta + apptEndDelta)) * msInHour;
 
         return result;
     }

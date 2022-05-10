@@ -26,8 +26,10 @@ import {
     validateViews,
     getStep,
     getViewType,
+    getViewName,
     nextWeek,
 } from './utils';
+import { getCurrentView } from '../../../renovation/ui/scheduler/model/views';
 
 const DEFAULT_ELEMENT = 'defaultElement';
 const VIEW_SWITCHER = 'viewSwitcher';
@@ -62,7 +64,12 @@ export class SchedulerHeader extends Widget {
     _createEventMap() {
         this.eventMap = new Map(
             [
-                ['currentView', [(view) => this.currentView = view]],
+                ['currentView', [(view) => {
+                    this.currentView = getCurrentView(
+                        getViewName(view),
+                        this.option('views'),
+                    );
+                }]],
                 ['items', [this.repaint.bind(this)]],
                 ['views', [validateViews]],
                 ['currentDate', [this._getCalendarOptionUpdater('date')]],
@@ -100,7 +107,10 @@ export class SchedulerHeader extends Widget {
         this._createEventMap();
         this.$element().addClass(COMPONENT_CLASS);
 
-        this.currentView = this.option('currentView');
+        this.currentView = getCurrentView(
+            getViewName(this.option('currentView')),
+            this.option('views'),
+        );
     }
 
     _render() {

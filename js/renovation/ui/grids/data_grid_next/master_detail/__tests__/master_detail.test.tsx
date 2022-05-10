@@ -10,7 +10,7 @@ import {
 } from '../master_detail';
 import {
   VisibleColumns, VisibleRows,
-} from '../../data_grid_next';
+} from '../../plugins';
 import { GetterExtender } from '../../../../../utils/plugin/getter_extender';
 import { MasterDetailRow } from '../master_detail_row';
 

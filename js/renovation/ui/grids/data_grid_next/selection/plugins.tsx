@@ -5,7 +5,7 @@ import type {
 import { createSelector, createValue } from '../../../../utils/plugin/context';
 import {
   LocalData, KeyExprPlugin, VisibleColumns, LocalVisibleItems,
-} from '../data_grid_next';
+} from '../plugins';
 import { createGetKey } from '../utils';
 import {
   RowClassesGetter, RowClassesGetterType, RowPropertiesGetter, RowPropertiesGetterType,

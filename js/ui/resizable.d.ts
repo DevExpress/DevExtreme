@@ -13,12 +13,6 @@ import {
 export interface ResizeInfo {
     readonly width: number;
     readonly height: number;
-    handles: {
-        readonly left: boolean;
-        readonly top: boolean;
-        readonly right: boolean;
-        readonly bottom: boolean;
-    };
 }
 
 /** @public */

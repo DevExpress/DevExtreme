@@ -982,6 +982,10 @@ declare module DevExpress {
      */
     currency?: string;
     /**
+     * [descr:FormatObject.useCurrencyAccountingStyle]
+     */
+    useCurrencyAccountingStyle?: boolean;
+    /**
      * [descr:Format.formatter]
      */
     formatter?: (value: number | Date) => string;
@@ -18804,12 +18808,6 @@ declare module DevExpress.ui {
     export interface ResizeInfo {
       readonly width: number;
       readonly height: number;
-      handles: {
-        readonly left: boolean;
-        readonly top: boolean;
-        readonly right: boolean;
-        readonly bottom: boolean;
-      };
     }
     export type ResizeStartEvent = DevExpress.events.NativeEventInfo<
       dxResizable,
@@ -22805,15 +22803,16 @@ declare module DevExpress.ui {
     export type FocusedRowChangingEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<
-      dxTreeList<TRowData, TKey>,
-      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
-    > & {
-      readonly rowElement: DevExpress.core.DxElement;
-      readonly prevRowIndex: number;
-      newRowIndex: number;
-      readonly rows: Array<Row<TRowData, TKey>>;
-    };
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<
+        dxTreeList<TRowData, TKey>,
+        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      > & {
+        readonly rowElement: DevExpress.core.DxElement;
+        readonly prevRowIndex: number;
+        newRowIndex: number;
+        readonly rows: Array<Row<TRowData, TKey>>;
+      };
     export type InitializedEvent<
       TRowData = any,
       TKey = any
@@ -25246,14 +25245,14 @@ declare module DevExpress.ui {
      * [descr:Stack.direction]
      */
     direction?:
-      | 'down'
-      | 'up'
-      | 'left'
-      | 'right'
-      | 'down-reverse'
-      | 'up-reverse'
-      | 'left-reverse'
-      | 'right-reverse';
+      | 'down-push'
+      | 'up-push'
+      | 'left-push'
+      | 'right-push'
+      | 'down-stack'
+      | 'up-stack'
+      | 'left-stack'
+      | 'right-stack';
   }
   /**
    * [descr:StringLengthRule]
