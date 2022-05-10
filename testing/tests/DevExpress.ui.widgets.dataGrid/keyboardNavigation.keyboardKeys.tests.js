@@ -4199,7 +4199,7 @@ QUnit.module('Keyboard keys', {
             // act
             this.focusCell(0, 0);
 
-            if(['cell', 'batch'].includes(editingMode)) {
+            if(editingMode === 'cell' || editingMode === 'batch') {
                 this.editingController.editCell(0, 0);
             } else {
                 this.editingController.editRow(0);
