@@ -40,8 +40,8 @@ jobs:
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
       run: npm run build
-      
-    - name: Zip artifacts 
+
+    - name: Zip artifacts
       run: |
         7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
 
@@ -93,7 +93,7 @@ jobs:
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid", name: 'ui.grid-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler", name: 'ui.scheduler-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz", name: 'viz-firefox' },
-          { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation", name: 'renovation-firefox' } 
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation", name: 'renovation-firefox' }
         ]
 
     steps:
@@ -127,6 +127,12 @@ jobs:
         '"font.name-list.monospace.x-western", "Liberation Mono"' \
         '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
         '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
+
+    - name: Update apt
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+       sudo apt-get update
+
     - name: Setup utils
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
@@ -163,7 +169,7 @@ jobs:
     - name: Unpack artifacts
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: 7z x artifacts.zip
-      
+
     - name: Build dotnet
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: dotnet build build/build-dotnet.sln
