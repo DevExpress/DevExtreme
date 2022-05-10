@@ -15,9 +15,11 @@ export const getClosestNodeWithKoCreation = (node) => {
     const $el = $(node);
     const data = $el.data();
     const hasFlag = data && data['dxKoCreation'];
-    if(!hasFlag && node.parentNode) {
+    if(hasFlag) {
+        return node;
+    }
+    if(node.parentNode) {
         return getClosestNodeWithKoCreation(node.parentNode);
     }
-
-    return node;
+    return null;
 };

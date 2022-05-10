@@ -514,7 +514,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         });
 
         const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
-        const stub = sinon.stub(scheduler.instance, 'deleteAppointment');
+        const stub = sinon.stub(scheduler.instance, 'processDeleteAppointment');
 
         scheduler.appointments.click(1);
         scheduler.tooltip.clickOnDeleteButton();
@@ -525,7 +525,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 endDate: new Date(2015, 1, 9, 12, 0),
                 text: 'Task 2'
             },
-            'deleteAppointment has a right arguments');
+            'processDeleteAppointment has a correct arguments');
 
         assert.notOk(scheduler.tooltip.isVisible(), 'tooltip was hidden');
     });

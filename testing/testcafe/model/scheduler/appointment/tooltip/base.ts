@@ -20,11 +20,17 @@ export default class TooltipBase {
   }
 
   isVisible(): Promise<boolean> {
-    const { element } = this;
+    const { element: getElement } = this;
     const invisibleStateClass = CLASS.stateInvisible;
 
-    return ClientFunction(() => !(element() as any).classList.contains(invisibleStateClass), {
-      dependencies: { element, invisibleStateClass },
+    return ClientFunction(() => {
+      const element = getElement() as any;
+      return element && !element.classList.contains(invisibleStateClass);
+    }, {
+      dependencies: {
+        getElement,
+        invisibleStateClass,
+      },
     })();
   }
 }
