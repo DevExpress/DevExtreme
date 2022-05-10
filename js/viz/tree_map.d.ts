@@ -319,8 +319,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxTreeMap
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
      * @public
@@ -330,7 +330,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field component:dxTreeMap
      * @notUsedInTheme
      * @action
      * @public
@@ -340,7 +340,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field component:dxTreeMap
      * @notUsedInTheme
      * @action
      * @public
@@ -350,7 +350,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field component:dxTreeMap
      * @notUsedInTheme
      * @action
      * @public
@@ -360,7 +360,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field component:dxTreeMap
      * @notUsedInTheme
      * @action
      * @public
@@ -370,7 +370,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field component:dxTreeMap
      * @notUsedInTheme
      * @action
      * @public

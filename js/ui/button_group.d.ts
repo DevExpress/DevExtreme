@@ -83,9 +83,9 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxButtonGroup
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxButtonGroup
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -94,9 +94,9 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxButtonGroup
-     * @type_function_param1_field4 addedItems:array<any>
-     * @type_function_param1_field5 removedItems:array<any>
+     * @type_function_param1_field component:dxButtonGroup
+     * @type_function_param1_field addedItems:array<any>
+     * @type_function_param1_field removedItems:array<any>
      * @action
      * @public
      */

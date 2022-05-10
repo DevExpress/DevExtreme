@@ -488,8 +488,8 @@ export default class PivotGridDataSource {
     /**
      * @docid
      * @publicName createDrillDownDataSource(options)
-     * @param1_field1 columnPath:Array<string, number, Date>
-     * @param1_field2 rowPath:Array<string, number, Date>
+     * @param1_field columnPath:Array<string, number, Date>
+     * @param1_field rowPath:Array<string, number, Date>
      * @public
      */
     createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>; rowPath?: Array<string | number | Date>; dataIndex?: number; maxRowCount?: number; customColumns?: Array<string> }): DataSource;

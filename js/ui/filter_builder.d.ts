@@ -225,8 +225,8 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFilterBuilder
-     * @type_function_param1_field5 setValue(newValue):any
+     * @type_function_param1_field component:dxFilterBuilder
+     * @type_function_param1_field setValue(newValue):any
      * @default null
      * @action
      * @public
@@ -235,9 +235,9 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxFilterBuilder
-     * @type_function_param1_field6 setValue(newValue):any
-     * @type_function_param1_field9 editorOptions:object
+     * @type_function_param1_field component:dxFilterBuilder
+     * @type_function_param1_field setValue(newValue):any
+     * @type_function_param1_field editorOptions:object
      * @default null
      * @action
      * @public
@@ -247,9 +247,9 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFilterBuilder
-     * @type_function_param1_field4 value:object
-     * @type_function_param1_field5 previousValue:object
+     * @type_function_param1_field component:dxFilterBuilder
+     * @type_function_param1_field value:object
+     * @type_function_param1_field previousValue:object
      * @action
      * @public
      */
@@ -304,7 +304,7 @@ export interface dxFilterBuilderCustomOperation {
     caption?: string;
     /**
      * @docid
-     * @type_function_param1_field3 field:dxFilterBuilderField:optional
+     * @type_function_param1_field field:dxFilterBuilderField:optional
      * @public
      */
     customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: Field }) => string);
@@ -318,7 +318,7 @@ export interface dxFilterBuilderCustomOperation {
     /**
      * @docid
      * @type_function_param1 conditionInfo:object
-     * @type_function_param1_field2 field:dxFilterBuilderField
+     * @type_function_param1_field field:dxFilterBuilderField
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -393,7 +393,7 @@ export interface dxFilterBuilderField {
     /**
      * @docid
      * @type_function_param1 conditionInfo:object
-     * @type_function_param1_field3 field:dxFilterBuilderField
+     * @type_function_param1_field field:dxFilterBuilderField
      * @type_function_return string|Element|jQuery
      * @public
      */

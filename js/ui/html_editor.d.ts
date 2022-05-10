@@ -120,8 +120,8 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:dxHtmlEditor
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxHtmlEditor
      * @action
      * @public
      */
@@ -130,8 +130,8 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:dxHtmlEditor
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxHtmlEditor
      * @action
      * @public
      */

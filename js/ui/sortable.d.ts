@@ -184,7 +184,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -193,8 +193,8 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxSortable
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -203,8 +203,8 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxSortable
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -213,8 +213,8 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxSortable
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -223,8 +223,8 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxSortable
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -233,8 +233,8 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -243,9 +243,9 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field14 promise:Promise<void>
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
+     * @type_function_param1_field promise:Promise<void>
      * @action
      * @public
      */

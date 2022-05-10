@@ -502,8 +502,8 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field4 center:Array<number>
+     * @type_function_param1_field component:dxVectorMap
+     * @type_function_param1_field center:Array<number>
      * @notUsedInTheme
      * @action
      * @public
@@ -514,8 +514,8 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxVectorMap
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
      * @public
@@ -525,7 +525,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field component:dxVectorMap
      * @notUsedInTheme
      * @action
      * @public
@@ -535,7 +535,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field component:dxVectorMap
      * @notUsedInTheme
      * @action
      * @public
@@ -545,7 +545,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field component:dxVectorMap
      * @notUsedInTheme
      * @action
      * @public
@@ -555,7 +555,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field component:dxVectorMap
      * @notUsedInTheme
      * @action
      * @public

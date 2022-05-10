@@ -58,8 +58,8 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:this
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -68,7 +68,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSpeedDialAction
+     * @type_function_param1_field component:dxSpeedDialAction
      * @action
      * @public
      */

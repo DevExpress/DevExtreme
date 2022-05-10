@@ -146,7 +146,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -703,8 +703,8 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field4 item:dxDiagramItem
+     * @type_function_param1_field component:dxDiagram
+     * @type_function_param1_field item:dxDiagramItem
      * @action
      * @public
      */
@@ -713,8 +713,8 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field4 item:dxDiagramItem
+     * @type_function_param1_field component:dxDiagram
+     * @type_function_param1_field item:dxDiagramItem
      * @action
      * @public
      */
@@ -723,8 +723,8 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field4 items:Array<dxDiagramItem>
+     * @type_function_param1_field component:dxDiagram
+     * @type_function_param1_field items:Array<dxDiagramItem>
      * @action
      * @public
      */
@@ -733,9 +733,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field4 operation:Enums.DiagramModelOperation
-     * @type_function_param1_field6 reason:Enums.DiagramRequestEditOperationReason
+     * @type_function_param1_field component:dxDiagram
+     * @type_function_param1_field operation:Enums.DiagramModelOperation
+     * @type_function_param1_field reason:Enums.DiagramRequestEditOperationReason
      * @action
      * @public
      */
@@ -744,8 +744,8 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field4 changes:Array<any>
+     * @type_function_param1_field component:dxDiagram
+     * @type_function_param1_field changes:Array<any>
      * @action
      * @public
      */

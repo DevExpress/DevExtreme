@@ -80,7 +80,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
+     * @type_function_param1_field component:this
      * @notUsedInTheme
      * @action
      * @public
@@ -90,7 +90,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -98,7 +98,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
+     * @type_function_param1_field component:this
      * @default null
      * @action
      * @public
@@ -107,7 +107,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:this
+     * @type_function_param1_field component:this
      * @default null
      * @action
      * @public
@@ -117,7 +117,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -565,8 +565,8 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
      * @static
      * @publicName defaultOptions(rule)
      * @param1 rule:Object
-     * @param1_field1 device:Device|Array<Device>|function
-     * @param1_field2 options:Object
+     * @param1_field device:Device|Array<Device>|function
+     * @param1_field options:Object
      * @hidden
      */
     static defaultOptions<TProperties>(rule: DefaultOptionsRule<TProperties>): void;

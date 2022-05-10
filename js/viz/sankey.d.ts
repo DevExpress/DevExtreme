@@ -426,8 +426,8 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxSankey
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
      * @public
@@ -437,7 +437,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field component:dxSankey
      * @notUsedInTheme
      * @action
      * @public
@@ -448,8 +448,8 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxSankey
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
      * @public
@@ -459,7 +459,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field component:dxSankey
      * @notUsedInTheme
      * @action
      * @public
@@ -522,7 +522,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * @docid  dxSankeyOptions.tooltip.customizeNodeTooltip
      * @default undefined
-     * @type_function_param1_field1 title:string:deprecated(label)
+     * @type_function_param1_field title:string:deprecated(label)
      * @type_function_return object
      * @public
      */

@@ -49,7 +49,7 @@ export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponen
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
+     * @type_function_param1_field component:this
      * @action
      * @public
      */

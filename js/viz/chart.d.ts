@@ -877,8 +877,8 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxChart
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
      * @public
@@ -889,10 +889,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxChart
+     * @type_function_param1_field element:DxElement
+     * @type_function_param1_field model:any
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
      * @public
@@ -903,10 +903,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxChart
+     * @type_function_param1_field element:DxElement
+     * @type_function_param1_field model:any
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
      * @public
@@ -916,7 +916,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxChart
+     * @type_function_param1_field component:dxChart
      * @notUsedInTheme
      * @action
      * @public
@@ -926,7 +926,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxChart
+     * @type_function_param1_field component:dxChart
      * @notUsedInTheme
      * @action
      * @public
@@ -936,11 +936,11 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxChart
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 rangeStart:Date|Number:deprecated(range)
-     * @type_function_param1_field7 rangeEnd:Date|Number:deprecated(range)
-     * @type_function_param1_field11 actionType:Enums.ChartZoomPanActionType
+     * @type_function_param1_field component:dxChart
+     * @type_function_param1_field event:event
+     * @type_function_param1_field rangeStart:Date|Number:deprecated(range)
+     * @type_function_param1_field rangeEnd:Date|Number:deprecated(range)
+     * @type_function_param1_field actionType:Enums.ChartZoomPanActionType
      * @notUsedInTheme
      * @action
      * @public
@@ -950,9 +950,9 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxChart
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field8 actionType:Enums.ChartZoomPanActionType
+     * @type_function_param1_field component:dxChart
+     * @type_function_param1_field event:event
+     * @type_function_param1_field actionType:Enums.ChartZoomPanActionType
      * @notUsedInTheme
      * @action
      * @public
@@ -1808,8 +1808,8 @@ export interface dxChartCommonAxisSettingsLabel {
     /**
      * @docid dxChartOptions.commonAxisSettings.label.template
      * @default undefined
-     * @type_function_param1_field1 value:Date|Number|string
-     * @type_function_param1_field2 valueText:string
+     * @type_function_param1_field value:Date|Number|string
+     * @type_function_param1_field valueText:string
      * @type_function_return string|SVGElement|jQuery
      * @public
      */

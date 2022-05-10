@@ -229,31 +229,31 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field2 event:event
+       * @type_function_param1_field event:event
        */
       onAdd?: ((e: AppointmentDraggingAddEvent) => void);
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field3 event:event
+       * @type_function_param1_field event:event
        */
       onDragEnd?: ((e: AppointmentDraggingEndEvent) => void);
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field3 event:event
+       * @type_function_param1_field event:event
        */
       onDragMove?: ((e: AppointmentDraggingMoveEvent) => void);
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field3 event:event
+       * @type_function_param1_field event:event
        */
       onDragStart?: ((e: AppointmentDraggingStartEvent) => void);
       /**
        * @docid
        * @type_function_param1 e:object
-       * @type_function_param1_field2 event:event
+       * @type_function_param1_field event:event
        */
       onRemove?: ((e: AppointmentDraggingRemoveEvent) => void);
       /**
@@ -270,16 +270,16 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default "item"
-     * @type_function_param1_field1 appointmentData:object
-     * @type_function_param1_field2 targetedAppointmentData:object
+     * @type_function_param1_field appointmentData:object
+     * @type_function_param1_field targetedAppointmentData:object
      * @public
      */
     appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default "appointmentTooltip"
-     * @type_function_param1_field1 appointmentData:object
-     * @type_function_param1_field2 targetedAppointmentData:object
+     * @type_function_param1_field appointmentData:object
+     * @type_function_param1_field targetedAppointmentData:object
      * @public
      */
     appointmentTooltipTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
@@ -476,7 +476,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field component:dxScheduler
      * @action
      * @public
      */
@@ -485,8 +485,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field cancel:Boolean|Promise<Boolean>
      * @action
      * @public
      */
@@ -496,8 +496,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxScheduler
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -507,8 +507,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -518,8 +518,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxScheduler
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -528,7 +528,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field component:dxScheduler
      * @action
      * @public
      */
@@ -537,8 +537,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field cancel:Boolean|Promise<Boolean>
      * @action
      * @public
      */
@@ -547,7 +547,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxScheduler
+     * @type_function_param1_field component:dxScheduler
      * @action
      * @public
      */
@@ -556,8 +556,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field5 targetedAppointmentData:dxSchedulerAppointment|undefined
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment|undefined
      * @action
      * @public
      */
@@ -566,7 +566,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field component:dxScheduler
      * @action
      * @public
      */
@@ -575,10 +575,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field4 oldData:Object
-     * @type_function_param1_field5 newData:Object
-     * @type_function_param1_field6 cancel:Boolean|Promise<Boolean>
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field oldData:Object
+     * @type_function_param1_field newData:Object
+     * @type_function_param1_field cancel:Boolean|Promise<Boolean>
      * @action
      * @public
      */
@@ -588,9 +588,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxScheduler
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 cellData:object
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field event:event
+     * @type_function_param1_field cellData:object
      * @action
      * @public
      */
@@ -600,9 +600,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 cellData:object
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field event:event
+     * @type_function_param1_field cellData:object
      * @action
      * @public
      */
@@ -782,15 +782,15 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default "item"
-       * @type_function_param1_field1 appointmentData:object
-       * @type_function_param1_field2 targetedAppointmentData:object
+       * @type_function_param1_field appointmentData:object
+       * @type_function_param1_field targetedAppointmentData:object
        */
       appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
        * @default "appointmentTooltip"
-       * @type_function_param1_field1 appointmentData:object
-       * @type_function_param1_field2 targetedAppointmentData:object
+       * @type_function_param1_field appointmentData:object
+       * @type_function_param1_field targetedAppointmentData:object
        */
       appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**

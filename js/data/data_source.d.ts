@@ -60,7 +60,7 @@ export interface DataSourceOptions<
     map?: ((dataItem: TStoreItem) => TMappedItem);
     /**
      * @docid
-     * @type_function_param1_field1 changes:Array<any>
+     * @type_function_param1_field changes:Array<any>
      * @action
      * @public
      */

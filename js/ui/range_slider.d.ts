@@ -53,10 +53,10 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     endName?: string;
     /**
      * @docid
-     * @type_function_param1_field1 component:dxRangeSlider
+     * @type_function_param1_field component:dxRangeSlider
      * @action
      * @default null
-     * @type_function_param1_field6 value:array<number>
+     * @type_function_param1_field value:array<number>
      * @public
      */
     onValueChanged?: ((e: ValueChangedEvent) => void);

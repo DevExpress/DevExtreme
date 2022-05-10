@@ -115,7 +115,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field component:dxContextMenu
      * @action
      * @public
      */
@@ -124,7 +124,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxContextMenu
+     * @type_function_param1_field component:dxContextMenu
      * @action
      * @public
      */
@@ -133,8 +133,8 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxContextMenu
      * @action
      * @public
      */
@@ -143,7 +143,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxContextMenu
+     * @type_function_param1_field component:dxContextMenu
      * @action
      * @public
      */
@@ -152,7 +152,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field component:dxContextMenu
      * @action
      * @public
      */

@@ -281,10 +281,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field9 viewArea:Enums.FileManagerViewArea
+     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field viewArea:Enums.FileManagerViewArea
      * @action
      * @public
      */
@@ -293,9 +293,9 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field2 component:dxFileManager
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field8 viewArea:Enums.FileManagerViewArea
+     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1_field event:event
+     * @type_function_param1_field viewArea:Enums.FileManagerViewArea
      * @action
      * @public
      */
@@ -303,7 +303,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field component:dxFileManager
      * @default null
      * @action
      * @public
@@ -312,7 +312,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field component:dxFileManager
      * @default null
      * @action
      * @public
@@ -321,11 +321,11 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field4 currentSelectedItemKeys:Array<string>
-     * @type_function_param1_field5 currentDeselectedItemKeys:Array<string>
-     * @type_function_param1_field6 selectedItems:Array<FileSystemItem>
-     * @type_function_param1_field7 selectedItemKeys:Array<string>
+     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1_field currentSelectedItemKeys:Array<string>
+     * @type_function_param1_field currentDeselectedItemKeys:Array<string>
+     * @type_function_param1_field selectedItems:Array<FileSystemItem>
+     * @type_function_param1_field selectedItemKeys:Array<string>
      * @default null
      * @action
      * @public
@@ -334,9 +334,9 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -344,7 +344,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field component:dxFileManager
      * @default null
      * @action
      * @public
@@ -353,7 +353,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field component:dxFileManager
      * @default null
      * @action
      * @public
@@ -362,8 +362,8 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1_field cancel:boolean|Promise<void>
      * @default null
      * @action
      * @public
@@ -372,7 +372,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field component:dxFileManager
      * @default null
      * @action
      * @public
@@ -381,8 +381,8 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1_field cancel:boolean|Promise<void>
      * @default null
      * @action
      * @public
@@ -391,7 +391,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field component:dxFileManager
      * @default null
      * @action
      * @public
@@ -400,8 +400,8 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1_field cancel:boolean|Promise<void>
      * @default null
      * @action
      * @public
@@ -410,7 +410,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field component:dxFileManager
      * @default null
      * @action
      * @public
@@ -419,8 +419,8 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1_field cancel:boolean|Promise<void>
      * @default null
      * @action
      * @public
@@ -429,7 +429,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field component:dxFileManager
      * @default null
      * @action
      * @public
@@ -438,8 +438,8 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1_field cancel:boolean|Promise<void>
      * @default null
      * @action
      * @public
@@ -448,7 +448,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field component:dxFileManager
      * @default null
      * @action
      * @public
@@ -457,8 +457,8 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1_field cancel:boolean|Promise<void>
      * @default null
      * @action
      * @public
@@ -467,7 +467,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
+     * @type_function_param1_field component:dxFileManager
      * @default null
      * @action
      * @public
@@ -476,8 +476,8 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field6 cancel:boolean|Promise<void>
+     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1_field cancel:boolean|Promise<void>
      * @default null
      * @action
      * @public

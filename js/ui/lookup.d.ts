@@ -158,7 +158,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxLookup
+     * @type_function_param1_field component:dxLookup
      * @action
      * @public
      */
@@ -167,7 +167,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxLookup
+     * @type_function_param1_field component:dxLookup
      * @action
      * @public
      */
@@ -176,9 +176,9 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 scrollOffset:object
-     * @type_function_param1_field1 component:dxLookup
+     * @type_function_param1_field event:event
+     * @type_function_param1_field scrollOffset:object
+     * @type_function_param1_field component:dxLookup
      * @action
      * @public
      */
@@ -187,10 +187,10 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field6 value:object
-     * @type_function_param1_field5 previousValue:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:dxLookup
+     * @type_function_param1_field value:object
+     * @type_function_param1_field previousValue:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxLookup
      * @action
      * @public
      */

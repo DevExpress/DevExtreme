@@ -151,9 +151,9 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 selectedItem:object
-     * @type_function_param1_field1 component:dxDropDownButton
+     * @type_function_param1_field event:event
+     * @type_function_param1_field selectedItem:object
+     * @type_function_param1_field component:dxDropDownButton
      * @action
      * @public
      */
@@ -163,9 +163,9 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field1 component:dxDropDownButton
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field component:dxDropDownButton
      * @action
      * @public
      */
@@ -175,9 +175,9 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 item:object
-     * @type_function_param1_field5 previousItem:object
-     * @type_function_param1_field1 component:dxDropDownButton
+     * @type_function_param1_field item:object
+     * @type_function_param1_field previousItem:object
+     * @type_function_param1_field component:dxDropDownButton
      * @action
      * @public
      */
@@ -299,9 +299,9 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDropDownButton
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field component:dxDropDownButton
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
      * @public
      */
      onClick?: ((e: ItemClickEvent) => void) | string;

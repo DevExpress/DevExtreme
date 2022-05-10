@@ -227,22 +227,22 @@ export interface PdfExportDataGridProps {
     selectedRowsOnly?: boolean;
     /**
       * @docid
-      * @type_function_param1_field1 gridCell:PdfDataGridCell
-      * @type_function_param1_field2 pdfCell:PdfCell
-      * @type_function_param1_field3 doc:object
+      * @type_function_param1_field gridCell:PdfDataGridCell
+      * @type_function_param1_field pdfCell:PdfCell
+      * @type_function_param1_field doc:object
       * @public
       */
     customDrawCell?: ((options: { gridCell?: DataGridCell; pdfCell?: Cell; doc?: any; rect?: { x: number; y: number; h: number; w: number }; cancel?: boolean }) => void);
     /**
      * @docid
-     * @type_function_param1_field1 gridCell:PdfDataGridCell
-     * @type_function_param1_field2 pdfCell:PdfCell
+     * @type_function_param1_field gridCell:PdfDataGridCell
+     * @type_function_param1_field pdfCell:PdfCell
      * @public
      */
     customizeCell?: ((options: { gridCell?: DataGridCell; pdfCell?: Cell }) => void);
     /**
      * @docid
-     * @type_function_param1_field1 rowCells:Array<PdfCell>
+     * @type_function_param1_field rowCells:Array<PdfCell>
      * @public
      */
     onRowExporting?: ((options: { rowCells?: Array<Cell>; rowHeight?: number }) => void);

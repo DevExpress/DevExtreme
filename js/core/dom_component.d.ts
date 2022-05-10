@@ -51,7 +51,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @action
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:<DOMComponent>
+     * @type_function_param1_field component:<DOMComponent>
      * @public
      */
     onDisposing?: ((e: EventInfo<TComponent>) => void);
@@ -60,7 +60,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @action
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:<DOMComponent>
+     * @type_function_param1_field component:<DOMComponent>
      * @public
      */
     onOptionChanged?: ((e: OptionChangedEventInfo<TComponent>) => void);
@@ -108,8 +108,8 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @section uiWidgets
      * @publicName defaultOptions(rule)
      * @param1 rule:Object
-     * @param1_field1 device:Device|Array<Device>|function
-     * @param1_field2 options:Object
+     * @param1_field device:Device|Array<Device>|function
+     * @param1_field options:Object
      * @public
      */
     static defaultOptions<TProperties = Properties>(rule: DefaultOptionsRule<TProperties>): void;

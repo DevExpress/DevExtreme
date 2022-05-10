@@ -2,8 +2,8 @@
 export interface XmlaStoreOptions {
     /**
      * @docid
-     * @type_function_param1_field3 headers:object
-     * @type_function_param1_field4 xhrFields:object
+     * @type_function_param1_field headers:object
+     * @type_function_param1_field xhrFields:object
      * @public
      */
     beforeSend?: ((options: { url?: string; method?: string; headers?: any; xhrFields?: any; data?: string; dataType?: string }) => void);

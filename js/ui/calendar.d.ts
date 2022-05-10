@@ -79,7 +79,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @docid
      * @default null
      * @type_function_param1 data:object
-     * @type_function_param1_field1 component:object
+     * @type_function_param1_field component:object
      * @public
      */
     disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);

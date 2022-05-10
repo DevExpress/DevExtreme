@@ -176,8 +176,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:dxMap
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxMap
      * @action
      * @public
      */
@@ -186,9 +186,9 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 options:object
-     * @type_function_param1_field5 originalMarker:object
-     * @type_function_param1_field1 component:dxMap
+     * @type_function_param1_field options:object
+     * @type_function_param1_field originalMarker:object
+     * @type_function_param1_field component:dxMap
      * @action
      * @public
      */
@@ -197,8 +197,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 options:object
-     * @type_function_param1_field1 component:dxMap
+     * @type_function_param1_field options:object
+     * @type_function_param1_field component:dxMap
      * @action
      * @public
      */
@@ -207,8 +207,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 originalMap:object
-     * @type_function_param1_field1 component:dxMap
+     * @type_function_param1_field originalMap:object
+     * @type_function_param1_field component:dxMap
      * @action
      * @public
      */
@@ -217,9 +217,9 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 options:object
-     * @type_function_param1_field5 originalRoute:object
-     * @type_function_param1_field1 component:dxMap
+     * @type_function_param1_field options:object
+     * @type_function_param1_field originalRoute:object
+     * @type_function_param1_field component:dxMap
      * @action
      * @public
      */
@@ -228,8 +228,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 options:object
-     * @type_function_param1_field1 component:dxMap
+     * @type_function_param1_field options:object
+     * @type_function_param1_field component:dxMap
      * @action
      * @public
      */

@@ -45,11 +45,11 @@ export interface AsyncRule {
      * @docid
      * @type_function_return Promise<any>
      * @type_function_param1 options:object
-     * @type_function_param1_field2 rule:object
-     * @type_function_param1_field3 validator:object
-     * @type_function_param1_field4 data:object
-     * @type_function_param1_field5 column:object
-     * @type_function_param1_field6 formItem:object
+     * @type_function_param1_field rule:object
+     * @type_function_param1_field validator:object
+     * @type_function_param1_field data:object
+     * @type_function_param1_field column:object
+     * @type_function_param1_field formItem:object
      * @public
      */
     validationCallback?: ((options: ValidationCallbackData) => PromiseLike<any>);
@@ -129,11 +129,11 @@ export interface CustomRule {
     /**
      * @docid
      * @type_function_param1 options:object
-     * @type_function_param1_field2 rule:object
-     * @type_function_param1_field3 validator:object
-     * @type_function_param1_field4 data:object
-     * @type_function_param1_field5 column:object
-     * @type_function_param1_field6 formItem:object
+     * @type_function_param1_field rule:object
+     * @type_function_param1_field validator:object
+     * @type_function_param1_field data:object
+     * @type_function_param1_field column:object
+     * @type_function_param1_field formItem:object
      * @public
      */
     validationCallback?: ((options: ValidationCallbackData) => boolean);

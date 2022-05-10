@@ -74,9 +74,9 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 validationGroup:object
-     * @type_function_param1_field1 component:dxButton
+     * @type_function_param1_field event:event
+     * @type_function_param1_field validationGroup:object
+     * @type_function_param1_field component:dxButton
      * @action
      * @public
      */

@@ -55,8 +55,8 @@ export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field4 target:object
+     * @type_function_param1_field component:this
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
@@ -66,8 +66,8 @@ export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field4 target:object
+     * @type_function_param1_field component:this
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public

@@ -321,8 +321,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxRangeSelector
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field component:dxRangeSelector
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
      * @public

@@ -42,8 +42,8 @@ export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
  * @publicName custom(options)
  * @return Object
  * @param1 options:object
- * @param1_field3 buttons:Array<dxButtonOptions>
- * @param1_field5 message:String:deprecated(messageHtml)
+ * @param1_field buttons:Array<dxButtonOptions>
+ * @param1_field message:String:deprecated(messageHtml)
  * @static
  * @namespace DevExpress.ui.dialog
  * @public

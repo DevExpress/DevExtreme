@@ -71,11 +71,11 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field6 itemElement:object
-     * @type_function_param1_field7 itemIndex:number | object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field itemElement:object
+     * @type_function_param1_field itemIndex:number | object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -84,8 +84,8 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 selectedItem:object
-     * @type_function_param1_field1 component:this
+     * @type_function_param1_field selectedItem:object
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -94,10 +94,10 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field6 value:object
-     * @type_function_param1_field5 previousValue:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
+     * @type_function_param1_field value:object
+     * @type_function_param1_field previousValue:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */

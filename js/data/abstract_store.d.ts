@@ -212,8 +212,8 @@ export default class Store<
     /**
      * @docid
      * @publicName totalCount(options)
-     * @param1_field1 filter:object
-     * @param1_field2 group:object
+     * @param1_field filter:object
+     * @param1_field group:object
      * @return Promise<number>
      * @public
      */
