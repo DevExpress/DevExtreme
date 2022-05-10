@@ -1,10 +1,11 @@
 import { ClientFunction } from 'testcafe';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Appointment Edting`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Appointment Editing`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 test('Should correctly update appointment if dataSource is a simple array', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -14,6 +15,8 @@ test('Should correctly update appointment if dataSource is a simple array', asyn
   const { appointmentPopup } = scheduler;
 
   await t
+    .expect(scheduler.getAppointmentCount())
+    .eql(1)
     .doubleClick(appointment.element)
     .click(appointmentPopup.subjectElement)
     .typeText(appointmentPopup.subjectElement, 'updated')
@@ -47,6 +50,8 @@ test('Should correctly update appointment if dataSource is a Store with key arra
   const { appointmentPopup } = scheduler;
 
   await t
+    .expect(scheduler.getAppointmentCount())
+    .eql(1)
     .doubleClick(appointment.element)
     .click(appointmentPopup.subjectElement)
     .typeText(appointmentPopup.subjectElement, 'updated')
