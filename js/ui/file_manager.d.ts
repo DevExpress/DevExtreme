@@ -695,7 +695,6 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @docid
      * @type Enums.ToolbarItemLocation|string
      * @default "before"
-     * @type Enums.ToolbarItemLocation
      * @public
      */
     location?: 'after' | 'before' | 'center';
