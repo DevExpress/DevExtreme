@@ -14,7 +14,7 @@ jobs:
     name: Build
     timeout-minutes: 60
 
-    steps:    
+    steps:
     - name: Get sources
       uses: actions/checkout@v2
 
@@ -39,8 +39,8 @@ jobs:
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
       run: npm run build
-      
-    - name: Zip artifacts 
+
+    - name: Zip artifacts
       run: |
         7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
 
@@ -86,6 +86,11 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/checkout@v2
 
+    - name: Update apt
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        sudo apt-get update
+
     - name: Setup utils
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
@@ -104,7 +109,7 @@ jobs:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
-        
+
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
@@ -113,11 +118,11 @@ jobs:
     - name: Unpack artifacts
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: 7z x artifacts.zip
-      
+
     - name: Build dotnet
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: dotnet build build/build-dotnet.sln
-      
+
     - name: Run QUnit tests
       if: steps.last_run_status.outputs.last_run_status != 'success'
       env:
