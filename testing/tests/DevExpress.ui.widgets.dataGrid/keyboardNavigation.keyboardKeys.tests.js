@@ -30,6 +30,8 @@ import {
     dataGridWrapper
 } from '../../helpers/grid/keyboardNavigationHelper.js';
 
+import 'ui/text_area.js';
+
 const device = devices.real();
 
 function generateItems(itemCount) {
@@ -4191,6 +4193,9 @@ QUnit.module('Keyboard keys', {
                     mode: editingMode,
                     allowUpdating: true
                 },
+                onEditorPreparing(e) {
+                    e.editorName = 'dxTextArea';
+                },
             };
 
             setupModules(this);
@@ -4199,6 +4204,7 @@ QUnit.module('Keyboard keys', {
             // act
             this.focusCell(0, 0);
 
+
             if(editingMode === 'cell' || editingMode === 'batch') {
                 this.editingController.editCell(0, 0);
             } else {
@@ -4206,11 +4212,15 @@ QUnit.module('Keyboard keys', {
             }
             this.clock.tick();
 
+            // assert
+            assert.equal($('.dx-data-row:eq(0) td:eq(0) textarea:focus').length, 1, 'first cell is focused');
+
+            // act
             this.triggerKeyDown('downArrow', true);
             this.clock.tick();
 
             // assert
-            assert.equal($('.dx-editor-cell input:focus').length, 1);
+            assert.equal($('.dx-data-row:eq(0) td:eq(0) textarea:focus').length, 1, 'first cell is still focused');
         });
     });
 });
