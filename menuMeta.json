@@ -5678,7 +5678,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/Toast/Overview/",
             "Widget": "Toast",
             "MvcAdditionalFiles": [
               "/Models/ListProduct.cs",
