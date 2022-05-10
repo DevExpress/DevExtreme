@@ -75,10 +75,10 @@ const Overlay = Widget.inherit({
             escape: function() {
                 this.hide();
             },
-            upArrow: (e) => { this._drag.moveUp(e); },
-            downArrow: (e) => { this._drag.moveDown(e); },
-            leftArrow: (e) => { this._drag.moveLeft(e); },
-            rightArrow: (e) => { this._drag.moveRight(e); }
+            upArrow: (e) => { this._drag?.moveUp(e); },
+            downArrow: (e) => { this._drag?.moveDown(e); },
+            leftArrow: (e) => { this._drag?.moveLeft(e); },
+            rightArrow: (e) => { this._drag?.moveRight(e); }
         });
     },
 
