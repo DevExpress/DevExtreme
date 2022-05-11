@@ -101,7 +101,7 @@ export default class Scheduler extends Widget {
     this.reducedIconTooltip = new ReducedIconTooltip();
   }
 
-  static getDialog(): AppointmentDialog {
+  static getDeleteRecurrenceDialog(): AppointmentDialog {
     return new AppointmentDialog();
   }
 

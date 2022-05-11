@@ -5,11 +5,13 @@ import { GetterExtender } from '../../../../utils/plugin/getter_extender';
 import { Plugins } from '../../../../utils/plugin/context';
 import { ValueSetter } from '../../../../utils/plugin/value_setter';
 import {
-  DataGridNext, viewFunction as DataGridView, DataGridNextProps,
   LocalData, Columns, KeyExprPlugin, VisibleColumns,
   LocalVisibleItems, VisibleRows, VisibleDataRows, TotalCount, DataStateValue, RemoteOperations,
   LocalDataState,
-  LoadOptionsValue,
+  LoadOptionsValue, CalculateLocalDataState,
+} from '../plugins';
+import {
+  DataGridNext, viewFunction as DataGridView, DataGridNextProps,
 } from '../data_grid_next';
 import { Widget } from '../../../common/widget';
 import CustomStore from '../../../../../data/custom_store';
@@ -246,8 +248,11 @@ describe('DataGridNext', () => {
         const grid = new DataGridNext({});
         grid.props = new DataGridNextProps();
         grid.plugins = new Plugins();
+
         grid.plugins.set(LocalData, data);
         grid.plugins.extend(LocalVisibleItems, -1, () => data.slice(0, 2));
+        grid.plugins.extend(LocalDataState, -1,
+          CalculateLocalDataState.func, CalculateLocalDataState.deps);
 
         grid.updateDataStateFromLocal();
 
@@ -345,6 +350,7 @@ describe('DataGridNext', () => {
         const dataState = {
           data: [{ id: 1 }],
           totalCount: 5,
+          dataOffset: 0,
         };
         const loadOptions = { skip: 0, take: 1 };
 
@@ -356,6 +362,8 @@ describe('DataGridNext', () => {
         });
         grid.plugins = new Plugins();
         grid.plugins.extend(LoadOptionsValue, 1, () => loadOptions);
+        grid.plugins.extend(LocalDataState, -1,
+          CalculateLocalDataState.func, CalculateLocalDataState.deps);
 
         grid.loadDataSource();
 
@@ -549,6 +557,8 @@ describe('DataGridNext', () => {
 
       plugins.set(LocalData, data);
       plugins.extend(LocalVisibleItems, -1, () => undefined);
+      plugins.extend(LocalDataState, -1,
+        CalculateLocalDataState.func, CalculateLocalDataState.deps);
 
       expect(plugins.getValue(LocalDataState)).toEqual({
         data: [],
@@ -563,6 +573,8 @@ describe('DataGridNext', () => {
 
       plugins.set(LocalData, data);
       plugins.extend(LocalVisibleItems, -1, () => data.slice(0, 2));
+      plugins.extend(LocalDataState, -1,
+        CalculateLocalDataState.func, CalculateLocalDataState.deps);
 
       expect(plugins.getValue(LocalDataState)).toEqual({
         data: data.slice(0, 2),
