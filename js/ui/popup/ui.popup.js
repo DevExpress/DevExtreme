@@ -109,10 +109,10 @@ const getButtonPlace = name => {
 const Popup = Overlay.inherit({
     _supportedKeys: function() {
         return extend(this.callBase(), {
-            upArrow: (e) => { this._drag.moveUp(e); },
-            downArrow: (e) => { this._drag.moveDown(e); },
-            leftArrow: (e) => { this._drag.moveLeft(e); },
-            rightArrow: (e) => { this._drag.moveRight(e); }
+            upArrow: (e) => { this._drag?.moveUp(e); },
+            downArrow: (e) => { this._drag?.moveDown(e); },
+            leftArrow: (e) => { this._drag?.moveLeft(e); },
+            rightArrow: (e) => { this._drag?.moveRight(e); }
         });
     },
 
