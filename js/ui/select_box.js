@@ -2,7 +2,6 @@ import $ from '../core/renderer';
 import { noop, ensureDefined } from '../core/utils/common';
 import { isDefined, isPromise } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
-import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
 import { Deferred, fromPromise } from '../core/utils/deferred';
 import { getPublicElement } from '../core/element';
@@ -228,9 +227,10 @@ const SelectBox = DropDownList.inherit({
             return;
         }
 
+        const { items, selectedItem } = this.option();
         const $listItems = this._list._itemElements();
-        const index = inArray(this.option('selectedItem'), this.option('items'));
-        const focusedElement = index >= 0 && !this._isCustomItemSelected() ? $listItems.eq(index) : null;
+        const index = items?.indexOf(selectedItem) ?? -1;
+        const focusedElement = index !== -1 && !this._isCustomItemSelected() ? $listItems.eq(index) : null;
 
         this._focusListElement(focusedElement);
     },

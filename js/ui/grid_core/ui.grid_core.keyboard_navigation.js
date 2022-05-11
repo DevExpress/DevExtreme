@@ -5,7 +5,6 @@ import eventsEngine from '../../events/core/events_engine';
 import core from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
 import { isDefined, isEmptyObject } from '../../core/utils/type';
-import { inArray } from '../../core/utils/array';
 import { focused } from '../widget/selectors';
 import { addNamespace, createEvent, isCommandKeyPressed } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
@@ -1509,7 +1508,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _getNextCell: function(keyCode, elementType, cellPosition) {
         const focusedCellPosition = cellPosition || this._focusedCellPosition;
         const isRowFocusType = this.isRowFocusType();
-        const includeCommandCells = isRowFocusType || inArray(keyCode, ['next', 'previous']) > -1;
+        const includeCommandCells = isRowFocusType || ['next', 'previous'].includes(keyCode);
         let $cell;
         let $row;
 

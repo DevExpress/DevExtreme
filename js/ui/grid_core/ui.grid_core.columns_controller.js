@@ -6,7 +6,7 @@ import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, ty
 import { each, map } from '../../core/utils/iterator';
 import { getDefaultAlignment } from '../../core/utils/position';
 import { extend } from '../../core/utils/extend';
-import { inArray, normalizeIndexes } from '../../core/utils/array';
+import { normalizeIndexes } from '../../core/utils/array';
 import config from '../../core/config';
 import { orderEach, deepExtendArraySafe } from '../../core/utils/object';
 import errors from '../widget/ui.errors';
@@ -516,11 +516,11 @@ export const columnsControllerModule = {
                     for(let index = 0; index < USER_STATE_FIELD_NAMES.length; index++) {
                         const fieldName = USER_STATE_FIELD_NAMES[index];
 
-                        if(inArray(fieldName, ignoreColumnOptionNames) >= 0) continue;
+                        if(ignoreColumnOptionNames.includes(fieldName)) continue;
 
                         if(fieldName === 'dataType') {
                             column[fieldName] = column[fieldName] || userStateColumn[fieldName];
-                        } else if(inArray(fieldName, USER_STATE_FIELD_NAMES_15_1) >= 0) {
+                        } else if(USER_STATE_FIELD_NAMES_15_1.includes(fieldName)) {
                             if(fieldName in userStateColumn) {
                                 column[fieldName] = userStateColumn[fieldName];
                             }
@@ -741,7 +741,7 @@ export const columnsControllerModule = {
 
                     if(!notFireEvent) {
                         // T346972
-                        if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== 'visibleWidth') {
+                        if(!USER_STATE_FIELD_NAMES.includes(optionName) && optionName !== 'visibleWidth') {
                             columns = that.option('columns');
                             initialColumn = that.getColumnByPath(fullOptionName, columns);
                             if(isString(initialColumn)) {

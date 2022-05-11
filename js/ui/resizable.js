@@ -3,7 +3,6 @@ import { locate, move } from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import DOMComponent from '../core/dom_component';
 import $ from '../core/renderer';
-import { inArray } from '../core/utils/array';
 import { pairToObject } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
@@ -108,15 +107,17 @@ const Resizable = DOMComponent.inherit({
         }
 
         const directions = handles === 'all' ? ['top', 'bottom', 'left', 'right'] : handles.split(' ');
+        const activeHandlesMap = {};
 
         each(directions, (index, handleName) => {
+            activeHandlesMap[handleName] = true;
             this._renderHandle(handleName);
         });
 
-        inArray('bottom', directions) + 1 && inArray('right', directions) + 1 && this._renderHandle('corner-bottom-right');
-        inArray('bottom', directions) + 1 && inArray('left', directions) + 1 && this._renderHandle('corner-bottom-left');
-        inArray('top', directions) + 1 && inArray('right', directions) + 1 && this._renderHandle('corner-top-right');
-        inArray('top', directions) + 1 && inArray('left', directions) + 1 && this._renderHandle('corner-top-left');
+        activeHandlesMap['bottom'] && activeHandlesMap['right'] && this._renderHandle('corner-bottom-right');
+        activeHandlesMap['bottom'] && activeHandlesMap['left'] && this._renderHandle('corner-bottom-left');
+        activeHandlesMap['top'] && activeHandlesMap['right'] && this._renderHandle('corner-top-right');
+        activeHandlesMap['top'] && activeHandlesMap['left'] && this._renderHandle('corner-top-left');
         this._attachEventHandlers();
     },
 

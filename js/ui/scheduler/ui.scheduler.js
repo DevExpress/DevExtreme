@@ -4,7 +4,6 @@ import devices from '../../core/devices';
 import $ from '../../core/renderer';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 import { EmptyTemplate } from '../../core/templates/empty_template';
-import { inArray } from '../../core/utils/array';
 import Callbacks from '../../core/utils/callbacks';
 import { noop } from '../../core/utils/common';
 import { compileGetter } from '../../core/utils/data';
@@ -2147,9 +2146,7 @@ class Scheduler extends Widget {
         const endDateTimeStamp = endDate.getTime();
 
 
-        return (inArray(dayTimeStamp, [startDateTimeStamp, endDateTimeStamp]) > -1)
-            ||
-            (startDateTimeStamp < dayTimeStamp && endDateTimeStamp > dayTimeStamp);
+        return startDateTimeStamp <= dayTimeStamp && dayTimeStamp <= endDateTimeStamp;
     }
 
     setTargetedAppointmentResources(rawAppointment, element, appointmentIndex) {

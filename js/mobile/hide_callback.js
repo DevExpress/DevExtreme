@@ -1,16 +1,13 @@
-import { inArray } from '../core/utils/array';
-
 export const hideCallback = (function() {
     let callbacks = [];
     return {
         add: function(callback) {
-            const indexOfCallback = inArray(callback, callbacks);
-            if(indexOfCallback === -1) {
+            if(!callbacks.includes(callback)) {
                 callbacks.push(callback);
             }
         },
         remove: function(callback) {
-            const indexOfCallback = inArray(callback, callbacks);
+            const indexOfCallback = callbacks.indexOf(callback);
             if(indexOfCallback !== -1) {
                 callbacks.splice(indexOfCallback, 1);
             }

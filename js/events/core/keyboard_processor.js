@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import Class from '../../core/class';
-import { inArray } from '../../core/utils/array';
 import { addNamespace, normalizeKeyName } from '../../events/utils/index';
 
 const COMPOSITION_START_EVENT = 'compositionstart';
@@ -41,7 +40,8 @@ const KeyboardProcessor = Class.inherit({
 
         if(this._element) {
             this._processFunction = (e) => {
-                const isNotFocusTarget = this._focusTarget && this._focusTarget !== e.target && inArray(e.target, $(this._focusTarget)) < 0;
+                const focusTargets = $(this._focusTarget).toArray();
+                const isNotFocusTarget = this._focusTarget && this._focusTarget !== e.target && !focusTargets.includes(e.target);
                 const shouldSkipProcessing = this._isComposingJustFinished && e.which === 229 || this._isComposing || isNotFocusTarget;
 
                 this._isComposingJustFinished = false;

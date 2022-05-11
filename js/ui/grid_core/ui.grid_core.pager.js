@@ -1,6 +1,5 @@
 import modules from './ui.grid_core.modules';
 import Pager from '../pager';
-import { inArray } from '../../core/utils/array';
 import { isDefined } from '../../core/utils/type';
 import { hasWindow } from '../../core/utils/window';
 
@@ -101,7 +100,7 @@ const PagerView = modules.View.inherit({
         const allowedPageSizes = pagerOptions && pagerOptions.allowedPageSizes;
         const pageSize = dataController.pageSize();
 
-        if(!isDefined(that._pageSizes) || inArray(pageSize, that._pageSizes) === -1) {
+        if(!isDefined(that._pageSizes) || !that._pageSizes.includes(pageSize)) {
             that._pageSizes = [];
             if(pagerOptions) {
                 if(Array.isArray(allowedPageSizes)) {

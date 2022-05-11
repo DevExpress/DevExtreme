@@ -1,6 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
 import { each } from '../../../../core/utils/iterator';
-import { merge } from '../../../../core/utils/array';
 import BaseRenderingStrategy from './strategy.base';
 import { ExpressionUtils } from '../../expressionUtils';
 import { groupAppointmentsByResources } from '../../resources/utils';
@@ -220,7 +219,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
             this.instance.getAppointmentsInstance()._reduceRecurrenceAppointments(appts.indexes, currentAppointments);
 
-            merge(currentAppointments, appts.parts);
+            currentAppointments.push(...appts.parts);
 
             const appointmentCount = currentAppointments.length;
             for(let i = 0; i < agendaDuration; i++) {

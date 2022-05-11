@@ -6,7 +6,6 @@ import { extend } from '../../core/utils/extend';
 import errors from '../../ui/widget/ui.errors';
 import uiSearchBoxMixin from '../../ui/widget/ui.search_box_mixin';
 import TextBox from '../../ui/text_box';
-import { inArray } from '../../core/utils/array';
 import query from '../../data/query';
 import storeHelper from '../../data/store_helper';
 import HierarchicalDataConverter from './ui.data_converter';
@@ -506,7 +505,7 @@ const DataAdapter = Class.inherit({
                     that._setFieldState(parent, EXPANDED, true);
                 }
 
-                if(inArray(parent, matches) > -1) {
+                if(matches.includes(parent)) {
                     index++;
                     continue;
                 }

@@ -11,7 +11,7 @@ import { getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
 import { format } from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { inArray, normalizeIndexes } from '../../core/utils/array';
+import { normalizeIndexes } from '../../core/utils/array';
 import { compileGetter } from '../../core/utils/data';
 import { removeEvent } from '../../events/remove';
 import { name as clickEventName } from '../../events/click';
@@ -709,12 +709,12 @@ const LayoutManager = Widget.inherit({
 
     _isLabelNeedBaselineAlign: function(item) {
         const largeEditors = ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'];
-        return (!!item.helpText && !this._hasBrowserFlex()) || inArray(item.editorType, largeEditors) !== -1;
+        return (!!item.helpText && !this._hasBrowserFlex()) || largeEditors.includes(item.editorType);
     },
 
     _isLabelNeedId: function(item) {
         const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor']; // TODO: support "dxCalendar"
-        return inArray(item.editorType, editorsRequiringIdForLabel) !== -1;
+        return editorsRequiringIdForLabel.includes(item.editorType);
     },
 
     _getLabelOptions: function(item, id, isRequired) {
