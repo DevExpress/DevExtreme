@@ -32,7 +32,7 @@ fixture('Renovated scheduler - Overflow indicator');
           .expect(await compareScreenshot(
             t,
             `scheduler_overflow-indicator_${currentView}-view_${groupOrientation}_rtl-${rtlEnabled}.png`,
-            scheduler.element,
+            scheduler.workSpace,
             screenshotComparerOptions,
           ))
           .ok();
