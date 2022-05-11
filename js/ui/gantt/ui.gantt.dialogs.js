@@ -33,6 +33,7 @@ export class GanttDialog {
         if(!this.infoMap[name]) {
             return;
         }
+        const isRefresh = this._popupInstance._isVisible() && this._dialogInfo && this._dialogInfo instanceof this.infoMap[name];
         this._dialogInfo = new this.infoMap[name](parameters, this._apply.bind(this), this.hide.bind(this), editingOptions);
         this._popupInstance.option({
             showTitle: !!this._dialogInfo.getTitle(),
@@ -42,7 +43,9 @@ export class GanttDialog {
             height: this._dialogInfo.getHeight(),
             contentTemplate: this._dialogInfo.getContentTemplate()
         });
-        this._popupInstance.show();
+        if(!isRefresh) {
+            this._popupInstance.show();
+        }
     }
     hide() {
         this._popupInstance.hide();
