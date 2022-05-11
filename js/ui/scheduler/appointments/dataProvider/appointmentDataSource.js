@@ -29,8 +29,16 @@ export class AppointmentDataSource {
         const store = dataSource?.store();
 
         if(store) {
-            store.on('updating', newItem => {
-                this._updatedAppointment = newItem;
+            store.on('updating', (key) => {
+                const keyName = store.key();
+                if(keyName) {
+                    this._updatedAppointmentKeys.push({
+                        key: keyName,
+                        value: key,
+                    });
+                } else {
+                    this._updatedAppointment = key;
+                }
             });
 
             store.on('push', pushItems => {
