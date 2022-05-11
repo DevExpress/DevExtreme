@@ -246,13 +246,15 @@ export const sendRequest = (protocolVersion, request, options) => {
 
 const formatDotNetError = (errorObj) => {
     let message;
+    let currentMessage;
     let currentError = errorObj;
 
     if('message' in errorObj) {
         message = errorObj.message?.value || errorObj.message;
     }
     while((currentError = (currentError['innererror'] || currentError['internalexception']))) {
-        message = currentError.message;
+        currentMessage = currentError.message;
+        message = currentMessage ?? message;
         if(currentError['internalexception'] && (message.indexOf('inner exception') === -1)) {
             break;
         }
