@@ -10,6 +10,9 @@ test('Vertical resize with zooming', async (t) => {
   const resizableAppointment = scheduler.getAppointment('Appt-01');
 
   await t
+    .resizeWindow(1200, 800);
+
+  await t
     .drag(resizableAppointment.resizableHandle.bottom, 0, 430, { offsetY: 20 });
 
   const height = parseInt(await resizableAppointment.size.height, 10);
