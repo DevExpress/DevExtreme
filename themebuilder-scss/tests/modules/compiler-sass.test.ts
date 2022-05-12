@@ -65,7 +65,7 @@ describe('Sass features', () => {
     expect(compiler.changedVariables).toEqual({
       $var1: '300px',
       $var2: 'Helvetica',
-      $var3: 'rgba(50, 60, 70, 0.4)',
+      $var3: '#323c4666',
       $var4: '10px, 15px, 32px',
       $var5: '10px 15px 32px',
       $var7: '200px',
