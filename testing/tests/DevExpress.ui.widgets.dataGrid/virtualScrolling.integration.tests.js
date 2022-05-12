@@ -5588,6 +5588,77 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.strictEqual(translator.getTranslate($fixedTable).y, 0, 'no offset');
     });
 
+    // T1086347
+    QUnit.test('Virtual scrolling should work after collapsing one group and cacheEnabled=true', function(assert) {
+        // arrange
+        const totalCount = 20;
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < totalCount; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const arrayStore = new ArrayStore(getData());
+
+        const dataGrid = createDataGrid({
+            dataSource: {
+                load(loadOptions) {
+                    const d = $.Deferred();
+                    setTimeout(() => {
+                        arrayStore.load(loadOptions).done((data) => {
+                            d.resolve({
+                                data,
+                                totalCount
+                            });
+                        });
+                    }, 100);
+                    return d;
+                },
+                key: 'id',
+            },
+            remoteOperations: {
+                paging: true,
+                filtering: true,
+                sorting: true,
+            },
+            cacheEnabled: true,
+            height: 300,
+            columns: [
+                { dataField: 'id', },
+                { dataField: 'name', groupIndex: 0 }
+            ],
+            paging: {
+                pageSize: 10
+            },
+            scrolling: {
+                useNative: false,
+                mode: 'virtual',
+            }
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.collapseRow(['Name 1']);
+        this.clock.tick(300);
+
+        // assert
+        const totalCountWithGroupRows = 40;
+        assert.strictEqual(dataGrid.getDataSource().totalCount(), totalCountWithGroupRows);
+
+        // act
+        dataGrid.getScrollable().scrollTo(1000);
+        $(dataGrid.getScrollable().content()).trigger('scroll');
+
+        // assert
+        assert.strictEqual(dataGrid.getDataSource().totalCount(), totalCountWithGroupRows);
+    });
+
     ['Row', 'Batch'].forEach(mode => {
         QUnit.test(`${mode} - Inserted rows should be at the top of the viewport when repaint mode is enabled (T1082889)`, function(assert) {
             // arrange
