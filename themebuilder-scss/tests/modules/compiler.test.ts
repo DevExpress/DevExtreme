@@ -63,9 +63,9 @@ describe('compile', () => {
       // collected variables
       expect(data.changedVariables).toEqual({
         '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
-        '$base-accent': 'red',
-        '$accordion-title-color': 'red',
-        '$accordion-item-title-opened-bg': 'green',
+        '$base-accent': '#ff0000',
+        '$accordion-title-color': '#ff0000',
+        '$accordion-item-title-opened-bg': '#008000',
       });
     });
   });

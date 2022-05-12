@@ -2,6 +2,7 @@ import * as sass from 'sass';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
 import DartClient from './dart-client';
+import * as value from './parse-value';
 
 export enum ImportType {
   Index,
@@ -142,15 +143,16 @@ export default class Compiler {
       const keyMap = map.getKey(mapIndex);
       if (keyMap instanceof sass.types.String) {
         const variableKey = keyMap.getValue();
-        // eslint-disable-next-line @typescript-eslint/no-base-to-string
-        const variableValue = map.getValue(mapIndex).toString();
+        const variableValue = map.getValue(mapIndex);
 
         // eslint-disable-next-line no-continue
-        if (variableValue === 'null') continue;
+        if (variableValue instanceof sass.types.Null) continue;
 
-        this.changedVariables[variableKey] = variableValue;
+        const result = value.parse(variableValue);
+        this.changedVariables[variableKey] = result;
       }
     }
+
     return sass.types.Null.NULL;
   }
 }

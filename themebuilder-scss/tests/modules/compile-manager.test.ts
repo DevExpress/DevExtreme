@@ -29,6 +29,7 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
 }));
 
 jest.mock('../../src/modules/post-compiler', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
   ...jest.requireActual('../../src/modules/post-compiler') as Record<string, unknown>,
   addInfoHeader: (css: string): string => css,
 }));
@@ -111,8 +112,8 @@ describe('Compile manager - integration test on test sass', () => {
 
       expect(result.compiledMetadata).toEqual({
         '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
-        '$base-accent': 'red',
-        '$accordion-title-color': 'red',
+        '$base-accent': '#ff0000',
+        '$accordion-title-color': '#ff0000',
         '$accordion-item-title-opened-bg': 'transparent',
       });
     });
@@ -137,8 +138,8 @@ describe('Compile manager - integration test on test sass', () => {
 
       expect(result.compiledMetadata).toEqual({
         '$base-font-family': 'sans-serif',
-        '$base-accent': 'red',
-        '$accordion-title-color': 'red',
+        '$base-accent': '#ff0000',
+        '$accordion-title-color': '#ff0000',
         '$accordion-item-title-opened-bg': 'transparent',
       });
     });
