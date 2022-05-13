@@ -13,7 +13,12 @@ const context = require('./context.js');
 
 const Cldr = require('cldrjs');
 const locales = require('cldr-core/availableLocales.json').availableLocales.full;
+const enNumbers = require('cldr-numbers-full/main/en/numbers.json');
+const enCurrencies = require('cldr-numbers-full/main/en/currencies.json');
+const currencyData = require('cldr-core/supplemental/currencyData.json');
+const enCaGregorian = require('cldr-dates-full/main/en/ca-gregorian.json');
 const weekData = require('cldr-core/supplemental/weekData.json');
+const timeData = require('cldr-core/supplemental/timeData.json');
 const likelySubtags = require('cldr-core/supplemental/likelySubtags.json');
 const parentLocales = require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale;
 
@@ -131,6 +136,55 @@ gulp.task('localization-generated-sources', gulp.parallel([
         filename: 'parent_locales.js',
         destination: 'js/localization/cldr-data'
     },
+    {
+        data: likelySubtags,
+        exportName: 'likelySubtags',
+        filename: 'likely_subtags.js',
+        destination: 'js/localization/cldr-data'
+    },
+
+    {
+        data: enCurrencies,
+        exportName: 'enCurrencies',
+        filename: 'en_currencies.js',
+        destination: 'js/localization/cldr-data'
+    },
+
+    {
+        data: enNumbers,
+        exportName: 'enNumbers',
+        filename: 'en_numbers.js',
+        destination: 'js/localization/cldr-data'
+    },
+
+    {
+        data: weekData,
+        exportName: 'weekData',
+        filename: 'week_data.js',
+        destination: 'js/localization/cldr-data'
+    },
+
+    {
+        data: timeData,
+        exportName: 'timeData',
+        filename: 'time_data.js',
+        destination: 'js/localization/cldr-data'
+    },
+
+    {
+        data: currencyData,
+        exportName: 'currencyData',
+        filename: 'currency_data.js',
+        destination: 'js/localization/cldr-data'
+    },
+
+    {
+        data: enCaGregorian,
+        exportName: 'enCaGregorian',
+        filename: 'en_ca_gregorian.js',
+        destination: 'js/localization/cldr-data'
+    },
+
     {
         data: firstDayOfWeekData(),
         filename: 'first_day_of_week_data.js',
