@@ -116,7 +116,8 @@ export class Appointment extends DOMComponent {
     }
 
     _getVerticalResizingRule() {
-        const height = this.invoke('getCellHeight');
+        const height = Math.round(this.invoke('getCellHeight'));
+
         return {
             handles: DEFAULT_VERTICAL_HANDLES,
             minWidth: 0,
