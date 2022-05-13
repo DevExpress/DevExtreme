@@ -34,16 +34,8 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
       await t
         .expect(scheduler.getAppointmentCount())
         .gt(0)
-        .expect(await compareScreenshot(
-          t,
-          `generic-groups(view=${view}-orientation=${groupOrientation}).png`,
-          scheduler.workSpace,
-        )).ok();
-    }).before(async (t) => {
-      await t.resizeWindow(1200, 800);
-
-      createScheduler(view, groupOrientation);
-    });
+        .expect(await compareScreenshot(t, `generic-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
+    }).before(async () => createScheduler(view, groupOrientation));
   });
 });
 
@@ -55,15 +47,7 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
       await t
         .expect(scheduler.getAppointmentCount())
         .gt(0)
-        .expect(await compareScreenshot(
-          t,
-          `generic-groups(view=${view}-orientation=${groupOrientation}).png`,
-          scheduler.workSpace,
-        )).ok();
-    }).before(async (t) => {
-      await t.resizeWindow(1200, 800);
-
-      createScheduler(view, groupOrientation);
-    });
+        .expect(await compareScreenshot(t, `generic-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
+    }).before(async () => createScheduler(view, groupOrientation));
   });
 });
