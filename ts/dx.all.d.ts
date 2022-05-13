@@ -982,6 +982,10 @@ declare module DevExpress {
      */
     currency?: string;
     /**
+     * [descr:FormatObject.useCurrencyAccountingStyle]
+     */
+    useCurrencyAccountingStyle?: boolean;
+    /**
      * [descr:Format.formatter]
      */
     formatter?: (value: number | Date) => string;
