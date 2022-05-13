@@ -2331,6 +2331,10 @@ $scheduler-appointment-form-label-padding: 20px;
       }
     }
 
+    .dx-scheduler-date-table {
+      width: calc(100% - 0.5px);
+    }
+
     .dx-scheduler-date-table-cell {
       &.dx-scheduler-last-group-cell {
         border-bottom: 2px solid $scheduler-base-border-color;
