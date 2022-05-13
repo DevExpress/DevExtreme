@@ -95,9 +95,6 @@ export default class Compiler {
   load = (url: URL): sass.ImporterResult => {
     const { pathname: path } = url;
     const importType = Compiler.getImportType(path);
-    if (importType === ImportType.Unknown) {
-      return null;
-    }
 
     let content = this.importerCache[path];
     if (!content) {

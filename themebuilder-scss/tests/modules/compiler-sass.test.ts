@@ -1,4 +1,5 @@
 import * as sass from 'sass-embedded';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { OrderedMap } from 'immutable';
 
 import Compiler from '../../src/modules/compiler';
