@@ -8,7 +8,6 @@ import registerComponent from '../../core/component_registrator';
 import { noop, ensureDefined, grep } from '../../core/utils/common';
 import { isWindow, isDefined, isObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import DropDownEditor from './ui.drop_down_editor';
 import List from '../list_light';
 import errors from '../widget/ui.errors';
@@ -415,7 +414,7 @@ const DropDownList = DropDownEditor.inherit({
         const searchMode = this.option('searchMode');
         const normalizedSearchMode = searchMode.toLowerCase();
 
-        if(inArray(normalizedSearchMode, SEARCH_MODES) < 0) {
+        if(!SEARCH_MODES.includes(normalizedSearchMode)) {
             throw errors.Error('E1019', searchMode);
         }
     },

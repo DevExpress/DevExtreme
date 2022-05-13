@@ -6,7 +6,6 @@ import domAdapter from '../../core/dom_adapter';
 import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
 import { EmptyTemplate } from '../../core/templates/empty_template';
-import { inArray } from '../../core/utils/array';
 import { noop } from '../../core/utils/common';
 import { Deferred } from '../../core/utils/deferred';
 import { contains, resetActiveElement } from '../../core/utils/dom';
@@ -622,7 +621,7 @@ const Overlay = Widget.inherit({
 
     _updateZIndexStackPosition: function(pushToStack) {
         const overlayStack = this._overlayStack();
-        const index = inArray(this, overlayStack);
+        const index = overlayStack.indexOf(this);
 
         if(pushToStack) {
             if(index === -1) {
@@ -1087,7 +1086,7 @@ const Overlay = Widget.inherit({
     _optionChanged: function(args) {
         const value = args.value;
 
-        if(inArray(args.name, this._getActionsList()) > -1) {
+        if(this._getActionsList().includes(args.name)) {
             this._initActions();
             return;
         }

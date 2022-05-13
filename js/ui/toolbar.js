@@ -3,7 +3,6 @@ import $ from '../core/renderer';
 import registerComponent from '../core/component_registrator';
 import { grep, deferRender } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
-import { merge } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
 import ToolbarDropDownMenu from './toolbar/ui.toolbar.drop_down_menu';
 import ToolbarBase from './toolbar/ui.toolbar.base';
@@ -185,7 +184,7 @@ const Toolbar = ToolbarBase.inherit({
             }, itemData);
         });
 
-        return merge(overflowItems, menuItems);
+        return [...overflowItems, ...menuItems];
     },
 
     _getToolbarItems: function() {

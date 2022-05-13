@@ -128,9 +128,13 @@ class AppointmentLayoutManager {
 
     _isDataChanged(data) {
         const appointmentDataProvider = this.instance.appointmentDataProvider;
-
         const updatedData = appointmentDataProvider.getUpdatedAppointment();
-        return updatedData === data || appointmentDataProvider.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
+
+        return updatedData === data || appointmentDataProvider
+            .getUpdatedAppointmentKeys()
+            .some((item) => {
+                return data[item.key] === item.value;
+            });
     }
 
     _isAppointmentShouldAppear(currentAppointment, sourceAppointment) {
@@ -215,9 +219,11 @@ class AppointmentLayoutManager {
         currentAppointments.forEach(appointment => {
             const sourceAppointment = this._getAssociatedSourceAppointment(appointment, sourceAppointments);
             if(sourceAppointment) {
-                appointment.needRepaint = this._isDataChanged(appointment.itemData) ||
-                    this._isSettingChanged(appointment.settings, sourceAppointment.settings) ||
-                    this._isAppointmentShouldAppear(appointment, sourceAppointment);
+                const isDataChanged = this._isDataChanged(appointment.itemData);
+                const isSettingChanged = this._isSettingChanged(appointment.settings, sourceAppointment.settings);
+                const isAppointmentShouldAppear = this._isAppointmentShouldAppear(appointment, sourceAppointment);
+
+                appointment.needRepaint = isDataChanged || isSettingChanged || isAppointmentShouldAppear;
             }
         });
 

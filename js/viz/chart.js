@@ -1,7 +1,6 @@
 import { getHeight } from '../core/utils/size';
 import { noop } from '../core/utils/common';
 import { extend as _extend } from '../core/utils/extend';
-import { inArray } from '../core/utils/array';
 import { hasWindow } from '../core/utils/window';
 import { each as _each } from '../core/utils/iterator';
 import registerComponent from '../core/component_registrator';
@@ -520,7 +519,7 @@ const dxChart = AdvancedChart.inherit({
         const paneList = _map(this.panes, function(pane) { return pane.name; });
         seriesTheme.pane = seriesTheme.pane || this.defaultPane;
 
-        return inArray(seriesTheme.pane, paneList) !== -1;
+        return paneList.includes(seriesTheme.pane);
     },
 
     _initCustomPositioningAxes() {

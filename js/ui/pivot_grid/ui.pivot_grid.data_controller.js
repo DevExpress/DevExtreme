@@ -1,7 +1,6 @@
 import Callbacks from '../../core/utils/callbacks';
 import { when, Deferred } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { map, each } from '../../core/utils/iterator';
 import Class from '../../core/class';
 import { format } from '../../core/utils/string';
@@ -208,7 +207,7 @@ export const DataController = Class.inherit((function() {
                         if(hideData === true && item.type === DATA_TYPE) {
                             const parentChildren = (items[1] ? items[1].children : viewHeaderItems) || [];
 
-                            parentChildren.splice(inArray(item, parentChildren), 1);
+                            parentChildren.splice(parentChildren.indexOf(item), 1);
                             return;
                         }
 
@@ -309,9 +308,9 @@ export const DataController = Class.inherit((function() {
                         const isTotal = item.type === TOTAL_TYPE;
                         const isValue = item.type === DATA_TYPE;
                         const columnIsHidden = cellDescriptions[i].visible === false ||
-                            (isGrandTotal && inArray(i, options.hiddenGrandTotals) !== -1) ||
-                            (isTotal && inArray(i, options.hiddenTotals) !== -1) ||
-                            (isValue && inArray(i, options.hiddenValues) !== -1);
+                            (isGrandTotal && options.hiddenGrandTotals.includes(i)) ||
+                            (isTotal && options.hiddenTotals.includes(i)) ||
+                            (isValue && options.hiddenValues.includes(i));
 
                         if(columnIsHidden) {
                             continue;
@@ -359,7 +358,7 @@ export const DataController = Class.inherit((function() {
             const parent = items[index + 1];
 
             if(!items[index].children.length && parent && parent.children) {
-                parent.children.splice(inArray(items[index], parent.children), 1);
+                parent.children.splice(parent.children.indexOf(items[index]), 1);
                 removeEmptyParent(items, index + 1);
             }
 

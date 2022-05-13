@@ -1,75 +1,34 @@
 import { isDefined } from './type';
-import { each } from './iterator';
 import { orderEach } from './object';
 import config from '../config';
 
-export const isEmpty = function(entity) {
-    return Array.isArray(entity) && !entity.length;
+export const wrapToArray = function(item) {
+    return Array.isArray(item) ? item : [item];
 };
 
-export const wrapToArray = function(entity) {
-    return Array.isArray(entity) ? entity : [entity];
+export const getUniqueValues = function(values) {
+    return [...new Set(values)];
 };
 
-export const inArray = function(value, object) {
-    if(!object) {
-        return -1;
-    }
-    const array = Array.isArray(object) ? object : object.toArray();
+export const removeDuplicates = function(from = [], toRemove = []) {
+    const toRemoveMap = toRemove.reduce((map, value) => {
+        map[value] = (map[value] ?? 0) + 1;
+        return map;
+    }, {});
 
-    return array.indexOf(value);
+    return from.filter(value => !toRemoveMap[value]--);
 };
 
-export const intersection = function(a, b) {
-    if(!Array.isArray(a) || a.length === 0 ||
-       !Array.isArray(b) || b.length === 0) {
-        return [];
-    }
-
-    const result = [];
-
-    each(a, function(_, value) {
-        const index = inArray(value, b);
-
-        if(index !== -1) {
-            result.push(value);
-        }
-    });
-
-    return result;
-};
-
-export const uniqueValues = function(data) {
-    return [...new Set(data)];
-};
-
-export const removeDuplicates = function(from, what) {
-    if(!Array.isArray(from) || from.length === 0) {
-        return [];
-    }
-
-    const result = from.slice();
-
-    if(!Array.isArray(what) || what.length === 0) {
-        return result;
-    }
-
-    each(what, function(_, value) {
-        const index = inArray(value, result);
-
-        result.splice(index, 1);
-    });
-
-    return result;
-};
-
-export const normalizeIndexes = function(items, indexParameterName, currentItem, needIndexCallback) {
+export const normalizeIndexes = function(items, indexPropName, currentItem, needIndexCallback) {
     const indexedItems = {};
-    let parameterIndex = 0;
-    const useLegacyVisibleIndex = config().useLegacyVisibleIndex;
+    const { useLegacyVisibleIndex } = config();
+    let currentIndex = 0;
 
-    each(items, function(index, item) {
-        index = item[indexParameterName];
+    const shouldUpdateIndex = (item) => !isDefined(item[indexPropName])
+            && (!needIndexCallback || needIndexCallback(item));
+
+    items.forEach((item) => {
+        const index = item[indexPropName];
         if(index >= 0) {
             indexedItems[index] = indexedItems[index] || [];
 
@@ -79,66 +38,47 @@ export const normalizeIndexes = function(items, indexParameterName, currentItem,
                 indexedItems[index].push(item);
             }
         } else {
-            item[indexParameterName] = undefined;
+            item[indexPropName] = undefined;
         }
     });
 
     if(!useLegacyVisibleIndex) {
-        each(items, function() {
-            if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
-                while(indexedItems[parameterIndex]) {
-                    parameterIndex++;
+        items.forEach(item => {
+            if(shouldUpdateIndex(item)) {
+                while(indexedItems[currentIndex]) {
+                    currentIndex++;
                 }
-                indexedItems[parameterIndex] = [this];
-                parameterIndex++;
+                indexedItems[currentIndex] = [item];
+                currentIndex++;
             }
         });
     }
 
-    parameterIndex = 0;
+    currentIndex = 0;
 
     orderEach(indexedItems, function(index, items) {
-        each(items, function() {
+        items.forEach(item => {
             if(index >= 0) {
-                this[indexParameterName] = parameterIndex++;
+                item[indexPropName] = currentIndex++;
             }
         });
     });
 
     if(useLegacyVisibleIndex) {
-        each(items, function() {
-            if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
-                this[indexParameterName] = parameterIndex++;
+        items.forEach(item => {
+            if(shouldUpdateIndex(item)) {
+                item[indexPropName] = currentIndex++;
             }
         });
     }
-
-    return parameterIndex;
 };
 
-export const merge = function(array1, array2) {
-    for(let i = 0; i < array2.length; i++) {
-        array1[array1.length] = array2[i];
-    }
+export const groupBy = (array, getGroupName) => {
+    return array.reduce((groupedResult, item) => {
+        const groupName = getGroupName(item);
+        groupedResult[groupName] = groupedResult[groupName] ?? [];
+        groupedResult[groupName].push(item);
 
-    return array1;
+        return groupedResult;
+    }, {});
 };
-
-export const find = function(array, condition) {
-    for(let i = 0; i < array.length; i++) {
-        if(condition(array[i])) {
-            return array[i];
-        }
-    }
-};
-
-export const groupBy = (array, cb) => array.reduce(
-    (result, item) => ({
-        ...result,
-        [cb(item)]: [
-            ...(result[cb(item)] || []),
-            item,
-        ],
-    }),
-    {}
-);

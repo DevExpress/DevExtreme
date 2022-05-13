@@ -4,7 +4,6 @@ import { isMaterial, waitWebFont } from '../themes';
 import { noop } from '../../core/utils/common';
 import { isPlainObject, isDefined } from '../../core/utils/type';
 import registerComponent from '../../core/component_registrator';
-import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { getBoundingRect } from '../../core/utils/position';
@@ -440,7 +439,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _getIndexByItem: function(item) {
-        return inArray(item, this._getToolbarItems());
+        return this._getToolbarItems().indexOf(item);
     },
 
     _itemOptionChanged: function(item, property, value) {

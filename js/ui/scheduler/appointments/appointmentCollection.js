@@ -9,7 +9,7 @@ import { normalizeKey, grep } from '../../../core/utils/common';
 import { isDefined, isDeferred, isString, isPlainObject } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 import { deepExtendArraySafe } from '../../../core/utils/object';
-import { merge, inArray, wrapToArray } from '../../../core/utils/array';
+import { wrapToArray } from '../../../core/utils/array';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { getRecurrenceProcessor } from '../recurrence';
@@ -975,7 +975,7 @@ class SchedulerAppointments extends CollectionWidget {
 
     _combineAppointments(appointments, additionalAppointments) {
         if(additionalAppointments.length) {
-            merge(appointments, additionalAppointments);
+            appointments.push(...additionalAppointments);
         }
         this._sortAppointmentsByStartDate(appointments);
     }
@@ -1133,9 +1133,9 @@ class SchedulerAppointments extends CollectionWidget {
         const horizontalResizables = grep($allResizableElements, (el) => {
             const $el = $(el);
             const resizableInst = $el.dxResizable('instance');
-            const area = resizableInst.option('area');
+            const { area, handles } = resizableInst.option();
 
-            return inArray(resizableInst.option('handles'), ['right left', 'left right']) > -1 && isPlainObject(area);
+            return (handles === 'right left' || handles === 'left right') && isPlainObject(area);
         });
 
         each(horizontalResizables, ((_, el) => {

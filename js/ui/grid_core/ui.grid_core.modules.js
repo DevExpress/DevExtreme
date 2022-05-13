@@ -4,7 +4,6 @@ import Class from '../../core/class';
 import Callbacks from '../../core/utils/callbacks';
 import { grep } from '../../core/utils/common';
 import { isFunction } from '../../core/utils/type';
-import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
 import messageLocalization from '../../localization/message';
@@ -294,8 +293,8 @@ const processModules = function(that, componentClass) {
     if(!componentClass.controllerTypes) {
         if(modulesOrder) {
             modules.sort(function(module1, module2) {
-                let orderIndex1 = inArray(module1.name, modulesOrder);
-                let orderIndex2 = inArray(module2.name, modulesOrder);
+                let orderIndex1 = modulesOrder.indexOf(module1.name);
+                let orderIndex2 = modulesOrder.indexOf(module2.name);
 
                 if(orderIndex1 < 0) {
                     orderIndex1 = MODULES_ORDER_MAX_INDEX;

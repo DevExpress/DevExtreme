@@ -8,7 +8,7 @@ import Widget from './widget/ui.widget';
 import { titleize } from '../core/utils/inflector';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
-import { inArray, wrapToArray } from '../core/utils/array';
+import { wrapToArray } from '../core/utils/array';
 import { isNumeric } from '../core/utils/type';
 import { addNamespace } from '../events/utils/index';
 import pointerEvents from '../events/pointer';
@@ -407,7 +407,7 @@ const Map = Widget.inherit({
         each(removingValues, function(removingIndex, removingValue) {
             const index = isNumeric(removingValue)
                 ? removingValue
-                : inArray(removingValue, optionValue);
+                : optionValue?.indexOf(removingValue);
 
             if(index !== -1) {
                 const removing = optionValue.splice(index, 1)[0];
