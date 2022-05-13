@@ -4,61 +4,16 @@ import './number';
 import '../currency';
 // eslint-disable-next-line no-restricted-imports
 import 'globalize/currency';
-
-const enCurrencyUSD = {
-    'main': {
-        'en': {
-            'identity': {
-                'version': {
-                    '_cldrVersion': '28',
-                    '_number': '$Revision: 11972 $'
-                },
-                'language': 'en'
-            },
-            'numbers': {
-                'currencies': {
-                    'USD': {
-                        'displayName': 'US Dollar',
-                        'displayName-count-one': 'US dollar',
-                        'displayName-count-other': 'US dollars',
-                        'symbol': '$',
-                        'symbol-alt-narrow': '$'
-                    }
-                }
-            }
-        }
-    }
-};
-
-const currencyData = {
-    'supplemental': {
-        'version': {
-            '_cldrVersion': '28',
-            '_unicodeVersion': '8.0.0',
-            '_number': '$Revision: 11969 $'
-        },
-        'currencyData': {
-            'fractions': {
-                'DEFAULT': {
-                    '_rounding': '0',
-                    '_digits': '2'
-                }
-            }
-        }
-    }
-};
-
 // eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
 import config from '../../core/config';
 import numberLocalization from '../number';
+import { currencyData } from '../cldr-data/currency_data'
 
 if(Globalize && Globalize.formatCurrency) {
-
     if(Globalize.locale().locale === 'en') {
         Globalize.load(
-            enCurrencyUSD,
-            currencyData
+           currencyData
         );
 
         Globalize.locale('en');
