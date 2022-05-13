@@ -2,7 +2,7 @@
  * @public
  */
 export interface ValidationCallbackData {
-    value?: string | number;
+    value?: any;
     rule: any;
     validator: any;
     data?: any;
