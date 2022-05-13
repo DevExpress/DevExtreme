@@ -1,5 +1,4 @@
 import path from 'path';
-import * as sass from 'sass';
 import { metadata } from '../data/metadata';
 import noModificationsResult from '../data/compilation-results/no-changes-css';
 import noModificationsMeta from '../data/compilation-results/no-changes-meta';
@@ -10,7 +9,7 @@ const dataPath = path.join(path.resolve(), 'tests', 'data');
 
 jest.mock('../../src/modules/bundle-resolver', () => ({
   __esModule: true,
-  default: (theme: string): sass.SyncOptions => ({
+  default: (theme: string): BundleResolver<'async'> => ({
     file: path.join(
       dataPath,
       'scss',
@@ -19,7 +18,9 @@ jest.mock('../../src/modules/bundle-resolver', () => ({
         ? 'dx.material.blue.light.scss'
         : 'dx.light.scss',
     ),
-    includePaths: [path.join(dataPath, 'scss', 'widgets', 'generic')],
+    options: {
+      loadPaths: [path.join(dataPath, 'scss', 'widgets', 'generic')],
+    },
   }),
 }));
 

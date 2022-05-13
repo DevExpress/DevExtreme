@@ -53,8 +53,13 @@ interface ConfigSettings {
 }
 
 interface CompilerResult {
-  result: import('node-sass').Result;
+  result: import('sass-embedded').CompileResult;
   changedVariables: { [key: string]: string };
+}
+
+interface BundleResolver<T = 'async' | 'sync'> {
+  options: import('sass-embedded').Options<T>;
+  file: string;
 }
 
 interface PackageResult {
