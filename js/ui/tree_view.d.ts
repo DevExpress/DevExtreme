@@ -27,6 +27,13 @@ import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
+import {
+    NavSelectionMode,
+    ScrollDirection,
+    TreeViewDataStructure,
+    TreeViewCheckBoxMode,
+    TreeViewExpandEvent,
+} from '../types/enums';
 import dxScrollable from './scroll_view/ui.scrollable';
 
 interface ItemInfo<TKey = any> {
@@ -106,11 +113,10 @@ export interface dxTreeViewOptions<TKey = any>
     dataSource?: DataSourceLike<Item, TKey>;
     /**
      * @docid
-     * @type Enums.TreeViewDataStructure
      * @default 'tree'
      * @public
      */
-    dataStructure?: 'plain' | 'tree';
+    dataStructure?: TreeViewDataStructure;
     /**
      * @docid
      * @default false
@@ -119,11 +125,10 @@ export interface dxTreeViewOptions<TKey = any>
     expandAllEnabled?: boolean;
     /**
      * @docid
-     * @type Enums.TreeViewExpandEvent
      * @default "dblclick"
      * @public
      */
-    expandEvent?: 'dblclick' | 'click';
+    expandEvent?: TreeViewExpandEvent;
     /**
      * @docid
      * @default true
@@ -266,11 +271,10 @@ export interface dxTreeViewOptions<TKey = any>
     rootValue?: any;
     /**
      * @docid
-     * @type Enums.ScrollDirection
      * @default "vertical"
      * @public
      */
-    scrollDirection?: 'both' | 'horizontal' | 'vertical';
+    scrollDirection?: ScrollDirection;
     /**
      * @docid
      * @default "Select All"
@@ -291,18 +295,16 @@ export interface dxTreeViewOptions<TKey = any>
     selectNodesRecursive?: boolean;
     /**
      * @docid
-     * @type Enums.NavSelectionMode
      * @default "multiple"
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: NavSelectionMode;
     /**
      * @docid
-     * @type Enums.TreeViewCheckBoxMode
      * @default 'none'
      * @public
      */
-    showCheckBoxesMode?: 'none' | 'normal' | 'selectAll';
+    showCheckBoxesMode?: TreeViewCheckBoxMode;
     /**
      * @docid
      * @default false

@@ -2,6 +2,10 @@ import {
     Properties as TextBoxProperties,
 } from '../text_box';
 
+import {
+    CollectionSearchMode,
+} from '../../types/enums';
+
 /** @namespace DevExpress.ui */
 export interface SearchBoxMixinOptions {
     /**
@@ -26,11 +30,10 @@ export interface SearchBoxMixinOptions {
     searchExpr?: string | Function | Array<string | Function>;
     /**
      * @docid
-     * @type Enums.CollectionSearchMode
      * @default 'contains'
      * @public
      */
-    searchMode?: 'contains' | 'startswith' | 'equals';
+    searchMode?: CollectionSearchMode;
     /**
      * @docid
      * @default undefined

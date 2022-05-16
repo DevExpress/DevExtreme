@@ -6,11 +6,6 @@ import {
 } from '../core/element';
 
 import {
-    PaletteType,
-    PaletteExtensionModeType,
-} from './palette';
-
-import {
     template,
 } from '../core/templates/template';
 
@@ -26,12 +21,21 @@ import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
-    WordWrapType,
-    VizTextOverflowType,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
+
+import {
+    VizWordWrap,
+    VizTextOverflow,
+    VizPalette,
+    VizPaletteExtensionMode,
+    SelectionMode,
+    TreeMapLayoutAlgorithm,
+    TreeMapLayoutDirection,
+    TreeMapColorizerType,
+} from '../types/enums';
 
 export interface InteractionInfo {
   readonly node: dxTreeMapNode;
@@ -122,15 +126,13 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
       /**
        * @docid
        * @default "Material"
-       * @type Array<string>|Enums.VizPalette
        */
-      palette?: Array<string> | PaletteType;
+      palette?: Array<string> | VizPalette;
       /**
        * @docid
-       * @type Enums.VizPaletteExtensionMode
        * @default 'blend'
        */
-      paletteExtensionMode?: PaletteExtensionModeType;
+      paletteExtensionMode?: VizPaletteExtensionMode;
       /**
        * @docid
        * @default undefined
@@ -138,10 +140,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
       range?: Array<number>;
       /**
        * @docid
-       * @type Enums.TreeMapColorizerType
        * @default undefined
        */
-      type?: 'discrete' | 'gradient' | 'none' | 'range';
+      type?: TreeMapColorizerType;
     };
     /**
      * @docid
@@ -227,10 +228,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
         font?: Font;
         /**
          * @docid
-         * @type Enums.VizTextOverflow
          * @default "ellipsis"
          */
-        textOverflow?: VizTextOverflowType;
+        textOverflow?: VizTextOverflow;
         /**
          * @docid
          * @default true
@@ -294,14 +294,13 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @type_function_return void
      * @public
      */
-    layoutAlgorithm?: 'sliceanddice' | 'squarified' | 'strip' | ((e: { rect?: Array<number>; sum?: number; items?: Array<any> }) => any);
+    layoutAlgorithm?: TreeMapLayoutAlgorithm | ((e: { rect?: Array<number>; sum?: number; items?: Array<any> }) => any);
     /**
      * @docid
-     * @type Enums.TreeMapLayoutDirection
      * @default 'leftTopRightBottom'
      * @public
      */
-    layoutDirection?: 'leftBottomRightTop' | 'leftTopRightBottom' | 'rightBottomLeftTop' | 'rightTopLeftBottom';
+    layoutDirection?: TreeMapLayoutDirection;
     /**
      * @docid
      * @type object
@@ -384,11 +383,10 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     parentField?: string;
     /**
      * @docid
-     * @type Enums.SelectionMode
      * @default undefined
      * @public
      */
-    selectionMode?: 'multiple' | 'none' | 'single';
+    selectionMode?: SelectionMode;
     /**
      * @docid
      * @public
@@ -451,10 +449,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
         font?: Font;
         /**
          * @docid
-         * @type Enums.VizTextOverflow
          * @default "ellipsis"
          */
-        textOverflow?: VizTextOverflowType;
+        textOverflow?: VizTextOverflow;
         /**
          * @docid
          * @defaultValue true
@@ -462,10 +459,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
         visible?: boolean;
         /**
          * @docid
-         * @type Enums.VizWordWrap
          * @default "normal"
          */
-        wordWrap?: WordWrapType;
+        wordWrap?: VizWordWrap;
       };
       /**
        * @docid

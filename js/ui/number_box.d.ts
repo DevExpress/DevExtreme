@@ -18,6 +18,11 @@ import {
     Format,
   } from '../localization';
 
+import {
+    NumberBoxMode,
+    NumberBoxButtonName,
+} from '../types/enums';
+
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxNumberBox, Event>;
 
@@ -73,11 +78,10 @@ export type ValueChangedEvent = NativeEventInfo<dxNumberBox, KeyboardEvent | Mou
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
      * @docid
-     * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
      * @default undefined
      * @public
      */
-    buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
+    buttons?: Array<NumberBoxButtonName | dxTextEditorButton>;
     /**
      * @docid
      * @default ""
@@ -104,12 +108,11 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     min?: number;
     /**
      * @docid
-     * @type Enums.NumberBoxMode
      * @default "text"
      * @default 'number' &for(mobile_devices)
      * @public
      */
-    mode?: 'number' | 'text' | 'tel';
+    mode?: NumberBoxMode;
     /**
      * @docid
      * @default false

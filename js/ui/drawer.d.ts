@@ -22,6 +22,12 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+    DrawerOpenedStateMode,
+    DrawerPosition,
+    DrawerRevealMode,
+} from '../types/enums';
+
 /** @public */
 export type DisposingEvent = EventInfo<dxDrawer>;
 
@@ -76,25 +82,22 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     opened?: boolean;
     /**
      * @docid
-     * @type Enums.DrawerOpenedStateMode
      * @default "shrink"
      * @public
      */
-    openedStateMode?: 'overlap' | 'shrink' | 'push';
+    openedStateMode?: DrawerOpenedStateMode;
     /**
      * @docid
-     * @type Enums.DrawerPosition
      * @default "left"
      * @public
      */
-    position?: 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
+    position?: DrawerPosition;
     /**
      * @docid
-     * @type Enums.DrawerRevealMode
      * @default "slide"
      * @public
      */
-    revealMode?: 'slide' | 'expand';
+    revealMode?: DrawerRevealMode;
     /**
      * @docid
      * @default false

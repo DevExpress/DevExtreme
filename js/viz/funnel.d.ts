@@ -6,11 +6,6 @@ import {
 } from '../core/element';
 
 import {
-    PaletteType,
-    PaletteExtensionModeType,
-} from './palette';
-
-import {
     template,
 } from '../core/templates/template';
 
@@ -28,20 +23,30 @@ import {
 import {
     BaseLegend,
     BaseLegendItem,
-    DashStyleType,
-    HatchingDirectionType,
 } from './common';
 
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
-    WordWrapType,
-    VizTextOverflowType,
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
+
+import {
+    VizPalette,
+    VizWordWrap,
+    VizTextOverflow,
+    VizPaletteExtensionMode,
+    DashStyle,
+    FunnelResolveLabelOverlapping,
+    HorizontalEdge,
+    SelectionMode,
+    FunnelAlgorithm,
+    HatchingDirection,
+    FunnelLabelPosition,
+} from '../types/enums';
 
 /**
  * @public
@@ -130,11 +135,10 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     };
     /**
      * @docid
-     * @type Enums.FunnelAlgorithm
      * @default 'dynamicSlope'
      * @public
      */
-    algorithm?: 'dynamicHeight' | 'dynamicSlope';
+    algorithm?: FunnelAlgorithm;
     /**
      * @docid
      * @default 'arg'
@@ -221,10 +225,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
         hatching?: {
           /**
            * @docid
-           * @type Enums.HatchingDirection
            * @default 'right'
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * @docid
            * @default 0.75
@@ -272,10 +275,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
         hatching?: {
           /**
            * @docid
-           * @type Enums.HatchingDirection
            * @default "right"
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * @docid
            * @default 0.5
@@ -314,10 +316,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
         color?: string;
         /**
          * @docid
-         * @type Enums.DashStyle
          * @default 'solid'
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * @docid
          * @default false
@@ -372,10 +373,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       format?: Format;
       /**
        * @docid
-       * @type Enums.HorizontalEdge
        * @default 'right'
        */
-      horizontalAlignment?: 'left' | 'right';
+      horizontalAlignment?: HorizontalEdge;
       /**
        * @docid
        * @default 0
@@ -383,10 +383,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       horizontalOffset?: number;
       /**
        * @docid
-       * @type Enums.FunnelLabelPosition
        * @default 'columns'
        */
-      position?: 'columns' | 'inside' | 'outside';
+      position?: FunnelLabelPosition;
       /**
        * @docid
        * @default false
@@ -394,10 +393,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       showForZeroValues?: boolean;
       /**
        * @docid
-       * @type Enums.VizTextOverflow
        * @default 'ellipsis'
        */
-      textOverflow?: VizTextOverflowType;
+      textOverflow?: VizTextOverflow;
       /**
        * @docid
        * @default true
@@ -405,10 +403,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       visible?: boolean;
       /**
        * @docid
-       * @type Enums.VizWordWrap
        * @default 'normal'
        */
-      wordWrap?: WordWrapType;
+      wordWrap?: VizWordWrap;
     };
     /**
      * @docid
@@ -480,31 +477,27 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid
      * @default "Material"
-     * @type Array<string>|Enums.VizPalette
      * @public
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * @docid
-     * @type Enums.VizPaletteExtensionMode
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: VizPaletteExtensionMode;
     /**
      * @docid
-     * @type Enums.FunnelResolveLabelOverlapping
      * @default "shift"
      * @public
      */
-    resolveLabelOverlapping?: 'hide' | 'none' | 'shift';
+    resolveLabelOverlapping?: FunnelResolveLabelOverlapping;
     /**
      * @docid
-     * @type Enums.SelectionMode
      * @default 'single'
      * @public
      */
-    selectionMode?: 'multiple' | 'none' | 'single';
+    selectionMode?: SelectionMode;
     /**
      * @docid
      * @default true

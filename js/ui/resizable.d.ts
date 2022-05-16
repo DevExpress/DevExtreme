@@ -10,6 +10,10 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
+import {
+    ResizeHandle,
+} from '../types/enums';
+
 export interface ResizeInfo {
     readonly width: number;
     readonly height: number;
@@ -46,11 +50,10 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     area?: string | UserDefinedElement;
     /**
      * @docid
-     * @type Enums.ResizeHandle | string
      * @default "all"
      * @public
      */
-    handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
+    handles?: ResizeHandle | string;
     /**
      * @docid
      * @fires dxResizableOptions.onResize

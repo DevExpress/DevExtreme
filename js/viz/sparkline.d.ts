@@ -16,6 +16,11 @@ import BaseSparkline, {
     BaseSparklineOptions,
 } from './sparklines/base_sparkline';
 
+import {
+    SparklineType,
+    VizPointSymbol,
+} from '../types/enums';
+
 /** @public */
 export type DisposingEvent = EventInfo<dxSparkline>;
 
@@ -144,11 +149,10 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     pointSize?: number;
     /**
      * @docid
-     * @type Enums.VizPointSymbol
      * @default 'circle'
      * @public
      */
-    pointSymbol?: 'circle' | 'cross' | 'polygon' | 'square' | 'triangle';
+    pointSymbol?: VizPointSymbol;
     /**
      * @docid
      * @default true
@@ -163,11 +167,10 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     showMinMax?: boolean;
     /**
      * @docid
-     * @type Enums.SparklineType
      * @default 'line'
      * @public
      */
-    type?: 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
+    type?: SparklineType;
     /**
      * @docid
      * @default 'val'

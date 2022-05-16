@@ -17,6 +17,19 @@ import XmlaStore, {
     XmlaStoreOptions,
 } from './xmla_store';
 
+import {
+    SortOrder,
+    FilterType,
+    SummaryType,
+    PivotGridDataType,
+    PivotGridGroupInterval,
+    PivotGridArea,
+    PivotGridSortBy,
+    PivotGridSummaryDisplayMode,
+    PivotGridRunningTotalMode,
+    PivotGridStoreType,
+} from '../../types/enums';
+
 /**
  * @docid
  * @type object
@@ -200,15 +213,13 @@ export interface PivotGridDataSourceOptions {
     store?: Store | StoreOptions | XmlaStore | (XmlaStoreOptions & { type: 'xmla' }) | Array<{
       /**
        * @docid
-       * @type Enums.PivotGridStoreType
        */
-      type?: 'array' | 'local' | 'odata' | 'xmla';
+      type?: PivotGridStoreType;
     }> | {
       /**
        * @docid
-       * @type Enums.PivotGridStoreType
        */
-      type?: 'array' | 'local' | 'odata' | 'xmla';
+      type?: PivotGridStoreType;
     };
 }
 
@@ -260,7 +271,7 @@ export interface PivotGridDataSourceField {
      * @acceptValues undefined
      * @public
      */
-    area?: 'column' | 'data' | 'filter' | 'row' | undefined;
+    area?: PivotGridArea | undefined;
     /**
      * @docid PivotGridDataSourceOptions.fields.areaIndex
      * @default undefined
@@ -297,11 +308,10 @@ export interface PivotGridDataSourceField {
     dataField?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.dataType
-     * @type Enums.PivotGridDataType
      * @default undefined
      * @public
      */
-    dataType?: 'date' | 'number' | 'string';
+    dataType?: PivotGridDataType;
     /**
      * @docid PivotGridDataSourceOptions.fields.displayFolder
      * @default undefined
@@ -316,11 +326,10 @@ export interface PivotGridDataSourceField {
     expanded?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.filterType
-     * @type Enums.FilterType
      * @default 'include'
      * @public
      */
-    filterType?: 'exclude' | 'include';
+    filterType?: FilterType;
     /**
      * @docid PivotGridDataSourceOptions.fields.filterValues
      * @default undefined
@@ -341,11 +350,10 @@ export interface PivotGridDataSourceField {
     groupIndex?: number;
     /**
      * @docid PivotGridDataSourceOptions.fields.groupInterval
-     * @type Enums.PivotGridGroupInterval|number
      * @default undefined
      * @public
      */
-    groupInterval?: 'day' | 'dayOfWeek' | 'month' | 'quarter' | 'year' | number;
+    groupInterval?: PivotGridGroupInterval | number;
     /**
      * @docid PivotGridDataSourceOptions.fields.groupName
      * @default undefined
@@ -371,11 +379,10 @@ export interface PivotGridDataSourceField {
     name?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.runningTotal
-     * @type Enums.PivotGridRunningTotalMode
      * @default undefined
      * @public
      */
-    runningTotal?: 'column' | 'row';
+    runningTotal?: PivotGridRunningTotalMode;
     /**
      * @docid PivotGridDataSourceOptions.fields.selector
      * @type function(data)
@@ -403,11 +410,10 @@ export interface PivotGridDataSourceField {
     showValues?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.sortBy
-     * @type Enums.PivotGridSortBy
      * @default undefined
      * @public
      */
-    sortBy?: 'displayText' | 'value' | 'none';
+    sortBy?: PivotGridSortBy;
     /**
      * @docid PivotGridDataSourceOptions.fields.sortBySummaryField
      * @default undefined
@@ -422,11 +428,10 @@ export interface PivotGridDataSourceField {
     sortBySummaryPath?: Array<number | string>;
     /**
      * @docid PivotGridDataSourceOptions.fields.sortOrder
-     * @type Enums.SortOrder
      * @default 'asc'
      * @public
      */
-    sortOrder?: 'asc' | 'desc';
+    sortOrder?: SortOrder;
     /**
      * @docid PivotGridDataSourceOptions.fields.sortingMethod
      * @default undefined
@@ -435,18 +440,16 @@ export interface PivotGridDataSourceField {
     sortingMethod?: ((a: { value?: string | number; children?: Array<any> }, b: { value?: string | number; children?: Array<any> }) => number);
     /**
      * @docid PivotGridDataSourceOptions.fields.summaryDisplayMode
-     * @type Enums.PivotGridSummaryDisplayMode
      * @default undefined
      * @public
      */
-    summaryDisplayMode?: 'absoluteVariation' | 'percentOfColumnGrandTotal' | 'percentOfColumnTotal' | 'percentOfGrandTotal' | 'percentOfRowGrandTotal' | 'percentOfRowTotal' | 'percentVariation';
+    summaryDisplayMode?: PivotGridSummaryDisplayMode;
     /**
      * @docid PivotGridDataSourceOptions.fields.summaryType
-     * @type Enums.SummaryType|string
      * @default 'count'
      * @public
      */
-    summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
+    summaryType?: SummaryType | string;
     /**
      * @docid PivotGridDataSourceOptions.fields.visible
      * @default true

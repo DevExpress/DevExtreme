@@ -15,6 +15,10 @@ import {
     NativeEventInfo,
 } from '../../events/index';
 
+import {
+    ScrollDirection,
+} from '../../types/enums';
+
 export interface ScrollEventInfo<T> extends NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
     readonly scrollOffset?: any;
     readonly reachedLeft?: boolean;
@@ -34,11 +38,10 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
     bounceEnabled?: boolean;
     /**
      * @docid
-     * @type Enums.ScrollDirection
      * @default "vertical"
      * @public
      */
-    direction?: 'both' | 'horizontal' | 'vertical';
+    direction?: ScrollDirection;
     /**
      * @docid
      * @default false

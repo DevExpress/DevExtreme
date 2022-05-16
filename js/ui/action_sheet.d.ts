@@ -21,6 +21,11 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import {
+    ButtonType,
+    ButtonStylingMode,
+} from '../types/enums';
+
 type ItemLike<TKey> = string | Item<TKey> | any;
 
 /** @public */
@@ -188,18 +193,16 @@ export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
     onClick?: ((e: NativeEventInfo<dxActionSheet<this, TKey>, MouseEvent | PointerEvent>) => void) | string;
     /**
      * @docid
-     * @type Enums.ButtonType
      * @default 'normal'
      * @public
      */
-    type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    type?: ButtonType;
     /**
      * @docid
-     * @type Enums.ButtonStylingMode
      * @default 'outlined'
      * @public
      */
-    stylingMode?: 'text' | 'outlined' | 'contained' ;
+    stylingMode?: ButtonStylingMode;
 }
 
 /** @public */

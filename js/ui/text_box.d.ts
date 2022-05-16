@@ -13,6 +13,10 @@ import dxTextEditor, {
     dxTextEditorOptions,
 } from './text_box/ui.text_editor.base';
 
+import {
+    TextBoxMode,
+} from '../types/enums';
+
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxTextBox, Event>;
 
@@ -74,11 +78,10 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
     maxLength?: string | number;
     /**
      * @docid
-     * @type Enums.TextBoxMode
      * @default "text"
      * @public
      */
-    mode?: 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
+    mode?: TextBoxMode;
     /**
      * @docid
      * @default ""

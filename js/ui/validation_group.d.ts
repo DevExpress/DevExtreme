@@ -24,6 +24,10 @@ import {
     StringLengthRule,
 } from './validation_rules';
 
+import {
+    ValidationStatus,
+} from '../types/enums';
+
 /** @public */
 export type DisposingEvent = EventInfo<dxValidationGroup>;
 
@@ -90,10 +94,9 @@ export interface dxValidationGroupResult {
     isValid?: boolean;
     /**
      * @docid
-     * @type Enums.ValidationStatus
      * @public
      */
-    status?: 'valid' | 'invalid' | 'pending';
+    status?: ValidationStatus;
     /**
      * @docid
      * @public

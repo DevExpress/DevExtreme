@@ -13,6 +13,10 @@ import CollectionWidget, {
   CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import {
+  Mode,
+} from '../types/enums';
+
 type ItemLike = string | Item | any;
 
 /** @public */
@@ -55,10 +59,9 @@ export interface dxResponsiveBoxOptions<
     cols?: Array<{
       /**
        * @docid
-       * @type number | Enums.Mode
        * @default 0
        */
-      baseSize?: number | 'auto';
+      baseSize?: number | Mode;
       /**
        * @docid
        * @default 1
@@ -102,10 +105,9 @@ export interface dxResponsiveBoxOptions<
     rows?: Array<{
       /**
        * @docid
-       * @type number | Enums.Mode
        * @default 0
        */
-      baseSize?: number | 'auto';
+      baseSize?: number | Mode;
       /**
        * @docid
        * @default 1
