@@ -7,7 +7,6 @@ const cldrData = [
     require('../../../node_modules/devextreme-cldr-data/mr.json!json'),
     require('../../../node_modules/devextreme-cldr-data/ar.json!json'),
     require('../../../node_modules/devextreme-cldr-data/de.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/en.json!json')
 ];
 
 Globalize.load(likelySubtags);
