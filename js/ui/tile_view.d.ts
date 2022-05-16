@@ -113,10 +113,11 @@ export interface dxTileViewOptions<
     items?: Array<TItem>;
     /**
      * @docid
-     * @default false
+     * @default 'never'
+     * @default 'onScroll' &for(Mac|Android|iOS)
      * @public
      */
-    showScrollbar?: boolean;
+    showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
 }
 /**
  * @docid
