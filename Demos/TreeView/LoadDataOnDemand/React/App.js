@@ -11,6 +11,7 @@ class App extends React.Component {
           dataStructure="plain"
           rootValue=""
           height={500}
+          expandNodesRecursive={false}
           createChildren={this.createChildren}
         />
       </React.Fragment>

@@ -5,6 +5,7 @@
       :create-children="createChildren"
       :root-value="''"
       :height="500"
+      :expand-nodes-recursive="false"
       data-structure="plain"
     />
   </div>

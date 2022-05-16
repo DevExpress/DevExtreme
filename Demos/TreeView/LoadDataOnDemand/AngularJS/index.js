@@ -11,6 +11,7 @@ DemoApp.controller('DemoController', ($scope) => {
         data: { parentId },
       });
     },
+    expandNodesRecursive: false,
     rootValue: '',
     dataStructure: 'plain',
     height: 500,

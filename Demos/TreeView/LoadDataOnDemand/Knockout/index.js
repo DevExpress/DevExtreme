@@ -9,6 +9,7 @@ window.onload = function () {
           data: { parentId },
         });
       },
+      expandNodesRecursive: false,
       dataStructure: 'plain',
       rootValue: '',
       height: 500,
