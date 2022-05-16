@@ -2348,7 +2348,7 @@ export interface ColumnBase<TRowData = any> {
      * @default undefined
      * @public
      */
-    filterOperations?: Array<GridFilterOperations>;
+    filterOperations?: Array<GridFilterOperations | string>;
     /**
      * @docid GridBaseColumn.filterType
      * @default "include"

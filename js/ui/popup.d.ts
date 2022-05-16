@@ -33,7 +33,7 @@ import {
 } from './resizable';
 
 import {
-    ToolbarLocation,
+    Toolbar,
     ToolbarItemWidget,
     ToolbarItemLocation,
     PositionAlignment,
@@ -294,7 +294,7 @@ export interface dxPopupToolbarItem {
      * @default 'top'
      * @public
      */
-    toolbar?: ToolbarLocation;
+    toolbar?: Toolbar;
     /**
      * @docid dxPopupOptions.toolbarItems.visible
      * @default true

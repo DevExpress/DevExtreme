@@ -1262,7 +1262,7 @@ export interface dxGanttSorting {
      * @docid
      * @default "single"
      */
-    mode?: GanttSortingMode;
+    mode?: GanttSortingMode | string;
     /**
      * @docid
      * @default false

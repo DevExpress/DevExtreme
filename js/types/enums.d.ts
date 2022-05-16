@@ -239,7 +239,7 @@ export type PivotGridTotalsDisplayMode = 'both' | 'columns' | 'none' | 'rows';
 
 export type PivotGridRowHeadersLayout = 'standard' | 'tree';
 
-export type ToolbarLocation = 'bottom' | 'top';
+export type Toolbar = 'bottom' | 'top';
 
 export type ToolbarItemWidget = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 

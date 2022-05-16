@@ -13,7 +13,10 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-import { Orientation } from '../types/enums';
+import {
+    Orientation,
+    ShowScrollbarMode,
+} from '../types/enums';
 
 type ItemLike = string | Item | any;
 
@@ -118,7 +121,7 @@ export interface dxTileViewOptions<
      * @default 'onScroll' &for(Mac|Android|iOS)
      * @public
      */
-    showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
+    showScrollbar?: ShowScrollbarMode;
 }
 /**
  * @docid

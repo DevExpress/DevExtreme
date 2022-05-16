@@ -742,6 +742,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
 export interface dxFileManagerDetailsColumn {
     /**
      * @docid
+     * @type Enums.HorizontalAlignment
      * @default undefined
      * @acceptValues undefined
      * @public
