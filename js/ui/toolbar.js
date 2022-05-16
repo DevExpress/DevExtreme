@@ -230,7 +230,7 @@ const Toolbar = ToolbarBase.inherit({
 
     _itemOptionChanged: function(item, property, value) {
         if(this._isMenuItem(item)) {
-            this._menu.renderMenuItems();
+            this._menu.itemOption(item, property, value);
         } else if(this._isToolbarItem(item)) {
             this.callBase(item, property, value);
         } else {
