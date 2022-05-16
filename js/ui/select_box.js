@@ -750,7 +750,7 @@ const SelectBox = DropDownList.inherit({
 
     _wasSearch: function(value) {
         if(!arguments.length) {
-            return this._wasSearchValue;
+            return !!this._wasSearchValue;
         }
         this._wasSearchValue = value;
     },
