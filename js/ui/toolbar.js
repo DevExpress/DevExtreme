@@ -230,12 +230,12 @@ const Toolbar = ToolbarBase.inherit({
 
     _itemOptionChanged: function(item, property, value) {
         if(this._isMenuItem(item)) {
-            this._menu.itemOption(item, property, value);
+            this._menu.renderMenuItems();
         } else if(this._isToolbarItem(item)) {
             this.callBase(item, property, value);
         } else {
             this.callBase(item, property, value);
-            this._menu.itemOption(item, property, value);
+            this._menu.renderMenuItems();
         }
 
         if(property === 'disabled' || property === 'options.disabled') {

@@ -128,14 +128,6 @@ class ToolbarDropDownMenu {
     widgetOption(name, value) {
         this._dropDownMenu && this._dropDownMenu.option(name, value);
     }
-
-    itemOption(item, property, value) {
-        if(property === 'disabled' || property === 'options.disabled') {
-            this._dropDownMenu?._itemOptionChanged(item, property, value);
-        } else {
-            this.renderMenuItems();
-        }
-    }
 }
 
 export default ToolbarDropDownMenu;
