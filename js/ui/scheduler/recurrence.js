@@ -1,6 +1,5 @@
 import errors from '../../core/errors';
 import { each } from '../../core/utils/iterator';
-import { inArray } from '../../core/utils/array';
 import { RRule, RRuleSet } from 'rrule';
 import dateUtils from '../../core/utils/date';
 import timeZoneUtils from './utils.timeZone';
@@ -46,9 +45,10 @@ class RecurrenceProcessor {
         this._initializeRRule(options, startDateUtc, rule.until);
 
         const minTime = minDateUtc.getTime();
-        const leftBorder = this._getLeftBorder(options, minDateUtc, duration);
 
-        this.rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
+        const newMinDate = new Date(minDateUtc.getTime() - duration);
+
+        this.rRuleSet.between(newMinDate, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
             if(endAppointmentTime >= minTime) {
@@ -228,14 +228,6 @@ class RecurrenceProcessor {
         this.rRuleSet.rrule(this.rRule);
     }
 
-    _getLeftBorder(options, minDateUtc, appointmentDuration) {
-        if(options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end)) {
-            return new Date(minDateUtc.getTime() - appointmentDuration);
-        }
-
-        return minDateUtc;
-    }
-
     _parseRecurrenceRule(recurrence) {
         const ruleObject = {};
         const ruleParts = recurrence.split(';');
@@ -302,7 +294,7 @@ class RecurrenceProcessor {
 class RecurrenceValidator {
     validateRRule(rule, recurrence) {
         if(this._brokenRuleNameExists(rule) ||
-            inArray(rule.freq, freqNames) === -1 ||
+            !freqNames.includes(rule.freq) ||
             this._wrongCountRule(rule) || this._wrongIntervalRule(rule) ||
             this._wrongDayOfWeek(rule) ||
             this._wrongByMonthDayRule(rule) || this._wrongByMonth(rule) ||
@@ -393,7 +385,7 @@ class RecurrenceValidator {
         let brokenRuleExists = false;
 
         each(rule, function(ruleName) {
-            if(inArray(ruleName, ruleNames) === -1) {
+            if(!ruleNames.includes(ruleName)) {
                 brokenRuleExists = true;
                 return false;
             }
@@ -403,7 +395,7 @@ class RecurrenceValidator {
     }
 
     _logBrokenRule(recurrence) {
-        if(inArray(recurrence, loggedWarnings) === -1) {
+        if(!loggedWarnings.includes(recurrence)) {
             errors.log('W0006', recurrence);
             loggedWarnings.push(recurrence);
         }

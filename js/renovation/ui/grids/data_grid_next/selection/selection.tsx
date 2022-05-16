@@ -22,7 +22,7 @@ import { SelectAllCheckbox } from './select_all_checkbox';
 
 import {
   VisibleColumns,
-} from '../data_grid_next';
+} from '../plugins';
 
 import {
   RowClassesGetter, RowPropertiesGetter,

@@ -10,6 +10,8 @@ import config from '../../core/config';
 import numberLocalization from '../number';
 import { currencyData } from '../cldr-data/currency_data';
 
+const CURRENCY_STYLES = ['symbol', 'accounting'];
+
 if(Globalize && Globalize.formatCurrency) {
     if(Globalize.locale().locale === 'en') {
         Globalize.load(currencyData);
@@ -45,13 +47,14 @@ if(Globalize && Globalize.formatCurrency) {
             return this.callBase.apply(this, arguments);
         },
         _normalizeFormatConfig: function(format, formatConfig, value) {
-            const config = this.callBase(format, formatConfig, value);
+            const normalizedConfig = this.callBase(format, formatConfig, value);
 
             if(format === 'currency') {
-                config.style = 'accounting';
+                const useAccountingStyle = formatConfig.useCurrencyAccountingStyle ?? config().defaultUseCurrencyAccountingStyle;
+                normalizedConfig.style = CURRENCY_STYLES[+useAccountingStyle];
             }
 
-            return config;
+            return normalizedConfig;
         },
         format: function(value, format) {
             if(typeof value !== 'number') {

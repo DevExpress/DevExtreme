@@ -81,7 +81,7 @@ test('Drag recurrent appointment occurrence from collector (T832887)', async (t)
   const collector = scheduler.collectors.find('2');
   const { appointmentTooltip } = scheduler;
   const appointmentTooltipItem = appointmentTooltip.getListItem('Recurrence two');
-  const popup = Scheduler.getDialog();
+  const popup = Scheduler.getDeleteRecurrenceDialog();
 
   await t
     .click(collector.element)

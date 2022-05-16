@@ -1,6 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import { getRecurrenceProcessor } from '../../recurrence';
-import { inArray, wrapToArray } from '../../../../core/utils/array';
+import { wrapToArray } from '../../../../core/utils/array';
 import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined } from '../../../../core/utils/type';
 import query from '../../../../data/query';
@@ -271,7 +271,7 @@ export class AppointmentFilterBaseStrategy {
             );
 
             for(let j = 0; j < appointmentResourceValues.length; j++) {
-                if(inArray(appointmentResourceValues[j], resourceData) > -1) {
+                if(resourceData.includes(appointmentResourceValues[j])) {
                     return true;
                 }
             }

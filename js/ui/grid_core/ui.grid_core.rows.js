@@ -1070,7 +1070,7 @@ export const rowsModule = {
                         const rowElements = that._getRowElements(tableElement).filter(':visible');
 
                         if(!isTop) {
-                            const height = this._hasHeight ? getOuterHeight(this.element()) : $(getWindow()).outerHeight();
+                            const height = getOuterHeight(this._hasHeight ? this.element() : getWindow());
 
                             viewportBoundary += height;
                         }

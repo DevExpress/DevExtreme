@@ -467,6 +467,13 @@ define(function(require, exports, module) {
             assert.equal(numberLocalization.format(1, { minimumIntegerDigits: 2, minimumFractionDigits: 0, currency: 'RUB' }), 'RUB' + NBSP + '01');
         });
 
+        QUnit.test('format currency with sign/style (T1076906)', function(assert) {
+            assert.equal(numberLocalization.format(-1.2, { currency: 'default', style: 'accounting' }), '($1.20)');
+            assert.equal(numberLocalization.format(-1.2, { type: 'currency', useCurrencyAccountingStyle: true }), '($1)');
+            assert.equal(numberLocalization.format(-12, { currency: 'default', style: 'symbol' }), '-$12.00');
+            assert.equal(numberLocalization.format(-12, { type: 'currency', useCurrencyAccountingStyle: false }), '-$12');
+        });
+
         QUnit.test('format currency & power in RU locale', function(assert) {
             Globalize.locale('ru');
             assert.equal(numberLocalization.format(0, { type: 'currency thousands', currency: undefined, precision: 0 }), '0K' + NBSP + '$');

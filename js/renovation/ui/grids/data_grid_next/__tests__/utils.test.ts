@@ -1,5 +1,6 @@
 import { Row } from '../types';
-import { createGetKey, getReactRowKey } from '../utils';
+import { createGetKey, getReactRowKey, getElementHeight } from '../utils';
+import { setWindow } from '../../../../../core/utils/window';
 
 describe('getKey', () => {
   const getKey = createGetKey('(Module name)');
@@ -58,5 +59,13 @@ describe('getReactRowKey', () => {
     };
 
     expect(getReactRowKey(row, 11)).toEqual('11');
+  });
+});
+
+describe('getElementHeight', () => {
+  it('should have correct value', () => {
+    const el = {} as HTMLElement;
+    setWindow({ getComputedStyle: () => ({ height: '100px' }) }, true);
+    expect(getElementHeight(el)).toEqual(100);
   });
 });

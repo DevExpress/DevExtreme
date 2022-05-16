@@ -6,7 +6,7 @@ import { compileGetter, compileSetter } from '../../../core/utils/data';
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 import { isDefined } from '../../../core/utils/type';
-import { wrapToArray, inArray } from '../../../core/utils/array';
+import { wrapToArray } from '../../../core/utils/array';
 import { deepExtendArraySafe } from '../../../core/utils/object';
 
 export const getValueExpr = resource => resource.valueExpr || 'id';
@@ -328,7 +328,7 @@ const hasGroupItem = (getDataAccessors, rawAppointment, groupName, itemValue) =>
     const groups = wrapToArray(resourceValue);
 
     if(groups) {
-        if(inArray(itemValue, groups) > -1) {
+        if(groups.includes(itemValue)) {
             return true;
         }
     }

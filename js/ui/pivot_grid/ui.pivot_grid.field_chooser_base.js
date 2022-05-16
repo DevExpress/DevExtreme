@@ -5,7 +5,6 @@ import ArrayStore from '../../data/array_store';
 import { name as clickEventName } from '../../events/click';
 import { noop } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
-import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { each, map } from '../../core/utils/iterator';
 import localizationMessage from '../../localization/message';
@@ -56,8 +55,11 @@ const processItems = function(groupItems, field) {
             item.children = null;
         }
 
-        updateHeaderFilterItemSelectionState(item, item.key && inArray(preparedFilterValueByText, filterValues) > -1 || inArray(preparedFilterValue, filterValues) > -1, isExcludeFilterType);
-
+        updateHeaderFilterItemSelectionState(
+            item,
+            item.key && filterValues.includes(preparedFilterValueByText) || filterValues.includes(preparedFilterValue),
+            isExcludeFilterType
+        );
     });
 };
 

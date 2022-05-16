@@ -1,4 +1,3 @@
-import { merge } from './array';
 import domAdapter from '../dom_adapter';
 
 const isTagName = (/<([a-z][^/\0>\x20\t\r\n\f]+)/i);
@@ -51,7 +50,7 @@ export const parseHTML = function(html) {
         container = container.lastChild;
     }
 
-    return merge([], container.childNodes);
+    return [...container.childNodes];
 };
 
 export const isTablePart = function(html) {

@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
-import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import TextEditor from './ui.text_editor';
@@ -143,7 +142,7 @@ const TextBox = TextEditor.inherit({
             this._cutOffExtraChar($input);
 
             return ($input.val().length < actualMaxLength
-                    || inArray(key, ignoreKeys) !== -1
+                    || ignoreKeys.includes(key)
                     || window.getSelection().toString() !== '');
         } else {
             return true;

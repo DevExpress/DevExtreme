@@ -14,7 +14,6 @@ import {
 import { isDefined, isFunction, isPlainObject, type } from '../../core/utils/type';
 import constants from './axes_constants';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import formatHelper from '../../format_helper';
 import { getParser } from '../components/parse_utils';
 import { tickGenerator } from './tick_generator';
@@ -484,8 +483,8 @@ Axis.prototype = {
             if(isDefined(startValue) && isDefined(endValue)) {
                 const parsedStartValue = this.parser(startValue);
                 const parsedEndValue = this.parser(endValue);
-                startCategoryIndex = inArray(isDefined(parsedStartValue) ? parsedStartValue.valueOf() : undefined, categories);
-                endCategoryIndex = inArray(isDefined(parsedEndValue) ? parsedEndValue.valueOf() : undefined, categories);
+                startCategoryIndex = categories.indexOf(parsedStartValue?.valueOf() ?? undefined);
+                endCategoryIndex = categories.indexOf(parsedEndValue?.valueOf() ?? undefined);
                 if(startCategoryIndex === -1 || endCategoryIndex === -1) {
                     return { from: 0, to: 0, outOfCanvas: true };
                 }

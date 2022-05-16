@@ -12,7 +12,6 @@ const RTL_MARKS_REGEX = /[\u200E\u200F]/g;
 import Globalize from 'globalize';
 import dateLocalization from '../date';
 import { isObject } from '../../core/utils/type';
-import { inArray } from '../../core/utils/array';
 import * as iteratorUtils from '../../core/utils/iterator';
 
 if(Globalize && Globalize.formatDate) {
@@ -234,7 +233,7 @@ if(Globalize && Globalize.formatDate) {
         firstDayOfWeekIndex: function() {
             const firstDay = Globalize.locale().supplemental.weekData.firstDay();
 
-            return inArray(firstDay, this._getDayKeys());
+            return this._getDayKeys().indexOf(firstDay);
         },
 
         _getDayKeys: function() {

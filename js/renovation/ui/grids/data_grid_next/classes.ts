@@ -18,6 +18,7 @@ export default {
   dataRow: 'dx-data-row',
   headerRow: 'dx-header-row',
   masterDetailRow: 'dx-master-detail-row',
+  virtualRow: 'dx-virtual-row',
 
   pager: 'dx-datagrid-pager',
 

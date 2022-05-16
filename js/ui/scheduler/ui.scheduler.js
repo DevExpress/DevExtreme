@@ -4,7 +4,6 @@ import devices from '../../core/devices';
 import $ from '../../core/renderer';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 import { EmptyTemplate } from '../../core/templates/empty_template';
-import { inArray } from '../../core/utils/array';
 import Callbacks from '../../core/utils/callbacks';
 import { noop } from '../../core/utils/common';
 import { compileGetter } from '../../core/utils/data';
@@ -76,6 +75,7 @@ import { getAppointmentTakesAllDay } from '../../renovation/ui/scheduler/appoint
 import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
+import { excludeFromRecurrence } from '../../renovation/ui/scheduler/utils/recurrence/excludeFromRecurrence';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -1342,9 +1342,18 @@ class Scheduler extends Widget {
             this.timeZoneCalculator
         );
 
-        this._checkRecurringAppointment(appointment, targetedAppointment, targetedAdapter.startDate, () => {
-            this.deleteAppointment(appointment);
-        }, true);
+        const deletingOptions = this.fireOnAppointmentDeleting(appointment, targetedAdapter);
+        if(!deletingOptions.cancel) {
+            this._checkRecurringAppointment(
+                appointment,
+                targetedAppointment,
+                targetedAdapter.startDate,
+                () => {
+                    this.processDeleteAppointment(appointment, deletingOptions);
+                },
+                true
+            );
+        }
     }
 
     _getExtraAppointmentTooltipOptions() {
@@ -1723,21 +1732,21 @@ class Scheduler extends Widget {
         this._appointmentPopup?.dispose();
     }
 
-    _checkRecurringAppointment(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
-        const recurrenceRule = ExpressionUtils.getField(this._dataAccessors, 'recurrenceRule', targetAppointment);
+    _checkRecurringAppointment(rawAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent, recurrenceEditMode) {
+        const recurrenceRule = ExpressionUtils.getField(this._dataAccessors, 'recurrenceRule', rawAppointment);
 
         if(!getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
             callback();
             return;
         }
 
-        const editMode = this.option('recurrenceEditMode');
+        const editMode = recurrenceEditMode || this.option('recurrenceEditMode');
         switch(editMode) {
             case 'series':
                 callback();
                 break;
             case 'occurrence':
-                this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+                this._excludeAppointmentFromSeries(rawAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
                 break;
             default:
                 if(dragEvent) {
@@ -1748,7 +1757,7 @@ class Scheduler extends Widget {
                         editingMode === RECURRENCE_EDITING_MODE.SERIES && callback();
 
                         editingMode === RECURRENCE_EDITING_MODE.OCCURENCE && this._excludeAppointmentFromSeries(
-                            targetAppointment, singleAppointment, exceptionDate,
+                            rawAppointment, singleAppointment, exceptionDate,
                             isDeleted, isPopupEditing, dragEvent,
                         );
                     })
@@ -1757,12 +1766,12 @@ class Scheduler extends Widget {
     }
 
     _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        const appointment = createAppointmentAdapter(
-            { ...rawAppointment },
+        const appointment = excludeFromRecurrence(
+            rawAppointment,
+            exceptionDate,
             this._dataAccessors,
-            this.timeZoneCalculator
+            this._timeZoneCalculator,
         );
-        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
         const singleRawAppointment = { ...newRawAppointment };
         delete singleRawAppointment[this._dataAccessors.expr.recurrenceExceptionExpr];
@@ -2137,9 +2146,7 @@ class Scheduler extends Widget {
         const endDateTimeStamp = endDate.getTime();
 
 
-        return (inArray(dayTimeStamp, [startDateTimeStamp, endDateTimeStamp]) > -1)
-            ||
-            (startDateTimeStamp < dayTimeStamp && endDateTimeStamp > dayTimeStamp);
+        return startDateTimeStamp <= dayTimeStamp && dayTimeStamp <= endDateTimeStamp;
     }
 
     setTargetedAppointmentResources(rawAppointment, element, appointmentIndex) {
@@ -2385,20 +2392,56 @@ class Scheduler extends Widget {
     }
 
     deleteAppointment(rawAppointment) {
+        const deletingOptions = this.fireOnAppointmentDeleting(rawAppointment);
+        this.processDeleteAppointment(rawAppointment, deletingOptions);
+    }
+
+    fireOnAppointmentDeleting(rawAppointment, targetedAppointmentData) {
         const deletingOptions = {
             appointmentData: rawAppointment,
+            targetedAppointmentData,
             cancel: false
         };
 
         this._actions[StoreEventNames.DELETING](deletingOptions);
 
+        return deletingOptions;
+    }
+
+    processDeleteAppointment(rawAppointment, deletingOptions) {
         this._processActionResult(deletingOptions, function(canceled) {
             if(!canceled) {
                 this.appointmentDataProvider
                     .remove(rawAppointment)
-                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, storeAppointment, rawAppointment));
+                    .always(storeAppointment => this._onDataPromiseCompleted(
+                        StoreEventNames.DELETED,
+                        storeAppointment,
+                        rawAppointment,
+                    ));
             }
         });
+    }
+
+    deleteRecurrence(
+        appointment,
+        date,
+        recurrenceEditMode,
+    ) {
+        this._checkRecurringAppointment(
+            appointment,
+            { },
+            date,
+            () => {
+                this.processDeleteAppointment(
+                    appointment,
+                    { cancel: false },
+                );
+            },
+            true,
+            false,
+            null,
+            recurrenceEditMode,
+        );
     }
 
     focus() {

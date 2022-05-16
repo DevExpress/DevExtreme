@@ -1,4 +1,3 @@
-import { find } from '../core/utils/array';
 import { ensureDefined } from '../core/utils/common';
 import { compileGetter, compileSetter } from '../core/utils/data';
 import Guid from '../core/guid';
@@ -314,7 +313,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
         let fileItemObj = null;
         let fileItemObjects = this._data;
         for(let i = 0; i < pathInfo.length && (i === 0 || fileItemObj); i++) {
-            fileItemObj = find(fileItemObjects, item => {
+            fileItemObj = fileItemObjects.find(item => {
                 const hasCorrectFileItemType = this._isDirGetter(item) || i === pathInfo.length - 1;
                 return this._getKeyFromDataObject(item, currentPath) === pathInfo[i].key &&
                     this._nameGetter(item) === pathInfo[i].name && hasCorrectFileItemType;

@@ -1,6 +1,5 @@
 import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { isFunction } from '../../core/utils/type';
 import { noop } from '../../core/utils/common';
 
@@ -183,7 +182,7 @@ export const MaskRule = BaseMaskRule.inherit({
         }
 
         if(Array.isArray(allowedChars)) {
-            return inArray(char, allowedChars) > -1;
+            return allowedChars.includes(char);
         }
 
         return allowedChars === char;
