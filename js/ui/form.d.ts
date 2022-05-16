@@ -120,6 +120,12 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
      * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem|dxFormButtonItem
+     * @type_function_param1_field colSpan::hidden
+     * @type_function_param1_field cssClass::hidden
+     * @type_function_param1_field itemType::hidden
+     * @type_function_param1_field name::hidden
+     * @type_function_param1_field visible::hidden
+     * @type_function_param1_field visibleIndex::hidden
      * @public
      */
     customizeItem?: ((item: Item) => void);

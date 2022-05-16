@@ -693,7 +693,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
     icon?: string;
     /**
      * @docid
-     * @type Enums.ToolbarItemLocation|string
+     * @type Enums.ToolbarItemLocation
      * @default "before"
      * @public
      */
