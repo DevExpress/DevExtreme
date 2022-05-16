@@ -7,7 +7,6 @@ const cldrData = [
     require('../../../node_modules/devextreme-cldr-data/mr.json!json'),
     require('../../../node_modules/devextreme-cldr-data/ar.json!json'),
     require('../../../node_modules/devextreme-cldr-data/de.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/en.json!json')
 ];
 
 Globalize.load(likelySubtags);
@@ -238,7 +237,7 @@ QUnit.module('DateBox', commonEnvironment, () => {
 
             assert.equal(navigatorText, 'نوفمبر ٢٠١٥', 'Navigator localized');
 
-            // first cell text must be equal 31 cos for AR locale first date of week is Saturday
+            // NOTE: first cell text must be equal 31 because for AR locale first date of week is Saturday
             assert.equal(cellText, '٣١', 'Cell localized');
         } finally {
             Globalize.locale(originalCulture);

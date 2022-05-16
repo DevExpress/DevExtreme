@@ -24,7 +24,6 @@ SystemJS.config({
 define(function(require, exports, module) {
     const cldrData = [
         require('../../../node_modules/devextreme-cldr-data/ru.json!json'),
-        require('../../../node_modules/devextreme-cldr-data/en.json!json'),
         require('../../../node_modules/devextreme-cldr-data/de.json!json'),
         require('../../../node_modules/devextreme-cldr-data/da.json!json')
     ];
@@ -447,6 +446,19 @@ define(function(require, exports, module) {
     });
 
     QUnit.module('Localization currency with Globalize', () => {
+
+        QUnit.test('format currency default after global config change', function(assert) {
+            const originalDefaultCurrency = config().defaultCurrency;
+
+            assert.equal(numberLocalization.format(1.2, { currency: 'default' }), '$1.20');
+
+            config({ defaultCurrency: 'EUR' });
+            assert.equal(numberLocalization.format(12, { currency: 'default' }), '€12.00');
+
+            config({ defaultCurrency: originalDefaultCurrency });
+            assert.equal(numberLocalization.format(1.2, { currency: 'default' }), '$1.20');
+
+        });
 
         QUnit.test('format', function(assert) {
             assert.equal(numberLocalization.format(1.2, { currency: 'default' }), '$1.20');
