@@ -188,6 +188,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     get renovatedHeaderPanelComponent() { return dxrDateHeader; }
 
+    get isDefaultDraggingMode() {
+        return this.option('draggingMode') === 'default';
+    }
+
     _supportedKeys() {
         const clickHandler = function(e) {
             e.preventDefault();
@@ -2250,8 +2254,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._detachDragEvents(element);
 
         const onDragEnter = e => {
-            this.removeDroppableCellClass();
-            $(e.target).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+            if(!this.preventDefaultDragging) {
+                this.removeDroppableCellClass();
+                $(e.target).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+            }
+        };
+
+        const removeClasses = () => {
+            if(!this.preventDefaultDragging) {
+                this.removeDroppableCellClass();
+            }
         };
 
         const onCheckDropTarget = (target, event) => {
@@ -2259,8 +2271,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         eventsEngine.on(element, DragEventNames.ENTER, DRAG_AND_DROP_SELECTOR, { checkDropTarget: onCheckDropTarget }, onDragEnter);
-        eventsEngine.on(element, DragEventNames.LEAVE, () => this.removeDroppableCellClass());
-        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, () => this.removeDroppableCellClass());
+        eventsEngine.on(element, DragEventNames.LEAVE, removeClasses);
+        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, removeClasses);
     }
 
     _attachPointerEvents(element) {
