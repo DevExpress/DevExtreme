@@ -3,6 +3,7 @@
 const gulp = require('gulp');
 const path = require('path');
 const rename = require('gulp-rename');
+const del = require('del');
 const template = require('gulp-template');
 const lint = require('gulp-eslint');
 const fs = require('fs');
@@ -104,6 +105,10 @@ const getMessages = function(directory, locale) {
     return serializeObject(json, true);
 };
 
+gulp.task('clean-cldr-data', function(){
+    return del('js/localization/cldr-data/**', {force:true});
+});
+
 gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FOLDER).map(locale => Object.assign(
     function() {
         return gulp
@@ -130,6 +135,12 @@ gulp.task('localization-generated-sources', gulp.parallel([
     {
         data: parentLocales,
         filename: 'parent_locales.js',
+        destination: 'js/localization/cldr-data'
+    },
+    {
+        data: likelySubtags,
+        exportName: 'likelySubtags',
+        filename: 'likely_subtags.js',
         destination: 'js/localization/cldr-data'
     },
     {
@@ -168,4 +179,4 @@ gulp.task('localization-generated-sources', gulp.parallel([
     { displayName: source.filename }
 ))));
 
-gulp.task('localization', gulp.series('localization-messages', 'localization-generated-sources'));
+gulp.task('localization', gulp.series('clean-cldr-data', 'localization-messages', 'localization-generated-sources'));
