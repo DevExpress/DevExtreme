@@ -4,6 +4,33 @@ import './number';
 import '../currency';
 // eslint-disable-next-line no-restricted-imports
 import 'globalize/currency';
+// import { currencyData } from '../cldr-data/currency_data';
+// import { enCurrencyUSD } from '../cldr-data/en_currency_usd';
+
+// eslint-disable-next-line no-restricted-imports
+import Globalize from 'globalize';
+import config from '../../core/config';
+import numberLocalization from '../number';
+
+const CURRENCY_STYLES = ['symbol', 'accounting'];
+
+const currencyData = {
+    'supplemental': {
+        'version': {
+            '_cldrVersion': '28',
+            '_unicodeVersion': '8.0.0',
+            '_number': '$Revision: 11969 $'
+        },
+        'currencyData': {
+            'fractions': {
+                'DEFAULT': {
+                    '_rounding': '0',
+                    '_digits': '2'
+                }
+            }
+        }
+    }
+};
 
 const enCurrencyUSD = {
     'main': {
@@ -30,38 +57,10 @@ const enCurrencyUSD = {
     }
 };
 
-const currencyData = {
-    'supplemental': {
-        'version': {
-            '_cldrVersion': '28',
-            '_unicodeVersion': '8.0.0',
-            '_number': '$Revision: 11969 $'
-        },
-        'currencyData': {
-            'fractions': {
-                'DEFAULT': {
-                    '_rounding': '0',
-                    '_digits': '2'
-                }
-            }
-        }
-    }
-};
-
-// eslint-disable-next-line no-restricted-imports
-import Globalize from 'globalize';
-import config from '../../core/config';
-import numberLocalization from '../number';
-
-const CURRENCY_STYLES = ['symbol', 'accounting'];
-
 if(Globalize && Globalize.formatCurrency) {
 
     if(Globalize.locale().locale === 'en') {
-        Globalize.load(
-            enCurrencyUSD,
-            currencyData
-        );
+        Globalize.load(currencyData, enCurrencyUSD);
 
         Globalize.locale('en');
     }

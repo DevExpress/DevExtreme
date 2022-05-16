@@ -3,6 +3,7 @@
 const gulp = require('gulp');
 const path = require('path');
 const rename = require('gulp-rename');
+const del = require('del');
 const template = require('gulp-template');
 const lint = require('gulp-eslint');
 const fs = require('fs');
@@ -14,6 +15,12 @@ const context = require('./context.js');
 const Cldr = require('cldrjs');
 const locales = require('cldr-core/availableLocales.json').availableLocales.full;
 const weekData = require('cldr-core/supplemental/weekData.json');
+const currencyData = require('cldr-core/supplemental/currencyData.json');
+const enCurrencyUSD = require('cldr-numbers-full/main/en/currencies.json');
+const timeData = require('cldr-core/supplemental/timeData.json');
+const enCaGregorian = require('cldr-dates-full/main/en/ca-gregorian.json');
+const enNumbers = require('cldr-numbers-full/main/en/numbers.json');
+const enCldr = require('devextreme-cldr-data/en.json');
 const likelySubtags = require('cldr-core/supplemental/likelySubtags.json');
 const parentLocales = require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale;
 
@@ -103,6 +110,10 @@ const getMessages = function(directory, locale) {
     return serializeObject(json, true);
 };
 
+gulp.task('clean-cldr-data', function() {
+    return del('js/localization/cldr-data/**', { force: true });
+});
+
 gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FOLDER).map(locale => Object.assign(
     function() {
         return gulp
@@ -129,6 +140,55 @@ gulp.task('localization-generated-sources', gulp.parallel([
     {
         data: parentLocales,
         filename: 'parent_locales.js',
+        destination: 'js/localization/cldr-data'
+    },
+    {
+        data: likelySubtags,
+        exportName: 'likelySubtags',
+        filename: 'likely_subtags.js',
+        destination: 'js/localization/cldr-data'
+    },
+    {
+        data: enCldr,
+        exportName: 'enCldr',
+        filename: 'en.js',
+        destination: 'js/localization/cldr-data'
+    },
+    {
+        data: enNumbers,
+        exportName: 'enNumbers',
+        filename: 'en_numbers.js',
+        destination: 'js/localization/cldr-data'
+    },
+    {
+        data: weekData,
+        exportName: 'weekData',
+        filename: 'week_data.js',
+        destination: 'js/localization/cldr-data'
+    },
+
+    {
+        data: timeData,
+        exportName: 'timeData',
+        filename: 'time_data.js',
+        destination: 'js/localization/cldr-data'
+    },
+    {
+        data: currencyData,
+        exportName: 'currencyData',
+        filename: 'currency_data.js',
+        destination: 'js/localization/cldr-data'
+    },
+    {
+        data: enCurrencyUSD,
+        exportName: 'enCurrencyUSD',
+        filename: 'en_currency_usd.js',
+        destination: 'js/localization/cldr-data'
+    },
+    {
+        data: enCaGregorian,
+        exportName: 'enCaGregorian',
+        filename: 'en_ca_gregorian.js',
         destination: 'js/localization/cldr-data'
     },
     {
@@ -161,4 +221,4 @@ gulp.task('localization-generated-sources', gulp.parallel([
     { displayName: source.filename }
 ))));
 
-gulp.task('localization', gulp.series('localization-messages', 'localization-generated-sources'));
+gulp.task('localization', gulp.series('clean-cldr-data', 'localization-messages', 'localization-generated-sources'));
