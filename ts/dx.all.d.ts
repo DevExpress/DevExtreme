@@ -21952,7 +21952,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTileViewOptions.showScrollbar]
      */
-    showScrollbar?: boolean;
+    showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
   }
   /**
    * [descr:dxToast]
