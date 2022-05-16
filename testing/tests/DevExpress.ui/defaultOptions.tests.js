@@ -49,6 +49,7 @@ const TagBox = require('ui/tag_box');
 const Toast = require('ui/toast');
 const TreeList = require('ui/tree_list');
 const TreeView = require('ui/tree_view');
+const TileView = require('ui/tile_view');
 const FileUploader = require('ui/file_uploader');
 const Form = require('ui/form');
 const ValidationMessage = require('ui/validation_message');
@@ -325,6 +326,30 @@ testComponentDefaults(List,
 testComponentDefaults(TreeView,
     {},
     { useNativeScrolling: false },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+testComponentDefaults(TileView,
+    {},
+    { showScrollbar: 'onScroll' },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = true;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+testComponentDefaults(TileView,
+    {},
+    { showScrollbar: 'never' },
     function() {
         this._supportNativeScrolling = support.nativeScrolling;
         support.nativeScrolling = false;
