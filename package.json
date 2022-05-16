@@ -75,7 +75,6 @@
     "babel-preset-env": "^1.6.1",
     "bootstrap": "^4.3.1",
     "cldr-core": "latest",
-    "cldr-dates-full": "latest",
     "cldr-numbers-full": "latest",
     "cldrjs": "^0.5.0",
     "clean-css": "^5.1.0",

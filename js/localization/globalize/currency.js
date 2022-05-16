@@ -8,14 +8,11 @@ import 'globalize/currency';
 import Globalize from 'globalize';
 import config from '../../core/config';
 import numberLocalization from '../number';
-import { currencyData } from '../cldr-data/currency_data'
+import { currencyData } from '../cldr-data/currency_data';
 
 if(Globalize && Globalize.formatCurrency) {
     if(Globalize.locale().locale === 'en') {
-        Globalize.load(
-           currencyData
-        );
-
+        Globalize.load(currencyData);
         Globalize.locale('en');
     }
 
