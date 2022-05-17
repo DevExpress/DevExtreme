@@ -631,7 +631,7 @@
         "dxGantt-dialogMoveTaskAndKeepDependencyMessage": "Move the task and keep the dependency",
         "dxGantt-dialogConstraintCriticalViolationSeveralTasksMessage": "The task you are attempting to move is linked to another tasks by dependency relations. This change would conflict with dependency rules. How would you like to proceed?",
         "dxGantt-dialogConstraintViolationSeveralTasksMessage": "The task you are attempting to move is linked to another tasks by dependency relations. How would you like to proceed?",
-        "dxGantt-dialogDeleteDependenciesMessage": "Delete the dependencies",
+        "dxGantt-dialogDeleteDependenciesMessage": "Delete the dependency relations",
         "dxGantt-dialogMoveTaskAndKeepDependenciesMessage": "Move the task and keep the dependencies",
         "dxGantt-undo": "Undo",
         "dxGantt-redo": "Redo",

@@ -225,6 +225,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.option('timeZoneCalculator');
     }
 
+    get isDefaultDraggingMode() {
+        return this.option('draggingMode') === 'default';
+    }
+
     _supportedKeys() {
         const clickHandler = function(e) {
             e.preventDefault();
@@ -962,8 +966,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._detachDragEvents(element);
 
         const onDragEnter = e => {
-            this.removeDroppableCellClass();
-            $(e.target).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+            if(!this.preventDefaultDragging) {
+                this.removeDroppableCellClass();
+                $(e.target).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+            }
+        };
+
+        const removeClasses = () => {
+            if(!this.preventDefaultDragging) {
+                this.removeDroppableCellClass();
+            }
         };
 
         const onCheckDropTarget = (target, event) => {
@@ -971,8 +983,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         eventsEngine.on(element, DragEventNames.ENTER, DRAG_AND_DROP_SELECTOR, { checkDropTarget: onCheckDropTarget }, onDragEnter);
-        eventsEngine.on(element, DragEventNames.LEAVE, () => this.removeDroppableCellClass());
-        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, () => this.removeDroppableCellClass());
+        eventsEngine.on(element, DragEventNames.LEAVE, removeClasses);
+        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, removeClasses);
     }
 
     _attachPointerEvents(element) {
@@ -2001,19 +2013,25 @@ class SchedulerWorkSpace extends WidgetObserver {
     _createDragBehaviorBase($element, options) {
         const container = this.$element().find(`.${FIXED_CONTAINER_CLASS}`);
 
-        const element = this.$element();
+        const disableDefaultDragging = () => {
+            if(!this.isDefaultDraggingMode) {
+                this.preventDefaultDragging = true;
+            }
+        };
 
-        const attachGeneralEvents = () => this._attachDragEvents(element);
-        const detachGeneralEvents = () => this._detachDragEvents(element);
+        const enableDefaultDragging = () => {
+            if(!this.isDefaultDraggingMode) {
+                this.preventDefaultDragging = false;
+            }
+        };
 
-        const isDefaultDraggingMode = this.option('draggingMode') === 'default';
 
         this.dragBehavior.addTo($element, createDragBehaviorConfig(
             container,
-            isDefaultDraggingMode,
+            this.isDefaultDraggingMode,
             this.dragBehavior,
-            attachGeneralEvents,
-            detachGeneralEvents,
+            enableDefaultDragging,
+            disableDefaultDragging,
             () => this._getDroppableCell(),
             () => this._getDateTables(),
             () => this.removeDroppableCellClass(),
@@ -3014,8 +3032,8 @@ const createDragBehaviorConfig = (
     container,
     isDefaultDraggingMode,
     dragBehavior,
-    attachGeneralEvents,
-    detachGeneralEvents,
+    enableDefaultDragging,
+    disableDefaultDragging,
     getDroppableCell,
     getDateTables,
     removeDroppableCellClass,
@@ -3054,7 +3072,7 @@ const createDragBehaviorConfig = (
 
     const onDragStart = e => {
         if(!isDefaultDraggingMode) {
-            detachGeneralEvents();
+            disableDefaultDragging();
         }
 
         const canceled = e.cancel;
@@ -3134,7 +3152,7 @@ const createDragBehaviorConfig = (
 
     const onDragEnd = e => {
         if(!isDefaultDraggingMode) {
-            attachGeneralEvents();
+            enableDefaultDragging();
         }
 
         if(!isItemDisabled()) {
