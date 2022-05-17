@@ -4493,7 +4493,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/ButtonGroup/Getting_Started_with_ButtonGroup/",
             "Widget": "ButtonGroup",
             "DemoType": "Web"
           }
