@@ -1,15 +1,15 @@
-const $ = require('jquery');
-const numberLocalization = require('localization/number');
-const dateLocalization = require('localization/date');
-const messageLocalization = require('localization/message');
-const errors = require('core/errors');
-const localization = require('localization');
-const config = require('core/config');
-const logger = require('core/utils/console').logger;
+import $ from 'jquery';
+import dateLocalization from 'localization/date';
+import numberLocalization from 'localization/number';
+import messageLocalization from 'localization/message';
+import errors from 'core/errors';
+import localization from 'localization';
+import config from 'core/config';
+import { logger } from 'core/utils/console';
 
-const generateExpectedDate = require('../../../helpers/dateHelper.js').generateDate;
+import { generateDate } from '../../../helpers/dateHelper.js';
 
-module.exports = function() {
+export default function() {
     QUnit.module('Localization modules', () => {
         const checkModules = function(testName, namespace, methods) {
             QUnit.test(testName, function(assert) {
@@ -410,7 +410,7 @@ module.exports = function() {
                     data = $.makeArray(data);
 
                     $.each(data, function(_, data) {
-                        const expected = data.expectedConfig && generateExpectedDate(data.expectedConfig) || data.expected;
+                        const expected = data.expectedConfig && generateDate(data.expectedConfig) || data.expected;
                         assert.equal(localization.parseDate(data.text, format), expected && String(expected), format + ' format');
                     });
                 });
@@ -418,7 +418,7 @@ module.exports = function() {
                 assert.equal(localization.parseDate('550', 'millisecond').getMilliseconds(), 550, 'millisecond format');
                 assert.equal(localization.parseDate('550', 'SSS').getMilliseconds(), 550, 'millisecond format');
 
-                assert.equal(localization.parseDate(localization.formatDate(new Date(), 'shortdate')), String(generateExpectedDate({ hours: 0 })), 'without format');
+                assert.equal(localization.parseDate(localization.formatDate(new Date(), 'shortdate')), String(generateDate({ hours: 0 })), 'without format');
                 assert.notOk(localization.parseDate(), 'without date');
             } finally {
                 assert.equal(warnLog.length, 0);
@@ -977,4 +977,4 @@ module.exports = function() {
             }
         });
     });
-};
+}

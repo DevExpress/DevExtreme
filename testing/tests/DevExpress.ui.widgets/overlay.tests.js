@@ -3383,26 +3383,31 @@ testModule('drag & resize', moduleConfig, () => {
 testModule('keyboard navigation', {
     beforeEach: function() {
         fx.off = true;
-
-        this.$overlay = $('#overlay').dxOverlay({
+        const initialOptions = {
             focusStateEnabled: true,
             dragEnabled: true,
             visible: true,
             width: 1,
             height: 1,
             position: { of: viewPort() }
-        });
+        };
 
-        this.overlay = this.$overlay.dxOverlay('instance');
-        this.$overlayContent = this.overlay.$content();
-        this.position = this.$overlayContent.position();
-        this.keyboard = keyboardMock(this.$overlayContent);
+        this.init = (options) => {
+            this.element = $('#overlay');
+            this.overlay = this.element
+                .dxOverlay($.extend({}, initialOptions, options))
+                .dxOverlay('instance');
+            this.$overlayContent = this.overlay.$content();
+            this.position = this.$overlayContent.position();
+            this.keyboard = keyboardMock(this.$overlayContent);
+        };
     },
     afterEach: function() {
         fx.off = false;
     }
 }, () => {
     test('esc handling', function(assert) {
+        this.init();
         assert.strictEqual(this.$overlayContent.attr('tabindex'), '0', 'overlay content has tabindex 0');
 
         this.keyboard.keyDown('esc');
@@ -3411,6 +3416,7 @@ testModule('keyboard navigation', {
     });
 
     test('arrows handling', function(assert) {
+        this.init();
         const offset = 5;
         this.keyboard.keyDown('left');
         assert.strictEqual(this.$overlayContent.position().left, this.position.left - offset, 'overlay position was change after pressing left arrow');
@@ -3428,9 +3434,24 @@ testModule('keyboard navigation', {
         assert.strictEqual(this.$overlayContent.position().top, this.position.top - offset, 'overlay position was change after pressing up arrow');
     });
 
+    QUnit.test('arrows handling should not throw an error', function(assert) {
+        this.init({ dragEnabled: false, title: null, showTitle: false });
+        let isOk = true;
+        try {
+            this.keyboard.keyDown('left');
+            this.keyboard.keyDown('right');
+            this.keyboard.keyDown('up');
+            this.keyboard.keyDown('down');
+        } catch(e) {
+            isOk = false;
+        }
+
+        assert.ok(isOk, 'arrows handling should not throw an error');
+    });
+
     test('overlay should not be dragged when container size less than overlay content, position: { my: "center center", at: "center center", of: $container }', function(assert) {
         const $container = $('<div>').appendTo('#qunit-fixture').height(14).width(14);
-        const $overlay = $('#overlay').dxOverlay({
+        this.init({
             dragEnabled: true,
             visible: true,
             height: 10,
@@ -3439,23 +3460,21 @@ testModule('keyboard navigation', {
             position: { my: 'center center', at: 'center center', of: $container }
         });
 
-        const $overlayContent = $overlay.dxOverlay('$content');
-        const keyboard = keyboardMock($overlayContent);
+        this.keyboard.keyDown('left');
+        assert.strictEqual(this.$overlayContent.position().left, 0, 'overlay should not be dragged left of target');
 
-        keyboard.keyDown('left');
-        assert.strictEqual($overlayContent.position().left, 0, 'overlay should not be dragged left of target');
+        this.keyboard.keyDown('right');
+        assert.strictEqual(this.$overlayContent.position().left, getWidth($container) - getOuterWidth(this.$overlayContent), 'overlay should not be dragged right of target');
 
-        keyboard.keyDown('right');
-        assert.strictEqual($overlayContent.position().left, getWidth($container) - getOuterWidth($overlayContent), 'overlay should not be dragged right of target');
+        this.keyboard.keyDown('up');
+        assert.strictEqual(this.$overlayContent.position().top, 0, 'overlay should not be dragged above the target');
 
-        keyboard.keyDown('up');
-        assert.strictEqual($overlayContent.position().top, 0, 'overlay should not be dragged above the target');
-
-        keyboard.keyDown('down');
-        assert.strictEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 'overlay should not be dragged below than target');
+        this.keyboard.keyDown('down');
+        assert.strictEqual(this.$overlayContent.position().top, getHeight($container) - getOuterHeight(this.$overlayContent), 'overlay should not be dragged below than target');
     });
 
     test('arrows handling for rtl', function(assert) {
+        this.init();
         const offset = 5;
 
         this.keyboard.keyDown('left');
@@ -3467,6 +3486,7 @@ testModule('keyboard navigation', {
     });
 
     test('arrows handling with dragEnabled = false', function(assert) {
+        this.init();
         this.overlay.option('dragEnabled', false);
 
         this.keyboard.keyDown('left');
@@ -3482,7 +3502,7 @@ testModule('keyboard navigation', {
     });
 
     test('overlay have focus on show click', function(assert) {
-
+        this.init();
         const $overlayContent = this.$overlayContent;
 
         this.overlay.option('animation', {
@@ -3501,6 +3521,7 @@ testModule('keyboard navigation', {
     });
 
     test('overlay doesn\'t handle keyboard propagated events', function(assert) {
+        this.init();
         const $overlayContent = this.$overlayContent;
         const $input = $('<input>');
 
