@@ -1,4 +1,4 @@
-import * as sass from 'sass';
+import * as sass from 'sass-embedded';
 import less from 'less';
 import { promises as fs } from 'fs';
 import bootstrap3meta from '../data/bootstrap-metadata/bootstrap-metadata';
@@ -31,10 +31,9 @@ export default class BootstrapExtractor {
 
   static async sassRender(input: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      sass.render(
-        { data: input },
-        (error, result) => (error ? reject(error.message) : resolve(result.css.toString())),
-      );
+      sass.compileStringAsync(input)
+        .then((data) => resolve(data.css.toString()))
+        .catch((error: sass.Exception) => reject(error.message));
     });
   }
 
