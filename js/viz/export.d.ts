@@ -3,8 +3,8 @@ import DOMComponent from '../core/dom_component';
 /**
  * @docid viz.exportFromMarkup
  * @publicName exportFromMarkup(markup, options)
- * @param2_field4 proxyUrl:string:deprecated
- * @param2_field11 svgToCanvas: function(svg, canvas)
+ * @param2_field proxyUrl:string:deprecated
+ * @param2_field svgToCanvas: function(svg, canvas)
  * @static
  * @public
  */
@@ -21,11 +21,11 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void
 /**
  * @docid viz.exportWidgets
  * @publicName exportWidgets(widgetInstances, options)
- * @param2_field2 format:Enums.ExportFormat
- * @param2_field6 verticalAlignment:Enums.VerticalAlignment
- * @param2_field7 horizontalAlignment:Enums.HorizontalAlignment
- * @param2_field8 proxyUrl:string:deprecated
- * @param2_field12 svgToCanvas: function(svg, canvas)
+ * @param2_field format:Enums.ExportFormat
+ * @param2_field verticalAlignment:Enums.VerticalAlignment
+ * @param2_field horizontalAlignment:Enums.HorizontalAlignment
+ * @param2_field proxyUrl:string:deprecated
+ * @param2_field svgToCanvas: function(svg, canvas)
  * @static
  * @public
  */

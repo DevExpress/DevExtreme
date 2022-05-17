@@ -81,8 +81,8 @@ export interface CustomStoreOptions<
     remove?: ((key: TKey) => PromiseLike<void>);
     /**
      * @docid
-     * @type_function_param1_field1 filter:object
-     * @type_function_param1_field2 group:object
+     * @type_function_param1_field filter:object
+     * @type_function_param1_field group:object
      * @type_function_return Promise<number>
      * @public
      */

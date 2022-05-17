@@ -158,9 +158,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxLookup
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:dxLookup
      * @action
      * @public
      */
@@ -169,9 +167,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxLookup
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:dxLookup
      * @action
      * @public
      */
@@ -180,15 +176,9 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 scrollOffset:object
-     * @type_function_param1_field6 reachedLeft:boolean
-     * @type_function_param1_field7 reachedRight:boolean
-     * @type_function_param1_field8 reachedTop:boolean
-     * @type_function_param1_field9 reachedBottom:boolean
-     * @type_function_param1_field1 component:dxLookup
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field scrollOffset:object
+     * @type_function_param1_field component:dxLookup
      * @action
      * @public
      */
@@ -197,12 +187,10 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field6 value:object
-     * @type_function_param1_field5 previousValue:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:dxLookup
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field value:object
+     * @type_function_param1_field previousValue:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxLookup
      * @action
      * @public
      */

@@ -87,7 +87,6 @@ export interface dxContextMenuOptions<
      * @deprecated dxContextMenuOptions.hideOnOutsideClick
      * @default true
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @public
      */
     closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
@@ -103,7 +102,6 @@ export interface dxContextMenuOptions<
      * @default true
      * @type boolean | function
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @public
      */
     hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
@@ -117,9 +115,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxContextMenu
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:dxContextMenu
      * @action
      * @public
      */
@@ -128,10 +124,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 cancel:boolean
-     * @type_function_param1_field2 component:dxContextMenu
-     * @type_function_param1_field3 element:DxElement
-     * @type_function_param1_field4 model:any
+     * @type_function_param1_field component:dxContextMenu
      * @action
      * @public
      */
@@ -140,11 +133,8 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 position:PositionConfig
-     * @type_function_param1_field1 component:dxContextMenu
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxContextMenu
      * @action
      * @public
      */
@@ -153,10 +143,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 cancel:boolean
-     * @type_function_param1_field2 component:dxContextMenu
-     * @type_function_param1_field3 element:DxElement
-     * @type_function_param1_field4 model:any
+     * @type_function_param1_field component:dxContextMenu
      * @action
      * @public
      */
@@ -165,9 +152,7 @@ export interface dxContextMenuOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxContextMenu
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:dxContextMenu
      * @action
      * @public
      */

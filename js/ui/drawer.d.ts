@@ -52,7 +52,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @docid
      * @default false
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @public
      */
     closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);

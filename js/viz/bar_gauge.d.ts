@@ -182,7 +182,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
       connectorWidth?: number;
       /**
        * @docid
-       * @type_function_param1_field1 value:Number
        * @notUsedInTheme
        */
       customizeText?: ((barValue: { value?: number; valueText?: string }) => string);
@@ -224,10 +223,8 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxBarGauge
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 target:object
+     * @type_function_param1_field component:dxBarGauge
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
@@ -237,10 +234,8 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxBarGauge
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 target:object
+     * @type_function_param1_field component:dxBarGauge
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
@@ -348,7 +343,6 @@ export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
 export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.contentTemplate
-     * @type_function_param1_field1 value:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -357,7 +351,6 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1_field1 value:Number
      * @type_function_return object
      * @public
      */

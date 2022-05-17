@@ -41,7 +41,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @deprecated dxOverlayOptions.hideOnOutsideClick
      * @default false
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @public
      */
     closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
@@ -77,7 +76,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default false
      * @type boolean | function
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @public
      */
     hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
@@ -121,9 +119,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -132,10 +128,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 cancel:boolean
-     * @type_function_param1_field2 component:this
-     * @type_function_param1_field3 element:DxElement
-     * @type_function_param1_field4 model:any
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -144,10 +137,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 cancel:Boolean
-     * @type_function_param1_field2 component:this
-     * @type_function_param1_field3 element:DxElement
-     * @type_function_param1_field4 model:any
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -156,9 +146,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
