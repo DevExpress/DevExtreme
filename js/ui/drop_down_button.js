@@ -281,10 +281,17 @@ const DropDownButton = Widget.inherit({
     },
 
     _buttonGroupOptions() {
-        const { accessKey, splitButton, showArrowIcon } = this.option();
+        const {
+            accessKey,
+            splitButton,
+            showArrowIcon,
+            focusStateEnabled,
+            hoverStateEnabled,
+            stylingMode,
+            tabIndex
+        } = this.option();
 
         return extend({
-            accessKey,
             items: this._getButtonGroupItems(),
             onItemClick: this._buttonGroupItemClick.bind(this),
             width: '100%',
@@ -301,7 +308,12 @@ const DropDownButton = Widget.inherit({
                 const $secondIcon = getImageContainer('spindown').addClass(DX_ICON_RIGHT_CLASS);
 
                 $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
-            }
+            },
+            focusStateEnabled,
+            hoverStateEnabled,
+            stylingMode,
+            accessKey,
+            tabIndex,
         }, this._options.cache('buttonGroupOptions'));
     },
 
