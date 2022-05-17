@@ -58,6 +58,7 @@ const LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.contentTemplate
+            * @type template
             * @hidden
             */
 
