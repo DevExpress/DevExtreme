@@ -17,7 +17,7 @@
         "media-feature-name-no-vendor-prefix": true,
         "no-descending-specificity": null,
         "no-empty-source": null,
-        "property-no-vendor-prefix": true,
+        "property-no-vendor-prefix": [true, { "ignoreProperties": ["print-color-adjust"] }],
         "scss/at-if-no-null": true,
         "scss/at-import-no-partial-leading-underscore": true,
         "scss/at-import-partial-extension": "never",
