@@ -51,7 +51,6 @@ export interface dxMenuBaseOptions<
     /**
      * @docid
      * @default null
-     * @type string | Array<dxMenuBaseItem> | Store | DataSource | DataSourceOptions
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<dxMenuBaseItem>
      */

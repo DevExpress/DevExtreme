@@ -131,12 +131,8 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 width:number
-     * @type_function_param1_field6 height:number
+     * @type_function_param1_field component:this
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -145,12 +141,8 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 width:number
-     * @type_function_param1_field6 height:number
+     * @type_function_param1_field component:this
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -159,12 +151,8 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 width:number
-     * @type_function_param1_field6 height:number
+     * @type_function_param1_field component:this
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -173,10 +161,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 titleElement:DxElement
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:this
      * @action
      * @public
      */

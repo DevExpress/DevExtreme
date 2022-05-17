@@ -49,15 +49,9 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 scrollOffset:object
-     * @type_function_param1_field2 reachedLeft:boolean
-     * @type_function_param1_field3 reachedRight:boolean
-     * @type_function_param1_field4 reachedTop:boolean
-     * @type_function_param1_field5 reachedBottom:boolean
-     * @type_function_param1_field6 component:this
-     * @type_function_param1_field7 element:DxElement
-     * @type_function_param1_field8 model:any
-     * @type_function_param1_field9 event:event
+     * @type_function_param1_field scrollOffset:object
+     * @type_function_param1_field component:this
+     * @type_function_param1_field event:event
      * @action
      * @public
      */
@@ -66,15 +60,9 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 scrollOffset:object
-     * @type_function_param1_field2 reachedLeft:boolean
-     * @type_function_param1_field3 reachedRight:boolean
-     * @type_function_param1_field4 reachedTop:boolean
-     * @type_function_param1_field5 reachedBottom:boolean
-     * @type_function_param1_field6 component:this
-     * @type_function_param1_field7 element:DxElement
-     * @type_function_param1_field8 model:any
-     * @type_function_param1_field9 event:event
+     * @type_function_param1_field scrollOffset:object
+     * @type_function_param1_field component:this
+     * @type_function_param1_field event:event
      * @action
      * @public
      */

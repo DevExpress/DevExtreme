@@ -3,7 +3,7 @@ export interface ComponentOptions<TDisposingEvent, TInitializedEvent, TOptionCha
   /**
    * @docid
    * @type_function_param1 e:object
-   * @type_function_param1_field1 component:this
+   * @type_function_param1_field component:this
    * @default null
    * @action
    * @public
@@ -12,8 +12,8 @@ export interface ComponentOptions<TDisposingEvent, TInitializedEvent, TOptionCha
   /**
    * @docid
    * @type_function_param1 e:object
-   * @type_function_param1_field1 component:this
-   * @type_function_param1_field2 element:DxElement
+   * @type_function_param1_field component:this
+   * @type_function_param1_field element:DxElement
    * @default null
    * @action
    * @public
@@ -22,10 +22,10 @@ export interface ComponentOptions<TDisposingEvent, TInitializedEvent, TOptionCha
   /**
    * @docid
    * @type_function_param1 e:object
-   * @type_function_param1_field1 component:this
-   * @type_function_param1_field2 name:string
-   * @type_function_param1_field3 fullName:string
-   * @type_function_param1_field4 value:any
+   * @type_function_param1_field component:this
+   * @type_function_param1_field name:string
+   * @type_function_param1_field fullName:string
+   * @type_function_param1_field value:any
    * @default null
    * @action
    * @public

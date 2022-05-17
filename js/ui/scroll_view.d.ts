@@ -43,9 +43,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScrollView
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:dxScrollView
      * @action
      * @public
      */
@@ -54,9 +52,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxScrollView
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:dxScrollView
      * @action
      * @public
      */

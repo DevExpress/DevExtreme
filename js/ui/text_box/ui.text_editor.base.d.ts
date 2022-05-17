@@ -85,10 +85,8 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -97,10 +95,8 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -109,10 +105,8 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -121,10 +115,8 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -133,10 +125,8 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -145,10 +135,8 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -157,10 +145,8 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -168,11 +154,9 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field event:event
      * @default null
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -181,10 +165,8 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -193,10 +175,8 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -281,7 +261,6 @@ export default class dxTextEditor<TProperties = Properties> extends Editor<TProp
     /**
      * @docid
      * @publicName getButton(name)
-     * @return dxButton | undefined
      * @public
      */
     getButton(name: string): dxButton | undefined;

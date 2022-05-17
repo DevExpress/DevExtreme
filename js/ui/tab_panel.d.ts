@@ -117,12 +117,9 @@ export interface dxTabPanelOptions<
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTabPanel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field6 itemElement:DxElement
+     * @type_function_param1_field component:dxTabPanel
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
      * @action
      * @public
      */
@@ -131,12 +128,9 @@ export interface dxTabPanelOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTabPanel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field6 itemElement:DxElement
+     * @type_function_param1_field component:dxTabPanel
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
      * @action
      * @public
      */
@@ -145,11 +139,8 @@ export interface dxTabPanelOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field1 component:dxTabPanel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field component:dxTabPanel
      * @action
      * @public
      */

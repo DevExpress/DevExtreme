@@ -37,7 +37,6 @@ export interface CollectionWidgetOptions<
      * @default null
      * @type Store|DataSource|DataSourceOptions|string|Array<string | CollectionWidgetItem>
      * @public
-     * @type string | Array<string | CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions
      */
     dataSource?: DataSourceLike<TItem, TKey>;
     /**
@@ -78,13 +77,9 @@ export interface CollectionWidgetOptions<
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field6 itemElement:DxElement
-     * @type_function_param1_field7 itemIndex:number
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -93,13 +88,9 @@ export interface CollectionWidgetOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field6 itemElement:DxElement
-     * @type_function_param1_field7 itemIndex:number
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -108,13 +99,9 @@ export interface CollectionWidgetOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field6 itemElement:DxElement
-     * @type_function_param1_field7 itemIndex:number
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -123,12 +110,8 @@ export interface CollectionWidgetOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -137,11 +120,9 @@ export interface CollectionWidgetOptions<
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 addedItems:array<any>
-     * @type_function_param1_field5 removedItems:array<any>
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field addedItems:array<any>
+     * @type_function_param1_field removedItems:array<any>
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
