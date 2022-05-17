@@ -1,7 +1,6 @@
 import * as sass from 'sass-embedded';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
-import DartClient from './dart-client';
 import { parse } from './parse-value';
 import { optimizeCss } from './post-compiler';
 
@@ -21,8 +20,6 @@ export default class Compiler {
   userItems: ConfigMetaItem[] = [];
 
   indexFileContent: string;
-
-  dartClient = new DartClient();
 
   static getImportType = (url: string): ImportType => {
     if (url.endsWith('tb_index')) return ImportType.Index;
