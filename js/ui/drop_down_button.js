@@ -281,19 +281,18 @@ const DropDownButton = Widget.inherit({
     },
 
     _buttonGroupOptions() {
+        const { accessKey, splitButton, showArrowIcon } = this.option();
+
         return extend({
+            accessKey,
             items: this._getButtonGroupItems(),
-            focusStateEnabled: this.option('focusStateEnabled'),
-            hoverStateEnabled: this.option('hoverStateEnabled'),
             onItemClick: this._buttonGroupItemClick.bind(this),
             width: '100%',
             height: '100%',
-            stylingMode: this.option('stylingMode'),
             selectionMode: 'none',
-            tabIndex: this.option('tabIndex'),
             onKeyboardHandled: (e) => this._keyboardHandler(e),
             buttonTemplate: ({ text, icon }, buttonContent) => {
-                if(this.option('splitButton') || !this.option('showArrowIcon')) {
+                if(splitButton || !showArrowIcon) {
                     return 'content';
                 }
 
