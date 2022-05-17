@@ -12,6 +12,7 @@ createTestCafe('localhost', 1437, 1438)
         const args = getArgs();
         const testName = args.test.trim();
         const meta = args.meta.trim();
+        const reporter = args.reporter.trim();
         const indices = args.indices.trim();
         let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
@@ -20,11 +21,11 @@ createTestCafe('localhost', 1437, 1438)
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
-        // eslint-disable-next-line spellcheck/spell-checker
             fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
         }
         const runner = testCafe.createRunner()
             .browsers(args.browsers.split(' '))
+            .reporter(reporter)
 
             .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
@@ -74,9 +75,7 @@ createTestCafe('localhost', 1437, 1438)
     })
     .then(failedCount => {
         testCafe.close();
-        if(failedCount !== 0) {
-            process.exit(failedCount);
-        }
+        process.exit(failedCount);
     });
 
 function setTestingPlatform(args) {
@@ -90,6 +89,7 @@ function getArgs() {
             browsers: 'chrome',
             test: '',
             meta: '',
+            reporter: 'minimal',
             componentFolder: '',
             file: '*',
             cache: true,

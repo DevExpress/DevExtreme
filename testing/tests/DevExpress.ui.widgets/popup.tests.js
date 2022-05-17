@@ -1930,14 +1930,11 @@ QUnit.module('keyboard navigation', {
             this.position = this.$overlayContent.position();
             this.keyboard = keyboardMock(this.$overlayContent);
         };
-        this.reinit = (options) => {
-            this.init(options);
-        };
-
-        this.init();
     }
 }, () => {
     QUnit.test('arrows handling', function(assert) {
+        this.init();
+
         const offset = 5;
 
         this.keyboard.keyDown('left');
@@ -1958,7 +1955,7 @@ QUnit.module('keyboard navigation', {
 
     QUnit.test('popup should not be dragged when container size is less than overlay content size', function(assert) {
         const $container = $('<div>').appendTo('#qunit-fixture').height(14).width(14);
-        this.reinit({
+        this.init({
             height: 10,
             width: 10,
             container: $container,
@@ -1983,7 +1980,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('arrows handling for rtl', function(assert) {
-        this.reinit({ rtlEnabled: true });
+        this.init({ rtlEnabled: true });
         const offset = 5;
 
         this.keyboard.keyDown('left');
@@ -1995,7 +1992,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('arrows handling with dragEnabled = false', function(assert) {
-        this.reinit({ dragEnabled: false });
+        this.init({ dragEnabled: false });
 
         this.keyboard.keyDown('left');
         assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'popup position was not changed after pressing left arrow');
@@ -2007,6 +2004,21 @@ QUnit.module('keyboard navigation', {
         assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'popup position was not changed after pressing right arrow');
 
         assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'popup position was not changed after pressing up arrow');
+    });
+
+    QUnit.test('arrows handling should not throw an error', function(assert) {
+        this.init({ dragEnabled: false, title: null, showTitle: false });
+        let isOk = true;
+        try {
+            this.keyboard.keyDown('left');
+            this.keyboard.keyDown('right');
+            this.keyboard.keyDown('up');
+            this.keyboard.keyDown('down');
+        } catch(e) {
+            isOk = false;
+        }
+
+        assert.ok(isOk, 'arrows handling should not throw an error');
     });
 });
 

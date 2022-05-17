@@ -3,7 +3,6 @@ import eventsEngine from '../../events/core/events_engine';
 import { isDefined as _isDefined, isFunction } from '../../core/utils/type';
 import { each as _each, reverseEach as _reverseEach } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { isTouchEvent, isPointerEvent } from '../../events/utils/index';
 import BaseWidget from '../core/base_widget';
 import { Legend } from '../components/legend';
@@ -939,8 +938,8 @@ export const BaseChart = BaseWidget.inherit({
     },
 
     _processRefreshData: function(newRefreshAction) {
-        const currentRefreshActionPosition = inArray(this._currentRefreshData, ACTIONS_BY_PRIORITY);
-        const newRefreshActionPosition = inArray(newRefreshAction, ACTIONS_BY_PRIORITY);
+        const currentRefreshActionPosition = ACTIONS_BY_PRIORITY.indexOf(this._currentRefreshData);
+        const newRefreshActionPosition = ACTIONS_BY_PRIORITY.indexOf(newRefreshAction);
         if(!this._currentRefreshData || (currentRefreshActionPosition >= 0 && newRefreshActionPosition < currentRefreshActionPosition)) {
             this._currentRefreshData = newRefreshAction;
             // this._invalidate();

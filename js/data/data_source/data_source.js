@@ -8,7 +8,6 @@ import { applyBatch } from '../array_utils';
 import CustomStore from '../custom_store';
 import { EventsStrategy } from '../../core/events_strategy';
 import { errors } from '../errors';
-import { isEmpty } from '../../core/utils/array';
 import { create } from '../../core/utils/queue';
 import { Deferred, when } from '../../core/utils/deferred';
 import OperationManager from './operation_manager';
@@ -374,7 +373,8 @@ export const DataSource = Class.inherit({
         const store = this._store;
         const options = this._createStoreLoadOptions();
         const handleDone = (data) => {
-            if(!isDefined(data) || isEmpty(data)) {
+            const isEmptyArray = Array.isArray(data) && !data.length;
+            if(!isDefined(data) || isEmptyArray) {
                 d.reject(new errors.Error('E4009'));
             } else {
                 if(!Array.isArray(data)) {

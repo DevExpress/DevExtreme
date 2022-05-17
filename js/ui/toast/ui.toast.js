@@ -7,7 +7,6 @@ import readyCallbacks from '../../core/utils/ready_callbacks';
 import { noop } from '../../core/utils/common';
 import { isString } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import pointerEvents from '../../events/pointer';
 import registerComponent from '../../core/component_registrator';
 import Overlay from '../overlay/ui.overlay';
@@ -191,7 +190,7 @@ const Toast = Overlay.inherit({
 
         this.setAria('role', 'alert', this._message);
 
-        if(inArray(this.option('type').toLowerCase(), toastTypes) > -1) {
+        if(toastTypes.includes(this.option('type').toLowerCase())) {
             this.$content().prepend($('<div>').addClass(TOAST_ICON_CLASS));
         }
 

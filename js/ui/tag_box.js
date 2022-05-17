@@ -12,7 +12,6 @@ import { getPublicElement } from '../core/element';
 import { isDefined, isObject, isString } from '../core/utils/type';
 import { hasWindow } from '../core/utils/window';
 import { extend } from '../core/utils/extend';
-import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
 import messageLocalization from '../localization/message';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/utils/index';
@@ -1069,9 +1068,9 @@ const TagBox = SelectBox.inherit({
 
             each($tags, function(_, tag) {
                 const $tag = $(tag);
-                const index = inArray($tag.data(TAGBOX_TAG_DATA_KEY), values);
+                const tagData = $tag.data(TAGBOX_TAG_DATA_KEY);
 
-                if(index < 0) {
+                if(!values?.includes(tagData)) {
                     $tag.remove();
                 }
             });

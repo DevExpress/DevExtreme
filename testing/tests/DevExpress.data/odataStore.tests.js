@@ -2140,6 +2140,35 @@ QUnit.test('Recursive inner exception (B232110)', function(assert) {
     helper.run($.proxy(store.load, store), done, assert);
 });
 
+QUnit.test('Recursive empty inner exception (T1081655) - primitive case', function(assert) {
+    const done = assert.async();
+
+    ajaxMock.setup({
+        url: 'odata.org',
+        responseText: {
+            error: {
+                'message': {
+                    'value': 'The DELETE statement conflicted with the REFERENCE constraint'
+                },
+                'innererror': {}
+            }
+        }
+    });
+
+    const helper = new ErrorHandlingHelper();
+
+    helper.extraChecker = function(error) {
+        assert.equal(error.message, 'The DELETE statement conflicted with the REFERENCE constraint');
+    };
+
+    const store = new ODataStore({
+        url: 'odata.org',
+        errorHandler: helper.optionalHandler
+    });
+
+    helper.run($.proxy(store.load, store), done, assert);
+});
+
 QUnit.test('No recursive inner exception (B232110) on validation error', function(assert) {
     const done = assert.async();
     ajaxMock.setup({

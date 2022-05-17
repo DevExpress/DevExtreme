@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "22.1.0",
+  "version": "22.1.2",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -31,7 +31,7 @@
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "~3.0.7",
     "devexpress-diagram": "2.1.49",
-    "devexpress-gantt": "4.1.26",
+    "devexpress-gantt": "4.1.27",
     "devextreme-quill": "~1.5.16",
     "devextreme-showdown": "^1.0.1",
     "inferno": "^7.4.9",

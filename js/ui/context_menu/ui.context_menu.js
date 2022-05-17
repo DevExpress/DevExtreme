@@ -8,7 +8,6 @@ import { isObject, isRenderer, isWindow, isFunction, isPlainObject, isDefined } 
 import { contains } from '../../core/utils/dom';
 import { getPublicElement } from '../../core/element';
 import { each } from '../../core/utils/iterator';
-import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
 import fx from '../../animation/fx';
@@ -260,7 +259,7 @@ class ContextMenu extends MenuBase {
         const $activeItem = this._getActiveItem(true);
         let $items;
 
-        if(inArray(location, LOCAL_SUBMENU_DIRECTIONS) >= 0) {
+        if(LOCAL_SUBMENU_DIRECTIONS.includes(location)) {
             $items = $activeItem
                 .closest(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`)
                 .children()
@@ -653,7 +652,7 @@ class ContextMenu extends MenuBase {
                 this._shownSubmenus = [];
             }
 
-            if(inArray($submenu, this._shownSubmenus)) {
+            if(!this._shownSubmenus.includes($submenu)) {
                 this._shownSubmenus.push($submenu);
             }
 
@@ -768,7 +767,7 @@ class ContextMenu extends MenuBase {
     }
 
     _hideSubmenuCore($submenu) {
-        const index = inArray($submenu, this._shownSubmenus);
+        const index = this._shownSubmenus.indexOf($submenu);
         const animation = this.option('animation') ? this.option('animation').hide : null;
 
         if(index >= 0) {
@@ -802,7 +801,7 @@ class ContextMenu extends MenuBase {
     }
 
     _optionChanged(args) {
-        if(inArray(args.name, ACTIONS) > -1) {
+        if(ACTIONS.includes(args.name)) {
             this._initActions();
             return;
         }

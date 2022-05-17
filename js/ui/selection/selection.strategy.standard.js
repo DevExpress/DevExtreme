@@ -1,6 +1,6 @@
 import { getKeyHash } from '../../core/utils/common';
 import { isDefined, isObject } from '../../core/utils/type';
-import { removeDuplicates, uniqueValues } from '../../core/utils/array';
+import { removeDuplicates, getUniqueValues } from '../../core/utils/array';
 import { isKeysEqual } from '../../core/utils/array_compare';
 import dataQuery from '../../data/query';
 import { Deferred, when } from '../../core/utils/deferred';
@@ -204,7 +204,7 @@ export default SelectionStrategy.inherit({
         let currentKeys = keys;
         if(this._isMultiSelectEnabled() && this._shouldMergeWithLastRequest && !isDeselect && !isSelectAll) {
             currentKeys = removeDuplicates(keys.concat(this._lastRequestData?.addedItems), this._lastRequestData?.removedItems);
-            currentKeys = uniqueValues(currentKeys);
+            currentKeys = getUniqueValues(currentKeys);
         }
 
         return currentKeys;

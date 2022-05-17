@@ -1,4 +1,3 @@
-import { inArray } from './array';
 import domAdapter from '../dom_adapter';
 import callOnce from './call_once';
 import { getNavigator, hasProperty } from './window';
@@ -21,7 +20,7 @@ const supportProp = function(prop) {
 
 const isNativeScrollingSupported = function() {
     const { platform, mac: isMac } = devices.real();
-    const isNativeScrollDevice = inArray(platform, ['ios', 'android']) > -1 || isMac;
+    const isNativeScrollDevice = platform === 'ios' || platform === 'android' || isMac;
 
     return isNativeScrollDevice;
 };

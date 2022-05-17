@@ -21952,7 +21952,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTileViewOptions.showScrollbar]
      */
-    showScrollbar?: boolean;
+    showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
   }
   /**
    * [descr:dxToast]
@@ -25312,7 +25312,7 @@ declare module DevExpress.ui {
     static isMaterial(theme: string): boolean;
   }
   export interface ValidationCallbackData {
-    value?: string | number;
+    value?: any;
     rule: any;
     validator: any;
     data?: any;
