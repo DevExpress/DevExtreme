@@ -42,6 +42,7 @@
         "selector-max-id": 0,
         "selector-no-vendor-prefix": true,
         "selector-pseudo-element-colon-notation": "double",
-        "value-no-vendor-prefix": true
+        "value-no-vendor-prefix": true,
+        "property-no-unknown": [true, { "ignoreProperties": ["print-color-adjust"] }]
     }
 }
