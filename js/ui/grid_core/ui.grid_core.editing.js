@@ -549,7 +549,7 @@ const EditingController = modules.ViewController.inherit((function() {
             return -1;
         },
 
-        _isEditRowByIndex(rowIndex) {
+        isEditRowByIndex(rowIndex) {
             const key = this._dataController.getKeyByRowIndex(rowIndex);
             // Vitik: performance optimization equalByValue take O(1)
             const isKeyEqual = isDefined(key) && equalByValue(this.option(EDITING_EDITROWKEY_OPTION_NAME), key);
@@ -561,7 +561,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         isEditCell: function(visibleRowIndex, columnIndex) {
-            return this._isEditRowByIndex(visibleRowIndex) && this._getVisibleEditColumnIndex() === columnIndex;
+            return this.isEditRowByIndex(visibleRowIndex) && this._getVisibleEditColumnIndex() === columnIndex;
         },
 
         getPopupContent: noop,

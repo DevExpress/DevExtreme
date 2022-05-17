@@ -31,6 +31,8 @@ import {
     dataGridWrapper
 } from '../../helpers/grid/keyboardNavigationHelper.js';
 
+import 'ui/text_area.js';
+
 const device = devices.real();
 
 function generateItems(itemCount) {
@@ -4183,6 +4185,52 @@ QUnit.module('Keyboard keys', {
 
             // assert
             assert.notOk(setFocusedCellPositionSpy.called, `${key} not called`);
+        });
+    });
+
+
+    // T1086485
+    ['batch', 'cell', 'row', 'form'].forEach(editingMode => {
+        QUnit.testInActiveWindow(`Keyboard navigation should not select next row when editing, editing.mode=${editingMode}`, function(assert) {
+            // arrange
+            this.options = {
+                keyboardNavigation: {
+                    enabled: true,
+                },
+                showColumnHeaders: true,
+                dataSource: [{ name: 1 }, { name: 2 }],
+                editing: {
+                    mode: editingMode,
+                    allowUpdating: true
+                },
+                onEditorPreparing(e) {
+                    e.editorName = 'dxTextArea';
+                },
+            };
+
+            setupModules(this);
+            this.gridView.render($('#container'));
+
+            // act
+            this.focusCell(0, 0);
+
+
+            if(editingMode === 'cell' || editingMode === 'batch') {
+                this.editingController.editCell(0, 0);
+            } else {
+                this.editingController.editRow(0);
+            }
+            this.clock.tick();
+
+            // assert
+            assert.equal($('.dx-data-row:eq(0) td:eq(0) textarea:focus').length, 1, 'first cell is focused');
+
+            // act
+            this.triggerKeyDown('downArrow', true);
+            this.clock.tick();
+
+            // assert
+            assert.equal($('.dx-data-row:eq(0) td:eq(0) textarea:focus').length, 1, 'first cell is still focused');
         });
     });
 });
