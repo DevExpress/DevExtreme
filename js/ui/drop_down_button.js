@@ -282,12 +282,12 @@ const DropDownButton = Widget.inherit({
 
     _buttonGroupOptions() {
         const {
-            accessKey,
             splitButton,
             showArrowIcon,
             focusStateEnabled,
             hoverStateEnabled,
             stylingMode,
+            accessKey,
             tabIndex
         } = this.option();
 
