@@ -1667,6 +1667,22 @@ QUnit.module('clearButton', moduleSetup, () => {
 
         assert.strictEqual(items.length, 0, 'items are re-filtered, and no item is shown because of minSearchLength=1');
     });
+
+    QUnit.test('click on clear button should correctly update dx-dropdowneditor-active class (T1073102)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: [1, 11],
+            searchEnabled: true,
+            value: 1,
+            showClearButton: true,
+            onValueChanged: ({ component }) => {
+                component.option('value', 11); // NOTE: to fill "searchValue"
+            }
+        });
+
+        $(`.${CLEAR_BUTTON_AREA}`).trigger('dxclick');
+
+        assert.strictEqual($selectBox.hasClass('dx-dropdowneditor-active'), false, 'dx-dropdowneditor-active class is not added');
+    });
 });
 
 QUnit.module('showSelectionControls', moduleSetup, () => {
