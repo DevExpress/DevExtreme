@@ -81,7 +81,7 @@ fixture`Form`
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => createWidget('dxForm', {
-      screenSize: () => screenSize,
+      screenByWidth: () => screenSize,
       with: 1000,
       formData: {},
       items: [
