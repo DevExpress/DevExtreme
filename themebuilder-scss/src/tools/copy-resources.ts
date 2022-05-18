@@ -12,7 +12,6 @@ const copyResources = async (): Promise<void> => {
     await outputJson('dist/package.json', packageConfig, { spaces: 2 });
   });
   await copy('src/data/scss', 'dist/data/scss');
-  await copy('dart-compiler', 'dist/dart-compiler');
   await copy('README.md', 'dist/README.md');
 };
 
