@@ -319,11 +319,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 node:dxTreeMapNode
+     * @type_function_param1_field component:dxTreeMap
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
      * @public
@@ -333,10 +330,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 node:dxTreeMapNode
+     * @type_function_param1_field component:dxTreeMap
      * @notUsedInTheme
      * @action
      * @public
@@ -346,10 +340,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 node:dxTreeMapNode
+     * @type_function_param1_field component:dxTreeMap
      * @notUsedInTheme
      * @action
      * @public
@@ -359,10 +350,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 root:dxTreeMapNode
+     * @type_function_param1_field component:dxTreeMap
      * @notUsedInTheme
      * @action
      * @public
@@ -372,10 +360,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 node:dxTreeMapNode
+     * @type_function_param1_field component:dxTreeMap
      * @notUsedInTheme
      * @action
      * @public
@@ -385,10 +370,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 node:dxTreeMapNode
+     * @type_function_param1_field component:dxTreeMap
      * @notUsedInTheme
      * @action
      * @public
@@ -528,7 +510,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
 export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.contentTemplate
-     * @type_function_param1_field1 value:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -537,7 +518,6 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1_field1 value:Number
      * @type_function_return object
      * @public
      */

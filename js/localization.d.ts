@@ -1,7 +1,6 @@
 /**
  * @docid localization.formatDate
  * @publicName formatDate(value, format)
- * @param1 value:date
  * @static
  * @namespace DevExpress.localization
  * @public
@@ -59,7 +58,6 @@ export function locale(locale: string): void;
 /**
  * @docid localization.parseDate
  * @publicName parseDate(text, format)
- * @return date
  * @static
  * @namespace DevExpress.localization
  * @public
@@ -92,13 +90,11 @@ export interface FormatObject {
    /**
     * @docid Format.formatter
     * @public
-    * @type_function_param1 value:number|date
     */
    formatter?: ((value: number | Date) => string);
    /**
     * @docid Format.parser
     * @public
-    * @type_function_return number|date
     */
    parser?: ((value: string) => number | Date);
    /**
@@ -118,7 +114,6 @@ type ExternalFormat = never;
 /**
  * @docid
  * @type Object|Enums.Format|string|function
- * @type_function_param1 value:number|date
  * @default undefined
  * @section Common
  * @namespace DevExpress.ui

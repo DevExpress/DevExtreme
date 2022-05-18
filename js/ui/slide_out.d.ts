@@ -136,9 +136,7 @@ export interface dxSlideOutOptions<
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSlideOut
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:dxSlideOut
      * @default null
      * @action
      * @public
@@ -147,9 +145,7 @@ export interface dxSlideOutOptions<
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxSlideOut
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field component:dxSlideOut
      * @default null
      * @action
      * @public

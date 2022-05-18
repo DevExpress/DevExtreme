@@ -20,9 +20,9 @@ export interface ODataRequestOptions {
 export interface ODataContextOptions {
     /**
      * @docid
-     * @type_function_param1_field5 params:object
-     * @type_function_param1_field6 payload:object
-     * @type_function_param1_field7 headers:object
+     * @type_function_param1_field params:object
+     * @type_function_param1_field payload:object
+     * @type_function_param1_field headers:object
      * @public
      */
     beforeSend?: ((options: { url: string; async: boolean; method: string; timeout: number; params: any; payload: any; headers: any }) => void);
@@ -39,8 +39,8 @@ export interface ODataContextOptions {
     /**
      * @docid
      * @type_function_param1 e:Error
-     * @type_function_param1_field2 errorDetails:object
-     * @type_function_param1_field3 requestOptions:object
+     * @type_function_param1_field errorDetails:object
+     * @type_function_param1_field requestOptions:object
      * @public
      */
     errorHandler?: ((e: { httpStatus: number; errorDetails: any; requestOptions: ODataRequestOptions }) => void);
