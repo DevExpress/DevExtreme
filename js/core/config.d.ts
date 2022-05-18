@@ -97,6 +97,13 @@ export interface globalConfig {
     forceIsoDateParsing?: boolean;
     /**
      * @docid
+     * @type boolean
+     * @default true
+     * @public
+     */
+    defaultUseCurrencyAccountingStyle?: boolean;
+    /**
+     * @docid
      * @default true
      * @public
      */
