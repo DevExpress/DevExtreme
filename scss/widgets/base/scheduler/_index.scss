@@ -2331,8 +2331,14 @@ $scheduler-appointment-form-label-padding: 20px;
       }
     }
 
-    .dx-scheduler-date-table {
-      width: calc(100% - 2px);
+    .dx-scheduler-date-table-scrollable {
+      .dx-scrollable-container {
+        width: auto;
+
+        .dx-scheduler-date-table {
+          width: calc(100% - 0.5px);
+        }
+      }
     }
 
     .dx-scheduler-date-table-cell {
