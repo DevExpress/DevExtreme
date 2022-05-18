@@ -169,7 +169,7 @@ describe('Compile manager - integration test on test sass', () => {
     return expect(manager.compile({
       makeSwatch: true,
       outColorScheme: 'error for sass compiler :)',
-    })).rejects.toBeInstanceOf(Error);
+    })).rejects.toThrowError(Error);
   });
 
   test('compile test bundle with removeExternalResources option', async () => {

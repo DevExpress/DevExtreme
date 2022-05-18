@@ -83,7 +83,7 @@ export default class CompileManager {
       const { span, message } = e as sass.Exception;
       const { url, start } = span;
       const { line, column } = start;
-      throw new Error(`Compilation failed.\nbundle: ${bundleOptions.file},\nfile: ${url?.pathname}:${line}:${column}\n${message}`);
+      throw new Error(`Compilation failed.\nbundle: ${bundleOptions.file},\nfile: ${url}:${line}:${column},\n${message}`);
     }
   }
 }
