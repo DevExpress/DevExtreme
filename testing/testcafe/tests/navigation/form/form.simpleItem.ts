@@ -68,20 +68,20 @@ fixture`Form`
   });
 });
 
-['xs', 'md', 'lg'].forEach((screenSize) => {
+[() => 'xs', () => 'md', () => 'lg'].forEach((screenByWidth) => {
   ['generic.light', 'material.blue.light'].forEach((theme) => {
-    test('item padding (T1088451)', async (t) => {
+    test(`item padding (T1088451), screenSize: ${screenByWidth.toString()}, theme: ${theme}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await changeTheme(theme);
       await waitFont();
 
       await t
-        .expect(await takeScreenshot(`item padding (T1088451)_${screenSize}_${theme}.png`, '#container'))
+        .expect(await takeScreenshot(`item padding (T1088451)_${screenByWidth.toString()}_${theme}.png`, '#container'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => createWidget('dxForm', {
-      screenByWidth: () => screenSize,
+      screenByWidth,
       with: 1000,
       formData: {},
       items: [
