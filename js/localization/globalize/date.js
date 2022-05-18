@@ -2,9 +2,6 @@ import './core';
 import './number';
 // eslint-disable-next-line no-restricted-imports
 import 'globalize/date';
-import { weekData } from '../cldr-data/week_data';
-import { timeData } from '../cldr-data/time_data';
-import { enCaGregorian } from '../cldr-data/en_ca_gregorian';
 
 const ACCEPTABLE_JSON_FORMAT_PROPERTIES = ['skeleton', 'date', 'time', 'datetime', 'raw'];
 const RTL_MARKS_REGEX = /[\u200E\u200F]/g;
@@ -18,12 +15,6 @@ import * as iteratorUtils from '../../core/utils/iterator';
 if(Globalize && Globalize.formatDate) {
 
     if(Globalize.locale().locale === 'en') {
-        Globalize.load(
-            weekData,
-            timeData,
-            enCaGregorian
-        );
-
         Globalize.locale('en');
     }
 

@@ -4,9 +4,6 @@ import './number';
 import '../currency';
 // eslint-disable-next-line no-restricted-imports
 import 'globalize/currency';
-import { currencyData } from '../cldr-data/currency_data';
-import { enCurrencyUSD } from '../cldr-data/en_currency_usd';
-
 // eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
 import config from '../../core/config';
@@ -17,8 +14,6 @@ const CURRENCY_STYLES = ['symbol', 'accounting'];
 if(Globalize && Globalize.formatCurrency) {
 
     if(Globalize.locale().locale === 'en') {
-        Globalize.load(currencyData, enCurrencyUSD);
-
         Globalize.locale('en');
     }
 
