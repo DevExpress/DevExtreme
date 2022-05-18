@@ -24,10 +24,8 @@
   },
   "scripts": {
     "test": "jest --coverage --verbose --runInBand",
-    "test-dart": "npm run dart && jest --verbose --runInBand --config=jest-dart.config.js",
     "copy-resources": "ts-node --files=true src/tools/copy-resources.ts",
     "generate-metadata": "ts-node --files=true src/metadata/generate.ts",
-    "dart": "ts-node --files=true tests/run-dart.ts",
     "build-ts": "tsc",
     "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources"
   },
