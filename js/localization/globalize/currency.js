@@ -4,8 +4,8 @@ import './number';
 import '../currency';
 // eslint-disable-next-line no-restricted-imports
 import 'globalize/currency';
-// import { currencyData } from '../cldr-data/currency_data';
-// import { enCurrencyUSD } from '../cldr-data/en_currency_usd';
+import { currencyData } from '../cldr-data/currency_data';
+import { enCurrencyUSD } from '../cldr-data/en_currency_usd';
 
 // eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
@@ -13,49 +13,6 @@ import config from '../../core/config';
 import numberLocalization from '../number';
 
 const CURRENCY_STYLES = ['symbol', 'accounting'];
-
-const currencyData = {
-    'supplemental': {
-        'version': {
-            '_cldrVersion': '28',
-            '_unicodeVersion': '8.0.0',
-            '_number': '$Revision: 11969 $'
-        },
-        'currencyData': {
-            'fractions': {
-                'DEFAULT': {
-                    '_rounding': '0',
-                    '_digits': '2'
-                }
-            }
-        }
-    }
-};
-
-const enCurrencyUSD = {
-    'main': {
-        'en': {
-            'identity': {
-                'version': {
-                    '_cldrVersion': '28',
-                    '_number': '$Revision: 11972 $'
-                },
-                'language': 'en'
-            },
-            'numbers': {
-                'currencies': {
-                    'USD': {
-                        'displayName': 'US Dollar',
-                        'displayName-count-one': 'US dollar',
-                        'displayName-count-other': 'US dollars',
-                        'symbol': '$',
-                        'symbol-alt-narrow': '$'
-                    }
-                }
-            }
-        }
-    }
-};
 
 if(Globalize && Globalize.formatCurrency) {
 

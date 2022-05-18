@@ -2,8 +2,8 @@ import './core';
 import './number';
 // eslint-disable-next-line no-restricted-imports
 import 'globalize/date';
-// import { weekData } from '../cldr-data/week_data';
-// import { timeData } from '../cldr-data/time_data';
+import { weekData } from '../cldr-data/week_data';
+import { timeData } from '../cldr-data/time_data';
 import { enCaGregorian } from '../cldr-data/en_ca_gregorian';
 
 const ACCEPTABLE_JSON_FORMAT_PROPERTIES = ['skeleton', 'date', 'time', 'datetime', 'raw'];
@@ -14,69 +14,6 @@ import Globalize from 'globalize';
 import dateLocalization from '../date';
 import { isObject } from '../../core/utils/type';
 import * as iteratorUtils from '../../core/utils/iterator';
-
-const weekData = {
-    'supplemental': {
-        'version': {
-            '_cldrVersion': '28',
-            '_unicodeVersion': '8.0.0',
-            '_number': '$Revision: 11969 $'
-        },
-        'weekData': {
-            'minDays': {
-                '001': '1',
-                'US': '1',
-                'DE': '4'
-            },
-            'firstDay': {
-                '001': 'mon',
-                'DE': 'mon',
-                'RU': 'mon',
-                'JP': 'sun',
-                'US': 'sun'
-            },
-            'weekendStart': {
-                '001': 'sat'
-            },
-            'weekendEnd': {
-                '001': 'sun'
-            }
-        }
-    }
-};
-
-const timeData = {
-    'supplemental': {
-        'version': {
-            '_cldrVersion': '28',
-            '_unicodeVersion': '8.0.0',
-            '_number': '$Revision: 11969 $'
-        },
-        'timeData': {
-            '001': {
-                '_allowed': 'H h',
-                '_preferred': 'H'
-            },
-            'DE': {
-                '_allowed': 'H',
-                '_preferred': 'H'
-            },
-            'JP': {
-                '_allowed': 'H K h',
-                '_preferred': 'H'
-            },
-            'RU': {
-                '_allowed': 'H',
-                '_preferred': 'H'
-            },
-            'US': {
-                '_allowed': 'H h',
-                '_preferred': 'h'
-            }
-        }
-    }
-};
-
 
 if(Globalize && Globalize.formatDate) {
 

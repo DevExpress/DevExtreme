@@ -7,7 +7,6 @@ import errors from '../../core/errors';
 // eslint-disable-next-line no-restricted-imports
 import 'globalize/number';
 
-
 const enNumbers = {
     'main': {
         'en': {
