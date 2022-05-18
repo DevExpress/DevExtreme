@@ -87,8 +87,8 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     if (this._childNode) {
       this._element.appendChild(this._childNode);
     }
-    if (!this._childNode && this._element.children.length) {
-      this._childNode = this._element.children[0];
+    if (!this._childNode && this._element.childNodes.length) {
+      this._childNode = this._element.childNodes[0];
     }
     this._updateCssClasses(null, this.props);
   }
@@ -105,7 +105,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   public componentWillUnmount(): void {
     if (this._instance) {
-      this._childNode && this._childNode.parentNode?.removeChild(this._childNode);
+      this._childNode?.parentNode?.removeChild(this._childNode);
       events.triggerHandler(this._element, DX_REMOVE_EVENT);
       this._instance.dispose();
     }

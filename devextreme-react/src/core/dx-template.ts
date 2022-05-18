@@ -34,6 +34,7 @@ function createDxTemplate(
       const prevTemplateId = renderedTemplates.get(key);
 
       let templateId: string;
+
       if (prevTemplateId) {
         templateId = prevTemplateId;
       } else {
@@ -43,7 +44,6 @@ function createDxTemplate(
           renderedTemplates.set(key, templateId);
         }
       }
-
       templatesStore.add(templateId, () => {
         const props: ITemplateArgs = {
           data: data.model,
@@ -57,10 +57,13 @@ function createDxTemplate(
             content: contentProvider(props),
             container,
             onRemoved: () => {
-              templatesStore.remove(templateId);
+              templatesStore.setDeferredRemove(templateId, true);
               renderedTemplates.delete({ key1: data.model, key2: container });
             },
-            onRendered: data.onRendered,
+            onDidMount: () => {
+              templatesStore.setDeferredRemove(templateId, false);
+              data.onRendered?.();
+            },
             key: templateId,
           },
         ) as any as TemplateWrapper;
