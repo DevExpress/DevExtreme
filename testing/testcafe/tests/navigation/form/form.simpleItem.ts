@@ -70,13 +70,14 @@ fixture`Form`
 
 [() => 'xs', () => 'md', () => 'lg'].forEach((screenByWidth) => {
   ['generic.light', 'material.blue.light'].forEach((theme) => {
-    test(`item padding (T1088451), screenSize: ${screenByWidth.toString()}, theme: ${theme}`, async (t) => {
+    const testName = `item padding (T1088451)_${screenByWidth.toString().split('=>')[1]}_${theme}`;
+    test(testName, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await changeTheme(theme);
       await waitFont();
 
       await t
-        .expect(await takeScreenshot(`item padding (T1088451)_${screenByWidth.toString()}_${theme}.png`, '#container'))
+        .expect(await takeScreenshot(`${testName}.png`, '#container'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
