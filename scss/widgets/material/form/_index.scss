@@ -48,18 +48,20 @@
 
     padding-bottom: 10px;
     font-size: $material-form-label-font-size;
+
+    .dx-field-item {
+      &.dx-last-row {
+        padding-bottom: 0;
+      }
+    }
   }
 }
 
 .dx-form > .dx-layout-manager.dx-layout-manager-one-col {
-  .dx-field-item.dx-last-row.dx-last-col {
-    padding-bottom: 0;
-  }
-}
-
-.dx-form > .dx-layout-manager:not(.dx-layout-manager-one-col) {
-  .dx-field-item.dx-last-row {
-    padding-bottom: 0;
+  .dx-field-item {
+    .dx-field-item.dx-last-row:not(.dx-last-col) {
+      padding-bottom: 10px;
+    }
   }
 }
 
