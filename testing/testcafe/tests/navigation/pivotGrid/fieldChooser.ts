@@ -231,7 +231,7 @@ test('Change dataFiels order with three invisible fields', async (t) => {
   await t.drag(Selector('.dx-area').nth(4).find('.dx-area-fields .dx-area-field').nth(0), 0, 170);
 
   await t
-    .expect(await takeScreenshot('Change_dataField_order_with_invisible_fields.png', '.dx-overlay-content.dx-popup-draggable'))
+    .expect(await takeScreenshot('Change_dataField_order_with_three_invisible_fields.png', '.dx-overlay-content.dx-popup-draggable'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
