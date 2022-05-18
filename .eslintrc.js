@@ -11,9 +11,6 @@ module.exports = {
             'jsx': true
         }
     },
-    'plugins': [
-        'no-only-tests'
-    ],
     'overrides': [
         {
             'files': ['*.js'],
@@ -108,7 +105,6 @@ module.exports = {
             'parser': '@typescript-eslint/parser',
             'extends': ['devextreme/typescript'],
             'rules': {
-                'no-only-tests/no-only-tests': 'error',
                 '@typescript-eslint/adjacent-overload-signatures': 'error',
                 '@typescript-eslint/array-type': 'error',
                 '@typescript-eslint/await-thenable': 'error',
