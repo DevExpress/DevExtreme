@@ -1039,6 +1039,10 @@ declare module DevExpress {
      */
     defaultCurrency?: string;
     /**
+     * [descr:globalConfig.defaultUseCurrencyAccountingStyle]
+     */
+    defaultUseCurrencyAccountingStyle?: boolean;
+    /**
      * [descr:globalConfig.editorStylingMode]
      */
     editorStylingMode?: 'outlined' | 'underlined' | 'filled';
@@ -1090,10 +1094,6 @@ declare module DevExpress {
      * [descr:globalConfig.forceIsoDateParsing]
      */
     forceIsoDateParsing?: boolean;
-    /**
-     * [descr:globalConfig.defaultUseCurrencyAccountingStyle]
-     */
-    defaultUseCurrencyAccountingStyle?: boolean;
     /**
      * [descr:globalConfig.oDataFilterToLower]
      */
@@ -23283,7 +23283,7 @@ declare module DevExpress.ui {
     TKey = any
   > = DevExpress.ui.dxTreeList.Editing<TRowData, TKey>;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListEditingTexts = DevExpress.ui.dxTreeList.EditingTexts;
   /**
@@ -23486,7 +23486,7 @@ declare module DevExpress.ui {
     toolbar?: DevExpress.ui.dxTreeList.Toolbar;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
   /**
@@ -24600,23 +24600,23 @@ declare module DevExpress.ui {
     updateDimensions(): void;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseColumn<TRowData = any> =
     DevExpress.ui.dxDataGrid.ColumnBase<TRowData>;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseColumnButton = DevExpress.ui.dxDataGrid.ColumnButtonBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseEditing<
     TRowData = any,
     TKey = any
   > = DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey>;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseEditingTexts = DevExpress.ui.dxDataGrid.EditingTextsBase;
   /**
@@ -24990,15 +24990,15 @@ declare module DevExpress.ui {
     syncLookupFilterValues?: boolean;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBasePaging = DevExpress.ui.dxDataGrid.PagingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseScrolling = DevExpress.ui.dxDataGrid.ScrollingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**
