@@ -282,7 +282,17 @@ const DropDownButton = Widget.inherit({
     },
 
     _buttonGroupOptions() {
-        const buttonTemplate = (this.option('splitButton') || !this.option('showArrowIcon')) ?
+        const {
+            splitButton,
+            showArrowIcon,
+            focusStateEnabled,
+            hoverStateEnabled,
+            stylingMode,
+            accessKey,
+            tabIndex
+        } = this.option();
+
+        const buttonTemplate = (splitButton || !showArrowIcon) ?
             'content' : ({ text, icon }, buttonContent) => {
                 const $firstIcon = getImageContainer(icon);
                 const $textContainer = text ? $('<span>').text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
@@ -293,16 +303,17 @@ const DropDownButton = Widget.inherit({
 
         return extend({
             items: this._getButtonGroupItems(),
-            focusStateEnabled: this.option('focusStateEnabled'),
-            hoverStateEnabled: this.option('hoverStateEnabled'),
             onItemClick: this._buttonGroupItemClick.bind(this),
             width: '100%',
             height: '100%',
-            stylingMode: this.option('stylingMode'),
             selectionMode: 'none',
-            tabIndex: this.option('tabIndex'),
             onKeyboardHandled: (e) => this._keyboardHandler(e),
             buttonTemplate,
+            focusStateEnabled,
+            hoverStateEnabled,
+            stylingMode,
+            accessKey,
+            tabIndex,
         }, this._options.cache('buttonGroupOptions'));
     },
 
