@@ -26,8 +26,7 @@ const createScheduler = async (
 };
 
 [false, true].forEach((crossScrollingEnabled) => {
-  // eslint-disable-next-line no-only-tests/no-only-tests
-  test.only(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
+  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
