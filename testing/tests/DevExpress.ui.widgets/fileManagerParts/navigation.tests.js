@@ -1426,4 +1426,22 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(this.fileManager.getCurrentDirectory().key, '', 'Current directory is the target one');
         assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'NavPane current folder text is correct');
     });
+
+    test('getItems must be invoked only once in case of exception (T1085224)', function(assert) {
+        const customProvider = new CustomFileSystemProvider({
+            getItems: function(parentDirectory) {
+                const deferred = new Deferred();
+                const error = new FileSystemError(42, parentDirectory, 'Custom text');
+                deferred.reject(error);
+                return deferred.promise();
+            }
+        });
+        const getItemsSpy = sinon.spy(customProvider, 'getItems');
+        this.fileManager.option({
+            fileSystemProvider: customProvider
+        });
+        this.clock.tick(400);
+
+        assert.strictEqual(getItemsSpy.callCount, 1, 'getItems function must be called once');
+    });
 });
