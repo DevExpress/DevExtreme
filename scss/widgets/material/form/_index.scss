@@ -59,6 +59,14 @@
   }
 }
 
+.dx-form > .dx-layout-manager.dx-layout-manager-one-col {
+  .dx-field-item {
+    .dx-field-item.dx-last-row:not(.dx-last-col) {
+      padding-bottom: 10px;
+    }
+  }
+}
+
 .dx-field-item {
   &:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs):not(.dx-first-row):not(.dx-label-v-align) {
     padding-top: $material-form-default-top-padding;

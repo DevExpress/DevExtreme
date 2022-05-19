@@ -67,3 +67,87 @@ fixture`Form`
     }));
   });
 });
+
+[() => 'xs', () => 'md', () => 'lg'].forEach((screenByWidth) => {
+  ['generic.light', 'material.blue.light'].forEach((theme) => {
+    const getFunctionBody = (func) => func.toString().split('=>')[1];
+    const testName = `item padding (T1088451)_${getFunctionBody(screenByWidth)}_${theme}`;
+    test(testName, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      await changeTheme(theme);
+      await waitFont();
+
+      await t
+        .expect(await takeScreenshot(`${testName}.png`, '#container'))
+        .ok()
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => createWidget('dxForm', {
+      screenByWidth,
+      with: 1000,
+      formData: {},
+      items: [
+        'Name1', 'Name2',
+        {
+          itemType: 'group',
+          items: [
+            {
+              itemType: 'group',
+              items: [
+                {
+                  itemType: 'group',
+                  items: [
+                    {
+                      itemType: 'group',
+                      colCount: 2,
+                      items: [
+                        {
+                          dataField: 'Name3',
+                        },
+                        {
+                          dataField: 'Name4',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          itemType: 'group',
+          items: [
+            {
+              itemType: 'group',
+              items: [
+                {
+                  itemType: 'group',
+                  items: [
+                    {
+                      itemType: 'group',
+                      colCount: 2,
+                      items: [
+                        {
+                          itemType: 'group',
+                          colCount: 2,
+                          items: ['Name7', 'Name8'],
+                        },
+                        {
+                          itemType: 'group',
+                          colCount: 2,
+                          items: ['Name9', 'Name10'],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        'Name11', 'Name12',
+      ],
+    }));
+  });
+});
