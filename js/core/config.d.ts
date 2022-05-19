@@ -47,6 +47,13 @@ export interface globalConfig {
     defaultCurrency?: string;
     /**
      * @docid
+     * @type boolean
+     * @default true
+     * @public
+     */
+    defaultUseCurrencyAccountingStyle?: boolean;
+    /**
+     * @docid
      * @default undefined
      * @public
      */
