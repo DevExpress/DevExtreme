@@ -34,6 +34,15 @@ import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
+import {
+    ShowScrollbarMode,
+    SelectAllMode,
+    ListSelectionMode,
+    ListPageLoadMode,
+    ListMenuMode,
+    ListItemDeleteMode,
+} from '../types/enums';
+
 type ItemLike = string | Item | any;
 
 interface ListItemInfo<TItem extends ItemLike> {
@@ -199,13 +208,12 @@ export interface dxListOptions<
     indicateLoading?: boolean;
     /**
      * @docid
-     * @type Enums.ListItemDeleteMode
      * @default 'static'
      * @default 'slideItem' &for(iOS)
      * @default 'swipe' &for(Android)
      * @public
      */
-    itemDeleteMode?: 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
+    itemDeleteMode?: ListItemDeleteMode;
     /**
      * @docid
      * @public
@@ -237,12 +245,11 @@ export interface dxListOptions<
     }>;
     /**
      * @docid
-     * @type Enums.ListMenuMode
      * @default 'context'
      * @default 'slide' &for(iOS)
      * @public
      */
-    menuMode?: 'context' | 'slide';
+    menuMode?: ListMenuMode;
     /**
      * @docid
      * @default "More"
@@ -378,12 +385,11 @@ export interface dxListOptions<
     onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void);
     /**
      * @docid
-     * @type Enums.ListPageLoadMode
      * @default "scrollBottom"
      * @default "nextButton" &for(desktop except Mac)
      * @public
      */
-    pageLoadMode?: 'nextButton' | 'scrollBottom';
+    pageLoadMode?: ListPageLoadMode;
     /**
      * @docid
      * @default "Loading..."
@@ -446,26 +452,23 @@ export interface dxListOptions<
     scrollingEnabled?: boolean;
     /**
      * @docid
-     * @type Enums.SelectAllMode
      * @default 'page'
      * @public
      */
-    selectAllMode?: 'allPages' | 'page';
+    selectAllMode?: SelectAllMode;
     /**
      * @docid
-     * @type Enums.ListSelectionMode
      * @default 'none'
      * @public
      */
-    selectionMode?: 'all' | 'multiple' | 'none' | 'single';
+    selectionMode?: ListSelectionMode;
     /**
      * @docid
-     * @type Enums.ShowScrollbarMode
      * @default 'onScroll'
      * @default 'onHover' &for(desktop)
      * @public
      */
-    showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
+    showScrollbar?: ShowScrollbarMode;
     /**
      * @docid
      * @default false

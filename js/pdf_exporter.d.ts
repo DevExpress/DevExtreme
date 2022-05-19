@@ -5,6 +5,10 @@ import dxGantt from './ui/gantt';
 import {
   DataGridCell as ExcelCell,
 } from './excel_exporter';
+import {
+  GanttPdfExportMode,
+  GanttPdfExportDateRange,
+} from './types/enums';
 
 /**
  * @public
@@ -312,17 +316,15 @@ export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>
   margins?: object;
   /**
    * @docid
-   * @type Enums.GanttPdfExportMode
    * @default 'all'
    * @public
    */
-  exportMode?: 'all' | 'treeList' | 'chart';
+  exportMode?: GanttPdfExportMode;
   /**
    * @docid
-   * @type Enums.GanttPdfExportDateRange|object
    * @public
    */
-  dateRange?: 'all' | 'visible' | object;
+  dateRange?: GanttPdfExportDateRange | object;
   /**
   * @docid
   * @public

@@ -33,6 +33,15 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+  FirstDayOfWeek,
+  Orientation,
+  SchedulerViewType,
+  MaxAppointmentsPerCell,
+  SchedulerRecurrenceEditMode,
+  SchedulerScrollingMode,
+} from '../types/enums';
+
 interface AppointmentDraggingEvent {
   readonly component: dxScheduler;
   readonly event?: DxEvent<MouseEvent | TouchEvent>;
@@ -304,12 +313,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     currentDate?: Date | number | string;
     /**
      * @docid
-     * @type Enums.SchedulerViewType
      * @default "day"
      * @fires dxSchedulerOptions.onOptionChanged
      * @public
      */
-    currentView?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+    currentView?: SchedulerViewType;
     /**
      * @docid
      * @type_function_param1 info:object
@@ -418,11 +426,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     endDayHour?: number;
     /**
      * @docid
-     * @type Enums.FirstDayOfWeek
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    firstDayOfWeek?: FirstDayOfWeek;
     /**
      * @docid
      * @default true &for(desktop)
@@ -455,11 +462,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     max?: Date | number | string;
     /**
      * @docid
-     * @type number|Enums.MaxAppointmentsPerCell
      * @default "auto"
      * @public
      */
-    maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+    maxAppointmentsPerCell?: number | MaxAppointmentsPerCell;
     /**
      * @docid
      * @default undefined
@@ -609,11 +615,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
     /**
      * @docid
-     * @type Enums.SchedulerRecurrenceEditMode
      * @default "dialog"
      * @public
      */
-    recurrenceEditMode?: 'dialog' | 'occurrence' | 'series';
+    recurrenceEditMode?: SchedulerRecurrenceEditMode;
     /**
      * @docid
      * @default 'recurrenceException'
@@ -825,10 +830,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       endDayHour?: number;
       /**
        * @docid
-       * @type Enums.FirstDayOfWeek
        * @default undefined
        */
-      firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+      firstDayOfWeek?: FirstDayOfWeek;
       /**
        * @docid
        * @default false
@@ -836,9 +840,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       groupByDate?: boolean;
       /**
        * @docid
-       * @type Enums.Orientation
        */
-      groupOrientation?: 'horizontal' | 'vertical';
+      groupOrientation?: Orientation;
       /**
        * @docid
        * @default []
@@ -851,10 +854,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       intervalCount?: number;
       /**
        * @docid
-       * @type number|Enums.MaxAppointmentsPerCell
        * @default "auto"
        */
-      maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+      maxAppointmentsPerCell?: number | MaxAppointmentsPerCell;
       /**
        * @docid
        * @default undefined
@@ -884,10 +886,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
-       * @type Enums.SchedulerViewType
        * @default undefined
        */
-      type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+      type?: SchedulerViewType;
       /**
        * @docid
        */
@@ -1073,9 +1074,8 @@ export type Options = dxSchedulerOptions;
 export interface dxSchedulerScrolling {
   /**
    * @docid
-   * @type Enums.SchedulerScrollingMode
    * @default "standard"
    * @public
    */
-  mode?: 'standard' | 'virtual';
+  mode?: SchedulerScrollingMode;
 }

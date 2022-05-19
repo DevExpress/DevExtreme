@@ -14,6 +14,10 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
+import {
+    NavSelectionMode,
+} from '../types/enums';
+
 export type ItemLike = string | Item | any;
 
 /** @public */
@@ -109,11 +113,10 @@ export interface dxTabsBaseOptions<
     scrollingEnabled?: boolean;
     /**
      * @docid dxTabsOptions.selectionMode
-     * @type Enums.NavSelectionMode
      * @default 'single'
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: NavSelectionMode;
     /**
      * @docid dxTabsOptions.showNavButtons
      * @default true

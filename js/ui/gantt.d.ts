@@ -38,6 +38,17 @@ import {
 } from '../core/utils/deferred';
 import { Skip } from '../core/index';
 
+import {
+    ToolbarItemLocation,
+    FirstDayOfWeek,
+    GanttTaskTitlePosition,
+    GanttToolbarItem,
+    GanttContextMenuItem,
+    GanttScaleType,
+    GanttSortingMode,
+    GanttRenderScaleType,
+} from '../types/enums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxGantt>;
 
@@ -212,7 +223,7 @@ export type TaskUpdatingEvent = Cancelable & EventInfo<dxGantt> & {
 /** @public */
 export type ScaleCellPreparedEvent = InitializedEventInfo<dxGantt> & {
     readonly scaleIndex: number;
-    readonly scaleType: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years' | 'fiveYears';
+    readonly scaleType: GanttRenderScaleType;
     readonly scaleElement: DxElement;
     readonly separatorElement: DxElement;
     readonly startDate: Date;
@@ -692,11 +703,10 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     };
     /**
      * @docid
-     * @type Enums.GanttScaleType
      * @default "auto"
      * @public
      */
-    scaleType?: 'auto' | 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+    scaleType?: GanttScaleType;
     /**
      * @docid
      * @public
@@ -704,16 +714,14 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     scaleTypeRange?: {
         /**
          * @docid
-         * @type Enums.GanttScaleType
          * @default "minutes"
          */
-        min?: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        min?: GanttScaleType;
         /**
          * @docid
-         * @type Enums.GanttScaleType
          * @default "years"
          */
-        max?: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        max?: GanttScaleType;
     };
     /**
      * @docid
@@ -747,18 +755,16 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     taskListWidth?: number;
     /**
      * @docid
-     * @type Enums.GanttTaskTitlePosition
      * @default "inside"
      * @public
      */
-    taskTitlePosition?: 'inside' | 'outside' | 'none';
+    taskTitlePosition?: GanttTaskTitlePosition;
     /**
      * @docid
-     * @type Enums.FirstDayOfWeek
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    firstDayOfWeek?: FirstDayOfWeek;
     /**
      * @docid
      * @default null
@@ -1133,7 +1139,7 @@ export interface dxGanttToolbar {
      * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
      * @public
      */
-    items?: Array<ToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies'>;
+    items?: Array<ToolbarItem | GanttToolbarItem>;
 }
 
 /**
@@ -1153,7 +1159,7 @@ export interface dxGanttContextMenu {
      * @type Array<dxGanttContextMenuItem,Enums.GanttContextMenuItem>
      * @public
      */
-    items?: Array<ContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager'>;
+    items?: Array<ContextMenuItem | GanttContextMenuItem | 'resourceManager'>;
 }
 
 /**
@@ -1169,17 +1175,15 @@ export type ToolbarItem = dxGanttToolbarItem;
 export interface dxGanttToolbarItem extends dxToolbarItem {
     /**
      * @docid
-     * @type Enums.GanttToolbarItem|string
      * @public
      */
-    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'toggleResources' | 'toggleDependencies' | string;
+    name?: GanttToolbarItem | string;
     /**
      * @docid
      * @default "before"
-     * @type Enums.ToolbarItemLocation
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
 }
 
 /**
@@ -1198,7 +1202,7 @@ export interface dxGanttContextMenuItem extends dxContextMenuItem {
      * @type Enums.GanttContextMenuItem|string
      * @public
      */
-    name?: 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager' | string;
+    name?: GanttContextMenuItem | 'resourceManager' | string;
 }
 
 /**
@@ -1256,10 +1260,9 @@ export interface dxGanttSorting {
     descendingText?: string;
     /**
      * @docid
-     * @type Enums.GanttSortingMode|string
      * @default "single"
      */
-    mode?: 'multiple' | 'none' | 'single';
+    mode?: GanttSortingMode | string;
     /**
      * @docid
      * @default false

@@ -28,7 +28,6 @@ interface Stack {
     };
     /**
      * @docid
-     * @type Enums.StackDirection
      */
     direction?: 'down-push' | 'up-push' | 'left-push' | 'right-push' | 'down-stack' | 'up-stack' | 'left-stack' | 'right-stack';
 }

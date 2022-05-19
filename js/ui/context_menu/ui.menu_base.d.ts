@@ -12,6 +12,11 @@ import {
     dxMenuBaseItem,
 } from '../menu';
 
+import {
+  ShowSubmenuMode,
+  MenuSelectionMode,
+} from '../../types/enums';
+
 /** @namespace DevExpress.ui */
 export interface dxMenuBaseOptions<
   TComponent extends dxMenuBase<any, TItem, TKey>,
@@ -69,14 +74,12 @@ export interface dxMenuBaseOptions<
     selectByClick?: boolean;
     /**
      * @docid
-     * @type Enums.MenuSelectionMode
      * @default none
      * @public
      */
-    selectionMode?: 'none' | 'single';
+    selectionMode?: MenuSelectionMode;
     /**
      * @docid
-     * @type Object|Enums.ShowSubmenuMode
      * @default { name: "onHover", delay: { show: 50, hide: 300 } }
      * @public
      */
@@ -99,11 +102,10 @@ export interface dxMenuBaseOptions<
       } | number;
       /**
        * @docid
-       * @type Enums.ShowSubmenuMode
        * @default "onHover"
        */
-      name?: 'onClick' | 'onHover';
-    } | 'onClick' | 'onHover';
+      name?: ShowSubmenuMode;
+    } | ShowSubmenuMode;
 }
 /**
  * @docid

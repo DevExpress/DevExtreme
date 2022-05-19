@@ -32,6 +32,13 @@ import {
     ResizeInfo,
 } from './resizable';
 
+import {
+    Toolbar,
+    ToolbarItemWidget,
+    ToolbarItemLocation,
+    PositionAlignment,
+} from '../types/enums';
+
 export interface TitleRenderedInfo {
     readonly titleElement: DxElement;
 }
@@ -168,10 +175,9 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     onTitleRendered?: ((e: EventInfo<TComponent> & TitleRenderedInfo) => void);
     /**
      * @docid
-     * @type Enums.PositionAlignment|PositionConfig|function
      * @public
      */
-    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
+    position?: PositionAlignment | PositionConfig | Function;
     /**
      * @docid
      * @default false
@@ -264,11 +270,10 @@ export interface dxPopupToolbarItem {
     html?: string;
     /**
      * @docid dxPopupOptions.toolbarItems.location
-     * @type Enums.ToolbarItemLocation
      * @default 'center'
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
     /**
      * @docid dxPopupOptions.toolbarItems.options
      * @public
@@ -286,11 +291,10 @@ export interface dxPopupToolbarItem {
     text?: string;
     /**
      * @docid dxPopupOptions.toolbarItems.toolbar
-     * @type Enums.Toolbar
      * @default 'top'
      * @public
      */
-    toolbar?: 'bottom' | 'top';
+    toolbar?: Toolbar;
     /**
      * @docid dxPopupOptions.toolbarItems.visible
      * @default true
@@ -299,10 +303,9 @@ export interface dxPopupToolbarItem {
     visible?: boolean;
     /**
      * @docid dxPopupOptions.toolbarItems.widget
-     * @type Enums.ToolbarItemWidget
      * @public
      */
-    widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
+    widget?: ToolbarItemWidget;
 }
 /**
  * @docid

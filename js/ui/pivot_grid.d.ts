@@ -22,6 +22,17 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+  PivotGridFieldChooserLayout,
+  Mode,
+  StateStoringType,
+  PivotGridScrollingMode,
+  PivotGridDataFieldArea,
+  PivotGridTotalsDisplayMode,
+  PivotGridRowHeadersLayout,
+  ApplyChangesMode,
+} from '../types/enums';
+
 /** @public */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid, MouseEvent | PointerEvent> & {
     readonly area?: string;
@@ -117,11 +128,10 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     allowSortingBySummary?: boolean;
     /**
      * @docid
-     * @type Enums.PivotGridDataFieldArea
      * @default "column"
      * @public
      */
-    dataFieldArea?: 'column' | 'row';
+    dataFieldArea?: PivotGridDataFieldArea;
     /**
      * @docid
      * @default null
@@ -175,10 +185,9 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       allowSearch?: boolean;
       /**
        * @docid
-       * @type Enums.ApplyChangesMode
        * @default "instantly"
        */
-      applyChangesMode?: 'instantly' | 'onDemand';
+      applyChangesMode?: ApplyChangesMode;
       /**
        * @docid
        * @default true
@@ -191,10 +200,9 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       height?: number;
       /**
        * @docid
-       * @type Enums.PivotGridFieldChooserLayout
        * @default 0
        */
-      layout?: 0 | 1 | 2;
+      layout?: PivotGridFieldChooserLayout;
       /**
        * @docid
        * @default 500
@@ -479,11 +487,10 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     onFileSaving?: ((e: FileSavingEvent) => void);
     /**
      * @docid
-     * @type Enums.PivotGridRowHeadersLayout
      * @default "standard"
      * @public
      */
-    rowHeaderLayout?: 'standard' | 'tree';
+    rowHeaderLayout?: PivotGridRowHeadersLayout;
     /**
      * @docid
      * @public
@@ -491,16 +498,14 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     scrolling?: {
       /**
        * @docid
-       * @type Enums.PivotGridScrollingMode
        * @default "standard"
        */
-      mode?: 'standard' | 'virtual';
+      mode?: PivotGridScrollingMode;
       /**
        * @docid
-       * @type boolean|Enums.Mode
        * @default "auto"
        */
-      useNative?: boolean | 'auto';
+      useNative?: boolean | Mode;
     };
     /**
      * @docid
@@ -534,11 +539,10 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     showRowTotals?: boolean;
     /**
      * @docid
-     * @type Enums.PivotGridTotalsDisplayMode
      * @default "none"
      * @public
      */
-    showTotalsPrior?: 'both' | 'columns' | 'none' | 'rows';
+    showTotalsPrior?: PivotGridTotalsDisplayMode;
     /**
      * @docid
      * @public
@@ -572,10 +576,9 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       storageKey?: string;
       /**
        * @docid
-       * @type Enums.StateStoringType
        * @default "localStorage"
        */
-      type?: 'custom' | 'localStorage' | 'sessionStorage';
+      type?: StateStoringType;
     };
     /**
      * @docid

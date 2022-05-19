@@ -13,6 +13,11 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+  PivotGridFieldChooserLayout,
+  ApplyChangesMode,
+} from '../types/enums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxPivotGridFieldChooser>;
 
@@ -46,11 +51,10 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     allowSearch?: boolean;
     /**
      * @docid
-     * @type Enums.ApplyChangesMode
      * @default "instantly"
      * @public
      */
-    applyChangesMode?: 'instantly' | 'onDemand';
+    applyChangesMode?: ApplyChangesMode;
     /**
      * @docid
      * @default null
@@ -117,11 +121,10 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     height?: number | string | (() => number | string);
     /**
      * @docid
-     * @type Enums.PivotGridFieldChooserLayout
      * @default 0
      * @public
      */
-    layout?: 0 | 1 | 2;
+    layout?: PivotGridFieldChooserLayout;
     /**
      * @docid
      * @type_function_param1 e:object

@@ -6,10 +6,6 @@ import {
 } from '../core/element';
 
 import {
-    PaletteType,
-} from './palette';
-
-import {
     template,
 } from '../core/templates/template';
 
@@ -43,6 +39,17 @@ import BaseWidget, {
 import {
     VectorMapProjectionConfig,
 } from './vector_map/projection';
+
+import {
+    VizPalette,
+    HorizontalAlignment,
+    VerticalEdge,
+    SelectionMode,
+    VectorMapLayerType,
+    VectorMapMarkerType,
+    VectorMapMarkerShape,
+    VectorMapProjection,
+} from '../types/enums';
 
 export interface TooltipInfo {
     target?: MapLayerElement | dxVectorMapAnnotationConfig;
@@ -285,10 +292,9 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       enabled?: boolean;
       /**
        * @docid
-       * @type Enums.HorizontalAlignment
        * @default 'left'
        */
-      horizontalAlignment?: 'center' | 'left' | 'right';
+      horizontalAlignment?: HorizontalAlignment;
       /**
        * @docid
        * @default 20
@@ -301,10 +307,9 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       opacity?: number;
       /**
        * @docid
-       * @type Enums.VerticalEdge
        * @default 'top'
        */
-      verticalAlignment?: 'bottom' | 'top';
+      verticalAlignment?: VerticalEdge;
     };
     /**
      * @docid
@@ -356,10 +361,9 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       dataSource?: object | DataSourceLike<any>;
       /**
        * @docid
-       * @type Enums.VectorMapMarkerType
        * @notUsedInTheme
        */
-      elementType?: 'bubble' | 'dot' | 'image' | 'pie';
+      elementType?: VectorMapMarkerType;
       /**
        * @docid
        * @default true
@@ -422,9 +426,8 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       /**
        * @docid
        * @default "Material"
-       * @type Array<string>|Enums.VizPalette
        */
-      palette?: Array<string> | PaletteType;
+      palette?: Array<string> | VizPalette;
       /**
        * @docid
        * @default 0
@@ -451,10 +454,9 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       selectedColor?: string;
       /**
        * @docid
-       * @type Enums.SelectionMode
        * @default 'single'
        */
-      selectionMode?: 'multiple' | 'none' | 'single';
+      selectionMode?: SelectionMode;
       /**
        * @docid
        * @default 8
@@ -472,11 +474,10 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       sizeGroups?: Array<number>;
       /**
        * @docid
-       * @type Enums.VectorMapLayerType
        * @notUsedInTheme
        */
-      type?: 'area' | 'line' | 'marker';
-    }> | { borderColor?: string; borderWidth?: number; color?: string; colorGroupingField?: string; colorGroups?: Array<number>; customize?: ((elements: Array<MapLayerElement>) => any); dataField?: string; dataSource?: object | DataSourceLike<any>; elementType?: 'bubble' | 'dot' | 'image' | 'pie'; hoverEnabled?: boolean; hoveredBorderColor?: string; hoveredBorderWidth?: number; hoveredColor?: string; label?: { dataField?: string; enabled?: boolean; font?: Font }; maxSize?: number; minSize?: number; name?: string; opacity?: number; palette?: Array<string> | PaletteType; paletteSize?: number; selectedBorderColor?: string; selectedBorderWidth?: number; selectedColor?: string; selectionMode?: 'multiple' | 'none' | 'single'; size?: number; sizeGroupingField?: string; sizeGroups?: Array<number>; type?: 'area' | 'line' | 'marker' };
+      type?: VectorMapLayerType;
+    }> | { borderColor?: string; borderWidth?: number; color?: string; colorGroupingField?: string; colorGroups?: Array<number>; customize?: ((elements: Array<MapLayerElement>) => any); dataField?: string; dataSource?: object | DataSourceLike<any>; elementType?: 'bubble' | 'dot' | 'image' | 'pie'; hoverEnabled?: boolean; hoveredBorderColor?: string; hoveredBorderWidth?: number; hoveredColor?: string; label?: { dataField?: string; enabled?: boolean; font?: Font }; maxSize?: number; minSize?: number; name?: string; opacity?: number; palette?: Array<string> | VizPalette; paletteSize?: number; selectedBorderColor?: string; selectedBorderWidth?: number; selectedColor?: string; selectionMode?: 'multiple' | 'none' | 'single'; size?: number; sizeGroupingField?: string; sizeGroups?: Array<number>; type?: 'area' | 'line' | 'marker' };
     /**
      * @docid
      * @type Array<Object>
@@ -574,7 +575,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @notUsedInTheme
      * @public
      */
-    projection?: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | VectorMapProjectionConfig | string | any;
+    projection?: VectorMapProjection | VectorMapProjectionConfig | string | any;
     /**
      * @docid
      * @type object
@@ -713,11 +714,10 @@ export interface dxVectorMapLegends extends BaseLegend {
     markerColor?: string;
     /**
      * @docid dxVectorMapOptions.legends.markerShape
-     * @type Enums.VectorMapMarkerShape
      * @default "square"
      * @public
      */
-    markerShape?: 'circle' | 'square';
+    markerShape?: VectorMapMarkerShape;
     /**
      * @docid dxVectorMapOptions.legends.markerSize
      * @default 12

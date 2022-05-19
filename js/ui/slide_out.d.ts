@@ -26,6 +26,10 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
+import {
+    SlideOutMenuPosition,
+} from '../types/enums';
+
 type ItemLike = string | Item | any;
 
 /** @public */
@@ -122,11 +126,10 @@ export interface dxSlideOutOptions<
     menuItemTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @type Enums.SlideOutMenuPosition
      * @default "normal"
      * @public
      */
-    menuPosition?: 'inverted' | 'normal';
+    menuPosition?: SlideOutMenuPosition;
     /**
      * @docid
      * @default false

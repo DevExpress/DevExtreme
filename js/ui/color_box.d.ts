@@ -27,6 +27,10 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
+import {
+    EditorApplyValueMode,
+} from '../types/enums';
+
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxColorBox, Event>;
 
@@ -94,11 +98,10 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     applyButtonText?: string;
     /**
      * @docid
-     * @type Enums.EditorApplyValueMode
      * @default "useButtons"
      * @public
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: EditorApplyValueMode;
     /**
      * @docid
      * @default "Cancel"

@@ -23,6 +23,12 @@ import {
     Format,
 } from '../localization';
 
+import {
+    FilterBuilderFieldFilterOperations,
+    FilterBuilderGroupOperations,
+    FilterBuilderFieldDataType,
+} from '../types/enums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
 
@@ -211,11 +217,10 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     };
     /**
      * @docid
-     * @type Array<Enums.FilterBuilderGroupOperations>
      * @default ['and', 'or', 'notAnd', 'notOr']
      * @public
      */
-    groupOperations?: Array<'and' | 'or' | 'notAnd' | 'notOr'>;
+    groupOperations?: Array<FilterBuilderGroupOperations>;
     /**
      * @docid
      * @default undefined
@@ -310,11 +315,10 @@ export interface dxFilterBuilderCustomOperation {
     customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: Field }) => string);
     /**
      * @docid
-     * @type Array<Enums.FilterBuilderFieldDataType>
      * @default undefined
      * @public
      */
-    dataTypes?: Array<'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime'>;
+    dataTypes?: Array<FilterBuilderFieldDataType>;
     /**
      * @docid
      * @type_function_param1 conditionInfo:object
@@ -380,11 +384,10 @@ export interface dxFilterBuilderField {
     dataField?: string;
     /**
      * @docid
-     * @type Enums.FilterBuilderFieldDataType
      * @default "string"
      * @public
      */
-    dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
+    dataType?: FilterBuilderFieldDataType;
     /**
      * @docid
      * @public
@@ -406,11 +409,10 @@ export interface dxFilterBuilderField {
     falseText?: string;
     /**
      * @docid
-     * @type Array<Enums.FilterBuilderFieldFilterOperations, string>
      * @default undefined
      * @public
      */
-    filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | string>;
+    filterOperations?: Array<FilterBuilderFieldFilterOperations | string>;
     /**
      * @docid
      * @default ""

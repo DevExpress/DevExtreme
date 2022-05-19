@@ -33,6 +33,11 @@ import dxSelectBox, {
     CustomItemCreatingInfo,
 } from './select_box';
 
+import {
+    EditorApplyValueMode,
+    SelectAllMode,
+} from '../types/enums';
+
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxTagBox, Event>;
 
@@ -109,11 +114,10 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>> {
     /**
      * @docid
-     * @type Enums.EditorApplyValueMode
      * @default "instantly"
      * @public
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: EditorApplyValueMode;
     /**
      * @docid
      * @default false
@@ -164,11 +168,10 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
-     * @type Enums.SelectAllMode
      * @default 'page'
      * @public
      */
-    selectAllMode?: 'allPages' | 'page';
+    selectAllMode?: SelectAllMode;
     /**
      * @docid
      * @readonly
