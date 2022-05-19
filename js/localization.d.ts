@@ -81,7 +81,7 @@ export interface FormatObject {
      */
    currency?: string;
    /**
-     * @docid
+     * @docid Format.useCurrencyAccountingStyle
      * @type boolean
      * @default true
      * @public

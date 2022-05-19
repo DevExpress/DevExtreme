@@ -41,6 +41,13 @@ export interface globalConfig {
     defaultCurrency?: string;
     /**
      * @docid
+     * @type boolean
+     * @default true
+     * @public
+     */
+    defaultUseCurrencyAccountingStyle?: boolean;
+    /**
+     * @docid
      * @type Enums.EditorStylingMode
      * @default undefined
      * @public

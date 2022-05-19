@@ -982,7 +982,7 @@ declare module DevExpress {
      */
     currency?: string;
     /**
-     * [descr:FormatObject.useCurrencyAccountingStyle]
+     * [descr:Format.useCurrencyAccountingStyle]
      */
     useCurrencyAccountingStyle?: boolean;
     /**
@@ -1038,6 +1038,10 @@ declare module DevExpress {
      * [descr:globalConfig.defaultCurrency]
      */
     defaultCurrency?: string;
+    /**
+     * [descr:globalConfig.defaultUseCurrencyAccountingStyle]
+     */
+    defaultUseCurrencyAccountingStyle?: boolean;
     /**
      * [descr:globalConfig.editorStylingMode]
      */
