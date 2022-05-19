@@ -248,12 +248,12 @@ test('Change dataFiels order with three invisible fields', async (t) => {
     height: 800,
   },
   onInitialized(e) {
-    function expand(dataSource) {
+    const expand = (dataSource): void => {
       setTimeout(() => {
         dataSource.expandHeaderItem('row', ['North America']);
         dataSource.expandHeaderItem('column', [2013]);
       }, 0);
-    }
+    };
 
     expand(e.component.getDataSource());
   },
