@@ -384,7 +384,7 @@ export default gridCore.Controller.inherit((function() {
                 useInsertIndex: true
             });
 
-            if(this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount) {
+            if(!this._cachedStoreData && (this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount)) {
                 this._totalCountCorrection += getItemCount() - oldItemCount;
             }
 
