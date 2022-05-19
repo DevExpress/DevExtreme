@@ -17,31 +17,31 @@ import CollectionWidget, {
 export type ItemLike = string | Item | any;
 
 /** @public */
-export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<TabsInstance<TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike = Item, TKey = any> = InitializedEventInfo<TabsInstance<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & SelectionChangedInfo<TItem>;
+export type SelectionChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
@@ -49,7 +49,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
  * @public
  */
 export interface dxTabsOptions<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > extends Properties<TItem, TKey> {}
 
@@ -131,7 +131,7 @@ export interface dxTabsBaseOptions<
  */
 export default class dxTabs<
     TProperties extends dxTabsOptions<TItem, TKey> = dxTabsOptions<any, any>,
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > extends CollectionWidget<TProperties, TItem, TKey> { }
 
@@ -179,12 +179,12 @@ interface TabsInstance<TItem, TKey> extends dxTabs<Properties<TItem, TKey>, TIte
 
 /** @public */
 export type Properties<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > = dxTabsBaseOptions<TabsInstance<TItem, TKey>, TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > = Properties<TItem, TKey>;

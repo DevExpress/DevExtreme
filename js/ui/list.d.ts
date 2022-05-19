@@ -51,71 +51,71 @@ export interface ScrollInfo {
 }
 
 /** @public */
-export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /** @public */
-export type GroupRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & {
+export type GroupRenderedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxList<TItem, TKey>> & {
     readonly groupData?: any;
     readonly groupElement?: DxElement;
     readonly groupIndex?: number;
 };
 
 /** @public */
-export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxList<TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike = Item, TKey = any> = InitializedEventInfo<dxList<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ListItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ListItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem>;
 
 /** @public */
-export type ItemDeletedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
+export type ItemDeletedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
 
 /** @public */
-export type ItemDeletingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
+export type ItemDeletingEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
     cancel?: boolean | PromiseLike<boolean> | PromiseLike<void>;
 };
 
 /** @public */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends Item | any = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends Item | any = Item, TKey = any> = EventInfo<dxList<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemReorderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
+export type ItemReorderedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
     readonly fromIndex: number;
     readonly toIndex: number;
 };
 
 /** @public */
-export type ItemSwipeEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem> & {
+export type ItemSwipeEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem> & {
     readonly direction: string;
 };
 
 /** @public */
-export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxList<TItem, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type PageLoadingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
+export type PageLoadingEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /** @public */
-export type PullRefreshEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
+export type PullRefreshEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /** @public */
-export type ScrollEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, Event> & ScrollInfo;
+export type ScrollEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, Event> & ScrollInfo;
 
 /** @public */
-export type SelectAllValueChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & {
+export type SelectAllValueChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxList<TItem, TKey>> & {
     readonly value: boolean;
 };
 
 /** @public */
-export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & SelectionChangedInfo<TItem>;
+export type SelectionChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxList<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
@@ -123,7 +123,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
  * @public
  */
 export interface dxListOptions<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > extends CollectionWidgetOptions<dxList<TItem, TKey>, TItem, TKey>, SearchBoxMixinOptions {
     /**
@@ -493,7 +493,7 @@ export interface dxListOptions<
  * @public
  */
 export default class dxList<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > extends CollectionWidget<dxListOptions<TItem, TKey>, TItem, TKey> {
     /**
@@ -716,12 +716,12 @@ export type ExplicitTypes<
 
 /** @public */
 export type Properties<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > = dxListOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > = Properties<TItem, TKey>;

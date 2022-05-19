@@ -29,37 +29,37 @@ import CollectionWidget, {
 type ItemLike = string | Item | any;
 
 /** @public */
-export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxSlideOut<TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike = Item, TKey = any> = InitializedEventInfo<dxSlideOut<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxSlideOut<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxSlideOut<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxSlideOut<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxSlideOut<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxSlideOut<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxSlideOut<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type MenuGroupRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>>;
+export type MenuGroupRenderedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>>;
 
 /** @public */
-export type MenuItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>>;
+export type MenuItemRenderedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>>;
 
 /** @public */
-export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>> & SelectionChangedInfo<TItem>;
+export type SelectionChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
@@ -67,7 +67,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
  * @public
  */
 export interface dxSlideOutOptions<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > extends CollectionWidgetOptions<dxSlideOut<TItem, TKey>, TItem, TKey> {
     /**
@@ -172,7 +172,7 @@ export interface dxSlideOutOptions<
  * @public
  */
 export default class dxSlideOut<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > extends CollectionWidget<dxSlideOutOptions<TItem, TKey>, TItem, TKey> {
     /**
@@ -239,12 +239,12 @@ export type ExplicitTypes<
 
 /** @public */
 export type Properties<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > = dxSlideOutOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > = Properties<TItem, TKey>;

@@ -29,34 +29,34 @@ import CollectionWidget, {
 type ItemLike = string | Item | any;
 
 /** @public */
-export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxAccordion<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxAccordion<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxAccordion<TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike = Item, TKey = any> = InitializedEventInfo<dxAccordion<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemTitleClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
+export type ItemTitleClickEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & SelectionChangedInfo<TItem>;
+export type SelectionChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
@@ -64,7 +64,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
  * @public
  */
 export interface dxAccordionOptions<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > extends CollectionWidgetOptions<dxAccordion<TItem, TKey>, TItem, TKey> {
     /**
@@ -172,7 +172,7 @@ export interface dxAccordionOptions<
  * @public
  */
 export default class dxAccordion<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > extends CollectionWidget<dxAccordionOptions<TItem, TKey>, TItem, TKey> {
     /**
@@ -243,12 +243,12 @@ export type ExplicitTypes<
 
 /** @public */
 export type Properties<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > = dxAccordionOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > = Properties<TItem, TKey>;

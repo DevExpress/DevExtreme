@@ -16,28 +16,28 @@ import CollectionWidget, {
 type ItemLike = string | Item | any;
 
 /** @public */
-export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxResponsiveBox<TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike = Item, TKey = any> = InitializedEventInfo<dxResponsiveBox<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @deprecated use Properties instead
@@ -45,7 +45,7 @@ export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = Event
  * @public
  */
 export interface dxResponsiveBoxOptions<
-  TItem extends ItemLike = any,
+  TItem extends ItemLike = Item,
   TKey = any,
   > extends CollectionWidgetOptions<dxResponsiveBox<TItem, TKey>, TItem, TKey> {
     /**
@@ -212,12 +212,12 @@ export type ExplicitTypes<
 
 /** @public */
 export type Properties<
-  TItem extends ItemLike = any,
+  TItem extends ItemLike = Item,
   TKey = any,
 > = dxResponsiveBoxOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<
-  TItem extends ItemLike = any,
+  TItem extends ItemLike = Item,
   TKey = any,
 > = Properties<TItem, TKey>;

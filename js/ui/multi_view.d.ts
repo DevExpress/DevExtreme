@@ -17,31 +17,31 @@ import CollectionWidget, {
 export type ItemLike = string | Item | any;
 
 /** @public */
-export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<MultiViewInstance<TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike = Item, TKey = any> = InitializedEventInfo<MultiViewInstance<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = Item, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>> & SelectionChangedInfo<TItem>;
+export type SelectionChangedEvent<TItem extends ItemLike = Item, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
@@ -49,7 +49,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
  * @public
  */
 export interface dxMultiViewOptions<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > extends Properties<TItem, TKey> {}
 
@@ -122,7 +122,7 @@ export interface dxMultiViewBaseOptions<
  */
 export default class dxMultiView<
     TProperties extends dxMultiViewOptions<TItem, TKey> = dxMultiViewOptions<any, any>,
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > extends CollectionWidget<TProperties, TItem, TKey> { }
 
@@ -159,12 +159,12 @@ interface MultiViewInstance<TItem, TKey> extends dxMultiView<Properties<TItem, T
 
 /** @public */
 export type Properties<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > = dxMultiViewBaseOptions<MultiViewInstance<TItem, TKey>, TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = Item,
     TKey = any,
 > = Properties<TItem, TKey>;

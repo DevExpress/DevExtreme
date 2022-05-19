@@ -24,31 +24,31 @@ import CollectionWidget, {
 type ItemLike<TKey> = string | Item<TKey> | any;
 
 /** @public */
-export type CancelClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Cancelable & EventInfo<dxActionSheet<TItem, TKey>>;
+export type CancelClickEvent<TItem extends ItemLike<TKey> = Item<any>, TKey = any> = Cancelable & EventInfo<dxActionSheet<TItem, TKey>>;
 
 /** @public */
-export type ContentReadyEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike<TKey> = Item<any>, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike<TKey> = Item<any>, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = InitializedEventInfo<dxActionSheet<TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike<TKey> = Item<any>, TKey = any> = InitializedEventInfo<dxActionSheet<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike<TKey> = Item<any>, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = Item<any>, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike<TKey> = Item<any>, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends ItemLike<TKey> = Item<any>, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike<TKey> = Item<any>, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @deprecated use Properties instead
@@ -56,7 +56,7 @@ export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> =
  * @public
  */
 export interface dxActionSheetOptions<
-    TItem extends ItemLike<TKey> = any,
+    TItem extends ItemLike<TKey> = Item<any>,
     TKey = any,
 > extends CollectionWidgetOptions<dxActionSheet<TItem, TKey>, TItem, TKey> {
     /**
@@ -134,7 +134,7 @@ export interface dxActionSheetOptions<
  * @public
  */
 export default class dxActionSheet<
-    TItem extends ItemLike<TKey> = any,
+    TItem extends ItemLike<TKey> = Item<any>,
     TKey = any,
 > extends CollectionWidget<dxActionSheetOptions<TItem, TKey>, TItem, TKey> {
     /**
@@ -221,12 +221,12 @@ export type ExplicitTypes<
 
 /** @public */
 export type Properties<
-    TItem extends ItemLike<TKey> = any,
+    TItem extends ItemLike<TKey> = Item<any>,
     TKey = any,
 > = dxActionSheetOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<
-    TItem extends ItemLike<TKey> = any,
+    TItem extends ItemLike<TKey> = Item<any>,
     TKey = any,
 > = Properties<TItem, TKey>;
