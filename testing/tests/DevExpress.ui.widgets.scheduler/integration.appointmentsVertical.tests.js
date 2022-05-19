@@ -787,10 +787,10 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const cellHeight = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
         const cellWidth = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().width;
 
-        assert.equal($appointments.eq(0).position().top, 0, 'correct top position');
-        assert.equal($appointments.eq(0).position().left, 200 + cellWidth * 5, 'correct left position');
-        assert.equal($appointments.eq(1).position().top, cellHeight * 30, 'correct top position');
-        assert.equal($appointments.eq(1).position().left, 200 + cellWidth * 5, 'correct left position');
+        assert.roughEqual($appointments.eq(0).position().top, 0, 1.5, 'correct top position');
+        assert.roughEqual($appointments.eq(0).position().left, 200 + cellWidth * 5, 1.1, 'correct left position');
+        assert.roughEqual($appointments.eq(1).position().top, cellHeight * 30, 1.1, 'correct top position');
+        assert.roughEqual($appointments.eq(1).position().left, 200 + cellWidth * 5, 1.1, 'correct left position');
     });
 
     QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Week, showAllDayPanel = true', function(assert) {
