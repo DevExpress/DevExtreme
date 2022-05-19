@@ -1352,16 +1352,6 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         const optionChangedSpy = sinon.spy();
         const objectProvider = new ObjectFileSystemProvider({ data: createTestFileSystem() });
         const customProvider = new CustomFileSystemProvider({
-            getItems1: function(parentDirectory) {
-                return new Promise((resolve, reject) => {
-                    if(parentDirectory.key === 'Folder 2') {
-                        const error = new FileSystemError(42, parentDirectory, 'Custom text');
-                        reject(error);
-                    } else {
-                        objectProvider.getItems(parentDirectory).then(result => resolve(result));
-                    }
-                });
-            },
             getItems: function(parentDirectory) {
                 const deferred = new Deferred();
                 if(parentDirectory.key === 'Folder 2') {
