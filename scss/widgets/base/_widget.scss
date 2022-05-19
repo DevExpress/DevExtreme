@@ -18,7 +18,8 @@
   -webkit-touch-callout: none;
   padding: 0;
   outline: 0;
-  color-adjust: exact;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
 
   &,
   &::before,
