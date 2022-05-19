@@ -466,3 +466,39 @@ openedStateModeConfigs.forEach((config) => {
       .ok(compareResults.errorMessages());
   });
 });
+
+['right', 'left'].forEach((position) => {
+  ['slide', 'expand'].forEach((revealMode) => {
+    ['overlap', 'shrink', 'push'].forEach((openedStateMode) => {
+      [true, false].forEach((opened) => {
+        const config = {
+          position, revealMode, openedStateMode, opened,
+        };
+
+        test(`TreeView_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+          const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          await ClientFunction(({ createDrawer, config }) => {
+            config.createInnerContent = ($container) => {
+              $('<div>').text('some text').appendTo($container);
+            };
+            createDrawer(config);
+          })({ createDrawer, config });
+
+          if (!opened) {
+            await ClientFunction(() => {
+              ($('#drawer1') as any).dxDrawer('instance').option('opened', true);
+            })();
+          }
+
+          await t
+            .expect(await takeScreenshot(`drawer (T1088518)_${position}_${revealMode}_${openedStateMode}_${opened}.png`, '#container'))
+            .ok()
+            .expect(compareResults.isValid())
+            .ok(compareResults.errorMessages());
+        });
+      });
+    });
+  });
+});

@@ -1,5 +1,5 @@
 export function createDrawer({
-  openedStateMode, shading, createOuterContent, createDrawerContent, createInnerContent,
+  openedStateMode, shading, position, createOuterContent, createDrawerContent, createInnerContent,
 }: { [key: string]: any }): void {
   function createDrawerInt($container: any): void {
     if (createOuterContent) {
@@ -22,6 +22,7 @@ export function createDrawer({
     ($drawer.appendTo($container) as any).dxDrawer({
       openedStateMode,
       shading,
+      position: position !== undefined ? position : 'left',
       opened: true,
       height: 400,
       template: () => {
