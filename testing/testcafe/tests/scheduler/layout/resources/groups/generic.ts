@@ -3,6 +3,7 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 import Scheduler from '../../../../../model/scheduler';
+import { restoreBrowserSize } from '../../../../../helpers/restoreBrowserSize';
 
 fixture`Scheduler: Generic theme layout`
   .page(url(__dirname, '../../../../container.html'));
@@ -35,7 +36,10 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
         .expect(scheduler.getAppointmentCount())
         .gt(0)
         .expect(await compareScreenshot(t, `generic-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(async () => createScheduler(view, groupOrientation));
+    }).before(async (t) => {
+      await restoreBrowserSize(t);
+      createScheduler(view, groupOrientation);
+    });
   });
 });
 
@@ -48,6 +52,9 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
         .expect(scheduler.getAppointmentCount())
         .gt(0)
         .expect(await compareScreenshot(t, `generic-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(async () => createScheduler(view, groupOrientation));
+    }).before(async (t) => {
+      await restoreBrowserSize(t);
+      createScheduler(view, groupOrientation);
+    });
   });
 });

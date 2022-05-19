@@ -15,8 +15,8 @@ test('it should correctly drag external item to the appointment after drag appoi
 
   await t
     .dragToElement(appt01.element, cell01)
-    .expect((await appt01.element.boundingClientRect).top)
-    .eql(208)
+    .expect(appt01.element.getBoundingClientRectProperty('top'))
+    .within(108, 109)
     .dragToElement(dragItem, appt02.element)
     .expect(appt02.element.innerText)
     .eql('Added');
