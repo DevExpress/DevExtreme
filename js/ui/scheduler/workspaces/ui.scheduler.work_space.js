@@ -3542,19 +3542,24 @@ class SchedulerWorkSpace extends WidgetObserver {
     _createDragBehaviorBase($element, options) {
         const container = this.$element().find(`.${FIXED_CONTAINER_CLASS}`);
 
-        const element = this.$element();
+        const disableDefaultDragging = () => {
+            if(!this.isDefaultDraggingMode) {
+                this.preventDefaultDragging = true;
+            }
+        };
 
-        const attachGeneralEvents = () => this._attachDragEvents(element);
-        const detachGeneralEvents = () => this._detachDragEvents(element);
-
-        const isDefaultDraggingMode = this.option('draggingMode') === 'default';
+        const enableDefaultDragging = () => {
+            if(!this.isDefaultDraggingMode) {
+                this.preventDefaultDragging = false;
+            }
+        };
 
         this.dragBehavior.addTo($element, createDragBehaviorConfig(
             container,
-            isDefaultDraggingMode,
+            this.isDefaultDraggingMode,
             this.dragBehavior,
-            attachGeneralEvents,
-            detachGeneralEvents,
+            enableDefaultDragging,
+            disableDefaultDragging,
             () => this._getDroppableCell(),
             () => this._getDateTables(),
             () => this.removeDroppableCellClass(),
@@ -3652,8 +3657,8 @@ const createDragBehaviorConfig = (
     container,
     isDefaultDraggingMode,
     dragBehavior,
-    attachGeneralEvents,
-    detachGeneralEvents,
+    enableDefaultDragging,
+    disableDefaultDragging,
     getDroppableCell,
     getDateTables,
     removeDroppableCellClass,
@@ -3681,7 +3686,7 @@ const createDragBehaviorConfig = (
 
     const onDragStart = e => {
         if(!isDefaultDraggingMode) {
-            detachGeneralEvents();
+            disableDefaultDragging();
         }
 
         const canceled = e.cancel;
@@ -3760,7 +3765,7 @@ const createDragBehaviorConfig = (
 
     const onDragEnd = e => {
         if(!isDefaultDraggingMode) {
-            attachGeneralEvents();
+            enableDefaultDragging();
         }
 
         if(state.itemData && !state.itemData.disabled) {
