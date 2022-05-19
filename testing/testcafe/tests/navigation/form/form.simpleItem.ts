@@ -70,7 +70,8 @@ fixture`Form`
 
 [() => 'xs', () => 'md', () => 'lg'].forEach((screenByWidth) => {
   ['generic.light', 'material.blue.light'].forEach((theme) => {
-    const testName = `item padding (T1088451)_${screenByWidth.toString().split('=>')[1]}_${theme}`;
+    const getFunctionBody = (func) => func.toString().split('=>')[1];
+    const testName = `item padding (T1088451)_${getFunctionBody(screenByWidth)}_${theme}`;
     test(testName, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await changeTheme(theme);
