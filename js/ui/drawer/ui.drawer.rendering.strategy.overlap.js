@@ -43,13 +43,21 @@ class OverlapStrategy extends DrawerStrategy {
 
     _fixOverlayPosition($overlayContent) {
         // NOTE: overlay should be positioned in extended wrapper
-        const position = ensureDefined(this._initialPosition, { left: 0, top: 0 });
+        const panelPosition = this.getDrawerInstance().calcTargetPosition();
+        const defaultPosition = {
+            left: panelPosition === 'right'
+                ? this._drawer.$element().width()
+                : 0,
+            top: 0
+        };
+
+        const position = ensureDefined(this._initialPosition, defaultPosition);
         move($overlayContent, position);
 
-        if(this.getDrawerInstance().calcTargetPosition() === 'right') {
+        if(panelPosition === 'right') {
             $overlayContent.css('left', 'auto');
         }
-        if(this.getDrawerInstance().calcTargetPosition() === 'bottom') {
+        if(panelPosition === 'bottom') {
             $overlayContent.css('top', 'auto');
             $overlayContent.css('bottom', '0px');
         }
