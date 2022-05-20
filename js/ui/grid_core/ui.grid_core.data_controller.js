@@ -151,7 +151,7 @@ export const dataControllerModule = {
                             }
                         }
 
-                        const isParasiteChange = Array.isArray(args.value) && !isValueChanged && this._dataSource?.isLoading();
+                        const isParasiteChange = Array.isArray(args.value) && !isValueChanged && this.getController('editing')?.isSaving();
                         if(!isParasiteChange) {
                             this.refresh(this.option('repaintChangesOnly'));
                         }
