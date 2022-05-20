@@ -263,18 +263,22 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                 that._adjustSortableOnChangedArgs(e);
 
                 if(field) {
-                    let targetIndex = e.targetIndex;
+                    const targetIndex = e.targetIndex;
 
-                    const areaInvisibleFields = dataSource.getAreaFields(field.area, true).filter(f => f.visible === false);
-                    areaInvisibleFields.forEach(field => {
-                        if(field.areaIndex <= e.targetIndex) {
-                            targetIndex++;
-                        }
-                    });
+                    const fields = dataSource.getAreaFields(field.area, true);
+
+                    const visibleFields = fields.filter(f => f.visible !== false);
+                    const fieldBeforeTarget = visibleFields[targetIndex - 1];
+
+                    let invisibleFieldsIndexOffset = 0;
+
+                    if(fieldBeforeTarget) {
+                        invisibleFieldsIndexOffset = fields.filter(f => f.visible === false && f.areaIndex <= fieldBeforeTarget.areaIndex).length;
+                    }
 
                     that._applyChanges([getMainGroupField(dataSource, field)], {
                         area: e.targetGroup,
-                        areaIndex: targetIndex
+                        areaIndex: targetIndex + invisibleFieldsIndexOffset
                     });
                 }
             }
