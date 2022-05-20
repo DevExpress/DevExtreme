@@ -384,7 +384,7 @@ export default gridCore.Controller.inherit((function() {
                 useInsertIndex: true
             });
 
-            if(!this._cachedStoreData && (this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount)) {
+            if(this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount) {
                 this._totalCountCorrection += getItemCount() - oldItemCount;
             }
 
@@ -722,7 +722,7 @@ export default gridCore.Controller.inherit((function() {
             return this._dataSource.totalCount();
         },
         totalCount: function() {
-            return parseInt((this._currentTotalCount || this._dataSourceTotalCount()) + this._totalCountCorrection);
+            return parseInt(this._currentTotalCount || this._dataSourceTotalCount());
         },
         totalCountCorrection: function() {
             return this._totalCountCorrection;
