@@ -7191,6 +7191,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 4);
+        assert.ok($(dataGrid.element()).find('.dx-data-row:eq(3)').hasClass('dx-row-focused'));
     });
 
     ['first', 'last', 'viewportTop', 'viewportBottom'].forEach(newRowPosition => {
