@@ -13,4 +13,4 @@ Displays the current page number and total record count. To display page informa
 
 The pager supports full, compact, and adaptive (default) display modes. In compact mode, the pager changes the appearance of the page navigator and page selector to use screen space more efficiently. In adaptive mode, the pager automatically chooses between the full and compact modes based on the DataGrid's width. Use the [displayMode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/pager/#displayMode) property to switch between modes.
 
-In this demo, you can use the drop-down Display Mode menu to switch between full and compact display modes. You can also use the checkboxes to hide or display different pager elements. Note that when the pager is in compact mode, navigation buttons are always visible but page information is hidden.
+In this demo, you can use the drop-down Display Mode menu to switch between full and compact display modes. You can also use the checkboxes to hide or display different pager elements. Note that when the pager is in compact mode, navigation buttons are always visible.

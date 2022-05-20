@@ -41,7 +41,6 @@
           <DxCheckBox
             id="showInfo"
             text="Show Info Text"
-            :disabled="isCompactMode"
             v-model:value="showInfo"
           />
         </div>

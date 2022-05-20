@@ -87,8 +87,7 @@ class App extends React.Component {
                 id='showInfo'
                 text='Show Info Text'
                 value={this.state.showInfo}
-                onValueChange={this.showInfoChange}
-                disabled={this.isCompactMode()} />
+                onValueChange={this.showInfoChange} />
             </div>
             <div className='option'>
               <CheckBox

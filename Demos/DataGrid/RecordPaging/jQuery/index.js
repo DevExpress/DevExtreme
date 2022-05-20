@@ -28,7 +28,6 @@ $(() => {
     value: 'full',
     onValueChanged(data) {
       dataGrid.option('pager.displayMode', data.value);
-      pageInfo.option('disabled', data.value === 'compact');
       navButtons.option('disabled', data.value === 'compact');
     },
   });
@@ -39,7 +38,7 @@ $(() => {
       dataGrid.option('pager.showPageSizeSelector', data.value);
     },
   });
-  const pageInfo = $('#showInfo').dxCheckBox({
+  $('#showInfo').dxCheckBox({
     text: 'Show Info Text',
     value: true,
     onValueChanged(data) {
