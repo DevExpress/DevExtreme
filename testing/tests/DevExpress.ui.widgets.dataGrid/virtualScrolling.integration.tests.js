@@ -5588,6 +5588,41 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.strictEqual(translator.getTranslate($fixedTable).y, 0, 'no offset');
     });
 
+    // T1089429
+    QUnit.test('TotalCount should be correct after adding row if virtual scrolling is enabled and refreshMode is reshape', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }],
+            keyExpr: 'id',
+            columns: ['id'],
+            scrolling: {
+                mode: 'virtual',
+            },
+            height: 500,
+            editing: {
+                confirmDelete: false,
+                refreshMode: 'reshape',
+                allowDeleting: true,
+            }
+        });
+
+        this.clock.tick(300);
+
+        // assert
+
+        assert.equal(dataGrid.getVisibleRows().length, 3, 'visible rows count');
+        assert.equal(dataGrid.totalCount(), 3, 'dataGrid totalCount');
+        assert.equal(dataGrid.getDataSource().totalCount(), 3, 'dataSource totalCount');
+
+        // act
+        dataGrid.deleteRow(1);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 2, 'visible rows count');
+        assert.equal(dataGrid.totalCount(), 2, 'dataGrid totalCount');
+        assert.equal(dataGrid.getDataSource().totalCount(), 2, 'dataSource totalCount');
+    });
+
     ['Row', 'Batch'].forEach(mode => {
         QUnit.test(`${mode} - Inserted rows should be at the top of the viewport when repaint mode is enabled (T1082889)`, function(assert) {
             // arrange
