@@ -7,7 +7,7 @@ import { supplementalCldr } from '../cldr-data/supplemental';
 
 if(Globalize && Globalize.load) {
     if(!Globalize.locale()) {
-        Globalize.load( enCldr, supplementalCldr);
+        Globalize.load(enCldr, supplementalCldr);
         Globalize.locale('en');
     }
 
