@@ -1,5 +1,5 @@
 const LocalStore = require('data/local_store');
-const DataSource = require("data/data_source");
+const DataSource = require('data/data_source');
 
 const TEST_NAME = '65DFE188-D178-11E1-A097-51216288709B';
 
@@ -46,18 +46,18 @@ QUnit.test('immediate flush', function(assert) {
 });
 
 QUnit.test('reload() of DataSource from LocalStore and totalCount() of LocalStore must reread window.localStorage', async function(assert) {
-    const storeName = "dx-data-localStore-myTest";
+    const storeName = 'dx-data-localStore-myTest';
     localStorage.removeItem(storeName);
 
     const storeData = [{ id: 0, nom: new Date().toISOString() }];
-    let store = new LocalStore({
-        key: "id",
-        name: "myTest",
+    const store = new LocalStore({
+        key: 'id',
+        name: 'myTest',
         immediate: true,
         data: storeData
     });
 
-    let dataSource = new DataSource({
+    const dataSource = new DataSource({
         store: store
     });
 
@@ -69,13 +69,13 @@ QUnit.test('reload() of DataSource from LocalStore and totalCount() of LocalStor
     localStorage.setItem(
         storeName,
         JSON.stringify([
-            { id: 1, nom: "1" },
-            { id: 2, nom: "2" }
+            { id: 1, nom: '1' },
+            { id: 2, nom: '2' }
         ])
     );
 
     // check local storage
-    let dataFromLocalStorage = JSON.parse(localStorage.getItem(storeName));
+    const dataFromLocalStorage = JSON.parse(localStorage.getItem(storeName));
 
     await dataSource.reload();
 

@@ -6,7 +6,7 @@ import Class from '../core/class';
 const abstract = Class.abstract;
 import { errors } from './errors';
 import ArrayStore from './array_store';
-import Query from "./query";
+import Query from './query';
 
 const LocalStoreBackend = Class.inherit({
 
