@@ -1,4 +1,5 @@
 const LocalStore = require('data/local_store');
+const DataSource = require("data/data_source");
 
 const TEST_NAME = '65DFE188-D178-11E1-A097-51216288709B';
 
@@ -42,4 +43,44 @@ QUnit.test('immediate flush', function(assert) {
     });
     store3.clear();
     assert.deepEqual(store3._array, []);
+});
+
+QUnit.test('reload() of DataSource from LocalStore and totalCount() of LocalStore must reread window.localStorage', async function(assert) {
+    const storeName = "dx-data-localStore-myTest";
+    localStorage.removeItem(storeName);
+
+    const storeData = [{ id: 0, nom: new Date().toISOString() }];
+    let store = new LocalStore({
+        key: "id",
+        name: "myTest",
+        immediate: true,
+        data: storeData
+    });
+
+    let dataSource = new DataSource({
+        store: store
+    });
+
+    await dataSource.load();
+
+    assert.deepEqual(storeData, dataSource.items());
+
+    // Force data in storage
+    localStorage.setItem(
+        storeName,
+        JSON.stringify([
+            { id: 1, nom: "1" },
+            { id: 2, nom: "2" }
+        ])
+    );
+
+    // check local storage
+    let dataFromLocalStorage = JSON.parse(localStorage.getItem(storeName));
+
+    await dataSource.reload();
+
+    const updatedDataAfterReload = await dataSource.items();
+
+    assert.deepEqual(dataFromLocalStorage, updatedDataAfterReload);
+    assert.equal(dataFromLocalStorage.length, await dataSource.store().totalCount({}));
 });
