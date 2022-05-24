@@ -43,6 +43,7 @@ export const viewFunction = ({
         isRecurrent,
       },
     },
+    isFocused,
     index,
     showReducedIconTooltip,
     hideReducedIconTooltip,
@@ -53,9 +54,15 @@ export const viewFunction = ({
     onClick={onItemClick}
     rootElementRef={ref}
     style={styles}
+    focusStateEnabled={isFocused}
     classes={classes}
     hint={text}
-    {...{ role: 'button' }}
+    {
+      ...{
+        role: 'button',
+        'data-index': index,
+      }
+    }
   >
     <AppointmentContent
       text={text}
@@ -83,6 +90,8 @@ export class AppointmentProps {
 
   @OneWay() groups!: string[];
 
+  @OneWay() isFocused = false;
+
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
   @Event() onItemClick!: (e: AppointmentClickData) => void;
@@ -96,7 +105,8 @@ export class AppointmentProps {
 })
 export class Appointment extends JSXComponent<
 AppointmentProps,
-'viewModel' | 'onItemClick' | 'onItemDoubleClick' | 'showReducedIconTooltip' | 'hideReducedIconTooltip' | 'groups'
+'viewModel' | 'onItemClick' | 'onItemDoubleClick' |
+'showReducedIconTooltip' | 'hideReducedIconTooltip' | 'groups'
 >() {
   @Consumer(AppointmentsContext)
   appointmentsContextValue!: IAppointmentContext;

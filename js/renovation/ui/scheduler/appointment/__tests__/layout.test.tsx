@@ -1,6 +1,15 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import { AppointmentLayout, AppointmentLayoutProps, viewFunction } from '../layout';
 
+const disposePointerDownMock = jest.fn();
+const subscribeToDXPointerDownEventMock = jest.fn(() => disposePointerDownMock);
+jest.mock('../../../../utils/subscribe_to_event', () => ({
+  ...jest.requireActual('../../../../utils/subscribe_to_event'),
+  subscribeToDXPointerDownEvent: jest.fn(
+    (element, callback) => (subscribeToDXPointerDownEventMock as any)(element, callback),
+  ),
+}));
+
 describe('AppointmentLayout', () => {
   describe('Render', () => {
     const render = (viewModel): ShallowWrapper => shallow(viewFunction({
@@ -75,6 +84,7 @@ describe('AppointmentLayout', () => {
           hideReducedIconTooltip: 'some value 2',
           appointmentTemplate,
         },
+        isFocusedAppointment: () => false,
       });
 
       expect(layout.children().length)
@@ -130,7 +140,7 @@ describe('AppointmentLayout', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      describe('classes', () => {
+      describe('CSS classes', () => {
         it('should return correct classes by default', () => {
           const layout = new AppointmentLayout(new AppointmentLayoutProps());
 
@@ -210,6 +220,48 @@ describe('AppointmentLayout', () => {
 
           expect(layout.overflowIndicators)
             .toBe(appointments);
+        });
+      });
+    });
+
+    describe('Methods', () => {
+      describe('pointerEventsEffect', () => {
+        it('should return correct value', () => {
+          const layout = new AppointmentLayout(new AppointmentLayoutProps());
+          layout.layoutRef = { current: 'some_element' } as any;
+
+          expect(subscribeToDXPointerDownEventMock)
+            .toBeCalledTimes(0);
+          expect(disposePointerDownMock)
+            .toBeCalledTimes(0);
+
+          const disposePointerDownCaller = layout.pointerEventsEffect() as any;
+          expect(subscribeToDXPointerDownEventMock)
+            .toBeCalledTimes(1);
+          expect(subscribeToDXPointerDownEventMock)
+            .toBeCalledWith(
+              'some_element',
+              expect.any(Function),
+            );
+
+          disposePointerDownCaller();
+
+          expect(disposePointerDownMock)
+            .toBeCalledTimes(1);
+        });
+      });
+
+      describe('isFocusedAppointment', () => {
+        it('should return correct focus state', () => {
+          const layout = new AppointmentLayout(new AppointmentLayoutProps());
+
+          expect(layout.isFocusedAppointment(100))
+            .toBe(false);
+
+          layout.focusedItemIndex = 100;
+
+          expect(layout.isFocusedAppointment(100))
+            .toBe(true);
         });
       });
     });
