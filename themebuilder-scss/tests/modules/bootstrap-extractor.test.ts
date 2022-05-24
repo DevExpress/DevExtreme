@@ -27,7 +27,7 @@ describe('BootstrapExtractor', () => {
 
   test('sassRender (error)', async () => expect(BootstrapExtractor.sassRender('0'))
     .rejects
-    .toMatch(/^expected "{"\./));
+    .toMatch(/^Error: expected "{"\./));
 
   test('lessRender', async () => {
     const less = '@var: red; div { color: @var;}';

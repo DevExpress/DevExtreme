@@ -1,5 +1,4 @@
 import path from 'path';
-import * as sass from 'sass';
 import { metadata } from '../data/metadata';
 import noModificationsResult from '../data/compilation-results/no-changes-css';
 import noModificationsMeta from '../data/compilation-results/no-changes-meta';
@@ -10,7 +9,7 @@ const dataPath = path.join(path.resolve(), 'tests', 'data');
 
 jest.mock('../../src/modules/bundle-resolver', () => ({
   __esModule: true,
-  default: (theme: string): sass.SyncOptions => ({
+  default: (theme: string): BundleResolver<'async'> => ({
     file: path.join(
       dataPath,
       'scss',
@@ -19,7 +18,9 @@ jest.mock('../../src/modules/bundle-resolver', () => ({
         ? 'dx.material.blue.light.scss'
         : 'dx.light.scss',
     ),
-    includePaths: [path.join(dataPath, 'scss', 'widgets', 'generic')],
+    options: {
+      loadPaths: [path.join(dataPath, 'scss', 'widgets', 'generic')],
+    },
   }),
 }));
 
@@ -29,6 +30,7 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
 }));
 
 jest.mock('../../src/modules/post-compiler', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
   ...jest.requireActual('../../src/modules/post-compiler') as Record<string, unknown>,
   addInfoHeader: (css: string): string => css,
 }));
@@ -111,8 +113,8 @@ describe('Compile manager - integration test on test sass', () => {
 
       expect(result.compiledMetadata).toEqual({
         '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
-        '$base-accent': 'red',
-        '$accordion-title-color': 'red',
+        '$base-accent': '#ff0000',
+        '$accordion-title-color': '#ff0000',
         '$accordion-item-title-opened-bg': 'transparent',
       });
     });
@@ -137,8 +139,8 @@ describe('Compile manager - integration test on test sass', () => {
 
       expect(result.compiledMetadata).toEqual({
         '$base-font-family': 'sans-serif',
-        '$base-accent': 'red',
-        '$accordion-title-color': 'red',
+        '$base-accent': '#ff0000',
+        '$accordion-title-color': '#ff0000',
         '$accordion-item-title-opened-bg': 'transparent',
       });
     });
@@ -167,7 +169,7 @@ describe('Compile manager - integration test on test sass', () => {
     return expect(manager.compile({
       makeSwatch: true,
       outColorScheme: 'error for sass compiler :)',
-    })).rejects.toBeInstanceOf(Error);
+    })).rejects.toThrowError(Error);
   });
 
   test('compile test bundle with removeExternalResources option', async () => {

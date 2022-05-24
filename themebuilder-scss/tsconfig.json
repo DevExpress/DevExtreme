@@ -12,7 +12,7 @@
         "baseUrl": ".",
         "paths": {
             "sass": [
-                "node_modules/@types/node-sass"
+                "node_modules/sass-embedded"
             ],
             "*": [
                 "node_modules/*",
@@ -21,6 +21,7 @@
         }
     },
     "include": [
+        "src/metadata/*",
         "src/modules/*",
         "src/data/**/*",
         "src/types/*",

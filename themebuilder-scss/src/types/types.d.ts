@@ -53,8 +53,13 @@ interface ConfigSettings {
 }
 
 interface CompilerResult {
-  result: import('node-sass').Result;
+  result: import('sass-embedded').CompileResult;
   changedVariables: { [key: string]: string };
+}
+
+interface BundleResolver<T = 'async' | 'sync'> {
+  options: import('sass-embedded').Options<T>;
+  file: string;
 }
 
 interface PackageResult {
@@ -111,23 +116,6 @@ interface AstComment {
 
 interface SyntaxTree {
   comments?: AstComment[];
-}
-
-interface DartCompilerConfig {
-  data: string;
-  file: string;
-  index: string;
-  items: ConfigMetaItem[];
-}
-
-interface DartCompilerKeepAliveConfig {
-  keepAlive: boolean;
-}
-
-interface DartCompilerResult {
-  changedVariables?: { [key: string]: string };
-  css?: string;
-  error?: string;
 }
 
 interface SocketEventListener {

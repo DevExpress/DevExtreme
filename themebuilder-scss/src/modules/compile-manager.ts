@@ -1,3 +1,4 @@
+import * as sass from 'sass-embedded';
 import Compiler from './compiler';
 import WidgetsHandler from './widgets-handler';
 import { createSassForSwatch } from './pre-compiler';
@@ -30,16 +31,21 @@ export default class CompileManager {
         modifiedVariables = await bootstrapExtractor.extract();
       }
 
-      const compileData = await this.compiler.compile(modifiedVariables, bundleOptions);
+      const compileData = await this.compiler.compile(
+        bundleOptions.file,
+        modifiedVariables,
+        bundleOptions.options,
+      );
       let css = compileData.result.css.toString();
       let swatchSelector: string = null;
 
       if (config.makeSwatch) {
         const swatchSass = createSassForSwatch(config.outColorScheme, css);
-        const swatchResult = await this.compiler.compile([], {
-          data: swatchSass.sass,
-          ...bundleOptions,
-        });
+        const swatchResult = await this.compiler.compileString(
+          swatchSass.sass,
+          [],
+          bundleOptions.options,
+        );
 
         css = fixSwatchCss(
           swatchResult.result.css,
@@ -63,7 +69,7 @@ export default class CompileManager {
         css = removeExternalResources(css);
       }
 
-      css = addInfoHeader(css, version, compileData.result.stats === null);
+      css = addInfoHeader(css, version);
 
       return {
         compiledMetadata: compileData.changedVariables,
@@ -74,7 +80,10 @@ export default class CompileManager {
         version,
       };
     } catch (e) {
-      throw new Error(`Compilation failed. bundle: ${bundleOptions.file}, file: ${e.file} line: ${e.line} ${e.message}`);
+      const { span, message } = e as sass.Exception;
+      const { url, start } = span;
+      const { line, column } = start;
+      throw new Error(`Compilation failed.\nbundle: ${bundleOptions.file},\nfile: ${url}:${line}:${column},\n${message}`);
     }
   }
 }

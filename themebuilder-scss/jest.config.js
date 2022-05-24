@@ -3,8 +3,7 @@ module.exports = {
         'ts-jest': {
             // eslint-disable-next-line spellcheck/spell-checker
             tsconfig: 'tests/tsconfig.json',
-        },
-        'DART_TEST': false,
+        }
     },
     moduleFileExtensions: [
         'ts',

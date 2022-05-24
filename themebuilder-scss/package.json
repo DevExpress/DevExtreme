@@ -19,15 +19,13 @@
     "clean-css": "^5.1.0",
     "less": "^3.13.1",
     "postcss": "^8.2.6",
-    "sass": "1.43.5",
+    "sass-embedded": "^1.51.0",
     "semver": "^5.7.1"
   },
   "scripts": {
     "test": "jest --coverage --verbose --runInBand",
-    "test-dart": "npm run dart && jest --verbose --runInBand --config=jest-dart.config.js",
     "copy-resources": "ts-node --files=true src/tools/copy-resources.ts",
     "generate-metadata": "ts-node --files=true src/metadata/generate.ts",
-    "dart": "ts-node --files=true tests/run-dart.ts",
     "build-ts": "tsc",
     "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources"
   },
@@ -38,10 +36,10 @@
     "@types/fs-extra": "9.0.7",
     "@types/jest": "^26.0.20",
     "@types/less": "^3.0.2",
-    "@types/node-sass": "^4.11.1",
     "express": "^4.17.1",
     "filing-cabinet": "^2.6.0",
     "fs-extra": "^9.0.0",
+    "immutable": "^4.0.0",
     "jest": "^26.6.1",
     "precinct": "^8.3.1",
     "sinon": "^9.2.4",
