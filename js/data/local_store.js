@@ -114,7 +114,7 @@ const LocalStore = ArrayStore.inherit({
         });
     },
 
-    load: function(options){
+    load: function(options) {
         this._backend.load();
         return this.callBase(options);
     },
