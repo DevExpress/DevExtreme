@@ -22,6 +22,26 @@ function App() {
   });
   const [direction, setDirection] = React.useState('up-push');
 
+  const topNumberBoxValueChanged = React.useCallback(
+    (top) => setCoordinatePosition({ ...coordinatePosition, top }),
+    [coordinatePosition],
+  );
+
+  const bottomNumberBoxValueChanged = React.useCallback(
+    (bottom) => setCoordinatePosition({ ...coordinatePosition, bottom }),
+    [coordinatePosition],
+  );
+
+  const leftNumberBoxValueChanged = React.useCallback(
+    (left) => setCoordinatePosition({ ...coordinatePosition, left }),
+    [coordinatePosition],
+  );
+
+  const rightNumberBoxValueChanged = React.useCallback(
+    (right) => setCoordinatePosition({ ...coordinatePosition, right }),
+    [coordinatePosition],
+  );
+
   return <React.Fragment>
     <div className='options'>
       <div>Position</div>
@@ -73,13 +93,13 @@ function App() {
         value={direction}
         onSelectionChanged={({ selectedItem }) => setDirection(selectedItem)} />
       <div className='section'>
-        <Button text='Show' width='48%' onClick={() => showNotify()} />
+        <Button text='Show' width='48%' onClick={() => show()} />
         <Button text='Hide all' width='48%' onClick={() => HideToasts()} />
       </div>
     </div>
   </React.Fragment>;
 
-  function showNotify() {
+  function show() {
     const position = isPredefined ? predefinedPosition : coordinatePosition;
 
     Notify({
@@ -100,19 +120,6 @@ function App() {
       direction,
     });
     setId(id + 1);
-  }
-
-  function topNumberBoxValueChanged(top) {
-    setCoordinatePosition({ ...coordinatePosition, top });
-  }
-  function bottomNumberBoxValueChanged(bottom) {
-    setCoordinatePosition({ ...coordinatePosition, bottom });
-  }
-  function leftNumberBoxValueChanged(left) {
-    setCoordinatePosition({ ...coordinatePosition, left });
-  }
-  function rightNumberBoxValueChanged(right) {
-    setCoordinatePosition({ ...coordinatePosition, right });
   }
 }
 

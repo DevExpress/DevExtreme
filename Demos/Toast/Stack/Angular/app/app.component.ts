@@ -50,7 +50,7 @@ export class AppComponent {
 
   direction = 'up-push';
 
-  showNotify() {
+  show() {
     const position: any = this.isPredefined ? this.predefinedPosition : this.coordinatePosition;
     const direction: any = this.direction;
 

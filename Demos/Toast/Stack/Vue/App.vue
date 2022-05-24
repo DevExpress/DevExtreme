@@ -58,7 +58,7 @@
         <DxButton
           text="Show"
           width="48%"
-          @click="showNotify()"
+          @click="show()"
         />
         <DxButton
           text="Hide all"
@@ -109,7 +109,7 @@ export default {
     };
   },
   methods: {
-    showNotify() {
+    show() {
       const position = this.isPredefined ? this.predefinedPosition : this.coordinatePosition;
       const direction = this.direction;
 
