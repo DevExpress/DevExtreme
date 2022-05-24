@@ -163,6 +163,8 @@ const Drawer = Widget.inherit({
         this._refreshRevealModeClass();
         this._renderShader();
 
+        this._refreshPositionClass();
+
         this._whenPanelContentRendered = new Deferred();
         this._strategy.renderPanelContent(this._whenPanelContentRendered);
         this._strategy.onPanelContentRendered();
@@ -172,7 +174,6 @@ const Drawer = Widget.inherit({
         eventsEngine.off(this._$viewContentWrapper, CLICK_EVENT_NAME);
         eventsEngine.on(this._$viewContentWrapper, CLICK_EVENT_NAME, this._viewContentWrapperClickHandler.bind(this));
 
-        this._refreshPositionClass();
         this._refreshWrapperChildrenOrder();
     },
 
