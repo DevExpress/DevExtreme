@@ -49,7 +49,7 @@ QUnit.test('reload() of DataSource from LocalStore and totalCount() of LocalStor
     const storeName = 'dx-data-localStore-myTest';
     localStorage.removeItem(storeName);
 
-    const storeData = [{ id: 0, nom: new Date().toISOString() }];
+    const storeData = [{ id: 0, name: new Date().toISOString() }];
     const store = new LocalStore({
         key: 'id',
         name: 'myTest',
@@ -69,8 +69,8 @@ QUnit.test('reload() of DataSource from LocalStore and totalCount() of LocalStor
     localStorage.setItem(
         storeName,
         JSON.stringify([
-            { id: 1, nom: '1' },
-            { id: 2, nom: '2' }
+            { id: 1, name: '1' },
+            { id: 2, name: '2' }
         ])
     );
 
