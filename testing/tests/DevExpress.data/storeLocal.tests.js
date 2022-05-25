@@ -1,6 +1,13 @@
 const LocalStore = require('data/local_store');
 
 const TEST_NAME = '65DFE188-D178-11E1-A097-51216288709B';
+const DX_LOCALSTORAGE_ITEM_NAME = 'dx-data-localStore-' + TEST_NAME;
+
+QUnit.module('LocalStorage', {
+    afterEach: function() {
+        localStorage.removeItem(DX_LOCALSTORAGE_ITEM_NAME);
+    }
+});
 
 QUnit.test('name option is required', function(assert) {
     assert.throws(function() {
@@ -45,13 +52,13 @@ QUnit.test('immediate flush', function(assert) {
 });
 
 QUnit.test('load() must read window.localStorage', async function(assert) {
-    const storeName = 'dx-data-localStore-myTest';
+    const storeName = DX_LOCALSTORAGE_ITEM_NAME;
     localStorage.removeItem(storeName);
 
     const storeData = [{ id: 0, name: new Date().toISOString() }];
     const store = new LocalStore({
         key: 'id',
-        name: 'myTest',
+        name: TEST_NAME,
         immediate: true,
         data: storeData
     });
@@ -74,13 +81,13 @@ QUnit.test('load() must read window.localStorage', async function(assert) {
 });
 
 QUnit.test('totalCount() must read window.localStorage', async function(assert) {
-    const storeName = 'dx-data-localStore-myTest';
+    const storeName = DX_LOCALSTORAGE_ITEM_NAME;
     localStorage.removeItem(storeName);
 
     const storeData = [{ id: 0, name: new Date().toISOString() }];
     const store = new LocalStore({
         key: 'id',
-        name: 'myTest',
+        name: TEST_NAME,
         immediate: true,
         data: storeData
     });
