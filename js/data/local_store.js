@@ -114,11 +114,6 @@ const LocalStore = ArrayStore.inherit({
         });
     },
 
-    load: function(options) {
-        this._backend.load();
-        return this.callBase(options);
-    },
-
     _insertImpl: function(values) {
         const b = this._backend;
         return this.callBase(values).done(b.notifyChanged.bind(b));

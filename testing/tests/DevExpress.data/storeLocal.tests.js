@@ -1,5 +1,4 @@
 const LocalStore = require('data/local_store');
-const DataSource = require('data/data_source');
 
 const TEST_NAME = '65DFE188-D178-11E1-A097-51216288709B';
 
@@ -45,7 +44,7 @@ QUnit.test('immediate flush', function(assert) {
     assert.deepEqual(store3._array, []);
 });
 
-QUnit.test('reload() of DataSource from LocalStore and totalCount() of LocalStore must reread window.localStorage', async function(assert) {
+QUnit.test('load() must read window.localStorage', async function(assert) {
     const storeName = 'dx-data-localStore-myTest';
     localStorage.removeItem(storeName);
 
@@ -57,15 +56,6 @@ QUnit.test('reload() of DataSource from LocalStore and totalCount() of LocalStor
         data: storeData
     });
 
-    const dataSource = new DataSource({
-        store: store
-    });
-
-    await dataSource.load();
-
-    assert.deepEqual(storeData, dataSource.items());
-
-    // Force data in storage
     localStorage.setItem(
         storeName,
         JSON.stringify([
@@ -74,13 +64,36 @@ QUnit.test('reload() of DataSource from LocalStore and totalCount() of LocalStor
         ])
     );
 
-    // check local storage
     const dataFromLocalStorage = JSON.parse(localStorage.getItem(storeName));
 
-    await dataSource.reload();
+    store.load();
 
-    const updatedDataAfterReload = await dataSource.items();
+    const loadedData = store.createQuery().toArray();
 
-    assert.deepEqual(dataFromLocalStorage, updatedDataAfterReload);
-    assert.equal(dataFromLocalStorage.length, await dataSource.store().totalCount({}));
+    assert.deepEqual(dataFromLocalStorage, loadedData);
+});
+
+QUnit.test('totalCount() must read window.localStorage', async function(assert) {
+    const storeName = 'dx-data-localStore-myTest';
+    localStorage.removeItem(storeName);
+
+    const storeData = [{ id: 0, name: new Date().toISOString() }];
+    const store = new LocalStore({
+        key: 'id',
+        name: 'myTest',
+        immediate: true,
+        data: storeData
+    });
+
+    localStorage.setItem(
+        storeName,
+        JSON.stringify([
+            { id: 1, name: '1' },
+            { id: 2, name: '2' }
+        ])
+    );
+
+    const dataFromLocalStorage = JSON.parse(localStorage.getItem(storeName));
+
+    assert.equal(dataFromLocalStorage.length, await store.totalCount({}));
 });
