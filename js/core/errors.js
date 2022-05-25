@@ -155,7 +155,7 @@ export default errorUtils({
     /**
     * @name ErrorsCore.E0121
     */
-    E0121: 'The \'customItem\' field of the \'onCustomItemCreating\' function\'s parameter should contain a custom item or Promise that is resolved after the item is created.',
+    E0121: 'The \'customItem\' parameter of the \'onCustomItemCreating\' function is empty or contains invalid data. Assign a custom object or a Promise that is resolved after the item is created.',
 
 
     /**
