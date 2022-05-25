@@ -250,20 +250,6 @@ describe('AppointmentLayout', () => {
             .toBeCalledTimes(1);
         });
       });
-
-      describe('isFocusedAppointment', () => {
-        it('should return correct focus state', () => {
-          const layout = new AppointmentLayout(new AppointmentLayoutProps());
-
-          expect(layout.isFocusedAppointment(100))
-            .toBe(false);
-
-          layout.focusedItemIndex = 100;
-
-          expect(layout.isFocusedAppointment(100))
-            .toBe(true);
-        });
-      });
     });
   });
 });

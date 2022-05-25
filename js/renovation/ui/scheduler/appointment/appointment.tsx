@@ -43,7 +43,6 @@ export const viewFunction = ({
         isRecurrent,
       },
     },
-    isFocused,
     index,
     showReducedIconTooltip,
     hideReducedIconTooltip,
@@ -51,10 +50,10 @@ export const viewFunction = ({
   },
 }: Appointment): JSX.Element => (
   <Widget
+    focusStateEnabled
     onClick={onItemClick}
     rootElementRef={ref}
     style={styles}
-    focusStateEnabled={isFocused}
     classes={classes}
     hint={text}
     {
@@ -89,8 +88,6 @@ export class AppointmentProps {
   @OneWay() hideReducedIconTooltip!: () => void;
 
   @OneWay() groups!: string[];
-
-  @OneWay() isFocused = false;
 
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
@@ -137,14 +134,18 @@ AppointmentProps,
 
   get classes(): string {
     const {
-      direction,
-      isRecurrent,
-      allDay,
-      appointmentReduced,
-    } = this.props.viewModel.info;
+      focused,
+      info: {
+        direction,
+        isRecurrent,
+        allDay,
+        appointmentReduced,
+      },
+    } = this.props.viewModel;
     const isVerticalDirection = direction === 'vertical';
 
     return combineClasses({
+      'dx-state-focused': focused,
       'dx-scheduler-appointment': true,
       'dx-scheduler-appointment-horizontal': !isVerticalDirection,
       'dx-scheduler-appointment-vertical': isVerticalDirection,

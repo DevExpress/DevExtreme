@@ -2,6 +2,7 @@ import type { AppointmentCollectorTemplateData, AppointmentTemplateData } from '
 import { BaseTemplateProps, Direction } from '../types';
 
 export type ReduceType = 'head' | 'body' | 'tail';
+export type AppointmentKindType = 'allDay' | 'allDayCompact' | 'regular' | 'regularCompact';
 
 export interface AppointmentGeometry {
   empty: boolean; // TODO
@@ -36,15 +37,18 @@ export interface AppointmentInfo {
   dateText: string;
 }
 
-export interface AppointmentViewModel {
+export interface IAppointmentViewModelBase {
   key: string;
+  focused: boolean;
+}
+
+export interface AppointmentViewModel extends IAppointmentViewModelBase {
   appointment: AppointmentData;
   geometry: AppointmentGeometry;
   info: AppointmentInfo;
 }
 
-export interface OverflowIndicatorViewModel {
-  key: string;
+export interface OverflowIndicatorViewModel extends IAppointmentViewModelBase {
   isAllDay: boolean;
   isCompact: boolean;
   groupIndex: number;
@@ -85,4 +89,9 @@ export interface AppointmentClickData {
 export interface ReducedIconHoverData {
   target: HTMLDivElement;
   endDate?: Date | string;
+}
+
+export interface IAppointmentFocusState {
+  index: number;
+  type: AppointmentKindType;
 }

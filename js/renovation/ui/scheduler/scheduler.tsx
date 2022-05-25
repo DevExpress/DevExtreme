@@ -39,6 +39,8 @@ import {
   AppointmentViewModel,
   AppointmentClickData,
   ReducedIconHoverData,
+  IAppointmentFocusState,
+  AppointmentKindType,
 } from './appointment/types';
 import { AppointmentsConfigType } from './model/types';
 import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
@@ -256,6 +258,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState() appointmentEditFormVisible = false;
 
   @InternalState() appointmentPopupSize!: IAppointmentPopupSize;
+
+  @InternalState() appointmentFocus: IAppointmentFocusState = { type: 'regular', index: -1 };
 
   @InternalState() needCreateAppointmentEditForm = false;
 
@@ -562,6 +566,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       onAppointmentDoubleClick: (data) => this.showAppointmentPopupForm(data),
       showReducedIconTooltip: (data) => this.showReducedIconTooltip(data),
       hideReducedIconTooltip: () => this.hideReducedIconTooltip(),
+      updateFocusedAppointment: this.updateFocusedAppointment,
     };
   }
 
@@ -739,5 +744,34 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   hideReducedIconTooltip(): void {
     this.reducedIconTooltipVisible = false;
+  }
+
+  updateAppointmentFocus(type: AppointmentKindType, index: number): void {
+    this.appointmentFocus.type = type;
+    this.appointmentFocus.index = index;
+  }
+
+  updateFocusedAppointment(type: AppointmentKindType, index: number): void {
+    const {
+      index: prevFocusedIndex,
+      type: prevFocusedType,
+    } = this.appointmentFocus;
+
+    if (prevFocusedIndex >= 0) {
+      const prevViewModels = this.appointmentsViewModel[prevFocusedType];
+      const prevViewModel = prevViewModels[prevFocusedIndex];
+      prevViewModels[prevFocusedIndex] = {
+        ...prevViewModel,
+        focused: false,
+      };
+    }
+
+    this.updateAppointmentFocus(type, index);
+
+    const viewModels = this.appointmentsViewModel[type];
+    viewModels[index] = {
+      ...viewModels[index],
+      focused: true,
+    };
   }
 }

@@ -7,9 +7,8 @@ import {
   Effect,
   ForwardRef,
   RefObject,
-  InternalState,
 } from '@devextreme-generator/declarations';
-import { AppointmentViewModel, OverflowIndicatorViewModel } from './types';
+import { AppointmentKindType, AppointmentViewModel, OverflowIndicatorViewModel } from './types';
 import { Appointment } from './appointment';
 import { OverflowIndicator } from './overflow_indicator/layout';
 import { combineClasses } from '../../../utils/combine_classes';
@@ -17,14 +16,17 @@ import { AppointmentsContext, IAppointmentContext } from '../appointments_contex
 import { EffectReturn } from '../../../utils/effect_return';
 import { subscribeToDXPointerDownEvent } from '../../../utils/subscribe_to_event';
 
-const APPOINTMENT_SELECTOR = '.dx-scheduler-appointment';
+const SELECTOR = {
+  appointment: '.dx-scheduler-appointment',
+  allDay: 'dx-scheduler-all-day-appointment',
+  collector: 'dx-scheduler-appointment-collector',
+};
 
 export const viewFunction = ({
   layoutRef,
   classes,
   appointments,
   overflowIndicators,
-  isFocusedAppointment,
 
   appointmentsContextValue: {
     groups,
@@ -51,7 +53,6 @@ export const viewFunction = ({
           index={index}
           key={item.key}
           groups={groups}
-          isFocused={isFocusedAppointment(index)}
           onItemClick={onAppointmentClick}
           onItemDoubleClick={onAppointmentDoubleClick}
           showReducedIconTooltip={showReducedIconTooltip}
@@ -89,9 +90,6 @@ export class AppointmentLayout extends JSXComponent(AppointmentLayoutProps) {
 
   @ForwardRef()
   layoutRef!: RefObject<HTMLDivElement>;
-
-  @InternalState()
-  focusedItemIndex = -1;
 
   get classes(): string {
     const { isAllDay } = this.props;
@@ -135,17 +133,30 @@ export class AppointmentLayout extends JSXComponent(AppointmentLayoutProps) {
   /* istanbul ignore next: syntetic test */
   onAppointmentPointerDown(e: MouseEvent | TouchEvent): void {
     const appointmentElement = (e.target as HTMLElement)
-      .closest(APPOINTMENT_SELECTOR) as HTMLElement;
+      .closest(SELECTOR.appointment) as HTMLElement;
 
     if (appointmentElement) {
       const { index } = appointmentElement.dataset;
-      this.focusedItemIndex = index
+      const focusedAppointmentIndex = index
         ? parseInt(index, 10)
         : -1;
-    }
-  }
 
-  isFocusedAppointment(index: number): boolean {
-    return index === this.focusedItemIndex;
+      const isAllDay = appointmentElement.classList.contains(SELECTOR.allDay);
+      const isCompact = appointmentElement.classList.contains(SELECTOR.collector);
+      const typeMap: Record<AppointmentKindType, boolean> = {
+        allDayCompact: isAllDay && isCompact,
+        allDay: isAllDay && !isCompact,
+        regularCompact: !isAllDay && isCompact,
+        regular: !isAllDay && !isCompact,
+      };
+
+      const appointmentType = Object.entries(typeMap)
+        .filter((item) => item[1])[0][0] as AppointmentKindType;
+
+      this.appointmentsContextValue.updateFocusedAppointment(
+        appointmentType,
+        focusedAppointmentIndex,
+      );
+    }
   }
 }

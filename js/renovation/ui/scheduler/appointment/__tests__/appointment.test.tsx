@@ -327,7 +327,6 @@ describe('Appointment', () => {
         expect(new AppointmentProps())
           .toEqual({
             index: 0,
-            isFocused: false,
           });
       });
     });
