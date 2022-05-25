@@ -1,6 +1,7 @@
 import { createContext, JSXTemplate } from '@devextreme-generator/declarations';
 import {
   AppointmentClickData,
+  AppointmentKindType,
   AppointmentsViewModelType,
   AppointmentTemplateProps,
   OverflowIndicatorTemplateProps,
@@ -24,6 +25,10 @@ export interface IAppointmentContext {
   onAppointmentDoubleClick: (e: AppointmentClickData) => void;
   showReducedIconTooltip: (data: ReducedIconHoverData) => void;
   hideReducedIconTooltip: () => void;
+  updateFocusedAppointment: (
+    type: AppointmentKindType,
+    appointmentIndex: number,
+  ) => void;
 }
 
 export const AppointmentsContext = createContext<IAppointmentContext | undefined>(undefined);

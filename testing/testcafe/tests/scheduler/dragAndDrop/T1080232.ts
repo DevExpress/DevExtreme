@@ -14,10 +14,10 @@ test('it should correctly drag external item to the appointment after drag appoi
   const appt02 = scheduler.getAppointment('Appt-02');
 
   await t
-    .dragToElement(appt01.element, cell01)
+    .dragToElement(appt01.element, cell01, { speed: 0.3 })
     .expect((await appt01.element.boundingClientRect).top)
     .eql(208)
-    .dragToElement(dragItem, appt02.element)
+    .dragToElement(dragItem, appt02.element, { speed: 0.3 })
     .expect(appt02.element.innerText)
     .eql('Added');
 }).before(async () => createScheduler({
