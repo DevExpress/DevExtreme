@@ -39,7 +39,7 @@ export interface AppointmentInfo {
 
 export interface IAppointmentViewModelBase {
   key: string;
-  focused: boolean;
+  focused?: boolean;
 }
 
 export interface AppointmentViewModel extends IAppointmentViewModelBase {

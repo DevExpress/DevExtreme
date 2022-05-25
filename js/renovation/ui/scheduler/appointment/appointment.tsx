@@ -145,7 +145,7 @@ AppointmentProps,
     const isVerticalDirection = direction === 'vertical';
 
     return combineClasses({
-      'dx-state-focused': focused,
+      'dx-state-focused': !!focused,
       'dx-scheduler-appointment': true,
       'dx-scheduler-appointment-horizontal': !isVerticalDirection,
       'dx-scheduler-appointment-vertical': isVerticalDirection,
