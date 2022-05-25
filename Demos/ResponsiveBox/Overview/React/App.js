@@ -19,7 +19,6 @@ class App extends React.Component {
           singleColumnScreen="sm"
           screenByWidth={screen}>
           <Row ratio={1}></Row>
-          <Row ratio={2} screen="xs"></Row>
           <Row ratio={2}></Row>
           <Row ratio={1}></Row>
 

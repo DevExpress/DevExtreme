@@ -5,10 +5,6 @@
       single-column-screen="sm"
     >
       <DxRow :ratio="1"/>
-      <DxRow
-        :ratio="2"
-        screen="xs"
-      />
       <DxRow :ratio="2"/>
       <DxRow :ratio="1"/>
 

@@ -5,7 +5,6 @@ DemoApp.controller('DemoController', ($scope) => {
     rows: [
       { ratio: 1 },
       { ratio: 2 },
-      { ratio: 2, screen: 'xs' },
       { ratio: 1 },
     ],
     cols: [
