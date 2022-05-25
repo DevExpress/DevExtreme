@@ -18,9 +18,8 @@ const weekData = require('cldr-core/supplemental/weekData.json');
 const likelySubtags = require('cldr-core/supplemental/likelySubtags.json');
 const parentLocales = require('cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale;
 
-/* for Globalize*/
-const enCldr = require('devextreme-cldr-data/en.json');
-const supplementalCldr = require('devextreme-cldr-data/supplemental.json');
+const globalizeEnCldr = require('devextreme-cldr-data/en.json');
+const globalizeSupplementalCldr = require('devextreme-cldr-data/supplemental.json');
 
 const PARENT_LOCALE_SEPARATOR = '-';
 
@@ -151,15 +150,14 @@ gulp.task('localization-generated-sources', gulp.parallel([
         destination: 'js/localization/cldr-data'
 
     },
-    /* NOTE: For Globalize only*/
     {
-        data: enCldr,
+        data: globalizeEnCldr,
         exportName: 'enCldr',
         filename: 'en.js',
         destination: 'js/localization/cldr-data'
     },
     {
-        data: supplementalCldr,
+        data: globalizeSupplementalCldr,
         exportName: 'supplementalCldr',
         filename: 'supplemental.js',
         destination: 'js/localization/cldr-data'

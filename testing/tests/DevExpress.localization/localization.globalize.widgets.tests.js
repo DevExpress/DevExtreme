@@ -233,12 +233,11 @@ QUnit.module('DateBox', commonEnvironment, () => {
             });
 
             const navigatorText = $calendar.find(CALENDAR_NAVIGATOR_TEXT_SELECTOR).text();
-            // const cellText = $calendar.find(CALENDAR_CELL_SELECTOR).first().text();
+            const cellText = $calendar.find(CALENDAR_CELL_SELECTOR).first().text();
 
             assert.equal(navigatorText, 'نوفمبر ٢٠١٥', 'Navigator localized');
 
-            // NOTE: first cell text must be equal 31 because for AR locale first date of week is Saturday
-            // assert.equal(cellText, '٣١', 'Cell localized');
+            assert.equal(cellText, '٣١', 'Cell localized');
         } finally {
             Globalize.locale(originalCulture);
         }
