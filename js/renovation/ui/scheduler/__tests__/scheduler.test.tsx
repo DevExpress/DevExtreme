@@ -1648,7 +1648,7 @@ describe('Scheduler', () => {
               fullScreen: false,
               maxWidth: expect.anything(),
             });
-          expect(scheduler.appointmentData)
+          expect(scheduler.appointmentFormData)
             .toEqual(data[0]);
           expect(scheduler.needCreateAppointmentEditForm)
             .toBe(true);

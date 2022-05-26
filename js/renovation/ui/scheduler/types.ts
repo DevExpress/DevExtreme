@@ -16,6 +16,7 @@ export interface IFieldExpr {
   recurrenceRuleExpr: string;
   recurrenceExceptionExpr: string;
   disabledExpr: string;
+  visibleExpr: string;
 }
 
 export interface DataAccessorType {
