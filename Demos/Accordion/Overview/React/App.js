@@ -40,16 +40,8 @@ class App extends React.Component {
           onSelectionChanged={this.selectionChanged}
           itemTitleRender={CustomTitle}
           itemRender={CustomItem}
+          id="accordion-container"
         />
-        <div className="selected-data">
-          <span className="caption">Selected Items</span>
-          <TagBox dataSource={this.companies}
-            displayExpr="CompanyName"
-            value={selectedItems}
-            onValueChanged={this.selectedItemsChanged}
-            disabled={!multiple}
-          />
-        </div>
         <div className="options">
           <div className="caption">Options</div>
           <div className="option">
@@ -76,6 +68,15 @@ class App extends React.Component {
               <Tooltip enabled={true} position="bottom" />
               <Label visible={true} />
             </Slider>
+          </div>
+          <div className="option">
+            <span className="caption">Selected Items</span>
+            <TagBox dataSource={this.companies}
+              displayExpr="CompanyName"
+              value={selectedItems}
+              onValueChanged={this.selectedItemsChanged}
+              disabled={!multiple}
+            />
           </div>
         </div>
       </div>

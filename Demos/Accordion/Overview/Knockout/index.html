@@ -17,7 +17,7 @@
 <body class="dx-viewport">
     <div class="demo-container">
         <div id="accordion">
-            <div data-bind="dxAccordion: accordionOptions">
+            <div id="accordion-container" data-bind="dxAccordion: accordionOptions">
                 <div data-options="dxTemplate : { name: 'title' } ">
                     <h1 data-bind="text: $data.CompanyName"></h1>
                 </div>
@@ -52,11 +52,6 @@
                 </div>
             </div>
 
-            <div class="selected-data">
-                <span class="caption">Selected Items</span>
-                <div data-bind="dxTagBox: tagBoxOptions"></div>
-            </div>
-
             <div class="options">
                 <div class="caption">Options</div>
                 <div class="option">
@@ -83,7 +78,11 @@
                             position: 'bottom'
                         }
                     }"></div>
-                </div>               
+                </div>
+                <div class="option">
+                    <span class="caption">Selected Items</span>
+                    <div data-bind="dxTagBox: tagBoxOptions"></div>
+                </div>             
             </div>
         </div>
     </div>

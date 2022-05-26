@@ -6,6 +6,7 @@
       :multiple="multiple"
       :animation-duration="animationDuration"
       v-model:selected-items="selectedItems"
+      id="accordion-container"
     >
       <template #title="{ data }">
         <CustomTitle :item-data="data"/>
@@ -14,16 +15,6 @@
         <CustomItem :item-data="data"/>
       </template>
     </DxAccordion>
-
-    <div class="selected-data">
-      <span class="caption">Selected Items</span>
-      <DxTagBox
-        :data-source="companies"
-        v-model:value="selectedItems"
-        :disabled="!multiple"
-        display-expr="CompanyName"
-      />
-    </div>
 
     <div class="options">
       <div class="caption">Options</div>
@@ -52,6 +43,15 @@
           />
           <DxLabel :visible="true"/>
         </DxSlider>
+      </div>
+      <div class="option">
+        <span class="caption">Selected Items</span>
+        <DxTagBox
+          :data-source="companies"
+          v-model:value="selectedItems"
+          :disabled="!multiple"
+          display-expr="CompanyName"
+        />
       </div>
     </div>
   </div>
@@ -83,6 +83,10 @@ export default {
 };
 </script>
 <style scoped>
+#accordion {
+  height: 700px;
+}
+
 #accordion h1 {
   font-size: 20px;
 }
@@ -90,6 +94,10 @@ export default {
 #accordion h1,
 #accordion p {
   margin: 0;
+}
+
+#accordion-container {
+  margin-right: 400px;
 }
 
 .dx-theme-material #accordion .dx-accordion-item-title {
@@ -100,31 +108,14 @@ export default {
   align-self: center;
 }
 
-.options,
-.selected-data {
+.options {
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
-  margin-top: 20px;
-}
-
-.selected-data {
-  position: relative;
-  height: 36px;
-}
-
-.selected-data > .caption {
-  position: relative;
-  top: 5px;
-  margin-right: 10px;
-  font-weight: bold;
-  font-size: 115%;
-}
-
-.selected-data > .dx-widget {
   position: absolute;
-  left: 140px;
-  right: 20px;
-  top: 20px;
+  bottom: 0;
+  right: 0;
+  width: 340px;
+  top: 0;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .options > .caption {
@@ -134,5 +125,14 @@ export default {
 
 .option {
   margin-top: 10px;
+}
+
+.option > .caption {
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.option > .dx-tagbox {
+  margin-top: 2px;
 }
 </style>

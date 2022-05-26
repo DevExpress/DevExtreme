@@ -1,3 +1,7 @@
+#accordion {
+  height: 700px;
+}
+
 #accordion h1 {
   font-size: 20px;
 }
@@ -5,6 +9,10 @@
 #accordion h1,
 #accordion p {
   margin: 0;
+}
+
+#accordion-container {
+  margin-right: 400px;
 }
 
 .dx-theme-material #accordion .dx-accordion-item-title {
@@ -15,31 +23,14 @@
   align-self: center;
 }
 
-.options,
-.selected-data {
+.options {
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
-  margin-top: 20px;
-}
-
-.selected-data {
-  position: relative;
-  height: 36px;
-}
-
-.selected-data > .caption {
-  position: relative;
-  top: 5px;
-  margin-right: 10px;
-  font-weight: bold;
-  font-size: 115%;
-}
-
-.selected-data > .dx-widget {
   position: absolute;
-  left: 140px;
-  right: 20px;
-  top: 20px;
+  bottom: 0;
+  right: 0;
+  width: 340px;
+  top: 0;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .options > .caption {
@@ -49,4 +40,13 @@
 
 .option {
   margin-top: 10px;
+}
+
+.option > .caption {
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.option > .dx-tagbox {
+  margin-top: 2px;
 }

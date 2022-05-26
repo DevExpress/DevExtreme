@@ -17,7 +17,7 @@
   <body class="dx-viewport">
     <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
       <div id="accordion">
-        <div dx-accordion="accordionOptions" dx-item-alias="company">
+        <div id="accordion-container" dx-accordion="accordionOptions" dx-item-alias="company">
           <div data-options="dxTemplate : { name: 'title' } ">
             <h1>{{company.CompanyName}}</h1>
           </div>
@@ -43,11 +43,6 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="selected-data">
-          <span class="caption">Selected Items</span>
-          <div dx-tag-box="tagBoxOptions"></div>
         </div>
 
         <div class="options">
@@ -88,6 +83,10 @@
                         }
                     }"
             ></div>
+          </div>
+          <div class="option">
+            <span class="caption">Selected Items</span>
+            <div dx-tag-box="tagBoxOptions"></div>
           </div>
         </div>
       </div>
