@@ -39,7 +39,7 @@ const defaultDataAccessors: DataAccessorType = {
     startDateExpr: 'startDate',
     endDateExpr: 'endDate',
     recurrenceRuleExpr: 'recurrenceRuleExpr',
-  },
+  } as any,
 };
 
 const prepareInstances = (
