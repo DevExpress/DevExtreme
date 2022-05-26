@@ -2276,7 +2276,6 @@
           {
             "Title": "Client-Side Data Processing",
             "Name": "ClientSideDataProcessing",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
             "Credits": "www.kaggle.com",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
