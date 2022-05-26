@@ -34,6 +34,11 @@ export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
 }
 
 /** @public */
+export interface NativeInputEventInfo<TComponent, TNativeEvent = Event> extends Omit<NativeEventInfo<TComponent, TNativeEvent>, 'event'> {
+    readonly event?: DxEvent<Omit<TNativeEvent, 'target'> & { target: HTMLInputElement }> ;
+}
+
+/** @public */
 export interface ChangedOptionInfo {
     readonly name: string;
     readonly fullName: string;

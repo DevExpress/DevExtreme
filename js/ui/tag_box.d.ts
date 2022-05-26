@@ -8,12 +8,12 @@ import {
 } from '../core/templates/template';
 
 import {
-    Cancelable,
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
-    ItemInfo,
+  Cancelable,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
+  ItemInfo, NativeInputEventInfo,
 } from '../events/index';
 
 import {
@@ -66,7 +66,7 @@ export type FocusOutEvent = NativeEventInfo<dxTagBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxTagBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxTagBox, UIEvent>;
+export type InputEvent = NativeInputEventInfo<dxTagBox, UIEvent>;
 
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxTagBox> & ItemInfo;

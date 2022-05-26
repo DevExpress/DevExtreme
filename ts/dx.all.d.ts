@@ -3197,6 +3197,12 @@ declare module DevExpress.events {
     readonly model?: any;
     readonly event?: DxEvent<TNativeEvent>;
   }
+  export interface NativeInputEventInfo<TComponent, TNativeEvent = Event>
+    extends Omit<NativeEventInfo<TComponent, TNativeEvent>, 'event'> {
+    readonly event?: DxEvent<
+      Omit<TNativeEvent, 'target'> & { target: HTMLInputElement }
+    >;
+  }
   /**
    * [descr:events.off(element)]
    */
@@ -5008,7 +5014,7 @@ declare module DevExpress.ui {
     >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxAutocomplete>;
-    export type InputEvent = DevExpress.events.NativeEventInfo<
+    export type InputEvent = DevExpress.events.NativeInputEventInfo<
       dxAutocomplete,
       UIEvent
     >;
@@ -5577,7 +5583,7 @@ declare module DevExpress.ui {
     >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxColorBox>;
-    export type InputEvent = DevExpress.events.NativeEventInfo<
+    export type InputEvent = DevExpress.events.NativeInputEventInfo<
       dxColorBox,
       UIEvent
     >;
@@ -8806,7 +8812,7 @@ declare module DevExpress.ui {
     >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxDateBox>;
-    export type InputEvent = DevExpress.events.NativeEventInfo<
+    export type InputEvent = DevExpress.events.NativeInputEventInfo<
       dxDateBox,
       UIEvent
     >;
@@ -10476,7 +10482,7 @@ declare module DevExpress.ui {
     >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxDropDownBox>;
-    export type InputEvent = DevExpress.events.NativeEventInfo<
+    export type InputEvent = DevExpress.events.NativeInputEventInfo<
       dxDropDownBox,
       UIEvent
     >;
@@ -16019,7 +16025,7 @@ declare module DevExpress.ui {
     >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxNumberBox>;
-    export type InputEvent = DevExpress.events.NativeEventInfo<
+    export type InputEvent = DevExpress.events.NativeInputEventInfo<
       dxNumberBox,
       UIEvent
     >;
@@ -18912,7 +18918,7 @@ declare module DevExpress.ui {
     >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxSelectBox>;
-    export type InputEvent = DevExpress.events.NativeEventInfo<
+    export type InputEvent = DevExpress.events.NativeInputEventInfo<
       dxSelectBox,
       UIEvent
     >;
@@ -20063,7 +20069,7 @@ declare module DevExpress.ui {
     >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxTagBox>;
-    export type InputEvent = DevExpress.events.NativeEventInfo<
+    export type InputEvent = DevExpress.events.NativeInputEventInfo<
       dxTagBox,
       UIEvent
     >;
@@ -20219,7 +20225,7 @@ declare module DevExpress.ui {
     >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxTextArea>;
-    export type InputEvent = DevExpress.events.NativeEventInfo<
+    export type InputEvent = DevExpress.events.NativeInputEventInfo<
       dxTextArea,
       UIEvent
     >;
@@ -20305,7 +20311,7 @@ declare module DevExpress.ui {
     >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxTextBox>;
-    export type InputEvent = DevExpress.events.NativeEventInfo<
+    export type InputEvent = DevExpress.events.NativeInputEventInfo<
       dxTextBox,
       UIEvent
     >;
@@ -21998,7 +22004,7 @@ declare module DevExpress.ui {
     TKey = any
   > = DevExpress.ui.dxTreeList.Editing<TRowData, TKey>;
   /**
-   * @deprecated 
+   * @deprecated
    */
   export type dxTreeListEditingTexts = DevExpress.ui.dxTreeList.EditingTexts;
   /**
@@ -22201,7 +22207,7 @@ declare module DevExpress.ui {
     toolbar?: DevExpress.ui.dxTreeList.Toolbar;
   }
   /**
-   * @deprecated 
+   * @deprecated
    */
   export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
   /**
@@ -23315,23 +23321,23 @@ declare module DevExpress.ui {
     updateDimensions(): void;
   }
   /**
-   * @deprecated 
+   * @deprecated
    */
   export type GridBaseColumn<TRowData = any> =
     DevExpress.ui.dxDataGrid.ColumnBase<TRowData>;
   /**
-   * @deprecated 
+   * @deprecated
    */
   export type GridBaseColumnButton = DevExpress.ui.dxDataGrid.ColumnButtonBase;
   /**
-   * @deprecated 
+   * @deprecated
    */
   export type GridBaseEditing<
     TRowData = any,
     TKey = any
   > = DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey>;
   /**
-   * @deprecated 
+   * @deprecated
    */
   export type GridBaseEditingTexts = DevExpress.ui.dxDataGrid.EditingTextsBase;
   /**
@@ -23705,15 +23711,15 @@ declare module DevExpress.ui {
     syncLookupFilterValues?: boolean;
   }
   /**
-   * @deprecated 
+   * @deprecated
    */
   export type GridBasePaging = DevExpress.ui.dxDataGrid.PagingBase;
   /**
-   * @deprecated 
+   * @deprecated
    */
   export type GridBaseScrolling = DevExpress.ui.dxDataGrid.ScrollingBase;
   /**
-   * @deprecated 
+   * @deprecated
    */
   export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**

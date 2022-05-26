@@ -4,10 +4,10 @@ import {
 } from '../core/element';
 
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo, NativeInputEventInfo,
 } from '../events/index';
 
 import {
@@ -59,7 +59,7 @@ export type FocusOutEvent = NativeEventInfo<dxColorBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxColorBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxColorBox, UIEvent>;
+export type InputEvent = NativeInputEventInfo<dxColorBox, UIEvent>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;

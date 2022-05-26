@@ -1,8 +1,8 @@
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo, NativeInputEventInfo,
 } from '../events/index';
 
 import {
@@ -41,7 +41,7 @@ export type FocusOutEvent = NativeEventInfo<dxTextArea, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxTextArea>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxTextArea, UIEvent>;
+export type InputEvent = NativeInputEventInfo<dxTextArea, UIEvent>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
