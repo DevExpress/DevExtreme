@@ -2269,7 +2269,6 @@
           {
             "Title": "JSON Data",
             "Name": "AjaxRequest",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Read-Only_Data_in_JSON_Format/",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "ajax request"
