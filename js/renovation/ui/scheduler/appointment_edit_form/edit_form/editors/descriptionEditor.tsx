@@ -6,7 +6,7 @@ import {
   JSXComponent,
   OneWay,
 } from '@devextreme-generator/declarations';
-import { TextArea } from '../../../../editors/textArea';
+import { TextArea } from '../../../../editors/text_area';
 
 export const viewFunction = ({
   props: {
