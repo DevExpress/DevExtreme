@@ -17830,6 +17830,14 @@ declare module DevExpress.ui {
      * [descr:dxScheduler.deleteAppointment(appointment)]
      */
     deleteAppointment(appointment: dxSchedulerAppointment): void;
+    /**
+     * [descr:dxScheduler.deleteRecurrence(appointment, date, recurrenceEditMode)]
+     */
+    deleteRecurrence(
+      appointmentData: dxSchedulerAppointment,
+      date: Date | string,
+      recurrenceEditMode: DevExpress.utils.SchedulerRecurrenceEditMode
+    ): void;
     getDataSource(): DevExpress.data.DataSource;
     /**
      * [descr:dxScheduler.getEndViewDate()]

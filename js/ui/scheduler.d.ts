@@ -924,6 +924,16 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      * @public
      */
     deleteAppointment(appointment: dxSchedulerAppointment): void;
+    /**
+     * @docid
+     * @publicName deleteRecurrence(appointment, date, recurrenceEditMode)
+     * @public
+     */
+    deleteRecurrence(
+      appointmentData: dxSchedulerAppointment,
+      date: Date | string,
+      recurrenceEditMode: SchedulerRecurrenceEditMode,
+    ): void;
     getDataSource(): DataSource;
     /**
      * @docid
