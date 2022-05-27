@@ -2288,7 +2288,6 @@
           {
             "Title": "Server-Side Data Processing",
             "Name": "ServerSideDataProcessing",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/OData/",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
