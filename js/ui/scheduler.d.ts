@@ -770,6 +770,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     useDropDownViewSwitcher?: boolean;
     /**
      * @docid
+     * @default "allDay"
+     */
+    allDayPanelMode?: 'all' | 'allDay' | 'no';
+    /**
+     * @docid
      * @default ['day', 'week']
      * @public
      */
@@ -893,6 +898,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        */
       scrolling?: dxSchedulerScrolling;
+      /**
+       * @docid
+       * @default "allDay"
+       */
+       allDayPanelMode?: 'all' | 'allDay' | 'no';
     }>;
 }
 /**
@@ -914,6 +924,16 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      * @public
      */
     deleteAppointment(appointment: dxSchedulerAppointment): void;
+    /**
+     * @docid
+     * @publicName deleteRecurrence(appointment, date, recurrenceEditMode)
+     * @public
+     */
+    deleteRecurrence(
+      appointmentData: dxSchedulerAppointment,
+      date: Date | string,
+      recurrenceEditMode: SchedulerRecurrenceEditMode,
+    ): void;
     getDataSource(): DataSource;
     /**
      * @docid

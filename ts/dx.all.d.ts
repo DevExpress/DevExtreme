@@ -17830,6 +17830,14 @@ declare module DevExpress.ui {
      * [descr:dxScheduler.deleteAppointment(appointment)]
      */
     deleteAppointment(appointment: dxSchedulerAppointment): void;
+    /**
+     * [descr:dxScheduler.deleteRecurrence(appointment, date, recurrenceEditMode)]
+     */
+    deleteRecurrence(
+      appointmentData: dxSchedulerAppointment,
+      date: Date | string,
+      recurrenceEditMode: DevExpress.utils.SchedulerRecurrenceEditMode
+    ): void;
     getDataSource(): DevExpress.data.DataSource;
     /**
      * [descr:dxScheduler.getEndViewDate()]
@@ -18516,6 +18524,10 @@ declare module DevExpress.ui {
      */
     useDropDownViewSwitcher?: boolean;
     /**
+     * [descr:dxSchedulerOptions.allDayPanelMode]
+     */
+    allDayPanelMode?: 'all' | 'allDay' | 'no';
+    /**
      * [descr:dxSchedulerOptions.views]
      */
     views?: Array<
@@ -18667,6 +18679,10 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.views.scrolling]
            */
           scrolling?: dxSchedulerScrolling;
+          /**
+           * [descr:dxSchedulerOptions.views.allDayPanelMode]
+           */
+          allDayPanelMode?: 'all' | 'allDay' | 'no';
         }
     >;
   }
