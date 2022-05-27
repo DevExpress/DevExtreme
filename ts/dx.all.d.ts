@@ -18516,6 +18516,10 @@ declare module DevExpress.ui {
      */
     useDropDownViewSwitcher?: boolean;
     /**
+     * [descr:dxSchedulerOptions.allDayPanelMode]
+     */
+    allDayPanelMode?: 'all' | 'allDay' | 'no';
+    /**
      * [descr:dxSchedulerOptions.views]
      */
     views?: Array<
@@ -18667,6 +18671,10 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.views.scrolling]
            */
           scrolling?: dxSchedulerScrolling;
+          /**
+           * [descr:dxSchedulerOptions.views.allDayPanelMode]
+           */
+          allDayPanelMode?: 'all' | 'allDay' | 'no';
         }
     >;
   }
