@@ -770,6 +770,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     useDropDownViewSwitcher?: boolean;
     /**
      * @docid
+     * @default "allDay"
+     */
+    allDayPanelMode?: 'all' | 'allDay' | 'no';
+    /**
+     * @docid
      * @default ['day', 'week']
      * @public
      */
@@ -893,6 +898,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        */
       scrolling?: dxSchedulerScrolling;
+      /**
+       * @docid
+       * @default "allDay"
+       */
+       allDayPanelMode?: 'all' | 'allDay' | 'no';
     }>;
 }
 /**
