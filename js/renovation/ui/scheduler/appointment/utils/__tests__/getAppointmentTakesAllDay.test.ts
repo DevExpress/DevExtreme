@@ -1,7 +1,7 @@
 import { getAppointmentTakesAllDay } from '../getAppointmentTakesAllDay';
 
 describe('getAppointmentTakesAllDay', () => {
-  describe('showAllDayAppointments is auto', () => {
+  describe('allDayPanelMode is all', () => {
     it('should return true if all day appointment', () => {
       const appointment = {
         allDay: true,
@@ -9,7 +9,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 1, 12),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 0, 24, 'auto'))
+      expect(getAppointmentTakesAllDay(appointment, 0, 24, 'all'))
         .toBe(true);
     });
 
@@ -20,7 +20,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 2, 12),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 0, 24, 'auto'))
+      expect(getAppointmentTakesAllDay(appointment, 0, 24, 'all'))
         .toBe(true);
     });
 
@@ -31,7 +31,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 1, 11),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 0, 24, 'auto'))
+      expect(getAppointmentTakesAllDay(appointment, 0, 24, 'all'))
         .toBe(false);
     });
 
@@ -42,7 +42,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 1, 12),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 8, 12, 'auto'))
+      expect(getAppointmentTakesAllDay(appointment, 8, 12, 'all'))
         .toBe(true);
     });
 
@@ -53,7 +53,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 1, 13),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 8, 11, 'auto'))
+      expect(getAppointmentTakesAllDay(appointment, 8, 11, 'all'))
         .toBe(false);
     });
 
@@ -68,13 +68,13 @@ describe('getAppointmentTakesAllDay', () => {
           endDate,
         };
 
-        expect(getAppointmentTakesAllDay(appointment, 8, 11, 'auto'))
+        expect(getAppointmentTakesAllDay(appointment, 8, 11, 'all'))
           .toBe(false);
       });
     });
   });
 
-  describe('showAllDayAppointments is none', () => {
+  describe('allDayPanelMode is hidden', () => {
     it('should return true if all day appointment', () => {
       const appointment = {
         allDay: true,
@@ -82,12 +82,12 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 1, 12),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 0, 24, 'none'))
+      expect(getAppointmentTakesAllDay(appointment, 0, 24, 'hidden'))
         .toBe(false);
     });
   });
 
-  describe('showAllDayAppointments is allDay', () => {
+  describe('allDayPanelMode is allDay', () => {
     it('should return true if all day appointment', () => {
       const appointment = {
         allDay: true,
