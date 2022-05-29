@@ -18526,7 +18526,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.allDayPanelMode]
      */
-    allDayPanelMode?: 'all' | 'allDay' | 'no';
+    allDayPanelMode?: 'all' | 'allDay' | 'hidden';
     /**
      * [descr:dxSchedulerOptions.views]
      */
