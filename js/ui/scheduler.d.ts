@@ -772,7 +772,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default "allDay"
      */
-    allDayPanelMode?: 'all' | 'allDay' | 'no';
+    allDayPanelMode?: 'all' | 'allDay' | 'hidden';
     /**
      * @docid
      * @default ['day', 'week']
