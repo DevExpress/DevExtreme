@@ -1786,6 +1786,13 @@
               "/Models/SampleData/PriorityResources.cs"
             ],
             "DemoType": "Web"
+          },
+          {
+            "Title": "All Day Panel Mode",
+            "Name": "AllDayPanelMode",
+            "Widget": "Scheduler",
+            "DemoType": "Web",
+            "Badge": "New"
           }
         ]
       },

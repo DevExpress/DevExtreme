@@ -1,0 +1,26 @@
+<dx-scheduler
+  timeZone="America/Los_Angeles"
+  [dataSource]="appointmentsData"
+  [views]="views"
+  currentView="day"
+  [currentDate]="currentDate"
+  [allDayPanelMode]="allDayPanelMode"
+  [startDayHour]="9"
+  [height]="600"
+>
+</dx-scheduler>
+
+<div class="options">
+  <div class="option">
+    <div class="label">All day panel mode</div>
+    <div class="value">
+      <dx-radio-group
+        [items]="allDayPanelModes"
+        [value]="allDayPanelModes[1]"
+        layout="horizontal"
+        (onValueChanged)="onChangeAllDayPanelMode($event)"
+      >
+      </dx-radio-group>
+    </div>
+  </div>
+</div>
