@@ -2951,7 +2951,8 @@ QUnit.module('itemRendered event', () => { // T906117
         });
     });
 
-    QUnit.test('itemRendered callback is called for menu & treeview items, adaptivityEnabled: true ()', function(assert) {
+    QUnit.test('itemRendered callback is called for menu & treeview items, adaptivityEnabled: true (T1092214)', function(assert) {
+        assert.expect(11);
         const onItemRenderedHandler = sinon.stub();
 
         $('#menu').dxMenu({
@@ -2961,22 +2962,22 @@ QUnit.module('itemRendered event', () => { // T906117
             onItemRendered: onItemRenderedHandler
         }).dxMenu('instance');
 
+        const checkRenderedItem = (call, itemText, itemClass) => {
+            assert.strictEqual(onItemRenderedHandler.getCall(call).args[0].itemData.text, itemText);
+            assert.ok($(onItemRenderedHandler.getCall(call).args[0].itemElement).hasClass(itemClass));
+        };
+
         assert.strictEqual(onItemRenderedHandler.callCount, 2);
-        assert.strictEqual(onItemRenderedHandler.getCall(0).args[0].itemData.text, 'item1');
-        assert.strictEqual($(onItemRenderedHandler.getCall(0).args[0].itemElement).hasClass(DX_MENU_ITEM_CLASS), true);
-        assert.strictEqual(onItemRenderedHandler.getCall(1).args[0].itemData.text, 'item1');
-        assert.strictEqual($(onItemRenderedHandler.getCall(1).args[0].itemElement).hasClass(DX_TREEVIEW_ITEM_CLASS), true);
+        checkRenderedItem(0, 'item1', DX_MENU_ITEM_CLASS);
+        checkRenderedItem(1, 'item1', DX_TREEVIEW_ITEM_CLASS);
 
-        const $treeview = $('#menu').find('.' + DX_TREEVIEW_CLASS).eq(0);
-        $treeview.find(`.${DX_TREEVIEW_ITEM_CLASS}`).trigger('dxclick');
-
+        const $treeview = $('#menu').find(`.${DX_TREEVIEW_CLASS}`);
+        $treeview.find(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(0).trigger('dxclick');
         assert.strictEqual(onItemRenderedHandler.callCount, 3);
-        assert.strictEqual(onItemRenderedHandler.getCall(2).args[0].itemData.text, 'item1_1');
-        assert.strictEqual($(onItemRenderedHandler.getCall(2).args[0].itemElement).hasClass(DX_TREEVIEW_ITEM_CLASS), true);
+        checkRenderedItem(2, 'item1_1', DX_TREEVIEW_ITEM_CLASS);
 
         $treeview.find(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(1).trigger('dxclick');
         assert.strictEqual(onItemRenderedHandler.callCount, 4);
-        assert.strictEqual(onItemRenderedHandler.getCall(3).args[0].itemData.text, 'item1_1_1');
-        assert.strictEqual($(onItemRenderedHandler.getCall(3).args[0].itemElement).hasClass(DX_TREEVIEW_ITEM_CLASS), true);
+        checkRenderedItem(3, 'item1_1_1', DX_TREEVIEW_ITEM_CLASS);
     });
 });
