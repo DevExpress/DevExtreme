@@ -102,6 +102,19 @@ export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & 
 };
 
 /** @public */
+export type AppointmentTooltipShowingAppointmentInfo = {
+  readonly appointmentData: Appointment;
+  readonly currentAppointmentData: Appointment;
+  readonly color: PromiseLike<string>;
+};
+
+/** @public */
+export type AppointmentTooltipShowingEvent = Cancelable & EventInfo<dxScheduler> & {
+  readonly targetElement: DxElement;
+  readonly appointments: AppointmentTooltipShowingAppointmentInfo[];
+};
+
+/** @public */
 export type AppointmentRenderedEvent = EventInfo<dxScheduler> & TargetedAppointmentInfo & {
   readonly appointmentElement: DxElement;
 };
@@ -177,7 +190,9 @@ export type AppointmentDraggingRemoveEvent = AppointmentDraggingEvent & {
 export type AppointmentTemplateData = TargetedAppointmentInfo;
 
 /** @public */
-export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
+export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
+  readonly isButtonClicked: true;
+};
 
 /** @public */
 export type AppointmentCollectorTemplateData = {
@@ -539,6 +554,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      */
     onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
+
     /**
      * @docid
      * @default null
@@ -554,6 +570,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxScheduler
+     * @action
+     * @public
+     */
+    onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
      * @action
      * @public
      */
