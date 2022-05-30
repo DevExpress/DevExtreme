@@ -2202,6 +2202,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             getSchedulerWidth: () => this.option('schedulerWidth'),
             getViewHeight: () => this.$element().height ? this.$element().height() : getHeight(this.$element()),
             getViewWidth: () => this.$element().width ? this.$element().width() : getWidth(this.$element()),
+            getWindowHeight: () => getWindow().innerHeight,
+            getWindowWidth: () => getWindow().innerWidth,
             getScrolling: () => this.option('scrolling'),
             getScrollableOuterWidth: this.getScrollableOuterWidth.bind(this),
             getScrollable: this.getScrollable.bind(this),
