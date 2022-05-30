@@ -2959,11 +2959,13 @@ QUnit.module('itemRendered event', () => { // T906117
             adaptivityEnabled: true,
             width: 50,
             onItemRendered: onItemRenderedHandler
-        }).dxMenu('instance');
+        });
 
         const checkRenderedItem = (call, itemText, itemClass) => {
-            assert.strictEqual(onItemRenderedHandler.getCall(call).args[0].itemData.text, itemText);
-            assert.ok($(onItemRenderedHandler.getCall(call).args[0].itemElement).hasClass(itemClass));
+            const itemRenderedHandlerArgs = onItemRenderedHandler.getCall(call).args[0];
+
+            assert.strictEqual(itemRenderedHandlerArgs.itemData.text, itemText);
+            assert.ok($(itemRenderedHandlerArgs.itemElement).hasClass(itemClass));
         };
 
         assert.strictEqual(onItemRenderedHandler.callCount, 2);
