@@ -12,6 +12,7 @@ import { Deferred, when } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { equalByValue } from '../../core/utils/common';
 import { isDefined, isObject, isPromise } from '../../core/utils/type';
+import Guid from '../../core/guid';
 
 const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
 
@@ -234,9 +235,14 @@ export default class FileItemsController {
                 .resolve(parentDirectoryInfo.items)
                 .promise();
         }
+        if(this._lockId && parentDirectoryInfo.itemsSingleLoadErrorId === this._lockId) {
+            this._handleItemLoadError(parentDirectoryInfo, parentDirectoryInfo.itemsSingleLoadError, skipNavigationOnError);
+            return new Deferred().reject().promise();
+        }
 
         const dirKey = parentDirectoryInfo.getInternalKey();
         let loadItemsDeferred = this._loadedItems[dirKey];
+
         if(loadItemsDeferred) {
             return loadItemsDeferred;
         }
@@ -249,6 +255,12 @@ export default class FileItemsController {
                 );
                 parentDirectoryInfo.itemsLoaded = true;
                 return parentDirectoryInfo.items;
+            }, err => {
+                if(this._lockId && parentDirectoryInfo.itemsSingleLoadErrorId !== this._lockId) {
+                    parentDirectoryInfo.itemsSingleLoadErrorId = this._lockId;
+                    parentDirectoryInfo.itemsSingleLoadError = err;
+                }
+                return [];
             });
 
         this._loadedItems[dirKey] = loadItemsDeferred;
@@ -262,7 +274,12 @@ export default class FileItemsController {
     _getFileItems(parentDirectoryInfo, skipNavigationOnError) {
         let loadItemsDeferred = null;
         try {
-            loadItemsDeferred = this._fileProvider.getItems(parentDirectoryInfo.fileItem);
+            loadItemsDeferred = new Deferred();
+            setTimeout(() => this._fileProvider.getItems(parentDirectoryInfo.fileItem)
+                .then(
+                    result => loadItemsDeferred.resolve(result),
+                    error => loadItemsDeferred.reject(error)
+                ));
         } catch(error) {
             return this._handleItemLoadError(parentDirectoryInfo, error, skipNavigationOnError);
         }
@@ -484,6 +501,19 @@ export default class FileItemsController {
 
     _handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError) {
         parentDirectoryInfo = this._getActualDirectoryInfo(parentDirectoryInfo);
+        this._raiseGetItemsError(parentDirectoryInfo, errorInfo);
+        this._resetDirectoryState(parentDirectoryInfo);
+        parentDirectoryInfo.expanded = false;
+        if(!skipNavigationOnError) {
+            this.setCurrentDirectory(parentDirectoryInfo.parentDirectory);
+        }
+        return new Deferred().reject(errorInfo).promise();
+    }
+
+    _raiseGetItemsError(parentDirectoryInfo, errorInfo) {
+        if(errorInfo.__notificationHandled) {
+            return;
+        }
         const actionInfo = this._createEditActionInfo('getItems', parentDirectoryInfo, parentDirectoryInfo);
         this._raiseEditActionStarting(actionInfo);
         this._raiseEditActionResultAcquired(actionInfo);
@@ -493,13 +523,7 @@ export default class FileItemsController {
             fileItem: parentDirectoryInfo.fileItem,
             index: 0
         });
-        this._resetDirectoryState(parentDirectoryInfo);
-        parentDirectoryInfo.expanded = false;
-        if(!skipNavigationOnError) {
-            this.setCurrentDirectory(parentDirectoryInfo.parentDirectory);
-        }
-
-        return new Deferred().reject().promise();
+        errorInfo.__notificationHandled = true;
     }
 
     _processEditAction(actionInfo, beforeAction, action, afterAction, completeAction) {
@@ -608,6 +632,14 @@ export default class FileItemsController {
         return this._executeDataLoad(() => {
             return this._refreshDeferred = this._refreshInternal();
         }, 'refresh');
+    }
+
+    lock() {
+        this._lockId = new Guid().toString();
+    }
+
+    unlock() {
+        delete this._lockId;
     }
 
     _refreshInternal() {
