@@ -365,12 +365,11 @@ class Menu extends MenuBase {
             'itemsExpr', 'items', 'itemTemplate', 'selectedExpr',
             'selectionMode', 'tabIndex', 'visible'
         ];
-        const actionsToTransfer = ['onItemContextMenu', 'onSelectionChanged'];
-
         each(optionsToTransfer, (_, option) => {
             menuOptions[option] = this.option(option);
         });
 
+        const actionsToTransfer = ['onItemContextMenu', 'onSelectionChanged', 'onItemRendered'];
         each(actionsToTransfer, (_, actionName) => {
             menuOptions[actionName] = (e) => {
                 this._actions[actionName](e);

@@ -2950,4 +2950,72 @@ QUnit.module('itemRendered event', () => { // T906117
             assert.equal(expectedItemsArray.length, 0);
         });
     });
+
+    QUnit.test('itemRendered callback is called for menu & treeview items, adaptivityEnabled: true', function(assert) {
+        const expectedItemsArray = [];
+        const callback = (e) => {
+            assert.equal(e.component, menu, 'component arg is menu');
+            assert.equal(e.element, menu.element(), 'element arg is menu');
+            assert.equal($(e.itemElement).text().trim(), e.itemData.text, 'item element text is equals to the item text');
+            expectedItemsArray.push(e);
+        };
+
+        let menu;
+        $('#menu').dxMenu({
+            dataSource: testDataSource,
+            adaptivityEnabled: true,
+            width: 50,
+            onInitialized(e) {
+                menu = e.component;
+            },
+            onItemRendered: callback
+        }).dxMenu('instance');
+
+        assert.equal(expectedItemsArray.length, 2);
+
+        assert.equal(expectedItemsArray[0].itemData.text, 'item1');
+        assert.strictEqual($(expectedItemsArray[0].itemElement).hasClass('dx-menu-item'), true);
+        assert.equal(expectedItemsArray[1].itemData.text, 'item1');
+        assert.strictEqual($(expectedItemsArray[1].itemElement).hasClass('dx-treeview-item'), true);
+    });
+
+    QUnit.test('itemRendered callback is called for all treeview items, adaptivityEnabled: true', function(assert) {
+        const expectedItemsArray = [];
+        const callback = (e) => {
+            assert.equal(e.component, menu, 'component arg is menu');
+            assert.equal(e.element, menu.element(), 'element arg is menu');
+            assert.equal($(e.itemElement).text().trim(), e.itemData.text, 'item element text is equals to the item text');
+            expectedItemsArray.push(e);
+        };
+
+        let menu;
+        $('#menu').dxMenu({
+            dataSource: testDataSource,
+            adaptivityEnabled: true,
+            width: 50,
+            onInitialized(e) {
+                menu = e.component;
+            },
+            onItemRendered: callback
+        }).dxMenu('instance');
+
+        assert.equal(expectedItemsArray.length, 2);
+
+        assert.equal(expectedItemsArray[0].itemData.text, 'item1');
+        assert.strictEqual($(expectedItemsArray[0].itemElement).hasClass('dx-menu-item'), true);
+        assert.equal(expectedItemsArray[1].itemData.text, 'item1');
+        assert.strictEqual($(expectedItemsArray[1].itemElement).hasClass('dx-treeview-item'), true);
+
+        const $treeview = $('#menu').find('.' + DX_TREEVIEW_CLASS).eq(0);
+        $treeview.find('.dx-treeview-item').trigger('dxclick');
+
+        assert.equal(expectedItemsArray.length, 3);
+        assert.equal(expectedItemsArray[2].itemData.text, 'item1_1');
+        assert.strictEqual($(expectedItemsArray[2].itemElement).hasClass('dx-treeview-item'), true);
+
+        $treeview.find('.dx-treeview-item').eq(1).trigger('dxclick');
+        assert.equal(expectedItemsArray.length, 4);
+        assert.equal(expectedItemsArray[3].itemData.text, 'item1_1_1');
+        assert.strictEqual($(expectedItemsArray[3].itemElement).hasClass('dx-treeview-item'), true);
+    });
 });
