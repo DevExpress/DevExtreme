@@ -26,9 +26,17 @@ import Widget, {
 
 import {
     ButtonType,
-    ButtonStylingMode,
+    ButtonStyle,
+} from '../common/buttons';
+
+import {
     ButtonGroupSelectionMode,
 } from '../types/enums';
+
+export {
+    ButtonType,
+    ButtonStyle,
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxButtonGroup>;
@@ -130,7 +138,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @default 'contained'
      * @public
      */
-    stylingMode?: ButtonStylingMode;
+    stylingMode?: ButtonStyle;
 }
 /**
  * @docid

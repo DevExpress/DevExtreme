@@ -1,10 +1,4 @@
 /** @namespace DevExpress.utils */
-export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
-
-/** @namespace DevExpress.utils */
-export type ButtonStylingMode = 'text' | 'outlined' | 'contained';
-
-/** @namespace DevExpress.utils */
 export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
 
 /** @namespace DevExpress.utils */

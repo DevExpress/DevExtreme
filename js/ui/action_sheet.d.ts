@@ -23,10 +23,15 @@ import CollectionWidget, {
 
 import {
     ButtonType,
-    ButtonStylingMode,
-} from '../types/enums';
+    ButtonStyle,
+} from '../common/buttons';
 
 type ItemLike<TKey> = string | Item<TKey> | any;
+
+export {
+    ButtonType,
+    ButtonStyle,
+};
 
 /** @public */
 export type CancelClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Cancelable & EventInfo<dxActionSheet<TItem, TKey>>;
@@ -202,7 +207,7 @@ export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
      * @default 'outlined'
      * @public
      */
-    stylingMode?: ButtonStylingMode;
+    stylingMode?: ButtonStyle;
 }
 
 /** @public */
