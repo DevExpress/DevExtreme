@@ -570,6 +570,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointments:Array<object>
      * @action
      * @public
      */
