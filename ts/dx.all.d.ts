@@ -17993,7 +17993,7 @@ declare module DevExpress.ui {
         readonly appointments: AppointmentTooltipShowingAppointmentInfo[];
       };
     export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
-      readonly isButtonClicked: true;
+      readonly isButtonClicked: boolean;
     };
     export type AppointmentUpdatedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {

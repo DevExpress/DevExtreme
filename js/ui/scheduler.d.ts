@@ -191,7 +191,7 @@ export type AppointmentTemplateData = TargetedAppointmentInfo;
 
 /** @public */
 export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
-  readonly isButtonClicked: true;
+  readonly isButtonClicked: boolean;
 };
 
 /** @public */
