@@ -2952,7 +2952,6 @@ QUnit.module('itemRendered event', () => { // T906117
     });
 
     QUnit.test('itemRendered callback is called for menu & treeview items, adaptivityEnabled: true (T1092214)', function(assert) {
-        assert.expect(11);
         const onItemRenderedHandler = sinon.stub();
 
         $('#menu').dxMenu({
