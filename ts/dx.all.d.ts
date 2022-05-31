@@ -17982,7 +17982,19 @@ declare module DevExpress.ui {
           readonly appointmentElement: DevExpress.core.DxElement;
         };
     export type AppointmentTemplateData = TargetedAppointmentInfo;
-    export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
+    export type AppointmentTooltipShowingAppointmentInfo = {
+      readonly appointmentData: Appointment;
+      readonly currentAppointmentData: Appointment;
+      readonly color: PromiseLike<string>;
+    };
+    export type AppointmentTooltipShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxScheduler> & {
+        readonly targetElement: DevExpress.core.DxElement;
+        readonly appointments: AppointmentTooltipShowingAppointmentInfo[];
+      };
+    export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
+      readonly isButtonClicked: boolean;
+    };
     export type AppointmentUpdatedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
         readonly appointmentData: dxSchedulerAppointment;
@@ -18364,11 +18376,18 @@ declare module DevExpress.ui {
     onAppointmentDeleted?: (
       e: DevExpress.ui.dxScheduler.AppointmentDeletedEvent
     ) => void;
+
     /**
      * [descr:dxSchedulerOptions.onAppointmentDeleting]
      */
     onAppointmentDeleting?: (
       e: DevExpress.ui.dxScheduler.AppointmentDeletingEvent
+    ) => void;
+    /**
+     * [descr:dxSchedulerOptions.onAppointmentTooltipShowing]
+     */
+    onAppointmentTooltipShowing?: (
+      e: DevExpress.ui.dxScheduler.AppointmentTooltipShowingEvent
     ) => void;
     /**
      * [descr:dxSchedulerOptions.onAppointmentFormOpening]
