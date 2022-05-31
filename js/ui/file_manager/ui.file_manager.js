@@ -49,6 +49,7 @@ class FileManager extends Widget {
         super._init();
         this._providerUpdateDeferred = null;
         this._lockCurrentPathProcessing = false;
+        this._wasRendered = false;
 
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
@@ -80,7 +81,11 @@ class FileManager extends Widget {
 
         this.$element().addClass(FILE_MANAGER_CLASS);
 
-        this._prepareToLoad();
+        if(this._wasRendered) {
+            this._prepareToLoad();
+        } else {
+            this._wasRendered = true;
+        }
         this._createNotificationControl();
 
         this._initCommandManager();
@@ -180,7 +185,7 @@ class FileManager extends Widget {
             getDirectories: this.getDirectories.bind(this),
             getCurrentDirectory: this._getCurrentDirectory.bind(this),
             onDirectoryClick: ({ itemData }) => this._setCurrentDirectory(itemData),
-            onFilesTreeViewContentReady: () => this._tryUnlockController(VIEW_AREAS.folders)
+            onItemListDataLoaded: () => this._tryUnlockController(VIEW_AREAS.folders)
         });
 
         this._filesTreeView.updateCurrentDirectory();
@@ -202,7 +207,7 @@ class FileManager extends Widget {
             onFocusedItemChanged: this._onItemViewFocusedItemChanged.bind(this),
             onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
             onContextMenuShowing: e => this._onContextMenuShowing(VIEW_AREAS.items, e),
-            onItemListContentReady: () => this._tryUnlockController(VIEW_AREAS.items),
+            onItemListItemsLoaded: () => this._tryUnlockController(VIEW_AREAS.items),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option('customizeDetailColumns'),
             detailColumns: this.option('itemView.details.columns')
@@ -299,13 +304,13 @@ class FileManager extends Widget {
     _tryUnlockController(area) {
         this._loadedWidgets.push(area);
         if(this._isAllWidgetsLoaded()) {
-            this._controller.unlock();
+            this._controller.endSingleLoad();
         }
     }
 
     _prepareToLoad() {
         this._loadedWidgets = [];
-        this._controller.lock();
+        this._controller.startSingleLoad();
     }
 
     _updateToolbar(selectedItems) {

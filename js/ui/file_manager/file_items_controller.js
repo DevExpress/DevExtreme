@@ -32,6 +32,7 @@ export default class FileItemsController {
 
         this._defaultIconMap = this._createDefaultIconMap();
 
+        this.startSingleLoad();
         this._setSecurityController();
         this._setProvider(options.fileProvider);
         this._initialize();
@@ -236,8 +237,8 @@ export default class FileItemsController {
                 .resolve(parentDirectoryInfo.items)
                 .promise();
         }
-        if(this._lockId && parentDirectoryInfo.itemsSingleLoadErrorId === this._lockId) {
-            this._handleItemLoadError(parentDirectoryInfo, parentDirectoryInfo.itemsSingleLoadError, skipNavigationOnError);
+        if(this._singleOperationLockId && parentDirectoryInfo.itemsSingleLoadErrorId === this._singleOperationLockId) {
+            this._changeDirectoryOnError(parentDirectoryInfo, skipNavigationOnError, true);
             return new Deferred().reject().promise();
         }
 
@@ -256,10 +257,9 @@ export default class FileItemsController {
                 );
                 parentDirectoryInfo.itemsLoaded = true;
                 return parentDirectoryInfo.items;
-            }, err => {
-                if(this._lockId && parentDirectoryInfo.itemsSingleLoadErrorId !== this._lockId) {
-                    parentDirectoryInfo.itemsSingleLoadErrorId = this._lockId;
-                    parentDirectoryInfo.itemsSingleLoadError = err;
+            }, () => {
+                if(this._singleOperationLockId && parentDirectoryInfo.itemsSingleLoadErrorId !== this._singleOperationLockId) {
+                    parentDirectoryInfo.itemsSingleLoadErrorId = this._singleOperationLockId;
                 }
                 return [];
             });
@@ -275,12 +275,7 @@ export default class FileItemsController {
     _getFileItems(parentDirectoryInfo, skipNavigationOnError) {
         let loadItemsDeferred = null;
         try {
-            loadItemsDeferred = new Deferred();
-            setTimeout(() => this._fileProvider.getItems(parentDirectoryInfo.fileItem)
-                .then(
-                    result => loadItemsDeferred.resolve(result),
-                    error => loadItemsDeferred.reject(error)
-                ));
+            loadItemsDeferred = this._fileProvider.getItems(parentDirectoryInfo.fileItem);
         } catch(error) {
             return this._handleItemLoadError(parentDirectoryInfo, error, skipNavigationOnError);
         }
@@ -405,18 +400,11 @@ export default class FileItemsController {
     _handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError) {
         parentDirectoryInfo = this._getActualDirectoryInfo(parentDirectoryInfo);
         this._raiseGetItemsError(parentDirectoryInfo, errorInfo);
-        this._resetDirectoryState(parentDirectoryInfo);
-        parentDirectoryInfo.expanded = false;
-        if(!skipNavigationOnError) {
-            this.setCurrentDirectory(parentDirectoryInfo.parentDirectory);
-        }
-        return new Deferred().reject(errorInfo).promise();
+        this._changeDirectoryOnError(parentDirectoryInfo, skipNavigationOnError);
+        return new Deferred().reject().promise();
     }
 
     _raiseGetItemsError(parentDirectoryInfo, errorInfo) {
-        if(errorInfo.__notificationHandled) {
-            return;
-        }
         const actionInfo = this._createEditActionInfo('getItems', parentDirectoryInfo, parentDirectoryInfo);
         this._raiseEditActionStarting(actionInfo);
         this._raiseEditActionResultAcquired(actionInfo);
@@ -426,7 +414,17 @@ export default class FileItemsController {
             fileItem: parentDirectoryInfo.fileItem,
             index: 0
         });
-        errorInfo.__notificationHandled = true;
+    }
+
+    _changeDirectoryOnError(dirInfo, skipNavigationOnError, isActualDirectoryRequired) {
+        if(isActualDirectoryRequired) {
+            dirInfo = this._getActualDirectoryInfo(dirInfo);
+        }
+        this._resetDirectoryState(dirInfo);
+        dirInfo.expanded = false;
+        if(!skipNavigationOnError) {
+            this.setCurrentDirectory(dirInfo.parentDirectory);
+        }
     }
 
     _processEditAction(actionInfo, action, completeAction) {
@@ -495,12 +493,12 @@ export default class FileItemsController {
         }, 'refresh');
     }
 
-    lock() {
-        this._lockId = new Guid().toString();
+    startSingleLoad() {
+        this._singleOperationLockId = new Guid().toString();
     }
 
-    unlock() {
-        delete this._lockId;
+    endSingleLoad() {
+        delete this._singleOperationLockId;
     }
 
     _refreshInternal() {
@@ -745,7 +743,7 @@ export default class FileItemsController {
 
     _tryCallAction(actionName) {
         const args = Array.prototype.slice.call(arguments, 1);
-        if(this._options[actionName]) {
+        if(this._isInitialized && this._options[actionName]) {
             this._options[actionName](...args);
         }
     }
