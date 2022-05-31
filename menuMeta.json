@@ -2305,7 +2305,6 @@
           {
             "Title": "Dynamic Series from the DataSource",
             "Name": "SeriesTemplates",
-            "DocUrl": "Guide/UI_Components/Chart/Data_Binding/Bind_Series_to_Data/#Using_a_Series_Template",
             "Credits": "www.geohive.com",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
