@@ -8,11 +8,11 @@ import {
 } from '../core/templates/template';
 
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
-    ItemInfo,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
+  ItemInfo,
 } from '../events/index';
 
 import {
@@ -71,7 +71,7 @@ export type FocusOutEvent = NativeEventInfo<dxSelectBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxSelectBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxSelectBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxSelectBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxSelectBox, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;

@@ -1,8 +1,8 @@
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
 } from '../events/index';
 
 import dxTextEditor, {
@@ -51,7 +51,7 @@ export type FocusOutEvent = NativeEventInfo<dxNumberBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxNumberBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxNumberBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxNumberBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;

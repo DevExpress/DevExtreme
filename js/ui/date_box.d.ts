@@ -1,8 +1,8 @@
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
 } from '../events/index';
 
 import {
@@ -63,7 +63,7 @@ export type FocusOutEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxDateBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxDateBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxDateBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;

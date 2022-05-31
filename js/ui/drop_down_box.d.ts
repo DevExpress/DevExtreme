@@ -10,10 +10,10 @@ import {
 import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
 } from '../events/index';
 
 import dxDropDownEditor, {
@@ -61,7 +61,7 @@ export type FocusOutEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxDropDownBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxDropDownBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxDropDownBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;

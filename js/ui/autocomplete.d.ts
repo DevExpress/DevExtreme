@@ -1,9 +1,9 @@
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
-    ItemInfo,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
+  ItemInfo,
 } from '../events/index';
 
 import dxDropDownList, {
@@ -54,7 +54,7 @@ export type FocusOutEvent = NativeEventInfo<dxAutocomplete, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxAutocomplete>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxAutocomplete, UIEvent>;
+export type InputEvent = NativeEventInfo<dxAutocomplete, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
