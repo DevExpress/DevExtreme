@@ -147,8 +147,9 @@ export class GanttExportHelper {
         const format = column?.format;
         const value = gridCoreUtils.getDisplayValue(column, data[field], data, 'data');
         if(isDefined(format)) {
-            if(isDate(value)) {
-                return dateLocalization.format(value, format);
+            if(column?.dataType === 'date' || column?.dataType === 'datetime') {
+                const date = isDate(value) ? value : new Date(value);
+                return dateLocalization.format(date, format);
             }
             if(isNumeric(value)) {
                 return numberLocalization.format(value, format);
