@@ -38,7 +38,8 @@ class FileManagerItemListBase extends Widget {
             onSelectionChanged: this._createActionByOption('onSelectionChanged'),
             onFocusedItemChanged: this._createActionByOption('onFocusedItemChanged'),
             onSelectedItemOpened: this._createActionByOption('onSelectedItemOpened'),
-            onContextMenuShowing: this._createActionByOption('onContextMenuShowing')
+            onContextMenuShowing: this._createActionByOption('onContextMenuShowing'),
+            onItemListContentReady: this._createActionByOption('onItemListContentReady')
         };
     }
 
@@ -81,6 +82,7 @@ class FileManagerItemListBase extends Widget {
             case 'onSelectionChanged':
             case 'onFocusedItemChanged':
             case 'onContextMenuShowing':
+            case 'onItemListContentReady':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -89,16 +91,20 @@ class FileManagerItemListBase extends Widget {
     }
 
     _getItems() {
-        return this._getItemsInternal().done(itemInfos => {
-            this._itemCount = itemInfos.length;
-            if(this._itemCount === 0) {
-                this._resetFocus();
-            }
+        return this._getItemsInternal()
+            .done(itemInfos => {
+                this._itemCount = itemInfos.length;
+                if(this._itemCount === 0) {
+                    this._resetFocus();
+                }
 
-            const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
-            this._hasParentDirectoryItem = !!parentDirectoryItem;
-            this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
-        });
+                const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
+                this._hasParentDirectoryItem = !!parentDirectoryItem;
+                this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
+            })
+            .always(() => {
+                this._onContentReady();
+            });
     }
 
     _getItemsInternal() {
@@ -125,6 +131,15 @@ class FileManagerItemListBase extends Widget {
 
     _raiseContextMenuShowing(e) {
         this._actions.onContextMenuShowing(e);
+    }
+
+    _raiseItemListContentReady() {
+        this._actions.onItemListContentReady();
+    }
+
+    _onContentReady() {
+        this._raiseItemListContentReady();
+        this._refreshDeferred?.resolve();
     }
 
     _tryRaiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
