@@ -21,7 +21,6 @@
         }
     },
     "include": [
-        "src/metadata/*",
         "src/modules/*",
         "src/data/**/*",
         "src/types/*",
