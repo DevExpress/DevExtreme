@@ -1352,16 +1352,6 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         const optionChangedSpy = sinon.spy();
         const objectProvider = new ObjectFileSystemProvider({ data: createTestFileSystem() });
         const customProvider = new CustomFileSystemProvider({
-            getItems1: function(parentDirectory) {
-                return new Promise((resolve, reject) => {
-                    if(parentDirectory.key === 'Folder 2') {
-                        const error = new FileSystemError(42, parentDirectory, 'Custom text');
-                        reject(error);
-                    } else {
-                        objectProvider.getItems(parentDirectory).then(result => resolve(result));
-                    }
-                });
-            },
             getItems: function(parentDirectory) {
                 const deferred = new Deferred();
                 if(parentDirectory.key === 'Folder 2') {
@@ -1425,5 +1415,121 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
         assert.strictEqual(this.fileManager.getCurrentDirectory().key, '', 'Current directory is the target one');
         assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'NavPane current folder text is correct');
+    });
+
+    test('getItems must be invoked only once in case of exception (T1085224)', function(assert) {
+        const customProvider = new CustomFileSystemProvider({
+            getItems: () => { throw new FileSystemError(42, null, 'Custom text'); }
+        });
+        const getItemsSpy = sinon.spy(customProvider, 'getItems');
+        this.fileManager.option({
+            fileSystemProvider: customProvider
+        });
+        this.clock.tick(800);
+
+        assert.strictEqual(getItemsSpy.callCount, 1, 'getItems function must be called once');
+    });
+
+    test('only one notification must be shown in case of getItems exception (T1085224)', function(assert) {
+        const provider = new CustomFileSystemProvider({
+            getItems: () => { throw new FileSystemError(42, null, 'Custom text'); }
+        });
+
+        this.fileManager.option('fileSystemProvider', provider);
+        this.clock.tick(400);
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 1, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, '', 'Common text is correct');
+        assert.strictEqual(details[0].errorText, 'Custom text', 'Error text is correct');
+    });
+
+    test('getItems must be invoked only once in case of exception after refresh (T1085224)', function(assert) {
+        const customProvider = new CustomFileSystemProvider({
+            getItems: () => { throw new FileSystemError(42, null, 'Custom text'); }
+        });
+        const getItemsSpy = sinon.spy(customProvider, 'getItems');
+        this.fileManager.option({
+            fileSystemProvider: customProvider
+        });
+        this.clock.tick(800);
+
+        getItemsSpy.reset();
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
+        this.clock.tick(800);
+
+        assert.strictEqual(getItemsSpy.callCount, 1, 'getItems function must be called once');
+    });
+
+    test('only one notification must be shown in case of getItems exception after refresh (T1085224)', function(assert) {
+        const provider = new CustomFileSystemProvider({
+            getItems: () => { throw new FileSystemError(42, null, 'Custom text'); }
+        });
+
+        this.fileManager.option('fileSystemProvider', provider);
+        this.clock.tick(400);
+
+        this.progressPanelWrapper.getInfos()[0].common.$closeButton.trigger('dxclick');
+        this.clock.tick(400);
+
+        let infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 0, 'There are no notifications on panel');
+
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
+        this.clock.tick(700);
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 1, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, '', 'Common text is correct');
+        assert.strictEqual(details[0].errorText, 'Custom text', 'Error text is correct');
+    });
+
+    test('getItems must be invoked only once in case of exception detailsView (T1085224)', function(assert) {
+        const customProvider = new CustomFileSystemProvider({
+            getItems: () => { throw new FileSystemError(42, null, 'Custom text'); }
+        });
+        const getItemsSpy = sinon.spy(customProvider, 'getItems');
+        this.fileManager.option({
+            itemView: { mode: 'details' },
+            fileSystemProvider: customProvider
+        });
+        this.clock.tick(800);
+
+        assert.strictEqual(getItemsSpy.callCount, 1, 'getItems function must be called once');
+    });
+
+    test('only one notification must be shown in case of getItems exception detailsView (T1085224)', function(assert) {
+        const provider = new CustomFileSystemProvider({
+            getItems: () => { throw new FileSystemError(42, null, 'Custom text'); }
+        });
+
+        this.fileManager.option({
+            itemView: { mode: 'details' },
+            fileSystemProvider: provider
+        });
+        this.clock.tick(800);
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 1, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, '', 'Common text is correct');
+        assert.strictEqual(details[0].errorText, 'Custom text', 'Error text is correct');
     });
 });

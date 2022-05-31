@@ -75,11 +75,13 @@ class FileManager extends Widget {
         this._lockSelectionProcessing = false;
         this._lockFocusedItemProcessing = false;
         this._itemKeyToFocus = undefined;
+        this._loadedWidgets = [];
 
         this._commandManager = new FileManagerCommandManager(this.option('permissions'));
 
         this.$element().addClass(FILE_MANAGER_CLASS);
 
+        this._prepareToLoad();
         this._createNotificationControl();
 
         this._initCommandManager();
@@ -178,7 +180,8 @@ class FileManager extends Widget {
             contextMenu: this._filesTreeViewContextMenu,
             getDirectories: this.getDirectories.bind(this),
             getCurrentDirectory: this._getCurrentDirectory.bind(this),
-            onDirectoryClick: ({ itemData }) => this._setCurrentDirectory(itemData)
+            onDirectoryClick: ({ itemData }) => this._setCurrentDirectory(itemData),
+            onFilesTreeViewContentReady: () => this._tryUnlockController(VIEW_AREAS.folders)
         });
 
         this._filesTreeView.updateCurrentDirectory();
@@ -200,6 +203,7 @@ class FileManager extends Widget {
             onFocusedItemChanged: this._onItemViewFocusedItemChanged.bind(this),
             onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
             onContextMenuShowing: e => this._onContextMenuShowing(VIEW_AREAS.items, e),
+            onItemListContentReady: () => this._tryUnlockController(VIEW_AREAS.items),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option('customizeDetailColumns'),
             detailColumns: this.option('itemView.details.columns')
@@ -282,8 +286,27 @@ class FileManager extends Widget {
     }
 
     _refreshAndShowProgress() {
+        this._prepareToLoad();
         return when(this._notificationControl.tryShowProgressPanel(), this._controller.refresh())
             .then(() => this._filesTreeView.refresh());
+    }
+
+    _isAllWidgetsLoaded() {
+        return this._loadedWidgets.length === 2 &&
+            this._loadedWidgets.indexOf(VIEW_AREAS.folders) !== -1 &&
+            this._loadedWidgets.indexOf(VIEW_AREAS.items) !== -1;
+    }
+
+    _tryUnlockController(area) {
+        this._loadedWidgets.push(area);
+        if(this._isAllWidgetsLoaded()) {
+            this._controller.unlock();
+        }
+    }
+
+    _prepareToLoad() {
+        this._loadedWidgets = [];
+        this._controller.lock();
     }
 
     _updateToolbar(selectedItems) {
