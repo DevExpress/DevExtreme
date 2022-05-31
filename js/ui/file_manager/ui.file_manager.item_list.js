@@ -39,7 +39,7 @@ class FileManagerItemListBase extends Widget {
             onFocusedItemChanged: this._createActionByOption('onFocusedItemChanged'),
             onSelectedItemOpened: this._createActionByOption('onSelectedItemOpened'),
             onContextMenuShowing: this._createActionByOption('onContextMenuShowing'),
-            onItemListContentReady: this._createActionByOption('onItemListContentReady')
+            onItemListDataLoaded: this._createActionByOption('onItemListDataLoaded')
         };
     }
 
@@ -82,7 +82,7 @@ class FileManagerItemListBase extends Widget {
             case 'onSelectionChanged':
             case 'onFocusedItemChanged':
             case 'onContextMenuShowing':
-            case 'onItemListContentReady':
+            case 'onItemListDataLoaded':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -103,7 +103,7 @@ class FileManagerItemListBase extends Widget {
                 this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
             })
             .always(() => {
-                this._onContentReady();
+                this._onDataLoaded();
             });
     }
 
@@ -133,12 +133,12 @@ class FileManagerItemListBase extends Widget {
         this._actions.onContextMenuShowing(e);
     }
 
-    _raiseItemListContentReady() {
-        this._actions.onItemListContentReady();
+    _raiseItemListDataLoaded() {
+        this._actions.onItemListDataLoaded();
     }
 
-    _onContentReady() {
-        this._raiseItemListContentReady();
+    _onDataLoaded() {
+        this._raiseItemListDataLoaded();
         this._refreshDeferred?.resolve();
     }
 
