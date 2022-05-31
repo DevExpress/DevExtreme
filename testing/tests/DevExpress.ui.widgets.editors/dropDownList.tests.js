@@ -1266,22 +1266,6 @@ QUnit.module('popup', moduleConfig, () => {
         parentContainer.remove();
     });
 
-    QUnit.test('skip gesture event class attach only when popup is opened', function(assert) {
-        const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
-        const $dropDownList = $('#dropDownList').dxDropDownList({
-            items: [1, 2, 3]
-        });
-
-        assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was not added when popup is closed');
-
-        $dropDownList.dxDropDownList('option', 'opened', true);
-        assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), true, 'skip gesture event class was added after popup was opened');
-
-        $dropDownList.dxDropDownList('option', 'opened', false);
-        assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was removed after popup was closed');
-    });
-
-
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
         const data = [];
         const done = assert.async();
