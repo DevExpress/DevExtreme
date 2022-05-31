@@ -1365,6 +1365,13 @@ declare module DevExpress.animation {
    */
   export interface positionConfig extends PositionConfig {}
 }
+declare module DevExpress.common {
+  export type ButtonStyle = 'text' | 'outlined' | 'contained';
+  export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+  export type ForcedSelectionMode = 'multiple' | 'single';
+  export type MenuSelectionMode = 'none' | 'single';
+  export type SelectionMode = ForcedSelectionMode | 'none';
+}
 declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -4916,11 +4923,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxActionSheetItem.type]
      */
-    type?: DevExpress.utils.ButtonType;
+    type?: DevExpress.common.ButtonType;
     /**
      * [descr:dxActionSheetItem.stylingMode]
      */
-    stylingMode?: DevExpress.utils.ButtonStylingMode;
+    stylingMode?: DevExpress.common.ButtonStyle;
   }
   /**
    * @deprecated use Properties instead
@@ -5260,7 +5267,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupItem.type]
      */
-    type?: DevExpress.utils.ButtonType;
+    type?: DevExpress.common.ButtonType;
 
     /**
      * [descr:dxButtonGroupItem.elementAttr]
@@ -5318,11 +5325,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupOptions.selectionMode]
      */
-    selectionMode?: DevExpress.utils.ButtonGroupSelectionMode;
+    selectionMode?: DevExpress.common.SelectionMode;
     /**
      * [descr:dxButtonGroupOptions.stylingMode]
      */
-    stylingMode?: DevExpress.utils.ButtonStylingMode;
+    stylingMode?: DevExpress.common.ButtonStyle;
   }
   /**
    * @deprecated use Properties instead
@@ -5352,7 +5359,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonOptions.stylingMode]
      */
-    stylingMode?: DevExpress.utils.ButtonStylingMode;
+    stylingMode?: DevExpress.common.ButtonStyle;
     /**
      * [descr:dxButtonOptions.template]
      */
@@ -5369,7 +5376,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonOptions.type]
      */
-    type?: DevExpress.utils.ButtonType;
+    type?: DevExpress.common.ButtonType;
     /**
      * [descr:dxButtonOptions.useSubmitBehavior]
      */
@@ -8132,7 +8139,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.selection.mode]
        */
-      mode?: DevExpress.utils.SelectionMode;
+      mode?: DevExpress.common.SelectionMode;
     }
     export type SelectionChangedEvent<
       TRowData = any,
@@ -10733,7 +10740,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.stylingMode]
      */
-    stylingMode?: DevExpress.utils.ButtonStylingMode;
+    stylingMode?: DevExpress.common.ButtonStyle;
     /**
      * [descr:dxDropDownButtonOptions.text]
      */
@@ -11433,7 +11440,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerOptions.selectionMode]
      */
-    selectionMode?: DevExpress.utils.FileManagerSelectionMode;
+    selectionMode?: DevExpress.common.ForcedSelectionMode;
     /**
      * [descr:dxFileManagerOptions.selectedItemKeys]
      */
@@ -14635,6 +14642,7 @@ declare module DevExpress.ui {
       readonly itemElement: DevExpress.core.DxElement;
       readonly itemIndex: number | { group: number; item: number };
     }
+    export type ListSelectionMode = DevExpress.common.SelectionMode | 'all';
     export type OptionChangedEvent<
       TItem extends ItemLike = any,
       TKey = any
@@ -14905,7 +14913,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.selectionMode]
      */
-    selectionMode?: DevExpress.utils.ListSelectionMode;
+    selectionMode?: DevExpress.ui.dxList.ListSelectionMode;
     /**
      * [descr:dxListOptions.showScrollbar]
      */
@@ -15617,7 +15625,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuBaseOptions.selectionMode]
      */
-    selectionMode?: DevExpress.utils.MenuSelectionMode;
+    selectionMode?: DevExpress.common.MenuSelectionMode;
     /**
      * [descr:dxMenuBaseOptions.showSubmenuMode]
      */
@@ -20021,7 +20029,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabsOptions.selectionMode]
      */
-    selectionMode?: DevExpress.utils.NavSelectionMode;
+    selectionMode?: DevExpress.common.ForcedSelectionMode;
     /**
      * [descr:dxTabsOptions.showNavButtons]
      */
@@ -22642,7 +22650,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.selectionMode]
      */
-    selectionMode?: DevExpress.utils.NavSelectionMode;
+    selectionMode?: DevExpress.common.ForcedSelectionMode;
     /**
      * [descr:dxTreeViewOptions.showCheckBoxesMode]
      */
@@ -24414,18 +24422,6 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type ButtonGroupSelectionMode = 'multiple' | 'single' | 'none';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ButtonStylingMode = 'text' | 'outlined' | 'contained';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
   /**
    * [descr:utils.cancelAnimationFrame(requestID)]
@@ -24439,10 +24435,6 @@ declare module DevExpress.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type ChartDataType = 'datetime' | 'numeric' | 'string';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ChartElementSelectionMode = 'multiple' | 'single';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -24888,10 +24880,6 @@ declare module DevExpress.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type FileManagerItemViewMode = 'details' | 'thumbnails';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type FileManagerSelectionMode = 'multiple' | 'single';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -25450,24 +25438,12 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type ListSelectionMode = 'all' | 'multiple' | 'none' | 'single';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type MaxAppointmentsPerCell = 'auto' | 'unlimited';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type MenuSelectionMode = 'none' | 'single';
 
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type Mode = 'auto';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type NavSelectionMode = 'multiple' | 'single';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -25707,10 +25683,6 @@ declare module DevExpress.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type SelectAllMode = 'allPages' | 'page';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type SelectionMode = 'multiple' | 'none' | 'single';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -26302,7 +26274,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.pointSelectionMode]
      */
-    pointSelectionMode?: DevExpress.utils.ChartElementSelectionMode;
+    pointSelectionMode?: DevExpress.common.ForcedSelectionMode;
     /**
      * [descr:BaseChartOptions.series]
      */
@@ -29551,7 +29523,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.seriesSelectionMode]
      */
-    seriesSelectionMode?: DevExpress.utils.ChartElementSelectionMode;
+    seriesSelectionMode?: DevExpress.common.ForcedSelectionMode;
     /**
      * [descr:dxChartOptions.seriesTemplate]
      */
@@ -32396,7 +32368,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.selectionMode]
      */
-    selectionMode?: DevExpress.utils.SelectionMode;
+    selectionMode?: DevExpress.common.SelectionMode;
     /**
      * [descr:dxFunnelOptions.sortData]
      */
@@ -33858,7 +33830,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.seriesSelectionMode]
      */
-    seriesSelectionMode?: DevExpress.utils.ChartElementSelectionMode;
+    seriesSelectionMode?: DevExpress.common.ForcedSelectionMode;
     /**
      * [descr:dxPolarChartOptions.seriesTemplate]
      */
@@ -36261,7 +36233,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxTreeMapOptions.selectionMode]
      */
-    selectionMode?: DevExpress.utils.SelectionMode;
+    selectionMode?: DevExpress.common.SelectionMode;
     /**
      * [descr:dxTreeMapOptions.tile]
      */
@@ -36772,7 +36744,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.selectionMode]
            */
-          selectionMode?: DevExpress.utils.SelectionMode;
+          selectionMode?: DevExpress.common.SelectionMode;
           /**
            * [descr:dxVectorMapOptions.layers.size]
            */
