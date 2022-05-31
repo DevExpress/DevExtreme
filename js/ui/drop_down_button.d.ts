@@ -1,6 +1,6 @@
 import {
     ButtonStyle,
-} from '../common/buttons';
+} from '../common';
 
 import {
     UserDefinedElement,

@@ -24,7 +24,7 @@ import CollectionWidget, {
 import {
     ButtonType,
     ButtonStyle,
-} from '../common/buttons';
+} from '../common';
 
 type ItemLike<TKey> = string | Item<TKey> | any;
 

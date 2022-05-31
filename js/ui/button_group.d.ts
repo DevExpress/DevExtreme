@@ -27,15 +27,13 @@ import Widget, {
 import {
     ButtonType,
     ButtonStyle,
-} from '../common/buttons';
-
-import {
     SelectionMode,
 } from '../common';
 
 export {
     ButtonType,
     ButtonStyle,
+    SelectionMode,
 };
 
 /** @public */

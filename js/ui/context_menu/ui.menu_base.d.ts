@@ -18,7 +18,7 @@ import {
 
 import {
     MenuSelectionMode,
-} from '../../common/menus';
+} from '../../common';
 
 /** @namespace DevExpress.ui */
 export interface dxMenuBaseOptions<

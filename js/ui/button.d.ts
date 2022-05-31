@@ -21,7 +21,7 @@ import Widget, {
 import {
     ButtonType,
     ButtonStyle,
-} from '../common/buttons';
+} from '../common';
 
 export {
     ButtonType,
