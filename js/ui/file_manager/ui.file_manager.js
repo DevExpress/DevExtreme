@@ -186,7 +186,7 @@ class FileManager extends Widget {
             getDirectories: this.getDirectories.bind(this),
             getCurrentDirectory: this._getCurrentDirectory.bind(this),
             onDirectoryClick: ({ itemData }) => this._setCurrentDirectory(itemData),
-            onItemListDataLoaded: () => this._tryUnlockController(VIEW_AREAS.folders)
+            onItemListDataLoaded: () => this._tryEndLoading(VIEW_AREAS.folders)
         });
 
         this._filesTreeView.updateCurrentDirectory();
@@ -208,7 +208,7 @@ class FileManager extends Widget {
             onFocusedItemChanged: this._onItemViewFocusedItemChanged.bind(this),
             onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
             onContextMenuShowing: e => this._onContextMenuShowing(VIEW_AREAS.items, e),
-            onItemListItemsLoaded: () => this._tryUnlockController(VIEW_AREAS.items),
+            onItemListItemsLoaded: () => this._tryEndLoading(VIEW_AREAS.items),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option('customizeDetailColumns'),
             detailColumns: this.option('itemView.details.columns')
@@ -302,7 +302,7 @@ class FileManager extends Widget {
             this._loadedWidgets.indexOf(VIEW_AREAS.items) !== -1;
     }
 
-    _tryUnlockController(area) {
+    _tryEndLoading(area) {
         this._loadedWidgets.push(area);
         if(this._isAllWidgetsLoaded()) {
             this._controller.endSingleLoad();
