@@ -37,11 +37,14 @@ import {
 import {
     ShowScrollbarMode,
     SelectAllMode,
-    ListSelectionMode,
     ListPageLoadMode,
     ListMenuMode,
     ListItemDeleteMode,
 } from '../types/enums';
+
+import {
+    SelectionMode,
+} from '../common';
 
 type ItemLike = string | Item | any;
 
@@ -50,6 +53,9 @@ interface ListItemInfo<TItem extends ItemLike> {
     readonly itemElement: DxElement;
     readonly itemIndex: number | { group: number; item: number };
 }
+
+/** @public */
+export type ListSelectionMode = SelectionMode | 'all';
 
 export interface ScrollInfo {
     readonly scrollOffset?: any;

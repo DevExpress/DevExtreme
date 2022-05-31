@@ -30,8 +30,8 @@ import {
 } from '../common/buttons';
 
 import {
-    ButtonGroupSelectionMode,
-} from '../types/enums';
+    SelectionMode,
+} from '../common';
 
 export {
     ButtonType,
@@ -132,7 +132,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @default 'single'
      * @public
      */
-    selectionMode?: ButtonGroupSelectionMode;
+    selectionMode?: SelectionMode;
     /**
      * @docid
      * @default 'contained'

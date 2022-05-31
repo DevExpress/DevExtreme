@@ -38,18 +38,25 @@ import {
     GridColumnDataType,
     SortOrder,
     ToolbarItemLocation,
-    FileManagerSelectionMode,
     FileManagerToolbarItem,
     FileManagerContextMenuItem,
     FileManagerItemViewMode,
     FileManagerViewArea,
 } from '../types/enums';
 
+import {
+   ForcedSelectionMode,
+} from '../common';
+
 interface ActionEventInfo {
     errorCode?: number;
     errorText: string;
     cancel: boolean | PromiseLike<void>;
 }
+
+export {
+    ForcedSelectionMode,
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFileManager>;
@@ -546,7 +553,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @default "multiple"
      * @public
      */
-    selectionMode?: FileManagerSelectionMode;
+    selectionMode?: ForcedSelectionMode;
     /**
      * @docid
      * @default []

@@ -44,12 +44,19 @@ import {
     VizPalette,
     HorizontalAlignment,
     VerticalEdge,
-    SelectionMode,
     VectorMapLayerType,
     VectorMapMarkerType,
     VectorMapMarkerShape,
     VectorMapProjection,
 } from '../types/enums';
+
+import {
+    SelectionMode,
+} from '../common';
+
+export {
+    SelectionMode,
+};
 
 export interface TooltipInfo {
     target?: MapLayerElement | dxVectorMapAnnotationConfig;

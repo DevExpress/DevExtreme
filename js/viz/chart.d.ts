@@ -52,7 +52,6 @@ import {
     HorizontalAlignment,
     DashStyle,
     ChartResolveLabelOverlapping,
-    ChartElementSelectionMode,
     SeriesType,
     Position,
     ChartZoomAndPanMode,
@@ -83,9 +82,17 @@ import {
     AggregatedPointsPosition,
 } from '../types/enums';
 
+import {
+    ForcedSelectionMode,
+} from '../common';
+
 interface SeriesInteractionInfo {
     target: chartSeriesObject;
 }
+
+export {
+    ForcedSelectionMode,
+};
 
 /** @public */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
@@ -1064,7 +1071,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default 'single'
      * @public
      */
-    seriesSelectionMode?: ChartElementSelectionMode;
+    seriesSelectionMode?: ForcedSelectionMode;
     /**
      * @docid
      * @default undefined

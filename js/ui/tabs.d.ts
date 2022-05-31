@@ -15,10 +15,14 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 import {
-    NavSelectionMode,
-} from '../types/enums';
+    ForcedSelectionMode,
+} from '../common';
 
 export type ItemLike = string | Item | any;
+
+export {
+    ForcedSelectionMode,
+};
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
@@ -116,7 +120,7 @@ export interface dxTabsBaseOptions<
      * @default 'single'
      * @public
      */
-    selectionMode?: NavSelectionMode;
+    selectionMode?: ForcedSelectionMode;
     /**
      * @docid dxTabsOptions.showNavButtons
      * @default true

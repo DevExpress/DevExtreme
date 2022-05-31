@@ -42,11 +42,18 @@ import {
     DashStyle,
     FunnelResolveLabelOverlapping,
     HorizontalEdge,
-    SelectionMode,
     FunnelAlgorithm,
     HatchingDirection,
     FunnelLabelPosition,
 } from '../types/enums';
+
+import {
+    SelectionMode,
+} from '../common';
+
+export {
+    SelectionMode,
+};
 
 /**
  * @public

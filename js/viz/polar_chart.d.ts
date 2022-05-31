@@ -53,7 +53,6 @@ import {
     PolarChartOverlappingBehavior,
     DashStyle,
     VizPointSymbol,
-    ChartElementSelectionMode,
     ChartLegendHoverMode,
     RelativePosition,
     DiscreteAxisDivisionMode,
@@ -72,9 +71,17 @@ import {
     ValueErrorBarType,
 } from '../types/enums';
 
+import {
+    ForcedSelectionMode,
+} from '../common';
+
 interface SeriesInteractionInfo {
     target: polarChartSeriesObject;
 }
+
+export {
+    ForcedSelectionMode,
+};
 
 /** @public */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
@@ -388,7 +395,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default 'single'
      * @public
      */
-    seriesSelectionMode?: ChartElementSelectionMode;
+    seriesSelectionMode?: ForcedSelectionMode;
     /**
      * @docid
      * @default undefined

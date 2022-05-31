@@ -14,8 +14,11 @@ import {
 
 import {
   ShowSubmenuMode,
-  MenuSelectionMode,
 } from '../../types/enums';
+
+import {
+    MenuSelectionMode,
+} from '../../common/menus';
 
 /** @namespace DevExpress.ui */
 export interface dxMenuBaseOptions<

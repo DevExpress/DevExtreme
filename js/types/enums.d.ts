@@ -85,9 +85,6 @@ export type BoxAlign = 'center' | 'end' | 'space-around' | 'space-between' | 'st
 /** @namespace DevExpress.utils */
 export type BoxCrossAlign = 'center' | 'end' | 'start' | 'stretch';
 
-/** @namespace DevExpress.utils */
-export type ButtonGroupSelectionMode = 'multiple' | 'single' | 'none';
-
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 /** @namespace DevExpress.utils */
 export type Mode = 'auto';
@@ -106,9 +103,6 @@ export type ChartResolveLabelOverlapping = 'hide' | 'none' | 'stack';
 
 /** @namespace DevExpress.utils */
 export type FunnelResolveLabelOverlapping = 'hide' | 'none' | 'shift';
-
-/** @namespace DevExpress.utils */
-export type ChartElementSelectionMode = 'multiple' | 'single';
 
 /** @namespace DevExpress.utils */
 export type SeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
@@ -192,9 +186,6 @@ export type EditorApplyValueMode = 'instantly' | 'useButtons';
 export type ShowSubmenuMode = 'onClick' | 'onHover';
 
 /** @namespace DevExpress.utils */
-export type MenuSelectionMode = 'none' | 'single';
-
-/** @namespace DevExpress.utils */
 export type ContextMenuSubmenuDirection = 'auto' | 'left' | 'right';
 
 /** @namespace DevExpress.utils */
@@ -255,9 +246,6 @@ export type GridScrollingMode = 'infinite' | 'standard' | 'virtual';
 export type ShowScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
 
 /** @namespace DevExpress.utils */
-export type SelectionMode = 'multiple' | 'none' | 'single';
-
-/** @namespace DevExpress.utils */
 export type GridSelectionShowCheckBoxesMode = 'always' | 'none' | 'onClick' | 'onLongTap';
 
 /** @namespace DevExpress.utils */
@@ -309,9 +297,6 @@ export type SankeyLabelOverlappingBehavior = 'ellipsis' | 'hide' | 'none';
 export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
 
 /** @namespace DevExpress.utils */
-export type ListSelectionMode = 'all' | 'multiple' | 'none' | 'single';
-
-/** @namespace DevExpress.utils */
 export type ListMenuMode = 'context' | 'slide';
 
 /** @namespace DevExpress.utils */
@@ -334,9 +319,6 @@ export type GeoMapRouteMode = 'driving' | 'walking';
 
 /** @namespace DevExpress.utils */
 export type SubmenuDirection = 'auto' | 'leftOrTop' | 'rightOrBottom';
-
-/** @namespace DevExpress.utils */
-export type NavSelectionMode = 'multiple' | 'single';
 
 /** @namespace DevExpress.utils */
 export type NumberBoxMode = 'number' | 'text' | 'tel';
@@ -632,9 +614,6 @@ export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
 
 /** @namespace DevExpress.utils */
 export type GridStartEditAction = 'click' | 'dblClick';
-
-/** @namespace DevExpress.utils */
-export type FileManagerSelectionMode = 'multiple' | 'single';
 
 /** @namespace DevExpress.utils */
 export type FileManagerToolbarItem = 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator';

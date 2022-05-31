@@ -100,7 +100,6 @@ import {
   GridGroupingExpandMode,
   GridScrollingMode,
   ShowScrollbarMode,
-  SelectionMode,
   GridSelectionShowCheckBoxesMode,
   SelectAllMode,
   SummaryType,
@@ -124,6 +123,14 @@ import {
   ToolbarItemLocation,
   DataGridExportFormat,
 } from '../types/enums';
+
+import {
+    SelectionMode,
+} from '../common';
+
+export {
+    SelectAllMode,
+};
 
 export interface AdaptiveDetailRowPreparingInfo {
   readonly formOptions: any;

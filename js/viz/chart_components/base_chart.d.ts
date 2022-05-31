@@ -42,8 +42,11 @@ import {
     VizAnimationEasing,
     VizPalette,
     VizPaletteExtensionMode,
-    ChartElementSelectionMode,
 } from '../../types/enums';
+
+import {
+    ForcedSelectionMode,
+} from '../../common';
 
 export interface PointInteractionInfo {
     readonly target: basePointObject;
@@ -194,7 +197,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @default 'single'
      * @public
      */
-    pointSelectionMode?: ChartElementSelectionMode;
+    pointSelectionMode?: ForcedSelectionMode;
     /**
      * @docid
      * @default undefined

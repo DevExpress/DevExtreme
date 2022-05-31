@@ -28,12 +28,16 @@ import {
 } from './widget/ui.search_box_mixin';
 
 import {
-    NavSelectionMode,
     ScrollDirection,
     TreeViewDataStructure,
     TreeViewCheckBoxMode,
     TreeViewExpandEvent,
 } from '../types/enums';
+
+import {
+    ForcedSelectionMode,
+} from '../common';
+
 import dxScrollable from './scroll_view/ui.scrollable';
 
 interface ItemInfo<TKey = any> {
@@ -42,6 +46,10 @@ interface ItemInfo<TKey = any> {
     readonly itemIndex?: number;
     readonly node?: Node<TKey>;
 }
+
+export {
+    ForcedSelectionMode,
+};
 
 /** @public */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
@@ -298,7 +306,7 @@ export interface dxTreeViewOptions<TKey = any>
      * @default "multiple"
      * @public
      */
-    selectionMode?: NavSelectionMode;
+    selectionMode?: ForcedSelectionMode;
     /**
      * @docid
      * @default 'none'

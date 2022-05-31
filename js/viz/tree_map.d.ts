@@ -31,11 +31,18 @@ import {
     VizTextOverflow,
     VizPalette,
     VizPaletteExtensionMode,
-    SelectionMode,
     TreeMapLayoutAlgorithm,
     TreeMapLayoutDirection,
     TreeMapColorizerType,
 } from '../types/enums';
+
+import {
+    SelectionMode,
+} from '../common';
+
+export {
+    SelectionMode,
+};
 
 export interface InteractionInfo {
   readonly node: dxTreeMapNode;
