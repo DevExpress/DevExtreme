@@ -1663,6 +1663,22 @@ QUnit.module('regressions', {
 
         assert.ok(!SpinButton.getInstance($spinButton).option('disabled'), 'spin button disabled state is correct');
     });
+
+    ['min', 'max', 'step'].forEach(optionName => {
+        QUnit.test(`T1090255 - changing ${optionName} option shouldn't lead to change tabIndex attribute`, function(assert) {
+            const instance = $('#widget').dxNumberBox({
+                tabIndex: 3,
+                value: 1,
+                min: 1
+            }).dxNumberBox('instance');
+
+            const $input = instance.$element().find(`.${INPUT_CLASS}`);
+            assert.equal($input.attr('tabIndex'), '3', 'tabIndex is correct after initializing');
+
+            instance.option(optionName, 4);
+            assert.equal($input.attr('tabIndex'), '3', 'tabIndex is correct after option changed');
+        });
+    });
 });
 
 QUnit.module('widget sizing render', {}, () => {

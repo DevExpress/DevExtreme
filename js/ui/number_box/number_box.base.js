@@ -232,17 +232,13 @@ const NumberBoxBase = TextEditor.inherit({
     },
 
     _renderProps: function() {
-        this.callBase();
+        const { min, max, step } = this.option();
 
-        this._input().prop({
-            'min': this.option('min'),
-            'max': this.option('max'),
-            'step': this.option('step')
-        });
+        this._input().prop({ min, max, step });
 
         this.setAria({
-            'valuemin': ensureDefined(this.option('min'), ''),
-            'valuemax': ensureDefined(this.option('max'), '')
+            'valuemin': ensureDefined(min, ''),
+            'valuemax': ensureDefined(max, '')
         });
     },
 
