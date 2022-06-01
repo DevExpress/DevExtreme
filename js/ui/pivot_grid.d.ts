@@ -26,12 +26,13 @@ import {
   PivotGridFieldChooserLayout,
   Mode,
   StateStoringType,
-  PivotGridScrollingMode,
-  PivotGridDataFieldArea,
-  PivotGridTotalsDisplayMode,
-  PivotGridRowHeadersLayout,
   ApplyChangesMode,
 } from '../types/enums';
+
+export type PivotGridDataFieldArea = 'column' | 'row';
+export type PivotGridRowHeadersLayout = 'standard' | 'tree';
+export type PivotGridScrollingMode = 'standard' | 'virtual';
+export type PivotGridTotalsDisplayMode = 'both' | 'columns' | 'none' | 'rows';
 
 /** @public */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid, MouseEvent | PointerEvent> & {

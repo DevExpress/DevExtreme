@@ -246,18 +246,6 @@ export type SubmenuDirection = 'auto' | 'leftOrTop' | 'rightOrBottom';
 export type NumberBoxMode = 'number' | 'text' | 'tel';
 
 /** @namespace DevExpress.utils */
-export type PivotGridScrollingMode = 'standard' | 'virtual';
-
-/** @namespace DevExpress.utils */
-export type PivotGridDataFieldArea = 'column' | 'row';
-
-/** @namespace DevExpress.utils */
-export type PivotGridTotalsDisplayMode = 'both' | 'columns' | 'none' | 'rows';
-
-/** @namespace DevExpress.utils */
-export type PivotGridRowHeadersLayout = 'standard' | 'tree';
-
-/** @namespace DevExpress.utils */
 export type Toolbar = 'bottom' | 'top';
 
 /** @namespace DevExpress.utils */
@@ -403,25 +391,7 @@ export type NumberBoxButtonName = 'clear' | 'spins';
 export type DropDownEditorButtonName = 'clear' | 'dropDown';
 
 /** @namespace DevExpress.utils */
-export type PivotGridDataType = 'date' | 'number' | 'string';
-
-/** @namespace DevExpress.utils */
-export type PivotGridGroupInterval = 'day' | 'dayOfWeek' | 'month' | 'quarter' | 'year';
-
-/** @namespace DevExpress.utils */
-export type PivotGridArea = 'column' | 'data' | 'filter' | 'row';
-
-/** @namespace DevExpress.utils */
-export type PivotGridSortBy = 'displayText' | 'value' | 'none';
-
-/** @namespace DevExpress.utils */
 export type ApplyChangesMode = 'instantly' | 'onDemand';
-
-/** @namespace DevExpress.utils */
-export type PivotGridSummaryDisplayMode = 'absoluteVariation' | 'percentOfColumnGrandTotal' | 'percentOfColumnTotal' | 'percentOfGrandTotal' | 'percentOfRowGrandTotal' | 'percentOfRowTotal' | 'percentVariation';
-
-/** @namespace DevExpress.utils */
-export type PivotGridRunningTotalMode = 'column' | 'row';
 
 /** @namespace DevExpress.utils */
 export type PositionAlignment = 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top';
@@ -434,9 +404,6 @@ export type PositionResolveCollision = 'fit' | 'flip' | 'flipfit' | 'none';
 
 /** @namespace DevExpress.utils */
 export type DataSourceStoreType = 'array' | 'local' | 'odata';
-
-/** @namespace DevExpress.utils */
-export type PivotGridStoreType = 'array' | 'local' | 'odata' | 'xmla';
 
 /** @namespace DevExpress.utils */
 export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';

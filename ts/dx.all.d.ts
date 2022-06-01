@@ -2484,6 +2484,46 @@ declare module DevExpress.data {
       | 'loadError'
       | 'loadingChanged';
     export type Options = PivotGridDataSourceOptions;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PivotGridArea = 'column' | 'data' | 'filter' | 'row';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PivotGridDataType = 'date' | 'number' | 'string';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PivotGridGroupInterval =
+      | 'day'
+      | 'dayOfWeek'
+      | 'month'
+      | 'quarter'
+      | 'year';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PivotGridRunningTotalMode = 'column' | 'row';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PivotGridSortBy = 'displayText' | 'value' | 'none';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PivotGridStoreType = 'array' | 'local' | 'odata' | 'xmla';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PivotGridSummaryDisplayMode =
+      | 'absoluteVariation'
+      | 'percentOfColumnGrandTotal'
+      | 'percentOfColumnTotal'
+      | 'percentOfGrandTotal'
+      | 'percentOfRowGrandTotal'
+      | 'percentOfRowTotal'
+      | 'percentVariation';
   }
   /**
    * @deprecated Use Field instead
@@ -2513,7 +2553,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.area]
      */
-    area?: DevExpress.utils.PivotGridArea | undefined;
+    area?: DevExpress.data.PivotGridDataSource.PivotGridArea | undefined;
     /**
      * [descr:PivotGridDataSourceOptions.fields.areaIndex]
      */
@@ -2548,7 +2588,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.dataType]
      */
-    dataType?: DevExpress.utils.PivotGridDataType;
+    dataType?: DevExpress.data.PivotGridDataSource.PivotGridDataType;
     /**
      * [descr:PivotGridDataSourceOptions.fields.displayFolder]
      */
@@ -2576,7 +2616,9 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.groupInterval]
      */
-    groupInterval?: DevExpress.utils.PivotGridGroupInterval | number;
+    groupInterval?:
+      | DevExpress.data.PivotGridDataSource.PivotGridGroupInterval
+      | number;
     /**
      * [descr:PivotGridDataSourceOptions.fields.groupName]
      */
@@ -2596,7 +2638,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.runningTotal]
      */
-    runningTotal?: DevExpress.utils.PivotGridRunningTotalMode;
+    runningTotal?: DevExpress.data.PivotGridDataSource.PivotGridRunningTotalMode;
     /**
      * [descr:PivotGridDataSourceOptions.fields.selector]
      */
@@ -2616,7 +2658,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.sortBy]
      */
-    sortBy?: DevExpress.utils.PivotGridSortBy;
+    sortBy?: DevExpress.data.PivotGridDataSource.PivotGridSortBy;
     /**
      * [descr:PivotGridDataSourceOptions.fields.sortBySummaryField]
      */
@@ -2639,7 +2681,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.summaryDisplayMode]
      */
-    summaryDisplayMode?: DevExpress.utils.PivotGridSummaryDisplayMode;
+    summaryDisplayMode?: DevExpress.data.PivotGridDataSource.PivotGridSummaryDisplayMode;
     /**
      * [descr:PivotGridDataSourceOptions.fields.summaryType]
      */
@@ -2712,13 +2754,13 @@ declare module DevExpress.data {
           /**
            * [descr:PivotGridDataSourceOptions.store.type]
            */
-          type?: DevExpress.utils.PivotGridStoreType;
+          type?: DevExpress.data.PivotGridDataSource.PivotGridStoreType;
         }>
       | {
           /**
            * [descr:PivotGridDataSourceOptions.store.type]
            */
-          type?: DevExpress.utils.PivotGridStoreType;
+          type?: DevExpress.data.PivotGridDataSource.PivotGridStoreType;
         };
   }
   /**
@@ -16794,6 +16836,26 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxPivotGrid>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPivotGrid> &
       DevExpress.events.ChangedOptionInfo;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PivotGridDataFieldArea = 'column' | 'row';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PivotGridRowHeadersLayout = 'standard' | 'tree';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PivotGridScrollingMode = 'standard' | 'virtual';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PivotGridTotalsDisplayMode =
+      | 'both'
+      | 'columns'
+      | 'none'
+      | 'rows';
     export type Properties = dxPivotGridOptions;
   }
   /**
@@ -16968,7 +17030,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridOptions.dataFieldArea]
      */
-    dataFieldArea?: DevExpress.utils.PivotGridDataFieldArea;
+    dataFieldArea?: DevExpress.ui.dxPivotGrid.PivotGridDataFieldArea;
     /**
      * [descr:dxPivotGridOptions.dataSource]
      */
@@ -17234,7 +17296,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridOptions.rowHeaderLayout]
      */
-    rowHeaderLayout?: DevExpress.utils.PivotGridRowHeadersLayout;
+    rowHeaderLayout?: DevExpress.ui.dxPivotGrid.PivotGridRowHeadersLayout;
     /**
      * [descr:dxPivotGridOptions.scrolling]
      */
@@ -17242,7 +17304,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.scrolling.mode]
        */
-      mode?: DevExpress.utils.PivotGridScrollingMode;
+      mode?: DevExpress.ui.dxPivotGrid.PivotGridScrollingMode;
       /**
        * [descr:dxPivotGridOptions.scrolling.useNative]
        */
@@ -17271,7 +17333,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridOptions.showTotalsPrior]
      */
-    showTotalsPrior?: DevExpress.utils.PivotGridTotalsDisplayMode;
+    showTotalsPrior?: DevExpress.ui.dxPivotGrid.PivotGridTotalsDisplayMode;
     /**
      * [descr:dxPivotGridOptions.stateStoring]
      */
@@ -25472,63 +25534,7 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type PivotGridArea = 'column' | 'data' | 'filter' | 'row';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PivotGridDataFieldArea = 'column' | 'row';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PivotGridDataType = 'date' | 'number' | 'string';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type PivotGridFieldChooserLayout = 0 | 1 | 2;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PivotGridGroupInterval =
-    | 'day'
-    | 'dayOfWeek'
-    | 'month'
-    | 'quarter'
-    | 'year';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PivotGridRowHeadersLayout = 'standard' | 'tree';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PivotGridRunningTotalMode = 'column' | 'row';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PivotGridScrollingMode = 'standard' | 'virtual';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PivotGridSortBy = 'displayText' | 'value' | 'none';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PivotGridStoreType = 'array' | 'local' | 'odata' | 'xmla';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PivotGridSummaryDisplayMode =
-    | 'absoluteVariation'
-    | 'percentOfColumnGrandTotal'
-    | 'percentOfColumnTotal'
-    | 'percentOfGrandTotal'
-    | 'percentOfRowGrandTotal'
-    | 'percentOfRowTotal'
-    | 'percentVariation';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PivotGridTotalsDisplayMode = 'both' | 'columns' | 'none' | 'rows';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */

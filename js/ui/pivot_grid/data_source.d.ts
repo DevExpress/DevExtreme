@@ -21,14 +21,15 @@ import {
     SortOrder,
     FilterType,
     SummaryType,
-    PivotGridDataType,
-    PivotGridGroupInterval,
-    PivotGridArea,
-    PivotGridSortBy,
-    PivotGridSummaryDisplayMode,
-    PivotGridRunningTotalMode,
-    PivotGridStoreType,
 } from '../../types/enums';
+
+export type PivotGridArea = 'column' | 'data' | 'filter' | 'row';
+export type PivotGridDataType = 'date' | 'number' | 'string';
+export type PivotGridGroupInterval = 'day' | 'dayOfWeek' | 'month' | 'quarter' | 'year';
+export type PivotGridRunningTotalMode = 'column' | 'row';
+export type PivotGridSortBy = 'displayText' | 'value' | 'none';
+export type PivotGridStoreType = 'array' | 'local' | 'odata' | 'xmla';
+export type PivotGridSummaryDisplayMode = 'absoluteVariation' | 'percentOfColumnGrandTotal' | 'percentOfColumnTotal' | 'percentOfGrandTotal' | 'percentOfRowGrandTotal' | 'percentOfRowTotal' | 'percentVariation';
 
 /**
  * @docid
