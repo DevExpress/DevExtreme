@@ -19,7 +19,8 @@ import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="dropDownList"></div>';
+        '<div id="dropDownList"></div>\
+        <div id="popup"></div>';
 
     $('#qunit-fixture').html(markup);
 });
