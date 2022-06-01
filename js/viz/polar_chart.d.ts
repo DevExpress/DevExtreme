@@ -79,6 +79,7 @@ export {
     ForcedSelectionMode,
 };
 
+export type PolarChartOverlapping = 'none' | 'hide';
 export type PolarChartOverlappingBehavior = 'none' | 'hide';
 export type PolarChartResolveLabelOverlapping = 'hide' | 'none';
 export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
@@ -381,7 +382,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default "none"
      * @public
      */
-    resolveLabelOverlapping?: PolarChartResolveLabelOverlapping;
+    resolveLabelOverlapping?: PolarChartOverlapping;
     /**
      * @docid
      * @default undefined
@@ -875,7 +876,7 @@ export interface dxPolarChartCommonAxisSettingsLabel {
      * @default 'hide'
      * @public
      */
-    overlappingBehavior?: PolarChartOverlappingBehavior;
+    overlappingBehavior?: PolarChartOverlapping;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.label.visible
      * @default true

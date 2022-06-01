@@ -33142,11 +33142,7 @@ declare module DevExpress.viz {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type PolarChartOverlappingBehavior = 'none' | 'hide';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type PolarChartResolveLabelOverlapping = 'hide' | 'none';
+    export type PolarChartOverlapping = 'none' | 'hide';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -33602,7 +33598,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.label.overlappingBehavior]
      */
-    overlappingBehavior?: DevExpress.viz.dxPolarChart.PolarChartOverlappingBehavior;
+    overlappingBehavior?: DevExpress.viz.dxPolarChart.PolarChartOverlapping;
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.label.visible]
      */
@@ -33855,7 +33851,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.viz.dxPolarChart.PolarChartResolveLabelOverlapping;
+    resolveLabelOverlapping?: DevExpress.viz.dxPolarChart.PolarChartOverlapping;
     /**
      * [descr:dxPolarChartOptions.series]
      */
