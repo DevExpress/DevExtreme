@@ -177,21 +177,6 @@ QUnit.module('rendering', moduleSetup, () => {
         tagBox.option('value', []);
         assert.ok($tagBox.hasClass(EMPTY_INPUT_CLASS), 'empty class present');
     });
-
-    QUnit.test('skip gesture event class attach only when popup is opened', function(assert) {
-        const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
-        const $tagBox = $('#tagBox').dxTagBox({
-            items: [1, 2, 3]
-        });
-
-        assert.equal($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was not added when popup is closed');
-
-        $tagBox.dxTagBox('option', 'opened', true);
-        assert.equal($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), true, 'skip gesture event class was added after popup was opened');
-
-        $tagBox.dxTagBox('option', 'opened', false);
-        assert.equal($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was removed after popup was closed');
-    });
 });
 
 QUnit.module('select element', () => {
