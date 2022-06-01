@@ -144,21 +144,6 @@ export type ChartDataType = 'datetime' | 'numeric' | 'string';
 export type ArgumentAxisHoverMode = 'allArgumentPoints' | 'none';
 
 /** @namespace DevExpress.utils */
-export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
-
-/** @namespace DevExpress.utils */
-export type PieChartResolveLabelOverlapping = 'hide' | 'none' | 'shift';
-
-/** @namespace DevExpress.utils */
-export type PieChartType = 'donut' | 'doughnut' | 'pie';
-
-/** @namespace DevExpress.utils */
-export type PieChartSegmentsDirection = 'anticlockwise' | 'clockwise';
-
-/** @namespace DevExpress.utils */
-export type PieChartAnnotationLocation = 'center' | 'edge';
-
-/** @namespace DevExpress.utils */
 export type PolarChartResolveLabelOverlapping = 'hide' | 'none';
 
 /** @namespace DevExpress.utils */
@@ -476,15 +461,6 @@ export type NumberBoxButtonName = 'clear' | 'spins';
 
 /** @namespace DevExpress.utils */
 export type DropDownEditorButtonName = 'clear' | 'dropDown';
-
-/** @namespace DevExpress.utils */
-export type SmallValuesGroupingMode = 'none' | 'smallValueThreshold' | 'topN';
-
-/** @namespace DevExpress.utils */
-export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';
-
-/** @namespace DevExpress.utils */
-export type PieChartLabelPosition = 'columns' | 'inside' | 'outside';
 
 /** @namespace DevExpress.utils */
 export type PivotGridDataType = 'date' | 'number' | 'string';

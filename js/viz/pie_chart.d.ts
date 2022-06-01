@@ -50,16 +50,18 @@ import {
     VizTextOverflow,
     DashStyle,
     ChartDataType,
-    PieChartLegendHoverMode,
-    PieChartResolveLabelOverlapping,
-    PieChartType,
-    PieChartSegmentsDirection,
-    PieChartAnnotationLocation,
     HatchingDirection,
-    SmallValuesGroupingMode,
-    PieChartSeriesInteractionMode,
-    PieChartLabelPosition,
+
 } from '../types/enums';
+
+export type PieChartAnnotationLocation = 'center' | 'edge';
+export type PieChartLabelPosition = 'columns' | 'inside' | 'outside';
+export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
+export type PieChartResolveLabelOverlapping = 'hide' | 'none' | 'shift';
+export type PieChartSegmentsDirection = 'anticlockwise' | 'clockwise';
+export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';
+export type PieChartType = 'donut' | 'doughnut' | 'pie';
+export type SmallValuesGroupingMode = 'none' | 'smallValueThreshold' | 'topN';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxPieChart>;
