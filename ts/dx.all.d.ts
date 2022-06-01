@@ -6209,7 +6209,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.filterOperations]
        */
-      filterOperations?: Array<DevExpress.utils.GridFilterOperations | string>;
+      filterOperations?: Array<GridFilterOperations | string>;
       /**
        * [descr:GridBaseColumn.filterType]
        */
@@ -6416,7 +6416,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.columnChooser.mode]
        */
-      mode?: DevExpress.utils.GridColumnChooserMode;
+      mode?: GridColumnChooserMode;
       /**
        * [descr:GridBaseOptions.columnChooser.searchTimeout]
        */
@@ -6530,7 +6530,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.headerFilter.groupInterval]
        */
-      groupInterval?: DevExpress.utils.HeaderFilterGroupInterval | number;
+      groupInterval?: HeaderFilterGroupInterval | number;
       /**
        * [descr:GridBaseColumn.headerFilter.height]
        */
@@ -6574,6 +6574,10 @@ declare module DevExpress.ui {
        */
       calculateCellValue?: (rowData: any) => any;
     }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ColumnResizingMode = 'nextColumn' | 'widget';
     export type ContentReadyEvent<
       TRowData = any,
       TKey = any
@@ -6615,6 +6619,22 @@ declare module DevExpress.ui {
     export interface DataErrorOccurredInfo {
       readonly error?: Error;
     }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DataGridExportFormat = 'pdf' | 'xlsx';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DataGridToolbarItem =
+      | 'addRowButton'
+      | 'applyFilterButton'
+      | 'columnChooserButton'
+      | 'exportButton'
+      | 'groupPanel'
+      | 'revertButton'
+      | 'saveButton'
+      | 'searchPanel';
     export type DataRowTemplateData<TRowData = any, TKey = any> = {
       readonly key: TKey;
       readonly data: TRowData;
@@ -6728,7 +6748,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.editing.newRowPosition]
        */
-      newRowPosition?: DevExpress.utils.GridNewRowPosition;
+      newRowPosition?: GridNewRowPosition;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -6757,7 +6777,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.mode]
        */
-      mode?: DevExpress.utils.GridEditMode;
+      mode?: GridEditMode;
       /**
        * [descr:GridBaseOptions.editing.popup]
        */
@@ -6765,7 +6785,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.refreshMode]
        */
-      refreshMode?: DevExpress.utils.GridEditRefreshMode;
+      refreshMode?: GridEditRefreshMode;
       /**
        * [descr:GridBaseOptions.editing.selectTextOnEditStart]
        */
@@ -6773,7 +6793,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.startEditAction]
        */
-      startEditAction?: DevExpress.utils.GridStartEditAction;
+      startEditAction?: GridStartEditAction;
       /**
        * [descr:GridBaseOptions.editing.texts]
        */
@@ -6876,19 +6896,63 @@ declare module DevExpress.ui {
       readonly dataField?: string;
       readonly row?: Row<TRowData, TKey>;
     };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ExcelCellHorizontalAlignment =
+      | 'center'
+      | 'centerContinuous'
+      | 'distributed'
+      | 'fill'
+      | 'general'
+      | 'justify'
+      | 'left'
+      | 'right';
     export type ExcelCellInfo<TRowData = any, TKey = any> = {
       readonly component: dxDataGrid<TRowData, TKey>;
-      horizontalAlignment?: DevExpress.utils.ExcelCellHorizontalAlignment;
-      verticalAlignment?: DevExpress.utils.ExcelCellVerticalAlignment;
+      horizontalAlignment?: ExcelCellHorizontalAlignment;
+      verticalAlignment?: ExcelCellVerticalAlignment;
       wrapTextEnabled?: boolean;
       backgroundColor?: string;
-      fillPatternType?: DevExpress.utils.ExcelCellPatternType;
+      fillPatternType?: ExcelCellPatternType;
       fillPatternColor?: string;
       font?: DevExpress.exporter.ExcelFont;
       readonly value?: string | number | Date;
       numberFormat?: string;
       gridCell?: DevExpress.excelExporter.DataGridCell;
     };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ExcelCellPatternType =
+      | 'darkDown'
+      | 'darkGray'
+      | 'darkGrid'
+      | 'darkHorizontal'
+      | 'darkTrellis'
+      | 'darkUp'
+      | 'darkVertical'
+      | 'gray0625'
+      | 'gray125'
+      | 'lightDown'
+      | 'lightGray'
+      | 'lightGrid'
+      | 'lightHorizontal'
+      | 'lightTrellis'
+      | 'lightUp'
+      | 'lightVertical'
+      | 'mediumGray'
+      | 'none'
+      | 'solid';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ExcelCellVerticalAlignment =
+      | 'bottom'
+      | 'center'
+      | 'distributed'
+      | 'justify'
+      | 'top';
     export type ExplicitTypes<TRowData, TKey> = {
       AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
         TRowData,
@@ -7039,7 +7103,7 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
         fileName?: string;
         selectedRowsOnly: boolean;
-        format: DevExpress.utils.DataGridExportFormat | string;
+        format: DataGridExportFormat | string;
       };
     export type ExportTexts = {
       /**
@@ -7122,7 +7186,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.filterRow.applyFilter]
        */
-      applyFilter?: DevExpress.utils.GridApplyFilterMode;
+      applyFilter?: GridApplyFilterMode;
       /**
        * [descr:GridBaseOptions.filterRow.applyFilterText]
        */
@@ -7253,6 +7317,119 @@ declare module DevExpress.ui {
         newRowIndex: number;
         readonly rows: Array<Row<TRowData, TKey>>;
       };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridApplyFilterMode = 'auto' | 'onClick';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridColumnButtonName =
+      | 'cancel'
+      | 'delete'
+      | 'edit'
+      | 'save'
+      | 'undelete';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridColumnChooserMode = 'dragAndDrop' | 'select';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridColumnRenderingMode = 'standard' | 'virtual';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridCommandColumnType =
+      | 'adaptive'
+      | 'buttons'
+      | 'detailExpand'
+      | 'groupExpand'
+      | 'selection'
+      | 'drag';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridDataChangeType = 'insert' | 'update' | 'remove';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridEditRefreshMode = 'full' | 'reshape' | 'repaint';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridEnterKeyAction = 'startEdit' | 'moveFocus';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridEnterKeyDirection = 'none' | 'column' | 'row';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridFilterOperations =
+      | '='
+      | '<>'
+      | '<'
+      | '<='
+      | '>'
+      | '>='
+      | 'contains'
+      | 'endswith'
+      | 'isblank'
+      | 'isnotblank'
+      | 'notcontains'
+      | 'startswith'
+      | 'between'
+      | 'anyof'
+      | 'noneof';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridGroupingExpandMode = 'buttonClick' | 'rowClick';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridNewRowPosition =
+      | 'first'
+      | 'last'
+      | 'pageBottom'
+      | 'pageTop'
+      | 'viewportBottom'
+      | 'viewportTop';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridPagerDisplayMode = 'adaptive' | 'compact' | 'full';
+
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridPagerPageSize = 'all';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridRowRenderingMode = 'standard' | 'virtual';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridSelectionShowCheckBoxesMode =
+      | 'always'
+      | 'none'
+      | 'onClick'
+      | 'onLongTap';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridSortingMode = 'multiple' | 'none' | 'single';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GridStartEditAction = 'click' | 'dblClick';
     export type GroupData<TRowData> = {
       key: any;
       items: Array<TRowData> | Array<GroupData<TRowData>> | null;
@@ -7293,7 +7470,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.grouping.expandMode]
        */
-      expandMode?: DevExpress.utils.GridGroupingExpandMode;
+      expandMode?: GridGroupingExpandMode;
       /**
        * [descr:dxDataGridOptions.grouping.texts]
        */
@@ -7371,6 +7548,17 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
+    export type HeaderFilterGroupInterval =
+      | 'day'
+      | 'hour'
+      | 'minute'
+      | 'month'
+      | 'quarter'
+      | 'second'
+      | 'year';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
     export interface HeaderFilterTexts {
       /**
        * [descr:GridBaseOptions.headerFilter.texts.cancel]
@@ -7409,11 +7597,11 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.keyboardNavigation.enterKeyAction]
        */
-      enterKeyAction?: DevExpress.utils.GridEnterKeyAction;
+      enterKeyAction?: GridEnterKeyAction;
       /**
        * [descr:GridBaseOptions.keyboardNavigation.enterKeyDirection]
        */
-      enterKeyDirection?: DevExpress.utils.GridEnterKeyDirection;
+      enterKeyDirection?: GridEnterKeyDirection;
     }
     export type KeyDownEvent<
       TRowData = any,
@@ -7514,12 +7702,12 @@ declare module DevExpress.ui {
        * [descr:GridBaseOptions.pager.allowedPageSizes]
        */
       allowedPageSizes?:
-        | Array<number | DevExpress.utils.GridPagerPageSize>
+        | Array<number | GridPagerPageSize>
         | DevExpress.utils.Mode;
       /**
        * [descr:GridBaseOptions.pager.displayMode]
        */
-      displayMode?: DevExpress.utils.GridPagerDisplayMode;
+      displayMode?: GridPagerDisplayMode;
       /**
        * [descr:GridBaseOptions.pager.infoText]
        */
@@ -8051,7 +8239,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.scrolling.columnRenderingMode]
        */
-      columnRenderingMode?: DevExpress.utils.GridColumnRenderingMode;
+      columnRenderingMode?: GridColumnRenderingMode;
       /**
        * [descr:GridBaseOptions.scrolling.preloadEnabled]
        */
@@ -8059,7 +8247,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.scrolling.rowRenderingMode]
        */
-      rowRenderingMode?: DevExpress.utils.GridRowRenderingMode;
+      rowRenderingMode?: GridRowRenderingMode;
       /**
        * [descr:GridBaseOptions.scrolling.scrollByContent]
        */
@@ -8126,7 +8314,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.selection.showCheckBoxesMode]
        */
-      showCheckBoxesMode?: DevExpress.utils.GridSelectionShowCheckBoxesMode;
+      showCheckBoxesMode?: GridSelectionShowCheckBoxesMode;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -8174,7 +8362,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.sorting.mode]
        */
-      mode?: DevExpress.utils.GridSortingMode;
+      mode?: GridSortingMode;
       /**
        * [descr:GridBaseOptions.sorting.showSortIndexes]
        */
@@ -8397,7 +8585,7 @@ declare module DevExpress.ui {
      * [descr:dxDataGridColumn.buttons]
      */
     buttons?: Array<
-      | DevExpress.utils.GridColumnButtonName
+      | DevExpress.ui.dxDataGrid.GridColumnButtonName
       | DevExpress.ui.dxDataGrid.ColumnButton<TRowData, TKey>
     >;
     /**
@@ -8467,7 +8655,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.type]
      */
-    type?: DevExpress.utils.GridCommandColumnType;
+    type?: DevExpress.ui.dxDataGrid.GridCommandColumnType;
   }
   /**
    * @deprecated Use the DataGrid's ColumnButton type instead
@@ -8478,7 +8666,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumnButton.name]
      */
-    name?: DevExpress.utils.GridColumnButtonName | string;
+    name?: DevExpress.ui.dxDataGrid.GridColumnButtonName | string;
     /**
      * [descr:dxDataGridColumnButton.onClick]
      */
@@ -21907,7 +22095,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
        */
-      mode?: DevExpress.utils.TreeListScrollingMode;
+      mode?: TreeListScrollingMode;
     }
     export interface Selection extends DevExpress.ui.dxDataGrid.SelectionBase {
       /**
@@ -21925,6 +22113,45 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.ui.dxDataGrid.ToolbarPreparingInfo;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type TreeListColumnButtonName =
+      | 'add'
+      | 'cancel'
+      | 'delete'
+      | 'edit'
+      | 'save'
+      | 'undelete';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type TreeListDataStructure = 'plain' | 'tree';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type TreeListFilterMode =
+      | 'fullBranch'
+      | 'withAncestors'
+      | 'matchOnly';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type TreeListScrollingMode = 'standard' | 'virtual';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type TreeListToolbarItem =
+      | 'addRowButton'
+      | 'applyFilterButton'
+      | 'columnChooserButton'
+      | 'revertButton'
+      | 'saveButton'
+      | 'searchPanel';
   }
   /**
    * @deprecated Use the DevExpress.ui.dxTreeList.Column type instead
@@ -21936,7 +22163,7 @@ declare module DevExpress.ui {
      * [descr:dxTreeListColumn.buttons]
      */
     buttons?: Array<
-      | DevExpress.utils.TreeListColumnButtonName
+      | DevExpress.ui.dxTreeList.TreeListColumnButtonName
       | DevExpress.ui.dxTreeList.ColumnButton<TRowData, TKey>
     >;
     /**
@@ -21982,7 +22209,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListColumn.type]
      */
-    type?: DevExpress.utils.TreeListCommandColumnType;
+    type?: DevExpress.ui.dxTreeList.TreeListCommandColumnType;
   }
   /**
    * @deprecated Use the TreeList's ColumnButton type instead
@@ -21993,7 +22220,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListColumnButton.name]
      */
-    name?: DevExpress.utils.TreeListColumnButtonName | string;
+    name?: DevExpress.ui.dxTreeList.TreeListColumnButtonName | string;
     /**
      * [descr:dxTreeListColumnButton.onClick]
      */
@@ -22074,7 +22301,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.dataStructure]
      */
-    dataStructure?: DevExpress.utils.TreeListDataStructure;
+    dataStructure?: DevExpress.ui.dxTreeList.TreeListDataStructure;
     /**
      * [descr:dxTreeListOptions.editing]
      */
@@ -22090,7 +22317,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.filterMode]
      */
-    filterMode?: DevExpress.utils.TreeListFilterMode;
+    filterMode?: DevExpress.ui.dxTreeList.TreeListFilterMode;
     /**
      * [descr:dxTreeListOptions.hasItemsExpr]
      */
@@ -23428,7 +23655,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.columnResizingMode]
      */
-    columnResizingMode?: DevExpress.utils.ColumnResizingMode;
+    columnResizingMode?: DevExpress.ui.dxDataGrid.ColumnResizingMode;
     /**
      * [descr:GridBaseOptions.columnWidth]
      */
@@ -24211,7 +24438,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:DataChange.type]
      */
-    type: DevExpress.utils.GridDataChangeType;
+    type: GridDataChangeType;
     /**
      * [descr:DataChange.data]
      */
@@ -24232,7 +24459,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:dxDataGridToolbar.items]
      */
-    items?: Array<DevExpress.utils.DataGridToolbarItem | ToolbarItem>;
+    items?: Array<DataGridToolbarItem | ToolbarItem>;
     /**
      * [descr:dxDataGridToolbar.visible]
      */
@@ -24250,7 +24477,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:dxDataGridToolbarItem.name]
      */
-    name?: DevExpress.utils.DataGridToolbarItem | string;
+    name?: DataGridToolbarItem | string;
     /**
      * [descr:dxDataGridToolbarItem.location]
      */
@@ -24342,7 +24569,7 @@ declare module DevExpress.ui.dxTreeList {
     /**
      * [descr:dxTreeListToolbar.items]
      */
-    items?: Array<DevExpress.utils.TreeListToolbarItem | ToolbarItem>;
+    items?: Array<TreeListToolbarItem | ToolbarItem>;
     /**
      * [descr:dxTreeListToolbar.visible]
      */
@@ -24360,7 +24587,7 @@ declare module DevExpress.ui.dxTreeList {
     /**
      * [descr:dxTreeListToolbarItem.name]
      */
-    name?: DevExpress.utils.TreeListToolbarItem | string;
+    name?: TreeListToolbarItem | string;
     /**
      * [descr:dxTreeListToolbarItem.location]
      */
@@ -24502,10 +24729,6 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type ColumnResizingMode = 'nextColumn' | 'widget';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type ComparisonOperator =
     | '!='
     | '!=='
@@ -24523,22 +24746,6 @@ declare module DevExpress.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DataGridExportFormat = 'pdf' | 'xlsx';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DataGridToolbarItem =
-    | 'addRowButton'
-    | 'applyFilterButton'
-    | 'columnChooserButton'
-    | 'exportButton'
-    | 'groupPanel'
-    | 'revertButton'
-    | 'saveButton'
-    | 'searchPanel';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -24776,50 +24983,6 @@ declare module DevExpress.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type EditorStylingMode = 'outlined' | 'underlined' | 'filled';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ExcelCellHorizontalAlignment =
-    | 'center'
-    | 'centerContinuous'
-    | 'distributed'
-    | 'fill'
-    | 'general'
-    | 'justify'
-    | 'left'
-    | 'right';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ExcelCellPatternType =
-    | 'darkDown'
-    | 'darkGray'
-    | 'darkGrid'
-    | 'darkHorizontal'
-    | 'darkTrellis'
-    | 'darkUp'
-    | 'darkVertical'
-    | 'gray0625'
-    | 'gray125'
-    | 'lightDown'
-    | 'lightGray'
-    | 'lightGrid'
-    | 'lightHorizontal'
-    | 'lightTrellis'
-    | 'lightUp'
-    | 'lightVertical'
-    | 'mediumGray'
-    | 'none'
-    | 'solid';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ExcelCellVerticalAlignment =
-    | 'bottom'
-    | 'center'
-    | 'distributed'
-    | 'justify'
-    | 'top';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -25105,23 +25268,6 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type GridApplyFilterMode = 'auto' | 'onClick';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridColumnButtonName =
-    | 'cancel'
-    | 'delete'
-    | 'edit'
-    | 'save'
-    | 'undelete';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridColumnChooserMode = 'dragAndDrop' | 'select';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type GridColumnDataType =
     | 'string'
     | 'number'
@@ -25132,118 +25278,11 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type GridColumnRenderingMode = 'standard' | 'virtual';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridCommandColumnType =
-    | 'adaptive'
-    | 'buttons'
-    | 'detailExpand'
-    | 'groupExpand'
-    | 'selection'
-    | 'drag';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridDataChangeType = 'insert' | 'update' | 'remove';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridEditRefreshMode = 'full' | 'reshape' | 'repaint';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridEnterKeyAction = 'startEdit' | 'moveFocus';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridEnterKeyDirection = 'none' | 'column' | 'row';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridFilterOperations =
-    | '='
-    | '<>'
-    | '<'
-    | '<='
-    | '>'
-    | '>='
-    | 'contains'
-    | 'endswith'
-    | 'isblank'
-    | 'isnotblank'
-    | 'notcontains'
-    | 'startswith'
-    | 'between'
-    | 'anyof'
-    | 'noneof';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridGroupingExpandMode = 'buttonClick' | 'rowClick';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridNewRowPosition =
-    | 'first'
-    | 'last'
-    | 'pageBottom'
-    | 'pageTop'
-    | 'viewportBottom'
-    | 'viewportTop';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridPagerDisplayMode = 'adaptive' | 'compact' | 'full';
-
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridPagerPageSize = 'all';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridRowRenderingMode = 'standard' | 'virtual';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type GridScrollingMode = 'infinite' | 'standard' | 'virtual';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type GridSelectionShowCheckBoxesMode =
-    | 'always'
-    | 'none'
-    | 'onClick'
-    | 'onLongTap';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridSortingMode = 'multiple' | 'none' | 'single';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GridStartEditAction = 'click' | 'dblClick';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type HatchingDirection = 'left' | 'none' | 'right';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type HeaderFilterGroupInterval =
-    | 'day'
-    | 'hour'
-    | 'minute'
-    | 'month'
-    | 'quarter'
-    | 'second'
-    | 'year';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -25731,42 +25770,6 @@ declare module DevExpress.utils {
     | 'dxTextBox'
     | 'dxButtonGroup'
     | 'dxDropDownButton';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type TreeListColumnButtonName =
-    | 'add'
-    | 'cancel'
-    | 'delete'
-    | 'edit'
-    | 'save'
-    | 'undelete';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type TreeListDataStructure = 'plain' | 'tree';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type TreeListScrollingMode = 'standard' | 'virtual';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type TreeListToolbarItem =
-    | 'addRowButton'
-    | 'applyFilterButton'
-    | 'columnChooserButton'
-    | 'revertButton'
-    | 'saveButton'
-    | 'searchPanel';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */

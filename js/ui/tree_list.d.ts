@@ -67,12 +67,6 @@ import Widget from './widget/ui.widget';
 
 import {
     Mode,
-    TreeListDataStructure,
-    TreeListScrollingMode,
-    TreeListColumnButtonName,
-    TreeListFilterMode,
-    TreeListCommandColumnType,
-    TreeListToolbarItem,
     ToolbarItemLocation,
 } from '../types/enums';
 
@@ -89,6 +83,13 @@ interface CellInfo<TRowData = any, TKey = any> {
     readonly cellElement: DxElement;
     readonly row: Row<TRowData, TKey>;
 }
+
+export type TreeListColumnButtonName = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
+export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
+export type TreeListDataStructure = 'plain' | 'tree';
+export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
+export type TreeListScrollingMode = 'standard' | 'virtual';
+export type TreeListToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 /** @public */
 export type Scrollable = Skip<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;

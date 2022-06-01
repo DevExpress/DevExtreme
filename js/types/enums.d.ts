@@ -147,12 +147,6 @@ export type ShowSubmenuMode = 'onClick' | 'onHover';
 export type ContextMenuSubmenuDirection = 'auto' | 'left' | 'right';
 
 /** @namespace DevExpress.utils */
-export type GridColumnChooserMode = 'dragAndDrop' | 'select';
-
-/** @namespace DevExpress.utils */
-export type ColumnResizingMode = 'nextColumn' | 'widget';
-
-/** @namespace DevExpress.utils */
 export type HorizontalEdge = 'left' | 'right';
 
 /** @namespace DevExpress.utils */
@@ -171,31 +165,7 @@ export type FilterBuilderGroupOperations = 'and' | 'or' | 'notAnd' | 'notOr';
 export type FilterOperations = '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
 
 /** @namespace DevExpress.utils */
-export type GridFilterOperations = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof';
-
-/** @namespace DevExpress.utils */
 export type FilterType = 'exclude' | 'include';
-
-/** @namespace DevExpress.utils */
-export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
-
-/** @namespace DevExpress.utils */
-export type GridEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
-
-/** @namespace DevExpress.utils */
-export type GridEnterKeyAction = 'startEdit' | 'moveFocus';
-
-/** @namespace DevExpress.utils */
-export type GridEnterKeyDirection = 'none' | 'column' | 'row';
-
-/** @namespace DevExpress.utils */
-export type GridEditRefreshMode = 'full' | 'reshape' | 'repaint';
-
-/** @namespace DevExpress.utils */
-export type GridApplyFilterMode = 'auto' | 'onClick';
-
-/** @namespace DevExpress.utils */
-export type GridGroupingExpandMode = 'buttonClick' | 'rowClick';
 
 /** @namespace DevExpress.utils */
 export type GridScrollingMode = 'infinite' | 'standard' | 'virtual';
@@ -204,16 +174,10 @@ export type GridScrollingMode = 'infinite' | 'standard' | 'virtual';
 export type ShowScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
 
 /** @namespace DevExpress.utils */
-export type GridSelectionShowCheckBoxesMode = 'always' | 'none' | 'onClick' | 'onLongTap';
-
-/** @namespace DevExpress.utils */
 export type SelectAllMode = 'allPages' | 'page';
 
 /** @namespace DevExpress.utils */
 export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
-
-/** @namespace DevExpress.utils */
-export type GridSortingMode = 'multiple' | 'none' | 'single';
 
 /** @namespace DevExpress.utils */
 export type StateStoringType = 'custom' | 'localStorage' | 'sessionStorage';
@@ -363,18 +327,6 @@ export type ToolbarItemLocateInMenuMode = 'always' | 'auto' | 'never';
 export type ToolbarItemShowTextMode = 'always' | 'inMenu';
 
 /** @namespace DevExpress.utils */
-export type TreeListDataStructure = 'plain' | 'tree';
-
-/** @namespace DevExpress.utils */
-export type TreeListScrollingMode = 'standard' | 'virtual';
-
-/** @namespace DevExpress.utils */
-export type GridRowRenderingMode = 'standard' | 'virtual';
-
-/** @namespace DevExpress.utils */
-export type GridColumnRenderingMode = 'standard' | 'virtual';
-
-/** @namespace DevExpress.utils */
 export type TreeMapLayoutAlgorithm = 'sliceanddice' | 'squarified' | 'strip';
 
 /** @namespace DevExpress.utils */
@@ -493,15 +445,6 @@ export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
 export type ExcelFontUnderlineType = 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
 
 /** @namespace DevExpress.utils */
-export type ExcelCellHorizontalAlignment = 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
-
-/** @namespace DevExpress.utils */
-export type ExcelCellVerticalAlignment = 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
-
-/** @namespace DevExpress.utils */
-export type ExcelCellPatternType = 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
-
-/** @namespace DevExpress.utils */
 export type HtmlEditorValueType = 'html' | 'markdown';
 
 /** @namespace DevExpress.utils */
@@ -527,24 +470,6 @@ export type EditorLabelMode = 'static' | 'floating' | 'hidden';
 
 /** @namespace DevExpress.utils */
 export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
-
-/** @namespace DevExpress.utils */
-export type GridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
-
-/** @namespace DevExpress.utils */
-export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
-
-/** @namespace DevExpress.utils */
-export type GridColumnButtonName = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
-
-/** @namespace DevExpress.utils */
-export type TreeListColumnButtonName = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
-
-/** @namespace DevExpress.utils */
-export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
-
-/** @namespace DevExpress.utils */
-export type GridStartEditAction = 'click' | 'dblClick';
 
 /** @namespace DevExpress.utils */
 export type FileManagerToolbarItem = 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator';
@@ -637,32 +562,10 @@ export type ValidationStatus = 'valid' | 'invalid' | 'pending';
 export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
 
 /** @namespace DevExpress.utils */
-export type GridPagerDisplayMode = 'adaptive' | 'compact' | 'full';
-
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-/** @namespace DevExpress.utils */
-export type GridPagerPageSize = 'all';
-
-/** @namespace DevExpress.utils */
-export type GridDataChangeType = 'insert' | 'update' | 'remove';
-
-/** @namespace DevExpress.utils */
-export type GridNewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
-
-/** @namespace DevExpress.utils */
-export type DataGridToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
-
-/** @namespace DevExpress.utils */
-export type TreeListToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
-
-/** @namespace DevExpress.utils */
 export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
 
 /** @namespace DevExpress.utils */
 export type GanttPdfExportDateRange = 'all' | 'visible';
-
-/** @namespace DevExpress.utils */
-export type DataGridExportFormat = 'pdf' | 'xlsx';
 
 /** @namespace DevExpress.utils */
 export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
