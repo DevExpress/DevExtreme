@@ -17990,7 +17990,19 @@ declare module DevExpress.ui {
           readonly appointmentElement: DevExpress.core.DxElement;
         };
     export type AppointmentTemplateData = TargetedAppointmentInfo;
-    export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
+    export type AppointmentTooltipShowingAppointmentInfo = {
+      readonly appointmentData: Appointment;
+      readonly currentAppointmentData: Appointment;
+      readonly color: PromiseLike<string>;
+    };
+    export type AppointmentTooltipShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxScheduler> & {
+        readonly targetElement: DevExpress.core.DxElement;
+        readonly appointments: AppointmentTooltipShowingAppointmentInfo[];
+      };
+    export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
+      readonly isButtonClicked: boolean;
+    };
     export type AppointmentUpdatedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
         readonly appointmentData: dxSchedulerAppointment;
@@ -18372,11 +18384,18 @@ declare module DevExpress.ui {
     onAppointmentDeleted?: (
       e: DevExpress.ui.dxScheduler.AppointmentDeletedEvent
     ) => void;
+
     /**
      * [descr:dxSchedulerOptions.onAppointmentDeleting]
      */
     onAppointmentDeleting?: (
       e: DevExpress.ui.dxScheduler.AppointmentDeletingEvent
+    ) => void;
+    /**
+     * [descr:dxSchedulerOptions.onAppointmentTooltipShowing]
+     */
+    onAppointmentTooltipShowing?: (
+      e: DevExpress.ui.dxScheduler.AppointmentTooltipShowingEvent
     ) => void;
     /**
      * [descr:dxSchedulerOptions.onAppointmentFormOpening]
@@ -18534,7 +18553,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.allDayPanelMode]
      */
-    allDayPanelMode?: 'all' | 'allDay' | 'hidden';
+    allDayPanelMode?: DevExpress.utils.AllDayPanelMode;
     /**
      * [descr:dxSchedulerOptions.views]
      */
@@ -18690,7 +18709,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.allDayPanelMode]
            */
-          allDayPanelMode?: 'all' | 'allDay' | 'no';
+          allDayPanelMode?: DevExpress.utils.AllDayPanelMode;
         }
     >;
   }
@@ -24356,6 +24375,10 @@ declare module DevExpress.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
