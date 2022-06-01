@@ -40,6 +40,7 @@ import {
   MaxAppointmentsPerCell,
   SchedulerRecurrenceEditMode,
   SchedulerScrollingMode,
+  AllDayPanelMode,
 } from '../types/enums';
 
 interface AppointmentDraggingEvent {
@@ -798,7 +799,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default "allDay"
      */
-    allDayPanelMode?: 'all' | 'allDay' | 'hidden';
+    allDayPanelMode?: AllDayPanelMode;
     /**
      * @docid
      * @default ['day', 'week']
@@ -928,7 +929,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default "allDay"
        */
-       allDayPanelMode?: 'all' | 'allDay' | 'no';
+       allDayPanelMode?: AllDayPanelMode;
     }>;
 }
 /**

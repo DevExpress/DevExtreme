@@ -759,3 +759,6 @@ export type GanttPdfExportDateRange = 'all' | 'visible';
 
 /** @namespace DevExpress.utils */
 export type DataGridExportFormat = 'pdf' | 'xlsx';
+
+/** @namespace DevExpress.utils */
+export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
