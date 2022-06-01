@@ -50,19 +50,15 @@ import {
 } from './core/base_widget';
 
 import {
-    PolarChartOverlappingBehavior,
     DashStyle,
     VizPointSymbol,
     ChartLegendHoverMode,
     RelativePosition,
     DiscreteAxisDivisionMode,
-    ValueAxisVisualRangeUpdateMode,
     ChartZoomPanAction,
     AxisScaleType,
     ChartDataType,
     ArgumentAxisHoverMode,
-    PolarChartResolveLabelOverlapping,
-    PolarChartSeriesType,
     HatchingDirection,
     ChartSeriesHoverMode,
     ChartSeriesSelectionMode,
@@ -82,6 +78,11 @@ interface SeriesInteractionInfo {
 export {
     ForcedSelectionMode,
 };
+
+export type PolarChartOverlappingBehavior = 'none' | 'hide';
+export type PolarChartResolveLabelOverlapping = 'hide' | 'none';
+export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
+export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
 
 /** @public */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {

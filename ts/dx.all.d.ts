@@ -25498,23 +25498,6 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type PolarChartOverlappingBehavior = 'none' | 'hide';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PolarChartResolveLabelOverlapping = 'hide' | 'none';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PolarChartSeriesType =
-    | 'area'
-    | 'bar'
-    | 'line'
-    | 'scatter'
-    | 'stackedbar';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type Position = 'bottom' | 'left' | 'right' | 'top';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25824,10 +25807,6 @@ declare module DevExpress.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -33157,6 +33136,23 @@ declare module DevExpress.viz {
     export type PointSelectionChangedEvent =
       DevExpress.events.EventInfo<dxPolarChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PolarChartOverlappingBehavior = 'none' | 'hide';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PolarChartResolveLabelOverlapping = 'hide' | 'none';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type PolarChartSeriesType =
+      | 'area'
+      | 'bar'
+      | 'line'
+      | 'scatter'
+      | 'stackedbar';
     export type Properties = dxPolarChartOptions;
     export type SeriesClickEvent = DevExpress.events.NativeEventInfo<
       dxPolarChart,
@@ -33178,6 +33174,10 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseChart.TooltipInfo;
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxPolarChart> &
       DevExpress.viz.BaseChart.TooltipInfo;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
     export type ZoomEndEvent = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<
         dxPolarChart,
@@ -33599,7 +33599,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.label.overlappingBehavior]
      */
-    overlappingBehavior?: DevExpress.utils.PolarChartOverlappingBehavior;
+    overlappingBehavior?: DevExpress.viz.dxPolarChart.PolarChartOverlappingBehavior;
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.label.visible]
      */
@@ -33701,7 +33701,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.commonSeriesSettings.type]
      */
-    type?: DevExpress.utils.PolarChartSeriesType;
+    type?: DevExpress.viz.dxPolarChart.PolarChartSeriesType;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -33852,7 +33852,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.utils.PolarChartResolveLabelOverlapping;
+    resolveLabelOverlapping?: DevExpress.viz.dxPolarChart.PolarChartResolveLabelOverlapping;
     /**
      * [descr:dxPolarChartOptions.series]
      */
@@ -34579,7 +34579,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.visualRangeUpdateMode]
      */
-    visualRangeUpdateMode?: DevExpress.utils.ValueAxisVisualRangeUpdateMode;
+    visualRangeUpdateMode?: DevExpress.viz.dxPolarChart.ValueAxisVisualRangeUpdateMode;
     /**
      * [descr:dxPolarChartOptions.valueAxis.wholeRange]
      */
@@ -37211,7 +37211,7 @@ declare module DevExpress.viz {
     /**
      * [descr:PolarChartSeries.type]
      */
-    type?: DevExpress.utils.PolarChartSeriesType;
+    type?: DevExpress.viz.dxPolarChart.PolarChartSeriesType;
   }
   /**
    * [descr:polarChartSeriesObject]

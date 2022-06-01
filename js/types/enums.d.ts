@@ -50,9 +50,6 @@ export type BarGaugeResolveLabelOverlapping = 'hide' | 'none';
 export type OverlappingBehavior = 'rotate' | 'stagger' | 'none' | 'hide';
 
 /** @namespace DevExpress.utils */
-export type PolarChartOverlappingBehavior = 'none' | 'hide';
-
-/** @namespace DevExpress.utils */
 export type Orientation = 'horizontal' | 'vertical';
 
 /** @namespace DevExpress.utils */
@@ -129,9 +126,6 @@ export type VizTimeInterval = 'day' | 'hour' | 'millisecond' | 'minute' | 'month
 export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
 
 /** @namespace DevExpress.utils */
-export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
-
-/** @namespace DevExpress.utils */
 export type ChartZoomPanAction = 'zoom' | 'pan';
 
 /** @namespace DevExpress.utils */
@@ -142,12 +136,6 @@ export type ChartDataType = 'datetime' | 'numeric' | 'string';
 
 /** @namespace DevExpress.utils */
 export type ArgumentAxisHoverMode = 'allArgumentPoints' | 'none';
-
-/** @namespace DevExpress.utils */
-export type PolarChartResolveLabelOverlapping = 'hide' | 'none';
-
-/** @namespace DevExpress.utils */
-export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
 
 /** @namespace DevExpress.utils */
 export type EditorApplyValueMode = 'instantly' | 'useButtons';
