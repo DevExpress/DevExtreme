@@ -18,7 +18,8 @@ import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="dropDownList"></div>';
+        '<div id="dropDownList"></div>\
+        <div id="popup"></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -1446,6 +1447,25 @@ QUnit.module('popup', moduleConfig, () => {
 
         assert.strictEqual(popupHeight, recalculatedPopupHeight);
         assert.strictEqual(listInstance.option('_revertPageOnEmptyLoad'), true, 'default list _revertPageOnEmptyLoad is correct');
+    });
+
+    QUnit.test('scroll on input should not scroll the page when opened DropDownList is inside Popup (T1082501)', function(assert) {
+        const $dropDownList = $('<div>').dxDropDownList({ opened: true });
+        $('#popup').dxPopup({
+            visible: true,
+            contentTemplate: () => $dropDownList
+        });
+        const $input = $dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const wheelEvent = $.Event('dxmousewheel', {
+            delta: -125,
+            pageX: $input.scrollLeft(),
+            pageY: $input.scrollTop(),
+            originalEvent: $.Event('wheel')
+        });
+
+        $input.trigger(wheelEvent);
+
+        assert.ok(wheelEvent.originalEvent.isDefaultPrevented());
     });
 });
 
