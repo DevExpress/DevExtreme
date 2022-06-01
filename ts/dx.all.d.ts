@@ -1370,7 +1370,7 @@ declare module DevExpress.common {
   export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
   export type ForcedSelectionMode = 'multiple' | 'single';
   export type MenuSelectionMode = 'none' | 'single';
-  export type SelectionMode = ForcedSelectionMode | 'none';
+  export type SelectionMode = 'multiple' | 'single' | 'none';
 }
 declare module DevExpress.core {
   /**
@@ -14642,7 +14642,7 @@ declare module DevExpress.ui {
       readonly itemElement: DevExpress.core.DxElement;
       readonly itemIndex: number | { group: number; item: number };
     }
-    export type ListSelectionMode = DevExpress.common.SelectionMode | 'all';
+    export type ListSelectionMode = 'all' | 'multiple' | 'none' | 'single';
     export type OptionChangedEvent<
       TItem extends ItemLike = any,
       TKey = any

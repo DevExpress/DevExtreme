@@ -42,10 +42,6 @@ import {
     ListItemDeleteMode,
 } from '../types/enums';
 
-import {
-    SelectionMode,
-} from '../common';
-
 type ItemLike = string | Item | any;
 
 interface ListItemInfo<TItem extends ItemLike> {
@@ -55,7 +51,7 @@ interface ListItemInfo<TItem extends ItemLike> {
 }
 
 /** @public */
-export type ListSelectionMode = SelectionMode | 'all';
+export type ListSelectionMode = 'all' | 'multiple' | 'none' | 'single';
 
 export interface ScrollInfo {
     readonly scrollOffset?: any;

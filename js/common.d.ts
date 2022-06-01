@@ -14,7 +14,7 @@ export type ButtonStyle = 'text' | 'outlined' | 'contained';
  * @public
  * @namespace DevExpress.common
  */
-export type SelectionMode = ForcedSelectionMode | 'none';
+export type SelectionMode = 'multiple' | 'single' | 'none';
 
 /**
  * @public
