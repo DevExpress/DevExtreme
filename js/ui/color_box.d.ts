@@ -51,7 +51,7 @@ export type FocusOutEvent = NativeEventInfo<dxColorBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxColorBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxColorBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxColorBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
