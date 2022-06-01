@@ -24374,10 +24374,6 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -24453,19 +24449,7 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type ChartDataType = 'datetime' | 'numeric' | 'string';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -24481,23 +24465,7 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type ChartResolveLabelOverlapping = 'hide' | 'none' | 'stack';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ChartSeriesAggregationMethod =
-    | 'avg'
-    | 'count'
-    | 'max'
-    | 'min'
-    | 'ohlc'
-    | 'range'
-    | 'sum'
-    | 'custom';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -24519,24 +24487,6 @@ declare module DevExpress.utils {
     | 'includePoints'
     | 'none'
     | 'onlyPoint';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ChartSingleValueSeriesAggregationMethod =
-    | 'avg'
-    | 'count'
-    | 'max'
-    | 'min'
-    | 'sum'
-    | 'custom';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ChartTooltipLocation = 'center' | 'edge';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ChartZoomAndPanMode = 'both' | 'none' | 'pan' | 'zoom';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -24829,10 +24779,6 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type ExcelCellHorizontalAlignment =
     | 'center'
     | 'centerContinuous'
@@ -24977,10 +24923,6 @@ declare module DevExpress.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type FilterType = 'exclude' | 'include';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type FinancialChartReductionLevel = 'close' | 'high' | 'low' | 'open';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -28286,20 +28228,82 @@ declare module DevExpress.viz {
     ): void;
   }
   module dxChart {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
     export type ArgumentAxisClickEvent = DevExpress.events.NativeEventInfo<
       dxChart,
       MouseEvent | PointerEvent
     > & {
       readonly argument: Date | number | string;
     };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ChartSeriesAggregationMethod =
+      | 'avg'
+      | 'count'
+      | 'max'
+      | 'min'
+      | 'ohlc'
+      | 'range'
+      | 'sum'
+      | 'custom';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ChartSingleValueSeriesAggregationMethod =
+      | 'avg'
+      | 'count'
+      | 'max'
+      | 'min'
+      | 'sum'
+      | 'custom';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ChartTooltipLocation = 'center' | 'edge';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type ChartZoomAndPanMode = 'both' | 'none' | 'pan' | 'zoom';
     export type DisposingEvent = DevExpress.events.EventInfo<dxChart>;
     export type DoneEvent = DevExpress.events.EventInfo<dxChart>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxChart>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
     export type ExportedEvent = DevExpress.events.EventInfo<dxChart>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseWidget.ExportInfo;
     export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxChart>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type FinancialChartReductionLevel =
+      | 'close'
+      | 'high'
+      | 'low'
+      | 'open';
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
@@ -28704,7 +28708,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.aggregatedPointsPosition]
      */
-    aggregatedPointsPosition?: DevExpress.utils.AggregatedPointsPosition;
+    aggregatedPointsPosition?: DevExpress.viz.dxChart.AggregatedPointsPosition;
     /**
      * [descr:dxChartOptions.commonAxisSettings.endOnTick]
      */
@@ -28920,7 +28924,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.displayMode]
      */
-    displayMode?: DevExpress.utils.ChartLabelDisplayMode;
+    displayMode?: DevExpress.viz.dxChart.ChartLabelDisplayMode;
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.font]
      */
@@ -29591,7 +29595,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.zoomAndPan.argumentAxis]
        */
-      argumentAxis?: DevExpress.utils.ChartZoomAndPanMode;
+      argumentAxis?: DevExpress.viz.dxChart.ChartZoomAndPanMode;
       /**
        * [descr:dxChartOptions.zoomAndPan.dragBoxStyle]
        */
@@ -29612,11 +29616,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.zoomAndPan.panKey]
        */
-      panKey?: DevExpress.utils.EventKeyModifier;
+      panKey?: DevExpress.viz.dxChart.EventKeyModifier;
       /**
        * [descr:dxChartOptions.zoomAndPan.valueAxis]
        */
-      valueAxis?: DevExpress.utils.ChartZoomAndPanMode;
+      valueAxis?: DevExpress.viz.dxChart.ChartZoomAndPanMode;
     };
   }
   /**
@@ -29768,7 +29772,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.AreaSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29824,7 +29828,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.BarSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29870,7 +29874,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.BubbleSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartBubbleSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartBubbleSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29928,7 +29932,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartFinancialSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartFinancialSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30099,7 +30103,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.reduction.level]
        */
-      level?: DevExpress.utils.FinancialChartReductionLevel;
+      level?: DevExpress.viz.dxChart.FinancialChartReductionLevel;
     };
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionMode]
@@ -30197,7 +30201,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30641,7 +30645,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedAreaSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30697,7 +30701,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedBarSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30743,7 +30747,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedLineSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30789,7 +30793,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30841,7 +30845,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30883,7 +30887,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.LineSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30929,7 +30933,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.RangeAreaSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartRangeSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartRangeSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30985,7 +30989,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.RangeBarSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartRangeSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartRangeSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31019,7 +31023,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.ScatterSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31065,7 +31069,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.SplineAreaSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31117,7 +31121,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.SplineSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31163,7 +31167,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedAreaSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31219,7 +31223,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedBarSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31265,7 +31269,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedLineSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31311,7 +31315,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31363,7 +31367,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31421,7 +31425,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31523,7 +31527,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StepLineSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartSingleValueSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31573,7 +31577,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StockSeries.aggregation.method]
      */
-    method?: DevExpress.utils.ChartFinancialSeriesAggregationMethod;
+    method?: DevExpress.viz.dxChart.ChartFinancialSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31592,7 +31596,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.tooltip.location]
      */
-    location?: DevExpress.utils.ChartTooltipLocation;
+    location?: DevExpress.viz.dxChart.ChartTooltipLocation;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
