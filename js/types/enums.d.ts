@@ -484,75 +484,6 @@ export type FileManagerItemViewMode = 'details' | 'thumbnails';
 export type FileManagerViewArea = 'navPane' | 'itemView';
 
 /** @namespace DevExpress.utils */
-export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
-
-/** @namespace DevExpress.utils */
-export type DiagramDataLayoutOrientation = 'vertical' | 'horizontal';
-
-/** @namespace DevExpress.utils */
-export type DiagramUnits = 'in' | 'cm' | 'px';
-
-/** @namespace DevExpress.utils */
-export type DiagramPageOrientation = 'portrait' | 'landscape';
-
-/** @namespace DevExpress.utils */
-export type DiagramShapeCategory = 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom';
-
-/** @namespace DevExpress.utils */
-export type DiagramShapeType = 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight';
-
-/** @namespace DevExpress.utils */
-export type DiagramConnectorLineType = 'straight' | 'orthogonal';
-
-/** @namespace DevExpress.utils */
-export type DiagramConnectorLineEnd = 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle';
-
-/** @namespace DevExpress.utils */
-export type DiagramToolboxDisplayMode = 'icons' | 'texts';
-
-/** @namespace DevExpress.utils */
-export type DiagramCommand = 'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox';
-
-/** @namespace DevExpress.utils */
-export type DiagramPanelVisibility = 'auto' | 'visible' | 'collapsed' | 'disabled';
-
-/** @namespace DevExpress.utils */
-export type DiagramAutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
-
-/** @namespace DevExpress.utils */
-export type DiagramItemType = 'shape' | 'connector';
-
-/** @namespace DevExpress.utils */
-export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
-
-/** @namespace DevExpress.utils */
-export type DiagramModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape' | 'moveShape';
-
-/** @namespace DevExpress.utils */
-export type DiagramRequestEditOperationReason = 'checkUIElementAvailability' | 'modelModification';
-
-/** @namespace DevExpress.utils */
-export type DiagramConnectorPosition = 'start' | 'end';
-
-/** @namespace DevExpress.utils */
-export type GanttTaskTitlePosition = 'inside' | 'outside' | 'none';
-
-/** @namespace DevExpress.utils */
-export type GanttToolbarItem = 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies';
-
-/** @namespace DevExpress.utils */
-export type GanttContextMenuItem = 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails';
-
-/** @namespace DevExpress.utils */
-export type GanttScaleType = 'auto' | 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
-
-/** @namespace DevExpress.utils */
-export type GanttRenderScaleType = 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years' | 'fiveYears';
-
-/** @namespace DevExpress.utils */
-export type GanttSortingMode = 'multiple' | 'none' | 'single';
-
-/** @namespace DevExpress.utils */
 export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
 
 /** @namespace DevExpress.utils */
@@ -560,12 +491,6 @@ export type ValidationStatus = 'valid' | 'invalid' | 'pending';
 
 /** @namespace DevExpress.utils */
 export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
-
-/** @namespace DevExpress.utils */
-export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
-
-/** @namespace DevExpress.utils */
-export type GanttPdfExportDateRange = 'all' | 'visible';
 
 /** @namespace DevExpress.utils */
 export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';

@@ -1,14 +1,13 @@
 import { DxPromise } from './core/utils/deferred';
 import dxDataGrid from './ui/data_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
-import dxGantt from './ui/gantt';
+import dxGantt, {
+  GanttPdfExportMode,
+  GanttPdfExportDateRange,
+} from './ui/gantt';
 import {
   DataGridCell as ExcelCell,
 } from './excel_exporter';
-import {
-  GanttPdfExportMode,
-  GanttPdfExportDateRange,
-} from './types/enums';
 
 /**
  * @public

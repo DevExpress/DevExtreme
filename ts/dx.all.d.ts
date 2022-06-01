@@ -4227,11 +4227,11 @@ declare module DevExpress.pdfExporter {
     /**
      * [descr:PdfExportGanttProps.exportMode]
      */
-    exportMode?: DevExpress.utils.GanttPdfExportMode;
+    exportMode?: DevExpress.ui.dxGantt.GanttPdfExportMode;
     /**
      * [descr:PdfExportGanttProps.dateRange]
      */
-    dateRange?: DevExpress.utils.GanttPdfExportDateRange | object;
+    dateRange?: DevExpress.ui.dxGantt.GanttPdfExportDateRange | object;
     /**
      * [descr:PdfExportGanttProps.font]
      */
@@ -9216,7 +9216,7 @@ declare module DevExpress.ui {
      * [descr:dxDiagram.exportTo(format, callback)]
      */
     exportTo(
-      format: DevExpress.utils.DiagramExportFormat,
+      format: DevExpress.ui.dxDiagram.DiagramExportFormat,
       callback: Function
     ): void;
     /**
@@ -9249,6 +9249,181 @@ declare module DevExpress.ui {
     export type CustomShapeToolboxTemplateData = {
       readonly item: dxDiagramShape;
     };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramAutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramCommand =
+      | 'separator'
+      | 'exportSvg'
+      | 'exportPng'
+      | 'exportJpg'
+      | 'undo'
+      | 'redo'
+      | 'cut'
+      | 'copy'
+      | 'paste'
+      | 'selectAll'
+      | 'delete'
+      | 'fontName'
+      | 'fontSize'
+      | 'bold'
+      | 'italic'
+      | 'underline'
+      | 'fontColor'
+      | 'lineStyle'
+      | 'lineWidth'
+      | 'lineColor'
+      | 'fillColor'
+      | 'textAlignLeft'
+      | 'textAlignCenter'
+      | 'textAlignRight'
+      | 'lock'
+      | 'unlock'
+      | 'sendToBack'
+      | 'bringToFront'
+      | 'insertShapeImage'
+      | 'editShapeImage'
+      | 'deleteShapeImage'
+      | 'connectorLineType'
+      | 'connectorLineStart'
+      | 'connectorLineEnd'
+      | 'layoutTreeTopToBottom'
+      | 'layoutTreeBottomToTop'
+      | 'layoutTreeLeftToRight'
+      | 'layoutTreeRightToLeft'
+      | 'layoutLayeredTopToBottom'
+      | 'layoutLayeredBottomToTop'
+      | 'layoutLayeredLeftToRight'
+      | 'layoutLayeredRightToLeft'
+      | 'fullScreen'
+      | 'zoomLevel'
+      | 'showGrid'
+      | 'snapToGrid'
+      | 'gridSize'
+      | 'units'
+      | 'pageSize'
+      | 'pageOrientation'
+      | 'pageColor'
+      | 'simpleView'
+      | 'toolbox';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramConnectorLineEnd =
+      | 'none'
+      | 'arrow'
+      | 'outlinedTriangle'
+      | 'filledTriangle';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramConnectorLineType = 'straight' | 'orthogonal';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramConnectorPosition = 'start' | 'end';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramDataLayoutOrientation = 'vertical' | 'horizontal';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramItemType = 'shape' | 'connector';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramPageOrientation = 'portrait' | 'landscape';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramPanelVisibility =
+      | 'auto'
+      | 'visible'
+      | 'collapsed'
+      | 'disabled';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramRequestEditOperationReason =
+      | 'checkUIElementAvailability'
+      | 'modelModification';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramShapeCategory =
+      | 'general'
+      | 'flowchart'
+      | 'orgChart'
+      | 'containers'
+      | 'custom';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramShapeType =
+      | 'text'
+      | 'rectangle'
+      | 'ellipse'
+      | 'cross'
+      | 'triangle'
+      | 'diamond'
+      | 'heart'
+      | 'pentagon'
+      | 'hexagon'
+      | 'octagon'
+      | 'star'
+      | 'arrowLeft'
+      | 'arrowTop'
+      | 'arrowRight'
+      | 'arrowBottom'
+      | 'arrowNorthSouth'
+      | 'arrowEastWest'
+      | 'process'
+      | 'decision'
+      | 'terminator'
+      | 'predefinedProcess'
+      | 'document'
+      | 'multipleDocuments'
+      | 'manualInput'
+      | 'preparation'
+      | 'data'
+      | 'database'
+      | 'hardDisk'
+      | 'internalStorage'
+      | 'paperTape'
+      | 'manualOperation'
+      | 'delay'
+      | 'storedData'
+      | 'display'
+      | 'merge'
+      | 'connector'
+      | 'or'
+      | 'summingJunction'
+      | 'verticalContainer'
+      | 'horizontalContainer'
+      | 'cardWithImageOnLeft'
+      | 'cardWithImageOnTop'
+      | 'cardWithImageOnRight';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramToolboxDisplayMode = 'icons' | 'texts';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DiagramUnits = 'in' | 'cm' | 'px';
     export type DisposingEvent = DevExpress.events.EventInfo<dxDiagram>;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxDiagram>;
@@ -9283,7 +9458,7 @@ declare module DevExpress.ui {
           | dxDiagramChangeConnectorTextArgs
           | dxDiagramResizeShapeArgs
           | dxDiagramMoveShapeArgs;
-        readonly reason: DevExpress.utils.DiagramRequestEditOperationReason;
+        readonly reason: DiagramRequestEditOperationReason;
         allowed?: boolean;
       };
     export type RequestLayoutUpdateEvent =
@@ -9327,7 +9502,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramAddShapeFromToolboxArgs.shapeType]
      */
-    shapeType?: DevExpress.utils.DiagramShapeType | string;
+    shapeType?: DevExpress.ui.dxDiagram.DiagramShapeType | string;
   }
   /**
    * [descr:dxDiagramBeforeChangeConnectorTextArgs]
@@ -9377,7 +9552,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramChangeConnectionArgs.connectorPosition]
      */
-    connectorPosition?: DevExpress.utils.DiagramConnectorPosition;
+    connectorPosition?: DevExpress.ui.dxDiagram.DiagramConnectorPosition;
   }
   /**
    * [descr:dxDiagramChangeConnectorPointsArgs]
@@ -9561,7 +9736,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramItem.itemType]
      */
-    itemType?: DevExpress.utils.DiagramItemType;
+    itemType?: DevExpress.ui.dxDiagram.DiagramItemType;
   }
   /**
    * [descr:dxDiagramMoveShapeArgs]
@@ -9607,7 +9782,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramOptions.autoZoomMode]
      */
-    autoZoomMode?: DevExpress.utils.DiagramAutoZoomMode;
+    autoZoomMode?: DevExpress.ui.dxDiagram.DiagramAutoZoomMode;
     /**
      * [descr:dxDiagramOptions.contextMenu]
      */
@@ -9615,7 +9790,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextMenu.commands]
        */
-      commands?: Array<DevExpress.utils.DiagramCommand>;
+      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
       /**
        * [descr:dxDiagramOptions.contextMenu.enabled]
        */
@@ -9628,11 +9803,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextToolbox.category]
        */
-      category?: DevExpress.utils.DiagramShapeCategory | string;
+      category?: DevExpress.ui.dxDiagram.DiagramShapeCategory | string;
       /**
        * [descr:dxDiagramOptions.contextToolbox.displayMode]
        */
-      displayMode?: DevExpress.utils.DiagramToolboxDisplayMode;
+      displayMode?: DevExpress.ui.dxDiagram.DiagramToolboxDisplayMode;
       /**
        * [descr:dxDiagramOptions.contextToolbox.enabled]
        */
@@ -9644,7 +9819,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextToolbox.shapes]
        */
-      shapes?: Array<DevExpress.utils.DiagramShapeType> | Array<string>;
+      shapes?: Array<DevExpress.ui.dxDiagram.DiagramShapeType> | Array<string>;
       /**
        * [descr:dxDiagramOptions.contextToolbox.width]
        */
@@ -9715,7 +9890,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.customShapes.baseType]
        */
-      baseType?: DevExpress.utils.DiagramShapeType | string;
+      baseType?: DevExpress.ui.dxDiagram.DiagramShapeType | string;
       /**
        * [descr:dxDiagramOptions.customShapes.category]
        */
@@ -9863,15 +10038,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.connectorLineType]
        */
-      connectorLineType?: DevExpress.utils.DiagramConnectorLineType;
+      connectorLineType?: DevExpress.ui.dxDiagram.DiagramConnectorLineType;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.connectorLineStart]
        */
-      connectorLineStart?: DevExpress.utils.DiagramConnectorLineEnd;
+      connectorLineStart?: DevExpress.ui.dxDiagram.DiagramConnectorLineEnd;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.connectorLineEnd]
        */
-      connectorLineEnd?: DevExpress.utils.DiagramConnectorLineEnd;
+      connectorLineEnd?: DevExpress.ui.dxDiagram.DiagramConnectorLineEnd;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.shapeMinWidth]
        */
@@ -10040,16 +10215,16 @@ declare module DevExpress.ui {
        * [descr:dxDiagramOptions.nodes.autoLayout]
        */
       autoLayout?:
-        | DevExpress.utils.DiagramDataLayoutType
+        | DevExpress.ui.dxDiagram.DiagramDataLayoutType
         | {
             /**
              * [descr:dxDiagramOptions.nodes.autoLayout.orientation]
              */
-            orientation?: DevExpress.utils.DiagramDataLayoutOrientation;
+            orientation?: DevExpress.ui.dxDiagram.DiagramDataLayoutOrientation;
             /**
              * [descr:dxDiagramOptions.nodes.autoLayout.type]
              */
-            type?: DevExpress.utils.DiagramDataLayoutType;
+            type?: DevExpress.ui.dxDiagram.DiagramDataLayoutType;
           };
       /**
        * [descr:dxDiagramOptions.nodes.autoSizeEnabled]
@@ -10165,7 +10340,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramOptions.pageOrientation]
      */
-    pageOrientation?: DevExpress.utils.DiagramPageOrientation;
+    pageOrientation?: DevExpress.ui.dxDiagram.DiagramPageOrientation;
     /**
      * [descr:dxDiagramOptions.pageSize]
      */
@@ -10207,7 +10382,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramOptions.propertiesPanel.tabs.commands]
          */
-        commands?: Array<DevExpress.utils.DiagramCommand>;
+        commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
         /**
          * [descr:dxDiagramOptions.propertiesPanel.tabs.groups]
          */
@@ -10215,7 +10390,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.commands]
            */
-          commands?: Array<DevExpress.utils.DiagramCommand>;
+          commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
           /**
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.title]
            */
@@ -10229,7 +10404,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.propertiesPanel.visibility]
        */
-      visibility?: DevExpress.utils.DiagramPanelVisibility;
+      visibility?: DevExpress.ui.dxDiagram.DiagramPanelVisibility;
     };
     /**
      * [descr:dxDiagramOptions.readOnly]
@@ -10258,7 +10433,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.mainToolbar.commands]
        */
-      commands?: Array<DevExpress.utils.DiagramCommand>;
+      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
       /**
        * [descr:dxDiagramOptions.mainToolbar.visible]
        */
@@ -10271,7 +10446,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.historyToolbar.commands]
        */
-      commands?: Array<DevExpress.utils.DiagramCommand>;
+      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
       /**
        * [descr:dxDiagramOptions.historyToolbar.visible]
        */
@@ -10284,7 +10459,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.viewToolbar.commands]
        */
-      commands?: Array<DevExpress.utils.DiagramCommand>;
+      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
       /**
        * [descr:dxDiagramOptions.viewToolbar.visible]
        */
@@ -10302,11 +10477,11 @@ declare module DevExpress.ui {
             /**
              * [descr:dxDiagramOptions.toolbox.groups.category]
              */
-            category?: DevExpress.utils.DiagramShapeCategory | string;
+            category?: DevExpress.ui.dxDiagram.DiagramShapeCategory | string;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.displayMode]
              */
-            displayMode?: DevExpress.utils.DiagramToolboxDisplayMode;
+            displayMode?: DevExpress.ui.dxDiagram.DiagramToolboxDisplayMode;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.expanded]
              */
@@ -10314,13 +10489,15 @@ declare module DevExpress.ui {
             /**
              * [descr:dxDiagramOptions.toolbox.groups.shapes]
              */
-            shapes?: Array<DevExpress.utils.DiagramShapeType> | Array<string>;
+            shapes?:
+              | Array<DevExpress.ui.dxDiagram.DiagramShapeType>
+              | Array<string>;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.title]
              */
             title?: string;
           }>
-        | Array<DevExpress.utils.DiagramShapeCategory>;
+        | Array<DevExpress.ui.dxDiagram.DiagramShapeCategory>;
       /**
        * [descr:dxDiagramOptions.toolbox.shapeIconsPerRow]
        */
@@ -10332,7 +10509,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.toolbox.visibility]
        */
-      visibility?: DevExpress.utils.DiagramPanelVisibility;
+      visibility?: DevExpress.ui.dxDiagram.DiagramPanelVisibility;
       /**
        * [descr:dxDiagramOptions.toolbox.width]
        */
@@ -10341,11 +10518,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramOptions.units]
      */
-    units?: DevExpress.utils.DiagramUnits;
+    units?: DevExpress.ui.dxDiagram.DiagramUnits;
     /**
      * [descr:dxDiagramOptions.viewUnits]
      */
-    viewUnits?: DevExpress.utils.DiagramUnits;
+    viewUnits?: DevExpress.ui.dxDiagram.DiagramUnits;
     /**
      * [descr:dxDiagramOptions.zoomLevel]
      */
@@ -10410,7 +10587,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramShape.type]
      */
-    type?: DevExpress.utils.DiagramShapeType | string;
+    type?: DevExpress.ui.dxDiagram.DiagramShapeType | string;
     /**
      * [descr:dxDiagramShape.position]
      */
@@ -13217,6 +13394,80 @@ declare module DevExpress.ui {
         readonly values: any;
       };
     export type DisposingEvent = DevExpress.events.EventInfo<dxGantt>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GanttContextMenuItem =
+      | 'undo'
+      | 'redo'
+      | 'expandAll'
+      | 'collapseAll'
+      | 'addTask'
+      | 'deleteTask'
+      | 'zoomIn'
+      | 'zoomOut'
+      | 'deleteDependency'
+      | 'taskDetails';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GanttPdfExportDateRange = 'all' | 'visible';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GanttRenderScaleType =
+      | 'minutes'
+      | 'hours'
+      | 'sixHours'
+      | 'days'
+      | 'weeks'
+      | 'months'
+      | 'quarters'
+      | 'years'
+      | 'fiveYears';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GanttScaleType =
+      | 'auto'
+      | 'minutes'
+      | 'hours'
+      | 'sixHours'
+      | 'days'
+      | 'weeks'
+      | 'months'
+      | 'quarters'
+      | 'years';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GanttSortingMode = 'multiple' | 'none' | 'single';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GanttTaskTitlePosition = 'inside' | 'outside' | 'none';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GanttToolbarItem =
+      | 'separator'
+      | 'undo'
+      | 'redo'
+      | 'expandAll'
+      | 'collapseAll'
+      | 'addTask'
+      | 'deleteTask'
+      | 'zoomIn'
+      | 'zoomOut'
+      | 'taskDetails'
+      | 'fullScreen'
+      | 'resourceManager'
+      | 'showResources'
+      | 'showDependencies';
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxGantt>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxGantt> &
@@ -13268,7 +13519,7 @@ declare module DevExpress.ui {
     export type ScaleCellPreparedEvent =
       DevExpress.events.InitializedEventInfo<dxGantt> & {
         readonly scaleIndex: number;
-        readonly scaleType: DevExpress.utils.GanttRenderScaleType;
+        readonly scaleType: GanttRenderScaleType;
         readonly scaleElement: DevExpress.core.DxElement;
         readonly separatorElement: DevExpress.core.DxElement;
         readonly startDate: Date;
@@ -13506,7 +13757,7 @@ declare module DevExpress.ui {
      */
     items?: Array<
       | DevExpress.ui.dxGantt.ContextMenuItem
-      | DevExpress.utils.GanttContextMenuItem
+      | DevExpress.ui.dxGantt.GanttContextMenuItem
       | 'resourceManager'
     >;
   }
@@ -13519,7 +13770,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttContextMenuItem.name]
      */
-    name?: DevExpress.utils.GanttContextMenuItem | 'resourceManager' | string;
+    name?:
+      | DevExpress.ui.dxGantt.GanttContextMenuItem
+      | 'resourceManager'
+      | string;
   }
   /**
    * [descr:dxGanttFilterRow]
@@ -13951,7 +14205,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.scaleType]
      */
-    scaleType?: DevExpress.utils.GanttScaleType;
+    scaleType?: DevExpress.ui.dxGantt.GanttScaleType;
     /**
      * [descr:dxGanttOptions.scaleTypeRange]
      */
@@ -13959,11 +14213,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.scaleTypeRange.min]
        */
-      min?: DevExpress.utils.GanttScaleType;
+      min?: DevExpress.ui.dxGantt.GanttScaleType;
       /**
        * [descr:dxGanttOptions.scaleTypeRange.max]
        */
-      max?: DevExpress.utils.GanttScaleType;
+      max?: DevExpress.ui.dxGantt.GanttScaleType;
     };
     /**
      * [descr:dxGanttOptions.selectedRowKey]
@@ -13988,7 +14242,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.taskTitlePosition]
      */
-    taskTitlePosition?: DevExpress.utils.GanttTaskTitlePosition;
+    taskTitlePosition?: DevExpress.ui.dxGantt.GanttTaskTitlePosition;
     /**
      * [descr:dxGanttOptions.firstDayOfWeek]
      */
@@ -14111,7 +14365,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttSorting.mode]
      */
-    mode?: DevExpress.utils.GanttSortingMode | string;
+    mode?: DevExpress.ui.dxGantt.GanttSortingMode | string;
     /**
      * [descr:dxGanttSorting.showSortIndexes]
      */
@@ -14148,7 +14402,7 @@ declare module DevExpress.ui {
      * [descr:dxGanttToolbar.items]
      */
     items?: Array<
-      DevExpress.ui.dxGantt.ToolbarItem | DevExpress.utils.GanttToolbarItem
+      DevExpress.ui.dxGantt.ToolbarItem | DevExpress.ui.dxGantt.GanttToolbarItem
     >;
   }
   /**
@@ -14159,7 +14413,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttToolbarItem.name]
      */
-    name?: DevExpress.utils.GanttToolbarItem | string;
+    name?: DevExpress.ui.dxGantt.GanttToolbarItem | string;
     /**
      * [descr:dxGanttToolbarItem.location]
      */
@@ -24757,181 +25011,6 @@ declare module DevExpress.utils {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type DiagramAutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramCommand =
-    | 'separator'
-    | 'exportSvg'
-    | 'exportPng'
-    | 'exportJpg'
-    | 'undo'
-    | 'redo'
-    | 'cut'
-    | 'copy'
-    | 'paste'
-    | 'selectAll'
-    | 'delete'
-    | 'fontName'
-    | 'fontSize'
-    | 'bold'
-    | 'italic'
-    | 'underline'
-    | 'fontColor'
-    | 'lineStyle'
-    | 'lineWidth'
-    | 'lineColor'
-    | 'fillColor'
-    | 'textAlignLeft'
-    | 'textAlignCenter'
-    | 'textAlignRight'
-    | 'lock'
-    | 'unlock'
-    | 'sendToBack'
-    | 'bringToFront'
-    | 'insertShapeImage'
-    | 'editShapeImage'
-    | 'deleteShapeImage'
-    | 'connectorLineType'
-    | 'connectorLineStart'
-    | 'connectorLineEnd'
-    | 'layoutTreeTopToBottom'
-    | 'layoutTreeBottomToTop'
-    | 'layoutTreeLeftToRight'
-    | 'layoutTreeRightToLeft'
-    | 'layoutLayeredTopToBottom'
-    | 'layoutLayeredBottomToTop'
-    | 'layoutLayeredLeftToRight'
-    | 'layoutLayeredRightToLeft'
-    | 'fullScreen'
-    | 'zoomLevel'
-    | 'showGrid'
-    | 'snapToGrid'
-    | 'gridSize'
-    | 'units'
-    | 'pageSize'
-    | 'pageOrientation'
-    | 'pageColor'
-    | 'simpleView'
-    | 'toolbox';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramConnectorLineEnd =
-    | 'none'
-    | 'arrow'
-    | 'outlinedTriangle'
-    | 'filledTriangle';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramConnectorLineType = 'straight' | 'orthogonal';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramConnectorPosition = 'start' | 'end';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramDataLayoutOrientation = 'vertical' | 'horizontal';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramItemType = 'shape' | 'connector';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramPageOrientation = 'portrait' | 'landscape';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramPanelVisibility =
-    | 'auto'
-    | 'visible'
-    | 'collapsed'
-    | 'disabled';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramRequestEditOperationReason =
-    | 'checkUIElementAvailability'
-    | 'modelModification';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramShapeCategory =
-    | 'general'
-    | 'flowchart'
-    | 'orgChart'
-    | 'containers'
-    | 'custom';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramShapeType =
-    | 'text'
-    | 'rectangle'
-    | 'ellipse'
-    | 'cross'
-    | 'triangle'
-    | 'diamond'
-    | 'heart'
-    | 'pentagon'
-    | 'hexagon'
-    | 'octagon'
-    | 'star'
-    | 'arrowLeft'
-    | 'arrowTop'
-    | 'arrowRight'
-    | 'arrowBottom'
-    | 'arrowNorthSouth'
-    | 'arrowEastWest'
-    | 'process'
-    | 'decision'
-    | 'terminator'
-    | 'predefinedProcess'
-    | 'document'
-    | 'multipleDocuments'
-    | 'manualInput'
-    | 'preparation'
-    | 'data'
-    | 'database'
-    | 'hardDisk'
-    | 'internalStorage'
-    | 'paperTape'
-    | 'manualOperation'
-    | 'delay'
-    | 'storedData'
-    | 'display'
-    | 'merge'
-    | 'connector'
-    | 'or'
-    | 'summingJunction'
-    | 'verticalContainer'
-    | 'horizontalContainer'
-    | 'cardWithImageOnLeft'
-    | 'cardWithImageOnTop'
-    | 'cardWithImageOnRight';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramToolboxDisplayMode = 'icons' | 'texts';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramUnits = 'in' | 'cm' | 'px';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25171,80 +25250,6 @@ declare module DevExpress.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type FunnelResolveLabelOverlapping = 'hide' | 'none' | 'shift';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GanttContextMenuItem =
-    | 'undo'
-    | 'redo'
-    | 'expandAll'
-    | 'collapseAll'
-    | 'addTask'
-    | 'deleteTask'
-    | 'zoomIn'
-    | 'zoomOut'
-    | 'deleteDependency'
-    | 'taskDetails';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GanttPdfExportDateRange = 'all' | 'visible';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GanttRenderScaleType =
-    | 'minutes'
-    | 'hours'
-    | 'sixHours'
-    | 'days'
-    | 'weeks'
-    | 'months'
-    | 'quarters'
-    | 'years'
-    | 'fiveYears';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GanttScaleType =
-    | 'auto'
-    | 'minutes'
-    | 'hours'
-    | 'sixHours'
-    | 'days'
-    | 'weeks'
-    | 'months'
-    | 'quarters'
-    | 'years';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GanttSortingMode = 'multiple' | 'none' | 'single';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GanttTaskTitlePosition = 'inside' | 'outside' | 'none';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type GanttToolbarItem =
-    | 'separator'
-    | 'undo'
-    | 'redo'
-    | 'expandAll'
-    | 'collapseAll'
-    | 'addTask'
-    | 'deleteTask'
-    | 'zoomIn'
-    | 'zoomOut'
-    | 'taskDetails'
-    | 'fullScreen'
-    | 'resourceManager'
-    | 'showResources'
-    | 'showDependencies';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */

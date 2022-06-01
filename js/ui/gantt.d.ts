@@ -41,13 +41,16 @@ import { Skip } from '../core/index';
 import {
     ToolbarItemLocation,
     FirstDayOfWeek,
-    GanttTaskTitlePosition,
-    GanttToolbarItem,
-    GanttContextMenuItem,
-    GanttScaleType,
-    GanttSortingMode,
-    GanttRenderScaleType,
 } from '../types/enums';
+
+export type GanttContextMenuItem = 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails';
+export type GanttPdfExportDateRange = 'all' | 'visible';
+export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
+export type GanttRenderScaleType = 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years' | 'fiveYears';
+export type GanttScaleType = 'auto' | 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+export type GanttSortingMode = 'multiple' | 'none' | 'single';
+export type GanttTaskTitlePosition = 'inside' | 'outside' | 'none';
+export type GanttToolbarItem = 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxGantt>;
