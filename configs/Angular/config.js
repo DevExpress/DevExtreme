@@ -74,7 +74,7 @@ window.config = {
 
     /** jspdf */
     'fflate': 'npm:fflate/esm/browser.js',
-    'jspdf': 'npm:jspdf/dist/jspdf.es.min.js',
+    'jspdf': 'npm:jspdf/dist/jspdf.umd.min.js',
     /**/
 
     /** devextreme-intl */
