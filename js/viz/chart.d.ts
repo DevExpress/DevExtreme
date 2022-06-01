@@ -44,7 +44,6 @@ import {
 } from './core/base_widget';
 
 import {
-    EventKeyModifier,
     VizWordWrap,
     VizTextOverflow,
     OverlappingBehavior,
@@ -54,32 +53,22 @@ import {
     ChartResolveLabelOverlapping,
     SeriesType,
     Position,
-    ChartZoomAndPanMode,
     ChartLegendHoverMode,
     RelativePosition,
     DiscreteAxisDivisionMode,
     ScaleBreakLineStyle,
-    ChartLabelDisplayMode,
     VisualRangeUpdateMode,
     ChartZoomPanAction,
     AxisScaleType,
     ChartDataType,
     ArgumentAxisHoverMode,
-    ChartTooltipLocation,
     HatchingDirection,
-    FinancialChartReductionLevel,
     ChartSeriesHoverMode,
     ChartSeriesSelectionMode,
     ChartPointInteractionMode,
     PointSymbol,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
-    ChartSeriesAggregationMethod,
-    ChartSingleValueSeriesAggregationMethod,
-    ChartFinancialSeriesAggregationMethod,
-    ChartRangeSeriesAggregationMethod,
-    ChartBubbleSeriesAggregationMethod,
-    AggregatedPointsPosition,
 } from '../types/enums';
 
 import {
@@ -93,6 +82,18 @@ interface SeriesInteractionInfo {
 export {
     ForcedSelectionMode,
 };
+
+export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
+export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
+export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
+export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
+export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
+export type ChartSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'ohlc' | 'range' | 'sum' | 'custom';
+export type ChartSingleValueSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+export type ChartTooltipLocation = 'center' | 'edge';
+export type ChartZoomAndPanMode = 'both' | 'none' | 'pan' | 'zoom';
+export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
+export type FinancialChartReductionLevel = 'close' | 'high' | 'low' | 'open';
 
 /** @public */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {

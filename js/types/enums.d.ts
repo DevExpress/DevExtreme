@@ -1,7 +1,4 @@
 /** @namespace DevExpress.utils */
-export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
-
-/** @namespace DevExpress.utils */
 export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 /** @namespace DevExpress.utils */
@@ -114,9 +111,6 @@ export type AnnotationType = 'text' | 'image' | 'custom';
 export type Position = 'bottom' | 'left' | 'right' | 'top';
 
 /** @namespace DevExpress.utils */
-export type ChartZoomAndPanMode = 'both' | 'none' | 'pan' | 'zoom';
-
-/** @namespace DevExpress.utils */
 export type ChartLegendHoverMode = 'excludePoints' | 'includePoints' | 'none';
 
 /** @namespace DevExpress.utils */
@@ -126,13 +120,7 @@ export type RelativePosition = 'inside' | 'outside';
 export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
 
 /** @namespace DevExpress.utils */
-export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
-
-/** @namespace DevExpress.utils */
 export type ScaleBreakLineStyle = 'straight' | 'waved';
-
-/** @namespace DevExpress.utils */
-export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
 
 /** @namespace DevExpress.utils */
 export type VizTimeInterval = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
@@ -154,9 +142,6 @@ export type ChartDataType = 'datetime' | 'numeric' | 'string';
 
 /** @namespace DevExpress.utils */
 export type ArgumentAxisHoverMode = 'allArgumentPoints' | 'none';
-
-/** @namespace DevExpress.utils */
-export type ChartTooltipLocation = 'center' | 'edge';
 
 /** @namespace DevExpress.utils */
 export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
@@ -453,9 +438,6 @@ export type AnimationType = 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'sli
 export type Direction = 'bottom' | 'left' | 'right' | 'top';
 
 /** @namespace DevExpress.utils */
-export type FinancialChartReductionLevel = 'close' | 'high' | 'low' | 'open';
-
-/** @namespace DevExpress.utils */
 export type ChartSeriesHoverMode = 'allArgumentPoints' | 'allSeriesPoints' | 'excludePoints' | 'includePoints' | 'nearestPoint' | 'none' | 'onlyPoint';
 
 /** @namespace DevExpress.utils */
@@ -533,21 +515,6 @@ export type PositionResolveCollisionXY = 'fit' | 'fit flip' | 'fit flipfit' | 'f
 
 /** @namespace DevExpress.utils */
 export type PositionResolveCollision = 'fit' | 'flip' | 'flipfit' | 'none';
-
-/** @namespace DevExpress.utils */
-export type ChartSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'ohlc' | 'range' | 'sum' | 'custom';
-
-/** @namespace DevExpress.utils */
-export type ChartSingleValueSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
-
-/** @namespace DevExpress.utils */
-export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
-
-/** @namespace DevExpress.utils */
-export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
-
-/** @namespace DevExpress.utils */
-export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
 
 /** @namespace DevExpress.utils */
 export type DataSourceStoreType = 'array' | 'local' | 'odata';
