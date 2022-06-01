@@ -25,7 +25,6 @@ const LIST_ITEM_SELECTOR = '.dx-list-item';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const DROPDOWNLIST_POPUP_WRAPPER_CLASS = 'dx-dropdownlist-popup-wrapper';
 
-const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
 const SEARCH_EVENT = 'input';
 
 const SEARCH_MODES = ['startswith', 'contains', 'endwith', 'notcontains'];
@@ -260,16 +259,6 @@ const DropDownList = DropDownEditor.inherit({
         const $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, 'mouseup');
         eventsEngine.on($popupContent, 'mouseup', this._saveFocusOnWidget.bind(this));
-
-        const that = this;
-        this._popup.on({
-            'shown': function() {
-                that.$element().addClass(SKIP_GESTURE_EVENT_CLASS);
-            },
-            'hidden': function() {
-                that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
-            }
-        });
     },
 
     _updateCustomBoundaryContainer: function() {

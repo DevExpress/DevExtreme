@@ -2015,21 +2015,6 @@ QUnit.module('popup options', {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test('skip gesture event class attach only when popup is opened', function(assert) {
-        const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
-        const $lookup = $('#lookup').dxLookup({
-            items: [1, 2, 3]
-        });
-
-        assert.equal($lookup.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was not added when popup is closed');
-
-        $lookup.dxLookup('option', 'opened', true);
-        assert.equal($lookup.hasClass(SKIP_GESTURE_EVENT_CLASS), true, 'skip gesture event class was added after popup was opened');
-
-        $lookup.dxLookup('option', 'opened', false);
-        assert.equal($lookup.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was removed after popup was closed');
-    });
-
     QUnit.test('toolbarItems should be passed to the popover (T896951)', function(assert) {
         const buttonConfig = {
             location: 'after',

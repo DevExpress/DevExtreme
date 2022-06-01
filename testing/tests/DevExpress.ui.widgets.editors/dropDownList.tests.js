@@ -18,7 +18,8 @@ import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="dropDownList"></div>';
+        '<div id="dropDownList"></div>\
+        <div id="popup"></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -1266,22 +1267,6 @@ QUnit.module('popup', moduleConfig, () => {
         parentContainer.remove();
     });
 
-    QUnit.test('skip gesture event class attach only when popup is opened', function(assert) {
-        const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
-        const $dropDownList = $('#dropDownList').dxDropDownList({
-            items: [1, 2, 3]
-        });
-
-        assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was not added when popup is closed');
-
-        $dropDownList.dxDropDownList('option', 'opened', true);
-        assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), true, 'skip gesture event class was added after popup was opened');
-
-        $dropDownList.dxDropDownList('option', 'opened', false);
-        assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was removed after popup was closed');
-    });
-
-
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
         const data = [];
         const done = assert.async();
@@ -1462,6 +1447,25 @@ QUnit.module('popup', moduleConfig, () => {
 
         assert.strictEqual(popupHeight, recalculatedPopupHeight);
         assert.strictEqual(listInstance.option('_revertPageOnEmptyLoad'), true, 'default list _revertPageOnEmptyLoad is correct');
+    });
+
+    QUnit.test('scroll on input should not scroll the page when opened DropDownList is inside Popup (T1082501)', function(assert) {
+        const $dropDownList = $('<div>').dxDropDownList({ opened: true });
+        $('#popup').dxPopup({
+            visible: true,
+            contentTemplate: () => $dropDownList
+        });
+        const $input = $dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const wheelEvent = $.Event('dxmousewheel', {
+            delta: -125,
+            pageX: $input.scrollLeft(),
+            pageY: $input.scrollTop(),
+            originalEvent: $.Event('wheel')
+        });
+
+        $input.trigger(wheelEvent);
+
+        assert.ok(wheelEvent.originalEvent.isDefaultPrevented());
     });
 });
 
