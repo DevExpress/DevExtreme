@@ -40,8 +40,11 @@ import { Skip } from '../core/index';
 
 import {
     ToolbarItemLocation,
-    FirstDayOfWeek,
 } from '../types/enums';
+
+import {
+    FirstDayOfWeek,
+} from '../common';
 
 export type GanttContextMenuItem = 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails';
 export type GanttPdfExportDateRange = 'all' | 'visible';

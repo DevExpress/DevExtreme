@@ -20,9 +20,16 @@ import Editor, {
 } from './editor/editor';
 
 import {
-    FirstDayOfWeek,
     CalendarZoomLevel,
 } from '../types/enums';
+
+import {
+    FirstDayOfWeek,
+} from '../common';
+
+export {
+    FirstDayOfWeek,
+};
 
 export interface ComponentDisabledDate<T> {
     component: T;

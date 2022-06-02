@@ -34,7 +34,6 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-  FirstDayOfWeek,
   Orientation,
   SchedulerViewType,
   MaxAppointmentsPerCell,
@@ -42,6 +41,10 @@ import {
   SchedulerScrollingMode,
   AllDayPanelMode,
 } from '../types/enums';
+
+import {
+  FirstDayOfWeek,
+} from '../common';
 
 interface AppointmentDraggingEvent {
   readonly component: dxScheduler;
@@ -55,6 +58,10 @@ interface TargetedAppointmentInfo {
   readonly appointmentData: dxSchedulerAppointment;
   readonly targetedAppointmentData?: dxSchedulerAppointment;
 }
+
+export {
+  FirstDayOfWeek,
+};
 
 /** @public */
 export type AppointmentAddedEvent = EventInfo<dxScheduler> & {

@@ -27,3 +27,15 @@ export type ForcedSelectionMode = 'multiple' | 'single';
  * @namespace DevExpress.common
  */
 export type MenuSelectionMode = 'none' | 'single';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type FieldChooserLayout = 0 | 1 | 2;

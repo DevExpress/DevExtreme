@@ -1,10 +1,4 @@
 /** @namespace DevExpress.utils */
-export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-
-/** @namespace DevExpress.utils */
-export type PivotGridFieldChooserLayout = 0 | 1 | 2;
-
-/** @namespace DevExpress.utils */
 export type DropDownSearchMode = 'contains' | 'startswith';
 
 /** @namespace DevExpress.utils */

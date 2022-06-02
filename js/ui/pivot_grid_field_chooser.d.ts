@@ -14,9 +14,16 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-  PivotGridFieldChooserLayout,
   ApplyChangesMode,
 } from '../types/enums';
+
+import {
+  FieldChooserLayout,
+} from '../common';
+
+export {
+  FieldChooserLayout,
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxPivotGridFieldChooser>;
@@ -124,7 +131,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @default 0
      * @public
      */
-    layout?: PivotGridFieldChooserLayout;
+    layout?: FieldChooserLayout;
     /**
      * @docid
      * @type_function_param1 e:object

@@ -23,11 +23,18 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-  PivotGridFieldChooserLayout,
   Mode,
   StateStoringType,
   ApplyChangesMode,
 } from '../types/enums';
+
+import {
+  FieldChooserLayout,
+} from '../common';
+
+export {
+  FieldChooserLayout,
+};
 
 export type PivotGridDataFieldArea = 'column' | 'row';
 export type PivotGridRowHeadersLayout = 'standard' | 'tree';
@@ -203,7 +210,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default 0
        */
-      layout?: PivotGridFieldChooserLayout;
+      layout?: FieldChooserLayout;
       /**
        * @docid
        * @default 500
