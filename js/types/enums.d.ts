@@ -144,9 +144,6 @@ export type ContextMenuSubmenuDirection = 'auto' | 'left' | 'right';
 export type HorizontalEdge = 'left' | 'right';
 
 /** @namespace DevExpress.utils */
-export type GridColumnDataType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
-
-/** @namespace DevExpress.utils */
 export type SortOrder = 'asc' | 'desc';
 
 /** @namespace DevExpress.utils */
@@ -156,22 +153,13 @@ export type FilterBuilderFieldFilterOperations = '=' | '<>' | '<' | '<=' | '>' |
 export type FilterBuilderGroupOperations = 'and' | 'or' | 'notAnd' | 'notOr';
 
 /** @namespace DevExpress.utils */
-export type FilterOperations = '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
-
-/** @namespace DevExpress.utils */
 export type FilterType = 'exclude' | 'include';
-
-/** @namespace DevExpress.utils */
-export type GridScrollingMode = 'infinite' | 'standard' | 'virtual';
 
 /** @namespace DevExpress.utils */
 export type ShowScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
 
 /** @namespace DevExpress.utils */
 export type SelectAllMode = 'allPages' | 'page';
-
-/** @namespace DevExpress.utils */
-export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
 
 /** @namespace DevExpress.utils */
 export type StateStoringType = 'custom' | 'localStorage' | 'sessionStorage';

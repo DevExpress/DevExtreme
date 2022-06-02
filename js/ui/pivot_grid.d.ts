@@ -32,8 +32,13 @@ import {
   FieldChooserLayout,
 } from '../common';
 
+import {
+  GridScrollingMode,
+} from '../common/grids';
+
 export {
   FieldChooserLayout,
+  GridScrollingMode,
 };
 
 export type PivotGridDataFieldArea = 'column' | 'row';

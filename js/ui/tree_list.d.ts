@@ -84,6 +84,28 @@ interface CellInfo<TRowData = any, TKey = any> {
     readonly row: Row<TRowData, TKey>;
 }
 
+export {
+    GridApplyFilterMode,
+    GridColumnButtonName,
+    GridColumnChooserMode,
+    GridColumnRenderingMode,
+    GridCommandColumnType,
+    GridDataChangeType,
+    GridEditMode,
+    GridEditRefreshMode,
+    GridEnterKeyAction,
+    GridEnterKeyDirection,
+    GridFilterOperations,
+    GridGroupingExpandMode,
+    GridNewRowPosition,
+    GridPagerDisplayMode,
+    GridPagerPageSize,
+    GridRowRenderingMode,
+    GridSelectionShowCheckBoxesMode,
+    GridSortingMode,
+    GridStartEditAction,
+} from '../common/grids';
+
 export type TreeListColumnButtonName = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
 export type TreeListDataStructure = 'plain' | 'tree';

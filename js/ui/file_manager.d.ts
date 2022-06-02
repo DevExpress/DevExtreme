@@ -35,7 +35,6 @@ import {
 
 import {
     HorizontalAlignment,
-    GridColumnDataType,
     SortOrder,
     ToolbarItemLocation,
     FileManagerToolbarItem,
@@ -48,6 +47,10 @@ import {
    ForcedSelectionMode,
 } from '../common';
 
+import {
+    GridColumnDataType,
+ } from '../common/grids';
+
 interface ActionEventInfo {
     errorCode?: number;
     errorText: string;
@@ -56,6 +59,7 @@ interface ActionEventInfo {
 
 export {
     ForcedSelectionMode,
+    GridColumnDataType,
 };
 
 /** @public */

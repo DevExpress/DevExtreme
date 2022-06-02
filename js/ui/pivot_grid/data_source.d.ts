@@ -20,8 +20,15 @@ import XmlaStore, {
 import {
     SortOrder,
     FilterType,
-    SummaryType,
 } from '../../types/enums';
+
+import {
+    SummaryType,
+} from '../../common/grids';
+
+export {
+    SummaryType,
+};
 
 export type PivotGridArea = 'column' | 'data' | 'filter' | 'row';
 export type PivotGridDataType = 'date' | 'number' | 'string';
@@ -36,7 +43,7 @@ export type PivotGridSummaryDisplayMode = 'absoluteVariation' | 'percentOfColumn
  * @type object
  * @namespace DevExpress.ui
  */
-interface dxPivotGridSummaryCell {
+export interface dxPivotGridSummaryCell {
     /**
      * @docid
      * @publicName child(direction, fieldValue)

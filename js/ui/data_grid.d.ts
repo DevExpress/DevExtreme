@@ -84,14 +84,10 @@ import {
   HorizontalAlignment,
   Mode,
   HorizontalEdge,
-  GridColumnDataType,
   SortOrder,
-  FilterOperations,
   FilterType,
-  GridScrollingMode,
   ShowScrollbarMode,
   SelectAllMode,
-  SummaryType,
   StateStoringType,
   CollectionSearchMode,
   DragDirection,
@@ -102,37 +98,65 @@ import {
     SelectionMode,
 } from '../common';
 
+import {
+    GridApplyFilterMode,
+    GridColumnButtonName,
+    GridColumnChooserMode,
+    GridColumnDataType,
+    GridColumnRenderingMode,
+    GridCommandColumnType,
+    GridDataChangeType,
+    GridEditMode,
+    GridEditRefreshMode,
+    GridEnterKeyAction,
+    GridEnterKeyDirection,
+    GridFilterOperations,
+    GridGroupingExpandMode,
+    GridNewRowPosition,
+    GridPagerDisplayMode,
+    GridPagerPageSize,
+    GridRowRenderingMode,
+    GridSelectionShowCheckBoxesMode,
+    GridScrollingMode,
+    GridSortingMode,
+    GridStartEditAction,
+    SummaryType,
+} from '../common/grids';
+
 export {
+    GridApplyFilterMode,
+    GridColumnButtonName,
+    GridColumnChooserMode,
+    GridColumnDataType,
+    GridColumnRenderingMode,
+    GridCommandColumnType,
+    GridDataChangeType,
+    GridEditMode,
+    GridEditRefreshMode,
+    GridEnterKeyAction,
+    GridEnterKeyDirection,
+    GridFilterOperations,
+    GridGroupingExpandMode,
+    GridNewRowPosition,
+    GridPagerDisplayMode,
+    GridPagerPageSize,
+    GridRowRenderingMode,
+    GridSelectionShowCheckBoxesMode,
+    GridScrollingMode,
+    GridSortingMode,
+    GridStartEditAction,
     SelectAllMode,
+    SummaryType,
 };
 
 export type ColumnResizingMode = 'nextColumn' | 'widget';
+export type FilterOperations = '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
 export type DataGridExportFormat = 'pdf' | 'xlsx';
 export type DataGridToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 export type ExcelCellHorizontalAlignment = 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
 export type ExcelCellPatternType = 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
 export type ExcelCellVerticalAlignment = 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
-export type GridApplyFilterMode = 'auto' | 'onClick';
-export type GridColumnButtonName = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
-export type GridColumnChooserMode = 'dragAndDrop' | 'select';
-export type GridColumnRenderingMode = 'standard' | 'virtual';
-export type GridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
-export type GridDataChangeType = 'insert' | 'update' | 'remove';
-export type GridEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
-export type GridEditRefreshMode = 'full' | 'reshape' | 'repaint';
-export type GridEnterKeyAction = 'startEdit' | 'moveFocus';
-export type GridEnterKeyDirection = 'none' | 'column' | 'row';
-export type GridFilterOperations = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof';
-export type GridGroupingExpandMode = 'buttonClick' | 'rowClick';
-export type GridNewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
-export type GridPagerDisplayMode = 'adaptive' | 'compact' | 'full';
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-export type GridPagerPageSize = 'all';
-export type GridRowRenderingMode = 'standard' | 'virtual';
-export type GridSelectionShowCheckBoxesMode = 'always' | 'none' | 'onClick' | 'onLongTap';
-export type GridSortingMode = 'multiple' | 'none' | 'single';
-export type GridStartEditAction = 'click' | 'dblClick';
 
 export interface AdaptiveDetailRowPreparingInfo {
   readonly formOptions: any;
