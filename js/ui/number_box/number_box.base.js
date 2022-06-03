@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import { applyServerDecimalSeparator } from '../../core/utils/common';
+import { applyServerDecimalSeparator, ensureDefined } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
 import { fitIntoRange, inRange } from '../../core/utils/math';
 import { extend } from '../../core/utils/extend';
@@ -209,8 +209,8 @@ const NumberBoxBase = TextEditor.inherit({
         const valueText = isDefined(value) ? null : messageLocalization.format('dxNumberBox-noDataText');
 
         this.setAria({
-            'valuenow': value ?? '',
-            'valuetext': valueText,
+            'valuenow': ensureDefined(value, ''),
+            'valuetext': valueText
         });
 
         this.option('text', this._input().val());
@@ -237,8 +237,8 @@ const NumberBoxBase = TextEditor.inherit({
         this._input().prop({ min, max, step });
 
         this.setAria({
-            'valuemin': min ?? '',
-            'valuemax': max ?? '',
+            'valuemin': ensureDefined(min, ''),
+            'valuemax': ensureDefined(max, '')
         });
     },
 

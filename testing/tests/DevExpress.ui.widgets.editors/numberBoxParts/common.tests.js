@@ -1650,7 +1650,7 @@ QUnit.module('regressions', {
         assert.ok(!this.element.children().length);
     });
 
-    QUnit.test('widget disabled state change should lead to spin buttons disabled state change (T282446)', function(assert) {
+    QUnit.test('T282446 - widget disabled state change should lead to spin buttons disabled state change', function(assert) {
         const $element = $('#widget').dxNumberBox({
             disabled: true,
             showSpinButtons: true
@@ -1665,7 +1665,7 @@ QUnit.module('regressions', {
     });
 
     ['min', 'max', 'step'].forEach(optionName => {
-        QUnit.test(`changing ${optionName} option shouldn't lead to change tabIndex attribute (T1090255)`, function(assert) {
+        QUnit.test(`T1090255 - changing ${optionName} option shouldn't lead to change tabIndex attribute`, function(assert) {
             const instance = $('#widget').dxNumberBox({
                 tabIndex: 3,
                 value: 1,
@@ -1673,10 +1673,10 @@ QUnit.module('regressions', {
             }).dxNumberBox('instance');
 
             const $input = instance.$element().find(`.${INPUT_CLASS}`);
-            assert.strictEqual($input.attr('tabIndex'), '3', 'tabIndex is correct after initializing');
+            assert.equal($input.attr('tabIndex'), '3', 'tabIndex is correct after initializing');
 
             instance.option(optionName, 4);
-            assert.strictEqual($input.attr('tabIndex'), '3', 'tabIndex is correct after option changed');
+            assert.equal($input.attr('tabIndex'), '3', 'tabIndex is correct after option changed');
         });
     });
 });
