@@ -32,14 +32,24 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <div id="date"></div>
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
-        });
+        $(() => {
+  const now = new Date();
+  const min = new Date("21.05.2022")
+
+  $('#date').dxDateBox({
+    type: 'datetime',
+    value: now,
+    showAnalogClock: false,
+    useMaskBehavior: true,
+    min,
+    max: now,
+    onValueChanged: e => console.log(e)
+  });
+
+});
+
     </script>
 </body>
 </html>
