@@ -1664,7 +1664,7 @@ QUnit.module('regressions', {
         assert.ok(!SpinButton.getInstance($spinButton).option('disabled'), 'spin button disabled state is correct');
     });
 
-    QUnit.test('tabindex attribute should be exists after initialization (T1090255)', function(assert) {
+    QUnit.test('tabindex attribute should be rendered after initialization (T1090255)', function(assert) {
         const instance = $('#widget').dxNumberBox({
             tabIndex: 3,
             value: 1,
