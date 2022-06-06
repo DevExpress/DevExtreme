@@ -77,6 +77,12 @@ window.config = {
     'jspdf': 'npm:jspdf/dist/jspdf.umd.min.js',
     /**/
 
+    /** jspdf&jspdf-autotable */
+    'fflate': 'npm:fflate/esm/browser.js',
+    'jspdf': 'npm:jspdf/dist/jspdf.umd.min.js',
+    'jspdf-autotable': 'npm:jspdf-autotable/dist/jspdf.plugin.autotable.min.js',
+    /**/
+
     /** devextreme-intl */
     'json': 'npm:systemjs-plugin-json/json.js',
     /**/
