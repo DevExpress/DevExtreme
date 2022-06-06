@@ -919,6 +919,47 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(notificationInfo.details[0].errorText, `File '${newFileName}' already exists.`, 'Error text is correct');
     });
 
+    test('rename non-existent directory leads to an error with correct text (T926881, T1086802)', function(assert) {
+        const newFolderName = 'Some new name';
+        const targetFolderName = 'Folder 1';
+        const folder1 = { isDirectory: true, name: targetFolderName };
+        const folder2 = { isDirectory: true, name: 'Folder 2' };
+        let beforeRename = true;
+        this.wrapper.getInstance().option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                getItems: dir => {
+                    switch(dir.key) {
+                        case '':
+                            return beforeRename ? [folder1, folder2] : [folder2];
+                        default:
+                            return [];
+                    }
+                },
+                renameItem: (item, name) => {
+                    throw new FileSystemError(ErrorCode.DirectoryNotFound);
+                }
+            }),
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+        beforeRename = false;
+        this.wrapper.findDetailsItem(targetFolderName).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput().val(newFolderName).trigger('change');
+        this.wrapper.getDialogButton('Save').trigger('dxclick');
+        this.clock.tick(800);
+
+        const notificationInfo = this.progressPanelWrapper.getInfos()[0];
+        assert.strictEqual(this.wrapper.findDetailsItem(targetFolderName).length, 1, 'There\'s only one folder with this name');
+        assert.strictEqual(notificationInfo.details[0].commonText, targetFolderName, 'Common text is correct');
+        assert.ok(notificationInfo.details[0].hasError, 'Info has error');
+        assert.strictEqual(notificationInfo.details[0].errorText, `Directory '${targetFolderName}' not found.`, 'Error text is correct');
+    });
+
     test('consequent upload of multiple files with drag and drop', function(assert) {
         const operationDelay = 200;
         const chunkSize = 50000;
