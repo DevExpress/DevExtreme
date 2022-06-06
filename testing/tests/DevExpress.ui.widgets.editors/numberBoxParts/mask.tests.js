@@ -2093,7 +2093,10 @@ QUnit.module('stubs', moduleConfig, function() {
         { format: '#,##0\'.\'\'0\'\'0\'', expectedText: '1,234.00', expectedValue: 1234 },
         { format: '\'-\'#,###.00', expectedText: '-1.00', expectedValue: 1 },
         { format: '\'-\'#,###.00', expectedText: '--1.00', expectedValue: -1 },
-    ].forEach(({ format, expectedText, expectedValue }) => {
+        { format: '#', expectedText: '1', expectedValue: 1 },
+        { format: '#', expectedText: '-1', expectedValue: -1 },
+        { format: '#', expectedText: '', typedText: '-', expectedValue: null },
+    ].forEach(({ format, expectedText, typedText, expectedValue }) => {
         QUnit.test(`widget should correctly apply format="${format}", value="${expectedValue}"`, function(assert) {
             this.instance.option({
                 value: null,
@@ -2101,7 +2104,7 @@ QUnit.module('stubs', moduleConfig, function() {
             });
 
             this.keyboard
-                .type(expectedValue.toString())
+                .type(typedText || expectedValue.toString())
                 .press('enter');
 
             assert.equal(this.input.val(), expectedText, 'text is correct');

@@ -257,6 +257,10 @@ const numberLocalization = dependencyInjector({
             return 1;
         }
 
+        if(text === '-') {
+            return -1;
+        }
+
         const negativeEtalon = this.getNegativeEtalonRegExp(format);
         return text.match(negativeEtalon) ? -1 : 1;
     },
