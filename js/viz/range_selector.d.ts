@@ -32,8 +32,6 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-  VizPalette,
-  VizPaletteExtensionMode,
   ScaleLabelOverlappingBehavior,
   ScaleBreakLineStyle,
   VisualRangeUpdateMode,
@@ -44,6 +42,16 @@ import {
   RangeSelectorChartAxisScaleType,
   DiscreteAxisDivisionMode,
 } from '../types/enums';
+
+import {
+    Palette,
+    PaletteExtensionMode,
+} from '../common/charts';
+
+export {
+    Palette,
+    PaletteExtensionMode,
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxRangeSelector>;
@@ -215,12 +223,12 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default "Material"
        */
-      palette?: Array<string> | VizPalette;
+      palette?: Array<string> | Palette;
       /**
        * @docid
        * @default 'blend'
        */
-      paletteExtensionMode?: VizPaletteExtensionMode;
+      paletteExtensionMode?: PaletteExtensionMode;
       /**
        * @docid
        * @default undefined
@@ -349,7 +357,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @inherits VizTimeInterval
-       * @type number|object|Enums.VizTimeInterval
+       * @type number|object|Enums.TimeInterval
        */
       aggregationInterval?: VizTimeInterval;
       /**
@@ -504,13 +512,13 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @inherits VizTimeInterval
-       * @type number|object|Enums.VizTimeInterval
+       * @type number|object|Enums.TimeInterval
        */
       maxRange?: VizTimeInterval;
       /**
        * @docid
        * @inherits VizTimeInterval
-       * @type number|object|Enums.VizTimeInterval
+       * @type number|object|Enums.TimeInterval
        */
       minRange?: VizTimeInterval;
       /**
@@ -546,7 +554,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @inherits VizTimeInterval
-       * @type number|object|Enums.VizTimeInterval
+       * @type number|object|Enums.TimeInterval
        */
       minorTickInterval?: VizTimeInterval;
       /**
@@ -593,7 +601,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @inherits VizTimeInterval
-       * @type number|object|Enums.VizTimeInterval
+       * @type number|object|Enums.TimeInterval
        */
       tickInterval?: VizTimeInterval;
       /**

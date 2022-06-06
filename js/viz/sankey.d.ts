@@ -26,13 +26,21 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-  VizPalette,
-  VizPaletteExtensionMode,
   VerticalAlignment,
   HatchingDirection,
-  SankeyLabelOverlappingBehavior,
   SankeyColorMode,
 } from '../types/enums';
+
+import {
+    Palette,
+    PaletteExtensionMode,
+    TextOverflow,
+} from '../common/charts';
+
+export {
+    Palette,
+    PaletteExtensionMode,
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxSankey>;
@@ -164,7 +172,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
        * @docid
        * @default 'ellipsis'
        */
-      overlappingBehavior?: SankeyLabelOverlappingBehavior;
+      overlappingBehavior?: TextOverflow;
       /**
        * @docid
        */
@@ -467,13 +475,13 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: VizPaletteExtensionMode;
+    paletteExtensionMode?: PaletteExtensionMode;
     /**
      * @docid
      * @default undefined

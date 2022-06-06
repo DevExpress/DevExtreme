@@ -24,12 +24,15 @@ import BaseWidget, {
 
 import {
     ScaleLabelOverlappingBehavior,
-    VizPalette,
-    VizPaletteExtensionMode,
     VerticalEdge,
     HorizontalEdge,
-    VizAnimationEasing,
 } from '../../types/enums';
+
+import {
+    AnimationEasing,
+    Palette,
+    PaletteExtensionMode,
+} from '../../common/charts';
 
 export interface TooltipInfo {
     target: any;
@@ -125,7 +128,7 @@ export interface BaseGaugeAnimation {
      * @default 'easeOutCubic'
      * @public
      */
-    easing?: VizAnimationEasing;
+    easing?: AnimationEasing;
     /**
      * @docid BaseGaugeOptions.animation.enabled
      * @default true
@@ -160,13 +163,13 @@ export interface BaseGaugeRangeContainer {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid BaseGaugeOptions.rangeContainer.paletteExtensionMode
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: VizPaletteExtensionMode;
+    paletteExtensionMode?: PaletteExtensionMode;
     /**
      * @docid BaseGaugeOptions.rangeContainer.ranges
      * @default []
@@ -482,7 +485,7 @@ export interface CommonIndicator {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid
      * @default '#E18E92'

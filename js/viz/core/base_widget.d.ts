@@ -21,15 +21,18 @@ import {
 } from '../../core/options';
 
 import {
-    VizTheme,
-    VizWordWrap,
-    VizTextOverflow,
     HorizontalAlignment,
     VerticalEdge,
     DashStyle,
     AnnotationType,
     ExportFormat,
 } from '../../types/enums';
+
+import {
+    TextOverflow,
+    Theme,
+    WordWrap,
+} from '../../common/charts';
 
 export interface ExportInfo {
   readonly fileName: string;
@@ -159,7 +162,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      * @default 'generic.light'
      * @public
      */
-    theme?: VizTheme;
+    theme?: Theme;
     /**
      * @docid
      * @type object|string
@@ -384,12 +387,12 @@ export interface BaseWidgetTitle {
        * @docid BaseWidgetOptions.title.subtitle.textOverflow
        * @default "ellipsis"
        */
-      textOverflow?: VizTextOverflow;
+      textOverflow?: TextOverflow;
       /**
        * @docid BaseWidgetOptions.title.subtitle.wordWrap
        * @default "normal"
        */
-      wordWrap?: VizWordWrap;
+      wordWrap?: WordWrap;
     } | string;
     /**
      * @docid BaseWidgetOptions.title.text
@@ -402,7 +405,7 @@ export interface BaseWidgetTitle {
      * @default "ellipsis"
      * @public
      */
-    textOverflow?: VizTextOverflow;
+    textOverflow?: TextOverflow;
     /**
      * @docid BaseWidgetOptions.title.verticalAlignment
      * @default 'top'
@@ -414,7 +417,7 @@ export interface BaseWidgetTitle {
      * @default "normal"
      * @public
      */
-    wordWrap?: VizWordWrap;
+    wordWrap?: WordWrap;
 }
 /** @namespace DevExpress.viz */
 export interface BaseWidgetTooltip {
@@ -831,7 +834,7 @@ export interface BaseWidgetAnnotationConfig {
      * @default "ellipsis"
      * @public
      */
-    textOverflow?: VizTextOverflow;
+    textOverflow?: TextOverflow;
     /**
      * @docid
      * @default true
@@ -855,7 +858,7 @@ export interface BaseWidgetAnnotationConfig {
      * @default "normal"
      * @public
      */
-    wordWrap?: VizWordWrap;
+    wordWrap?: WordWrap;
     /**
      * @docid
      * @default undefined

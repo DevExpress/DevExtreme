@@ -13,9 +13,12 @@ import {
     DashStyle,
     SeriesType,
     Position,
-    VizTimeInterval as TimeIntervalType,
     LegendMarkerState,
 } from '../types/enums';
+
+import {
+    TimeInterval,
+} from '../common/charts';
 
 /**
  * @docid
@@ -41,7 +44,7 @@ export type VizTimeInterval = number | {
   weeks?: number;
   /** @docid */
   years?: number;
-} | TimeIntervalType;
+} | TimeInterval;
 
 /**
  * @docid
@@ -391,7 +394,7 @@ export interface VizRange {
     /**
      * @docid
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @default undefined
      * @public
      */

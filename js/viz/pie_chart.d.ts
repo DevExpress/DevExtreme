@@ -45,14 +45,23 @@ import {
 } from './core/base_widget';
 
 import {
-    VizPalette,
-    VizWordWrap,
-    VizTextOverflow,
     DashStyle,
     ChartDataType,
     HatchingDirection,
 
 } from '../types/enums';
+
+import {
+    Palette,
+    TextOverflow,
+    WordWrap,
+} from '../common/charts';
+
+export {
+    Palette,
+    TextOverflow,
+    WordWrap,
+};
 
 export type PieChartAnnotationLocation = 'center' | 'edge';
 export type PieChartLabelPosition = 'columns' | 'inside' | 'outside';
@@ -234,7 +243,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid
      * @default "none"
@@ -667,7 +676,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.textOverflow
        * @default 'ellipsis'
        */
-      textOverflow?: VizTextOverflow;
+      textOverflow?: TextOverflow;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.visible
        * @default false
@@ -677,7 +686,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap
        * @default 'normal'
        */
-      wordWrap?: VizWordWrap;
+      wordWrap?: WordWrap;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.displayFormat
        * @default undefined

@@ -39,10 +39,10 @@ import BaseWidget, {
 } from '../core/base_widget';
 
 import {
-    VizAnimationEasing,
-    VizPalette,
-    VizPaletteExtensionMode,
-} from '../../types/enums';
+    AnimationEasing,
+    Palette,
+    PaletteExtensionMode,
+} from '../../common/charts';
 
 import {
     ForcedSelectionMode,
@@ -78,7 +78,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
        * @docid
        * @default 'easeOutCubic'
        */
-      easing?: VizAnimationEasing;
+      easing?: AnimationEasing;
       /**
        * @docid
        * @default true
@@ -185,13 +185,13 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: VizPaletteExtensionMode;
+    paletteExtensionMode?: PaletteExtensionMode;
     /**
      * @docid
      * @default 'single'

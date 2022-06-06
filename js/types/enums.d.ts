@@ -5,28 +5,7 @@ export type DropDownSearchMode = 'contains' | 'startswith';
 export type ValidationMessageMode = 'always' | 'auto';
 
 /** @namespace DevExpress.utils */
-export type VizAnimationEasing = 'easeOutCubic' | 'linear';
-
-/** @namespace DevExpress.utils */
 export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
-
-/** @namespace DevExpress.utils */
-export type VizTheme = 'generic.dark' | 'generic.light' | 'generic.contrast' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
-
-/** @namespace DevExpress.utils */
-export type VizPalette = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
-
-/** @namespace DevExpress.utils */
-export type VizWordWrap = 'normal' | 'breakWord' | 'none';
-
-/** @namespace DevExpress.utils */
-export type VizTextOverflow = 'ellipsis' | 'hide' | 'none';
-
-/** @namespace DevExpress.utils */
-export type VizPaletteExtensionMode = 'alternate' | 'blend' | 'extrapolate';
-
-/** @namespace DevExpress.utils */
-export type VizPaletteColorSet = 'simpleSet' | 'indicatingSet' | 'gradientSet';
 
 /** @namespace DevExpress.utils */
 export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
@@ -81,9 +60,6 @@ export type Mode = 'auto';
 export type SparklineType = 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
 
 /** @namespace DevExpress.utils */
-export type VizPointSymbol = 'circle' | 'cross' | 'polygon' | 'square' | 'triangle';
-
-/** @namespace DevExpress.utils */
 export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
 
 /** @namespace DevExpress.utils */
@@ -112,9 +88,6 @@ export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
 
 /** @namespace DevExpress.utils */
 export type ScaleBreakLineStyle = 'straight' | 'waved';
-
-/** @namespace DevExpress.utils */
-export type VizTimeInterval = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
 
 /** @namespace DevExpress.utils */
 export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
@@ -193,9 +166,6 @@ export type HatchingDirection = 'left' | 'none' | 'right';
 
 /** @namespace DevExpress.utils */
 export type FunnelLabelPosition = 'columns' | 'inside' | 'outside';
-
-/** @namespace DevExpress.utils */
-export type SankeyLabelOverlappingBehavior = 'ellipsis' | 'hide' | 'none';
 
 /** @namespace DevExpress.utils */
 export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
@@ -340,9 +310,6 @@ export type ChartSeriesSelectionMode = 'allArgumentPoints' | 'allSeriesPoints' |
 
 /** @namespace DevExpress.utils */
 export type ChartPointInteractionMode = 'allArgumentPoints' | 'allSeriesPoints' | 'none' | 'onlyPoint';
-
-/** @namespace DevExpress.utils */
-export type PointSymbol = 'circle' | 'cross' | 'polygon' | 'square' | 'triangleDown' | 'triangleUp';
 
 /** @namespace DevExpress.utils */
 export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';

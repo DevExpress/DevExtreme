@@ -51,7 +51,6 @@ import {
 
 import {
     DashStyle,
-    VizPointSymbol,
     ChartLegendHoverMode,
     RelativePosition,
     DiscreteAxisDivisionMode,
@@ -71,12 +70,17 @@ import {
     ForcedSelectionMode,
 } from '../common';
 
+import {
+    PointSymbol,
+} from '../common/charts';
+
 interface SeriesInteractionInfo {
     target: polarChartSeriesObject;
 }
 
 export {
     ForcedSelectionMode,
+    PointSymbol,
 };
 
 export type PolarChartOverlapping = 'none' | 'hide';
@@ -522,7 +526,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -561,7 +565,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     /**
      * @docid dxPolarChartOptions.argumentAxis.tickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -1091,7 +1095,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -1106,7 +1110,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -1133,7 +1137,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.tickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -2069,7 +2073,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @public
      */
-    symbol?: VizPointSymbol;
+    symbol?: PointSymbol;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.visible
      * @default true

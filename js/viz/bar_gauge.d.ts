@@ -33,10 +33,19 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-    VizPalette,
-    VizPaletteExtensionMode,
+
     BarGaugeResolveLabelOverlapping,
 } from '../types/enums';
+
+import {
+    Palette,
+    PaletteExtensionMode,
+} from '../common/charts';
+
+export {
+    Palette,
+    PaletteExtensionMode,
+};
 
 /**
  * @docid
@@ -247,13 +256,13 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: VizPaletteExtensionMode;
+    paletteExtensionMode?: PaletteExtensionMode;
     /**
      * @docid
      * @default 0.3

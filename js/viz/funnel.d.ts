@@ -35,10 +35,6 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-    VizPalette,
-    VizWordWrap,
-    VizTextOverflow,
-    VizPaletteExtensionMode,
     DashStyle,
     FunnelResolveLabelOverlapping,
     HorizontalEdge,
@@ -51,8 +47,19 @@ import {
     SelectionMode,
 } from '../common';
 
+import {
+    Palette,
+    PaletteExtensionMode,
+    TextOverflow,
+    WordWrap,
+} from '../common/charts';
+
 export {
     SelectionMode,
+    Palette,
+    PaletteExtensionMode,
+    TextOverflow,
+    WordWrap,
 };
 
 /**
@@ -402,7 +409,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @docid
        * @default 'ellipsis'
        */
-      textOverflow?: VizTextOverflow;
+      textOverflow?: TextOverflow;
       /**
        * @docid
        * @default true
@@ -412,7 +419,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @docid
        * @default 'normal'
        */
-      wordWrap?: VizWordWrap;
+      wordWrap?: WordWrap;
     };
     /**
      * @docid
@@ -486,13 +493,13 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: VizPaletteExtensionMode;
+    paletteExtensionMode?: PaletteExtensionMode;
     /**
      * @docid
      * @default "shift"

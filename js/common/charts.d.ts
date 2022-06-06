@@ -1,0 +1,9 @@
+export type AnimationEasing = 'easeOutCubic' | 'linear';
+export type Palette = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+export type PaletteColorSet = 'simpleSet' | 'indicatingSet' | 'gradientSet';
+export type PaletteExtensionMode = 'alternate' | 'blend' | 'extrapolate';
+export type PointSymbol = 'circle' | 'cross' | 'polygon' | 'square' | 'triangle' | 'triangleDown' | 'triangleUp';
+export type TextOverflow = 'ellipsis' | 'hide' | 'none';
+export type Theme = 'generic.dark' | 'generic.light' | 'generic.contrast' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
+export type TimeInterval = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+export type WordWrap = 'normal' | 'breakWord' | 'none';

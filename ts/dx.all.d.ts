@@ -1504,6 +1504,87 @@ declare module DevExpress.common {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizAnimationEasing = 'easeOutCubic' | 'linear';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizPalette =
+    | 'Bright'
+    | 'Harmony Light'
+    | 'Ocean'
+    | 'Pastel'
+    | 'Soft'
+    | 'Soft Pastel'
+    | 'Vintage'
+    | 'Violet'
+    | 'Carmine'
+    | 'Dark Moon'
+    | 'Dark Violet'
+    | 'Green Mist'
+    | 'Soft Blue'
+    | 'Material'
+    | 'Office';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizPaletteColorSet =
+    | 'simpleSet'
+    | 'indicatingSet'
+    | 'gradientSet';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizPaletteExtensionMode = 'alternate' | 'blend' | 'extrapolate';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizPointSymbol =
+    | 'circle'
+    | 'cross'
+    | 'polygon'
+    | 'square'
+    | 'triangle';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizTextOverflow = 'ellipsis' | 'hide' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizTheme =
+    | 'generic.dark'
+    | 'generic.light'
+    | 'generic.contrast'
+    | 'generic.carmine'
+    | 'generic.darkmoon'
+    | 'generic.darkviolet'
+    | 'generic.greenmist'
+    | 'generic.softblue'
+    | 'material.blue.light'
+    | 'material.lime.light'
+    | 'material.orange.light'
+    | 'material.purple.light'
+    | 'material.teal.light';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizTimeInterval =
+    | 'day'
+    | 'hour'
+    | 'millisecond'
+    | 'minute'
+    | 'month'
+    | 'quarter'
+    | 'second'
+    | 'week'
+    | 'year';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizWordWrap = 'normal' | 'breakWord' | 'none';
 }
 declare module DevExpress.core {
   /**
@@ -25864,87 +25945,6 @@ declare module DevExpress.utils {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type VizAnimationEasing = 'easeOutCubic' | 'linear';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type VizPalette =
-    | 'Bright'
-    | 'Harmony Light'
-    | 'Ocean'
-    | 'Pastel'
-    | 'Soft'
-    | 'Soft Pastel'
-    | 'Vintage'
-    | 'Violet'
-    | 'Carmine'
-    | 'Dark Moon'
-    | 'Dark Violet'
-    | 'Green Mist'
-    | 'Soft Blue'
-    | 'Material'
-    | 'Office';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type VizPaletteColorSet =
-    | 'simpleSet'
-    | 'indicatingSet'
-    | 'gradientSet';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type VizPaletteExtensionMode = 'alternate' | 'blend' | 'extrapolate';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type VizPointSymbol =
-    | 'circle'
-    | 'cross'
-    | 'polygon'
-    | 'square'
-    | 'triangle';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type VizTextOverflow = 'ellipsis' | 'hide' | 'none';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type VizTheme =
-    | 'generic.dark'
-    | 'generic.light'
-    | 'generic.contrast'
-    | 'generic.carmine'
-    | 'generic.darkmoon'
-    | 'generic.darkviolet'
-    | 'generic.greenmist'
-    | 'generic.softblue'
-    | 'material.blue.light'
-    | 'material.lime.light'
-    | 'material.orange.light'
-    | 'material.purple.light'
-    | 'material.teal.light';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type VizTimeInterval =
-    | 'day'
-    | 'hour'
-    | 'millisecond'
-    | 'minute'
-    | 'month'
-    | 'quarter'
-    | 'second'
-    | 'week'
-    | 'year';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type VizWordWrap = 'normal' | 'breakWord' | 'none';
 }
 declare module DevExpress.viz {
   /**
@@ -26112,7 +26112,7 @@ declare module DevExpress.viz {
           /**
            * [descr:BaseChartOptions.animation.easing]
            */
-          easing?: DevExpress.utils.VizAnimationEasing;
+          easing?: DevExpress.common.VizAnimationEasing;
           /**
            * [descr:BaseChartOptions.animation.enabled]
            */
@@ -26186,11 +26186,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.palette]
      */
-    palette?: Array<string> | DevExpress.utils.VizPalette;
+    palette?: Array<string> | DevExpress.common.VizPalette;
     /**
      * [descr:BaseChartOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: DevExpress.utils.VizPaletteExtensionMode;
+    paletteExtensionMode?: DevExpress.common.VizPaletteExtensionMode;
     /**
      * [descr:BaseChartOptions.pointSelectionMode]
      */
@@ -26288,7 +26288,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.animation.easing]
      */
-    easing?: DevExpress.utils.VizAnimationEasing;
+    easing?: DevExpress.common.VizAnimationEasing;
     /**
      * [descr:BaseGaugeOptions.animation.enabled]
      */
@@ -26371,11 +26371,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.rangeContainer.palette]
      */
-    palette?: Array<string> | DevExpress.utils.VizPalette;
+    palette?: Array<string> | DevExpress.common.VizPalette;
     /**
      * [descr:BaseGaugeOptions.rangeContainer.paletteExtensionMode]
      */
-    paletteExtensionMode?: DevExpress.utils.VizPaletteExtensionMode;
+    paletteExtensionMode?: DevExpress.common.VizPaletteExtensionMode;
     /**
      * [descr:BaseGaugeOptions.rangeContainer.ranges]
      */
@@ -27225,7 +27225,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.textOverflow]
      */
-    textOverflow?: DevExpress.utils.VizTextOverflow;
+    textOverflow?: DevExpress.common.VizTextOverflow;
     /**
      * [descr:BaseWidgetAnnotationConfig.tooltipEnabled]
      */
@@ -27241,7 +27241,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.wordWrap]
      */
-    wordWrap?: DevExpress.utils.VizWordWrap;
+    wordWrap?: DevExpress.common.VizWordWrap;
     /**
      * [descr:BaseWidgetAnnotationConfig.x]
      */
@@ -27410,7 +27410,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.theme]
      */
-    theme?: DevExpress.utils.VizTheme;
+    theme?: DevExpress.common.VizTheme;
     /**
      * [descr:BaseWidgetOptions.title]
      */
@@ -27496,11 +27496,11 @@ declare module DevExpress.viz {
           /**
            * [descr:BaseWidgetOptions.title.subtitle.textOverflow]
            */
-          textOverflow?: DevExpress.utils.VizTextOverflow;
+          textOverflow?: DevExpress.common.VizTextOverflow;
           /**
            * [descr:BaseWidgetOptions.title.subtitle.wordWrap]
            */
-          wordWrap?: DevExpress.utils.VizWordWrap;
+          wordWrap?: DevExpress.common.VizWordWrap;
         }
       | string;
     /**
@@ -27510,7 +27510,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.title.textOverflow]
      */
-    textOverflow?: DevExpress.utils.VizTextOverflow;
+    textOverflow?: DevExpress.common.VizTextOverflow;
     /**
      * [descr:BaseWidgetOptions.title.verticalAlignment]
      */
@@ -27518,7 +27518,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.title.wordWrap]
      */
-    wordWrap?: DevExpress.utils.VizWordWrap;
+    wordWrap?: DevExpress.common.VizWordWrap;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -27785,7 +27785,7 @@ declare module DevExpress.viz {
     /**
      * [descr:CommonIndicator.palette]
      */
-    palette?: Array<string> | DevExpress.utils.VizPalette;
+    palette?: Array<string> | DevExpress.common.VizPalette;
     /**
      * [descr:CommonIndicator.secondColor]
      */
@@ -28038,11 +28038,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.palette]
      */
-    palette?: Array<string> | DevExpress.utils.VizPalette;
+    palette?: Array<string> | DevExpress.common.VizPalette;
     /**
      * [descr:dxBarGaugeOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: DevExpress.utils.VizPaletteExtensionMode;
+    paletteExtensionMode?: DevExpress.common.VizPaletteExtensionMode;
     /**
      * [descr:dxBarGaugeOptions.relativeInnerRadius]
      */
@@ -28907,7 +28907,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.textOverflow]
      */
-    textOverflow?: DevExpress.utils.VizTextOverflow;
+    textOverflow?: DevExpress.common.VizTextOverflow;
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.visible]
      */
@@ -28915,7 +28915,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.wordWrap]
      */
-    wordWrap?: DevExpress.utils.VizWordWrap;
+    wordWrap?: DevExpress.common.VizWordWrap;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28970,11 +28970,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.title.textOverflow]
      */
-    textOverflow?: DevExpress.utils.VizTextOverflow;
+    textOverflow?: DevExpress.common.VizTextOverflow;
     /**
      * [descr:dxChartOptions.commonAxisSettings.title.wordWrap]
      */
-    wordWrap?: DevExpress.utils.VizWordWrap;
+    wordWrap?: DevExpress.common.VizWordWrap;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -32291,7 +32291,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.textOverflow]
        */
-      textOverflow?: DevExpress.utils.VizTextOverflow;
+      textOverflow?: DevExpress.common.VizTextOverflow;
       /**
        * [descr:dxFunnelOptions.label.visible]
        */
@@ -32299,7 +32299,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.wordWrap]
        */
-      wordWrap?: DevExpress.utils.VizWordWrap;
+      wordWrap?: DevExpress.common.VizWordWrap;
     };
     /**
      * [descr:dxFunnelOptions.legend]
@@ -32338,11 +32338,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.palette]
      */
-    palette?: Array<string> | DevExpress.utils.VizPalette;
+    palette?: Array<string> | DevExpress.common.VizPalette;
     /**
      * [descr:dxFunnelOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: DevExpress.utils.VizPaletteExtensionMode;
+    paletteExtensionMode?: DevExpress.common.VizPaletteExtensionMode;
     /**
      * [descr:dxFunnelOptions.resolveLabelOverlapping]
      */
@@ -32743,7 +32743,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.palette]
      */
-    palette?: Array<string> | DevExpress.utils.VizPalette;
+    palette?: Array<string> | DevExpress.common.VizPalette;
     /**
      * [descr:dxPieChartOptions.resolveLabelOverlapping]
      */
@@ -32983,7 +32983,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.textOverflow]
        */
-      textOverflow?: DevExpress.utils.VizTextOverflow;
+      textOverflow?: DevExpress.common.VizTextOverflow;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.visible]
        */
@@ -32991,7 +32991,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap]
        */
-      wordWrap?: DevExpress.utils.VizWordWrap;
+      wordWrap?: DevExpress.common.VizWordWrap;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.displayFormat]
        */
@@ -34434,7 +34434,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.symbol]
      */
-    symbol?: DevExpress.utils.VizPointSymbol;
+    symbol?: DevExpress.common.VizPointSymbol;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.visible]
      */
@@ -34849,11 +34849,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.chart.palette]
        */
-      palette?: Array<string> | DevExpress.utils.VizPalette;
+      palette?: Array<string> | DevExpress.common.VizPalette;
       /**
        * [descr:dxRangeSelectorOptions.chart.paletteExtensionMode]
        */
-      paletteExtensionMode?: DevExpress.utils.VizPaletteExtensionMode;
+      paletteExtensionMode?: DevExpress.common.VizPaletteExtensionMode;
       /**
        * [descr:dxRangeSelectorOptions.chart.series]
        */
@@ -35703,11 +35703,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSankeyOptions.palette]
      */
-    palette?: Array<string> | DevExpress.utils.VizPalette;
+    palette?: Array<string> | DevExpress.common.VizPalette;
     /**
      * [descr:dxSankeyOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: DevExpress.utils.VizPaletteExtensionMode;
+    paletteExtensionMode?: DevExpress.common.VizPaletteExtensionMode;
     /**
      * [descr:dxSankeyOptions.sortData]
      */
@@ -35867,7 +35867,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSparklineOptions.pointSymbol]
      */
-    pointSymbol?: DevExpress.utils.VizPointSymbol;
+    pointSymbol?: DevExpress.common.VizPointSymbol;
     /**
      * [descr:dxSparklineOptions.showFirstLast]
      */
@@ -36079,11 +36079,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxTreeMapOptions.colorizer.palette]
        */
-      palette?: Array<string> | DevExpress.utils.VizPalette;
+      palette?: Array<string> | DevExpress.common.VizPalette;
       /**
        * [descr:dxTreeMapOptions.colorizer.paletteExtensionMode]
        */
-      paletteExtensionMode?: DevExpress.utils.VizPaletteExtensionMode;
+      paletteExtensionMode?: DevExpress.common.VizPaletteExtensionMode;
       /**
        * [descr:dxTreeMapOptions.colorizer.range]
        */
@@ -36163,7 +36163,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.group.label.textOverflow]
          */
-        textOverflow?: DevExpress.utils.VizTextOverflow;
+        textOverflow?: DevExpress.common.VizTextOverflow;
         /**
          * [descr:dxTreeMapOptions.group.label.visible]
          */
@@ -36322,7 +36322,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.tile.label.textOverflow]
          */
-        textOverflow?: DevExpress.utils.VizTextOverflow;
+        textOverflow?: DevExpress.common.VizTextOverflow;
         /**
          * [descr:dxTreeMapOptions.tile.label.visible]
          */
@@ -36330,7 +36330,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.tile.label.wordWrap]
          */
-        wordWrap?: DevExpress.utils.VizWordWrap;
+        wordWrap?: DevExpress.common.VizWordWrap;
       };
       /**
        * [descr:dxTreeMapOptions.tile.selectionStyle]
@@ -36754,7 +36754,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.palette]
            */
-          palette?: Array<string> | DevExpress.utils.VizPalette;
+          palette?: Array<string> | DevExpress.common.VizPalette;
           /**
            * [descr:dxVectorMapOptions.layers.paletteSize]
            */
@@ -36815,7 +36815,7 @@ declare module DevExpress.viz {
           minSize?: number;
           name?: string;
           opacity?: number;
-          palette?: Array<string> | DevExpress.utils.VizPalette;
+          palette?: Array<string> | DevExpress.common.VizPalette;
           paletteSize?: number;
           selectedBorderColor?: string;
           selectedBorderWidth?: number;
@@ -37034,11 +37034,11 @@ declare module DevExpress.viz {
    * [descr:viz.generateColors(palette, count, options)]
    */
   export function generateColors(
-    palette: DevExpress.utils.VizPalette | Array<string>,
+    palette: DevExpress.common.VizPalette | Array<string>,
     count: number,
     options: {
-      paletteExtensionMode?: DevExpress.utils.VizPaletteExtensionMode;
-      baseColorSet?: DevExpress.utils.VizPaletteColorSet;
+      paletteExtensionMode?: DevExpress.common.VizPaletteExtensionMode;
+      baseColorSet?: DevExpress.common.VizPaletteColorSet;
     }
   ): Array<string>;
   /**
@@ -37359,7 +37359,7 @@ declare module DevExpress.viz {
          */
         years?: number;
       }
-    | DevExpress.utils.VizTimeInterval;
+    | DevExpress.common.VizTimeInterval;
 }
 declare module DevExpress.viz.dxBarGauge {
   export type LegendItem = BarGaugeLegendItem;
