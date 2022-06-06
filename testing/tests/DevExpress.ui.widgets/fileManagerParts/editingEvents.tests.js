@@ -36,7 +36,7 @@ const moduleConfig = {
 
         this.$element = $('#fileManager').dxFileManager(options);
         this.fileManager = this.$element.dxFileManager('instance');
-
+        this.progressPanelWrapper = new FileManagerProgressPanelWrapper(this.$element);
         this.clock.tick(400);
 
         this.dialogResult = { };
@@ -353,7 +353,7 @@ QUnit.module('Editing events tests', moduleConfig, () => {
         assert.ok(this.provider.downloadItems.calledOnce);
     });
 
-    test('error that is specified in the itemDownloading must not be ignored (T1086905)', function(assert) {
+    test('error that is specified in the itemDownloading must not be ignored - single file (T1086905)', function(assert) {
         const fileName = 'File 1.txt';
         const customErrorText = 'Custom error text';
         const operationDelay = 500;
@@ -375,8 +375,7 @@ QUnit.module('Editing events tests', moduleConfig, () => {
         this.fileManager.executeCommand('download');
         this.clock.tick(operationDelay + 400);
 
-        const progressPanelWrapper = new FileManagerProgressPanelWrapper(this.$element);
-        const infos = progressPanelWrapper.getInfos();
+        const infos = this.progressPanelWrapper.getInfos();
         assert.strictEqual(infos.length, 1, 'There is one notification on panel');
 
         assert.strictEqual(infos[0].common.commonText, 'The file cannot be downloaded', 'Title is correct');
@@ -384,8 +383,78 @@ QUnit.module('Editing events tests', moduleConfig, () => {
         const details = infos[0].details;
         assert.strictEqual(details.length, 1, 'Notification has one details section');
 
-        assert.strictEqual(details[0].commonText, '', 'Common text is correct');
+        assert.strictEqual(details[0].commonText, fileName, 'Common text is correct');
         assert.strictEqual(details[0].errorText, customErrorText, 'Error text is correct');
     });
 
+    test('error that is specified in the itemDownloading must not be ignored - multiple files, cancel all (T1086905)', function(assert) {
+        const fileName1 = 'File 1.txt';
+        const fileName2 = 'File 2.jpg';
+        const operationDelay = 500;
+
+        this.fileManager.option({
+            onItemDownloading: function(e) {
+                const deferred = new Deferred();
+                e.cancel = deferred.promise();
+                setTimeout(() => deferred.resolve({
+                    cancel: true,
+                    errorCode: 2
+                }), operationDelay);
+            },
+            selectedItemKeys: [ fileName1, fileName2 ]
+        });
+        this.clock.tick(400);
+
+        this.fileManager.executeCommand('download');
+        this.clock.tick(operationDelay + 400);
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The files cannot be downloaded', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 2, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, fileName1, 'Common text 1 is correct');
+        assert.strictEqual(details[0].errorText, `File '${fileName1}' not found.`, 'Error text 1 is correct');
+        assert.strictEqual(details[1].commonText, fileName2, 'Common text 2 is correct');
+        assert.strictEqual(details[1].errorText, `File '${fileName2}' not found.`, 'Error text 2 is correct');
+    });
+
+    test('error that is specified in the itemDownloading must not be ignored - multiple files, cancel one - nothing downloaded (T1086905)', function(assert) {
+        const fileName1 = 'File 1.txt';
+        const fileName2 = 'File 2.jpg';
+        const operationDelay = 500;
+
+        this.fileManager.option({
+            onItemDownloading: function(e) {
+                const deferred = new Deferred();
+                e.cancel = deferred.promise();
+                setTimeout(() => deferred.resolve({
+                    cancel: e.item.name === fileName1,
+                    errorCode: 2
+                }), operationDelay);
+            },
+            selectedItemKeys: [ fileName1, fileName2 ]
+        });
+        this.clock.tick(400);
+
+        this.fileManager.executeCommand('download');
+        this.clock.tick(operationDelay + 400);
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The files cannot be downloaded', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 2, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, fileName1, 'Common text 1 is correct');
+        assert.strictEqual(details[0].errorText, `File '${fileName1}' not found.`, 'Error text 1 is correct');
+        assert.strictEqual(details[1].commonText, fileName2, 'Common text 2 is correct');
+        assert.strictEqual(details[1].errorText, `File '${fileName2}' not found.`, 'Error text 2 is correct');
+        assert.ok(this.provider.downloadItems.notCalled, 'provider.downloadItems method not called');
+    });
 });
