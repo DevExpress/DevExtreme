@@ -32,26 +32,30 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-  ScaleLabelOverlappingBehavior,
-  ScaleBreakLineStyle,
-  VisualRangeUpdateMode,
-  ChartDataType,
-  RangeSelectorAxisScaleType,
-  ValueChangedCallMode,
-  BackgroundImageLocation,
-  RangeSelectorChartAxisScaleType,
-  DiscreteAxisDivisionMode,
+    ScaleBreakLineStyle,
+    VisualRangeUpdateMode,
+    ValueChangedCallMode,
+    BackgroundImageLocation,
 } from '../types/enums';
 
 import {
+    ChartDataType,
+    DiscreteAxisDivisionMode,
+    LabelOverlapping,
     Palette,
     PaletteExtensionMode,
 } from '../common/charts';
 
 export {
+    ChartDataType,
+    DiscreteAxisDivisionMode,
+    LabelOverlapping,
     Palette,
     PaletteExtensionMode,
 };
+
+export type AxisScale = 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';
+export type ChartAxisScale = 'continuous' | 'logarithmic';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxRangeSelector>;
@@ -283,7 +287,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default undefined
          */
-        type?: RangeSelectorChartAxisScaleType;
+        type?: ChartAxisScale;
         /**
          * @docid
          * @default undefined
@@ -442,7 +446,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default "hide"
          */
-        overlappingBehavior?: ScaleLabelOverlappingBehavior;
+        overlappingBehavior?: LabelOverlapping;
         /**
          * @docid
          * @default 7
@@ -608,7 +612,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      type?: RangeSelectorAxisScaleType;
+      type?: AxisScale;
       /**
        * @docid
        * @default undefined

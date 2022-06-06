@@ -33,16 +33,13 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-
-    BarGaugeResolveLabelOverlapping,
-} from '../types/enums';
-
-import {
+    LabelOverlapping,
     Palette,
     PaletteExtensionMode,
 } from '../common/charts';
 
 export {
+    LabelOverlapping,
     Palette,
     PaletteExtensionMode,
 };
@@ -274,7 +271,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @default 'hide'
      * @public
      */
-    resolveLabelOverlapping?: BarGaugeResolveLabelOverlapping;
+    resolveLabelOverlapping?: LabelOverlapping;
     /**
      * @docid
      * @default 0

@@ -23,7 +23,6 @@ import BaseWidget, {
 } from '../core/base_widget';
 
 import {
-    ScaleLabelOverlappingBehavior,
     VerticalEdge,
     HorizontalEdge,
 } from '../../types/enums';
@@ -32,6 +31,7 @@ import {
     AnimationEasing,
     Palette,
     PaletteExtensionMode,
+    LabelOverlapping,
 } from '../../common/charts';
 
 export interface TooltipInfo {
@@ -340,7 +340,7 @@ export interface BaseGaugeScaleLabel {
      * @default 'hide'
      * @public
      */
-    overlappingBehavior?: ScaleLabelOverlappingBehavior;
+    overlappingBehavior?: LabelOverlapping;
     /**
      * @docid BaseGaugeOptions.scale.label.useRangeColors
      * @default false

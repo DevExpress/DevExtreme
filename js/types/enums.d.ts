@@ -8,21 +8,6 @@ export type ValidationMessageMode = 'always' | 'auto';
 export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 
 /** @namespace DevExpress.utils */
-export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
-
-/** @namespace DevExpress.utils */
-export type GaugeOverlappingBehavior = 'first' | 'last';
-
-/** @namespace DevExpress.utils */
-export type ScaleLabelOverlappingBehavior = 'hide' | 'none';
-
-/** @namespace DevExpress.utils */
-export type BarGaugeResolveLabelOverlapping = 'hide' | 'none';
-
-/** @namespace DevExpress.utils */
-export type OverlappingBehavior = 'rotate' | 'stagger' | 'none' | 'hide';
-
-/** @namespace DevExpress.utils */
 export type Orientation = 'horizontal' | 'vertical';
 
 /** @namespace DevExpress.utils */
@@ -63,12 +48,6 @@ export type SparklineType = 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 
 export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
 
 /** @namespace DevExpress.utils */
-export type ChartResolveLabelOverlapping = 'hide' | 'none' | 'stack';
-
-/** @namespace DevExpress.utils */
-export type FunnelResolveLabelOverlapping = 'hide' | 'none' | 'shift';
-
-/** @namespace DevExpress.utils */
 export type SeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
 
 /** @namespace DevExpress.utils */
@@ -78,31 +57,13 @@ export type AnnotationType = 'text' | 'image' | 'custom';
 export type Position = 'bottom' | 'left' | 'right' | 'top';
 
 /** @namespace DevExpress.utils */
-export type ChartLegendHoverMode = 'excludePoints' | 'includePoints' | 'none';
-
-/** @namespace DevExpress.utils */
 export type RelativePosition = 'inside' | 'outside';
-
-/** @namespace DevExpress.utils */
-export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
 
 /** @namespace DevExpress.utils */
 export type ScaleBreakLineStyle = 'straight' | 'waved';
 
 /** @namespace DevExpress.utils */
 export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
-
-/** @namespace DevExpress.utils */
-export type ChartZoomPanAction = 'zoom' | 'pan';
-
-/** @namespace DevExpress.utils */
-export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
-
-/** @namespace DevExpress.utils */
-export type ChartDataType = 'datetime' | 'numeric' | 'string';
-
-/** @namespace DevExpress.utils */
-export type ArgumentAxisHoverMode = 'allArgumentPoints' | 'none';
 
 /** @namespace DevExpress.utils */
 export type EditorApplyValueMode = 'instantly' | 'useButtons';
@@ -159,18 +120,6 @@ export type FormItemEditorType = 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' 
 export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
 
 /** @namespace DevExpress.utils */
-export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
-
-/** @namespace DevExpress.utils */
-export type HatchingDirection = 'left' | 'none' | 'right';
-
-/** @namespace DevExpress.utils */
-export type FunnelLabelPosition = 'columns' | 'inside' | 'outside';
-
-/** @namespace DevExpress.utils */
-export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
-
-/** @namespace DevExpress.utils */
 export type ListMenuMode = 'context' | 'slide';
 
 /** @namespace DevExpress.utils */
@@ -207,16 +156,10 @@ export type ToolbarItemWidget = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | '
 export type ToolbarItemLocation = 'after' | 'before' | 'center';
 
 /** @namespace DevExpress.utils */
-export type RangeSelectorAxisScaleType = 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';
-
-/** @namespace DevExpress.utils */
 export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
 
 /** @namespace DevExpress.utils */
 export type BackgroundImageLocation = 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop';
-
-/** @namespace DevExpress.utils */
-export type RangeSelectorChartAxisScaleType = 'continuous' | 'logarithmic';
 
 /** @namespace DevExpress.utils */
 export type SliderTooltipShowMode = 'always' | 'onHover';
@@ -301,15 +244,6 @@ export type AnimationType = 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'sli
 
 /** @namespace DevExpress.utils */
 export type Direction = 'bottom' | 'left' | 'right' | 'top';
-
-/** @namespace DevExpress.utils */
-export type ChartSeriesHoverMode = 'allArgumentPoints' | 'allSeriesPoints' | 'excludePoints' | 'includePoints' | 'nearestPoint' | 'none' | 'onlyPoint';
-
-/** @namespace DevExpress.utils */
-export type ChartSeriesSelectionMode = 'allArgumentPoints' | 'allSeriesPoints' | 'excludePoints' | 'includePoints' | 'none' | 'onlyPoint';
-
-/** @namespace DevExpress.utils */
-export type ChartPointInteractionMode = 'allArgumentPoints' | 'allSeriesPoints' | 'none' | 'onlyPoint';
 
 /** @namespace DevExpress.utils */
 export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
@@ -398,9 +332,6 @@ export type FileManagerItemViewMode = 'details' | 'thumbnails';
 
 /** @namespace DevExpress.utils */
 export type FileManagerViewArea = 'navPane' | 'itemView';
-
-/** @namespace DevExpress.utils */
-export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
 
 /** @namespace DevExpress.utils */
 export type ValidationStatus = 'valid' | 'invalid' | 'pending';

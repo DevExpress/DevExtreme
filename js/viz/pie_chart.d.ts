@@ -46,25 +46,27 @@ import {
 
 import {
     DashStyle,
-    ChartDataType,
-    HatchingDirection,
-
 } from '../types/enums';
 
 import {
+    ChartDataType,
+    HatchingDirection,
+    LabelPosition,
     Palette,
     TextOverflow,
     WordWrap,
 } from '../common/charts';
 
 export {
+    ChartDataType,
+    HatchingDirection,
+    LabelPosition,
     Palette,
     TextOverflow,
     WordWrap,
 };
 
 export type PieChartAnnotationLocation = 'center' | 'edge';
-export type PieChartLabelPosition = 'columns' | 'inside' | 'outside';
 export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
 export type PieChartResolveLabelOverlapping = 'hide' | 'none' | 'shift';
 export type PieChartSegmentsDirection = 'anticlockwise' | 'clockwise';
@@ -661,7 +663,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.position
        * @default 'outside'
        */
-      position?: PieChartLabelPosition;
+      position?: LabelPosition;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.radialOffset
        * @default 0

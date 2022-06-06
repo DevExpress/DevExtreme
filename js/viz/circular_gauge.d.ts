@@ -22,8 +22,13 @@ import {
 
 import {
     CircularGaugeElementOrientation,
-    GaugeOverlappingBehavior,
-} from '../types/enums';
+    CircularGaugeLabelOverlapping,
+} from '../common/charts';
+
+export {
+    CircularGaugeElementOrientation,
+    CircularGaugeLabelOverlapping,
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxCircularGauge>;
@@ -138,7 +143,7 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
      * @default 'last'
      * @public
      */
-    hideFirstOrLast?: GaugeOverlappingBehavior;
+    hideFirstOrLast?: CircularGaugeLabelOverlapping;
     /**
      * @docid dxCircularGaugeOptions.scale.label.indentFromTick
      * @default 10

@@ -13,10 +13,10 @@ import {
     DashStyle,
     SeriesType,
     Position,
-    LegendMarkerState,
 } from '../types/enums';
 
 import {
+    LegendMarkerState,
     TimeInterval,
 } from '../common/charts';
 

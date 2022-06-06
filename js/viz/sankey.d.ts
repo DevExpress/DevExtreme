@@ -27,19 +27,22 @@ import BaseWidget, {
 
 import {
   VerticalAlignment,
-  HatchingDirection,
-  SankeyColorMode,
 } from '../types/enums';
 
 import {
+    HatchingDirection,
     Palette,
     PaletteExtensionMode,
+    SankeyColorMode,
     TextOverflow,
 } from '../common/charts';
 
 export {
+    HatchingDirection,
     Palette,
     PaletteExtensionMode,
+    SankeyColorMode,
+    TextOverflow,
 };
 
 /** @public */

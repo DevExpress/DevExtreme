@@ -36,11 +36,7 @@ import BaseWidget, {
 
 import {
     DashStyle,
-    FunnelResolveLabelOverlapping,
     HorizontalEdge,
-    FunnelAlgorithm,
-    HatchingDirection,
-    FunnelLabelPosition,
 } from '../types/enums';
 
 import {
@@ -48,6 +44,10 @@ import {
 } from '../common';
 
 import {
+    FunnelAlgorithm,
+    FunnelLabelOverlapping,
+    HatchingDirection,
+    LabelPosition,
     Palette,
     PaletteExtensionMode,
     TextOverflow,
@@ -55,7 +55,10 @@ import {
 } from '../common/charts';
 
 export {
-    SelectionMode,
+    FunnelAlgorithm,
+    FunnelLabelOverlapping,
+    HatchingDirection,
+    LabelPosition,
     Palette,
     PaletteExtensionMode,
     TextOverflow,
@@ -399,7 +402,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @docid
        * @default 'columns'
        */
-      position?: FunnelLabelPosition;
+      position?: LabelPosition;
       /**
        * @docid
        * @default false
@@ -505,7 +508,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default "shift"
      * @public
      */
-    resolveLabelOverlapping?: FunnelResolveLabelOverlapping;
+    resolveLabelOverlapping?: FunnelLabelOverlapping;
     /**
      * @docid
      * @default 'single'

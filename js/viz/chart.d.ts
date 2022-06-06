@@ -44,26 +44,14 @@ import {
 } from './core/base_widget';
 
 import {
-    OverlappingBehavior,
     VerticalAlignment,
     HorizontalAlignment,
     DashStyle,
-    ChartResolveLabelOverlapping,
     SeriesType,
     Position,
-    ChartLegendHoverMode,
     RelativePosition,
-    DiscreteAxisDivisionMode,
     ScaleBreakLineStyle,
     VisualRangeUpdateMode,
-    ChartZoomPanAction,
-    AxisScaleType,
-    ChartDataType,
-    ArgumentAxisHoverMode,
-    HatchingDirection,
-    ChartSeriesHoverMode,
-    ChartSeriesSelectionMode,
-    ChartPointInteractionMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
 } from '../types/enums';
@@ -73,9 +61,21 @@ import {
 } from '../common';
 
 import {
+    ArgumentAxisHoverMode,
+    AxisScaleType,
+    ChartAxisLabelOverlapping,
+    ChartDataType,
+    ChartLabelOverlapping,
+    DiscreteAxisDivisionMode,
+    HatchingDirection,
+    LegendHoverMode,
+    PointInteractionMode,
     PointSymbol,
+    SeriesHoverMode,
+    SeriesSelectionMode,
     TextOverflow,
     WordWrap,
+    ZoomPanAction,
 } from '../common/charts';
 
 interface SeriesInteractionInfo {
@@ -83,9 +83,21 @@ interface SeriesInteractionInfo {
 }
 
 export {
-    ForcedSelectionMode,
+    ArgumentAxisHoverMode,
+    AxisScaleType,
+    ChartAxisLabelOverlapping,
+    ChartDataType,
+    ChartLabelOverlapping,
+    DiscreteAxisDivisionMode,
+    HatchingDirection,
+    LegendHoverMode,
+    PointInteractionMode,
+    PointSymbol,
+    SeriesHoverMode,
+    SeriesSelectionMode,
     TextOverflow,
     WordWrap,
+    ZoomPanAction,
 };
 
 export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
@@ -170,7 +182,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | To
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly previousRange: VizRange;
-    readonly actionType: ChartZoomPanAction;
+    readonly actionType: ZoomPanAction;
     readonly zoomFactor: number;
     readonly shift: number;
 };
@@ -179,7 +191,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | To
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
-    readonly actionType?: ChartZoomPanAction;
+    readonly actionType?: ZoomPanAction;
 };
 
 /**
@@ -1020,7 +1032,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default "none"
      * @public
      */
-    resolveLabelOverlapping?: ChartResolveLabelOverlapping;
+    resolveLabelOverlapping?: ChartLabelOverlapping;
     /**
      * @docid
      * @default false
@@ -1866,7 +1878,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @default 'hide'
      * @public
      */
-    overlappingBehavior?: OverlappingBehavior;
+    overlappingBehavior?: ChartAxisLabelOverlapping;
     /**
      * @docid dxChartOptions.commonAxisSettings.label.position
      * @default 'outside'
@@ -2182,7 +2194,7 @@ export interface dxChartLegend extends BaseChartLegend {
      * @default 'includePoints'
      * @public
      */
-    hoverMode?: ChartLegendHoverMode;
+    hoverMode?: LegendHoverMode;
     /**
      * @docid dxChartOptions.legend.position
      * @default 'outside'
@@ -3154,7 +3166,7 @@ export interface dxChartSeriesTypesCommonSeries {
      * @docid dxChartSeriesTypes.CommonSeries.hoverMode
      * @public
      */
-    hoverMode?: ChartSeriesHoverMode;
+    hoverMode?: SeriesHoverMode;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle
      * @type object
@@ -3268,7 +3280,7 @@ export interface dxChartSeriesTypesCommonSeries {
      * @docid dxChartSeriesTypes.CommonSeries.selectionMode
      * @public
      */
-    selectionMode?: ChartSeriesSelectionMode;
+    selectionMode?: SeriesSelectionMode;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle
      * @type object
@@ -3695,7 +3707,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
-    hoverMode?: ChartPointInteractionMode;
+    hoverMode?: PointInteractionMode;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -3810,7 +3822,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
-    selectionMode?: ChartPointInteractionMode;
+    selectionMode?: PointInteractionMode;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
