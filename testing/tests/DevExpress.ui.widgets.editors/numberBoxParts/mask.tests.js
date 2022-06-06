@@ -440,7 +440,7 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, 'caret preserved');
     });
 
-    QUnit.test('NumberBox should process a value correctly after valueChange event (T1092593)', function(assert) {
+    QUnit.test('NumberBox should not reset the negativ value after valueChange event (T1092593)', function(assert) {
         this.instance.option({
             format: '0.00',
         });
@@ -451,7 +451,7 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
             .type('-')
             .change();
 
-        assert.equal(this.input.val(), '-5.00', 'value is correct');
+        assert.strictEqual(this.input.val(), '-5.00', 'value is correct');
         assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, 'caret');
     });
 
