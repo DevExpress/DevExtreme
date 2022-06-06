@@ -2096,6 +2096,7 @@ QUnit.module('stubs', moduleConfig, function() {
         { format: '#', expectedText: '1', expectedValue: 1 },
         { format: '#', expectedText: '-1', expectedValue: -1 },
         { format: '#', expectedText: '', typedText: '-', expectedValue: null },
+        { format: '#', expectedText: '-1', typedText: '1-', expectedValue: -1 },
     ].forEach(({ format, expectedText, typedText, expectedValue }) => {
         QUnit.test(`widget should correctly apply format="${format}", value="${expectedValue}"`, function(assert) {
             this.instance.option({
