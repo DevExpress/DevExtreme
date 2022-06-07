@@ -6,7 +6,7 @@ import Scheduler from '../../../model/scheduler';
 fixture`Drag-and-drop appointments in the Scheduler with vertical grouping`
   .page(url(__dirname, '../../container.html'));
 
-test('Should drag appointment to the previous day`s cell (T1025952)', async (t) => {
+test.skip('Should drag appointment to the previous day`s cell (T1025952)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('appointment');
 
