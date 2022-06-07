@@ -116,11 +116,15 @@ export default Class.inherit({
         const allowLoadByRange = this.options.allowLoadByRange?.();
         let indexOffset;
         let focusedItemNotInLoadedRange = false;
+        let shiftFocusedItemNotInLoadedRange = false;
 
         if(allowLoadByRange) {
             indexOffset = item.loadIndex - itemIndex;
             itemIndex = item.loadIndex;
             focusedItemNotInLoadedRange = this._focusedItemIndex >= 0 && !items.filter(it => it.loadIndex === this._focusedItemIndex).length;
+            if(isDefined(this._shiftFocusedItemIndex)) {
+                shiftFocusedItemNotInLoadedRange = this._shiftFocusedItemIndex >= 0 && !items.filter(it => it.loadIndex === this._shiftFocusedItemIndex).length;
+            }
         }
 
         if(!this.isSelectable() || !this.isDataItem(item)) {
@@ -133,7 +137,7 @@ export default Class.inherit({
         keys = keys || {};
 
         if(keys.shift && this.options.mode === 'multiple' && this._focusedItemIndex >= 0) {
-            if(focusedItemNotInLoadedRange) {
+            if(focusedItemNotInLoadedRange || shiftFocusedItemNotInLoadedRange) {
                 isSelectedItemsChanged = itemIndex !== this._shiftFocusedItemIndex || this._focusedItemIndex !== this._shiftFocusedItemIndex;
 
                 if(isSelectedItemsChanged) {
