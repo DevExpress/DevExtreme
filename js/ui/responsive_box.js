@@ -600,6 +600,11 @@ const ResponsiveBox = CollectionWidget.inherit({
         });
     },
 
+    _cleanItemContainer() {
+        this._clearItemNodeTemplates();
+        this.callBase();
+    },
+
     _toggleVisibility: function(visible) {
         this.callBase(visible);
         if(visible) {
