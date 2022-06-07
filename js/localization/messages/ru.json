@@ -422,6 +422,9 @@
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} элементов не были загружены",
         "dxFileManager-editingUploadCanceledMessage": "Отменено",
 
+        "dxFileManager-editingDownloadSingleItemErrorMessage": "TODO",
+        "dxFileManager-editingDownloadMultipleItemsErrorMessage": "TODO",
+
         "dxFileManager-listDetailsColumnCaptionName": "Название",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Дата изменения",
         "dxFileManager-listDetailsColumnCaptionFileSize": "Размер файла",
