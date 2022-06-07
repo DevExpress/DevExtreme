@@ -1,1 +1,5 @@
-DevExtreme Data Editor JavaScript components fully support RTL languages. As&nbsp;is&nbsp;illustrated in&nbsp;this demo, Editor components are able to&nbsp;display their contents in&nbsp;a&nbsp;right-to-left direction and fully mirror associated&nbsp;UI elements. Use the language drop-down menu (change from English to&nbsp;Arabic) to&nbsp;explore the differences between default and RTL modes available in&nbsp;DevExtreme.
+The DevExtreme Editor components support right-to-left (RTL) languages. The components can display content in a right-to-left direction and mirror associated UI elements.
+
+To enable RTL language support in the application, you can either set the [globalConfig](/Documentation/ApiReference/Common/Object_Structures/globalConfig/) object's [rtlEnabled](/Documentation/ApiReference/Common/Object_Structures/globalConfig/#rtlEnabled) property to **true** or specify each component's **rtlEnabled** property individually. Note that individual RTL parameters have higher priority than general parameters.
+
+In this demo, you can use the language drop-down menu (for example, change the language from English to Arabic) to explore the differences between default and RTL modes.
