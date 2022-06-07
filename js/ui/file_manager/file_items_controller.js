@@ -468,8 +468,6 @@ export default class FileItemsController {
     }
 
     downloadItems(itemInfos) {
-        let canceled = false;
-
         const deferreds = itemInfos.map(itemInfo => {
             return this._processBeforeItemEditAction(
                 args => {
@@ -480,12 +478,16 @@ export default class FileItemsController {
             );
         });
 
-        whenSome(deferreds, null, () => { canceled = true; })
+        when(...deferreds)
             .then(() => {
-                if(!canceled) {
-                    const items = itemInfos.map(i => i.fileItem);
-                    this._fileProvider.downloadItems(items);
-                }
+                const items = itemInfos.map(i => i.fileItem);
+                this._fileProvider.downloadItems(items);
+            },
+            errorInfo => {
+                this._raiseDownloadItemsError(itemInfos, itemInfos[0].parentDirectory, errorInfo);
+            })
+            .catch(errorInfo => {
+                this._raiseDownloadItemsError(itemInfos, itemInfos[0].parentDirectory, errorInfo);
             });
     }
 
@@ -511,6 +513,21 @@ export default class FileItemsController {
             fileItem: parentDirectoryInfo.fileItem,
             index: 0
         });
+    }
+
+    _raiseDownloadItemsError(targetFileInfos, directory, errorInfo) {
+        const actionInfo = this._createEditActionInfo('download', targetFileInfos, directory);
+        actionInfo.singleRequest = targetFileInfos.length === 1;
+        this._raiseEditActionStarting(actionInfo);
+        this._raiseEditActionResultAcquired(actionInfo);
+        for(let index = 0; index < targetFileInfos.length; index++) {
+            this._raiseEditActionError(actionInfo, {
+                errorCode: errorInfo.errorCode,
+                errorText: errorInfo.errorText,
+                fileItem: targetFileInfos[index].fileItem,
+                index
+            });
+        }
     }
 
     _changeDirectoryOnError(dirInfo, skipNavigationOnError, isActualDirectoryRequired) {
