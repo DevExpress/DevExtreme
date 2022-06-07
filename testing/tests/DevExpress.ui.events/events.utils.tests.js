@@ -450,6 +450,11 @@ QUnit.module('event utils', () => {
             comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
+            testData: { which: 229 },
+            expected: 'minus',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
+        },
+        {
             testData: { which: 16 },
             expected: 'shift',
             comment: '\'which\' attribute used where \'key\' attribute unsupported'

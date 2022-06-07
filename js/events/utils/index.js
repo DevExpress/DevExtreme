@@ -51,6 +51,7 @@ const LEGACY_KEY_CODES = {
     '109': 'minus',
     '189': 'minus',
     '173': 'minus',
+    '229': 'minus',
     '16': 'shift',
     '17': 'control',
     '18': 'alt'

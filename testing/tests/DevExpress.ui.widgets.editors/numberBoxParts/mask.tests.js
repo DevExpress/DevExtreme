@@ -11,6 +11,8 @@ const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const CARET_TIMEOUT_DURATION = 0;
 
+const supportedMinusWhichCodes = [109, 189, 173, 229];
+
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#numberbox').dxNumberBox({
@@ -369,6 +371,28 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         assert.equal(this.input.val(), '-$ 0.00', 'text is correct');
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 6 }, 'caret is good');
     });
+
+
+    supportedMinusWhichCodes.forEach(which => {
+        QUnit.test('pressing minus should be processed when \'key\' attribute unsupported (T1093704)', function(assert) {
+            this.clock.restore();
+
+            this.instance.option({
+                format: '#0.##',
+                mode: 'number',
+                value: '1.233'
+            });
+
+            this.input.focus();
+            this.keyboard
+                .triggerEvent('keydown', { which })
+                .input('-');
+
+            this.clock.tick();
+            assert.equal(this.input.val(), '-1.23', 'text is correct');
+        });
+    });
+
 
     QUnit.test('pressing \'-\' should keep selection', function(assert) {
         this.instance.option({
