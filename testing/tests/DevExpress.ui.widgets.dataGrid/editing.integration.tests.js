@@ -6575,6 +6575,49 @@ QUnit.module('Editing state', baseModuleConfig, () => {
     });
 
     ['Row', 'Form', 'Popup', 'Cell', 'Batch'].forEach(editMode => {
+        // T1089969
+        QUnit.test(`${editMode} - Changing editing.changes option should update the values of the edited cells`, function(assert) {
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: [{ id: 1, field: 'field' }],
+                keyExpr: 'id',
+                columns: ['field'],
+                editing: {
+                    allowUpdating: true,
+                    mode: editMode.toLowerCase()
+                },
+                loadingTimeout: null,
+            }).dxDataGrid('instance');
+
+            // act
+            if(editMode === 'Batch' || editMode === 'Cell') {
+                dataGrid.editCell(0, 0);
+            } else {
+                dataGrid.editRow(0);
+            }
+            this.clock.tick();
+
+            // assert
+            switch(editMode) {
+                case 'Batch':
+                case 'Cell':
+                    assert.ok($(dataGrid.getRowElement(0)).children().first().hasClass('dx-editor-cell'), 'cell is editing');
+                    break;
+                case 'Popup':
+                    assert.ok($('.dx-datagrid-edit-popup').is(':visible'), 'edit popup is visible');
+                    break;
+                default:
+                    assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-edit-row'), 'row is editing');
+            }
+
+            // act
+            dataGrid.option('editing.changes', [{ type: 'update', key: 1, data: { field: 'test' } }]);
+
+            // assert
+            const cellValue = $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').val();
+            assert.strictEqual(cellValue, 'test', 'cell value');
+        });
+
         ['changes', 'editRowKey', 'editColumnName'].forEach(editingOption => {
             QUnit.test(`${editMode} - Changing the editing.${editingOption} option should not raise the onToolbarPreparing event (T949025)`, function(assert) {
                 // arrange
