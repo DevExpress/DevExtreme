@@ -5857,6 +5857,39 @@ QUnit.module('API methods', baseModuleConfig, () => {
             assert.deepEqual(validationCallbackSpy.args[i][0].data, { id: 1, id1: 1, name: 'test1' }, `data parameter for the ${i + 1} call`);
         }
     });
+
+    ['cell', 'batch', 'row', 'form', 'popup'].forEach(editMode => {
+        // T1090487
+        QUnit.test(`The cellValue method should return the correct value of the modified cell in editMode = ${editMode})`, function(assert) {
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: [{ id: 1, field: 'field' }],
+                keyExpr: 'id',
+                columns: ['field'],
+                editing: {
+                    allowUpdating: true,
+                    allowAdding: true,
+                    mode: editMode
+                },
+                loadingTimeout: null
+            }).dxDataGrid('instance');
+
+            if(editMode === 'batch' || editMode === 'cell') {
+                dataGrid.editCell(0, 0);
+            } else {
+                dataGrid.editRow(0);
+            }
+            this.clock.tick();
+
+            // act
+            const $input = $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input');
+            $input.val('test');
+            $input.trigger('change');
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 0), 'test', 'cell value');
+        });
+    });
 });
 
 
