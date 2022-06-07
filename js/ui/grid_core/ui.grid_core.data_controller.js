@@ -745,6 +745,7 @@ export const dataControllerModule = {
                     const changeTypes = [];
                     const items = [];
                     const newIndexByKey = {};
+                    const isLiveUpdate = change?.isLiveUpdate ?? true;
 
                     function getRowKey(row) {
                         if(row) {
@@ -791,7 +792,7 @@ export const dataControllerModule = {
                                 const index = change.index;
                                 const newItem = change.data;
                                 const oldItem = change.oldItem;
-                                const changedColumnIndices = this._partialUpdateRow(oldItem, newItem, index, true);
+                                const changedColumnIndices = this._partialUpdateRow(oldItem, newItem, index, isLiveUpdate);
 
                                 rowIndices.push(index);
                                 changeTypes.push('update');
