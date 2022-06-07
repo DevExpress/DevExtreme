@@ -56,15 +56,11 @@ const PagerView = modules.View.inherit({
             hasKnownLastPage: dataController.hasKnownLastPage(),
             pageIndexChanged: function(pageIndex) {
                 if(dataController.pageIndex() !== pageIndex - 1) {
-                    setTimeout(function() {
-                        dataController.pageIndex(pageIndex - 1);
-                    });
+                    dataController.pageIndex(pageIndex - 1);
                 }
             },
             pageSizeChanged: function(pageSize) {
-                setTimeout(function() {
-                    dataController.pageSize(pageSize);
-                });
+                dataController.pageSize(pageSize);
             },
             onKeyDown: e => keyboardController && keyboardController.executeAction('onKeyDown', e),
             useLegacyKeyboardNavigation: this.option('useLegacyKeyboardNavigation'),
