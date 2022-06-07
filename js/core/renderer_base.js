@@ -366,12 +366,15 @@ initRender.prototype.detach = function() {
     return this;
 };
 
-initRender.prototype.empty = function() {
+initRender.prototype.empty = function(silent) {
     if(this.length > 1) {
         return repeatMethod.call(this, 'empty', arguments);
     }
 
-    cleanDataRecursive(this[0]);
+    if(!silent) {
+        cleanDataRecursive(this[0]);
+    }
+
     domAdapter.setText(this[0], '');
 
     return this;
