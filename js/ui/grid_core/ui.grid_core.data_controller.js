@@ -925,7 +925,7 @@ export const dataControllerModule = {
                         }
                     }
 
-                    if(that._updateLockCount) {
+                    if(that._updateLockCount && !change.cancel) {
                         that._changes.push(change);
                         return;
                     }
