@@ -7170,6 +7170,30 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
         });
     });
 
+    // T1088316
+    QUnit.test('Adding row after changing focusedRowKey should work', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }],
+            keyExpr: 'id',
+            focusedRowEnabled: true,
+        });
+        this.clock.tick(300);
+
+        // act
+        dataGrid.option('focusedRowKey', 4);
+
+        const dataSource = dataGrid.option('dataSource');
+        dataSource.push({ id: 4 });
+        dataGrid.option('dataSource', dataSource);
+
+        this.clock.tick(300);
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows().length, 4);
+        assert.ok($(dataGrid.element()).find('.dx-data-row:eq(3)').hasClass('dx-row-focused'));
+    });
+
     ['first', 'last', 'viewportTop', 'viewportBottom'].forEach(newRowPosition => {
         QUnit.test(`New row should be shown with saved cell value when a new row is added repeatedly (newRowPosition is ${newRowPosition} and virtual scrolling)`, function(assert) {
             // arrange
