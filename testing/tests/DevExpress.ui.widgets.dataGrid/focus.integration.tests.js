@@ -1540,6 +1540,21 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'no rows');
     });
 
+    // T1090672
+    QUnit.test('Initialization with empty dataSource without columns with focusedRowEnabled should not cause exception', function(assert) {
+        // arrange
+        createDataGrid({
+            keyExpr: 'id',
+            dataSource: [],
+            focusedRowEnabled: true,
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        assert.ok(true, 'no errors');
+    });
+
 });
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {
     // T809900
