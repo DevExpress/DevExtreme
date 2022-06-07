@@ -5491,6 +5491,54 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             // assert
             assert.deepEqual(dataGrid.getSelectedRowKeys(), [50, 55, 54, 53, 52, 51], 'selected keys with Shift');
         });
+
+        // T1092804
+        QUnit.test(`${scrollingMode} - Rows should be selected correctly with Shift on different pages`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: Array(100).fill().map((x, i) => ({ id: i })),
+                keyExpr: 'id',
+                showBorders: true,
+                height: 500,
+                scrolling: {
+                    mode: scrollingMode.toLowerCase(),
+                    useNative: false
+                },
+                selection: {
+                    mode: 'multiple',
+                    showCheckBoxesMode: 'always'
+                }
+            });
+
+            this.clock.tick(300);
+
+            // act
+            $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(1)').trigger('dxclick');
+            this.clock.tick(300);
+
+            dataGrid.getScrollable().scrollTo({ top: 1600 });
+            if(scrollingMode === 'Infinite') {
+                dataGrid.getScrollable().scrollTo({ top: 1600 });
+                this.clock.tick(300);
+                dataGrid.getScrollable().scrollTo({ top: 1600 });
+                this.clock.tick(300);
+            }
+            this.clock.tick(300);
+
+            const pointer1 = pointerMock($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(2)'));
+            pointer1.start({ shiftKey: true }).down().up();
+            this.clock.tick(100);
+
+            const pointer2 = pointerMock($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(3)'));
+            pointer2.start({ shiftKey: true }).down().up();
+
+            this.clock.tick(100);
+
+            // assert
+            const keys = dataGrid.getSelectedRowKeys();
+            assert.strictEqual(keys.length, 50, 'selected rows count');
+            assert.deepEqual(keys.sort((a, b) => a - b), Array(50).fill().map((x, i) => i + 1), 'selected rows keys');
+        });
     });
 
     QUnit.test('No redundant load calls with filter (T1063237)', function(assert) {
