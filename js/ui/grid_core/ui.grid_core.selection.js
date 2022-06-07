@@ -252,7 +252,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
             const isDeferredMode = that.option('selection.deferred');
             const selectionFilter = that._selection.selectionFilter();
             const dataController = that._dataController;
-            const items = dataController.items();
+            const items = dataController.items(true);
 
             if(!items) {
                 return;
