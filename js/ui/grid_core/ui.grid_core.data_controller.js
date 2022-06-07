@@ -151,14 +151,16 @@ export const dataControllerModule = {
                             }
                         }
 
-                        const isParasiteChange = Array.isArray(args.value) && !isValueChanged && this._dataSource?.isLoading();
-                        if(!isParasiteChange) {
+                        if(this.needToRefreshOnDataSourceChange(args)) {
                             this.refresh(this.option('repaintChangesOnly'));
                         }
                         return true;
                     }
 
                     return false;
+                },
+                needToRefreshOnDataSourceChange: function(args) {
+                    return true;
                 },
                 optionChanged: function(args) {
                     const that = this;
