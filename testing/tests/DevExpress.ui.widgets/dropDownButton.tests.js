@@ -71,6 +71,16 @@ QUnit.module('button group integration', {}, () => {
         const newButtonGroupWrapper = buttonGroup.$element().find(`.${BUTTON_GROUP_WRAPPER}`);
         assert.strictEqual(newButtonGroupWrapper.eq(0).height(), 450, 'height after option change in runtime is right');
     });
+
+    QUnit.test('accessKey option should be passed to buttonGroup (T1089414)', function(assert) {
+        const accessKey = 't';
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            accessKey
+        }).dxDropDownButton('instance');
+
+        const buttonGroup = getButtonGroup(dropDownButton);
+        assert.strictEqual(buttonGroup.option('accessKey'), accessKey, 'accessKey is passed to buttonGroup');
+    });
 });
 
 QUnit.module('popup integration', {

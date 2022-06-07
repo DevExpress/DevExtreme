@@ -682,26 +682,6 @@ QUnit.module('skip mousewheel event test', () => {
             $element.remove();
         }
     });
-
-    test('needSkipEvent returns false for dropDownList popup (T1000311)', function(assert) {
-        const $element = $('<div class=\'dx-skip-gesture-event\'></div>');
-        const $popup = $('<div class=\'dx-dropdownlist-popup-wrapper\'></div>');
-
-        $popup.appendTo($element);
-
-        assert.notOk(needSkipMouseWheel($popup), 'event is not skipped in inner dropdownlist popup wrapper element');
-    });
-
-    test('needSkipEvent returns false for dropDownList popup child (T1000311)', function(assert) {
-        const $element = $('<div class=\'dx-skip-gesture-event\'></div>');
-        const $popup = $('<div class=\'dx-dropdownlist-popup-wrapper\'></div>');
-        const $content = $('<div class=\'some-content\'></div>');
-
-        $popup.appendTo($element);
-        $content.appendTo($popup);
-
-        assert.notOk(needSkipMouseWheel($content), 'event is not skipped in inner dropdownlist popup wrapper child');
-    });
 });
 
 QUnit.module('skip mouse event tests', () => {

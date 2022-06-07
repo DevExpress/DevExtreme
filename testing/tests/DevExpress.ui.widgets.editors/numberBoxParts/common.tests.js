@@ -1656,7 +1656,7 @@ QUnit.module('regressions', {
         assert.ok(!this.element.children().length);
     });
 
-    QUnit.test('T282446 - widget disabled state change should lead to spin buttons disabled state change', function(assert) {
+    QUnit.test('widget disabled state change should lead to spin buttons disabled state change (T282446)', function(assert) {
         const $element = $('#widget').dxNumberBox({
             disabled: true,
             showSpinButtons: true
@@ -1668,6 +1668,32 @@ QUnit.module('regressions', {
         instance.option('disabled', false);
 
         assert.ok(!SpinButton.getInstance($spinButton).option('disabled'), 'spin button disabled state is correct');
+    });
+
+    QUnit.test('tabindex attribute should be rendered after initialization', function(assert) {
+        const instance = $('#widget').dxNumberBox({
+            tabIndex: 3,
+            value: 1,
+            min: 1
+        }).dxNumberBox('instance');
+
+        const $input = instance.$element().find(`.${INPUT_CLASS}`);
+        assert.strictEqual($input.attr('tabIndex'), '3', 'tabIndex is correct after initializing');
+    });
+
+    ['min', 'max', 'step'].forEach(optionName => {
+        QUnit.test(`tabindex attribute shouldn't be removed after change of ${optionName} option (T1090255)`, function(assert) {
+            const instance = $('#widget').dxNumberBox({
+                tabIndex: 3,
+                value: 1,
+                min: 1
+            }).dxNumberBox('instance');
+
+            instance.option(optionName, 4);
+
+            const $input = instance.$element().find(`.${INPUT_CLASS}`);
+            assert.strictEqual($input.attr('tabIndex'), '3', 'tabIndex is correct after option changed');
+        });
     });
 });
 
