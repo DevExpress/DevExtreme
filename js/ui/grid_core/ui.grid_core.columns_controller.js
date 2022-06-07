@@ -2034,7 +2034,9 @@ export const columnsControllerModule = {
                                 that._columns.push(group.selector);
                             });
                             each(sortParameters, function(index, sort) {
-                                that._columns.push(sort.selector);
+                                if(!isFunction(sort.selector)) {
+                                    that._columns.push(sort.selector);
+                                }
                             });
                             assignColumns(that, createColumnsFromOptions(that, that._columns));
                         }
