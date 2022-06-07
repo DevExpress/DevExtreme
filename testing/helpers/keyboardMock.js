@@ -251,6 +251,8 @@ let focused;
                     timeStamp: clock
                 }, options));
                 $element.trigger(this.event);
+
+                return this;
             },
 
             keyDown: function(rawKey, options) {
