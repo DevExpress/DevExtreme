@@ -2457,7 +2457,6 @@
           {
             "Title": "Custom Bar Width",
             "Name": "CustomBarWidth",
-            "DocUrl": "ApiReference/UI_Components/dxChart/Configuration/series/#barPadding",
             "Credits": "www.geohive.com",
             "Widget": "Charts",
             "DemoType": "Viz",
