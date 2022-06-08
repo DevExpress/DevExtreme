@@ -1,7 +1,7 @@
-import $ from 'jquery';
 import 'generic_light.css!';
-import 'ui/scheduler/ui.scheduler';
+import Scheduler from 'ui/scheduler/ui.scheduler';
 import pointerMock from '../../helpers/pointerMock.js';
+import { isDesktopEnvironment } from '../../helpers/scheduler/helpers';
 
 const {
     testStart,
@@ -11,14 +11,18 @@ const {
 
 const FIRST_SCHEDULER_ID = 'scheduler-first';
 const SECOND_SCHEDULER_ID = 'scheduler-second';
+const FIXTURE_SELECTOR = '#qunit-fixture';
+const APPOINTMENT_SELECTOR = '.dx-scheduler-appointment-content';
+const FIRST_CELL_SELECTOR = '.dx-scheduler-first-group-cell';
 
 testStart(function() {
-    $('#qunit-fixture').html(`
-    <div style="display: flex;">
-        <div id="${FIRST_SCHEDULER_ID}"></div>
-        <div id="${SECOND_SCHEDULER_ID}"></div>
-    </div>
-    `);
+    const fixtureRef = document.querySelector(FIXTURE_SELECTOR);
+    fixtureRef.innerHTML = `
+        <div style="display: flex;">
+            <div id="${FIRST_SCHEDULER_ID}"></div>
+            <div id="${SECOND_SCHEDULER_ID}"></div>
+        </div>
+    `;
 });
 
 const testDragGroupName = 'testDragGroup';
@@ -34,15 +38,10 @@ const dragAppointmentBetweenSchedulersConfig = {
     ],
     secondSchedulerData: [],
     getSchedulerOptions: (dataSource) => ({
-        timeZone: 'America/Los_Angeles',
         dataSource,
         currentView: 'workWeek',
-        views: ['workWeek'],
         currentDate: new Date(2021, 3, 26),
-        startDayHour: 9,
-        width: 600,
-        height: 600,
-        editing: true,
+        width: 300,
         appointmentDragging: {
             group: testDragGroupName,
             onRemove(e) {
@@ -56,21 +55,23 @@ const dragAppointmentBetweenSchedulersConfig = {
 };
 
 module('Drag appointment between two schedulers with array DataSources', dragAppointmentBetweenSchedulersConfig, () => {
+    if(!isDesktopEnvironment()) {
+        return;
+    }
+
     test('Drag appointment with schedulers cells with same indexes', function(assert) {
         const { getSchedulerOptions, firstSchedulerData, secondSchedulerData } = dragAppointmentBetweenSchedulersConfig;
-        const $firstScheduler = $(`#${FIRST_SCHEDULER_ID}`);
-        const $secondScheduler = $(`#${SECOND_SCHEDULER_ID}`);
+        const firstSchedulerRef = document.querySelector(`#${FIRST_SCHEDULER_ID}`);
+        const secondSchedulerRef = document.querySelector(`#${SECOND_SCHEDULER_ID}`);
 
-        $firstScheduler.dxScheduler(getSchedulerOptions(firstSchedulerData)).dxScheduler('instance');
-        $secondScheduler.dxScheduler(getSchedulerOptions(secondSchedulerData)).dxScheduler('instance');
+        new Scheduler(firstSchedulerRef, getSchedulerOptions(firstSchedulerData));
+        new Scheduler(secondSchedulerRef, getSchedulerOptions(secondSchedulerData));
 
-        const appointments = $firstScheduler.find('.dx-scheduler-appointment-content');
-        const [appointmentToMove] = appointments;
+        const appointmentToMove = firstSchedulerRef.querySelector(APPOINTMENT_SELECTOR);
         const appointmentToMoveRect = appointmentToMove.getBoundingClientRect();
 
-        const firstCells = $secondScheduler.first('.dx-scheduler-first-group-cell');
-        const [cellToMove] = firstCells;
-        const cellToMoveRect = cellToMove.getBoundingClientRect();
+        const firstCell = secondSchedulerRef.querySelector(FIRST_CELL_SELECTOR);
+        const cellToMoveRect = firstCell.getBoundingClientRect();
 
         const pointer = pointerMock(appointmentToMove);
 
@@ -78,10 +79,10 @@ module('Drag appointment between two schedulers with array DataSources', dragApp
             .start()
             .down(appointmentToMoveRect.x + appointmentToMoveRect.width / 2, appointmentToMoveRect.y + appointmentToMoveRect.height / 2)
             .move(1, 1)
-            .move(cellToMoveRect.x - appointmentToMoveRect.x + appointmentToMoveRect.width, 0)
+            .move(cellToMoveRect.x - appointmentToMoveRect.x, 0)
             .up();
 
-        const result = $secondScheduler.find('.dx-scheduler-appointment-content');
-        assert.ok(result.length > 0, 'appointment doesn\'t exist in second scheduler.');
+        const result = secondSchedulerRef.querySelector(APPOINTMENT_SELECTOR);
+        assert.notStrictEqual(result, null, 'appointment doesn\'t exist in the second scheduler.');
     });
 });
