@@ -37,16 +37,13 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
+    VectorMapProjection,
     VectorMapProjectionConfig,
 } from './vector_map/projection';
 
 import {
     HorizontalAlignment,
     VerticalEdge,
-    VectorMapLayerType,
-    VectorMapMarkerType,
-    VectorMapMarkerShape,
-    VectorMapProjection,
 } from '../types/enums';
 
 import {
@@ -60,7 +57,12 @@ import {
 export {
     SelectionMode,
     Palette,
+    VectorMapProjection,
 };
+
+export type VectorMapLayerType = 'area' | 'line' | 'marker';
+export type VectorMapMarkerShape = 'circle' | 'square';
+export type VectorMapMarkerType = 'bubble' | 'dot' | 'image' | 'pie';
 
 export interface TooltipInfo {
     target?: MapLayerElement | dxVectorMapAnnotationConfig;

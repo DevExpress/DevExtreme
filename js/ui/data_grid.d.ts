@@ -91,11 +91,11 @@ import {
   StateStoringType,
   CollectionSearchMode,
   DragDirection,
-  ToolbarItemLocation,
 } from '../types/enums';
 
 import {
     SelectionMode,
+    ToolbarItemLocation,
 } from '../common';
 
 import {
@@ -147,6 +147,7 @@ export {
     GridStartEditAction,
     SelectAllMode,
     SummaryType,
+    ToolbarItemLocation,
 };
 
 export type ColumnResizingMode = 'nextColumn' | 'widget';

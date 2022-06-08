@@ -27,12 +27,6 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-    TreeMapLayoutAlgorithm,
-    TreeMapLayoutDirection,
-    TreeMapColorizerType,
-} from '../types/enums';
-
-import {
     SelectionMode,
 } from '../common';
 
@@ -49,6 +43,10 @@ export {
     TextOverflow,
     WordWrap,
 };
+
+export type TreeMapColorizerType = 'discrete' | 'gradient' | 'none' | 'range';
+export type TreeMapLayoutAlgorithm = 'sliceanddice' | 'squarified' | 'strip';
+export type TreeMapLayoutDirection = 'leftBottomRightTop' | 'leftTopRightBottom' | 'rightBottomLeftTop' | 'rightTopLeftBottom';
 
 export interface InteractionInfo {
   readonly node: dxTreeMapNode;

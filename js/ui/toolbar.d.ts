@@ -16,19 +16,27 @@ import {
     ItemInfo,
 } from '../events/index';
 
+import {
+    ToolbarItemLocation,
+    ToolbarItemWidget,
+} from '../common';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
 import {
-    ToolbarItemWidget,
-    ToolbarItemLocation,
     ToolbarItemLocateInMenuMode,
     ToolbarItemShowTextMode,
 } from '../types/enums';
 
 type ItemLike = string | Item | any;
+
+export {
+    ToolbarItemLocation,
+    ToolbarItemWidget,
+};
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>>;

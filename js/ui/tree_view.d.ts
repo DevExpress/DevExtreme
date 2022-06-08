@@ -29,9 +29,6 @@ import {
 
 import {
     ScrollDirection,
-    TreeViewDataStructure,
-    TreeViewCheckBoxMode,
-    TreeViewExpandEvent,
 } from '../types/enums';
 
 import {
@@ -50,6 +47,10 @@ interface ItemInfo<TKey = any> {
 export {
     ForcedSelectionMode,
 };
+
+export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
+export type TreeViewDataStructure = 'plain' | 'tree';
+export type TreeViewExpandEvent = 'dblclick' | 'click';
 
 /** @public */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;

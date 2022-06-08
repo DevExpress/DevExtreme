@@ -39,11 +39,8 @@ import {
 import { Skip } from '../core/index';
 
 import {
-    ToolbarItemLocation,
-} from '../types/enums';
-
-import {
     FirstDayOfWeek,
+    ToolbarItemLocation,
 } from '../common';
 
 export type GanttContextMenuItem = 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails';

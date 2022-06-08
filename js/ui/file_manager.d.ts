@@ -36,15 +36,11 @@ import {
 import {
     HorizontalAlignment,
     SortOrder,
-    ToolbarItemLocation,
-    FileManagerToolbarItem,
-    FileManagerContextMenuItem,
-    FileManagerItemViewMode,
-    FileManagerViewArea,
 } from '../types/enums';
 
 import {
    ForcedSelectionMode,
+   ToolbarItemLocation,
 } from '../common';
 
 import {
@@ -60,7 +56,13 @@ interface ActionEventInfo {
 export {
     ForcedSelectionMode,
     GridColumnDataType,
+    ToolbarItemLocation,
 };
+
+export type FileManagerContextMenuItem = 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete';
+export type FileManagerItemViewMode = 'details' | 'thumbnails';
+export type FileManagerToolbarItem = 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator';
+export type FileManagerViewArea = 'navPane' | 'itemView';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFileManager>;

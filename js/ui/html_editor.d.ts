@@ -15,6 +15,10 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
+import {
+    ToolbarItemLocation,
+} from '../common';
+
 import Editor, {
     ValueChangedInfo,
     EditorOptions,
@@ -30,15 +34,19 @@ import {
 
 import { Properties as fileUploaderProperties } from './file_uploader';
 import {
-    ToolbarItemLocation,
-    HtmlEditorValueType,
-    HtmlEditorToolbarItem,
-    HtmlEditorFormat,
     EditorStylingMode,
-    HtmlEditorContextMenuItem,
-    HtmlEditorImageUploadTab,
-    HtmlEditorImageUploadFileUploadMode,
 } from '../types/enums';
+
+export {
+    ToolbarItemLocation,
+};
+
+export type HtmlEditorContextMenuItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'cellProperties' | 'tableProperties';
+export type HtmlEditorFormat = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block';
+export type HtmlEditorImageUploadFileUploadMode = 'base64' | 'server' | 'both';
+export type HtmlEditorImageUploadTab = 'url' | 'file';
+export type HtmlEditorToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
+export type HtmlEditorValueType = 'html' | 'markdown';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;

@@ -39,3 +39,15 @@ export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
  * @namespace DevExpress.common
  */
 export type FieldChooserLayout = 0 | 1 | 2;
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ToolbarItemLocation = 'after' | 'before' | 'center';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ToolbarItemWidget = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';

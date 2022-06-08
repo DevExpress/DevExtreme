@@ -27,6 +27,10 @@ import {
 } from '../events/index';
 
 import {
+    ToolbarItemLocation,
+} from '../common';
+
+import {
     GridBase,
     ColumnBase,
     ColumnButtonBase,
@@ -67,7 +71,6 @@ import Widget from './widget/ui.widget';
 
 import {
     Mode,
-    ToolbarItemLocation,
 } from '../types/enums';
 
 interface CellInfo<TRowData = any, TKey = any> {
@@ -105,6 +108,10 @@ export {
     GridSortingMode,
     GridStartEditAction,
 } from '../common/grids';
+
+export {
+    ToolbarItemLocation,
+};
 
 export type TreeListColumnButtonName = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';

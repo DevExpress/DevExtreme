@@ -105,12 +105,6 @@ export type DateBoxType = 'date' | 'datetime' | 'time';
 export type DateBoxPickerType = 'calendar' | 'list' | 'native' | 'rollers';
 
 /** @namespace DevExpress.utils */
-export type FileUploadMode = 'instantly' | 'useButtons' | 'useForm';
-
-/** @namespace DevExpress.utils */
-export type UploadHttpMethod = 'POST' | 'PUT';
-
-/** @namespace DevExpress.utils */
 export type FormLabelLocation = 'left' | 'right' | 'top';
 
 /** @namespace DevExpress.utils */
@@ -145,15 +139,6 @@ export type SubmenuDirection = 'auto' | 'leftOrTop' | 'rightOrBottom';
 
 /** @namespace DevExpress.utils */
 export type NumberBoxMode = 'number' | 'text' | 'tel';
-
-/** @namespace DevExpress.utils */
-export type Toolbar = 'bottom' | 'top';
-
-/** @namespace DevExpress.utils */
-export type ToolbarItemWidget = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
-
-/** @namespace DevExpress.utils */
-export type ToolbarItemLocation = 'after' | 'before' | 'center';
 
 /** @namespace DevExpress.utils */
 export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
@@ -208,36 +193,6 @@ export type ToolbarItemLocateInMenuMode = 'always' | 'auto' | 'never';
 
 /** @namespace DevExpress.utils */
 export type ToolbarItemShowTextMode = 'always' | 'inMenu';
-
-/** @namespace DevExpress.utils */
-export type TreeMapLayoutAlgorithm = 'sliceanddice' | 'squarified' | 'strip';
-
-/** @namespace DevExpress.utils */
-export type TreeMapLayoutDirection = 'leftBottomRightTop' | 'leftTopRightBottom' | 'rightBottomLeftTop' | 'rightTopLeftBottom';
-
-/** @namespace DevExpress.utils */
-export type TreeMapColorizerType = 'discrete' | 'gradient' | 'none' | 'range';
-
-/** @namespace DevExpress.utils */
-export type TreeViewDataStructure = 'plain' | 'tree';
-
-/** @namespace DevExpress.utils */
-export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
-
-/** @namespace DevExpress.utils */
-export type TreeViewExpandEvent = 'dblclick' | 'click';
-
-/** @namespace DevExpress.utils */
-export type VectorMapLayerType = 'area' | 'line' | 'marker';
-
-/** @namespace DevExpress.utils */
-export type VectorMapMarkerType = 'bubble' | 'dot' | 'image' | 'pie';
-
-/** @namespace DevExpress.utils */
-export type VectorMapMarkerShape = 'circle' | 'square';
-
-/** @namespace DevExpress.utils */
-export type VectorMapProjection = 'equirectangular' | 'lambert' | 'mercator' | 'miller';
 
 /** @namespace DevExpress.utils */
 export type AnimationType = 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
@@ -295,24 +250,6 @@ export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
 export type ExcelFontUnderlineType = 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
 
 /** @namespace DevExpress.utils */
-export type HtmlEditorValueType = 'html' | 'markdown';
-
-/** @namespace DevExpress.utils */
-export type HtmlEditorToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
-
-/** @namespace DevExpress.utils */
-export type HtmlEditorFormat = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block';
-
-/** @namespace DevExpress.utils */
-export type HtmlEditorContextMenuItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'cellProperties' | 'tableProperties';
-
-/** @namespace DevExpress.utils */
-export type HtmlEditorImageUploadTab = 'url' | 'file';
-
-/** @namespace DevExpress.utils */
-export type HtmlEditorImageUploadFileUploadMode = 'base64' | 'server' | 'both';
-
-/** @namespace DevExpress.utils */
 export type EditorStylingMode = 'outlined' | 'underlined' | 'filled';
 
 /** @namespace DevExpress.utils */
@@ -320,18 +257,6 @@ export type EditorLabelMode = 'static' | 'floating' | 'hidden';
 
 /** @namespace DevExpress.utils */
 export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
-
-/** @namespace DevExpress.utils */
-export type FileManagerToolbarItem = 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator';
-
-/** @namespace DevExpress.utils */
-export type FileManagerContextMenuItem = 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete';
-
-/** @namespace DevExpress.utils */
-export type FileManagerItemViewMode = 'details' | 'thumbnails';
-
-/** @namespace DevExpress.utils */
-export type FileManagerViewArea = 'navPane' | 'itemView';
 
 /** @namespace DevExpress.utils */
 export type ValidationStatus = 'valid' | 'invalid' | 'pending';
