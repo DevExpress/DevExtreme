@@ -148,6 +148,36 @@ const startDeleteItems = (context, deleteItemCount, endIndex) => {
     return deferred.promise();
 };
 
+
+const startDownloadItems = (context, downloadItemCount, endIndex) => {
+    if(endIndex === undefined) {
+        endIndex = 4;
+    }
+
+    const deferred = new Deferred();
+    let itemCount = -1;
+    const controller = context.controller;
+    const selectedDir = controller.getCurrentDirectory();
+
+    controller
+        .getDirectoryContents(selectedDir)
+        .then(items => {
+            itemCount = items.length;
+            const targetItems = [];
+            endIndex = Math.min(endIndex, items.length - 1);
+
+            for(let i = downloadItemCount - 1; i >= 0; i--) {
+                const targetItem = items[endIndex - i];
+                targetItems.push(targetItem);
+            }
+            return context.editing.getCommandActions()['download'](targetItems);
+        })
+        .then(() => controller.getDirectoryContents(selectedDir))
+        .then(items => deferred.resolve(items, itemCount));
+
+    return deferred.promise();
+};
+
 const createTestData = () => {
     return {
 
@@ -451,7 +481,62 @@ const createTestData = () => {
             { errorMode: true, commonText: 'Item was not uploaded', detailsText: 'Upload file 1.txtUnspecified error.', type: 'notification-_showPopup' },
             { operationId: 1, commonText: 'Item was not uploaded', isError: true, type: 'progress-completeOperation' },
             { message: '', status: 'error', type: 'notification-onActionProgress' }
-        ]
+        ],
+
+        'multiple request - download single item with error': [
+            { allowProgressAutoUpdate: true, commonText: '', operationId: 1, type: 'progress-addOperation' },
+            { message: '', status: 'progress', type: 'notification-onActionProgress' },
+            {
+                details: [
+                    { commonText: 'File 2.jpg', imageUrl: 'image' }
+                ],
+                operationId: 1,
+                type: 'progress-addOperationDetails'
+            },
+            { errorText: 'Unspecified error.', operationId: 1, type: 'progress-completeSingleOperationWithError' },
+            { errorText: 'Unspecified error.', type: 'progress-_renderError' },
+            { message: 'Item was not downloaded', status: 'error', type: 'notification-onActionProgress' },
+            { errorText: 'Unspecified error.', item: { commonText: 'File 2.jpg', imageUrl: 'image' }, type: 'notification_manager-createErrorDetailsProgressBox' },
+            { errorText: 'Unspecified error.', type: 'notification_manager-renderError' },
+            { commonText: 'Item was not downloaded', detailsText: 'File 2.jpgUnspecified error.', errorMode: true, type: 'notification-_showPopup' },
+            { commonText: 'Item was not downloaded', isError: true, operationId: 1, type: 'progress-completeOperation' },
+            { message: '', status: 'error', type: 'notification-onActionProgress' }
+        ],
+
+        'multiple request - download multiple items with error for each item': [
+            { operationId: 1, commonText: '', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
+            { message: '', status: 'progress', type: 'notification-onActionProgress' },
+            {
+                operationId: 1,
+                details: [
+                    { commonText: 'File 1.txt', imageUrl: 'txtfile' },
+                    { commonText: 'File 2.jpg', imageUrl: 'image' }
+                ],
+                type: 'progress-addOperationDetails'
+            },
+            { operationId: 1, index: 0, errorText: 'Unspecified error.', type: 'progress-addOperationDetailsError' },
+            { errorText: 'Unspecified error.', type: 'progress-_renderError' },
+            { message: 'Item was not downloaded', status: 'error', type: 'notification-onActionProgress' },
+            {
+                item: { commonText: 'File 1.txt', imageUrl: 'txtfile' },
+                errorText: 'Unspecified error.',
+                type: 'notification_manager-createErrorDetailsProgressBox'
+            },
+            { errorText: 'Unspecified error.', type: 'notification_manager-renderError' },
+            { errorMode: true, commonText: 'Item was not downloaded', detailsText: 'File 1.txtUnspecified error.', type: 'notification-_showPopup' },
+            { operationId: 1, index: 1, errorText: 'Unspecified error.', type: 'progress-addOperationDetailsError' },
+            { errorText: 'Unspecified error.', type: 'progress-_renderError' },
+            { message: '2 items were not downloaded', status: 'error', type: 'notification-onActionProgress' },
+            {
+                item: { commonText: 'File 2.jpg', imageUrl: 'image' },
+                errorText: 'Unspecified error.',
+                type: 'notification_manager-createErrorDetailsProgressBox'
+            },
+            { errorText: 'Unspecified error.', type: 'notification_manager-renderError' },
+            { errorMode: true, commonText: '2 items were not downloaded', detailsText: 'File 2.jpgUnspecified error.', type: 'notification-_showPopup' },
+            { operationId: 1, commonText: '2 items were not downloaded', isError: true, type: 'progress-completeOperation' },
+            { message: '', status: 'error', type: 'notification-onActionProgress' }
+        ],
 
     };
 };
@@ -701,6 +786,40 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
         this.clock.tick(10000);
 
         assert.deepEqual(this.logger.getEntries(), expectedEvents, 'progress events raised');
+    });
+
+    test('multiple request - download single item with error', function(assert) {
+        prepareEnvironment(this, {
+            provider: { raiseErrorMode: 'always' }
+        });
+
+        const done = assert.async();
+        const expectedEvents = createTestData()['multiple request - download single item with error'];
+
+        startDownloadItems(this, 1)
+            .then(() => {
+                assert.deepEqual(this.logger.getEntries(), expectedEvents, 'progress events raised');
+                done();
+            });
+
+        this.clock.tick(10000);
+    });
+
+    test('multiple request - download multiple items with error for each item', function(assert) {
+        prepareEnvironment(this, {
+            provider: { raiseErrorMode: 'always' }
+        });
+
+        const done = assert.async();
+        const expectedEvents = createTestData()['multiple request - download multiple items with error for each item'];
+
+        startDownloadItems(this, 2)
+            .then(() => {
+                assert.deepEqual(this.logger.getEntries(), expectedEvents, 'progress events raised');
+                done();
+            });
+
+        this.clock.tick(10000);
     });
 
     test('hide success status after panel showing', function(assert) {
