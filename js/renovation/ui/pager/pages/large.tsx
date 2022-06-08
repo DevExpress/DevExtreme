@@ -114,9 +114,9 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType, 'pageIndexChan
 
   private canReuseSlidingWindow(currentPageCount: number, pageIndex: number): boolean {
     const { indexesForReuse } = this.slidingWindowState;
-    const currentPageNotExistInIndexes = !indexesForReuse.includes(currentPageCount);
+    const lastPageIsFartherThanWindow = indexesForReuse.slice(-1)[0] < currentPageCount - 1;
     const pageIndexExistInIndexes = indexesForReuse.includes(pageIndex);
-    return currentPageNotExistInIndexes && pageIndexExistInIndexes;
+    return lastPageIsFartherThanWindow && pageIndexExistInIndexes;
   }
 
   private generatePageIndexes(): PageIndexes {
