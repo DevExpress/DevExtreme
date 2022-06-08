@@ -1,10 +1,15 @@
 import { extend as _extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-const defaultCustomizeLinkTooltip = function(info) {
-    return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${info.weight}` };
+import numberLocalization from '../../localization/number';
+
+const defaultCustomizeLinkTooltip = function(info, format) {
+    const weight = numberLocalization.format(info.weight ?? 0, format);
+    return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${weight}` };
 };
-const defaultCustomizeNodeTooltip = function(info) {
-    return { html: `<strong>${info.label}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outgoing weight: ${info.weightOut}` };
+const defaultCustomizeNodeTooltip = function(info, format) {
+    format = format || (value => value);
+    const [weightIn, weightOut] = [info.weightIn, info.weightOut].map(value => numberLocalization.format(value ?? 0, format));
+    return { html: `<strong>${info.label}</strong><br/>Incoming weight: ${weightIn}<br/>Outgoing weight: ${weightOut}` };
 };
 const generateCustomCallback = function(customCallback, defaultCallback) {
     return function(objectInfo) {
@@ -36,10 +41,11 @@ export function setTooltipCustomOptions(sankey) {
                 if(!(linkTemplate && args.type === 'link' || nodeTemplate && args.type === 'node')) {
                     args.skipTemplate = true;
                 }
+                const format = options.format;
                 if(args.type === 'node') {
-                    return generateCustomCallback(options.customizeNodeTooltip, defaultCustomizeNodeTooltip)(args.info);
+                    return generateCustomCallback(options.customizeNodeTooltip, function(info) { return defaultCustomizeNodeTooltip.call(this, info, format); })(args.info);
                 } else if(args.type === 'link') {
-                    return generateCustomCallback(options.customizeLinkTooltip, defaultCustomizeLinkTooltip)(args.info);
+                    return generateCustomCallback(options.customizeLinkTooltip, function(info) { return defaultCustomizeLinkTooltip.call(this, info, format); })(args.info);
                 }
 
                 return {};
