@@ -80,10 +80,6 @@ export type HorizontalEdge = 'left' | 'right';
 /** @namespace DevExpress.utils */
 export type SortOrder = 'asc' | 'desc';
 
-/** @namespace DevExpress.utils */
-export type FilterBuilderFieldFilterOperations = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between';
-
-/** @namespace DevExpress.utils */
 export type FilterBuilderGroupOperations = 'and' | 'or' | 'notAnd' | 'notOr';
 
 /** @namespace DevExpress.utils */

@@ -100,6 +100,7 @@ import {
 } from '../common';
 
 import {
+    FilterOperation,
     GridApplyFilterMode,
     GridColumnButtonName,
     GridColumnChooserMode,
@@ -110,7 +111,6 @@ import {
     GridEditRefreshMode,
     GridEnterKeyAction,
     GridEnterKeyDirection,
-    GridFilterOperations,
     GridGroupingExpandMode,
     GridNewRowPosition,
     GridPagerDisplayMode,
@@ -120,11 +120,13 @@ import {
     GridScrollingMode,
     GridSortingMode,
     GridStartEditAction,
+    SelectedFilterOperation,
     SummaryType,
 } from '../common/grids';
 
 export {
     DataType,
+    FilterOperation,
     GridApplyFilterMode,
     GridColumnButtonName,
     GridColumnChooserMode,
@@ -135,7 +137,6 @@ export {
     GridEditRefreshMode,
     GridEnterKeyAction,
     GridEnterKeyDirection,
-    GridFilterOperations,
     GridGroupingExpandMode,
     GridNewRowPosition,
     GridPagerDisplayMode,
@@ -146,12 +147,12 @@ export {
     GridSortingMode,
     GridStartEditAction,
     SelectAllMode,
+    SelectedFilterOperation,
     SummaryType,
     ToolbarItemLocation,
 };
 
 export type ColumnResizingMode = 'nextColumn' | 'widget';
-export type FilterOperations = '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
 export type DataGridExportFormat = 'pdf' | 'xlsx';
 export type DataGridToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 export type ExcelCellHorizontalAlignment = 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
@@ -2382,7 +2383,7 @@ export interface ColumnBase<TRowData = any> {
      * @default undefined
      * @public
      */
-    filterOperations?: Array<GridFilterOperations | string>;
+    filterOperations?: Array<FilterOperation | string>;
     /**
      * @docid GridBaseColumn.filterType
      * @default "include"
@@ -2482,7 +2483,7 @@ export interface ColumnBase<TRowData = any> {
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
-    selectedFilterOperation?: FilterOperations;
+    selectedFilterOperation?: SelectedFilterOperation;
     /**
      * @docid GridBaseColumn.setCellValue
      * @type_function_param1 newData:object

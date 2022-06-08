@@ -27,13 +27,15 @@ import {
     DataType,
 } from '../common';
 
-import {
-    FilterBuilderFieldFilterOperations,
-} from '../types/enums';
-
 export {
     DataType,
 };
+
+export {
+    FilterOperation,
+} from '../common/grids';
+
+export type FilterBuilderOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between';
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
 
@@ -417,7 +419,7 @@ export interface dxFilterBuilderField {
      * @default undefined
      * @public
      */
-    filterOperations?: Array<FilterBuilderFieldFilterOperations | string>;
+    filterOperations?: Array<FilterBuilderOperation | string>;
     /**
      * @docid
      * @default ""

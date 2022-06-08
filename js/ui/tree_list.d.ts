@@ -88,6 +88,7 @@ interface CellInfo<TRowData = any, TKey = any> {
 }
 
 export {
+    FilterOperation,
     GridApplyFilterMode,
     GridColumnButtonName,
     GridColumnChooserMode,
@@ -98,7 +99,6 @@ export {
     GridEditRefreshMode,
     GridEnterKeyAction,
     GridEnterKeyDirection,
-    GridFilterOperations,
     GridGroupingExpandMode,
     GridNewRowPosition,
     GridPagerDisplayMode,
@@ -107,6 +107,7 @@ export {
     GridSelectionShowCheckBoxesMode,
     GridSortingMode,
     GridStartEditAction,
+    SelectedFilterOperation,
 } from '../common/grids';
 
 export {

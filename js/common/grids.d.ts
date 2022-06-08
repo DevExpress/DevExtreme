@@ -52,7 +52,12 @@ export type GridEnterKeyDirection = 'none' | 'column' | 'row';
  * @public
  * @namespace DevExpress.common.grids
  */
-export type GridFilterOperations = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof';
+export type FilterOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof';
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type SelectedFilterOperation = '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
 /**
  * @public
  * @namespace DevExpress.common.grids

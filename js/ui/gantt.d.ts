@@ -43,6 +43,10 @@ import {
     ToolbarItemLocation,
 } from '../common';
 
+export {
+    SelectedFilterOperation,
+} from '../common/grids';
+
 export type GanttContextMenuItem = 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails';
 export type GanttPdfExportDateRange = 'all' | 'visible';
 export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
