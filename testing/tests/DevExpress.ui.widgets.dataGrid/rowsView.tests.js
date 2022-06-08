@@ -256,13 +256,14 @@ QUnit.module('Rows view', {
         const $cells = getCells(testElement).filter(function(i, cell) { return !$(cell).parent().hasClass('dx-freespace-row'); });
 
         // assert
-        assert.expect(15 - $freeSpaceCells.length);
+        assert.expect(24 - $freeSpaceCells.length);
 
         for(let i = 0; i < $cells.length; i++) {
             if(i < $rows.length) {
                 assert.equal($rows.eq(i).attr('role'), 'row', 'Row has correct role');
             }
             assert.equal($cells.eq(i).attr('role'), 'gridcell', 'Cell has correct role');
+            assert.notOk($cells.get(i).hasAttribute('aria-selected'), 'Cell has no aria-selected attribute'); // T1093760
         }
     });
 
