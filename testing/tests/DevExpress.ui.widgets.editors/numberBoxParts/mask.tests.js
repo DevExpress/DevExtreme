@@ -441,12 +441,14 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
     });
 
     [
-        { format: 'b,##0.###b', text: '-b5b', expectedCaretPosition: { start: 2, end: 2 } },
+        { format: 'b,##0.###b', text: '-b5b', expectedCaretPosition: { start: 3, end: 3 } },
         { format: '0000', text: '-0005', expectedCaretPosition: { start: 5, end: 5 } },
         { format: '0.00', text: '-5.00', expectedCaretPosition: { start: 2, end: 2 } },
         { format: '-0.00', text: '--5.00', expectedCaretPosition: { start: 3, end: 3 } },
         { format: '00.00', text: '-05.00', expectedCaretPosition: { start: 3, end: 3 } },
         { format: '$0.##', text: '-$5', expectedCaretPosition: { start: 3, end: 3 } },
+        { format: '\'123\'000.#\'123\'', text: '-123005.123', expectedCaretPosition: { start: 7, end: 7 } },
+        { format: '$ 000.000 \'0\'', text: '-$ 005.000 0', expectedCaretPosition: { start: 6, end: 6 } },
     ].forEach(({ format, text, expectedCaretPosition }) => {
         QUnit.test(`NumberBox should not reset the negativ value after valueChange event, format: ${format} (T1092593)`, function(assert) {
             this.instance.option({
