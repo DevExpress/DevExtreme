@@ -160,7 +160,6 @@ class FileManagerEditingControl extends Widget {
                 multipleItemsProcessingMessage: '',
                 singleItemErrorMessage: messageLocalization.format('dxFileManager-editingDownloadSingleItemErrorMessage'),
                 multipleItemsErrorMessage: messageLocalization.format('dxFileManager-editingDownloadMultipleItemsErrorMessage'),
-                commonErrorMessage: 'Items were not downloaded', // TODO: No need?
             },
 
             getItemContent: {
