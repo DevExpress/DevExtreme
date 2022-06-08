@@ -9,6 +9,7 @@ import Button from '../button';
 import devices from '../../core/devices';
 import Form from '../form';
 import { Deferred } from '../../core/utils/deferred';
+import { equalByValue } from '../../core/utils/common';
 import Scrollable from '../scroll_view/ui.scrollable';
 import Popup from '../popup';
 import {
@@ -97,10 +98,13 @@ export const editingFormBasedModule = {
                 },
 
                 _handleDataChanged: function(args) {
-                    const editForm = this._editForm;
+                    if(this.isPopupEditMode()) {
+                        const editRowKey = this.option('editing.editRowKey');
+                        const hasEditRow = args?.items?.some((item) => equalByValue(item.key, editRowKey));
 
-                    if(args.changeType === 'refresh' && this.isPopupEditMode() && editForm?.option('visible')) {
-                        this._repaintEditPopup();
+                        if(args.changeType === 'refresh' || hasEditRow) {
+                            this._repaintEditPopup();
+                        }
                     }
 
                     this.callBase.apply(this, arguments);
@@ -470,6 +474,14 @@ export const editingFormBasedModule = {
                     if(this._editingController.isFormEditMode()) {
                         item.rowType = 'detail';
                     }
+                },
+
+                _getChangedColumnIndices: function(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
+                    if(isLiveUpdate === false && newItem.isEditing && this._editingController.isFormEditMode()) {
+                        return;
+                    }
+
+                    return this.callBase.apply(this, arguments);
                 }
             }
         },
