@@ -22,15 +22,28 @@
     },
     "packageRules": [
         {
-            "packagePatterns": [
+            "matchPackagePatterns": [
                 "*"
+            ],
+            "matchPackageType": [
+                "patch"
+            ],
+            "automerge": true
+        },
+        {
+            "matchPackagePatterns": [
+                "*"
+            ],
+            "matchPackageType": [
+                "major",
+                "minor"
             ],
             "enabled": false
         }
     ],
     "assignAutomerge": true,
     "reviewers": [
-        "team:devextreme-core"
+        "team:devextreme-devops"
     ],
     "ignorePaths": [
         ".github"
