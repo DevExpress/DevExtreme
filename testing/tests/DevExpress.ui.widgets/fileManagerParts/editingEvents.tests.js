@@ -378,7 +378,7 @@ QUnit.module('Editing events tests', moduleConfig, () => {
         const infos = this.progressPanelWrapper.getInfos();
         assert.strictEqual(infos.length, 1, 'There is one notification on panel');
 
-        assert.strictEqual(infos[0].common.commonText, 'The file cannot be downloaded', 'Title is correct');
+        assert.strictEqual(infos[0].common.commonText, 'Item was not downloaded', 'Title is correct');
 
         const details = infos[0].details;
         assert.strictEqual(details.length, 1, 'Notification has one details section');
@@ -411,7 +411,7 @@ QUnit.module('Editing events tests', moduleConfig, () => {
         const infos = this.progressPanelWrapper.getInfos();
         assert.strictEqual(infos.length, 1, 'There is one notification on panel');
 
-        assert.strictEqual(infos[0].common.commonText, 'The files cannot be downloaded', 'Title is correct');
+        assert.strictEqual(infos[0].common.commonText, '2 items were not downloaded', 'Title is correct');
 
         const details = infos[0].details;
         assert.strictEqual(details.length, 2, 'Notification has one details section');
@@ -446,7 +446,7 @@ QUnit.module('Editing events tests', moduleConfig, () => {
         const infos = this.progressPanelWrapper.getInfos();
         assert.strictEqual(infos.length, 1, 'There is one notification on panel');
 
-        assert.strictEqual(infos[0].common.commonText, 'The files cannot be downloaded', 'Title is correct');
+        assert.strictEqual(infos[0].common.commonText, '2 items were not downloaded', 'Title is correct');
 
         const details = infos[0].details;
         assert.strictEqual(details.length, 2, 'Notification has one details section');
