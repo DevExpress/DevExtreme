@@ -136,7 +136,7 @@
     "handlebars": "^4.7.3",
     "hogan.js": "3.0.2",
     "intl": "^1.2.5",
-    "jest": "^24.9.0",
+    "jest": "^26.0.0",
     "jest-each": "^26.1.0",
     "jquery": "^3.5.1",
     "jquery.tmpl": "0.0.2",
