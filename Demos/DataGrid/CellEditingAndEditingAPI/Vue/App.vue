@@ -51,12 +51,14 @@
           show-text="always"
         />
         <DxItem location="after">
-          <DxButton
-            @click="deleteRecords()"
-            :disabled="!selectedItemKeys.length"
-            icon="trash"
-            text="Delete Selected Records"
-          />
+          <template #default>
+            <DxButton
+              @click="deleteRecords()"
+              :disabled="!selectedItemKeys.length"
+              icon="trash"
+              text="Delete Selected Records"
+            />
+          </template>
         </DxItem>
       </DxToolbar>
     </DxDataGrid>
