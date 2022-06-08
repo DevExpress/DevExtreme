@@ -520,7 +520,8 @@ const EditingController = modules.ViewController.inherit((function() {
             this._processInsertChanges(args.value);
 
             dataController.updateItems({
-                repaintChangesOnly: true
+                repaintChangesOnly: true,
+                isLiveUpdate: false
             });
         },
 
