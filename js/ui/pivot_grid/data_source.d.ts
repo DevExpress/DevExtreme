@@ -19,14 +19,16 @@ import XmlaStore, {
 
 import {
     SortOrder,
-    FilterType,
-} from '../../types/enums';
+} from '../../common';
 
 import {
+    FilterType,
     SummaryType,
 } from '../../common/grids';
 
 export {
+    FilterType,
+    SortOrder,
     SummaryType,
 };
 

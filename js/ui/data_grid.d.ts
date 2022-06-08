@@ -84,8 +84,6 @@ import {
   HorizontalAlignment,
   Mode,
   HorizontalEdge,
-  SortOrder,
-  FilterType,
   ShowScrollbarMode,
   SelectAllMode,
   StateStoringType,
@@ -96,11 +94,13 @@ import {
 import {
     DataType,
     SelectionMode,
+    SortOrder,
     ToolbarItemLocation,
 } from '../common';
 
 import {
     FilterOperation,
+    FilterType,
     GridApplyFilterMode,
     GridColumnButtonName,
     GridColumnChooserMode,
@@ -117,7 +117,6 @@ import {
     GridPagerPageSize,
     GridRowRenderingMode,
     GridSelectionShowCheckBoxesMode,
-    GridScrollingMode,
     GridSortingMode,
     GridStartEditAction,
     SelectedFilterOperation,
@@ -127,6 +126,7 @@ import {
 export {
     DataType,
     FilterOperation,
+    FilterType,
     GridApplyFilterMode,
     GridColumnButtonName,
     GridColumnChooserMode,
@@ -143,7 +143,6 @@ export {
     GridPagerPageSize,
     GridRowRenderingMode,
     GridSelectionShowCheckBoxesMode,
-    GridScrollingMode,
     GridSortingMode,
     GridStartEditAction,
     SelectAllMode,
@@ -159,6 +158,7 @@ export type ExcelCellHorizontalAlignment = 'center' | 'centerContinuous' | 'dist
 export type ExcelCellPatternType = 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
 export type ExcelCellVerticalAlignment = 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
+export type GridScrollingMode = 'infinite' | 'standard' | 'virtual';
 
 export interface AdaptiveDetailRowPreparingInfo {
   readonly formOptions: any;

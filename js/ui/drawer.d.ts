@@ -22,11 +22,9 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
-import {
-    DrawerOpenedStateMode,
-    DrawerPosition,
-    DrawerRevealMode,
-} from '../types/enums';
+export type OpenedStateMode = 'overlap' | 'shrink' | 'push';
+export type PanelLocation = 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
+export type RevealMode = 'slide' | 'expand';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxDrawer>;
@@ -85,19 +83,19 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @default "shrink"
      * @public
      */
-    openedStateMode?: DrawerOpenedStateMode;
+    openedStateMode?: OpenedStateMode;
     /**
      * @docid
      * @default "left"
      * @public
      */
-    position?: DrawerPosition;
+    position?: PanelLocation;
     /**
      * @docid
      * @default "slide"
      * @public
      */
-    revealMode?: DrawerRevealMode;
+    revealMode?: RevealMode;
     /**
      * @docid
      * @default false

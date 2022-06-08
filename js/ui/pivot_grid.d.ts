@@ -30,20 +30,16 @@ import {
 
 import {
   FieldChooserLayout,
+  ScrollingMode,
 } from '../common';
-
-import {
-  GridScrollingMode,
-} from '../common/grids';
 
 export {
   FieldChooserLayout,
-  GridScrollingMode,
+  ScrollingMode,
 };
 
 export type PivotGridDataFieldArea = 'column' | 'row';
 export type PivotGridRowHeadersLayout = 'standard' | 'tree';
-export type PivotGridScrollingMode = 'standard' | 'virtual';
 export type PivotGridTotalsDisplayMode = 'both' | 'columns' | 'none' | 'rows';
 
 /** @public */
@@ -513,7 +509,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default "standard"
        */
-      mode?: PivotGridScrollingMode;
+      mode?: ScrollingMode;
       /**
        * @docid
        * @default "auto"

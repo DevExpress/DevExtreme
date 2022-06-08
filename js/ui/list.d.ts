@@ -37,10 +37,15 @@ import {
 import {
     ShowScrollbarMode,
     SelectAllMode,
-    ListPageLoadMode,
-    ListMenuMode,
-    ListItemDeleteMode,
 } from '../types/enums';
+
+import {
+    PageLoadMode,
+} from '../common';
+
+export {
+    PageLoadMode,
+};
 
 type ItemLike = string | Item | any;
 
@@ -49,6 +54,9 @@ interface ListItemInfo<TItem extends ItemLike> {
     readonly itemElement: DxElement;
     readonly itemIndex: number | { group: number; item: number };
 }
+
+export type ItemDeleteMode = 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
+export type ListMenuMode = 'context' | 'slide';
 
 /** @public */
 export type ListSelectionMode = 'all' | 'multiple' | 'none' | 'single';
@@ -215,7 +223,7 @@ export interface dxListOptions<
      * @default 'swipe' &for(Android)
      * @public
      */
-    itemDeleteMode?: ListItemDeleteMode;
+    itemDeleteMode?: ItemDeleteMode;
     /**
      * @docid
      * @public
@@ -391,7 +399,7 @@ export interface dxListOptions<
      * @default "nextButton" &for(desktop except Mac)
      * @public
      */
-    pageLoadMode?: ListPageLoadMode;
+    pageLoadMode?: PageLoadMode;
     /**
      * @docid
      * @default "Loading..."

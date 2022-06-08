@@ -14,11 +14,12 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 import {
-    BoxAlign,
-    BoxDirection,
-    BoxCrossAlign,
     Mode,
 } from '../types/enums';
+
+export type Distribution = 'center' | 'end' | 'space-around' | 'space-between' | 'start';
+export type CrosswiseDistribution = 'center' | 'end' | 'start' | 'stretch';
+export type BoxDirection = 'col' | 'row';
 
 type ItemLike<TKey> = string | Item<TKey> | any;
 
@@ -60,13 +61,13 @@ export interface dxBoxOptions<
      * @default 'start'
      * @public
      */
-    align?: BoxAlign;
+    align?: Distribution;
     /**
      * @docid
      * @default 'start'
      * @public
      */
-    crossAlign?: BoxCrossAlign;
+    crossAlign?: CrosswiseDistribution;
     /**
      * @docid
      * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions

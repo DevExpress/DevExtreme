@@ -36,6 +36,8 @@ export {
 } from '../common/grids';
 
 export type FilterBuilderOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between';
+export type GroupOperation = 'and' | 'or' | 'notAnd' | 'notOr';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
 

@@ -35,15 +35,13 @@ import Widget, {
 
 import {
   Orientation,
-  SchedulerViewType,
   MaxAppointmentsPerCell,
-  SchedulerRecurrenceEditMode,
-  SchedulerScrollingMode,
   AllDayPanelMode,
 } from '../types/enums';
 
 import {
   FirstDayOfWeek,
+  ScrollingMode,
 } from '../common';
 
 interface AppointmentDraggingEvent {
@@ -62,6 +60,9 @@ interface TargetedAppointmentInfo {
 export {
   FirstDayOfWeek,
 };
+
+export type RecurrenceEditingMode = 'dialog' | 'occurrence' | 'series';
+export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
 /** @public */
 export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
@@ -340,7 +341,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @fires dxSchedulerOptions.onOptionChanged
      * @public
      */
-    currentView?: SchedulerViewType;
+    currentView?: ViewType;
     /**
      * @docid
      * @type_function_param1 info:object
@@ -652,7 +653,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default "dialog"
      * @public
      */
-    recurrenceEditMode?: SchedulerRecurrenceEditMode;
+    recurrenceEditMode?: RecurrenceEditingMode;
     /**
      * @docid
      * @default 'recurrenceException'
@@ -927,7 +928,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default undefined
        */
-      type?: SchedulerViewType;
+      type?: ViewType;
       /**
        * @docid
        */
@@ -966,7 +967,7 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     deleteRecurrence(
       appointmentData: dxSchedulerAppointment,
       date: Date | string,
-      recurrenceEditMode: SchedulerRecurrenceEditMode,
+      recurrenceEditMode: RecurrenceEditingMode,
     ): void;
     getDataSource(): DataSource;
     /**
@@ -1131,5 +1132,5 @@ export interface dxSchedulerScrolling {
    * @default "standard"
    * @public
    */
-  mode?: SchedulerScrollingMode;
+  mode?: ScrollingMode;
 }

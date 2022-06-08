@@ -13,11 +13,9 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
-import {
-  GeoMapType,
-  GeoMapProvider,
-  GeoMapRouteMode,
-} from '../types/enums';
+export type MapProvider = 'bing' | 'google' | 'googleStatic';
+export type RoutingMode = 'driving' | 'walking';
+export type MapType = 'hybrid' | 'roadmap' | 'satellite';
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxMap, MouseEvent | PointerEvent>;
@@ -245,7 +243,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @default "google"
      * @public
      */
-    provider?: GeoMapProvider;
+    provider?: MapProvider;
     /**
      * @docid
      * @fires dxMapOptions.onRouteAdded
@@ -268,7 +266,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @docid
        * @default 'driving'
        */
-      mode?: GeoMapRouteMode;
+      mode?: RoutingMode;
       /**
        * @docid
        * @default 0.5
@@ -285,7 +283,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @default "roadmap"
      * @public
      */
-    type?: GeoMapType;
+    type?: MapType;
     /**
      * @docid
      * @default 300

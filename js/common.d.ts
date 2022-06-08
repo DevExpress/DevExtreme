@@ -57,3 +57,27 @@ export type ToolbarItemLocation = 'after' | 'before' | 'center';
  * @namespace DevExpress.common
  */
 export type ToolbarItemWidget = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type SortOrder = 'asc' | 'desc';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type PageLoadMode = 'nextButton' | 'scrollBottom';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ScrollingMode = 'standard' | 'virtual';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ValidationStatus = 'valid' | 'invalid' | 'pending';

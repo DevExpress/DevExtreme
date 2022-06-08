@@ -51,11 +51,12 @@ import {
     VerticalAlignment,
     HorizontalAlignment,
     Mode,
-    FormLabelLocation,
-    FormItemEditorType,
-    FormItemType,
-    FormLabelMode,
 } from '../types/enums';
+
+export type FormEditor = 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
+export type FormItem = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+export type LabelLocation = 'left' | 'right' | 'top';
+export type LabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxForm>;
@@ -158,13 +159,13 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default "top" &for(Material)
      * @public
      */
-    labelLocation?: FormLabelLocation;
+    labelLocation?: LabelLocation;
     /**
      * @docid
      * @default "outside"
      * @public
      */
-     labelMode?: FormLabelMode;
+     labelMode?: LabelMode;
     /**
      * @docid
      * @default 200
@@ -378,7 +379,7 @@ export interface dxFormButtonItem {
      * @default "simple"
      * @public
      */
-    itemType?: FormItemType;
+    itemType?: FormItem;
     /**
      * @docid
      * @default undefined
@@ -433,7 +434,7 @@ export interface dxFormEmptyItem {
      * @default "simple"
      * @public
      */
-    itemType?: FormItemType;
+    itemType?: FormItem;
     /**
      * @docid
      * @default undefined
@@ -508,7 +509,7 @@ export interface dxFormGroupItem {
      * @default "simple"
      * @public
      */
-    itemType?: FormItemType;
+    itemType?: FormItem;
     /**
      * @docid
      * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
@@ -583,7 +584,7 @@ export interface dxFormSimpleItem {
      * @docid
      * @public
      */
-    editorType?: FormItemEditorType;
+    editorType?: FormEditor;
     /**
      * @docid
      * @default undefined
@@ -601,7 +602,7 @@ export interface dxFormSimpleItem {
      * @default "simple"
      * @public
      */
-    itemType?: FormItemType;
+    itemType?: FormItem;
     /**
      * @docid
      * @default undefined
@@ -617,7 +618,7 @@ export interface dxFormSimpleItem {
        * @docid
        * @default "left"
        */
-      location?: FormLabelLocation;
+      location?: LabelLocation;
       /**
        * @docid
        * @default from showColonAfterLabel
@@ -696,7 +697,7 @@ export interface dxFormTabbedItem {
      * @default "simple"
      * @public
      */
-    itemType?: FormItemType;
+    itemType?: FormItem;
     /**
      * @docid
      * @default undefined

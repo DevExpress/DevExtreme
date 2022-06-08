@@ -27,6 +27,7 @@ import {
 } from '../events/index';
 
 import {
+    ScrollingMode,
     ToolbarItemLocation,
 } from '../common';
 
@@ -111,6 +112,7 @@ export {
 } from '../common/grids';
 
 export {
+    ScrollingMode,
     ToolbarItemLocation,
 };
 
@@ -118,7 +120,6 @@ export type TreeListColumnButtonName = 'add' | 'cancel' | 'delete' | 'edit' | 's
 export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
 export type TreeListDataStructure = 'plain' | 'tree';
 export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
-export type TreeListScrollingMode = 'standard' | 'virtual';
 export type TreeListToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 /** @public */
@@ -865,7 +866,7 @@ export interface Scrolling extends ScrollingBase {
      * @default "virtual"
      * @public
      */
-    mode?: TreeListScrollingMode;
+    mode?: ScrollingMode;
 }
 
 /**

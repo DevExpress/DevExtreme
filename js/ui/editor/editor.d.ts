@@ -9,8 +9,11 @@ import Widget, {
 import {
     ValidationMessageMode,
     EditorStylingMode,
-    ValidationStatus,
 } from '../../types/enums';
+
+import {
+    ValidationStatus,
+} from '../../common';
 
 export interface ValueChangedInfo {
     readonly previousValue?: any;

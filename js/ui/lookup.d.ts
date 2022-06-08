@@ -38,8 +38,15 @@ import {
 
 import {
     EditorApplyValueMode,
-    ListPageLoadMode,
 } from '../types/enums';
+
+import {
+    PageLoadMode,
+} from '../common';
+
+export {
+    PageLoadMode,
+};
 
 /** @public */
 export type ClosedEvent = EventInfo<dxLookup>;
@@ -204,7 +211,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default "scrollBottom"
      * @public
      */
-    pageLoadMode?: ListPageLoadMode;
+    pageLoadMode?: PageLoadMode;
     /**
      * @docid
      * @default "Loading..."

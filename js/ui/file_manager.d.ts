@@ -35,12 +35,12 @@ import {
 
 import {
     HorizontalAlignment,
-    SortOrder,
 } from '../types/enums';
 
 import {
     DataType,
     ForcedSelectionMode,
+    SortOrder,
     ToolbarItemLocation,
 } from '../common';
 

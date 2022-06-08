@@ -26,12 +26,10 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-import {
-    ToolbarItemLocateInMenuMode,
-    ToolbarItemShowTextMode,
-} from '../types/enums';
-
 type ItemLike = string | Item | any;
+
+export type LocateInMenuMode = 'always' | 'auto' | 'never';
+export type ShowTextMode = 'always' | 'inMenu';
 
 export {
     ToolbarItemLocation,
@@ -134,7 +132,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @default 'never'
      * @public
      */
-    locateInMenu?: ToolbarItemLocateInMenuMode;
+    locateInMenu?: LocateInMenuMode;
     /**
      * @docid
      * @default 'center'
@@ -157,7 +155,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @default 'always'
      * @public
      */
-    showText?: ToolbarItemShowTextMode;
+    showText?: ShowTextMode;
     /**
      * @docid
      * @public

@@ -19,7 +19,11 @@ import {
 
 import {
     ValidationStatus,
-} from '../types/enums';
+} from '../common';
+
+export {
+    ValidationStatus,
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxValidator>;

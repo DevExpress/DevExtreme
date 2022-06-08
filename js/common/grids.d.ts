@@ -52,6 +52,11 @@ export type GridEnterKeyDirection = 'none' | 'column' | 'row';
  * @public
  * @namespace DevExpress.common.grids
  */
+export type FilterType = 'exclude' | 'include';
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export type FilterOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof';
 /**
  * @public
@@ -88,11 +93,6 @@ export type GridRowRenderingMode = 'standard' | 'virtual';
  * @namespace DevExpress.common.grids
  */
 export type GridSelectionShowCheckBoxesMode = 'always' | 'none' | 'onClick' | 'onLongTap';
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
-export type GridScrollingMode = 'infinite' | 'standard' | 'virtual';
 /**
  * @public
  * @namespace DevExpress.common.grids

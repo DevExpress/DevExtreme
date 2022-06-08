@@ -28,15 +28,6 @@ export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
 /** @namespace DevExpress.utils */
 export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
 
-/** @namespace DevExpress.utils */
-export type BoxDirection = 'col' | 'row';
-
-/** @namespace DevExpress.utils */
-export type BoxAlign = 'center' | 'end' | 'space-around' | 'space-between' | 'start';
-
-/** @namespace DevExpress.utils */
-export type BoxCrossAlign = 'center' | 'end' | 'start' | 'stretch';
-
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 /** @namespace DevExpress.utils */
 export type Mode = 'auto';
@@ -78,14 +69,6 @@ export type ContextMenuSubmenuDirection = 'auto' | 'left' | 'right';
 export type HorizontalEdge = 'left' | 'right';
 
 /** @namespace DevExpress.utils */
-export type SortOrder = 'asc' | 'desc';
-
-export type FilterBuilderGroupOperations = 'and' | 'or' | 'notAnd' | 'notOr';
-
-/** @namespace DevExpress.utils */
-export type FilterType = 'exclude' | 'include';
-
-/** @namespace DevExpress.utils */
 export type ShowScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
 
 /** @namespace DevExpress.utils */
@@ -101,34 +84,7 @@ export type DateBoxType = 'date' | 'datetime' | 'time';
 export type DateBoxPickerType = 'calendar' | 'list' | 'native' | 'rollers';
 
 /** @namespace DevExpress.utils */
-export type FormLabelLocation = 'left' | 'right' | 'top';
-
-/** @namespace DevExpress.utils */
-export type FormItemEditorType = 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
-
-/** @namespace DevExpress.utils */
-export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
-
-/** @namespace DevExpress.utils */
-export type ListMenuMode = 'context' | 'slide';
-
-/** @namespace DevExpress.utils */
-export type ListItemDeleteMode = 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
-
-/** @namespace DevExpress.utils */
-export type ListPageLoadMode = 'nextButton' | 'scrollBottom';
-
-/** @namespace DevExpress.utils */
 export type CollectionSearchMode = 'contains' | 'startswith' | 'equals';
-
-/** @namespace DevExpress.utils */
-export type GeoMapType = 'hybrid' | 'roadmap' | 'satellite';
-
-/** @namespace DevExpress.utils */
-export type GeoMapProvider = 'bing' | 'google' | 'googleStatic';
-
-/** @namespace DevExpress.utils */
-export type GeoMapRouteMode = 'driving' | 'walking';
 
 /** @namespace DevExpress.utils */
 export type SubmenuDirection = 'auto' | 'leftOrTop' | 'rightOrBottom';
@@ -146,16 +102,7 @@ export type BackgroundImageLocation = 'center' | 'centerBottom' | 'centerTop' | 
 export type SliderTooltipShowMode = 'always' | 'onHover';
 
 /** @namespace DevExpress.utils */
-export type SchedulerViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
-
-/** @namespace DevExpress.utils */
 export type MaxAppointmentsPerCell = 'auto' | 'unlimited';
-
-/** @namespace DevExpress.utils */
-export type SchedulerRecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
-
-/** @namespace DevExpress.utils */
-export type SchedulerScrollingMode = 'standard' | 'virtual';
 
 /** @namespace DevExpress.utils */
 export type ScrollDirection = 'both' | 'horizontal' | 'vertical';
@@ -167,15 +114,6 @@ export type DragDirection = 'both' | 'horizontal' | 'vertical';
 export type SlideOutMenuPosition = 'inverted' | 'normal';
 
 /** @namespace DevExpress.utils */
-export type DrawerOpenedStateMode = 'overlap' | 'shrink' | 'push';
-
-/** @namespace DevExpress.utils */
-export type DrawerPosition = 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
-
-/** @namespace DevExpress.utils */
-export type DrawerRevealMode = 'slide' | 'expand';
-
-/** @namespace DevExpress.utils */
 export type TextBoxMode = 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
 
 /** @namespace DevExpress.utils */
@@ -183,12 +121,6 @@ export type ShowMaskMode = 'always' | 'onFocus';
 
 /** @namespace DevExpress.utils */
 export type ToastType = 'custom' | 'error' | 'info' | 'success' | 'warning';
-
-/** @namespace DevExpress.utils */
-export type ToolbarItemLocateInMenuMode = 'always' | 'auto' | 'never';
-
-/** @namespace DevExpress.utils */
-export type ToolbarItemShowTextMode = 'always' | 'inMenu';
 
 /** @namespace DevExpress.utils */
 export type AnimationType = 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
@@ -201,9 +133,6 @@ export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
 
 /** @namespace DevExpress.utils */
 export type ValueErrorBarType = 'fixed' | 'percent' | 'stdDeviation' | 'stdError' | 'variance';
-
-/** @namespace DevExpress.utils */
-export type ValidationRuleType = 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 
 /** @namespace DevExpress.utils */
 export type ComparisonOperator = '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
@@ -247,12 +176,6 @@ export type EditorStylingMode = 'outlined' | 'underlined' | 'filled';
 
 /** @namespace DevExpress.utils */
 export type EditorLabelMode = 'static' | 'floating' | 'hidden';
-
-/** @namespace DevExpress.utils */
-export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
-
-/** @namespace DevExpress.utils */
-export type ValidationStatus = 'valid' | 'invalid' | 'pending';
 
 /** @namespace DevExpress.utils */
 export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
