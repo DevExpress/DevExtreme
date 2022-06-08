@@ -1330,6 +1330,25 @@ QUnit.module('format: percent format', moduleConfig, () => {
         });
     });
 
+    [
+        { text: '0.04', value: 0.00035, format: '#0.00%' },
+        { text: '0.0350', value: 0.00035, format: '#0.0000%' },
+        { text: '0.14', value: 0.00135, format: '#0.00%' },
+        { text: '0.4', value: 0.0035, format: '#0.0%' },
+        { text: '0.35', value: 0.0035, format: '#0.00%' },
+        { text: '1.4', value: 0.0135, format: '#0.0%' },
+        { text: '0.005', value: 0.000049999, format: '#0.000%' },
+        { text: '0.004', value: 0.0000444999, format: '#0.000%' },
+    ].forEach(({ text, value, format }) => {
+        QUnit.test(`percent format should correctly handle float values, value: ${value}, format: ${format}`, function(assert) {
+            this.instance.option('format', format);
+            this.instance.option('value', value);
+
+            assert.equal(this.input.val(), `${text}%`, 'text is correct');
+            assert.equal(this.instance.option('value'), value, 'value is correct');
+        });
+    });
+
 });
 
 QUnit.module('format: removing', moduleConfig, () => {
