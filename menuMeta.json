@@ -2433,7 +2433,6 @@
           {
             "Title": "Drill-Down Chart",
             "Name": "ChartsDrillDown",
-            "DocUrl": "Guide/UI_Components/Chart/Drill-Down_Chart/",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
