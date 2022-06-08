@@ -118,12 +118,14 @@ export default Class.inherit({
         let focusedItemNotInLoadedRange = false;
         let shiftFocusedItemNotInLoadedRange = false;
 
+        const itemIsNotInLoadedRange = (index) => index >= 0 && !items.filter(it => it.loadIndex === index).length;
+
         if(allowLoadByRange) {
             indexOffset = item.loadIndex - itemIndex;
             itemIndex = item.loadIndex;
-            focusedItemNotInLoadedRange = this._focusedItemIndex >= 0 && !items.filter(it => it.loadIndex === this._focusedItemIndex).length;
+            focusedItemNotInLoadedRange = itemIsNotInLoadedRange(this._focusedItemIndex);
             if(isDefined(this._shiftFocusedItemIndex)) {
-                shiftFocusedItemNotInLoadedRange = this._shiftFocusedItemIndex >= 0 && !items.filter(it => it.loadIndex === this._shiftFocusedItemIndex).length;
+                shiftFocusedItemNotInLoadedRange = itemIsNotInLoadedRange(this._shiftFocusedItemIndex);
             }
         }
 
