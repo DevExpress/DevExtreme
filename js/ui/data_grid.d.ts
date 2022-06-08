@@ -94,6 +94,7 @@ import {
 } from '../types/enums';
 
 import {
+    DataType,
     SelectionMode,
     ToolbarItemLocation,
 } from '../common';
@@ -102,7 +103,6 @@ import {
     GridApplyFilterMode,
     GridColumnButtonName,
     GridColumnChooserMode,
-    GridColumnDataType,
     GridColumnRenderingMode,
     GridCommandColumnType,
     GridDataChangeType,
@@ -124,10 +124,10 @@ import {
 } from '../common/grids';
 
 export {
+    DataType,
     GridApplyFilterMode,
     GridColumnButtonName,
     GridColumnChooserMode,
-    GridColumnDataType,
     GridColumnRenderingMode,
     GridCommandColumnType,
     GridDataChangeType,
@@ -2359,7 +2359,7 @@ export interface ColumnBase<TRowData = any> {
      * @default undefined
      * @public
      */
-    dataType?: GridColumnDataType;
+    dataType?: DataType;
     /**
      * @docid GridBaseColumn.editorOptions
      * @public

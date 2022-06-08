@@ -14,6 +14,12 @@ export type ButtonStyle = 'text' | 'outlined' | 'contained';
  * @public
  * @namespace DevExpress.common
  */
+export type DataType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SelectionMode = 'multiple' | 'single' | 'none';
 
 /**

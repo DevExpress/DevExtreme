@@ -24,11 +24,16 @@ import {
 } from '../localization';
 
 import {
+    DataType,
+} from '../common';
+
+import {
     FilterBuilderFieldFilterOperations,
-    FilterBuilderGroupOperations,
-    FilterBuilderFieldDataType,
 } from '../types/enums';
 
+export {
+    DataType,
+};
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
 
@@ -220,7 +225,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @default ['and', 'or', 'notAnd', 'notOr']
      * @public
      */
-    groupOperations?: Array<FilterBuilderGroupOperations>;
+    groupOperations?: Array<GroupOperation>;
     /**
      * @docid
      * @default undefined
@@ -318,7 +323,7 @@ export interface dxFilterBuilderCustomOperation {
      * @default undefined
      * @public
      */
-    dataTypes?: Array<FilterBuilderFieldDataType>;
+    dataTypes?: Array<DataType>;
     /**
      * @docid
      * @type_function_param1 conditionInfo:object
@@ -387,7 +392,7 @@ export interface dxFilterBuilderField {
      * @default "string"
      * @public
      */
-    dataType?: FilterBuilderFieldDataType;
+    dataType?: DataType;
     /**
      * @docid
      * @public

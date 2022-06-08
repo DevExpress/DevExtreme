@@ -17,11 +17,6 @@ export type GridColumnChooserMode = 'dragAndDrop' | 'select';
  * @public
  * @namespace DevExpress.common.grids
  */
-export type GridColumnDataType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type GridColumnRenderingMode = 'standard' | 'virtual';
 /**
  * @public

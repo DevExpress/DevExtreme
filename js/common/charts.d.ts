@@ -79,7 +79,7 @@ export type ZoomPanAction = 'zoom' | 'pan';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type ChartDataType = 'datetime' | 'numeric' | 'string';
+export type ChartsDataType = 'datetime' | 'numeric' | 'string';
 
 /**
  * @public

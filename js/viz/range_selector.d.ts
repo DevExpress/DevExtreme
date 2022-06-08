@@ -39,7 +39,7 @@ import {
 } from '../types/enums';
 
 import {
-    ChartDataType,
+    ChartsDataType,
     DiscreteAxisDivisionMode,
     LabelOverlapping,
     Palette,
@@ -47,7 +47,7 @@ import {
 } from '../common/charts';
 
 export {
-    ChartDataType,
+    ChartsDataType,
     DiscreteAxisDivisionMode,
     LabelOverlapping,
     Palette,
@@ -292,7 +292,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default undefined
          */
-        valueType?: ChartDataType;
+        valueType?: ChartsDataType;
       };
     };
     /**
@@ -617,7 +617,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      valueType?: ChartDataType;
+      valueType?: ChartsDataType;
       /**
        * @docid
        * @default [1, 2, 3, 4, 5]

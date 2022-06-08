@@ -39,13 +39,10 @@ import {
 } from '../types/enums';
 
 import {
-   ForcedSelectionMode,
-   ToolbarItemLocation,
+    DataType,
+    ForcedSelectionMode,
+    ToolbarItemLocation,
 } from '../common';
-
-import {
-    GridColumnDataType,
- } from '../common/grids';
 
 interface ActionEventInfo {
     errorCode?: number;
@@ -54,8 +51,8 @@ interface ActionEventInfo {
 }
 
 export {
+    DataType,
     ForcedSelectionMode,
-    GridColumnDataType,
     ToolbarItemLocation,
 };
 
@@ -784,7 +781,7 @@ export interface dxFileManagerDetailsColumn {
      * @default undefined
      * @public
      */
-    dataType?: GridColumnDataType;
+    dataType?: DataType;
     /**
      * @docid
      * @default undefined

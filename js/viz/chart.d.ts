@@ -64,7 +64,7 @@ import {
     ArgumentAxisHoverMode,
     AxisScaleType,
     ChartAxisLabelOverlapping,
-    ChartDataType,
+    ChartsDataType,
     ChartLabelOverlapping,
     DiscreteAxisDivisionMode,
     HatchingDirection,
@@ -86,7 +86,7 @@ export {
     ArgumentAxisHoverMode,
     AxisScaleType,
     ChartAxisLabelOverlapping,
-    ChartDataType,
+    ChartsDataType,
     ChartLabelOverlapping,
     DiscreteAxisDivisionMode,
     HatchingDirection,
@@ -1210,7 +1210,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @default undefined
      * @public
      */
-    argumentType?: ChartDataType;
+    argumentType?: ChartsDataType;
     /**
      * @docid dxChartOptions.argumentAxis.axisDivisionFactor
      * @default 70
@@ -2401,7 +2401,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @default undefined
      * @public
      */
-    valueType?: ChartDataType;
+    valueType?: ChartsDataType;
     /**
      * @docid dxChartOptions.valueAxis.visualRange
      * @fires BaseWidgetOptions.onOptionChanged

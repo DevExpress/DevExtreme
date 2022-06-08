@@ -49,7 +49,7 @@ import {
 } from '../types/enums';
 
 import {
-    ChartDataType,
+    ChartsDataType,
     HatchingDirection,
     LabelPosition,
     Palette,
@@ -58,7 +58,7 @@ import {
 } from '../common/charts';
 
 export {
-    ChartDataType,
+    ChartsDataType,
     HatchingDirection,
     LabelPosition,
     Palette,
@@ -482,7 +482,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
      * @default undefined
      * @public
      */
-    argumentType?: ChartDataType;
+    argumentType?: ChartsDataType;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border
      * @public

@@ -63,7 +63,7 @@ import {
 import {
     ArgumentAxisHoverMode,
     AxisScaleType,
-    ChartDataType,
+    ChartsDataType,
     DiscreteAxisDivisionMode,
     HatchingDirection,
     LabelOverlapping,
@@ -82,7 +82,7 @@ interface SeriesInteractionInfo {
 export {
     ArgumentAxisHoverMode,
     AxisScaleType,
-    ChartDataType,
+    ChartsDataType,
     DiscreteAxisDivisionMode,
     HatchingDirection,
     LabelOverlapping,
@@ -469,7 +469,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @default undefined
      * @public
      */
-    argumentType?: ChartDataType;
+    argumentType?: ChartsDataType;
     /**
      * @docid dxPolarChartOptions.argumentAxis.axisDivisionFactor
      * @default 50
@@ -1166,7 +1166,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @default undefined
      * @public
      */
-    valueType?: ChartDataType;
+    valueType?: ChartsDataType;
     /**
      * @docid dxPolarChartOptions.valueAxis.visualRange
      * @fires BaseWidgetOptions.onOptionChanged

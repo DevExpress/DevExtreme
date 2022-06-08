@@ -213,9 +213,6 @@ export type ValidationRuleType = 'required' | 'numeric' | 'range' | 'stringLengt
 export type ComparisonOperator = '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
 
 /** @namespace DevExpress.utils */
-export type FilterBuilderFieldDataType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
-
-/** @namespace DevExpress.utils */
 export type TextEditorButtonLocation = 'after' | 'before';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
