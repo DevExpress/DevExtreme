@@ -96,21 +96,19 @@ class App extends React.Component {
     this.dataGrid.instance.clearSelection();
   }
 
-  async onSelectionFilterChanged({ value }) {
+  onSelectionFilterChanged({ value }) {
     this.selectionChangedBySelectBox = true;
 
     const prefix = value;
 
     if (prefix) {
       const filteredEmployees = prefix === 'All' ? employees : employees.filter((employee) => employee.Prefix === prefix);
-
       const selectedRowKeys = filteredEmployees.map((employee) => employee.ID);
-      const selectedRowsData = await this.dataGrid.instance.getDataByKeys(selectedRowKeys);
 
       this.setState({
         prefix,
         selectedRowKeys,
-        selectedEmployeeNames: getEmployeeNames(selectedRowsData),
+        selectedEmployeeNames: getEmployeeNames(filteredEmployees),
       });
     }
   }
