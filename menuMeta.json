@@ -2399,14 +2399,12 @@
           {
             "Title": "Standard Bar",
             "Name": "StandardBar",
-            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Bar_Series/",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
           {
             "Title": "Side-by-Side Bar",
             "Name": "SideBySideBar",
-            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Bar_Series/",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
@@ -2414,7 +2412,6 @@
           {
             "Title": "Stacked Bar",
             "Name": "StackedBar",
-            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Bar_Series/",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
@@ -2422,7 +2419,6 @@
           {
             "Title": "Full Stacked Bar",
             "Name": "FullStackedBar",
-            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Bar_Series/",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
@@ -2430,7 +2426,6 @@
           {
             "Title": "Side-by-Side Stacked Bar",
             "Name": "SideBySideStackedBar",
-            "DocUrl": "ApiReference/UI_Components/dxChart/Configuration/series/#stack",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
