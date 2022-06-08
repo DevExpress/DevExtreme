@@ -2439,7 +2439,6 @@
           {
             "Title": "Side-by-Side Full-Stacked Bar",
             "Name": "SideBySideFullStackedBar",
-            "DocUrl": "ApiReference/UI_Components/dxChart/Configuration/series/#stack",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz",
