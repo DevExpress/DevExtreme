@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import DataGrid from '../../model/dataGrid';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
@@ -132,3 +133,80 @@ test('Resize without navigation buttons', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 });
+
+['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
+  test(`Compact pager in the ${theme} theme (T1057735)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const pagerElement = dataGrid.getPager().element;
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t
+      .expect(await takeScreenshot(`compact-pager-in-the-${theme.replace(/\./g, '-')}-theme.png`, pagerElement))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    if (theme !== 'generic.light') {
+      await changeTheme(theme);
+    }
+
+    return createWidget('dxDataGrid', {
+      dataSource: [{ id: 1, name: 'test' }],
+      keyExpr: 'id',
+      paging: {
+        pageSize: 10,
+      },
+      pager: {
+        visible: true,
+        allowedPageSizes: [5, 10, 'all'],
+        showPageSizeSelector: true,
+        showInfo: true,
+        showNavigationButtons: true,
+        displayMode: 'compact',
+      },
+    });
+  }).after(async () => {
+    await disposeWidgets();
+    await changeTheme('generic.light');
+  });
+});
+
+test("Changing pageSize to 'all' with rowRenderingMode='virtual' should work (T1090331)", async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.option('paging.pageSize'))
+    .eql(10);
+
+  await t.click(dataGrid.element()); // don't know why but test isn't reproduces without this click
+
+  await dataGrid.scrollBy({ y: 100 });
+
+  await t.click('.dx-dropdowneditor-button');
+  await t.click(Selector('.dx-item').withText('All'));
+
+  await t
+    .expect(dataGrid.option('paging.pageSize'))
+    .eql(0);
+})
+  .before(async () => createWidget('dxDataGrid', {
+    dataSource: [...new Array(100).keys()].map((i) => ({ id: i })),
+    keyExpr: 'id',
+    showBorders: true,
+    scrolling: {
+      rowRenderingMode: 'virtual',
+    },
+    paging: {
+      pageSize: 10,
+    },
+    pager: {
+      visible: true,
+      allowedPageSizes: [5, 10, 'all'],
+      showPageSizeSelector: true,
+      displayMode: 'compact',
+    },
+    height: 400,
+  }))
+  .after(async () => {
+    await disposeWidgets();
+  });
