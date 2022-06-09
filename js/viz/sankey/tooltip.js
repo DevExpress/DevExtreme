@@ -37,7 +37,7 @@ export function setTooltipCustomOptions(sankey) {
                 if(!(linkTemplate && args.type === 'link' || nodeTemplate && args.type === 'node')) {
                     args.skipTemplate = true;
                 }
-                const formatter = value => tooltip.formatValue(value, options.format || (_ => _));
+                const formatter = value => tooltip.formatValue(value);
                 if(args.type === 'node') {
                     return generateCustomCallback(options.customizeNodeTooltip, defaultCustomizeNodeTooltip(formatter))(args.info);
                 } else if(args.type === 'link') {

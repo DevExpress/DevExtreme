@@ -181,7 +181,7 @@ QUnit.test('Show custom tooltip (text) on hovered node', function(assert) {
     assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', label: 'Z', weightIn: 2, weightOut: 0 });
 });
 
-QUnit.test('Show custom tooltip (text) on hovered link 2', function(assert) {
+QUnit.test('Show custom tooltip (text) on hovered link', function(assert) {
     const stub = sinon.stub().returns({ text: 'custom text' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
