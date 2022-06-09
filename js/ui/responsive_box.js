@@ -11,6 +11,8 @@ import { extend } from '../core/utils/extend';
 import registerComponent from '../core/component_registrator';
 import Box from './box';
 import CollectionWidget from './collection/ui.collection_widget.edit';
+import domAdapter from "../core/dom_adapter";
+import {cleanDataRecursive} from "../core/element_data";
 
 // STYLE responsiveBox
 
@@ -22,7 +24,8 @@ const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
 const HD_SCREEN_WIDTH = 1920;
 
 const ResponsiveBox = CollectionWidget.inherit({
-
+    _linkedItems: new Set(),
+    _elementsForClean: new Set(),
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             rows: [],
@@ -367,13 +370,25 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _linkNodeToItem: function() {
+        const newLinkedItems = new Set();
         each(this._itemElements(), function(_, itemNode) {
-            const $item = $(itemNode);
-            const item = $item.data(BOX_ITEM_DATA_KEY);
-            if(!item.box) {
-                item.node = $item.children();
+                const $item = $(itemNode);
+                const item = $item.data(BOX_ITEM_DATA_KEY);
+                if (!item.box) {
+                    item.node = $item.children();
+                    newLinkedItems.add(item);
+                }
             }
-        });
+        );
+
+        this._linkedItems.forEach( item => {
+            if (!newLinkedItems.has(item)) {
+                this._clearItemLink(item);
+            }
+        })
+
+        this._linkedItems = newLinkedItems;
+        console.log('----------> _LINKED_ITEMS', this._linkedItems)
     },
 
     _layoutItems: function() {
@@ -579,8 +594,10 @@ const ResponsiveBox = CollectionWidget.inherit({
 
     _dispose: function() {
         clearTimeout(this._updateTimer);
+        this._cleanAll();
         this._clearItemNodeTemplates();
         this._cleanUnusedRoots();
+
         this.callBase.apply(this, arguments);
     },
 
@@ -594,11 +611,52 @@ const ResponsiveBox = CollectionWidget.inherit({
         });
     },
 
+    _cleanItemContainer: function() {
+        this._collectElementsForClean($(this._itemContainer())[0])
+        domAdapter.setText($(this._itemContainer())[0], '');
+    },
+
+    _collectElementsForClean: function(element) {
+        if(!domAdapter.isElementNode(element)) {
+            return;
+        }
+
+        const els = element.getElementsByTagName('*');
+        [...els].forEach( el => this._elementsForClean.add(el));
+
+        console.log('---------->_cleanAll', this._elementsForClean, [...this._linkedItems]/*.map( i => i.node)*/)
+    },
+
+    _cleanAll: function() {
+        [...this._elementsForClean].forEach( el => {
+            cleanDataRecursive(el, true);
+        })
+    },
+
     _clearItemNodeTemplates: function() {
+        const me = this;
         each(this.option('items'), function() {
-            delete this.node;
+            me._clearItemLink(this);
         });
     },
+
+        _clearItemLink(item) {
+            console.log('----------> _clearItemLink', item.box, item.node)
+            cleanDataRecursive(item.box || (item.node && item.node[0]), true)
+            $(item.box || (item.node && item.node[0])).remove()
+            if (item.node) {
+                if (item.node[0]) {
+                    // cleanDataRecursive(item.node[0], true)
+                    //console.log('---------->', item.node)
+                    // $(item.node[0]).remove()
+
+                    // console.log('---------->00' )
+                    // domAdapter.setText(item.node[0], '')
+                }
+            }
+            delete item.node;
+            delete item.box;
+        },
 
     _toggleVisibility: function(visible) {
         this.callBase(visible);
