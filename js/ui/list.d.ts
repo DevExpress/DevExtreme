@@ -35,15 +35,14 @@ import {
 } from './widget/ui.search_box_mixin';
 
 import {
-    ShowScrollbarMode,
     SelectAllMode,
-} from '../types/enums';
-
-import {
+    ScrollbarMode,
     PageLoadMode,
 } from '../common';
 
 export {
+    SelectAllMode,
+    ScrollbarMode,
     PageLoadMode,
 };
 
@@ -478,7 +477,7 @@ export interface dxListOptions<
      * @default 'onHover' &for(desktop)
      * @public
      */
-    showScrollbar?: ShowScrollbarMode;
+    showScrollbar?: ScrollbarMode;
     /**
      * @docid
      * @default false

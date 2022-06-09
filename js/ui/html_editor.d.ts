@@ -16,6 +16,7 @@ import {
 } from '../events/index';
 
 import {
+    EditorStyle,
     ToolbarItemLocation,
 } from '../common';
 
@@ -33,11 +34,9 @@ import {
 } from './toolbar';
 
 import { Properties as fileUploaderProperties } from './file_uploader';
-import {
-    EditorStylingMode,
-} from '../types/enums';
 
 export {
+    EditorStyle,
     ToolbarItemLocation,
 };
 
@@ -183,7 +182,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default 'outlined'
      * @public
      */
-    stylingMode?: EditorStylingMode;
+    stylingMode?: EditorStyle;
 }
 /**
  * @docid

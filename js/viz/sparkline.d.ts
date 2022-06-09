@@ -17,16 +17,14 @@ import BaseSparkline, {
 } from './sparklines/base_sparkline';
 
 import {
-    SparklineType,
-} from '../types/enums';
-
-import {
     PointSymbol,
 } from '../common/charts';
 
 export {
     PointSymbol,
 };
+
+export type SparklineType = 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxSparkline>;

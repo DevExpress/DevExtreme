@@ -22,10 +22,17 @@ import dxMenuBase, {
 } from './context_menu/ui.menu_base';
 
 import {
-    Orientation,
     ShowSubmenuMode,
     SubmenuDirection,
 } from '../types/enums';
+
+import {
+    Orientation,
+} from '../common';
+
+export {
+    Orientation,
+};
 
 /** @public */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxMenu<TKey>>;

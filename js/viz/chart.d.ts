@@ -32,6 +32,7 @@ import {
 import {
     ChartSeries,
     ScaleBreak,
+    SeriesType,
     VizRange,
     VizTimeInterval,
 } from './common';
@@ -44,36 +45,32 @@ import {
 } from './core/base_widget';
 
 import {
-    VerticalAlignment,
-    HorizontalAlignment,
-    DashStyle,
-    SeriesType,
-    Position,
-    RelativePosition,
-    ScaleBreakLineStyle,
-    VisualRangeUpdateMode,
-    ValueErrorBarDisplayMode,
-    ValueErrorBarType,
-} from '../types/enums';
-
-import {
     ForcedSelectionMode,
+    HorizontalAlignment,
+    Position,
+    VerticalAlignment,
 } from '../common';
 
 import {
     ArgumentAxisHoverMode,
     AxisScaleType,
     ChartAxisLabelOverlapping,
-    ChartsDataType,
     ChartLabelOverlapping,
+    ChartsDataType,
+    DashStyle,
     DiscreteAxisDivisionMode,
     HatchingDirection,
     LegendHoverMode,
     PointInteractionMode,
     PointSymbol,
+    RelativePosition,
+    ScaleBreakLineStyle,
     SeriesHoverMode,
     SeriesSelectionMode,
     TextOverflow,
+    ValueErrorBarDisplayMode,
+    ValueErrorBarType,
+    VisualRangeUpdateMode,
     WordWrap,
     ZoomPanAction,
 } from '../common/charts';
@@ -86,16 +83,26 @@ export {
     ArgumentAxisHoverMode,
     AxisScaleType,
     ChartAxisLabelOverlapping,
-    ChartsDataType,
     ChartLabelOverlapping,
+    ChartsDataType,
+    DashStyle,
     DiscreteAxisDivisionMode,
     HatchingDirection,
+    HorizontalAlignment,
     LegendHoverMode,
     PointInteractionMode,
     PointSymbol,
+    Position,
+    RelativePosition,
+    ScaleBreakLineStyle,
     SeriesHoverMode,
     SeriesSelectionMode,
+    SeriesType,
     TextOverflow,
+    ValueErrorBarDisplayMode,
+    ValueErrorBarType,
+    VerticalAlignment,
+    VisualRangeUpdateMode,
     WordWrap,
     ZoomPanAction,
 };
@@ -2172,6 +2179,7 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
     /**
      * @docid dxChartOptions.commonSeriesSettings.type
      * @default 'line'
+     * @type Enums.SeriesType
      * @public
      */
     type?: SeriesType;

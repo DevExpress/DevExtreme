@@ -34,14 +34,14 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-  Orientation,
   MaxAppointmentsPerCell,
   AllDayPanelMode,
 } from '../types/enums';
 
 import {
-  FirstDayOfWeek,
-  ScrollMode,
+    FirstDayOfWeek,
+    Orientation,
+    ScrollMode,
 } from '../common';
 
 interface AppointmentDraggingEvent {
@@ -58,7 +58,9 @@ interface TargetedAppointmentInfo {
 }
 
 export {
-  FirstDayOfWeek,
+    FirstDayOfWeek,
+    Orientation,
+    ScrollMode,
 };
 
 export type RecurrenceEditingMode = 'dialog' | 'occurrence' | 'series';

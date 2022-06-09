@@ -50,13 +50,6 @@ import {
 } from './core/base_widget';
 
 import {
-    DashStyle,
-    RelativePosition,
-    ValueErrorBarDisplayMode,
-    ValueErrorBarType,
-} from '../types/enums';
-
-import {
     ForcedSelectionMode,
 } from '../common';
 
@@ -64,14 +57,18 @@ import {
     ArgumentAxisHoverMode,
     AxisScaleType,
     ChartsDataType,
+    DashStyle,
     DiscreteAxisDivisionMode,
     HatchingDirection,
     LabelOverlapping,
     LegendHoverMode,
     PointInteractionMode,
     PointSymbol,
+    RelativePosition,
     SeriesHoverMode,
     SeriesSelectionMode,
+    ValueErrorBarDisplayMode,
+    ValueErrorBarType,
     ZoomPanAction,
 } from '../common/charts';
 
@@ -83,14 +80,18 @@ export {
     ArgumentAxisHoverMode,
     AxisScaleType,
     ChartsDataType,
+    DashStyle,
     DiscreteAxisDivisionMode,
     HatchingDirection,
     LabelOverlapping,
     LegendHoverMode,
     PointInteractionMode,
     PointSymbol,
+    RelativePosition,
     SeriesHoverMode,
     SeriesSelectionMode,
+    ValueErrorBarDisplayMode,
+    ValueErrorBarType,
     ZoomPanAction,
 };
 

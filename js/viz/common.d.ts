@@ -7,18 +7,19 @@ import {
 } from './core/base_widget';
 
 import {
-    Orientation,
     HorizontalAlignment,
-    VerticalEdge,
-    DashStyle,
-    SeriesType,
+    Orientation,
     Position,
-} from '../types/enums';
+    VerticalEdge,
+} from '../common';
 
 import {
+    DashStyle,
     LegendMarkerState,
     TimeInterval,
 } from '../common/charts';
+
+export type SeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
 
 /**
  * @docid

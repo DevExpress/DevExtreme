@@ -23,9 +23,9 @@ import BaseWidget, {
 } from '../core/base_widget';
 
 import {
-    VerticalEdge,
     HorizontalEdge,
-} from '../../types/enums';
+    VerticalEdge,
+} from '../../common';
 
 import {
     AnimationEasing,

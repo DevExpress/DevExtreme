@@ -28,11 +28,8 @@ import {
 } from './widget/ui.search_box_mixin';
 
 import {
-    ScrollDirection,
-} from '../types/enums';
-
-import {
     ForcedSelectionMode,
+    ScrollDirection,
 } from '../common';
 
 import dxScrollable from './scroll_view/ui.scrollable';

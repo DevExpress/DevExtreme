@@ -37,14 +37,12 @@ import {
 } from './popup';
 
 import {
-    EditorApplyValueMode,
-} from '../types/enums';
-
-import {
+    ApplyValueMode,
     PageLoadMode,
 } from '../common';
 
 export {
+    ApplyValueMode,
     PageLoadMode,
 };
 
@@ -103,7 +101,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @hidden false
      * @public
      */
-    applyValueMode?: EditorApplyValueMode;
+    applyValueMode?: ApplyValueMode;
     /**
      * @docid
      * @default "Cancel"

@@ -35,15 +35,12 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-    DashStyle,
     HorizontalEdge,
-} from '../types/enums';
-
-import {
     SelectionMode,
 } from '../common';
 
 import {
+    DashStyle,
     FunnelAlgorithm,
     FunnelLabelOverlapping,
     HatchingDirection,
@@ -55,9 +52,11 @@ import {
 } from '../common/charts';
 
 export {
+    DashStyle,
     FunnelAlgorithm,
     FunnelLabelOverlapping,
     HatchingDirection,
+    HorizontalEdge,
     LabelPosition,
     Palette,
     PaletteExtensionMode,

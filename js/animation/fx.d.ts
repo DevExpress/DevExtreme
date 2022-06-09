@@ -4,8 +4,11 @@ import { PositionConfig } from './position';
 
 import {
     AnimationType,
-    Direction,
 } from '../types/enums';
+
+import {
+    Direction,
+} from '../common';
 
 /**
  * @docid

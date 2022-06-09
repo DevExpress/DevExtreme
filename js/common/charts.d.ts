@@ -150,3 +150,40 @@ export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
  * @namespace DevExpress.common.charts
  */
 export type HatchingDirection = 'left' | 'none' | 'right';
+
+/**
+ * @public
+ * @namespace DevExpress.common.charts
+ */
+export type AnnotationType = 'text' | 'image' | 'custom';
+
+/**
+ * @public
+ * @namespace DevExpress.common.charts
+ */
+export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+/**
+ * @public
+ * @namespace DevExpress.common.charts
+ */
+export type RelativePosition = 'inside' | 'outside';
+/**
+ * @public
+ * @namespace DevExpress.common.charts
+ */
+export type ScaleBreakLineStyle = 'straight' | 'waved';
+/**
+ * @public
+ * @namespace DevExpress.common.charts
+ */
+export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
+/**
+ * @public
+ * @namespace DevExpress.common.charts
+ */
+export type ValueErrorBarType = 'fixed' | 'percent' | 'stdDeviation' | 'stdError' | 'variance';
+/**
+ * @public
+ * @namespace DevExpress.common.charts
+ */
+export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';

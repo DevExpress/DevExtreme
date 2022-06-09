@@ -3,12 +3,15 @@ import {
 } from '../core/element';
 
 import {
-  VerticalAlignment,
-  HorizontalAlignment,
-  PositionAlignment,
   PositionResolveCollisionXY,
   PositionResolveCollision,
 } from '../types/enums';
+
+import {
+    HorizontalAlignment,
+    PositionAlignment,
+    VerticalAlignment,
+} from '../common';
 
 /**
  * @docid

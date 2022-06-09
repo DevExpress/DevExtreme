@@ -45,11 +45,8 @@ import {
 } from './core/base_widget';
 
 import {
-    DashStyle,
-} from '../types/enums';
-
-import {
     ChartsDataType,
+    DashStyle,
     HatchingDirection,
     LabelPosition,
     Palette,
@@ -59,6 +56,7 @@ import {
 
 export {
     ChartsDataType,
+    DashStyle,
     HatchingDirection,
     LabelPosition,
     Palette,

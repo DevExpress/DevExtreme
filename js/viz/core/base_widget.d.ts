@@ -21,14 +21,14 @@ import {
 } from '../../core/options';
 
 import {
+    ExportFormat,
     HorizontalAlignment,
     VerticalEdge,
-    DashStyle,
-    AnnotationType,
-    ExportFormat,
-} from '../../types/enums';
+} from '../../common';
 
 import {
+    AnnotationType,
+    DashStyle,
     TextOverflow,
     Theme,
     WordWrap,

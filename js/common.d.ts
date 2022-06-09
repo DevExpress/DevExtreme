@@ -93,3 +93,128 @@ export type ValidationStatus = 'valid' | 'invalid' | 'pending';
  * @namespace DevExpress.common
  */
 export type Mode = 'auto'; // eslint-disable-line @typescript-eslint/no-type-alias
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type DropDownSearchMode = 'contains' | 'startswith';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ValidationMessageMode = 'always' | 'auto';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type Orientation = 'horizontal' | 'vertical';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type VerticalAlignment = 'bottom' | 'center' | 'top';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type HorizontalAlignment = 'center' | 'left' | 'right';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type DropFeedbackMode = 'push' | 'indicate';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type VerticalEdge = 'bottom' | 'top';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type HorizontalEdge = 'left' | 'right';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type Direction = 'bottom' | 'left' | 'right' | 'top';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type DragDirection = 'both' | 'horizontal' | 'vertical';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ApplyValueMode = 'instantly' | 'useButtons';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type LabelMode = 'static' | 'floating' | 'hidden';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type EditorStyle = 'outlined' | 'underlined' | 'filled';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type Position = 'bottom' | 'left' | 'right' | 'top';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type PositionAlignment = 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ScrollDirection = 'both' | 'horizontal' | 'vertical';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type SelectAllMode = 'allPages' | 'page';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type MaskMode = 'always' | 'onFocus';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ClearButtonName = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type TextEditorButtonLocation = 'after' | 'before';

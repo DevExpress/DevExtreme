@@ -26,8 +26,8 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-  VerticalAlignment,
-} from '../types/enums';
+    VerticalAlignment,
+} from '../common';
 
 import {
     HatchingDirection,

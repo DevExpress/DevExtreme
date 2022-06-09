@@ -48,22 +48,21 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-    VerticalAlignment,
     HorizontalAlignment,
-} from '../types/enums';
-
-import {
     Mode,
+    VerticalAlignment,
 } from '../common';
 
 export {
+    HorizontalAlignment,
     Mode,
+    VerticalAlignment,
 };
 
 export type FormEditor = 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
 export type FormItem = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
 export type LabelLocation = 'left' | 'right' | 'top';
-export type LabelMode = 'static' | 'floating' | 'hidden' | 'outside';
+export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxForm>;
@@ -172,7 +171,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default "outside"
      * @public
      */
-     labelMode?: LabelMode;
+     labelMode?: FormLabelMode;
     /**
      * @docid
      * @default 200

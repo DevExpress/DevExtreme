@@ -32,8 +32,6 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-    ScaleBreakLineStyle,
-    VisualRangeUpdateMode,
     ValueChangedCallMode,
     BackgroundImageLocation,
 } from '../types/enums';
@@ -44,6 +42,8 @@ import {
     LabelOverlapping,
     Palette,
     PaletteExtensionMode,
+    ScaleBreakLineStyle,
+    VisualRangeUpdateMode,
 } from '../common/charts';
 
 export {
@@ -52,6 +52,8 @@ export {
     LabelOverlapping,
     Palette,
     PaletteExtensionMode,
+    ScaleBreakLineStyle,
+    VisualRangeUpdateMode,
 };
 
 export type AxisScale = 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';

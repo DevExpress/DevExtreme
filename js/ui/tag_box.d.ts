@@ -34,9 +34,9 @@ import dxSelectBox, {
 } from './select_box';
 
 import {
-    EditorApplyValueMode,
+    ApplyValueMode,
     SelectAllMode,
-} from '../types/enums';
+} from '../common';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxTagBox, Event>;
@@ -117,7 +117,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
      * @default "instantly"
      * @public
      */
-    applyValueMode?: EditorApplyValueMode;
+    applyValueMode?: ApplyValueMode;
     /**
      * @docid
      * @default false

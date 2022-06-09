@@ -34,12 +34,9 @@ import {
 } from '../core/templates/template';
 
 import {
-    HorizontalAlignment,
-} from '../types/enums';
-
-import {
     DataType,
     ForcedSelectionMode,
+    HorizontalAlignment,
     SortOrder,
     ToolbarItemLocation,
 } from '../common';
@@ -53,6 +50,8 @@ interface ActionEventInfo {
 export {
     DataType,
     ForcedSelectionMode,
+    HorizontalAlignment,
+    SortOrder,
     ToolbarItemLocation,
 };
 

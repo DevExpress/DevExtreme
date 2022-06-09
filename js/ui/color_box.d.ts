@@ -28,8 +28,8 @@ import {
 } from './popup';
 
 import {
-    EditorApplyValueMode,
-} from '../types/enums';
+    ApplyValueMode,
+} from '../common';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxColorBox, Event>;
@@ -101,7 +101,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @default "useButtons"
      * @public
      */
-    applyValueMode?: EditorApplyValueMode;
+    applyValueMode?: ApplyValueMode;
     /**
      * @docid
      * @default "Cancel"

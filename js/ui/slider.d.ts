@@ -18,9 +18,16 @@ import {
 } from '../localization';
 
 import {
-    VerticalEdge,
     SliderTooltipShowMode,
 } from '../types/enums';
+
+import {
+    VerticalEdge,
+} from '../common';
+
+export {
+    VerticalEdge,
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxSlider>;

@@ -24,6 +24,7 @@ import {
 } from '../events/index';
 
 import {
+    PositionAlignment,
     ToolbarItemLocation,
     ToolbarItemWidget,
 } from '../common';
@@ -37,11 +38,8 @@ import {
     ResizeInfo,
 } from './resizable';
 
-import {
-    PositionAlignment,
-} from '../types/enums';
-
 export {
+    PositionAlignment,
     ToolbarItemLocation,
     ToolbarItemWidget,
 };

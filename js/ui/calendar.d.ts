@@ -20,10 +20,6 @@ import Editor, {
 } from './editor/editor';
 
 import {
-    CalendarZoomLevel,
-} from '../types/enums';
-
-import {
     FirstDayOfWeek,
 } from '../common';
 
@@ -36,6 +32,8 @@ export interface ComponentDisabledDate<T> {
     readonly date: Date;
     readonly view: string;
 }
+
+export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxCalendar>;

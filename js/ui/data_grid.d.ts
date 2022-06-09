@@ -80,20 +80,20 @@ import {
 } from '../localization';
 
 import {
-  DropFeedbackMode,
-  HorizontalAlignment,
-  HorizontalEdge,
-  ShowScrollbarMode,
-  SelectAllMode,
   StateStoringType,
   CollectionSearchMode,
-  DragDirection,
 } from '../types/enums';
 
 import {
     DataType,
+    DragDirection,
+    DropFeedbackMode,
+    HorizontalAlignment,
+    HorizontalEdge,
     Mode,
+    SelectAllMode,
     SelectionMode,
+    ScrollbarMode,
     SortMode,
     SortOrder,
     ToolbarItemLocation,
@@ -124,6 +124,8 @@ import {
 
 export {
     DataType,
+    DragDirection,
+    DropFeedbackMode,
     FilterOperation,
     FilterType,
     GridApplyFilterMode,
@@ -142,9 +144,12 @@ export {
     GridPagerPageSize,
     GridSelectionShowCheckBoxesMode,
     GridStartEditAction,
+    HorizontalAlignment,
+    HorizontalEdge,
     Mode,
     SelectAllMode,
     SelectedFilterOperation,
+    ScrollbarMode,
     SortMode,
     SortOrder,
     SummaryType,
@@ -1768,7 +1773,7 @@ export interface ScrollingBase {
      * @default 'onScroll'
      * @public
      */
-    showScrollbar?: ShowScrollbarMode;
+    showScrollbar?: ScrollbarMode;
     /**
      * @docid GridBaseOptions.scrolling.useNative
      * @default "auto"

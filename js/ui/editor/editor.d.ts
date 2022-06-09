@@ -7,11 +7,8 @@ import Widget, {
 } from '../widget/ui.widget';
 
 import {
+    EditorStyle,
     ValidationMessageMode,
-    EditorStylingMode,
-} from '../../types/enums';
-
-import {
     ValidationStatus,
 } from '../../common';
 
@@ -83,7 +80,7 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @default 'outlined'
      * @hidden
      */
-    stylingMode?: EditorStylingMode;
+    stylingMode?: EditorStyle;
 }
 /**
  * @docid

@@ -29,9 +29,12 @@ import {
 } from '../../events/index';
 
 import {
-    EditorApplyValueMode,
     DropDownEditorButtonName,
 } from '../../types/enums';
+
+import {
+    ApplyValueMode,
+} from '../../common';
 
 export interface DropDownButtonTemplateDataModel {
     readonly text?: string;
@@ -57,7 +60,7 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
      * @default "instantly"
      * @public
      */
-    applyValueMode?: EditorApplyValueMode;
+    applyValueMode?: ApplyValueMode;
     /**
      * @docid
      * @default {}

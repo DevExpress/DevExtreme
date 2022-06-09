@@ -15,10 +15,15 @@ import CollectionWidget, {
 
 import {
     Orientation,
-    ShowScrollbarMode,
-} from '../types/enums';
+    ScrollbarMode,
+} from '../common';
 
 type ItemLike = string | Item | any;
+
+export {
+    Orientation,
+    ScrollbarMode,
+};
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTileView<TItem, TKey>>;
@@ -121,7 +126,7 @@ export interface dxTileViewOptions<
      * @default 'onScroll' &for(Mac|Android|iOS)
      * @public
      */
-    showScrollbar?: ShowScrollbarMode;
+    showScrollbar?: ScrollbarMode;
 }
 /**
  * @docid

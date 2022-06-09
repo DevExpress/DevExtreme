@@ -42,22 +42,20 @@ import {
 } from './vector_map/projection';
 
 import {
-    HorizontalAlignment,
-    VerticalEdge,
-} from '../types/enums';
-
-import {
     Palette,
 } from '../common/charts';
 
 import {
+    HorizontalAlignment,
     SelectionMode,
+    VerticalEdge,
 } from '../common';
 
 export {
     SelectionMode,
     Palette,
     VectorMapProjection,
+    VerticalEdge,
 };
 
 export type VectorMapLayerType = 'area' | 'line' | 'marker';
