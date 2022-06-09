@@ -9,6 +9,10 @@
     "labels": [
         "dependencies"
     ],
+    "ignoreDeps": [
+        "enzyme",
+        "@types/enzyme"
+    ],
     "lockFileMaintenance": {
         "enabled": true,
         "schedule": [
