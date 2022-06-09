@@ -9,6 +9,10 @@
     "labels": [
         "dependencies"
     ],
+    "ignoreDeps": [
+        "enzyme",
+        "@types/enzyme"
+    ],
     "lockFileMaintenance": {
         "enabled": true,
         "schedule": [
@@ -24,12 +28,6 @@
         {
             "packagePatterns": [
                 "*"
-            ],
-            "enabled": false
-        }, {
-            "description": "enzyme -> cherrio -> htmlparser2 -> typescript@^4.7",
-            "packagePatterns": [
-                "enzyme"
             ],
             "enabled": false
         }
