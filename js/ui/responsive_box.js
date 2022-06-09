@@ -11,6 +11,7 @@ import { extend } from '../core/utils/extend';
 import registerComponent from '../core/component_registrator';
 import Box from './box';
 import CollectionWidget from './collection/ui.collection_widget.edit';
+import domAdapter from '../core/dom_adapter';
 
 // STYLE responsiveBox
 
@@ -22,7 +23,7 @@ const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
 const HD_SCREEN_WIDTH = 1920;
 
 const ResponsiveBox = CollectionWidget.inherit({
-
+    _elementsForClean: new Set(),
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             rows: [],
@@ -149,6 +150,7 @@ const ResponsiveBox = CollectionWidget.inherit({
         this._spreadItems();
         this._layoutItems();
         this._linkNodeToItem();
+        this._cleanFromUnusedElements();
     },
 
     _itemOptionChanged: function(item) {
@@ -594,9 +596,39 @@ const ResponsiveBox = CollectionWidget.inherit({
         });
     },
 
+    _cleanItemContainer: function() {
+        this._collectElementsForClean($(this._itemContainer())[0]);
+        domAdapter.setText($(this._itemContainer())[0], '');
+    },
+
+    _collectElementsForClean: function(element) {
+        if(!domAdapter.isElementNode(element)) {
+            return;
+        }
+
+        const elements = element.getElementsByTagName('*');
+        [...elements].forEach(el => this._elementsForClean.add(el));
+    },
+
     _clearItemNodeTemplates: function() {
         each(this.option('items'), function() {
             delete this.node;
+        });
+    },
+
+    _cleanFromUnusedElements: function() {
+        const hasParent = el => {
+            const parent = el.parentElement;
+            return !parent ? false :
+                el.classList.contains(this._itemClass()) ? true :
+                    parent.classList.contains(this._itemClass()) ? parent.parentElement : hasParent(parent);
+        };
+
+        [...this._elementsForClean].forEach(el => {
+            if(!hasParent(el)) {
+                this._elementsForClean.delete(el);
+                $(el).remove();
+            }
         });
     },
 
