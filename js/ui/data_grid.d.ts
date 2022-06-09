@@ -158,7 +158,7 @@ export type ExcelCellHorizontalAlignment = 'center' | 'centerContinuous' | 'dist
 export type ExcelCellPatternType = 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
 export type ExcelCellVerticalAlignment = 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
-export type GridScrollingMode = 'infinite' | 'standard' | 'virtual';
+export type DataGridScrollMode = 'infinite' | 'standard' | 'virtual';
 
 export interface AdaptiveDetailRowPreparingInfo {
   readonly formOptions: any;
@@ -3998,7 +3998,7 @@ export type Scrolling = ScrollingBase & {
      * @default "standard"
      * @public
      */
-    mode?: GridScrollingMode;
+    mode?: DataGridScrollMode;
 };
 
 /**

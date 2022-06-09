@@ -28,7 +28,7 @@ import {
 
 import {
     Mode,
-    ScrollingMode,
+    ScrollMode,
     SortMode,
     ToolbarItemLocation,
 } from '../common';
@@ -109,7 +109,7 @@ export {
 
 export {
     Mode,
-    ScrollingMode,
+    ScrollMode,
     SortMode,
     ToolbarItemLocation,
 };
@@ -864,7 +864,7 @@ export interface Scrolling extends ScrollingBase {
      * @default "virtual"
      * @public
      */
-    mode?: ScrollingMode;
+    mode?: ScrollMode;
 }
 
 /**

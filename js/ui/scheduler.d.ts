@@ -41,7 +41,7 @@ import {
 
 import {
   FirstDayOfWeek,
-  ScrollingMode,
+  ScrollMode,
 } from '../common';
 
 interface AppointmentDraggingEvent {
@@ -1132,5 +1132,5 @@ export interface dxSchedulerScrolling {
    * @default "standard"
    * @public
    */
-  mode?: ScrollingMode;
+  mode?: ScrollMode;
 }

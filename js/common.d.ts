@@ -80,7 +80,7 @@ export type PageLoadMode = 'nextButton' | 'scrollBottom';
  * @public
  * @namespace DevExpress.common
  */
-export type ScrollingMode = 'standard' | 'virtual';
+export type ScrollMode = 'standard' | 'virtual';
 
 /**
  * @public
