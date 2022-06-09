@@ -138,9 +138,12 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         this.clock.tick();
+        const scrollable = dataGrid.getScrollable();
 
         // act
         dataGrid.navigateToRow(100);
+        this.clock.tick();
+        $(scrollable.container()).trigger('scroll');
         this.clock.tick();
 
         // assert
