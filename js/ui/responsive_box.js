@@ -640,23 +640,54 @@ const ResponsiveBox = CollectionWidget.inherit({
         });
     },
 
-        _clearItemLink(item) {
-            console.log('----------> _clearItemLink', item.box, item.node)
-            cleanDataRecursive(item.box || (item.node && item.node[0]), true)
-            $(item.box || (item.node && item.node[0])).remove()
-            if (item.node) {
-                if (item.node[0]) {
-                    // cleanDataRecursive(item.node[0], true)
-                    //console.log('---------->', item.node)
-                    // $(item.node[0]).remove()
+    _clearItemLink(item) {
+        console.log('----------> START _clearItemLink', this._elementsForClean.size, this._elementsForClean)
 
-                    // console.log('---------->00' )
-                    // domAdapter.setText(item.node[0], '')
-                }
+        const findParentWithOneChild = (el) => {
+            if (el.parentElement && el.parentElement.childElementCount == 1) {
+                this._elementsForClean.delete(el)
+                return el.className.includes(this._itemClass()) ? el :findParentWithOneChild(el.parentElement);
+            } else {
+                return el;
             }
-            delete item.node;
-            delete item.box;
-        },
+        };
+
+        const cleanChildRecursive = (el) => {
+            this._elementsForClean.delete(el);
+            [...el.children].forEach( ch => cleanChildRecursive(ch));
+        }
+
+        if (item.node) {
+            if (item.node[0]) {
+                const topEl = findParentWithOneChild(item.node[0]);
+                console.log('---------->topEl', topEl )
+
+                cleanDataRecursive(topEl, true);
+                $(topEl).empty();
+                $(topEl).remove();
+                cleanChildRecursive(topEl);
+            }
+        }
+
+        const hasParent = el => {
+            const parent = el.parentElement;
+            return !parent ? false :
+                el.classList.contains(this._itemClass()) ? true :
+                    parent.classList.contains(this._itemClass()) ? parent.parentElement : hasParent(parent);
+        };
+
+        [...this._elementsForClean].forEach( el => {
+            if(!hasParent(el)) {
+                this._elementsForClean.delete(el);
+                $(el).remove();
+            }
+        });
+
+        console.log('----------> END _clearItemLink', this._elementsForClean.size, this._elementsForClean)
+
+        delete item.node;
+        delete item.box;
+    },
 
     _toggleVisibility: function(visible) {
         this.callBase(visible);
