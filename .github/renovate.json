@@ -10,7 +10,9 @@
         "22_1",
         "21_2"
     ],
-    "labels": [ "dependencies" ],
+    "labels": [
+        "dependencies"
+    ],
     "lockFileMaintenance": {
         "enabled": true,
         "schedule": [ "every 1 day" ],
