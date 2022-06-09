@@ -526,7 +526,7 @@ QUnit.module('Headers', {
             const $element = $(element);
             assert.equal($element.attr('aria-colindex'), index + 1);
             assert.equal($element.attr('role'), 'gridcell');
-            assert.equal($element.attr('aria-selected'), 'false');
+            assert.notOk(element.hasAttribute('aria-selected'), 'element has no aria-selected attribute'); // T1093760
         });
     });
 
