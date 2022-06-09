@@ -181,7 +181,7 @@ QUnit.test('Show custom tooltip (text) on hovered node', function(assert) {
     assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', label: 'Z', weightIn: 2, weightOut: 0 });
 });
 
-QUnit.test('Show custom tooltip (text) on hovered link', function(assert) {
+QUnit.test('Show custom tooltip (text) on hovered link 2', function(assert) {
     const stub = sinon.stub().returns({ text: 'custom text' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
@@ -280,4 +280,24 @@ QUnit.test('Set skip template in tooltip cusomizeObject if templates are not def
     this.trigger(pointerEvents.move, 3, { pageX: 100, pageY: 100 });
 
     assert.equal(sankey._tooltip._textHtml.html(), 'html');
+});
+
+QUnit.test('Format option applies to weights values in default tooltip templates', function(assert) {
+    const dataRow = { source: 'A', target: 'Z', weight: 100 };
+    const sankey = createSankey({
+        node: {
+            width: 15
+        },
+        dataSource: [dataRow],
+        tooltip: {
+            enabled: true,
+            format: {
+                type: 'percent'
+            }
+        }
+    });
+
+    const tooltipRenderedData = sankey._tooltip._customizeTooltip({ type: 'link', info: dataRow });
+    const tooltipEl = $(`<div>${tooltipRenderedData.html}</div>`);
+    assert.equal(tooltipEl.text(), 'A > ZWeight: 10,000%');
 });

@@ -1,14 +1,11 @@
 import { extend as _extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-import numberLocalization from '../../localization/number';
 
-const defaultCustomizeLinkTooltip = (format) => function(info) {
-    const weight = numberLocalization.format(info.weight ?? 0, format);
-    return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${weight}` };
+const defaultCustomizeLinkTooltip = (formatter) => function(info) {
+    return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${formatter(info.weight)}` };
 };
-const defaultCustomizeNodeTooltip = (format) => function(info) {
-    const [weightIn, weightOut] = [info.weightIn, info.weightOut].map(value => numberLocalization.format(value ?? 0, format));
-    return { html: `<strong>${info.label}</strong><br/>Incoming weight: ${weightIn}<br/>Outgoing weight: ${weightOut}` };
+const defaultCustomizeNodeTooltip = (formatter) => function(info) {
+    return { html: `<strong>${info.label}</strong><br/>Incoming weight: ${formatter(info.weightIn)}<br/>Outgoing weight: ${formatter(info.weightOut)}` };
 };
 const generateCustomCallback = function(customCallback, defaultCallback) {
     return function(objectInfo) {
@@ -40,11 +37,11 @@ export function setTooltipCustomOptions(sankey) {
                 if(!(linkTemplate && args.type === 'link' || nodeTemplate && args.type === 'node')) {
                     args.skipTemplate = true;
                 }
-                const format = options.format || (_ => _);
+                const formatter = value => tooltip.formatValue(value, options.format || (_ => _));
                 if(args.type === 'node') {
-                    return generateCustomCallback(options.customizeNodeTooltip, defaultCustomizeNodeTooltip(format))(args.info);
+                    return generateCustomCallback(options.customizeNodeTooltip, defaultCustomizeNodeTooltip(formatter))(args.info);
                 } else if(args.type === 'link') {
-                    return generateCustomCallback(options.customizeLinkTooltip, defaultCustomizeLinkTooltip(format))(args.info);
+                    return generateCustomCallback(options.customizeLinkTooltip, defaultCustomizeLinkTooltip(formatter))(args.info);
                 }
 
                 return {};
