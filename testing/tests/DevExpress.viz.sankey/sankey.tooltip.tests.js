@@ -7,7 +7,7 @@ const rendererModule = require('viz/core/renderers/renderer');
 
 QUnit.module('Initialization tooltip', {
     beforeEach: function() {
-        $('#qunit-fixture').append('<div id="test-container"></div>');
+        $('#qunit-fixture').append('<div id="test-sankey-with-tooltip-container"></div>');
 
         const that = this;
         this.renderer = new vizMocks.Renderer();
@@ -21,14 +21,13 @@ QUnit.module('Initialization tooltip', {
     },
 
 }, () => {
-
     QUnit.test('Format option applies to weights values in default tooltip templates', function(assert) {
-
-        const sankey = new DxSankey($('#test-container'), {
+        const dataRow = { source: 'A', target: 'Z', weight: 100 };
+        const sankey = new DxSankey($('#test-sankey-with-tooltip-container'), {
             node: {
                 width: 15
             },
-            dataSource: [{ source: 'A', target: 'Z', weight: 100 }],
+            dataSource: [dataRow],
             tooltip: {
                 enabled: true,
                 format: {
@@ -37,7 +36,8 @@ QUnit.module('Initialization tooltip', {
             }
         });
 
-        sankey.getAllLinks()[0].showTooltip();
-        assert.equal($('.dxs-tooltip').text(), 'A > ZWeight: 10,000%');
+        const tooltipRenderedData = sankey._tooltip._customizeTooltip({ type: 'link', info: dataRow });
+        const tooltipEl = $(`<div>${tooltipRenderedData.html}</div>`);
+        assert.equal(tooltipEl.text(), 'A > ZWeight: 10,000%');
     });
 });
