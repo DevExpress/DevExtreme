@@ -15,13 +15,17 @@ import CollectionWidget, {
 
 import {
     Mode,
-} from '../types/enums';
+} from '../common';
+
+type ItemLike<TKey> = string | Item<TKey> | any;
+
+export {
+    Mode,
+};
 
 export type Distribution = 'center' | 'end' | 'space-around' | 'space-between' | 'start';
 export type CrosswiseDistribution = 'center' | 'end' | 'start' | 'stretch';
 export type BoxDirection = 'col' | 'row';
-
-type ItemLike<TKey> = string | Item<TKey> | any;
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxBox<TItem, TKey>>;

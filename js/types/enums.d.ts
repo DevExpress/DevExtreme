@@ -28,10 +28,6 @@ export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
 /** @namespace DevExpress.utils */
 export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-/** @namespace DevExpress.utils */
-export type Mode = 'auto';
-
 /** @namespace DevExpress.utils */
 export type SparklineType = 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
 

@@ -50,8 +50,15 @@ import Widget, {
 import {
     VerticalAlignment,
     HorizontalAlignment,
-    Mode,
 } from '../types/enums';
+
+import {
+    Mode,
+} from '../common';
+
+export {
+    Mode,
+};
 
 export type FormEditor = 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
 export type FormItem = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';

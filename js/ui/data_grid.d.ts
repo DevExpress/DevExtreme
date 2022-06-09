@@ -82,7 +82,6 @@ import {
 import {
   DropFeedbackMode,
   HorizontalAlignment,
-  Mode,
   HorizontalEdge,
   ShowScrollbarMode,
   SelectAllMode,
@@ -93,7 +92,9 @@ import {
 
 import {
     DataType,
+    Mode,
     SelectionMode,
+    SortMode,
     SortOrder,
     ToolbarItemLocation,
 } from '../common';
@@ -104,9 +105,9 @@ import {
     GridApplyFilterMode,
     GridColumnButtonName,
     GridColumnChooserMode,
-    GridColumnRenderingMode,
     GridCommandColumnType,
     GridDataChangeType,
+    GridDataRenderMode,
     GridEditMode,
     GridEditRefreshMode,
     GridEnterKeyAction,
@@ -115,9 +116,7 @@ import {
     GridNewRowPosition,
     GridPagerDisplayMode,
     GridPagerPageSize,
-    GridRowRenderingMode,
     GridSelectionShowCheckBoxesMode,
-    GridSortingMode,
     GridStartEditAction,
     SelectedFilterOperation,
     SummaryType,
@@ -130,9 +129,9 @@ export {
     GridApplyFilterMode,
     GridColumnButtonName,
     GridColumnChooserMode,
-    GridColumnRenderingMode,
     GridCommandColumnType,
     GridDataChangeType,
+    GridDataRenderMode,
     GridEditMode,
     GridEditRefreshMode,
     GridEnterKeyAction,
@@ -141,12 +140,13 @@ export {
     GridNewRowPosition,
     GridPagerDisplayMode,
     GridPagerPageSize,
-    GridRowRenderingMode,
     GridSelectionShowCheckBoxesMode,
-    GridSortingMode,
     GridStartEditAction,
+    Mode,
     SelectAllMode,
     SelectedFilterOperation,
+    SortMode,
+    SortOrder,
     SummaryType,
     ToolbarItemLocation,
 };
@@ -1464,7 +1464,7 @@ export interface Sorting {
      * @docid GridBaseOptions.sorting.mode
      * @default "single"
      */
-    mode?: GridSortingMode;
+    mode?: SortMode;
     /**
      * @docid GridBaseOptions.sorting.showSortIndexes
      * @default true
@@ -1736,7 +1736,7 @@ export interface ScrollingBase {
      * @default "standard"
      * @public
      */
-    columnRenderingMode?: GridColumnRenderingMode;
+    columnRenderingMode?: GridDataRenderMode;
     /**
      * @docid GridBaseOptions.scrolling.preloadEnabled
      * @default false
@@ -1748,7 +1748,7 @@ export interface ScrollingBase {
      * @default "standard"
      * @public
      */
-    rowRenderingMode?: GridRowRenderingMode;
+    rowRenderingMode?: GridDataRenderMode;
     /**
      * @docid GridBaseOptions.scrolling.scrollByContent
      * @default true

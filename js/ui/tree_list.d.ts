@@ -27,7 +27,9 @@ import {
 } from '../events/index';
 
 import {
+    Mode,
     ScrollingMode,
+    SortMode,
     ToolbarItemLocation,
 } from '../common';
 
@@ -70,10 +72,6 @@ import dxScrollable from './scroll_view/ui.scrollable';
 
 import Widget from './widget/ui.widget';
 
-import {
-    Mode,
-} from '../types/enums';
-
 interface CellInfo<TRowData = any, TKey = any> {
     readonly data: TRowData;
     readonly key: TKey;
@@ -93,9 +91,9 @@ export {
     GridApplyFilterMode,
     GridColumnButtonName,
     GridColumnChooserMode,
-    GridColumnRenderingMode,
     GridCommandColumnType,
     GridDataChangeType,
+    GridDataRenderMode,
     GridEditMode,
     GridEditRefreshMode,
     GridEnterKeyAction,
@@ -104,15 +102,15 @@ export {
     GridNewRowPosition,
     GridPagerDisplayMode,
     GridPagerPageSize,
-    GridRowRenderingMode,
     GridSelectionShowCheckBoxesMode,
-    GridSortingMode,
     GridStartEditAction,
     SelectedFilterOperation,
 } from '../common/grids';
 
 export {
+    Mode,
     ScrollingMode,
+    SortMode,
     ToolbarItemLocation,
 };
 

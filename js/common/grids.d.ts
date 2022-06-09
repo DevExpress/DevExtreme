@@ -17,7 +17,7 @@ export type GridColumnChooserMode = 'dragAndDrop' | 'select';
  * @public
  * @namespace DevExpress.common.grids
  */
-export type GridColumnRenderingMode = 'standard' | 'virtual';
+export type GridDataRenderMode = 'standard' | 'virtual';
 /**
  * @public
  * @namespace DevExpress.common.grids
@@ -82,22 +82,12 @@ export type GridPagerDisplayMode = 'adaptive' | 'compact' | 'full';
  * @public
  * @namespace DevExpress.common.grids
  */
-export type GridPagerPageSize = 'all';// eslint-disable-line @typescript-eslint/no-type-alias
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
-export type GridRowRenderingMode = 'standard' | 'virtual';
+export type GridPagerPageSize = 'all' | 'auto';
 /**
  * @public
  * @namespace DevExpress.common.grids
  */
 export type GridSelectionShowCheckBoxesMode = 'always' | 'none' | 'onClick' | 'onLongTap';
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
-export type GridSortingMode = 'multiple' | 'none' | 'single';
 /**
  * @public
  * @namespace DevExpress.common.grids

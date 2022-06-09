@@ -23,19 +23,20 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-  Mode,
   StateStoringType,
   ApplyChangesMode,
 } from '../types/enums';
 
 import {
-  FieldChooserLayout,
-  ScrollingMode,
+    Mode,
+    FieldChooserLayout,
+    ScrollingMode,
 } from '../common';
 
 export {
-  FieldChooserLayout,
-  ScrollingMode,
+    Mode,
+    FieldChooserLayout,
+    ScrollingMode,
 };
 
 export type PivotGridDataFieldArea = 'column' | 'row';

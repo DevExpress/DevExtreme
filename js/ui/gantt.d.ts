@@ -40,6 +40,7 @@ import { Skip } from '../core/index';
 
 import {
     FirstDayOfWeek,
+    SortMode,
     ToolbarItemLocation,
 } from '../common';
 
@@ -48,7 +49,6 @@ export type GanttPdfExportDateRange = 'all' | 'visible';
 export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
 export type GanttRenderScaleType = 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years' | 'fiveYears';
 export type GanttScaleType = 'auto' | 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
-export type GanttSortingMode = 'multiple' | 'none' | 'single';
 export type GanttTaskTitlePosition = 'inside' | 'outside' | 'none';
 export type GanttToolbarItem = 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies';
 
@@ -1265,7 +1265,7 @@ export interface dxGanttSorting {
      * @docid
      * @default "single"
      */
-    mode?: GanttSortingMode | string;
+    mode?: SortMode | string;
     /**
      * @docid
      * @default false

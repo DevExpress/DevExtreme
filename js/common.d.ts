@@ -32,6 +32,12 @@ export type ForcedSelectionMode = 'multiple' | 'single';
  * @public
  * @namespace DevExpress.common
  */
+export type SortMode = 'multiple' | 'none' | 'single';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type MenuSelectionMode = 'none' | 'single';
 
 /**
@@ -81,3 +87,9 @@ export type ScrollingMode = 'standard' | 'virtual';
  * @namespace DevExpress.common
  */
 export type ValidationStatus = 'valid' | 'invalid' | 'pending';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type Mode = 'auto'; // eslint-disable-line @typescript-eslint/no-type-alias
