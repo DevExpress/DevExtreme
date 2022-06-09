@@ -11,6 +11,11 @@
         "21_2"
     ],
     "labels": [ "dependencies" ],
+    "lockFileMaintenance": {
+        "enabled": true,
+        "schedule": [ "every 1 day" ],
+        "automerge": true
+    },
     "vulnerabilityAlerts": {
         "enabled": true,
         "automerge": true
