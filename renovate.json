@@ -26,6 +26,12 @@
                 "*"
             ],
             "enabled": false
+        }, {
+            "description": "enzyme -> cherrio -> htmlparser2 -> typescript@^4.7",
+            "packagePatterns": [
+                "enzyme"
+            ],
+            "enabled": false
         }
     ],
     "assignAutomerge": true,
