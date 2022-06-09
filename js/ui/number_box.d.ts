@@ -18,10 +18,8 @@ import {
     Format,
   } from '../localization';
 
-import {
-    NumberBoxMode,
-    NumberBoxButtonName,
-} from '../types/enums';
+export type PredefinedNumberBoxButton = 'clear' | 'spins';
+export type NumberBoxType = 'number' | 'text' | 'tel';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxNumberBox, Event>;
@@ -81,7 +79,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @default undefined
      * @public
      */
-    buttons?: Array<NumberBoxButtonName | dxTextEditorButton>;
+    buttons?: Array<PredefinedNumberBoxButton | dxTextEditorButton>;
     /**
      * @docid
      * @default ""
@@ -112,7 +110,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @default 'number' &for(mobile_devices)
      * @public
      */
-    mode?: NumberBoxMode;
+    mode?: NumberBoxType;
     /**
      * @docid
      * @default false

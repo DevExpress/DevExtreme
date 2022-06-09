@@ -34,11 +34,6 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-  MaxAppointmentsPerCell,
-  AllDayPanelMode,
-} from '../types/enums';
-
-import {
     FirstDayOfWeek,
     Orientation,
     ScrollMode,
@@ -63,6 +58,8 @@ export {
     ScrollMode,
 };
 
+export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
+export type CellAppointmentsLimit = 'auto' | 'unlimited';
 export type RecurrenceEditingMode = 'dialog' | 'occurrence' | 'series';
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
@@ -491,7 +488,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default "auto"
      * @public
      */
-    maxAppointmentsPerCell?: number | MaxAppointmentsPerCell;
+    maxAppointmentsPerCell?: number | CellAppointmentsLimit;
     /**
      * @docid
      * @default undefined
@@ -898,7 +895,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default "auto"
        */
-      maxAppointmentsPerCell?: number | MaxAppointmentsPerCell;
+      maxAppointmentsPerCell?: number | CellAppointmentsLimit;
       /**
        * @docid
        * @default undefined

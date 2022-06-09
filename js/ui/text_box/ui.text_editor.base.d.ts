@@ -14,7 +14,7 @@ import {
     LabelMode,
     EditorStyle,
     MaskMode,
-    ClearButtonName,
+    PredefinedTextBoxButton,
     TextEditorButtonLocation,
 } from '../../common';
 
@@ -25,7 +25,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default undefined
      * @public
      */
-    buttons?: Array<string | ClearButtonName | dxTextEditorButton>;
+    buttons?: Array<string | PredefinedTextBoxButton | dxTextEditorButton>;
     /**
      * @docid
      * @default true

@@ -212,9 +212,33 @@ export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
  * @public
  * @namespace DevExpress.common
  */
-export type ClearButtonName = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
+export type PredefinedTextBoxButton = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
 /**
  * @public
  * @namespace DevExpress.common
  */
 export type TextEditorButtonLocation = 'after' | 'before';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type CollectionSearchMode = 'contains' | 'startswith' | 'equals';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type SubmenuShowMode = 'onClick' | 'onHover';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type SlideOutMenuPosition = 'inverted' | 'normal';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type TooltipShowMode = 'always' | 'onHover';

@@ -28,7 +28,11 @@ import CollectionWidget, {
 
 import {
     SlideOutMenuPosition,
-} from '../types/enums';
+} from '../common';
+
+export {
+    SlideOutMenuPosition,
+};
 
 type ItemLike = string | Item | any;
 

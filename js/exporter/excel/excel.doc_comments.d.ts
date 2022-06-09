@@ -1,6 +1,4 @@
-import {
-    ExcelFontUnderlineType,
-} from '../../types/enums';
+export type ExcelUnderlineType = 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
 
 /**
  * @docid
@@ -37,5 +35,5 @@ export interface ExcelFont {
      * @docid
      * @public
      */
-    underline?: ExcelFontUnderlineType;
+    underline?: ExcelUnderlineType;
 }

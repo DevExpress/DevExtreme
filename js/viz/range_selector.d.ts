@@ -32,11 +32,6 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-    ValueChangedCallMode,
-    BackgroundImageLocation,
-} from '../types/enums';
-
-import {
     ChartsDataType,
     DiscreteAxisDivisionMode,
     LabelOverlapping,
@@ -56,6 +51,8 @@ export {
     VisualRangeUpdateMode,
 };
 
+export type BackgroundImageLocation = 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop';
+export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
 export type AxisScale = 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';
 export type ChartAxisScale = 'continuous' | 'logarithmic';
 

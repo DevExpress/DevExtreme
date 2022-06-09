@@ -22,17 +22,16 @@ import dxMenuBase, {
 } from './context_menu/ui.menu_base';
 
 import {
-    ShowSubmenuMode,
-    SubmenuDirection,
-} from '../types/enums';
-
-import {
     Orientation,
+    SubmenuShowMode,
 } from '../common';
 
 export {
     Orientation,
+    SubmenuShowMode,
 };
+
+export type SubmenuDirection = 'auto' | 'leftOrTop' | 'rightOrBottom';
 
 /** @public */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxMenu<TKey>>;
@@ -179,8 +178,8 @@ export interface dxMenuOptions<
        * @docid
        * @default "onClick"
        */
-      name?: ShowSubmenuMode;
-    } | ShowSubmenuMode;
+      name?: SubmenuShowMode;
+    } | SubmenuShowMode;
     /**
      * @docid
      * @default "auto"

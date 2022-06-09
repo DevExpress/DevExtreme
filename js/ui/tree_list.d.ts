@@ -89,7 +89,6 @@ interface CellInfo<TRowData = any, TKey = any> {
 export {
     FilterOperation,
     GridApplyFilterMode,
-    GridColumnButtonName,
     GridColumnChooserMode,
     GridCommandColumnType,
     GridDataChangeType,
@@ -114,7 +113,7 @@ export {
     ToolbarItemLocation,
 };
 
-export type TreeListColumnButtonName = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
+export type PredefinedTreeListColumnButton = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
 export type TreeListDataStructure = 'plain' | 'tree';
 export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
@@ -1155,10 +1154,10 @@ export type Column<TRowData = any, TKey = any> = dxTreeListColumn<TRowData, TKey
 export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase<TRowData> {
     /**
      * @docid dxTreeListColumn.buttons
-     * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
+     * @type Array<Enums.PredefinedTreeListColumnButton,dxTreeListColumnButton>
      * @public
      */
-    buttons?: Array<TreeListColumnButtonName | ColumnButton<TRowData, TKey>>;
+    buttons?: Array<PredefinedTreeListColumnButton | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxTreeListColumn.cellTemplate
      * @type_function_param2 cellInfo:object
@@ -1214,7 +1213,7 @@ export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends Colu
      * @docid dxTreeListColumnButton.name
      * @public
      */
-    name?: TreeListColumnButtonName | string;
+    name?: PredefinedTreeListColumnButton | string;
     /**
      * @docid dxTreeListColumnButton.onClick
      * @type_function_param1 e:object

@@ -80,11 +80,7 @@ import {
 } from '../localization';
 
 import {
-  StateStoringType,
-  CollectionSearchMode,
-} from '../types/enums';
-
-import {
+    CollectionSearchMode,
     DataType,
     DragDirection,
     DropFeedbackMode,
@@ -103,7 +99,6 @@ import {
     FilterOperation,
     FilterType,
     GridApplyFilterMode,
-    GridColumnButtonName,
     GridColumnChooserMode,
     GridCommandColumnType,
     GridDataChangeType,
@@ -119,17 +114,18 @@ import {
     GridSelectionShowCheckBoxesMode,
     GridStartEditAction,
     SelectedFilterOperation,
+    StateStoringType,
     SummaryType,
 } from '../common/grids';
 
 export {
+    CollectionSearchMode,
     DataType,
     DragDirection,
     DropFeedbackMode,
     FilterOperation,
     FilterType,
     GridApplyFilterMode,
-    GridColumnButtonName,
     GridColumnChooserMode,
     GridCommandColumnType,
     GridDataChangeType,
@@ -152,10 +148,12 @@ export {
     ScrollbarMode,
     SortMode,
     SortOrder,
+    StateStoringType,
     SummaryType,
     ToolbarItemLocation,
 };
 
+export type PredefinedDataGridColumnButton = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 export type ColumnResizingMode = 'nextColumn' | 'widget';
 export type DataGridExportFormat = 'pdf' | 'xlsx';
 export type DataGridToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
@@ -4256,10 +4254,10 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
     autoExpandGroup?: boolean;
     /**
      * @docid dxDataGridColumn.buttons
-     * @type Array<Enums.GridColumnButtonName,dxDataGridColumnButton>
+     * @type Array<Enums.PredefinedDataGridColumnButton,dxDataGridColumnButton>
      * @public
      */
-    buttons?: Array<GridColumnButtonName | ColumnButton<TRowData, TKey>>;
+    buttons?: Array<PredefinedDataGridColumnButton | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxDataGridColumn.calculateGroupValue
      * @type_function_param1 rowData:object
@@ -4343,7 +4341,7 @@ export interface dxDataGridColumnButton<TRowData = any, TKey = any> extends Colu
      * @docid dxDataGridColumnButton.name
      * @public
      */
-    name?: GridColumnButtonName | string;
+    name?: PredefinedDataGridColumnButton | string;
     /**
      * @docid dxDataGridColumnButton.onClick
      * @type_function_param1 e:object

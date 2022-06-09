@@ -14,15 +14,16 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-  ApplyChangesMode,
-} from '../types/enums';
-
-import {
-  FieldChooserLayout,
+    FieldChooserLayout,
 } from '../common';
 
+import {
+    ChangesApplyMode,
+} from '../common/grids';
+
 export {
-  FieldChooserLayout,
+    ChangesApplyMode,
+    FieldChooserLayout,
 };
 
 /** @public */
@@ -61,7 +62,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @default "instantly"
      * @public
      */
-    applyChangesMode?: ApplyChangesMode;
+    applyChangesMode?: ChangesApplyMode;
     /**
      * @docid
      * @default null

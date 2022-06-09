@@ -3,13 +3,11 @@ import {
 } from '../animation/position';
 
 import {
-  FloatingActionButtonDirection,
-} from '../types/enums';
-
-import {
     PositionAlignment,
     EditorStyle,
 } from '../common';
+
+export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
 
 /**
  * @docid

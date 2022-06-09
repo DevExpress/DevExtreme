@@ -29,12 +29,10 @@ import {
 } from '../../events/index';
 
 import {
-    DropDownEditorButtonName,
-} from '../../types/enums';
-
-import {
     ApplyValueMode,
 } from '../../common';
+
+export type PredefinedDropDownButton = 'clear' | 'dropDown';
 
 export interface DropDownButtonTemplateDataModel {
     readonly text?: string;
@@ -73,7 +71,7 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
      * @default undefined
      * @public
      */
-    buttons?: Array<DropDownEditorButtonName | dxTextEditorButton>;
+    buttons?: Array<PredefinedDropDownButton | dxTextEditorButton>;
     /**
      * @docid
      * @default true

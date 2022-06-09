@@ -13,9 +13,7 @@ import dxTextEditor, {
     dxTextEditorOptions,
 } from './text_box/ui.text_editor.base';
 
-import {
-    TextBoxMode,
-} from '../types/enums';
+export type TextBoxType = 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxTextBox, Event>;
@@ -81,7 +79,7 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
      * @default "text"
      * @public
      */
-    mode?: TextBoxMode;
+    mode?: TextBoxType;
     /**
      * @docid
      * @default ""

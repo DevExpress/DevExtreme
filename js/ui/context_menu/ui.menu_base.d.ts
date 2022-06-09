@@ -13,11 +13,8 @@ import {
 } from '../menu';
 
 import {
-  ShowSubmenuMode,
-} from '../../types/enums';
-
-import {
     MenuSelectionMode,
+    SubmenuShowMode,
 } from '../../common';
 
 /** @namespace DevExpress.ui */
@@ -107,8 +104,8 @@ export interface dxMenuBaseOptions<
        * @docid
        * @default "onHover"
        */
-      name?: ShowSubmenuMode;
-    } | ShowSubmenuMode;
+      name?: SubmenuShowMode;
+    } | SubmenuShowMode;
 }
 /**
  * @docid

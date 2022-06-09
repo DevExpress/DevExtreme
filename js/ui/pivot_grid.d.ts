@@ -23,20 +23,22 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-  StateStoringType,
-  ApplyChangesMode,
-} from '../types/enums';
-
-import {
     Mode,
     FieldChooserLayout,
     ScrollMode,
 } from '../common';
 
+import {
+    ChangesApplyMode,
+    StateStoringType,
+} from '../common/grids';
+
 export {
-    Mode,
+    ChangesApplyMode,
     FieldChooserLayout,
+    Mode,
     ScrollMode,
+    StateStoringType,
 };
 
 export type PivotGridDataFieldArea = 'column' | 'row';
@@ -197,7 +199,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default "instantly"
        */
-      applyChangesMode?: ApplyChangesMode;
+      applyChangesMode?: ChangesApplyMode;
       /**
        * @docid
        * @default true

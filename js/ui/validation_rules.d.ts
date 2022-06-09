@@ -1,6 +1,4 @@
-import {
-    ComparisonOperator,
-} from '../types/enums';
+export type ComparisonOperator = '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
 
 /**
  * @public

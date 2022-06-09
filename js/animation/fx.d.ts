@@ -3,12 +3,10 @@ import { DxPromise } from '../core/utils/deferred';
 import { PositionConfig } from './position';
 
 import {
-    AnimationType,
-} from '../types/enums';
-
-import {
     Direction,
 } from '../common';
+
+export type AnimationType = 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
 
 /**
  * @docid

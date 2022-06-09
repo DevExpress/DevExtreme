@@ -7,11 +7,6 @@ export type GridApplyFilterMode = 'auto' | 'onClick';
  * @public
  * @namespace DevExpress.common.grids
  */
-export type GridColumnButtonName = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type GridColumnChooserMode = 'dragAndDrop' | 'select';
 /**
  * @public
@@ -98,3 +93,15 @@ export type GridStartEditAction = 'click' | 'dblClick';
  * @namespace DevExpress.common.grids
  */
 export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
+
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type StateStoringType = 'custom' | 'localStorage' | 'sessionStorage';
+
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type ChangesApplyMode = 'instantly' | 'onDemand';
