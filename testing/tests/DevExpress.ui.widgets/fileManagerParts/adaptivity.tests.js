@@ -171,7 +171,7 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         assert.roughEqual(this.wrapper.getSplitterPosition(), getOuterWidth(contentPane), 0.3, 'Splitter is on the correct position');
     });
 
-    test('splitter should resize panels (T1091934)', function(assert) {
+    test('splitter should resize panels with 2 fileManagers (T1091934)', function(assert) {
         const $fileManager2 = $('<div>').attr('id', 'fileManager2').appendTo('#qunit-fixture');
         $fileManager2.dxFileManager();
         const fileManager2 = $fileManager2.dxFileManager().dxFileManager('instance');
