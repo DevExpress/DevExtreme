@@ -253,6 +253,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
             const selectionFilter = that._selection.selectionFilter();
             const dataController = that._dataController;
             const items = dataController.items(true);
+            const visibleItems = dataController.items();
 
             if(!items) {
                 return;
@@ -260,6 +261,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
 
             const isSelectionWithCheckboxes = that.isSelectionWithCheckboxes();
             const changedItemIndexes = that.getChangedItemIndexes(items);
+            const visibleChangedItemIndexes = that.getChangedItemIndexes(visibleItems);
 
             that._updateCheckboxesState({
                 selectedItemKeys: args.selectedItemKeys,
@@ -271,7 +273,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
             if(changedItemIndexes.length || (isSelectionWithCheckboxes !== that.isSelectionWithCheckboxes())) {
                 dataController.updateItems({
                     changeType: 'updateSelection',
-                    itemIndexes: changedItemIndexes
+                    itemIndexes: visibleChangedItemIndexes
                 });
             }
 
