@@ -5,7 +5,7 @@ import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 const showDataGrid = ClientFunction(() => {
-  $('#wrapperContainer').show();
+  $('#wrapperContainer').css('display', '');
 });
 
 fixture.disablePageReloads`Virtual Columns`
