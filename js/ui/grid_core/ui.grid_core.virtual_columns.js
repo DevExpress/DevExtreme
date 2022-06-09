@@ -1,5 +1,6 @@
 import { hasWindow } from '../../core/utils/window';
 import { createColumnsInfo } from './ui.grid_core.virtual_columns_core';
+import { isDefined } from '../../core/utils/type';
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
@@ -44,8 +45,8 @@ const ColumnsControllerExtender = (function() {
             const that = this;
             that.callBase();
 
-            that._beginPageIndex = 0;
-            that._endPageIndex = 0;
+            that._beginPageIndex = null;
+            that._endPageIndex = null;
             that._position = 0;
             that._virtualVisibleColumns = {};
         },
@@ -152,7 +153,7 @@ const ColumnsControllerExtender = (function() {
                 return this.callBase(rowIndex);
             }
 
-            if(!this._beginPageIndex && !this._endPageIndex) {
+            if(!isDefined(this._beginPageIndex) && !isDefined(this._endPageIndex)) {
                 this._beginPageIndex = this.getBeginPageIndex(this._position);
                 this._endPageIndex = this.getEndPageIndex(this._position);
             }
