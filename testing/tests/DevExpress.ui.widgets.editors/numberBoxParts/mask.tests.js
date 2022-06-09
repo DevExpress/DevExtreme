@@ -440,6 +440,32 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, 'caret preserved');
     });
 
+    [
+        { format: 'b,##0.###b', text: '-b5b', expectedCaretPosition: { start: 3, end: 3 } },
+        { format: '0000', text: '-0005', expectedCaretPosition: { start: 5, end: 5 } },
+        { format: '0.00', text: '-5.00', expectedCaretPosition: { start: 2, end: 2 } },
+        { format: '-0.00', text: '--5.00', expectedCaretPosition: { start: 3, end: 3 } },
+        { format: '00.00', text: '-05.00', expectedCaretPosition: { start: 3, end: 3 } },
+        { format: '$0.##', text: '-$5', expectedCaretPosition: { start: 3, end: 3 } },
+        { format: '\'123\'000.#\'123\'', text: '-123005.123', expectedCaretPosition: { start: 7, end: 7 } },
+        { format: '$ 000.000 \'0\'', text: '-$ 005.000 0', expectedCaretPosition: { start: 6, end: 6 } },
+    ].forEach(({ format, text, expectedCaretPosition }) => {
+        QUnit.test(`NumberBox should not reset the negativ value after valueChange event, format: ${format} (T1092593)`, function(assert) {
+            this.instance.option({
+                format,
+            });
+
+            this.input.focus();
+            this.keyboard
+                .type('5')
+                .type('-')
+                .change();
+
+            assert.strictEqual(this.input.val(), text, 'value is correct');
+            assert.deepEqual(this.keyboard.caret(), expectedCaretPosition, 'caret');
+        });
+    });
+
     QUnit.test('typing zero-based value should not revert negative sign', function(assert) {
         this.instance.option({
             format: '0.00',
