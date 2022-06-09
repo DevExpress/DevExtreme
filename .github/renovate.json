@@ -2,46 +2,31 @@
     "extends": [
         "config:base"
     ],
+    "rangeStrategy": "bump",
+    "prConcurrentLimit": 2,
+    "semanticCommits": "enabled",
+    "commitMessagePrefix": "Update deps - ",
     "baseBranches": [
         "22_1",
         "21_2"
     ],
-    "labels": [
-        "dependencies"
-    ],
-    "lockFileMaintenance": {
-        "enabled": true,
-        "schedule": [
-            "every 1 day"
-        ],
-        "automerge": true
-    },
+    "labels": [ "dependencies" ],
     "vulnerabilityAlerts": {
         "enabled": true,
         "automerge": true
     },
     "packageRules": [
         {
-            "matchPackagePatterns": [
-                "*"
-            ],
-            "matchPackageType": [
-                "patch"
-            ],
+            "matchPackagePatterns": [ "*" ],
+            "matchPackageType": [ "minor", "patch" ],
             "automerge": true
         },
         {
-            "matchPackagePatterns": [
-                "*"
-            ],
-            "matchPackageType": [
-                "major",
-                "minor"
-            ],
+            "matchPackagePatterns": [ "*" ],
+            "matchPackageType": [ "major" ],
             "enabled": false
         }
     ],
-    "assignAutomerge": true,
     "reviewers": [
         "team:devextreme-devops"
     ],
