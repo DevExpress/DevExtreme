@@ -243,9 +243,9 @@ const numberLocalization = dependencyInjector({
         specialCharacters.forEach(char => {
             negativeEtalon = negativeEtalon.replaceAll(char, `\\${char}`);
         });
-        negativeEtalon = negativeEtalon.replaceAll(' ', '\\s');
-        negativeEtalon = negativeEtalon.replaceAll('1', '.+');
 
+        negativeEtalon = negativeEtalon.replaceAll(' ', '\\s');
+        negativeEtalon = negativeEtalon.replaceAll('1', '.*');
         return new RegExp(negativeEtalon, 'g');
     },
 
@@ -255,10 +255,6 @@ const numberLocalization = dependencyInjector({
                 return -1;
             }
             return 1;
-        }
-
-        if(text === '-') {
-            return -1;
         }
 
         const negativeEtalon = this.getNegativeEtalonRegExp(format);
