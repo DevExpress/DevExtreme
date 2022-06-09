@@ -19,7 +19,8 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
         this._counters = {
             deletion: 0,
             moving: 0,
-            copying: 0
+            copying: 0,
+            downloading: 0
         };
     }
 
@@ -111,6 +112,10 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
 
     abortFileUpload(fileData, chunksInfo, destinationDirectory) {
         return this._doDelay(() => this._provider.abortFileUpload(fileData, chunksInfo, destinationDirectory), DEFAULT_DELAY, true);
+    }
+
+    downloadItems(items) {
+        return this._getDelayedDeferreds(items, () => this._provider.downloadItems(items), 'downloading');
     }
 
     _initiateFileUpload() {

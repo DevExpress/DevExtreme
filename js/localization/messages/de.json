@@ -417,6 +417,9 @@
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} Elemente wurden nicht hochgeladen",
         "dxFileManager-editingUploadCanceledMessage": "Abgebrochen",
 
+        "dxFileManager-editingDownloadSingleItemErrorMessage": "TODO",
+        "dxFileManager-editingDownloadMultipleItemsErrorMessage": "TODO",
+
         "dxFileManager-listDetailsColumnCaptionName": "Name",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Zuletzt geändert am",
         "dxFileManager-listDetailsColumnCaptionFileSize": "Dateigröße",
