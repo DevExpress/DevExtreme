@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Get Project info
         run: |
-          RESPONSE=$(curl -X GET "https://lgtm.com/api/v1.0/projects/g/${{ env.GITHUB_REPOSITORY }}" -H 'Content-Type: application/json')
+          RESPONSE=$(curl -X GET "https://lgtm.com/api/v1.0/projects/g/DevExpress/DevExtreme" -H 'Content-Type: application/json')
           echo "PROJECT=$RESPONSE" >> $GITHUB_ENV
       - name: Get Latest Analysis info
         run: |
