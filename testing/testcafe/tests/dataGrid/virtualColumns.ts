@@ -1,6 +1,12 @@
+import { ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from '../../helpers/screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
+
+const showDataGrid = ClientFunction(() => {
+  $('#wrapperContainer').show();
+});
 
 fixture.disablePageReloads`Virtual Columns`
   .page(url(__dirname, '../container.html'))
@@ -83,3 +89,42 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
     columnRenderingMode: 'virtual',
   },
 }));
+
+// T1090735
+test('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .expect(dataGrid.isVisible())
+    .notOk();
+
+  await showDataGrid();
+
+  await t
+    .expect(dataGrid.isVisible())
+    .ok();
+
+  await dataGrid.apiUpdateDimensions();
+
+  await t
+    .expect(await takeScreenshot('T1090735-grid-virtual-columns.png', '#wrapperContainer'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await t.maximizeWindow();
+
+  await ClientFunction(() => {
+    $('#container').wrap('<div id=\'wrapperContainer\' style=\'display: none;\'></div>');
+  })();
+
+  return createWidget('dxDataGrid', {
+    height: 440,
+    dataSource: generateData(150, 500),
+    columnWidth: 100,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
+  });
+});

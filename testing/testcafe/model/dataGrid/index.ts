@@ -193,6 +193,15 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${CLASS.revertButton}`);
   }
 
+  isVisible(): Promise<boolean> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => $((getGridInstance() as any).element()).is(':visible'),
+      { dependencies: { getGridInstance } },
+    )();
+  }
+
   apiOption(name: any, value = 'undefined'): Promise<any> {
     const { getGridInstance } = this;
 
@@ -301,6 +310,19 @@ export default class DataGrid extends Widget {
         rowType: r.rowType,
       }));
     }, { dependencies: { getGridInstance } })();
+  }
+
+  apiUpdateDimensions(): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => (getGridInstance() as any).updateDimensions(),
+      {
+        dependencies: {
+          getGridInstance,
+        },
+      },
+    )();
   }
 
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
