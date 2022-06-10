@@ -63,7 +63,7 @@
     "@types/jquery": "^2.0.34",
     "@types/react": "16.9.16",
     "@typescript-eslint/eslint-plugin": "^4.15.0",
-    "angular": "^1.6.10",
+    "angular": "^1.8.3",
     "ast-types": "^0.14.2",
     "autoprefixer": "^10.4.7",
     "babel-core": "^7.0.0-bridge.0",
