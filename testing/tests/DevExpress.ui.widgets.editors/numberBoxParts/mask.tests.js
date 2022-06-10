@@ -2119,15 +2119,30 @@ QUnit.module('stubs', moduleConfig, function() {
         { format: '#,##0\'.\'\'0\'\'0\'', expectedText: '1,234.00', expectedValue: 1234 },
         { format: '\'-\'#,###.00', expectedText: '-1.00', expectedValue: 1 },
         { format: '\'-\'#,###.00', expectedText: '--1.00', expectedValue: -1 },
-    ].forEach(({ format, expectedText, expectedValue }) => {
-        QUnit.test(`widget should correctly apply format="${format}", value="${expectedValue}"`, function(assert) {
+        { format: '\'--\'#,###.00', expectedText: '--1.00', expectedValue: 1 },
+        { format: '\'--\'#,###.00', expectedText: '---1.00', expectedValue: -1 },
+        { format: '#', expectedText: '1', expectedValue: 1 },
+        { format: '#', expectedText: '-1', expectedValue: -1 },
+        { format: '#', expectedText: '', typedText: '-', expectedValue: null },
+        { format: '#', expectedText: '-1', typedText: '1-', expectedValue: -1 },
+        { format: '\'-\'#', expectedText: '--1', typedText: '-1', expectedValue: -1 },
+        { format: '\'--\'#', expectedText: '---1', typedText: '-1', expectedValue: -1 },
+        { format: '#;-#', expectedText: '-1', typedText: '1-', expectedValue: -1 },
+        { format: '#;-#', expectedText: '1', typedText: '1--', expectedValue: 1 },
+        { format: '0;<0', expectedText: '<1', typedText: '-1', expectedValue: -1 },
+        { format: '0;<0', expectedText: '<1', typedText: '1-', expectedValue: -1 },
+        { format: '0;<0', expectedText: '1', typedText: '1--', expectedValue: 1 },
+        { format: '\'plus\' 0;\'minus\' 0', expectedText: 'minus 1', typedText: '1-', expectedValue: -1 },
+        { format: '\'plus\' 0;\'minus\' 0', expectedText: 'plus 1', typedText: '1--', expectedValue: 1 },
+    ].forEach(({ format, expectedText, typedText, expectedValue }) => {
+        QUnit.test(`widget should correctly apply format="${format}", value="${typedText || expectedValue}"`, function(assert) {
             this.instance.option({
                 value: null,
                 format
             });
 
             this.keyboard
-                .type(expectedValue.toString())
+                .type(typedText || expectedValue.toString())
                 .press('enter');
 
             assert.equal(this.input.val(), expectedText, 'text is correct');
