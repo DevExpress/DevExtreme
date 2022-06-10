@@ -24,10 +24,6 @@
     },
     "packageRules": [
         {
-            "matchPackagePatterns": [ "enzyme" ],
-            "enabled": false
-        },
-        {
             "matchPackagePatterns": [ "*" ],
             "matchUpdateTypes": [ "minor", "patch" ],
             "automerge": true
