@@ -6,7 +6,7 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
-import Scrollable from '../scroll_view/ui.scrollable';
+import Scrollable from '../scroll_view/ui.scrollable.old';
 import devices from '../../core/devices';
 import fx from '../../animation/fx';
 import { resetPosition } from '../../animation/translator';
