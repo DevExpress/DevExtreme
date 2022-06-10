@@ -19,6 +19,8 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
+    Orientation,
+    PageOrientation,
     ToolbarItemLocation,
 } from '../common';
 
@@ -27,12 +29,10 @@ export type DiagramCommand = 'separator' | 'exportSvg' | 'exportPng' | 'exportJp
 export type DiagramConnectorLineEnd = 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle';
 export type DiagramConnectorLineType = 'straight' | 'orthogonal';
 export type DiagramConnectorPosition = 'start' | 'end';
-export type DiagramDataLayoutOrientation = 'vertical' | 'horizontal';
 export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
 export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
 export type DiagramItemType = 'shape' | 'connector';
 export type DiagramModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape' | 'moveShape';
-export type DiagramPageOrientation = 'portrait' | 'landscape';
 export type DiagramPanelVisibility = 'auto' | 'visible' | 'collapsed' | 'disabled';
 export type DiagramRequestEditOperationReason = 'checkUIElementAvailability' | 'modelModification';
 export type DiagramShapeCategory = 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom';
@@ -601,7 +601,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
          * @docid
          */
-        orientation?: DiagramDataLayoutOrientation;
+        orientation?: Orientation;
         /**
          * @docid
          */
@@ -772,7 +772,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default "portrait"
      * @public
      */
-    pageOrientation?: DiagramPageOrientation;
+    pageOrientation?: PageOrientation;
     /**
      * @docid
      * @public

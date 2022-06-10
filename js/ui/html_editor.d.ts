@@ -40,12 +40,12 @@ export {
     ToolbarItemLocation,
 };
 
-export type HtmlEditorContextMenuItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'cellProperties' | 'tableProperties';
 export type HtmlEditorFormat = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block';
-export type HtmlEditorImageUploadFileUploadMode = 'base64' | 'server' | 'both';
+export type HtmlEditorImageUploadMode = 'base64' | 'server' | 'both';
 export type HtmlEditorImageUploadTab = 'url' | 'file';
-export type HtmlEditorToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
-export type HtmlEditorValueType = 'html' | 'markdown';
+export type HtmlEditorPredefinedContextMenuItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'cellProperties' | 'tableProperties';
+export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
+export type MarkupType = 'html' | 'markdown';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
@@ -170,7 +170,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default "html"
      * @public
      */
-    valueType?: HtmlEditorValueType;
+    valueType?: MarkupType;
     /**
      * @docid
      * @default null
@@ -429,7 +429,7 @@ export interface dxHtmlEditorImageUpload {
    * @default 'base64'
    * @public
    */
-   fileUploadMode?: HtmlEditorImageUploadFileUploadMode;
+   fileUploadMode?: HtmlEditorImageUploadMode;
      /**
    * @docid
    * @default ["url"]
@@ -479,10 +479,10 @@ export interface dxHtmlEditorTableContextMenu {
     enabled?: boolean;
     /**
      * @docid
-     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorContextMenuItem>
+     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorPredefinedContextMenuItem>
      * @public
      */
-    items?: Array<ContextMenuItem | HtmlEditorContextMenuItem>;
+    items?: Array<ContextMenuItem | HtmlEditorPredefinedContextMenuItem>;
 }
 
 /**
@@ -501,13 +501,13 @@ export interface dxHtmlEditorTableContextMenuItem extends MenuBasePlainItem {
      * @default undefined
      * @public
      */
-    name?: HtmlEditorContextMenuItem;
+    name?: HtmlEditorPredefinedContextMenuItem;
     /**
      * @docid
      * @public
-     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorContextMenuItem>
+     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorPredefinedContextMenuItem>
      */
-    items?: Array<ContextMenuItem | HtmlEditorContextMenuItem>;
+    items?: Array<ContextMenuItem | HtmlEditorPredefinedContextMenuItem>;
 }
 
 /**
@@ -592,10 +592,10 @@ export interface dxHtmlEditorToolbar {
     container?: string | UserDefinedElement;
     /**
      * @docid
-     * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
+     * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorPredefinedToolbarItem>
      * @public
      */
-    items?: Array<ToolbarItem | HtmlEditorToolbarItem>;
+    items?: Array<ToolbarItem | HtmlEditorPredefinedToolbarItem>;
     /**
      * @docid
      * @default true
@@ -619,12 +619,12 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
      * @docid
      * @public
      */
-    name?: HtmlEditorToolbarItem | string;
+    name?: HtmlEditorPredefinedToolbarItem | string;
     /**
      * @docid
      * @deprecated dxHtmlEditorToolbarItem.name
      */
-    formatName?: HtmlEditorToolbarItem | string;
+    formatName?: HtmlEditorPredefinedToolbarItem | string;
     /**
      * @docid
      * @public

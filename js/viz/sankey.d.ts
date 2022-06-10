@@ -33,7 +33,6 @@ import {
     HatchingDirection,
     Palette,
     PaletteExtensionMode,
-    SankeyColorMode,
     TextOverflow,
 } from '../common/charts';
 
@@ -41,9 +40,10 @@ export {
     HatchingDirection,
     Palette,
     PaletteExtensionMode,
-    SankeyColorMode,
     TextOverflow,
 };
+
+export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxSankey>;

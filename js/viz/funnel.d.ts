@@ -41,8 +41,6 @@ import {
 
 import {
     DashStyle,
-    FunnelAlgorithm,
-    FunnelLabelOverlapping,
     HatchingDirection,
     LabelPosition,
     Palette,
@@ -53,8 +51,6 @@ import {
 
 export {
     DashStyle,
-    FunnelAlgorithm,
-    FunnelLabelOverlapping,
     HatchingDirection,
     HorizontalEdge,
     LabelPosition,
@@ -63,6 +59,9 @@ export {
     TextOverflow,
     WordWrap,
 };
+
+export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
+export type FunnelLabelOverlapping = 'hide' | 'none' | 'shift';
 
 /**
  * @public

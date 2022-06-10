@@ -57,7 +57,7 @@ export {
 
 export type FileManagerContextMenuItem = 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete';
 export type FileManagerItemViewMode = 'details' | 'thumbnails';
-export type FileManagerToolbarItem = 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator';
+export type FileManagerPredefinedToolbarItem = 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator';
 export type FileManagerViewArea = 'navPane' | 'itemView';
 
 /** @public */
@@ -678,18 +678,18 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
 export interface dxFileManagerToolbar {
     /**
      * @docid
-     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerPredefinedToolbarItem>
      * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "clearSelection", { name: "separator", location: "after" }, "refresh" ]
      * @public
      */
-    fileSelectionItems?: Array<ToolbarItem | FileManagerToolbarItem>;
+    fileSelectionItems?: Array<ToolbarItem | FileManagerPredefinedToolbarItem>;
     /**
      * @docid
-     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerPredefinedToolbarItem>
      * @default [ "showNavPane", "create", "upload", "switchView", { name: "separator", location: "after" }, "refresh" ]
      * @public
      */
-    items?: Array<ToolbarItem | FileManagerToolbarItem >;
+    items?: Array<ToolbarItem | FileManagerPredefinedToolbarItem >;
 }
 
 /**
@@ -719,7 +719,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @docid
      * @public
      */
-    name?: FileManagerToolbarItem | string;
+    name?: FileManagerPredefinedToolbarItem | string;
     /**
      * @docid
      * @default undefined

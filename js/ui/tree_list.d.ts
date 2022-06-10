@@ -27,6 +27,7 @@ import {
 } from '../events/index';
 
 import {
+    DataStructure,
     Mode,
     ScrollMode,
     SingleMultipleOrNone,
@@ -87,37 +88,36 @@ interface CellInfo<TRowData = any, TKey = any> {
 }
 
 export {
+    ApplyFilterMode,
+    ColumnChooserMode,
+    DataChangeType,
+    DataRenderMode,
+    EnterKeyAction,
+    EnterKeyDirection,
     FilterOperation,
-    GridApplyFilterMode,
-    GridColumnChooserMode,
-    GridCommandColumnType,
-    GridDataChangeType,
-    GridDataRenderMode,
-    GridEditMode,
-    GridEditRefreshMode,
-    GridEnterKeyAction,
-    GridEnterKeyDirection,
-    GridGroupingExpandMode,
-    GridNewRowPosition,
-    GridPagerDisplayMode,
-    GridPagerPageSize,
-    GridSelectionShowCheckBoxesMode,
-    GridStartEditAction,
+    GridsEditMode,
+    GridsEditRefreshMode,
+    GroupingExpandMode,
+    NewRowPosition,
+    PagerDisplayMode,
+    PagerPageSize,
     SelectedFilterOperation,
+    SelectionCheckBoxesShowMode,
+    StartEditAction,
 } from '../common/grids';
 
 export {
+    DataStructure,
     Mode,
     ScrollMode,
     SingleMultipleOrNone,
     ToolbarItemLocation,
 };
 
-export type PredefinedTreeListColumnButton = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
+export type TreeListPredefinedColumnButton = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
+export type TreeListPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
-export type TreeListDataStructure = 'plain' | 'tree';
 export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
-export type TreeListToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 /** @public */
 export type Scrollable = Skip<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
@@ -465,7 +465,7 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
      * @default "plain"
      * @public
      */
-    dataStructure?: TreeListDataStructure;
+    dataStructure?: DataStructure;
     /**
      * @docid
      * @public
@@ -1107,7 +1107,7 @@ export interface ToolbarItem extends dxToolbarItem {
      * @docid dxTreeListToolbarItem.name
      * @public
      */
-    name?: TreeListToolbarItem | string;
+    name?: TreeListPredefinedToolbarItem | string;
     /**
      * @docid dxTreeListToolbarItem.location
      * @default 'after'
@@ -1124,10 +1124,10 @@ export interface ToolbarItem extends dxToolbarItem {
 export type Toolbar = {
     /**
      * @docid dxTreeListToolbar.items
-     * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItem>
+     * @type Array<dxTreeListToolbarItem,Enums.TreeListPredefinedToolbarItem>
      * @public
      */
-    items?: Array<TreeListToolbarItem | ToolbarItem>;
+    items?: Array<TreeListPredefinedToolbarItem | ToolbarItem>;
     /**
      * @docid dxTreeListToolbar.visible
      * @default undefined
@@ -1154,10 +1154,10 @@ export type Column<TRowData = any, TKey = any> = dxTreeListColumn<TRowData, TKey
 export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase<TRowData> {
     /**
      * @docid dxTreeListColumn.buttons
-     * @type Array<Enums.PredefinedTreeListColumnButton,dxTreeListColumnButton>
+     * @type Array<Enums.TreeListPredefinedColumnButton,dxTreeListColumnButton>
      * @public
      */
-    buttons?: Array<PredefinedTreeListColumnButton | ColumnButton<TRowData, TKey>>;
+    buttons?: Array<TreeListPredefinedColumnButton | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxTreeListColumn.cellTemplate
      * @type_function_param2 cellInfo:object
@@ -1213,7 +1213,7 @@ export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends Colu
      * @docid dxTreeListColumnButton.name
      * @public
      */
-    name?: PredefinedTreeListColumnButton | string;
+    name?: TreeListPredefinedColumnButton | string;
     /**
      * @docid dxTreeListColumnButton.onClick
      * @type_function_param1 e:object

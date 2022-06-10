@@ -87,79 +87,82 @@ import {
     HorizontalAlignment,
     HorizontalEdge,
     Mode,
+    ScrollbarMode,
     SelectAllMode,
     SingleMultipleOrNone,
-    ScrollbarMode,
     SortOrder,
     ToolbarItemLocation,
 } from '../common';
 
 import {
+    ApplyFilterMode,
+    ColumnChooserMode,
+    DataChangeType,
+    DataRenderMode,
+    EnterKeyAction,
+    EnterKeyDirection,
     FilterOperation,
     FilterType,
-    GridApplyFilterMode,
-    GridColumnChooserMode,
-    GridCommandColumnType,
-    GridDataChangeType,
-    GridDataRenderMode,
-    GridEditMode,
-    GridEditRefreshMode,
-    GridEnterKeyAction,
-    GridEnterKeyDirection,
-    GridGroupingExpandMode,
-    GridNewRowPosition,
-    GridPagerDisplayMode,
-    GridPagerPageSize,
-    GridSelectionShowCheckBoxesMode,
-    GridStartEditAction,
+    GridsEditMode,
+    GridsEditRefreshMode,
+    GroupingExpandMode,
+    NewRowPosition,
+    PagerDisplayMode,
+    PagerPageSize,
     SelectedFilterOperation,
+    SelectionCheckBoxesShowMode,
+    StartEditAction,
     StateStoringType,
     SummaryType,
 } from '../common/grids';
 
 export {
+    ExcelUnderlineType,
+} from '../exporter/excel/excel.doc_comments';
+
+export {
+    ApplyFilterMode,
     CollectionSearchMode,
+    ColumnChooserMode,
+    DataChangeType,
+    DataRenderMode,
     DataType,
     DragDirection,
     DropFeedbackMode,
+    EnterKeyAction,
+    EnterKeyDirection,
     FilterOperation,
     FilterType,
-    GridApplyFilterMode,
-    GridColumnChooserMode,
-    GridCommandColumnType,
-    GridDataChangeType,
-    GridDataRenderMode,
-    GridEditMode,
-    GridEditRefreshMode,
-    GridEnterKeyAction,
-    GridEnterKeyDirection,
-    GridGroupingExpandMode,
-    GridNewRowPosition,
-    GridPagerDisplayMode,
-    GridPagerPageSize,
-    GridSelectionShowCheckBoxesMode,
-    GridStartEditAction,
+    GridsEditMode,
+    GridsEditRefreshMode,
+    GroupingExpandMode,
     HorizontalAlignment,
     HorizontalEdge,
     Mode,
+    NewRowPosition,
+    PagerDisplayMode,
+    PagerPageSize,
+    ScrollbarMode,
     SelectAllMode,
     SelectedFilterOperation,
-    ScrollbarMode,
+    SelectionCheckBoxesShowMode,
     SortOrder,
+    StartEditAction,
     StateStoringType,
     SummaryType,
     ToolbarItemLocation,
 };
 
-export type PredefinedDataGridColumnButton = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 export type ColumnResizingMode = 'nextColumn' | 'widget';
+export type DataGridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 export type DataGridExportFormat = 'pdf' | 'xlsx';
-export type DataGridToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+export type DataGridScrollMode = 'infinite' | 'standard' | 'virtual';
 export type ExcelCellHorizontalAlignment = 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
 export type ExcelCellPatternType = 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
 export type ExcelCellVerticalAlignment = 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
-export type DataGridScrollMode = 'infinite' | 'standard' | 'virtual';
+export type DataGridPredefinedColumnButton = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
+export type DataGridPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 export interface AdaptiveDetailRowPreparingInfo {
   readonly formOptions: any;
@@ -1062,7 +1065,7 @@ export interface ColumnChooser {
      * @docid GridBaseOptions.columnChooser.mode
      * @default "dragAndDrop"
      */
-    mode?: GridColumnChooserMode;
+    mode?: ColumnChooserMode;
     /**
      * @docid GridBaseOptions.columnChooser.searchTimeout
      * @default 500
@@ -1144,7 +1147,7 @@ export interface FilterRow {
      * @docid GridBaseOptions.filterRow.applyFilter
      * @default "auto"
      */
-    applyFilter?: GridApplyFilterMode;
+    applyFilter?: ApplyFilterMode;
     /**
      * @docid GridBaseOptions.filterRow.applyFilterText
      * @default "Apply filter"
@@ -1312,12 +1315,12 @@ export interface KeyboardNavigation {
      * @docid GridBaseOptions.keyboardNavigation.enterKeyAction
      * @default "startEdit"
      */
-    enterKeyAction?: GridEnterKeyAction;
+    enterKeyAction?: EnterKeyAction;
     /**
      * @docid GridBaseOptions.keyboardNavigation.enterKeyDirection
      * @default "none"
      */
-    enterKeyDirection?: GridEnterKeyDirection;
+    enterKeyDirection?: EnterKeyDirection;
 }
 
 export interface LoadPanel {
@@ -1373,12 +1376,12 @@ export interface Pager {
      * @docid GridBaseOptions.pager.allowedPageSizes
      * @default "auto"
      */
-    allowedPageSizes?: Array<(number | GridPagerPageSize)> | Mode;
+    allowedPageSizes?: Array<(number | PagerPageSize)> | Mode;
     /**
      * @docid GridBaseOptions.pager.displayMode
      * @default "adaptive"
      */
-    displayMode?: GridPagerDisplayMode;
+    displayMode?: PagerDisplayMode;
     /**
      * @docid GridBaseOptions.pager.infoText
      * @default "Page {0} of {1} ({2} items)"
@@ -1553,7 +1556,7 @@ export interface EditingBase<TRowData = any, TKey = any> {
      * @default "row"
      * @public
      */
-    mode?: GridEditMode;
+    mode?: GridsEditMode;
     /**
      * @docid GridBaseOptions.editing.popup
      * @public
@@ -1565,7 +1568,7 @@ export interface EditingBase<TRowData = any, TKey = any> {
      * @default "full"
      * @public
      */
-    refreshMode?: GridEditRefreshMode;
+    refreshMode?: GridsEditRefreshMode;
     /**
      * @docid GridBaseOptions.editing.selectTextOnEditStart
      * @default false
@@ -1577,7 +1580,7 @@ export interface EditingBase<TRowData = any, TKey = any> {
      * @default "click"
      * @public
      */
-    startEditAction?: GridStartEditAction;
+    startEditAction?: StartEditAction;
     /**
      * @docid GridBaseOptions.editing.texts
      * @type object
@@ -1605,7 +1608,7 @@ export interface DataChange<TRowData = any, TKey = any> {
     /**
      * @docid
      */
-    type: GridDataChangeType;
+    type: DataChangeType;
     /**
      * @docid
      * @type any
@@ -1737,7 +1740,7 @@ export interface ScrollingBase {
      * @default "standard"
      * @public
      */
-    columnRenderingMode?: GridDataRenderMode;
+    columnRenderingMode?: DataRenderMode;
     /**
      * @docid GridBaseOptions.scrolling.preloadEnabled
      * @default false
@@ -1749,7 +1752,7 @@ export interface ScrollingBase {
      * @default "standard"
      * @public
      */
-    rowRenderingMode?: GridDataRenderMode;
+    rowRenderingMode?: DataRenderMode;
     /**
      * @docid GridBaseOptions.scrolling.scrollByContent
      * @default true
@@ -3605,7 +3608,7 @@ export type Grouping = {
    * @default 'rowClick' &for(mobile_devices)
    * @default "buttonClick"
    */
-  expandMode?: GridGroupingExpandMode;
+  expandMode?: GroupingExpandMode;
   /**
    * @docid dxDataGridOptions.grouping.texts
    * @type object
@@ -3889,8 +3892,6 @@ export type SummaryTexts = {
     sumOtherColumn?: string;
 };
 
-type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
-
 export type dxDataGridToolbar = Toolbar;
 export type dxDataGridToolbarItem = ToolbarItem;
 
@@ -3904,7 +3905,7 @@ export interface ToolbarItem extends dxToolbarItem {
    * @docid dxDataGridToolbarItem.name
    * @public
    */
-  name?: DataGridToolbarItem | string;
+  name?: DataGridPredefinedToolbarItem | string;
   /**
    * @docid dxDataGridToolbarItem.location
    * @default 'after'
@@ -3921,10 +3922,10 @@ export interface ToolbarItem extends dxToolbarItem {
 export type Toolbar = {
   /**
    * @docid dxDataGridToolbar.items
-   * @type Array<dxDataGridToolbarItem,Enums.DataGridToolbarItem>
+   * @type Array<dxDataGridToolbarItem,Enums.DataGridPredefinedToolbarItem>
    * @public
    */
-  items?: Array<DataGridToolbarItem | ToolbarItem>;
+  items?: Array<DataGridPredefinedToolbarItem | ToolbarItem>;
   /**
    * @docid dxDataGridToolbar.visible
    * @default undefined
@@ -3982,7 +3983,7 @@ export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & 
      * @default "viewportTop"
      * @public
      */
-    newRowPosition?: GridNewRowPosition;
+    newRowPosition?: NewRowPosition;
 };
 
 /**
@@ -4029,7 +4030,7 @@ export type Selection = SelectionBase & {
      * @default "always" &for(Material)
      * @public
      */
-    showCheckBoxesMode?: GridSelectionShowCheckBoxesMode;
+    showCheckBoxesMode?: SelectionCheckBoxesShowMode;
 };
 /**
  * @docid
@@ -4252,10 +4253,10 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
     autoExpandGroup?: boolean;
     /**
      * @docid dxDataGridColumn.buttons
-     * @type Array<Enums.PredefinedDataGridColumnButton,dxDataGridColumnButton>
+     * @type Array<Enums.DataGridPredefinedColumnButton,dxDataGridColumnButton>
      * @public
      */
-    buttons?: Array<PredefinedDataGridColumnButton | ColumnButton<TRowData, TKey>>;
+    buttons?: Array<DataGridPredefinedColumnButton | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxDataGridColumn.calculateGroupValue
      * @type_function_param1 rowData:object
@@ -4323,7 +4324,7 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
      * @publicName type
      * @public
      */
-    type?: GridCommandColumnType;
+    type?: DataGridCommandColumnType;
 }
 
 /**
@@ -4339,7 +4340,7 @@ export interface dxDataGridColumnButton<TRowData = any, TKey = any> extends Colu
      * @docid dxDataGridColumnButton.name
      * @public
      */
-    name?: PredefinedDataGridColumnButton | string;
+    name?: DataGridPredefinedColumnButton | string;
     /**
      * @docid dxDataGridColumnButton.onClick
      * @type_function_param1 e:object

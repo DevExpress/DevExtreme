@@ -28,6 +28,7 @@ import {
 } from './widget/ui.search_box_mixin';
 
 import {
+    DataStructure,
     SingleOrMultiple,
     ScrollDirection,
 } from '../common';
@@ -42,11 +43,12 @@ interface ItemInfo<TKey = any> {
 }
 
 export {
+    DataStructure,
     SingleOrMultiple,
+    ScrollDirection,
 };
 
 export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
-export type TreeViewDataStructure = 'plain' | 'tree';
 export type TreeViewExpandEvent = 'dblclick' | 'click';
 
 /** @public */
@@ -122,7 +124,7 @@ export interface dxTreeViewOptions<TKey = any>
      * @default 'tree'
      * @public
      */
-    dataStructure?: TreeViewDataStructure;
+    dataStructure?: DataStructure;
     /**
      * @docid
      * @default false

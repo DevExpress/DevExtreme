@@ -212,7 +212,7 @@ export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
  * @public
  * @namespace DevExpress.common
  */
-export type PredefinedTextBoxButton = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
+export type TextBoxPredefinedButton = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
 /**
  * @public
  * @namespace DevExpress.common
@@ -242,3 +242,11 @@ export type SlideOutMenuPosition = 'inverted' | 'normal';
  * @namespace DevExpress.common
  */
 export type TooltipShowMode = 'always' | 'onHover';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type DataStructure = 'plain' | 'tree';
+
+export type PageOrientation = 'portrait' | 'landscape';

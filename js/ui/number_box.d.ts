@@ -18,7 +18,7 @@ import {
     Format,
   } from '../localization';
 
-export type PredefinedNumberBoxButton = 'clear' | 'spins';
+export type NumberBoxPredefinedButton = 'clear' | 'spins';
 export type NumberBoxType = 'number' | 'text' | 'tel';
 
 /** @public */
@@ -79,7 +79,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @default undefined
      * @public
      */
-    buttons?: Array<PredefinedNumberBoxButton | dxTextEditorButton>;
+    buttons?: Array<NumberBoxPredefinedButton | dxTextEditorButton>;
     /**
      * @docid
      * @default ""

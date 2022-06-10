@@ -20,15 +20,8 @@ import {
     TooltipInfo,
 } from './gauges/base_gauge';
 
-import {
-    CircularGaugeElementOrientation,
-    CircularGaugeLabelOverlapping,
-} from '../common/charts';
-
-export {
-    CircularGaugeElementOrientation,
-    CircularGaugeLabelOverlapping,
-};
+export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
+export type CircularGaugeLabelOverlapping = 'first' | 'last';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxCircularGauge>;

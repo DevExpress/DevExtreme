@@ -14,7 +14,7 @@ import {
     LabelMode,
     EditorStyle,
     MaskMode,
-    PredefinedTextBoxButton,
+    TextBoxPredefinedButton,
     TextEditorButtonLocation,
 } from '../../common';
 
@@ -25,7 +25,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default undefined
      * @public
      */
-    buttons?: Array<string | PredefinedTextBoxButton | dxTextEditorButton>;
+    buttons?: Array<string | TextBoxPredefinedButton | dxTextEditorButton>;
     /**
      * @docid
      * @default true

@@ -32,7 +32,7 @@ import {
     ApplyValueMode,
 } from '../../common';
 
-export type PredefinedDropDownButton = 'clear' | 'dropDown';
+export type DropDownPredefinedButton = 'clear' | 'dropDown';
 
 export interface DropDownButtonTemplateDataModel {
     readonly text?: string;
@@ -71,7 +71,7 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
      * @default undefined
      * @public
      */
-    buttons?: Array<PredefinedDropDownButton | dxTextEditorButton>;
+    buttons?: Array<DropDownPredefinedButton | dxTextEditorButton>;
     /**
      * @docid
      * @default true
