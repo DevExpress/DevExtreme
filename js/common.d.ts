@@ -20,25 +20,25 @@ export type DataType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'da
  * @public
  * @namespace DevExpress.common
  */
-export type SelectionMode = 'multiple' | 'single' | 'none';
+export type SingleOrNone = 'single' | 'none';
 
 /**
  * @public
  * @namespace DevExpress.common
  */
-export type ForcedSelectionMode = 'multiple' | 'single';
+export type SingleOrMultiple = 'single' | 'multiple';
 
 /**
  * @public
  * @namespace DevExpress.common
  */
-export type SortMode = 'multiple' | 'none' | 'single';
+export type SingleMultipleOrNone = 'single' | 'multiple' | 'none';
 
 /**
  * @public
  * @namespace DevExpress.common
  */
-export type MenuSelectionMode = 'none' | 'single';
+export type SingleMultipleAllOrNone = 'single' | 'multiple' | 'all' | 'none';
 
 /**
  * @public

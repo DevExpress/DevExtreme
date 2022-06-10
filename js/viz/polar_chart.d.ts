@@ -50,7 +50,7 @@ import {
 } from './core/base_widget';
 
 import {
-    ForcedSelectionMode,
+    SingleOrMultiple,
 } from '../common';
 
 import {
@@ -410,7 +410,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default 'single'
      * @public
      */
-    seriesSelectionMode?: ForcedSelectionMode;
+    seriesSelectionMode?: SingleOrMultiple;
     /**
      * @docid
      * @default undefined

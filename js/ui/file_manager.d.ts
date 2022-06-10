@@ -35,7 +35,7 @@ import {
 
 import {
     DataType,
-    ForcedSelectionMode,
+    SingleOrMultiple,
     HorizontalAlignment,
     SortOrder,
     ToolbarItemLocation,
@@ -49,7 +49,7 @@ interface ActionEventInfo {
 
 export {
     DataType,
-    ForcedSelectionMode,
+    SingleOrMultiple,
     HorizontalAlignment,
     SortOrder,
     ToolbarItemLocation,
@@ -555,7 +555,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @default "multiple"
      * @public
      */
-    selectionMode?: ForcedSelectionMode;
+    selectionMode?: SingleOrMultiple;
     /**
      * @docid
      * @default []

@@ -36,7 +36,7 @@ import BaseWidget, {
 
 import {
     HorizontalEdge,
-    SelectionMode,
+    SingleMultipleOrNone,
 } from '../common';
 
 import {
@@ -513,7 +513,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default 'single'
      * @public
      */
-    selectionMode?: SelectionMode;
+    selectionMode?: SingleMultipleOrNone;
     /**
      * @docid
      * @default true

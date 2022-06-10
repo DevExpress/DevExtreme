@@ -29,7 +29,7 @@ import {
 import {
     Mode,
     ScrollMode,
-    SortMode,
+    SingleMultipleOrNone,
     ToolbarItemLocation,
 } from '../common';
 
@@ -109,7 +109,7 @@ export {
 export {
     Mode,
     ScrollMode,
-    SortMode,
+    SingleMultipleOrNone,
     ToolbarItemLocation,
 };
 

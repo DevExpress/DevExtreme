@@ -40,7 +40,7 @@ import { Skip } from '../core/index';
 
 import {
     FirstDayOfWeek,
-    SortMode,
+    SingleMultipleOrNone,
     ToolbarItemLocation,
 } from '../common';
 
@@ -1265,7 +1265,7 @@ export interface dxGanttSorting {
      * @docid
      * @default "single"
      */
-    mode?: SortMode | string;
+    mode?: SingleMultipleOrNone | string;
     /**
      * @docid
      * @default false

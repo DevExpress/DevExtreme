@@ -88,9 +88,8 @@ import {
     HorizontalEdge,
     Mode,
     SelectAllMode,
-    SelectionMode,
+    SingleMultipleOrNone,
     ScrollbarMode,
-    SortMode,
     SortOrder,
     ToolbarItemLocation,
 } from '../common';
@@ -146,7 +145,6 @@ export {
     SelectAllMode,
     SelectedFilterOperation,
     ScrollbarMode,
-    SortMode,
     SortOrder,
     StateStoringType,
     SummaryType,
@@ -1467,7 +1465,7 @@ export interface Sorting {
      * @docid GridBaseOptions.sorting.mode
      * @default "single"
      */
-    mode?: SortMode;
+    mode?: SingleMultipleOrNone;
     /**
      * @docid GridBaseOptions.sorting.showSortIndexes
      * @default true
@@ -1804,7 +1802,7 @@ export interface SelectionBase {
      * @default "none"
      * @public
      */
-    mode?: SelectionMode;
+    mode?: SingleMultipleOrNone;
 }
 
 /**

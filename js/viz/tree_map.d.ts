@@ -27,7 +27,7 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-    SelectionMode,
+    SingleMultipleOrNone,
 } from '../common';
 
 import {
@@ -397,7 +397,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default undefined
      * @public
      */
-    selectionMode?: SelectionMode;
+    selectionMode?: SingleMultipleOrNone;
     /**
      * @docid
      * @public

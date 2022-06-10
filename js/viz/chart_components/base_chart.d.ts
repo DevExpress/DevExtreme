@@ -45,7 +45,7 @@ import {
 } from '../../common/charts';
 
 import {
-    ForcedSelectionMode,
+    SingleOrMultiple,
 } from '../../common';
 
 export interface PointInteractionInfo {
@@ -197,7 +197,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @default 'single'
      * @public
      */
-    pointSelectionMode?: ForcedSelectionMode;
+    pointSelectionMode?: SingleOrMultiple;
     /**
      * @docid
      * @default undefined

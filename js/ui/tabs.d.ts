@@ -15,13 +15,13 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 import {
-    ForcedSelectionMode,
+    SingleOrMultiple,
 } from '../common';
 
 export type ItemLike = string | Item | any;
 
 export {
-    ForcedSelectionMode,
+    SingleOrMultiple,
 };
 
 /** @public */
@@ -120,7 +120,7 @@ export interface dxTabsBaseOptions<
      * @default 'single'
      * @public
      */
-    selectionMode?: ForcedSelectionMode;
+    selectionMode?: SingleOrMultiple;
     /**
      * @docid dxTabsOptions.showNavButtons
      * @default true

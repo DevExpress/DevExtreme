@@ -38,6 +38,7 @@ import {
     SelectAllMode,
     ScrollbarMode,
     PageLoadMode,
+    SingleMultipleAllOrNone,
 } from '../common';
 
 export {
@@ -56,9 +57,6 @@ interface ListItemInfo<TItem extends ItemLike> {
 
 export type ItemDeleteMode = 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
 export type ListMenuMode = 'context' | 'slide';
-
-/** @public */
-export type ListSelectionMode = 'all' | 'multiple' | 'none' | 'single';
 
 export interface ScrollInfo {
     readonly scrollOffset?: any;
@@ -470,7 +468,7 @@ export interface dxListOptions<
      * @default 'none'
      * @public
      */
-    selectionMode?: ListSelectionMode;
+    selectionMode?: SingleMultipleAllOrNone;
     /**
      * @docid
      * @default 'onScroll'

@@ -13,7 +13,7 @@ import {
 } from '../menu';
 
 import {
-    MenuSelectionMode,
+    SingleOrNone,
     SubmenuShowMode,
 } from '../../common';
 
@@ -77,7 +77,7 @@ export interface dxMenuBaseOptions<
      * @default none
      * @public
      */
-    selectionMode?: MenuSelectionMode;
+    selectionMode?: SingleOrNone;
     /**
      * @docid
      * @default { name: "onHover", delay: { show: 50, hide: 300 } }

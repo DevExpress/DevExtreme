@@ -27,13 +27,13 @@ import Widget, {
 import {
     ButtonType,
     ButtonStyle,
-    SelectionMode,
+    SingleMultipleOrNone,
 } from '../common';
 
 export {
     ButtonType,
     ButtonStyle,
-    SelectionMode,
+    SingleMultipleOrNone,
 };
 
 /** @public */
@@ -130,7 +130,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @default 'single'
      * @public
      */
-    selectionMode?: SelectionMode;
+    selectionMode?: SingleMultipleOrNone;
     /**
      * @docid
      * @default 'contained'

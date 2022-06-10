@@ -28,7 +28,7 @@ import {
 } from './widget/ui.search_box_mixin';
 
 import {
-    ForcedSelectionMode,
+    SingleOrMultiple,
     ScrollDirection,
 } from '../common';
 
@@ -42,7 +42,7 @@ interface ItemInfo<TKey = any> {
 }
 
 export {
-    ForcedSelectionMode,
+    SingleOrMultiple,
 };
 
 export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
@@ -304,7 +304,7 @@ export interface dxTreeViewOptions<TKey = any>
      * @default "multiple"
      * @public
      */
-    selectionMode?: ForcedSelectionMode;
+    selectionMode?: SingleOrMultiple;
     /**
      * @docid
      * @default 'none'

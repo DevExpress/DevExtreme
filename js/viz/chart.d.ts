@@ -45,7 +45,7 @@ import {
 } from './core/base_widget';
 
 import {
-    ForcedSelectionMode,
+    SingleOrMultiple,
     HorizontalAlignment,
     Position,
     VerticalAlignment,
@@ -1096,7 +1096,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default 'single'
      * @public
      */
-    seriesSelectionMode?: ForcedSelectionMode;
+    seriesSelectionMode?: SingleOrMultiple;
     /**
      * @docid
      * @default undefined
