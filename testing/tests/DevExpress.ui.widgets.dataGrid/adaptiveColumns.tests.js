@@ -3198,6 +3198,58 @@ QUnit.module('Editing', {
         assert.ok($itemsContent.eq(1).hasClass('dx-item-modified'), '2 item. modified css class is added');
     });
 
+    // T1094572
+    QUnit.test('Edit batch. Form\'s item text is chaned when repaintChangesOnly is true', function(assert) {
+        // arrange
+        $('.dx-datagrid').width(300);
+
+        const dataSource = [
+            { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
+            { firstName: 'Super', lastName: 'Man', count: 0.5 }
+        ];
+
+        this.options = {
+            columns: [
+                { dataField: 'firstName', index: 0, allowEditing: true },
+                { dataField: 'lastName', index: 1, allowEditing: true },
+                { dataField: 'count', index: 2, allowEditing: true }
+            ],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: dataSource
+            },
+            repaintChangesOnly: true,
+            columnHidingEnabled: true
+        };
+
+        setupDataGrid(this);
+        this.rowsView.render($('#container'));
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
+
+        let $itemsContent = $('.dx-field-item-content');
+        $($itemsContent.eq(0)).trigger('dxclick');
+        this.clock.tick();
+
+        // act
+        const editor = $('.dx-texteditor').first().dxTextBox('instance');
+        editor.option('value', 'Test');
+        $(document).trigger('dxpointerdown');
+        $(document).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        $itemsContent = $('.dx-field-item-content');
+        assert.ok($itemsContent.eq(0).hasClass('dx-item-modified'), '1 item. modified css class is added');
+        assert.strictEqual($itemsContent.eq(0).text(), 'Test', 'first item value is changed');
+    });
+
     QUnit.test('Edit batch. Form\'s item is marked as modified for other adaptive row', function(assert) {
         // arrange
         $('.dx-datagrid').width(300);
