@@ -98,7 +98,7 @@ export type SelectedFilterOperation = '<' | '<=' | '<>' | '=' | '>' | '>=' | 'be
  * @public
  * @namespace DevExpress.common.charts
  */
-export type SelectionCheckBoxesShowMode = 'always' | 'none' | 'onClick' | 'onLongTap';
+export type SelectionColumnDisplayMode = 'always' | 'none' | 'onClick' | 'onLongTap';
 
 /**
  * @public

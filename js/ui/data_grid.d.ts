@@ -110,7 +110,7 @@ import {
     PagerDisplayMode,
     PagerPageSize,
     SelectedFilterOperation,
-    SelectionCheckBoxesShowMode,
+    SelectionColumnDisplayMode,
     StartEditAction,
     StateStoringType,
     SummaryType,
@@ -145,7 +145,7 @@ export {
     ScrollbarMode,
     SelectAllMode,
     SelectedFilterOperation,
-    SelectionCheckBoxesShowMode,
+    SelectionColumnDisplayMode,
     SortOrder,
     StartEditAction,
     StateStoringType,
@@ -4030,7 +4030,7 @@ export type Selection = SelectionBase & {
      * @default "always" &for(Material)
      * @public
      */
-    showCheckBoxesMode?: SelectionCheckBoxesShowMode;
+    showCheckBoxesMode?: SelectionColumnDisplayMode;
 };
 /**
  * @docid

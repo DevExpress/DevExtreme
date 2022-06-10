@@ -102,7 +102,7 @@ export {
     PagerDisplayMode,
     PagerPageSize,
     SelectedFilterOperation,
-    SelectionCheckBoxesShowMode,
+    SelectionColumnDisplayMode,
     StartEditAction,
 } from '../common/grids';
 

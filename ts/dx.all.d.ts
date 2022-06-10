@@ -1407,6 +1407,7 @@ declare module DevExpress.common {
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
   export type CollectionSearchMode = 'contains' | 'startswith' | 'equals';
+  export type DataStructure = 'plain' | 'tree';
   export type DataType =
     | 'string'
     | 'number'
@@ -1416,14 +1417,12 @@ declare module DevExpress.common {
     | 'datetime';
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
-
   export type DropDownSearchMode = 'contains' | 'startswith';
   export type DropFeedbackMode = 'push' | 'indicate';
   export type EditorStyle = 'outlined' | 'underlined' | 'filled';
   export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
   export type FieldChooserLayout = 0 | 1 | 2;
   export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-  export type ForcedSelectionMode = 'multiple' | 'single';
   export type Format =
     | 'billions'
     | 'currency'
@@ -1457,10 +1456,11 @@ declare module DevExpress.common {
   export type HorizontalEdge = 'left' | 'right';
   export type LabelMode = 'static' | 'floating' | 'hidden';
   export type MaskMode = 'always' | 'onFocus';
-  export type MenuSelectionMode = 'none' | 'single';
   export type Mode = 'auto';
+
   export type Orientation = 'horizontal' | 'vertical';
   export type PageLoadMode = 'nextButton' | 'scrollBottom';
+  export type PageOrientation = 'portrait' | 'landscape';
   export type Position = 'bottom' | 'left' | 'right' | 'top';
   export type PositionAlignment =
     | 'bottom'
@@ -1472,16 +1472,19 @@ declare module DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
-  export type PredefinedTextBoxButton = 'clear';
   export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
   export type ScrollDirection = 'both' | 'horizontal' | 'vertical';
   export type ScrollMode = 'standard' | 'virtual';
   export type SelectAllMode = 'allPages' | 'page';
-  export type SelectionMode = 'multiple' | 'single' | 'none';
+  export type SingleMultipleAllOrNone = 'single' | 'multiple' | 'all' | 'none';
+  export type SingleMultipleOrNone = 'single' | 'multiple' | 'none';
+  export type SingleOrMultiple = 'single' | 'multiple';
+  export type SingleOrNone = 'single' | 'none';
   export type SlideOutMenuPosition = 'inverted' | 'normal';
-  export type SortMode = 'multiple' | 'none' | 'single';
   export type SortOrder = 'asc' | 'desc';
+  export type StoreType = 'array' | 'local' | 'odata';
   export type SubmenuShowMode = 'onClick' | 'onHover';
+  export type TextBoxPredefinedButton = 'clear';
 
   export type TextEditorButtonLocation = 'after' | 'before';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
@@ -1505,26 +1508,58 @@ declare module DevExpress.common {
 declare module DevExpress.common.charts {
   export type AnimationEasing = 'easeOutCubic' | 'linear';
   export type AnnotationType = 'text' | 'image' | 'custom';
+  export type ApplyFilterMode = 'auto' | 'onClick';
   export type ArgumentAxisHoverMode = 'allArgumentPoints' | 'none';
   export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
-  export type ChartAxisLabelOverlapping =
+  export type ChangesApplyMode = 'instantly' | 'onDemand';
+  export type ChartsAxisLabelOverlapping =
     | 'rotate'
     | 'stagger'
     | 'none'
     | 'hide';
-  export type ChartLabelOverlapping = 'hide' | 'none' | 'stack';
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
-  export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
-  export type CircularGaugeLabelOverlapping = 'first' | 'last';
+  export type ChartsLabelOverlapping = 'hide' | 'none' | 'stack';
+  export type ColumnChooserMode = 'dragAndDrop' | 'select';
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+  export type DataChangeType = 'insert' | 'update' | 'remove';
+  export type DataRenderMode = 'standard' | 'virtual';
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
-  export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
-  export type FunnelLabelOverlapping = 'hide' | 'none' | 'shift';
+  export type EnterKeyAction = 'startEdit' | 'moveFocus';
+  export type EnterKeyDirection = 'none' | 'column' | 'row';
+  export type FilterOperation =
+    | '='
+    | '<>'
+    | '<'
+    | '<='
+    | '>'
+    | '>='
+    | 'contains'
+    | 'endswith'
+    | 'isblank'
+    | 'isnotblank'
+    | 'notcontains'
+    | 'startswith'
+    | 'between'
+    | 'anyof'
+    | 'noneof';
+  export type FilterType = 'exclude' | 'include';
+  export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
+  export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
+  export type GroupingExpandMode = 'buttonClick' | 'rowClick';
   export type HatchingDirection = 'left' | 'none' | 'right';
   export type LabelOverlapping = 'hide' | 'none';
   export type LabelPosition = 'columns' | 'inside' | 'outside';
   export type LegendHoverMode = 'excludePoints' | 'includePoints' | 'none';
   export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
+  export type NewRowPosition =
+    | 'first'
+    | 'last'
+    | 'pageBottom'
+    | 'pageTop'
+    | 'viewportBottom'
+    | 'viewportTop';
+  export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
+  export type PagerPageSize = 'all' | 'auto';
   export type Palette =
     | 'Bright'
     | 'Harmony Light'
@@ -1557,8 +1592,24 @@ declare module DevExpress.common.charts {
     | 'triangleDown'
     | 'triangleUp';
   export type RelativePosition = 'inside' | 'outside';
-  export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
   export type ScaleBreakLineStyle = 'straight' | 'waved';
+  export type SelectedFilterOperation =
+    | '<'
+    | '<='
+    | '<>'
+    | '='
+    | '>'
+    | '>='
+    | 'between'
+    | 'contains'
+    | 'endswith'
+    | 'notcontains'
+    | 'startswith';
+  export type SelectionColumnDisplayMode =
+    | 'always'
+    | 'none'
+    | 'onClick'
+    | 'onLongTap';
   export type SeriesHoverMode =
     | 'allArgumentPoints'
     | 'allSeriesPoints'
@@ -1574,6 +1625,9 @@ declare module DevExpress.common.charts {
     | 'includePoints'
     | 'none'
     | 'onlyPoint';
+  export type StartEditAction = 'click' | 'dblClick';
+  export type StateStoringType = 'custom' | 'localStorage' | 'sessionStorage';
+  export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
   export type TextOverflow = 'ellipsis' | 'hide' | 'none';
   export type Theme =
     | 'generic.dark'
@@ -1609,71 +1663,6 @@ declare module DevExpress.common.charts {
   export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
   export type WordWrap = 'normal' | 'breakWord' | 'none';
   export type ZoomPanAction = 'zoom' | 'pan';
-}
-declare module DevExpress.common.grids {
-  export type ChangesApplyMode = 'instantly' | 'onDemand';
-  export type FilterOperation =
-    | '='
-    | '<>'
-    | '<'
-    | '<='
-    | '>'
-    | '>='
-    | 'contains'
-    | 'endswith'
-    | 'isblank'
-    | 'isnotblank'
-    | 'notcontains'
-    | 'startswith'
-    | 'between'
-    | 'anyof'
-    | 'noneof';
-  export type FilterType = 'exclude' | 'include';
-  export type GridApplyFilterMode = 'auto' | 'onClick';
-  export type GridColumnChooserMode = 'dragAndDrop' | 'select';
-  export type GridCommandColumnType =
-    | 'adaptive'
-    | 'buttons'
-    | 'detailExpand'
-    | 'groupExpand'
-    | 'selection'
-    | 'drag';
-  export type GridDataChangeType = 'insert' | 'update' | 'remove';
-  export type GridDataRenderMode = 'standard' | 'virtual';
-  export type GridEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
-  export type GridEditRefreshMode = 'full' | 'reshape' | 'repaint';
-  export type GridEnterKeyAction = 'startEdit' | 'moveFocus';
-  export type GridEnterKeyDirection = 'none' | 'column' | 'row';
-  export type GridGroupingExpandMode = 'buttonClick' | 'rowClick';
-  export type GridNewRowPosition =
-    | 'first'
-    | 'last'
-    | 'pageBottom'
-    | 'pageTop'
-    | 'viewportBottom'
-    | 'viewportTop';
-  export type GridPagerDisplayMode = 'adaptive' | 'compact' | 'full';
-  export type GridPagerPageSize = 'all' | 'auto';
-  export type GridSelectionShowCheckBoxesMode =
-    | 'always'
-    | 'none'
-    | 'onClick'
-    | 'onLongTap';
-  export type GridStartEditAction = 'click' | 'dblClick';
-  export type SelectedFilterOperation =
-    | '<'
-    | '<='
-    | '<>'
-    | '='
-    | '>'
-    | '>='
-    | 'between'
-    | 'contains'
-    | 'endswith'
-    | 'notcontains'
-    | 'startswith';
-  export type StateStoringType = 'custom' | 'localStorage' | 'sessionStorage';
-  export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
 }
 declare module DevExpress.core {
   /**
@@ -2907,7 +2896,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.filterType]
      */
-    filterType?: DevExpress.common.grids.FilterType;
+    filterType?: DevExpress.common.charts.FilterType;
     /**
      * [descr:PivotGridDataSourceOptions.fields.filterValues]
      */
@@ -2992,7 +2981,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.summaryType]
      */
-    summaryType?: DevExpress.common.grids.SummaryType | string;
+    summaryType?: DevExpress.common.charts.SummaryType | string;
     /**
      * [descr:PivotGridDataSourceOptions.fields.visible]
      */
@@ -5712,7 +5701,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupOptions.selectionMode]
      */
-    selectionMode?: DevExpress.common.SelectionMode;
+    selectionMode?: DevExpress.common.SingleMultipleOrNone;
     /**
      * [descr:dxButtonGroupOptions.stylingMode]
      */
@@ -6605,12 +6594,12 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.filterOperations]
        */
       filterOperations?: Array<
-        DevExpress.common.grids.FilterOperation | string
+        DevExpress.common.charts.FilterOperation | string
       >;
       /**
        * [descr:GridBaseColumn.filterType]
        */
-      filterType?: DevExpress.common.grids.FilterType;
+      filterType?: DevExpress.common.charts.FilterType;
       /**
        * [descr:GridBaseColumn.filterValue]
        */
@@ -6670,7 +6659,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.selectedFilterOperation]
        */
-      selectedFilterOperation?: DevExpress.common.grids.SelectedFilterOperation;
+      selectedFilterOperation?: DevExpress.common.charts.SelectedFilterOperation;
       /**
        * [descr:GridBaseColumn.setCellValue]
        */
@@ -6813,7 +6802,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.columnChooser.mode]
        */
-      mode?: DevExpress.common.grids.GridColumnChooserMode;
+      mode?: DevExpress.common.charts.ColumnChooserMode;
       /**
        * [descr:GridBaseOptions.columnChooser.searchTimeout]
        */
@@ -7019,15 +7008,30 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
+    export type DataGridCommandColumnType =
+      | 'adaptive'
+      | 'buttons'
+      | 'detailExpand'
+      | 'groupExpand'
+      | 'selection'
+      | 'drag';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
     export type DataGridExportFormat = 'pdf' | 'xlsx';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type DataGridScrollMode = 'infinite' | 'standard' | 'virtual';
+    export type DataGridPredefinedColumnButton =
+      | 'cancel'
+      | 'delete'
+      | 'edit'
+      | 'save'
+      | 'undelete';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type DataGridToolbarItem =
+    export type DataGridPredefinedToolbarItem =
       | 'addRowButton'
       | 'applyFilterButton'
       | 'columnChooserButton'
@@ -7036,6 +7040,10 @@ declare module DevExpress.ui {
       | 'revertButton'
       | 'saveButton'
       | 'searchPanel';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type DataGridScrollMode = 'infinite' | 'standard' | 'virtual';
     export type DataRowTemplateData<TRowData = any, TKey = any> = {
       readonly key: TKey;
       readonly data: TRowData;
@@ -7149,7 +7157,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.editing.newRowPosition]
        */
-      newRowPosition?: DevExpress.common.grids.GridNewRowPosition;
+      newRowPosition?: DevExpress.common.charts.NewRowPosition;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7178,7 +7186,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.mode]
        */
-      mode?: DevExpress.common.grids.GridEditMode;
+      mode?: DevExpress.common.charts.GridsEditMode;
       /**
        * [descr:GridBaseOptions.editing.popup]
        */
@@ -7186,7 +7194,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.refreshMode]
        */
-      refreshMode?: DevExpress.common.grids.GridEditRefreshMode;
+      refreshMode?: DevExpress.common.charts.GridsEditRefreshMode;
       /**
        * [descr:GridBaseOptions.editing.selectTextOnEditStart]
        */
@@ -7194,7 +7202,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.startEditAction]
        */
-      startEditAction?: DevExpress.common.grids.GridStartEditAction;
+      startEditAction?: DevExpress.common.charts.StartEditAction;
       /**
        * [descr:GridBaseOptions.editing.texts]
        */
@@ -7587,7 +7595,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.filterRow.applyFilter]
        */
-      applyFilter?: DevExpress.common.grids.GridApplyFilterMode;
+      applyFilter?: DevExpress.common.charts.ApplyFilterMode;
       /**
        * [descr:GridBaseOptions.filterRow.applyFilterText]
        */
@@ -7758,7 +7766,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.grouping.expandMode]
        */
-      expandMode?: DevExpress.common.grids.GridGroupingExpandMode;
+      expandMode?: DevExpress.common.charts.GroupingExpandMode;
       /**
        * [descr:dxDataGridOptions.grouping.texts]
        */
@@ -7885,11 +7893,11 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.keyboardNavigation.enterKeyAction]
        */
-      enterKeyAction?: DevExpress.common.grids.GridEnterKeyAction;
+      enterKeyAction?: DevExpress.common.charts.EnterKeyAction;
       /**
        * [descr:GridBaseOptions.keyboardNavigation.enterKeyDirection]
        */
-      enterKeyDirection?: DevExpress.common.grids.GridEnterKeyDirection;
+      enterKeyDirection?: DevExpress.common.charts.EnterKeyDirection;
     }
     export type KeyDownEvent<
       TRowData = any,
@@ -7990,12 +7998,12 @@ declare module DevExpress.ui {
        * [descr:GridBaseOptions.pager.allowedPageSizes]
        */
       allowedPageSizes?:
-        | Array<number | DevExpress.common.grids.GridPagerPageSize>
+        | Array<number | DevExpress.common.charts.PagerPageSize>
         | DevExpress.common.Mode;
       /**
        * [descr:GridBaseOptions.pager.displayMode]
        */
-      displayMode?: DevExpress.common.grids.GridPagerDisplayMode;
+      displayMode?: DevExpress.common.charts.PagerDisplayMode;
       /**
        * [descr:GridBaseOptions.pager.infoText]
        */
@@ -8034,15 +8042,6 @@ declare module DevExpress.ui {
        */
       pageSize?: number;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type PredefinedDataGridColumnButton =
-      | 'cancel'
-      | 'delete'
-      | 'edit'
-      | 'save'
-      | 'undelete';
     export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<
       TRowData,
       TKey
@@ -8536,7 +8535,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.scrolling.columnRenderingMode]
        */
-      columnRenderingMode?: DevExpress.common.grids.GridDataRenderMode;
+      columnRenderingMode?: DevExpress.common.charts.DataRenderMode;
       /**
        * [descr:GridBaseOptions.scrolling.preloadEnabled]
        */
@@ -8544,7 +8543,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.scrolling.rowRenderingMode]
        */
-      rowRenderingMode?: DevExpress.common.grids.GridDataRenderMode;
+      rowRenderingMode?: DevExpress.common.charts.DataRenderMode;
       /**
        * [descr:GridBaseOptions.scrolling.scrollByContent]
        */
@@ -8611,7 +8610,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.selection.showCheckBoxesMode]
        */
-      showCheckBoxesMode?: DevExpress.common.grids.GridSelectionShowCheckBoxesMode;
+      showCheckBoxesMode?: DevExpress.common.charts.SelectionColumnDisplayMode;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -8624,7 +8623,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.selection.mode]
        */
-      mode?: DevExpress.common.SelectionMode;
+      mode?: DevExpress.common.SingleMultipleOrNone;
     }
     export type SelectionChangedEvent<
       TRowData = any,
@@ -8659,7 +8658,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.sorting.mode]
        */
-      mode?: DevExpress.common.SortMode;
+      mode?: DevExpress.common.SingleMultipleOrNone;
       /**
        * [descr:GridBaseOptions.sorting.showSortIndexes]
        */
@@ -8692,7 +8691,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.stateStoring.type]
        */
-      type?: DevExpress.common.grids.StateStoringType;
+      type?: DevExpress.common.charts.StateStoringType;
     }
     export type Summary<TRowData = any, TKey = any> = {
       /**
@@ -8758,7 +8757,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.summaryType]
        */
-      summaryType?: DevExpress.common.grids.SummaryType | string;
+      summaryType?: DevExpress.common.charts.SummaryType | string;
       /**
        * [descr:dxDataGridOptions.summary.groupItems.valueFormat]
        */
@@ -8842,7 +8841,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.summaryType]
        */
-      summaryType?: DevExpress.common.grids.SummaryType | string;
+      summaryType?: DevExpress.common.charts.SummaryType | string;
       /**
        * [descr:dxDataGridOptions.summary.totalItems.valueFormat]
        */
@@ -8882,7 +8881,7 @@ declare module DevExpress.ui {
      * [descr:dxDataGridColumn.buttons]
      */
     buttons?: Array<
-      | DevExpress.ui.dxDataGrid.PredefinedDataGridColumnButton
+      | DevExpress.ui.dxDataGrid.DataGridPredefinedColumnButton
       | DevExpress.ui.dxDataGrid.ColumnButton<TRowData, TKey>
     >;
     /**
@@ -8952,7 +8951,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.type]
      */
-    type?: DevExpress.common.grids.GridCommandColumnType;
+    type?: DevExpress.ui.dxDataGrid.DataGridCommandColumnType;
   }
   /**
    * @deprecated Use the DataGrid's ColumnButton type instead
@@ -8963,7 +8962,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumnButton.name]
      */
-    name?: DevExpress.ui.dxDataGrid.PredefinedDataGridColumnButton | string;
+    name?: DevExpress.ui.dxDataGrid.DataGridPredefinedColumnButton | string;
     /**
      * [descr:dxDataGridColumnButton.onClick]
      */
@@ -9634,10 +9633,6 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type DiagramDataLayoutOrientation = 'vertical' | 'horizontal';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -9647,10 +9642,6 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export type DiagramItemType = 'shape' | 'connector';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type DiagramPageOrientation = 'portrait' | 'landscape';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -10525,7 +10516,7 @@ declare module DevExpress.ui {
             /**
              * [descr:dxDiagramOptions.nodes.autoLayout.orientation]
              */
-            orientation?: DevExpress.ui.dxDiagram.DiagramDataLayoutOrientation;
+            orientation?: DevExpress.common.Orientation;
             /**
              * [descr:dxDiagramOptions.nodes.autoLayout.type]
              */
@@ -10645,7 +10636,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramOptions.pageOrientation]
      */
-    pageOrientation?: DevExpress.ui.dxDiagram.DiagramPageOrientation;
+    pageOrientation?: DevExpress.common.PageOrientation;
     /**
      * [descr:dxDiagramOptions.pageSize]
      */
@@ -11479,7 +11470,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type PredefinedDropDownButton = 'clear' | 'dropDown';
+    export type DropDownPredefinedButton = 'clear' | 'dropDown';
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -11508,7 +11499,7 @@ declare module DevExpress.ui {
      * [descr:dxDropDownEditorOptions.buttons]
      */
     buttons?: Array<
-      | DevExpress.ui.dxDropDownEditor.PredefinedDropDownButton
+      | DevExpress.ui.dxDropDownEditor.DropDownPredefinedButton
       | dxTextEditorButton
     >;
     /**
@@ -11753,7 +11744,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type FileManagerToolbarItem =
+    export type FileManagerPredefinedToolbarItem =
       | 'showNavPane'
       | 'create'
       | 'upload'
@@ -12169,7 +12160,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerOptions.selectionMode]
      */
-    selectionMode?: DevExpress.common.ForcedSelectionMode;
+    selectionMode?: DevExpress.common.SingleOrMultiple;
     /**
      * [descr:dxFileManagerOptions.selectedItemKeys]
      */
@@ -12206,14 +12197,14 @@ declare module DevExpress.ui {
      */
     fileSelectionItems?: Array<
       | DevExpress.ui.dxFileManager.ToolbarItem
-      | DevExpress.ui.dxFileManager.FileManagerToolbarItem
+      | DevExpress.ui.dxFileManager.FileManagerPredefinedToolbarItem
     >;
     /**
      * [descr:dxFileManagerToolbar.items]
      */
     items?: Array<
       | DevExpress.ui.dxFileManager.ToolbarItem
-      | DevExpress.ui.dxFileManager.FileManagerToolbarItem
+      | DevExpress.ui.dxFileManager.FileManagerPredefinedToolbarItem
     >;
   }
   /**
@@ -12233,7 +12224,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerToolbarItem.name]
      */
-    name?: DevExpress.ui.dxFileManager.FileManagerToolbarItem | string;
+    name?:
+      | DevExpress.ui.dxFileManager.FileManagerPredefinedToolbarItem
+      | string;
     /**
      * [descr:dxFileManagerToolbarItem.visible]
      */
@@ -14787,7 +14780,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttSorting.mode]
      */
-    mode?: DevExpress.common.SortMode | string;
+    mode?: DevExpress.common.SingleMultipleOrNone | string;
     /**
      * [descr:dxGanttSorting.showSortIndexes]
      */
@@ -14978,7 +14971,35 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type HtmlEditorContextMenuItem =
+    export type HtmlEditorFormat =
+      | 'background'
+      | 'bold'
+      | 'color'
+      | 'font'
+      | 'italic'
+      | 'link'
+      | 'size'
+      | 'strike'
+      | 'script'
+      | 'underline'
+      | 'blockquote'
+      | 'header'
+      | 'indent'
+      | 'list'
+      | 'align'
+      | 'code-block';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type HtmlEditorImageUploadMode = 'base64' | 'server' | 'both';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type HtmlEditorImageUploadTab = 'url' | 'file';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type HtmlEditorPredefinedContextMenuItem =
       | 'background'
       | 'bold'
       | 'color'
@@ -15018,38 +15039,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type HtmlEditorFormat =
-      | 'background'
-      | 'bold'
-      | 'color'
-      | 'font'
-      | 'italic'
-      | 'link'
-      | 'size'
-      | 'strike'
-      | 'script'
-      | 'underline'
-      | 'blockquote'
-      | 'header'
-      | 'indent'
-      | 'list'
-      | 'align'
-      | 'code-block';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type HtmlEditorImageUploadFileUploadMode =
-      | 'base64'
-      | 'server'
-      | 'both';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type HtmlEditorImageUploadTab = 'url' | 'file';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type HtmlEditorToolbarItem =
+    export type HtmlEditorPredefinedToolbarItem =
       | 'background'
       | 'bold'
       | 'color'
@@ -15089,12 +15079,12 @@ declare module DevExpress.ui {
       | 'deleteColumn'
       | 'deleteRow'
       | 'deleteTable';
+    export type InitializedEvent =
+      DevExpress.events.InitializedEventInfo<dxHtmlEditor>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type HtmlEditorValueType = 'html' | 'markdown';
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxHtmlEditor>;
+    export type MarkupType = 'html' | 'markdown';
     export interface MentionTemplateData {
       readonly marker: string;
       readonly id?: string | number;
@@ -15125,7 +15115,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorImageUpload.fileUploadMode]
      */
-    fileUploadMode?: DevExpress.ui.dxHtmlEditor.HtmlEditorImageUploadFileUploadMode;
+    fileUploadMode?: DevExpress.ui.dxHtmlEditor.HtmlEditorImageUploadMode;
     /**
      * [descr:dxHtmlEditorImageUpload.tabs]
      */
@@ -15275,7 +15265,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorOptions.valueType]
      */
-    valueType?: DevExpress.ui.dxHtmlEditor.HtmlEditorValueType;
+    valueType?: DevExpress.ui.dxHtmlEditor.MarkupType;
     /**
      * [descr:dxHtmlEditorOptions.variables]
      */
@@ -15299,7 +15289,7 @@ declare module DevExpress.ui {
      */
     items?: Array<
       | DevExpress.ui.dxHtmlEditor.ContextMenuItem
-      | DevExpress.ui.dxHtmlEditor.HtmlEditorContextMenuItem
+      | DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedContextMenuItem
     >;
   }
   /**
@@ -15311,13 +15301,13 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.name]
      */
-    name?: DevExpress.ui.dxHtmlEditor.HtmlEditorContextMenuItem;
+    name?: DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedContextMenuItem;
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.items]
      */
     items?: Array<
       | DevExpress.ui.dxHtmlEditor.ContextMenuItem
-      | DevExpress.ui.dxHtmlEditor.HtmlEditorContextMenuItem
+      | DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedContextMenuItem
     >;
   }
   /**
@@ -15352,7 +15342,7 @@ declare module DevExpress.ui {
      */
     items?: Array<
       | DevExpress.ui.dxHtmlEditor.ToolbarItem
-      | DevExpress.ui.dxHtmlEditor.HtmlEditorToolbarItem
+      | DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedToolbarItem
     >;
     /**
      * [descr:dxHtmlEditorToolbar.multiline]
@@ -15368,12 +15358,14 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorToolbarItem.name]
      */
-    name?: DevExpress.ui.dxHtmlEditor.HtmlEditorToolbarItem | string;
+    name?: DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedToolbarItem | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.formatName]
      * @deprecated [depNote:dxHtmlEditorToolbarItem.formatName]
      */
-    formatName?: DevExpress.ui.dxHtmlEditor.HtmlEditorToolbarItem | string;
+    formatName?:
+      | DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedToolbarItem
+      | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.acceptedValues]
      */
@@ -15638,7 +15630,6 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export type ListMenuMode = 'context' | 'slide';
-    export type ListSelectionMode = 'all' | 'multiple' | 'none' | 'single';
     export type OptionChangedEvent<
       TItem extends ItemLike = any,
       TKey = any
@@ -15909,7 +15900,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.selectionMode]
      */
-    selectionMode?: DevExpress.ui.dxList.ListSelectionMode;
+    selectionMode?: DevExpress.common.SingleMultipleAllOrNone;
     /**
      * [descr:dxListOptions.showScrollbar]
      */
@@ -16637,7 +16628,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuBaseOptions.selectionMode]
      */
-    selectionMode?: DevExpress.common.MenuSelectionMode;
+    selectionMode?: DevExpress.common.SingleOrNone;
     /**
      * [descr:dxMenuBaseOptions.showSubmenuMode]
      */
@@ -17058,6 +17049,10 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
+    export type NumberBoxPredefinedButton = 'clear' | 'spins';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
     export type NumberBoxType = 'number' | 'text' | 'tel';
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxNumberBox> &
       DevExpress.events.ChangedOptionInfo;
@@ -17065,10 +17060,6 @@ declare module DevExpress.ui {
       dxNumberBox,
       ClipboardEvent
     >;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type PredefinedNumberBoxButton = 'clear' | 'spins';
     export type Properties = dxNumberBoxOptions;
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxNumberBox,
@@ -17085,7 +17076,7 @@ declare module DevExpress.ui {
      * [descr:dxNumberBoxOptions.buttons]
      */
     buttons?: Array<
-      DevExpress.ui.dxNumberBox.PredefinedNumberBoxButton | dxTextEditorButton
+      DevExpress.ui.dxNumberBox.NumberBoxPredefinedButton | dxTextEditorButton
     >;
     /**
      * [descr:dxNumberBoxOptions.format]
@@ -17445,7 +17436,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridFieldChooserOptions.applyChangesMode]
      */
-    applyChangesMode?: DevExpress.common.grids.ChangesApplyMode;
+    applyChangesMode?: DevExpress.common.charts.ChangesApplyMode;
     /**
      * [descr:dxPivotGridFieldChooserOptions.dataSource]
      */
@@ -17611,7 +17602,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.fieldChooser.applyChangesMode]
        */
-      applyChangesMode?: DevExpress.common.grids.ChangesApplyMode;
+      applyChangesMode?: DevExpress.common.charts.ChangesApplyMode;
       /**
        * [descr:dxPivotGridOptions.fieldChooser.enabled]
        */
@@ -17895,7 +17886,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.stateStoring.type]
        */
-      type?: DevExpress.common.grids.StateStoringType;
+      type?: DevExpress.common.charts.StateStoringType;
     };
     /**
      * [descr:dxPivotGridOptions.texts]
@@ -21121,7 +21112,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabsOptions.selectionMode]
      */
-    selectionMode?: DevExpress.common.ForcedSelectionMode;
+    selectionMode?: DevExpress.common.SingleOrMultiple;
     /**
      * [descr:dxTabsOptions.showNavButtons]
      */
@@ -21540,7 +21531,7 @@ declare module DevExpress.ui {
      * [descr:dxTextEditorOptions.buttons]
      */
     buttons?: Array<
-      string | DevExpress.common.PredefinedTextBoxButton | dxTextEditorButton
+      string | DevExpress.common.TextBoxPredefinedButton | dxTextEditorButton
     >;
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
@@ -22745,16 +22736,6 @@ declare module DevExpress.ui {
        */
       enabled?: boolean;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type PredefinedTreeListColumnButton =
-      | 'add'
-      | 'cancel'
-      | 'delete'
-      | 'edit'
-      | 'save'
-      | 'undelete';
     export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<
       TRowData,
       TKey
@@ -23037,10 +23018,6 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type TreeListDataStructure = 'plain' | 'tree';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TreeListFilterMode =
       | 'fullBranch'
       | 'withAncestors'
@@ -23048,7 +23025,17 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type TreeListToolbarItem =
+    export type TreeListPredefinedColumnButton =
+      | 'add'
+      | 'cancel'
+      | 'delete'
+      | 'edit'
+      | 'save'
+      | 'undelete';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type TreeListPredefinedToolbarItem =
       | 'addRowButton'
       | 'applyFilterButton'
       | 'columnChooserButton'
@@ -23066,7 +23053,7 @@ declare module DevExpress.ui {
      * [descr:dxTreeListColumn.buttons]
      */
     buttons?: Array<
-      | DevExpress.ui.dxTreeList.PredefinedTreeListColumnButton
+      | DevExpress.ui.dxTreeList.TreeListPredefinedColumnButton
       | DevExpress.ui.dxTreeList.ColumnButton<TRowData, TKey>
     >;
     /**
@@ -23123,7 +23110,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListColumnButton.name]
      */
-    name?: DevExpress.ui.dxTreeList.PredefinedTreeListColumnButton | string;
+    name?: DevExpress.ui.dxTreeList.TreeListPredefinedColumnButton | string;
     /**
      * [descr:dxTreeListColumnButton.onClick]
      */
@@ -23204,7 +23191,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.dataStructure]
      */
-    dataStructure?: DevExpress.ui.dxTreeList.TreeListDataStructure;
+    dataStructure?: DevExpress.common.DataStructure;
     /**
      * [descr:dxTreeListOptions.editing]
      */
@@ -23595,10 +23582,6 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type TreeViewDataStructure = 'plain' | 'tree';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TreeViewExpandEvent = 'dblclick' | 'click';
   }
   /**
@@ -23709,7 +23692,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.dataStructure]
      */
-    dataStructure?: DevExpress.ui.dxTreeView.TreeViewDataStructure;
+    dataStructure?: DevExpress.common.DataStructure;
     /**
      * [descr:dxTreeViewOptions.expandAllEnabled]
      */
@@ -23811,7 +23794,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.selectionMode]
      */
-    selectionMode?: DevExpress.common.ForcedSelectionMode;
+    selectionMode?: DevExpress.common.SingleOrMultiple;
     /**
      * [descr:dxTreeViewOptions.showCheckBoxesMode]
      */
@@ -25353,7 +25336,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:DataChange.type]
      */
-    type: DevExpress.common.grids.GridDataChangeType;
+    type: DevExpress.common.charts.DataChangeType;
     /**
      * [descr:DataChange.data]
      */
@@ -25374,7 +25357,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:dxDataGridToolbar.items]
      */
-    items?: Array<DataGridToolbarItem | ToolbarItem>;
+    items?: Array<DataGridPredefinedToolbarItem | ToolbarItem>;
     /**
      * [descr:dxDataGridToolbar.visible]
      */
@@ -25392,7 +25375,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:dxDataGridToolbarItem.name]
      */
-    name?: DataGridToolbarItem | string;
+    name?: DataGridPredefinedToolbarItem | string;
     /**
      * [descr:dxDataGridToolbarItem.location]
      */
@@ -25484,7 +25467,7 @@ declare module DevExpress.ui.dxTreeList {
     /**
      * [descr:dxTreeListToolbar.items]
      */
-    items?: Array<TreeListToolbarItem | ToolbarItem>;
+    items?: Array<TreeListPredefinedToolbarItem | ToolbarItem>;
     /**
      * [descr:dxTreeListToolbar.visible]
      */
@@ -25502,7 +25485,7 @@ declare module DevExpress.ui.dxTreeList {
     /**
      * [descr:dxTreeListToolbarItem.name]
      */
-    name?: TreeListToolbarItem | string;
+    name?: TreeListPredefinedToolbarItem | string;
     /**
      * [descr:dxTreeListToolbarItem.location]
      */
@@ -25782,7 +25765,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.pointSelectionMode]
      */
-    pointSelectionMode?: DevExpress.common.ForcedSelectionMode;
+    pointSelectionMode?: DevExpress.common.SingleOrMultiple;
     /**
      * [descr:BaseChartOptions.series]
      */
@@ -28479,7 +28462,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.overlappingBehavior]
      */
-    overlappingBehavior?: DevExpress.common.charts.ChartAxisLabelOverlapping;
+    overlappingBehavior?: DevExpress.common.charts.ChartsAxisLabelOverlapping;
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.position]
      */
@@ -29054,7 +29037,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.common.charts.ChartLabelOverlapping;
+    resolveLabelOverlapping?: DevExpress.common.charts.ChartsLabelOverlapping;
     /**
      * [descr:dxChartOptions.rotated]
      */
@@ -29095,7 +29078,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.seriesSelectionMode]
      */
-    seriesSelectionMode?: DevExpress.common.ForcedSelectionMode;
+    seriesSelectionMode?: DevExpress.common.SingleOrMultiple;
     /**
      * [descr:dxChartOptions.seriesTemplate]
      */
@@ -31403,6 +31386,17 @@ declare module DevExpress.viz {
    */
   export class dxCircularGauge extends BaseGauge<dxCircularGaugeOptions> {}
   module dxCircularGauge {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type CircularGaugeElementOrientation =
+      | 'center'
+      | 'inside'
+      | 'outside';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type CircularGaugeLabelOverlapping = 'first' | 'last';
     export type DisposingEvent = DevExpress.events.EventInfo<dxCircularGauge>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxCircularGauge>;
     export type ExportedEvent = DevExpress.events.EventInfo<dxCircularGauge>;
@@ -31470,7 +31464,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxCircularGaugeOptions.rangeContainer.orientation]
      */
-    orientation?: DevExpress.common.charts.CircularGaugeElementOrientation;
+    orientation?: DevExpress.viz.dxCircularGauge.CircularGaugeElementOrientation;
     /**
      * [descr:dxCircularGaugeOptions.rangeContainer.width]
      */
@@ -31487,7 +31481,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxCircularGaugeOptions.scale.orientation]
      */
-    orientation?: DevExpress.common.charts.CircularGaugeElementOrientation;
+    orientation?: DevExpress.viz.dxCircularGauge.CircularGaugeElementOrientation;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31496,7 +31490,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxCircularGaugeOptions.scale.label.hideFirstOrLast]
      */
-    hideFirstOrLast?: DevExpress.common.charts.CircularGaugeLabelOverlapping;
+    hideFirstOrLast?: DevExpress.viz.dxCircularGauge.CircularGaugeLabelOverlapping;
     /**
      * [descr:dxCircularGaugeOptions.scale.label.indentFromTick]
      */
@@ -31531,9 +31525,17 @@ declare module DevExpress.viz {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
+    export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
     interface FunnelItemInfo {
       readonly item: Item;
     }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type FunnelLabelOverlapping = 'hide' | 'none' | 'shift';
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxFunnel> &
@@ -31665,7 +31667,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.algorithm]
      */
-    algorithm?: DevExpress.common.charts.FunnelAlgorithm;
+    algorithm?: DevExpress.viz.dxFunnel.FunnelAlgorithm;
     /**
      * [descr:dxFunnelOptions.argumentField]
      */
@@ -31936,11 +31938,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.common.charts.FunnelLabelOverlapping;
+    resolveLabelOverlapping?: DevExpress.viz.dxFunnel.FunnelLabelOverlapping;
     /**
      * [descr:dxFunnelOptions.selectionMode]
      */
-    selectionMode?: DevExpress.common.SelectionMode;
+    selectionMode?: DevExpress.common.SingleMultipleOrNone;
     /**
      * [descr:dxFunnelOptions.sortData]
      */
@@ -33446,7 +33448,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.seriesSelectionMode]
      */
-    seriesSelectionMode?: DevExpress.common.ForcedSelectionMode;
+    seriesSelectionMode?: DevExpress.common.SingleOrMultiple;
     /**
      * [descr:dxPolarChartOptions.seriesTemplate]
      */
@@ -34923,6 +34925,10 @@ declare module DevExpress.viz {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxSankey> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSankeyOptions;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
   }
   /**
    * [descr:dxSankeyConnectionInfoObject]
@@ -35146,7 +35152,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxSankeyOptions.link.colorMode]
        */
-      colorMode?: DevExpress.common.charts.SankeyColorMode;
+      colorMode?: DevExpress.viz.dxSankey.SankeyColorMode;
       /**
        * [descr:dxSankeyOptions.link.hoverStyle]
        */
@@ -35914,7 +35920,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxTreeMapOptions.selectionMode]
      */
-    selectionMode?: DevExpress.common.SelectionMode;
+    selectionMode?: DevExpress.common.SingleMultipleOrNone;
     /**
      * [descr:dxTreeMapOptions.tile]
      */
@@ -36437,7 +36443,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.selectionMode]
            */
-          selectionMode?: DevExpress.common.SelectionMode;
+          selectionMode?: DevExpress.common.SingleMultipleOrNone;
           /**
            * [descr:dxVectorMapOptions.layers.size]
            */
@@ -36479,7 +36485,7 @@ declare module DevExpress.viz {
           selectedBorderColor?: string;
           selectedBorderWidth?: number;
           selectedColor?: string;
-          selectionMode?: 'multiple' | 'none' | 'single';
+          selectionMode?: DevExpress.common.SingleMultipleOrNone;
           size?: number;
           sizeGroupingField?: string;
           sizeGroups?: Array<number>;
