@@ -1,9 +1,10 @@
-import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
+import createWidget from '../../../../helpers/createWidget';
 
 const FIRST_SCHEDULER_SELECTOR = '#scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = '#scheduler-second';
+const EXPECTED_APPOINTMENT_TIME = '1:00 AM - 2:00 AM';
 
 const TEST_APPOINTMENT = {
   text: 'My appointment',
@@ -27,14 +28,6 @@ const getSchedulerOptions = (dataSource) => ({
   },
 });
 
-const createSchedulerOnClientSide = async (selector: string, options: unknown): Promise<void> => {
-  await ClientFunction(() => {
-    ($(selector) as any).dxScheduler(options);
-  }, {
-    dependencies: { selector, options },
-  })();
-};
-
 fixture`Drag-n-drop appointments between two schedulers with equal cell indexes (T1094035)`
   .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
 
@@ -48,19 +41,15 @@ test('Should not lose drag-n-dropped appointment in the second scheduler', async
   const cellToMoveElement = secondScheduler
     .getDateTableCell(2, 0);
 
-  await t.dragToElement(appointmentToMoveElement, cellToMoveElement).wait(100);
+  await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.1 });
 
-  const movedAppointmentElement = await secondScheduler
+  const movedAppointmentTime = await secondScheduler
     .getAppointment(TEST_APPOINTMENT.text)
-    .element();
-  await t.expect(movedAppointmentElement).ok('Cannot find drag&dropped appointment in the second scheduler');
+    .date
+    .time;
+
+  await t.expect(movedAppointmentTime).eql(EXPECTED_APPOINTMENT_TIME);
 }).before(async () => {
-  await createSchedulerOnClientSide(
-    FIRST_SCHEDULER_SELECTOR,
-    getSchedulerOptions([TEST_APPOINTMENT]),
-  );
-  await createSchedulerOnClientSide(
-    SECOND_SCHEDULER_SELECTOR,
-    getSchedulerOptions([]),
-  );
+  await createWidget('dxScheduler', getSchedulerOptions([TEST_APPOINTMENT]), false, FIRST_SCHEDULER_SELECTOR);
+  await createWidget('dxScheduler', getSchedulerOptions([]), false, SECOND_SCHEDULER_SELECTOR);
 });
