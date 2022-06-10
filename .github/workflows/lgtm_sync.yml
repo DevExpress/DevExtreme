@@ -1,6 +1,7 @@
 name: Sync LGTM.com alerts
 
 on:
+  push:
   schedule:
     - cron: '30 1 * * *'
 
