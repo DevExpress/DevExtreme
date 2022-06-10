@@ -250,3 +250,5 @@ export type TooltipShowMode = 'always' | 'onHover';
 export type DataStructure = 'plain' | 'tree';
 
 export type PageOrientation = 'portrait' | 'landscape';
+
+export type StoreType = 'array' | 'local' | 'odata';

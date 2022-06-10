@@ -372,7 +372,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxPolarChart
      * @type_function_param1_field event:event
-     * @type_function_param1_field actionType:Enums.ChartZoomPanAction
+     * @type_function_param1_field actionType:Enums.ZoomPanAction
      * @notUsedInTheme
      * @action
      * @public
@@ -384,7 +384,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxPolarChart
      * @type_function_param1_field event:event
-     * @type_function_param1_field actionType:Enums.ChartZoomPanAction
+     * @type_function_param1_field actionType:Enums.ZoomPanAction
      * @notUsedInTheme
      * @action
      * @public
