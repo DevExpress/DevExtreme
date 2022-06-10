@@ -5,6 +5,7 @@ import eventsEngine from '../events/core/events_engine';
 import pointerEvents from '../events/pointer';
 import { getWindow } from '../core/utils/window';
 import { addNamespace } from '../events/utils/index';
+import Guid from '../core/guid';
 
 const window = getWindow();
 
@@ -17,11 +18,15 @@ const SPLITTER_INITIAL_STATE_CLASS = `${SPLITTER_CLASS}-initial`;
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
 
 const SPLITTER_MODULE_NAMESPACE = 'dxSplitterResizing';
-const SPLITTER_POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, SPLITTER_MODULE_NAMESPACE);
-const SPLITTER_POINTER_MOVE_EVENT_NAME = addNamespace(pointerEvents.move, SPLITTER_MODULE_NAMESPACE);
-const SPLITTER_POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, SPLITTER_MODULE_NAMESPACE);
 
 export default class SplitterControl extends Widget {
+    _init() {
+        super._init();
+        const eventGuid = new Guid().toString();
+        this.SPLITTER_POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, SPLITTER_MODULE_NAMESPACE + eventGuid);
+        this.SPLITTER_POINTER_MOVE_EVENT_NAME = addNamespace(pointerEvents.move, SPLITTER_MODULE_NAMESPACE + eventGuid);
+        this.SPLITTER_POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, SPLITTER_MODULE_NAMESPACE + eventGuid);
+    }
     _initMarkup() {
         super._initMarkup();
 
@@ -63,16 +68,16 @@ export default class SplitterControl extends Widget {
 
     _attachEventHandlers() {
         const document = domAdapter.getDocument();
-        eventsEngine.on(this._$splitterBorder, SPLITTER_POINTER_DOWN_EVENT_NAME, this._onMouseDownHandler.bind(this));
-        eventsEngine.on(document, SPLITTER_POINTER_MOVE_EVENT_NAME, this._onMouseMoveHandler.bind(this));
-        eventsEngine.on(document, SPLITTER_POINTER_UP_EVENT_NAME, this._onMouseUpHandler.bind(this));
+        eventsEngine.on(this._$splitterBorder, this.SPLITTER_POINTER_DOWN_EVENT_NAME, this._onMouseDownHandler.bind(this));
+        eventsEngine.on(document, this.SPLITTER_POINTER_MOVE_EVENT_NAME, this._onMouseMoveHandler.bind(this));
+        eventsEngine.on(document, this.SPLITTER_POINTER_UP_EVENT_NAME, this._onMouseUpHandler.bind(this));
     }
 
     _detachEventHandlers() {
         const document = domAdapter.getDocument();
-        eventsEngine.off(this._$splitterBorder, SPLITTER_POINTER_DOWN_EVENT_NAME);
-        eventsEngine.off(document, SPLITTER_POINTER_MOVE_EVENT_NAME);
-        eventsEngine.off(document, SPLITTER_POINTER_UP_EVENT_NAME);
+        eventsEngine.off(this._$splitterBorder, this.SPLITTER_POINTER_DOWN_EVENT_NAME);
+        eventsEngine.off(document, this.SPLITTER_POINTER_MOVE_EVENT_NAME);
+        eventsEngine.off(document, this.SPLITTER_POINTER_UP_EVENT_NAME);
     }
 
     _dimensionChanged(dimension) {

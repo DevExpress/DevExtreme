@@ -169,4 +169,56 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         assert.roughEqual(this.wrapper.getSplitterPosition(), contentPane.outerWidth(), 0.2, 'Splitter is on the correct position');
     });
 
+    test('splitter should resize panels with 2 fileManagers (T1091934)', function(assert) {
+        const $fileManager2 = $('<div>').attr('id', 'fileManager2').appendTo('#qunit-fixture');
+        $fileManager2.dxFileManager();
+        const fileManager2 = $fileManager2.dxFileManager().dxFileManager('instance');
+        const wrapper2 = new FileManagerWrapper($fileManager2);
+        this.clock.tick(400);
+        this.currentWidth = 900;
+        resizeCallbacks.fire();
+        this.clock.tick(400);
+        $('#fileManager').css('width', '900px');
+        $('#fileManager2').css('width', '900px');
+        this.wrapper.getInstance().repaint();
+        fileManager2.repaint();
+        this.clock.tick(400);
+        const fileManagerWidth = $('#fileManager').get(0).clientWidth;
+
+        assert.strictEqual(this.wrapper.getSplitter().length, 1, 'Splitter 0 was rendered');
+        assert.strictEqual(wrapper2.getSplitter().length, 1, 'Splitter 1 was rendered');
+        assert.ok(this.wrapper.isSplitterActive(), 'Splitter 0 is active');
+        assert.ok(wrapper2.isSplitterActive(), 'Splitter 1 is active');
+
+        [this.wrapper, wrapper2].forEach((wrapper, index) => {
+            let oldTreeViewWidth = wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth;
+            let oldItemViewWidth = wrapper.getItemsPanel().get(0).clientWidth;
+            wrapper.moveSplitter(100);
+            assert.equal(wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, `Dirs tree ${index} has correct width`);
+            assert.equal(wrapper.getItemsPanel().get(0).clientWidth, oldItemViewWidth - 100, `Item view ${index} has correct width`);
+
+            oldTreeViewWidth = wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth;
+            oldItemViewWidth = wrapper.getItemsPanel().get(0).clientWidth;
+            wrapper.moveSplitter(-200);
+            assert.equal(wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth - 200, `Dirs tree ${index} has correct width`);
+            assert.equal(wrapper.getItemsPanel().get(0).clientWidth, oldItemViewWidth + 200, `Item view ${index} has correct width`);
+
+            oldTreeViewWidth = wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth;
+            oldItemViewWidth = wrapper.getItemsPanel().get(0).clientWidth;
+            wrapper.moveSplitter(-oldTreeViewWidth * 2);
+            assert.equal(wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth, 0, `Dirs tree ${index} has correct width`);
+            assert.equal(wrapper.getItemsPanel().get(0).clientWidth, fileManagerWidth, `Item view ${index} has correct width`);
+
+            const splitterWidth = wrapper.getSplitter().get(0).clientWidth;
+            oldTreeViewWidth = wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth;
+            oldItemViewWidth = wrapper.getItemsPanel().get(0).clientWidth;
+            wrapper.moveSplitter(oldItemViewWidth * 2);
+            assert.equal(wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth, fileManagerWidth - splitterWidth, `Dirs tree ${index} has correct width`);
+            assert.equal(wrapper.getItemsPanel().get(0).clientWidth, splitterWidth, `Item view ${index} has correct width`);
+        });
+
+        fileManager2.dispose();
+        $fileManager2.remove();
+    });
+
 });
