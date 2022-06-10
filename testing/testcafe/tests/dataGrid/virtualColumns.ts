@@ -102,7 +102,6 @@ test('The updateDimensions method should render the grid if a container was hidd
   await showDataGrid();
 
   await t
-    .wait(1000)
     .expect(Selector('#wrapperContainer').visible)
     .ok();
 
