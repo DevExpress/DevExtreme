@@ -93,8 +93,9 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const focusAction = that.createAction(function() {
             eventsEngine.trigger($container, clickEventName);
         });
-        const value = column.calculateCellValue(cellOptions.data);
-        const displayValue = gridCoreUtils.getDisplayValue(column, value, cellOptions.data, cellOptions.rowType);
+        const rowData = cellOptions.row.data;
+        const value = column.calculateCellValue(rowData);
+        const displayValue = gridCoreUtils.getDisplayValue(column, value, rowData, cellOptions.rowType);
         const text = gridCoreUtils.formatValue(displayValue, column);
         const isCellOrBatchEditMode = this._editingController.isCellOrBatchEditMode();
         const rowsView = that._rowsView;
