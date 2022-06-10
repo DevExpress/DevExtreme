@@ -1,16 +1,14 @@
-import { Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
-import createScheduler from '../init/widget.setup';
+import Scheduler from '../../../../model/scheduler';
 
 const FIRST_SCHEDULER_SELECTOR = '#scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = '#scheduler-second';
-const APPOINTMENT_SELECTOR = '.dx-scheduler-appointment-content';
-const FIRST_CELL_SELECTOR = '.dx-scheduler-first-group-cell';
 
 const TEST_APPOINTMENT = {
   text: 'My appointment',
-  startDate: new Date(2021, 3, 30, 9),
-  endDate: new Date(2021, 3, 30, 10),
+  startDate: new Date(2021, 3, 30, 1),
+  endDate: new Date(2021, 3, 30, 2),
 };
 
 const getSchedulerOptions = (dataSource) => ({
@@ -29,19 +27,40 @@ const getSchedulerOptions = (dataSource) => ({
   },
 });
 
+const createSchedulerOnClientSide = async (selector: string, options: unknown): Promise<void> => {
+  await ClientFunction(() => {
+    ($(selector) as any).dxScheduler(options);
+  }, {
+    dependencies: { selector, options },
+  })();
+};
+
 fixture`Drag-n-drop appointments between two schedulers with equal cell indexes (T1094035)`
   .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
 
 test('Should not lose drag-n-dropped appointment in the second scheduler', async (t) => {
-  await t
-    .dragToElement(
-      Selector(`${FIRST_SCHEDULER_SELECTOR} ${APPOINTMENT_SELECTOR}`),
-      Selector(`${SECOND_SCHEDULER_SELECTOR} ${FIRST_CELL_SELECTOR}`).nth(2),
-    ).debug();
+  const firstScheduler = new Scheduler(FIRST_SCHEDULER_SELECTOR);
+  const secondScheduler = new Scheduler(SECOND_SCHEDULER_SELECTOR);
 
-  const appointmentExistInSecondScheduler = await Selector(`${SECOND_SCHEDULER_SELECTOR} ${APPOINTMENT_SELECTOR}`).count > 0;
-  await t.expect(appointmentExistInSecondScheduler).eql(true);
+  const appointmentToMoveElement = firstScheduler
+    .getAppointment(TEST_APPOINTMENT.text)
+    .element();
+  const cellToMoveElement = secondScheduler
+    .getDateTableCell(2, 0);
+
+  await t.dragToElement(appointmentToMoveElement, cellToMoveElement).wait(100);
+
+  const movedAppointmentElement = await secondScheduler
+    .getAppointment(TEST_APPOINTMENT.text)
+    .element();
+  await t.expect(movedAppointmentElement).ok('Cannot find drag&dropped appointment in the second scheduler');
 }).before(async () => {
-  await createScheduler(getSchedulerOptions([TEST_APPOINTMENT]), false, FIRST_SCHEDULER_SELECTOR);
-  await createScheduler(getSchedulerOptions([]), false, SECOND_SCHEDULER_SELECTOR);
+  await createSchedulerOnClientSide(
+    FIRST_SCHEDULER_SELECTOR,
+    getSchedulerOptions([TEST_APPOINTMENT]),
+  );
+  await createSchedulerOnClientSide(
+    SECOND_SCHEDULER_SELECTOR,
+    getSchedulerOptions([]),
+  );
 });
