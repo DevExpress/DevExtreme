@@ -153,15 +153,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  isVisible(): Promise<boolean> {
-    const { getGridInstance } = this;
-
-    return ClientFunction(
-      () => $((getGridInstance() as any).element()).is(':visible'),
-      { dependencies: { getGridInstance } },
-    )();
-  }
-
   scrollBy(options: { x?: number; y?: number; top?: number }): Promise<void> {
     const { getGridInstance } = this;
 

@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
@@ -96,13 +96,13 @@ test('The updateDimensions method should render the grid if a container was hidd
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(dataGrid.isVisible())
+    .expect(Selector('#wrapperContainer').visible)
     .notOk();
 
   await showDataGrid();
 
   await t
-    .expect(dataGrid.isVisible())
+    .expect(Selector('#wrapperContainer').visible)
     .ok();
 
   await dataGrid.apiUpdateDimensions();
