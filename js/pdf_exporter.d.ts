@@ -13,7 +13,7 @@ import {
  * @public
  * @namespace DevExpress.pdfExporter
  */
- export type DataGridCell = PdfDataGridCell;
+export type DataGridCell = PdfDataGridCell;
 
  /**
   * @namespace DevExpress.pdfExporter
@@ -270,7 +270,7 @@ export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>
  * @docid
  * @namespace DevExpress.pdfExporter
  */
- export interface PdfExportGanttProps {
+export interface PdfExportGanttProps {
   /**
    * @docid
    * @type_function_param1 options:object
@@ -368,4 +368,4 @@ export interface PdfExportGanttFont {
  * @static
  * @public
  */
- export function exportGantt(options: PdfExportGanttProps): DxPromise<any>;
+export function exportGantt(options: PdfExportGanttProps): DxPromise<any>;

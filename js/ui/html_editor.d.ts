@@ -411,7 +411,7 @@ export interface dxHtmlEditorTableResizing {
  * @type object
  * @namespace DevExpress.ui
  */
- export interface dxHtmlEditorImageUpload {
+export interface dxHtmlEditorImageUpload {
   /**
    * @docid
    * @default undefined
@@ -450,13 +450,13 @@ export interface dxHtmlEditorTableResizing {
  * @public
  * @namespace DevExpress.ui.dxHtmlEditor
  */
- export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
+export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
 
  /**
   * @deprecated Use ImageUploadTab instead
   * @namespace DevExpress.ui
   */
- export interface dxHtmlEditorImageUploadTabItem {
+export interface dxHtmlEditorImageUploadTabItem {
     /**
      * @docid
      * @default undefined

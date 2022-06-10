@@ -41,7 +41,7 @@ export type SelectDescriptor<T> = string | Array<string> | ((source: T) => any);
  * @docid
  * @public
  */
- export type FilterDescriptor = any;
+export type FilterDescriptor = any;
 
  /**
  * @docid
@@ -58,7 +58,7 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
  * @namespace DevExpress.data
  * @type object
  */
- export interface LoadOptions<T = any> {
+export interface LoadOptions<T = any> {
     /**
      * @docid
      * @public
