@@ -90,8 +90,6 @@ const subscribes = {
 
         const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() &&
             (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
-        // NOTE: if we update the appointment after drag&drop between two schedulers,
-        // we don't need cell index comparison, because cell indexes may be equal in two different schedulers.
         const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
 
         if((newCellIndex !== oldCellIndex) || isDragAndDropBetweenComponents || movedBetweenAllDayAndSimple) {

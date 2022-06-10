@@ -7,9 +7,7 @@ const resources = [
   { id: 2, color: '#1e65e8' },
 ];
 
-export default async (options = {},
-  disableAnimation = false,
-  selector = '#container'): Promise<void> => createWidget('dxScheduler', extend({
+export default async (options = {}): Promise<void> => createWidget('dxScheduler', extend({
   views: ['day'],
   dataSource: [],
   resources: [
@@ -26,4 +24,4 @@ export default async (options = {},
   maxAppointmentsPerCell: 5,
   currentView: 'day',
   currentDate: new Date(2019, 3, 1),
-}, options), disableAnimation, selector);
+}, options));
