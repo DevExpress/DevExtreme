@@ -297,6 +297,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getMaxWidth() {
+        let adaptive = this.isAdaptive;
+        adaptive = false;
         return this.cellWidth || this.cellWidth;
     }
 
