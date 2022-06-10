@@ -23,6 +23,7 @@ jobs:
           RESPONSE=$(curl -X GET 'https://lgtm.com/api/v1.0/analyses/${{ fromJSON(env.PROJECT).id }}/commits/latest' -H 'Accept: application/json')
           echo "ANALYSIS=$RESPONSE" >> $GITHUB_ENV
       - name: Get SARIF
+        working-directory: ./
         run: |
           curl -X GET "https://lgtm.com/api/v1.0/analyses/${{ fromJSON(env.ANALYSIS).id }}/alerts" -H 'Accept: application/sarif+json' >> lgtm.sarif
       - name: Upload SARIF file
