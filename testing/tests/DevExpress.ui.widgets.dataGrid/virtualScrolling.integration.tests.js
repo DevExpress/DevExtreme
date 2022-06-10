@@ -115,6 +115,46 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok(getHeight(dataGrid.$element().find('.dx-virtual-row').first().children().first()) <= scrollTop, 'scrollTop should be less than or equal to virtual row height');
     });
 
+    // T1092443
+    QUnit.test('Virtual scrolling should work with stateStoring and selection', function(assert) {
+        // arrange
+        const dataSource = [...Array(100).keys()].map(i => ({ id: i + 1 }));
+
+        const dataGrid = createDataGrid({
+            height: 440,
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        selectedRowKeys: [100],
+                        pageIndex: 4,
+                    };
+                },
+                customSave: function() {}
+            },
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+            },
+            dataSource,
+        });
+
+        this.clock.tick();
+        const scrollable = dataGrid.getScrollable();
+
+        // act
+        dataGrid.navigateToRow(100);
+        this.clock.tick();
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [100], 'selectedRowKeys is actual');
+        assert.deepEqual(dataGrid.getVisibleRows().slice(-1)[0].isSelected, true, 'last row is selected');
+        assert.ok(dataGrid.getVisibleRows().slice(0, -1).every(row => row.isSelected === false), 'other rows are not selected');
+    });
+
     // T916093
     ['standard', 'virtual', 'infinite'].forEach(scrollingMode => {
         QUnit.test(`LoadPanel should be shown during export (scrolling.mode = ${scrollingMode})`, function(assert) {
