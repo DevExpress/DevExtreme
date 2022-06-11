@@ -15,12 +15,12 @@
   "author": "Developer Express Inc.",
   "dependencies": {
     "@angular/cdk": "^11.0.2",
-    "@angular/common": "^11.0.4",
-    "@angular/compiler": "^11.0.4",
-    "@angular/core": "^11.0.4",
-    "@angular/forms": "^11.0.4",
-    "@angular/platform-browser": "^11.0.4",
-    "@angular/platform-browser-dynamic": "^11.0.4",
+    "@angular/common": "^11.2.14",
+    "@angular/compiler": "^11.2.14",
+    "@angular/core": "^11.2.14",
+    "@angular/forms": "^11.2.14",
+    "@angular/platform-browser": "^11.2.14",
+    "@angular/platform-browser-dynamic": "^11.2.14",
     "angular2-template-loader": "^0.6.2",
     "core-js": "^3.19.1",
     "inferno": "^7.4.6",
@@ -31,7 +31,7 @@
     "react-dom": "^16.13.1",
     "rxjs": "^6.5.4",
     "vue": "^2.6.11",
-    "zone.js": "^0.10.3"
+    "zone.js": "^0.11.5"
   },
   "devDependencies": {
     "babel-preset-react-app": "^10.0.0",
