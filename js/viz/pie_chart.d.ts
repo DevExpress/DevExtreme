@@ -47,7 +47,7 @@ import {
 import {
     ChartsDataType,
     DashStyle,
-    HatchingDirection,
+    HatchDirection,
     LabelPosition,
     Palette,
     TextOverflow,
@@ -57,7 +57,7 @@ import {
 export {
     ChartsDataType,
     DashStyle,
-    HatchingDirection,
+    HatchDirection,
     LabelPosition,
     Palette,
     TextOverflow,
@@ -569,7 +569,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.direction
            * @default 'right'
            */
-          direction?: HatchingDirection;
+          direction?: HatchDirection;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.opacity
            * @default 0.75
@@ -762,7 +762,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.direction
            * @default 'right'
            */
-          direction?: HatchingDirection;
+          direction?: HatchDirection;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.opacity
            * @default 0.5

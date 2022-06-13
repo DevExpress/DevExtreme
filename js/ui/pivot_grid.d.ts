@@ -29,16 +29,16 @@ import {
 } from '../common';
 
 import {
-    ChangesApplyMode,
+    ApplyChangesMode,
     StateStoreType,
 } from '../common/grids';
 
 export {
-    ChangesApplyMode,
+    ApplyChangesMode,
     FieldChooserLayout,
     Mode,
     ScrollMode,
-    StateStoreType as StateStoringType,
+    StateStoreType,
 };
 
 /** @public */
@@ -46,7 +46,7 @@ export type PivotGridDataFieldArea = 'column' | 'row';
 /** @public */
 export type PivotGridRowHeaderLayout = 'standard' | 'tree';
 /** @public */
-export type PivotGridTotalsDisplayMode = 'both' | 'columns' | 'none' | 'rows';
+export type PivotGridTotalDisplayMode = 'both' | 'columns' | 'none' | 'rows';
 
 /** @public */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid, MouseEvent | PointerEvent> & {
@@ -202,7 +202,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default "instantly"
        */
-      applyChangesMode?: ChangesApplyMode;
+      applyChangesMode?: ApplyChangesMode;
       /**
        * @docid
        * @default true
@@ -557,7 +557,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @default "none"
      * @public
      */
-    showTotalsPrior?: PivotGridTotalsDisplayMode;
+    showTotalsPrior?: PivotGridTotalDisplayMode;
     /**
      * @docid
      * @public

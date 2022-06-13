@@ -59,7 +59,7 @@ import {
     ChartsDataType,
     DashStyle,
     DiscreteAxisDivisionMode,
-    HatchingDirection,
+    HatchDirection,
     LegendHoverMode,
     PointInteractionMode,
     PointSymbol,
@@ -87,7 +87,7 @@ export {
     ChartsDataType,
     DashStyle,
     DiscreteAxisDivisionMode,
-    HatchingDirection,
+    HatchDirection,
     HorizontalAlignment,
     LegendHoverMode,
     PointInteractionMode,
@@ -3066,7 +3066,7 @@ export interface dxChartSeriesTypesCandleStickSeriesHoverStyleHatching extends d
      * @default 'none'
      * @public
      */
-    direction?: HatchingDirection;
+    direction?: HatchDirection;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCandleStickSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -3094,7 +3094,7 @@ export interface dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching exten
      * @default 'none'
      * @public
      */
-    direction?: HatchingDirection;
+    direction?: HatchDirection;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeries {
@@ -3530,7 +3530,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleHatching {
      * @default 'right'
      * @public
      */
-    direction?: HatchingDirection;
+    direction?: HatchDirection;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.opacity
      * @default 0.75
@@ -3978,7 +3978,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
      * @default 'right'
      * @public
      */
-    direction?: HatchingDirection;
+    direction?: HatchDirection;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.opacity
      * @default 0.5

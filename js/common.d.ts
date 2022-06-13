@@ -236,13 +236,13 @@ export type TextEditorButtonLocation = 'after' | 'before';
  * @public
  * @namespace DevExpress.common
  */
-export type ToolbarItemLocation = 'after' | 'before' | 'center';
+ export type ToolbarItemComponent = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 
 /**
  * @public
  * @namespace DevExpress.common
  */
-export type ToolbarItemWidget = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
+export type ToolbarItemLocation = 'after' | 'before' | 'center';
 
 /**
  * @public

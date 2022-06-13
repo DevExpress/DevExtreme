@@ -59,7 +59,7 @@ import {
     ChartsDataType,
     DashStyle,
     DiscreteAxisDivisionMode,
-    HatchingDirection,
+    HatchDirection,
     LabelOverlap,
     LegendHoverMode,
     PointInteractionMode,
@@ -82,7 +82,7 @@ export {
     ChartsDataType,
     DashStyle,
     DiscreteAxisDivisionMode,
-    HatchingDirection,
+    HatchDirection,
     LabelOverlap,
     LegendHoverMode,
     PointInteractionMode,
@@ -1555,7 +1555,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.direction
          * @default 'none'
          */
-        direction?: HatchingDirection;
+        direction?: HatchDirection;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.opacity
          * @default 0.75
@@ -1676,7 +1676,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.direction
          * @default 'none'
          */
-        direction?: HatchingDirection;
+        direction?: HatchDirection;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.opacity
          * @default 0.5

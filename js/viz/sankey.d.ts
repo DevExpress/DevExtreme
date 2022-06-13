@@ -30,14 +30,14 @@ import {
 } from '../common';
 
 import {
-    HatchingDirection,
+    HatchDirection,
     Palette,
     PaletteExtensionMode,
     TextOverflow,
 } from '../common/charts';
 
 export {
-    HatchingDirection,
+    HatchDirection,
     Palette,
     PaletteExtensionMode,
     TextOverflow,
@@ -295,7 +295,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
            * @docid
            * @default 'right'
            */
-          direction?: HatchingDirection;
+          direction?: HatchDirection;
           /**
            * @docid
            * @default 0.75
@@ -391,7 +391,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
            * @docid
            * @default 'right'
            */
-          direction?: HatchingDirection;
+          direction?: HatchDirection;
           /**
            * @docid
            * @default 0.75

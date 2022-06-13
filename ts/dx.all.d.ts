@@ -1481,8 +1481,7 @@ declare module DevExpress.common {
   export type TextBoxPredefinedButton = 'clear';
 
   export type TextEditorButtonLocation = 'after' | 'before';
-  export type ToolbarItemLocation = 'after' | 'before' | 'center';
-  export type ToolbarItemWidget =
+  export type ToolbarItemComponent =
     | 'dxAutocomplete'
     | 'dxButton'
     | 'dxCheckBox'
@@ -1493,6 +1492,7 @@ declare module DevExpress.common {
     | 'dxTextBox'
     | 'dxButtonGroup'
     | 'dxDropDownButton';
+  export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationMessageMode = 'always' | 'auto';
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
@@ -1502,10 +1502,10 @@ declare module DevExpress.common {
 declare module DevExpress.common.charts {
   export type AnimationEaseMode = 'easeOutCubic' | 'linear';
   export type AnnotationType = 'text' | 'image' | 'custom';
+  export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
   export type ArgumentAxisHoverMode = 'allArgumentPoints' | 'none';
   export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
-  export type ChangesApplyMode = 'instantly' | 'onDemand';
   export type ChartsAxisLabelOverlap = 'rotate' | 'stagger' | 'none' | 'hide';
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
@@ -1536,7 +1536,7 @@ declare module DevExpress.common.charts {
   export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
   export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
   export type GroupExpandMode = 'buttonClick' | 'rowClick';
-  export type HatchingDirection = 'left' | 'none' | 'right';
+  export type HatchDirection = 'left' | 'none' | 'right';
   export type LabelOverlap = 'hide' | 'none';
   export type LabelPosition = 'columns' | 'inside' | 'outside';
   export type LegendHoverMode = 'excludePoints' | 'includePoints' | 'none';
@@ -12865,7 +12865,7 @@ declare module DevExpress.ui {
       readonly dataField?: string;
       readonly value?: any;
     };
-    export type FormEditor =
+    export type FormItemComponent =
       | 'dxAutocomplete'
       | 'dxCalendar'
       | 'dxCheckBox'
@@ -13163,7 +13163,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormSimpleItem.editorType]
      */
-    editorType?: DevExpress.ui.dxForm.FormEditor;
+    editorType?: DevExpress.ui.dxForm.FormItemComponent;
     /**
      * [descr:dxFormSimpleItem.helpText]
      */
@@ -17197,7 +17197,7 @@ declare module DevExpress.ui {
       DevExpress.events.ChangedOptionInfo;
     export type PivotGridDataFieldArea = 'column' | 'row';
     export type PivotGridRowHeaderLayout = 'standard' | 'tree';
-    export type PivotGridTotalsDisplayMode =
+    export type PivotGridTotalDisplayMode =
       | 'both'
       | 'columns'
       | 'none'
@@ -17257,7 +17257,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridFieldChooserOptions.applyChangesMode]
      */
-    applyChangesMode?: DevExpress.common.charts.ChangesApplyMode;
+    applyChangesMode?: DevExpress.common.charts.ApplyChangesMode;
     /**
      * [descr:dxPivotGridFieldChooserOptions.dataSource]
      */
@@ -17423,7 +17423,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.fieldChooser.applyChangesMode]
        */
-      applyChangesMode?: DevExpress.common.charts.ChangesApplyMode;
+      applyChangesMode?: DevExpress.common.charts.ApplyChangesMode;
       /**
        * [descr:dxPivotGridOptions.fieldChooser.enabled]
        */
@@ -17679,7 +17679,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridOptions.showTotalsPrior]
      */
-    showTotalsPrior?: DevExpress.ui.dxPivotGrid.PivotGridTotalsDisplayMode;
+    showTotalsPrior?: DevExpress.ui.dxPivotGrid.PivotGridTotalDisplayMode;
     /**
      * [descr:dxPivotGridOptions.stateStoring]
      */
@@ -18228,7 +18228,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.toolbarItems.widget]
      */
-    widget?: DevExpress.common.ToolbarItemWidget;
+    widget?: DevExpress.common.ToolbarItemComponent;
   }
   /**
    * [descr:dxProgressBar]
@@ -21833,7 +21833,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToolbarItem.widget]
      */
-    widget?: DevExpress.common.ToolbarItemWidget;
+    widget?: DevExpress.common.ToolbarItemComponent;
   }
   /**
    * @deprecated use Properties instead
@@ -29224,7 +29224,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching.direction]
      */
-    direction?: DevExpress.common.charts.HatchingDirection;
+    direction?: DevExpress.common.charts.HatchDirection;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29254,7 +29254,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching.direction]
      */
-    direction?: DevExpress.common.charts.HatchingDirection;
+    direction?: DevExpress.common.charts.HatchDirection;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29549,7 +29549,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.direction]
      */
-    direction?: DevExpress.common.charts.HatchingDirection;
+    direction?: DevExpress.common.charts.HatchDirection;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.opacity]
      */
@@ -29869,7 +29869,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.direction]
      */
-    direction?: DevExpress.common.charts.HatchingDirection;
+    direction?: DevExpress.common.charts.HatchDirection;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.opacity]
      */
@@ -31469,7 +31469,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxFunnelOptions.item.hoverStyle.hatching.direction]
            */
-          direction?: DevExpress.common.charts.HatchingDirection;
+          direction?: DevExpress.common.charts.HatchDirection;
           /**
            * [descr:dxFunnelOptions.item.hoverStyle.hatching.opacity]
            */
@@ -31512,7 +31512,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxFunnelOptions.item.selectionStyle.hatching.direction]
            */
-          direction?: DevExpress.common.charts.HatchingDirection;
+          direction?: DevExpress.common.charts.HatchDirection;
           /**
            * [descr:dxFunnelOptions.item.selectionStyle.hatching.opacity]
            */
@@ -32190,7 +32190,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.direction]
          */
-        direction?: DevExpress.common.charts.HatchingDirection;
+        direction?: DevExpress.common.charts.HatchDirection;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.opacity]
          */
@@ -32344,7 +32344,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.direction]
          */
-        direction?: DevExpress.common.charts.HatchingDirection;
+        direction?: DevExpress.common.charts.HatchDirection;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.opacity]
          */
@@ -33349,7 +33349,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.direction]
          */
-        direction?: DevExpress.common.charts.HatchingDirection;
+        direction?: DevExpress.common.charts.HatchDirection;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.opacity]
          */
@@ -33436,7 +33436,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.direction]
          */
-        direction?: DevExpress.common.charts.HatchingDirection;
+        direction?: DevExpress.common.charts.HatchDirection;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.opacity]
          */
@@ -34875,7 +34875,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxSankeyOptions.link.hoverStyle.hatching.direction]
            */
-          direction?: DevExpress.common.charts.HatchingDirection;
+          direction?: DevExpress.common.charts.HatchDirection;
           /**
            * [descr:dxSankeyOptions.link.hoverStyle.hatching.opacity]
            */
@@ -34956,7 +34956,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxSankeyOptions.node.hoverStyle.hatching.direction]
            */
-          direction?: DevExpress.common.charts.HatchingDirection;
+          direction?: DevExpress.common.charts.HatchDirection;
           /**
            * [descr:dxSankeyOptions.node.hoverStyle.hatching.opacity]
            */

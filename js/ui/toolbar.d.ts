@@ -18,7 +18,7 @@ import {
 
 import {
     ToolbarItemLocation,
-    ToolbarItemWidget,
+    ToolbarItemComponent,
 } from '../common';
 
 import CollectionWidget, {
@@ -35,7 +35,7 @@ export type ShowTextMode = 'always' | 'inMenu';
 
 export {
     ToolbarItemLocation,
-    ToolbarItemWidget,
+    ToolbarItemComponent as ToolbarItemWidget,
 };
 
 /** @public */
@@ -162,7 +162,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @docid
      * @public
      */
-    widget?: ToolbarItemWidget;
+    widget?: ToolbarItemComponent;
 }
 
 /** @public */

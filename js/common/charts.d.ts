@@ -56,7 +56,7 @@ export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type HatchingDirection = 'left' | 'none' | 'right';
+export type HatchDirection = 'left' | 'none' | 'right';
 
 /**
  * @public

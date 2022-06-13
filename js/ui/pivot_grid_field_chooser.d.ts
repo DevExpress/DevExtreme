@@ -18,11 +18,11 @@ import {
 } from '../common';
 
 import {
-    ChangesApplyMode,
+    ApplyChangesMode,
 } from '../common/grids';
 
 export {
-    ChangesApplyMode,
+    ApplyChangesMode,
     FieldChooserLayout,
 };
 
@@ -62,7 +62,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @default "instantly"
      * @public
      */
-    applyChangesMode?: ChangesApplyMode;
+    applyChangesMode?: ApplyChangesMode;
     /**
      * @docid
      * @default null

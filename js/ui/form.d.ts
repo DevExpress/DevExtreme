@@ -60,7 +60,7 @@ export {
 };
 
 /** @public */
-export type FormEditor = 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
+export type FormItemComponent = 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
 /** @public */
 export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
 /** @public */
@@ -594,7 +594,7 @@ export interface dxFormSimpleItem {
      * @docid
      * @public
      */
-    editorType?: FormEditor;
+    editorType?: FormItemComponent;
     /**
      * @docid
      * @default undefined

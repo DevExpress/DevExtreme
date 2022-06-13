@@ -148,7 +148,7 @@ export {
     SelectionColumnDisplayMode,
     SortOrder,
     StartEditAction,
-    StateStoreType as StateStoringType,
+    StateStoreType,
     SummaryType,
     ToolbarItemLocation,
 };

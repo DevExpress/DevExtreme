@@ -26,7 +26,7 @@ import {
 import {
     PositionAlignment,
     ToolbarItemLocation,
-    ToolbarItemWidget,
+    ToolbarItemComponent,
 } from '../common';
 
 import dxOverlay, {
@@ -41,7 +41,7 @@ import {
 export {
     PositionAlignment,
     ToolbarItemLocation,
-    ToolbarItemWidget,
+    ToolbarItemComponent as ToolbarItemWidget,
 };
 
 export interface TitleRenderedInfo {
@@ -313,7 +313,7 @@ export interface dxPopupToolbarItem {
      * @docid dxPopupOptions.toolbarItems.widget
      * @public
      */
-    widget?: ToolbarItemWidget;
+    widget?: ToolbarItemComponent;
 }
 /**
  * @docid

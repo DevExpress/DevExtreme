@@ -8,7 +8,7 @@ export type ApplyFilterMode = 'auto' | 'onClick';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type ChangesApplyMode = 'instantly' | 'onDemand';
+export type ApplyChangesMode = 'instantly' | 'onDemand';
 
 /**
  * @public

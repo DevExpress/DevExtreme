@@ -41,7 +41,7 @@ import {
 
 import {
     DashStyle,
-    HatchingDirection,
+    HatchDirection,
     LabelPosition,
     Palette,
     PaletteExtensionMode,
@@ -51,7 +51,7 @@ import {
 
 export {
     DashStyle,
-    HatchingDirection,
+    HatchDirection,
     HorizontalEdge,
     LabelPosition,
     Palette,
@@ -244,7 +244,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @docid
            * @default 'right'
            */
-          direction?: HatchingDirection;
+          direction?: HatchDirection;
           /**
            * @docid
            * @default 0.75
@@ -294,7 +294,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @docid
            * @default "right"
            */
-          direction?: HatchingDirection;
+          direction?: HatchDirection;
           /**
            * @docid
            * @default 0.5
