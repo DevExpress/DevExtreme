@@ -242,11 +242,11 @@ const numberLocalization = dependencyInjector({
 
         let negativeEtalon = this.format(-1, format).replace(digitalRegExp, '1');
         specialCharacters.forEach(char => {
-            negativeEtalon = negativeEtalon.replaceAll(char, `\\${char}`);
+            negativeEtalon = negativeEtalon.replace(new RegExp(`\\${char}`, 'g'), `\\${char}`);
         });
 
-        negativeEtalon = negativeEtalon.replaceAll(' ', '\\s');
-        negativeEtalon = negativeEtalon.replaceAll('1', '.*');
+        negativeEtalon = negativeEtalon.replace(/ /g, '\\s');
+        negativeEtalon = negativeEtalon.replace(/1/g, '.*');
         return new RegExp(negativeEtalon, 'g');
     },
 
