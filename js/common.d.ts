@@ -20,12 +20,6 @@ export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
  * @public
  * @namespace DevExpress.common
  */
-export type SearchMode = 'contains' | 'startswith' | 'equals';
-
-/**
- * @public
- * @namespace DevExpress.common
- */
 export type DataStructure = 'plain' | 'tree';
 
 /**
@@ -45,12 +39,6 @@ export type Direction = 'bottom' | 'left' | 'right' | 'top';
  * @namespace DevExpress.common
  */
 export type DragDirection = 'both' | 'horizontal' | 'vertical';
-
-/**
- * @public
- * @namespace DevExpress.common
- */
-export type SimplifiedSearchMode = 'contains' | 'startswith';
 
 /**
  * @public
@@ -170,7 +158,19 @@ export type ScrollMode = 'standard' | 'virtual';
  * @public
  * @namespace DevExpress.common
  */
+export type SearchMode = 'contains' | 'startswith' | 'equals';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SelectAllMode = 'allPages' | 'page';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type SimplifiedSearchMode = 'contains' | 'startswith';
 
 /**
  * @public
