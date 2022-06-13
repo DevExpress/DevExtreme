@@ -60,7 +60,7 @@ export {
 };
 
 export type FormEditor = 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
-export type FormItem = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
 export type LabelLocation = 'left' | 'right' | 'top';
 export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 
@@ -385,7 +385,7 @@ export interface dxFormButtonItem {
      * @default "simple"
      * @public
      */
-    itemType?: FormItem;
+    itemType?: FormItemType;
     /**
      * @docid
      * @default undefined
@@ -440,7 +440,7 @@ export interface dxFormEmptyItem {
      * @default "simple"
      * @public
      */
-    itemType?: FormItem;
+    itemType?: FormItemType;
     /**
      * @docid
      * @default undefined
@@ -515,7 +515,7 @@ export interface dxFormGroupItem {
      * @default "simple"
      * @public
      */
-    itemType?: FormItem;
+    itemType?: FormItemType;
     /**
      * @docid
      * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
@@ -608,7 +608,7 @@ export interface dxFormSimpleItem {
      * @default "simple"
      * @public
      */
-    itemType?: FormItem;
+    itemType?: FormItemType;
     /**
      * @docid
      * @default undefined
@@ -703,7 +703,7 @@ export interface dxFormTabbedItem {
      * @default "simple"
      * @public
      */
-    itemType?: FormItem;
+    itemType?: FormItemType;
     /**
      * @docid
      * @default undefined

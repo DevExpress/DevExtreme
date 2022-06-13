@@ -14,7 +14,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 export type MapProvider = 'bing' | 'google' | 'googleStatic';
-export type RoutingMode = 'driving' | 'walking';
+export type RouteMode = 'driving' | 'walking';
 export type MapType = 'hybrid' | 'roadmap' | 'satellite';
 
 /** @public */
@@ -266,7 +266,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @docid
        * @default 'driving'
        */
-      mode?: RoutingMode;
+      mode?: RouteMode;
       /**
        * @docid
        * @default 0.5

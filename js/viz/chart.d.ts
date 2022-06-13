@@ -54,8 +54,8 @@ import {
 import {
     ArgumentAxisHoverMode,
     AxisScaleType,
-    ChartsAxisLabelOverlapping,
-    ChartsLabelOverlapping,
+    ChartsAxisLabelOverlap,
+    ChartsLabelOverlap,
     ChartsDataType,
     DashStyle,
     DiscreteAxisDivisionMode,
@@ -82,8 +82,8 @@ interface SeriesInteractionInfo {
 export {
     ArgumentAxisHoverMode,
     AxisScaleType,
-    ChartsAxisLabelOverlapping,
-    ChartsLabelOverlapping,
+    ChartsAxisLabelOverlap,
+    ChartsLabelOverlap,
     ChartsDataType,
     DashStyle,
     DiscreteAxisDivisionMode,
@@ -1039,7 +1039,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default "none"
      * @public
      */
-    resolveLabelOverlapping?: ChartsLabelOverlapping;
+    resolveLabelOverlapping?: ChartsLabelOverlap;
     /**
      * @docid
      * @default false
@@ -1885,7 +1885,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @default 'hide'
      * @public
      */
-    overlappingBehavior?: ChartsAxisLabelOverlapping;
+    overlappingBehavior?: ChartsAxisLabelOverlap;
     /**
      * @docid dxChartOptions.commonAxisSettings.label.position
      * @default 'outside'

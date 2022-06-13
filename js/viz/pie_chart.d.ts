@@ -66,8 +66,8 @@ export {
 
 export type PieChartAnnotationLocation = 'center' | 'edge';
 export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
-export type PieChartResolveLabelOverlapping = 'hide' | 'none' | 'shift';
-export type PieChartSegmentsDirection = 'anticlockwise' | 'clockwise';
+export type PieChartLabelOverlap = 'hide' | 'none' | 'shift';
+export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
 export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';
 export type PieChartType = 'donut' | 'doughnut' | 'pie';
 export type SmallValuesGroupingMode = 'none' | 'smallValueThreshold' | 'topN';
@@ -249,13 +249,13 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @default "none"
      * @public
      */
-    resolveLabelOverlapping?: PieChartResolveLabelOverlapping;
+    resolveLabelOverlapping?: PieChartLabelOverlap;
     /**
      * @docid
      * @default 'clockwise'
      * @public
      */
-    segmentsDirection?: PieChartSegmentsDirection;
+    segmentsDirection?: PieChartSegmentDirection;
     /**
      * @docid
      * @default undefined

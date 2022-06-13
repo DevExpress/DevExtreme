@@ -60,7 +60,7 @@ export {
 
 export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
 export type CellAppointmentsLimit = 'auto' | 'unlimited';
-export type RecurrenceEditingMode = 'dialog' | 'occurrence' | 'series';
+export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
 /** @public */
@@ -652,7 +652,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default "dialog"
      * @public
      */
-    recurrenceEditMode?: RecurrenceEditingMode;
+    recurrenceEditMode?: RecurrenceEditMode;
     /**
      * @docid
      * @default 'recurrenceException'
@@ -966,7 +966,7 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     deleteRecurrence(
       appointmentData: dxSchedulerAppointment,
       date: Date | string,
-      recurrenceEditMode: RecurrenceEditingMode,
+      recurrenceEditMode: RecurrenceEditMode,
     ): void;
     getDataSource(): DataSource;
     /**

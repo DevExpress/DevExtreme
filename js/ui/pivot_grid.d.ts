@@ -30,7 +30,7 @@ import {
 
 import {
     ChangesApplyMode,
-    StateStoringType,
+    StateStoreType,
 } from '../common/grids';
 
 export {
@@ -38,11 +38,11 @@ export {
     FieldChooserLayout,
     Mode,
     ScrollMode,
-    StateStoringType,
+    StateStoreType as StateStoringType,
 };
 
 export type PivotGridDataFieldArea = 'column' | 'row';
-export type PivotGridRowHeadersLayout = 'standard' | 'tree';
+export type PivotGridRowHeaderLayout = 'standard' | 'tree';
 export type PivotGridTotalsDisplayMode = 'both' | 'columns' | 'none' | 'rows';
 
 /** @public */
@@ -502,7 +502,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @default "standard"
      * @public
      */
-    rowHeaderLayout?: PivotGridRowHeadersLayout;
+    rowHeaderLayout?: PivotGridRowHeaderLayout;
     /**
      * @docid
      * @public
@@ -590,7 +590,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default "localStorage"
        */
-      type?: StateStoringType;
+      type?: StateStoreType;
     };
     /**
      * @docid

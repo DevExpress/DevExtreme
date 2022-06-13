@@ -68,7 +68,7 @@ export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type GroupingExpandMode = 'buttonClick' | 'rowClick';
+export type GroupExpandMode = 'buttonClick' | 'rowClick';
 
 /**
  * @public
@@ -110,7 +110,7 @@ export type StartEditAction = 'click' | 'dblClick';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type StateStoringType = 'custom' | 'localStorage' | 'sessionStorage';
+export type StateStoreType = 'custom' | 'localStorage' | 'sessionStorage';
 
 /**
  * @public

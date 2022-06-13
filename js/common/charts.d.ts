@@ -2,7 +2,7 @@
  * @public
  * @namespace DevExpress.common.charts
  */
-export type AnimationEasing = 'easeOutCubic' | 'linear';
+export type AnimationEaseMode = 'easeOutCubic' | 'linear';
 
 /**
  * @public
@@ -26,13 +26,13 @@ export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type ChartsAxisLabelOverlapping = 'rotate' | 'stagger' | 'none' | 'hide';
+export type ChartsAxisLabelOverlap = 'rotate' | 'stagger' | 'none' | 'hide';
 
 /**
  * @public
  * @namespace DevExpress.common.charts
  */
-export type ChartsLabelOverlapping = 'hide' | 'none' | 'stack';
+export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
 
 /**
  * @public
@@ -62,7 +62,7 @@ export type HatchingDirection = 'left' | 'none' | 'right';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type LabelOverlapping = 'hide' | 'none';
+export type LabelOverlap = 'hide' | 'none';
 
 /**
  * @public

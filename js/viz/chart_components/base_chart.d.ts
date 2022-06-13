@@ -39,7 +39,7 @@ import BaseWidget, {
 } from '../core/base_widget';
 
 import {
-    AnimationEasing,
+    AnimationEaseMode,
     Palette,
     PaletteExtensionMode,
 } from '../../common/charts';
@@ -78,7 +78,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
        * @docid
        * @default 'easeOutCubic'
        */
-      easing?: AnimationEasing;
+      easing?: AnimationEaseMode;
       /**
        * @docid
        * @default true

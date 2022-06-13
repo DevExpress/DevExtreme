@@ -105,14 +105,14 @@ import {
     FilterType,
     GridsEditMode,
     GridsEditRefreshMode,
-    GroupingExpandMode,
+    GroupExpandMode,
     NewRowPosition,
     PagerDisplayMode,
     PagerPageSize,
     SelectedFilterOperation,
     SelectionColumnDisplayMode,
     StartEditAction,
-    StateStoringType,
+    StateStoreType,
     SummaryType,
 } from '../common/grids';
 
@@ -135,7 +135,7 @@ export {
     FilterType,
     GridsEditMode,
     GridsEditRefreshMode,
-    GroupingExpandMode,
+    GroupExpandMode,
     HorizontalAlignment,
     HorizontalEdge,
     Mode,
@@ -148,12 +148,12 @@ export {
     SelectionColumnDisplayMode,
     SortOrder,
     StartEditAction,
-    StateStoringType,
+    StateStoreType as StateStoringType,
     SummaryType,
     ToolbarItemLocation,
 };
 
-export type ColumnResizingMode = 'nextColumn' | 'widget';
+export type ColumnResizeMode = 'nextColumn' | 'widget';
 export type DataGridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 export type DataGridExportFormat = 'pdf' | 'xlsx';
 export type DataGridScrollMode = 'infinite' | 'standard' | 'virtual';
@@ -561,7 +561,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @default "nextColumn"
      * @public
      */
-    columnResizingMode?: ColumnResizingMode;
+    columnResizingMode?: ColumnResizeMode;
     /**
      * @docid
      * @default undefined
@@ -1508,7 +1508,7 @@ export interface StateStoring {
      * @docid GridBaseOptions.stateStoring.type
      * @default "localStorage"
      */
-    type?: StateStoringType;
+    type?: StateStoreType;
 }
 
 /**
@@ -3608,7 +3608,7 @@ export type Grouping = {
    * @default 'rowClick' &for(mobile_devices)
    * @default "buttonClick"
    */
-  expandMode?: GroupingExpandMode;
+  expandMode?: GroupExpandMode;
   /**
    * @docid dxDataGridOptions.grouping.texts
    * @type object

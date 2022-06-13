@@ -60,7 +60,7 @@ import {
     DashStyle,
     DiscreteAxisDivisionMode,
     HatchingDirection,
-    LabelOverlapping,
+    LabelOverlap,
     LegendHoverMode,
     PointInteractionMode,
     PointSymbol,
@@ -83,7 +83,7 @@ export {
     DashStyle,
     DiscreteAxisDivisionMode,
     HatchingDirection,
-    LabelOverlapping,
+    LabelOverlap,
     LegendHoverMode,
     PointInteractionMode,
     PointSymbol,
@@ -395,7 +395,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default "none"
      * @public
      */
-    resolveLabelOverlapping?: LabelOverlapping;
+    resolveLabelOverlapping?: LabelOverlap;
     /**
      * @docid
      * @default undefined
@@ -889,7 +889,7 @@ export interface dxPolarChartCommonAxisSettingsLabel {
      * @default 'hide'
      * @public
      */
-    overlappingBehavior?: LabelOverlapping;
+    overlappingBehavior?: LabelOverlap;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.label.visible
      * @default true

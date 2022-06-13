@@ -101,7 +101,7 @@ export {
     FilterOperation,
     GridsEditMode,
     GridsEditRefreshMode,
-    GroupingExpandMode,
+    GroupExpandMode,
     NewRowPosition,
     PagerDisplayMode,
     PagerPageSize,

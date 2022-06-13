@@ -34,7 +34,7 @@ import BaseWidget, {
 import {
     ChartsDataType,
     DiscreteAxisDivisionMode,
-    LabelOverlapping,
+    LabelOverlap,
     Palette,
     PaletteExtensionMode,
     ScaleBreakLineStyle,
@@ -44,7 +44,7 @@ import {
 export {
     ChartsDataType,
     DiscreteAxisDivisionMode,
-    LabelOverlapping,
+    LabelOverlap,
     Palette,
     PaletteExtensionMode,
     ScaleBreakLineStyle,
@@ -445,7 +445,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @default "hide"
          */
-        overlappingBehavior?: LabelOverlapping;
+        overlappingBehavior?: LabelOverlap;
         /**
          * @docid
          * @default 7

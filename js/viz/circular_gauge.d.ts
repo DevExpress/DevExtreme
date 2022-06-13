@@ -21,7 +21,7 @@ import {
 } from './gauges/base_gauge';
 
 export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
-export type CircularGaugeLabelOverlapping = 'first' | 'last';
+export type CircularGaugeLabelOverlap = 'first' | 'last';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxCircularGauge>;
@@ -136,7 +136,7 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
      * @default 'last'
      * @public
      */
-    hideFirstOrLast?: CircularGaugeLabelOverlapping;
+    hideFirstOrLast?: CircularGaugeLabelOverlap;
     /**
      * @docid dxCircularGaugeOptions.scale.label.indentFromTick
      * @default 10

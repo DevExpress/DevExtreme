@@ -61,7 +61,7 @@ export {
 };
 
 export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
-export type FunnelLabelOverlapping = 'hide' | 'none' | 'shift';
+export type FunnelLabelOverlap = 'hide' | 'none' | 'shift';
 
 /**
  * @public
@@ -506,7 +506,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default "shift"
      * @public
      */
-    resolveLabelOverlapping?: FunnelLabelOverlapping;
+    resolveLabelOverlapping?: FunnelLabelOverlap;
     /**
      * @docid
      * @default 'single'

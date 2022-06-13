@@ -28,10 +28,10 @@ import {
 } from '../../common';
 
 import {
-    AnimationEasing,
+    AnimationEaseMode,
     Palette,
     PaletteExtensionMode,
-    LabelOverlapping,
+    LabelOverlap,
 } from '../../common/charts';
 
 export interface TooltipInfo {
@@ -128,7 +128,7 @@ export interface BaseGaugeAnimation {
      * @default 'easeOutCubic'
      * @public
      */
-    easing?: AnimationEasing;
+    easing?: AnimationEaseMode;
     /**
      * @docid BaseGaugeOptions.animation.enabled
      * @default true
@@ -340,7 +340,7 @@ export interface BaseGaugeScaleLabel {
      * @default 'hide'
      * @public
      */
-    overlappingBehavior?: LabelOverlapping;
+    overlappingBehavior?: LabelOverlap;
     /**
      * @docid BaseGaugeOptions.scale.label.useRangeColors
      * @default false
