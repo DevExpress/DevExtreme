@@ -36,6 +36,7 @@ jobs:
       run: | 
         npm i cheerio@1.0.0-rc.10 
         npm run compile:r
+# Remove package install after upgarde to TypeScript >= 4.6
 
     - name: Lint renovation
       run: npm run lint-renovation
