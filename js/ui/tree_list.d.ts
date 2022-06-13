@@ -88,6 +88,10 @@ interface CellInfo<TRowData = any, TKey = any> {
 }
 
 export {
+    SearchMode,
+} from '../common';
+
+export {
     ApplyFilterMode,
     ColumnChooserMode,
     DataChangeType,

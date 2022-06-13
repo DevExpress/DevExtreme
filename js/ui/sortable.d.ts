@@ -24,12 +24,12 @@ import dxDraggable, {
 } from './draggable';
 
 import {
-    DropFeedbackMode,
+    DragHighlight,
     Orientation,
 } from '../common';
 
 export {
-    DropFeedbackMode,
+    DragHighlight,
     Orientation,
 };
 
@@ -169,7 +169,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default "push"
      * @public
      */
-    dropFeedbackMode?: DropFeedbackMode;
+    dropFeedbackMode?: DragHighlight;
     /**
      * @docid
      * @default "> *"

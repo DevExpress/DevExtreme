@@ -20,7 +20,7 @@ export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
  * @public
  * @namespace DevExpress.common
  */
-export type CollectionSearchMode = 'contains' | 'startswith' | 'equals';
+export type SearchMode = 'contains' | 'startswith' | 'equals';
 
 /**
  * @public
@@ -50,13 +50,13 @@ export type DragDirection = 'both' | 'horizontal' | 'vertical';
  * @public
  * @namespace DevExpress.common
  */
-export type DropDownSearchMode = 'contains' | 'startswith';
+export type SimplifiedSearchMode = 'contains' | 'startswith';
 
 /**
  * @public
  * @namespace DevExpress.common
  */
-export type DropFeedbackMode = 'push' | 'indicate';
+export type DragHighlight = 'push' | 'indicate';
 
 /**
  * @public

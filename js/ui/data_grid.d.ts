@@ -80,10 +80,10 @@ import {
 } from '../localization';
 
 import {
-    CollectionSearchMode,
+    SearchMode,
     DataType,
     DragDirection,
-    DropFeedbackMode,
+    DragHighlight,
     HorizontalAlignment,
     HorizontalEdge,
     Mode,
@@ -122,13 +122,13 @@ export {
 
 export {
     ApplyFilterMode,
-    CollectionSearchMode,
+    SearchMode,
     ColumnChooserMode,
     DataChangeType,
     DataRenderMode,
     DataType,
     DragDirection,
-    DropFeedbackMode,
+    DragHighlight,
     EnterKeyAction,
     EnterKeyDirection,
     FilterOperation,
@@ -402,7 +402,7 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
      * @docid GridBaseOptions.rowDragging.dropFeedbackMode
      * @default "indicate"
      */
-    dropFeedbackMode?: DropFeedbackMode;
+    dropFeedbackMode?: DragHighlight;
     /**
      * @docid GridBaseOptions.rowDragging.filter
      * @default "> *"
@@ -2590,7 +2590,7 @@ export interface ColumnHeaderFilter {
    * @docid GridBaseColumn.headerFilter.searchMode
    * @default 'contains'
    */
-  searchMode?: CollectionSearchMode;
+  searchMode?: SearchMode;
   /**
    * @docid GridBaseColumn.headerFilter.width
    * @default undefined

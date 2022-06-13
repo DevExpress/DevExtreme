@@ -3,7 +3,7 @@ import {
 } from '../text_box';
 
 import {
-    CollectionSearchMode,
+    SearchMode,
 } from '../../common';
 
 /** @namespace DevExpress.ui */
@@ -33,7 +33,7 @@ export interface SearchBoxMixinOptions {
      * @default 'contains'
      * @public
      */
-    searchMode?: CollectionSearchMode;
+    searchMode?: SearchMode;
     /**
      * @docid
      * @default undefined

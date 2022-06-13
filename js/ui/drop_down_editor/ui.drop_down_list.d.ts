@@ -28,7 +28,7 @@ import dxDropDownEditor, {
 } from './ui.drop_down_editor';
 
 import {
-    DropDownSearchMode,
+    SimplifiedSearchMode,
 } from '../../common';
 
 export interface SelectionChangedInfo<T = any> {
@@ -124,7 +124,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @default "contains"
      * @public
      */
-    searchMode?: DropDownSearchMode;
+    searchMode?: SimplifiedSearchMode;
     /**
      * @docid
      * @default 500

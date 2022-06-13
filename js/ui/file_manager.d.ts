@@ -55,8 +55,8 @@ export {
     ToolbarItemLocation,
 };
 
-export type FileManagerContextMenuItem = 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete';
 export type FileManagerItemViewMode = 'details' | 'thumbnails';
+export type FileManagerPredefinedContextMenuItem = 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete';
 export type FileManagerPredefinedToolbarItem = 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator';
 export type FileManagerViewArea = 'navPane' | 'itemView';
 
@@ -628,11 +628,11 @@ export default class dxFileManager extends Widget<dxFileManagerOptions> {
 export interface dxFileManagerContextMenu {
     /**
      * @docid
-     * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
+     * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerPredefinedContextMenuItem>
      * @default [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ]
      * @public
      */
-    items?: Array<ContextMenuItem | FileManagerContextMenuItem>;
+    items?: Array<ContextMenuItem | FileManagerPredefinedContextMenuItem>;
 }
 
 /**
@@ -656,7 +656,7 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
      * @docid
      * @public
      */
-    name?: FileManagerContextMenuItem | string;
+    name?: FileManagerPredefinedContextMenuItem | string;
     /**
      * @docid
      * @default undefined

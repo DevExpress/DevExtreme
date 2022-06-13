@@ -44,13 +44,13 @@ import {
     ToolbarItemLocation,
 } from '../common';
 
-export type GanttContextMenuItem = 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails';
 export type GanttPdfExportDateRange = 'all' | 'visible';
 export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
+export type GanttPredefinedContextMenuItem = 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager';
+export type GanttPredefinedToolbarItem = 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies';
 export type GanttRenderScaleType = 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years' | 'fiveYears';
 export type GanttScaleType = 'auto' | 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
 export type GanttTaskTitlePosition = 'inside' | 'outside' | 'none';
-export type GanttToolbarItem = 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxGantt>;
@@ -1139,10 +1139,10 @@ export default class dxGantt extends Widget<dxGanttOptions> {
 export interface dxGanttToolbar {
     /**
      * @docid
-     * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
+     * @type Array<dxGanttToolbarItem,Enums.GanttPredefinedToolbarItem>
      * @public
      */
-    items?: Array<ToolbarItem | GanttToolbarItem>;
+    items?: Array<ToolbarItem | GanttPredefinedToolbarItem>;
 }
 
 /**
@@ -1159,10 +1159,10 @@ export interface dxGanttContextMenu {
     enabled?: boolean;
     /**
      * @docid
-     * @type Array<dxGanttContextMenuItem,Enums.GanttContextMenuItem>
+     * @type Array<dxGanttContextMenuItem,Enums.GanttPredefinedContextMenuItem>
      * @public
      */
-    items?: Array<ContextMenuItem | GanttContextMenuItem | 'resourceManager'>;
+    items?: Array<ContextMenuItem | GanttPredefinedContextMenuItem>;
 }
 
 /**
@@ -1180,7 +1180,7 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
      * @docid
      * @public
      */
-    name?: GanttToolbarItem | string;
+    name?: GanttPredefinedToolbarItem | string;
     /**
      * @docid
      * @default "before"
@@ -1202,10 +1202,10 @@ export type ContextMenuItem = dxGanttContextMenuItem;
 export interface dxGanttContextMenuItem extends dxContextMenuItem {
     /**
      * @docid
-     * @type Enums.GanttContextMenuItem|string
+     * @type Enums.GanttPredefinedContextMenuItem|string
      * @public
      */
-    name?: GanttContextMenuItem | 'resourceManager' | string;
+    name?: GanttPredefinedContextMenuItem | string;
 }
 
 /**
