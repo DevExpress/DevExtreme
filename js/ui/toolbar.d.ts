@@ -16,19 +16,27 @@ import {
     ItemInfo,
 } from '../events/index';
 
+import {
+    ToolbarItemLocation,
+    ToolbarItemComponent,
+} from '../common';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-import {
-    ToolbarItemWidget,
-    ToolbarItemLocation,
-    ToolbarItemLocateInMenuMode,
-    ToolbarItemShowTextMode,
-} from '../types/enums';
-
 type ItemLike = string | Item | any;
+
+/** @public */
+export type LocateInMenuMode = 'always' | 'auto' | 'never';
+/** @public */
+export type ShowTextMode = 'always' | 'inMenu';
+
+export {
+    ToolbarItemLocation,
+    ToolbarItemComponent as ToolbarItemWidget,
+};
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>>;
@@ -126,7 +134,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @default 'never'
      * @public
      */
-    locateInMenu?: ToolbarItemLocateInMenuMode;
+    locateInMenu?: LocateInMenuMode;
     /**
      * @docid
      * @default 'center'
@@ -149,12 +157,12 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @default 'always'
      * @public
      */
-    showText?: ToolbarItemShowTextMode;
+    showText?: ShowTextMode;
     /**
      * @docid
      * @public
      */
-    widget?: ToolbarItemWidget;
+    widget?: ToolbarItemComponent;
 }
 
 /** @public */

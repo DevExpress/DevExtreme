@@ -24,10 +24,20 @@ import {
 } from '../localization';
 
 import {
-    FilterBuilderFieldFilterOperations,
-    FilterBuilderGroupOperations,
-    FilterBuilderFieldDataType,
-} from '../types/enums';
+    DataType,
+} from '../common';
+
+export {
+    DataType,
+};
+
+export {
+    FilterOperation,
+} from '../common/grids';
+
+export type FilterBuilderOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between';
+/** @public */
+export type GroupOperation = 'and' | 'or' | 'notAnd' | 'notOr';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
@@ -220,7 +230,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @default ['and', 'or', 'notAnd', 'notOr']
      * @public
      */
-    groupOperations?: Array<FilterBuilderGroupOperations>;
+    groupOperations?: Array<GroupOperation>;
     /**
      * @docid
      * @default undefined
@@ -318,7 +328,7 @@ export interface dxFilterBuilderCustomOperation {
      * @default undefined
      * @public
      */
-    dataTypes?: Array<FilterBuilderFieldDataType>;
+    dataTypes?: Array<DataType>;
     /**
      * @docid
      * @type_function_param1 conditionInfo:object
@@ -387,7 +397,7 @@ export interface dxFilterBuilderField {
      * @default "string"
      * @public
      */
-    dataType?: FilterBuilderFieldDataType;
+    dataType?: DataType;
     /**
      * @docid
      * @public
@@ -412,7 +422,7 @@ export interface dxFilterBuilderField {
      * @default undefined
      * @public
      */
-    filterOperations?: Array<FilterBuilderFieldFilterOperations | string>;
+    filterOperations?: Array<FilterBuilderOperation | string>;
     /**
      * @docid
      * @default ""

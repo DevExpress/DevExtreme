@@ -15,9 +15,13 @@ import CollectionWidget, {
 
 import {
   Mode,
-} from '../types/enums';
+} from '../common';
 
 type ItemLike = string | Item | any;
+
+export {
+  Mode,
+};
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>>;

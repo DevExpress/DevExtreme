@@ -7,10 +7,10 @@ import Widget, {
 } from '../widget/ui.widget';
 
 import {
+    EditorStyle,
     ValidationMessageMode,
-    EditorStylingMode,
     ValidationStatus,
-} from '../../types/enums';
+} from '../../common';
 
 export interface ValueChangedInfo {
     readonly previousValue?: any;
@@ -80,7 +80,7 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @default 'outlined'
      * @hidden
      */
-    stylingMode?: EditorStylingMode;
+    stylingMode?: EditorStyle;
 }
 /**
  * @docid

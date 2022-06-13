@@ -23,6 +23,12 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
+import {
+    PositionAlignment,
+    ToolbarItemLocation,
+    ToolbarItemComponent,
+} from '../common';
+
 import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions,
@@ -32,16 +38,18 @@ import {
     ResizeInfo,
 } from './resizable';
 
-import {
-    Toolbar,
-    ToolbarItemWidget,
-    ToolbarItemLocation,
+export {
     PositionAlignment,
-} from '../types/enums';
+    ToolbarItemLocation,
+    ToolbarItemComponent as ToolbarItemWidget,
+};
 
 export interface TitleRenderedInfo {
     readonly titleElement: DxElement;
 }
+
+/** @public */
+export type ToolbarLocation = 'bottom' | 'top';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxPopup>;
@@ -294,7 +302,7 @@ export interface dxPopupToolbarItem {
      * @default 'top'
      * @public
      */
-    toolbar?: Toolbar;
+    toolbar?: ToolbarLocation;
     /**
      * @docid dxPopupOptions.toolbarItems.visible
      * @default true
@@ -305,7 +313,7 @@ export interface dxPopupToolbarItem {
      * @docid dxPopupOptions.toolbarItems.widget
      * @public
      */
-    widget?: ToolbarItemWidget;
+    widget?: ToolbarItemComponent;
 }
 /**
  * @docid

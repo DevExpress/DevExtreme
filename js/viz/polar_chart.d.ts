@@ -50,31 +50,55 @@ import {
 } from './core/base_widget';
 
 import {
-    PolarChartOverlappingBehavior,
-    DashStyle,
-    VizPointSymbol,
-    ChartElementSelectionMode,
-    ChartLegendHoverMode,
-    RelativePosition,
-    DiscreteAxisDivisionMode,
-    ValueAxisVisualRangeUpdateMode,
-    ChartZoomPanAction,
-    AxisScaleType,
-    ChartDataType,
+    SingleOrMultiple,
+} from '../common';
+
+import {
     ArgumentAxisHoverMode,
-    PolarChartResolveLabelOverlapping,
-    PolarChartSeriesType,
-    HatchingDirection,
-    ChartSeriesHoverMode,
-    ChartSeriesSelectionMode,
-    ChartPointInteractionMode,
+    AxisScaleType,
+    ChartsDataType,
+    DashStyle,
+    DiscreteAxisDivisionMode,
+    HatchDirection,
+    LabelOverlap,
+    LegendHoverMode,
+    PointInteractionMode,
+    PointSymbol,
+    RelativePosition,
+    SeriesHoverMode,
+    SeriesSelectionMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
-} from '../types/enums';
+    ZoomPanAction,
+} from '../common/charts';
 
 interface SeriesInteractionInfo {
     target: polarChartSeriesObject;
 }
+
+export {
+    ArgumentAxisHoverMode,
+    AxisScaleType,
+    ChartsDataType,
+    DashStyle,
+    DiscreteAxisDivisionMode,
+    HatchDirection,
+    LabelOverlap,
+    LegendHoverMode,
+    PointInteractionMode,
+    PointSymbol,
+    RelativePosition,
+    SeriesHoverMode,
+    SeriesSelectionMode,
+    ValueErrorBarDisplayMode,
+    ValueErrorBarType,
+    ZoomPanAction,
+};
+
+/** @public */
+export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
+/** @public */
+export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
 
 /** @public */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
@@ -144,7 +168,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly previousRange: VizRange;
-    readonly actionType: ChartZoomPanAction;
+    readonly actionType: ZoomPanAction;
     readonly zoomFactor: number;
     readonly shift: number;
 };
@@ -152,7 +176,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | TouchEvent> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
-    readonly actionType: ChartZoomPanAction;
+    readonly actionType: ZoomPanAction;
 };
 
 /**
@@ -350,7 +374,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxPolarChart
      * @type_function_param1_field event:event
-     * @type_function_param1_field actionType:Enums.ChartZoomPanAction
+     * @type_function_param1_field actionType:Enums.ZoomPanAction
      * @notUsedInTheme
      * @action
      * @public
@@ -362,7 +386,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxPolarChart
      * @type_function_param1_field event:event
-     * @type_function_param1_field actionType:Enums.ChartZoomPanAction
+     * @type_function_param1_field actionType:Enums.ZoomPanAction
      * @notUsedInTheme
      * @action
      * @public
@@ -373,7 +397,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default "none"
      * @public
      */
-    resolveLabelOverlapping?: PolarChartResolveLabelOverlapping;
+    resolveLabelOverlapping?: LabelOverlap;
     /**
      * @docid
      * @default undefined
@@ -388,7 +412,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default 'single'
      * @public
      */
-    seriesSelectionMode?: ChartElementSelectionMode;
+    seriesSelectionMode?: SingleOrMultiple;
     /**
      * @docid
      * @default undefined
@@ -448,7 +472,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @default undefined
      * @public
      */
-    argumentType?: ChartDataType;
+    argumentType?: ChartsDataType;
     /**
      * @docid dxPolarChartOptions.argumentAxis.axisDivisionFactor
      * @default 50
@@ -513,7 +537,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -552,7 +576,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     /**
      * @docid dxPolarChartOptions.argumentAxis.tickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -867,7 +891,7 @@ export interface dxPolarChartCommonAxisSettingsLabel {
      * @default 'hide'
      * @public
      */
-    overlappingBehavior?: PolarChartOverlappingBehavior;
+    overlappingBehavior?: LabelOverlap;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.label.visible
      * @default true
@@ -1011,7 +1035,7 @@ export interface dxPolarChartLegend extends BaseChartLegend {
      * @default 'includePoints'
      * @public
      */
-    hoverMode?: ChartLegendHoverMode;
+    hoverMode?: LegendHoverMode;
 }
 /** @namespace DevExpress.viz */
 export interface dxPolarChartTooltip extends BaseChartTooltip {
@@ -1082,7 +1106,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -1097,7 +1121,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -1124,7 +1148,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.tickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -1145,7 +1169,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @default undefined
      * @public
      */
-    valueType?: ChartDataType;
+    valueType?: ChartsDataType;
     /**
      * @docid dxPolarChartOptions.valueAxis.visualRange
      * @fires BaseWidgetOptions.onOptionChanged
@@ -1478,7 +1502,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
      * @public
      */
-    hoverMode?: ChartSeriesHoverMode;
+    hoverMode?: SeriesHoverMode;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle
      * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
@@ -1531,7 +1555,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.direction
          * @default 'none'
          */
-        direction?: HatchingDirection;
+        direction?: HatchDirection;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.opacity
          * @default 0.75
@@ -1599,7 +1623,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
      * @public
      */
-    selectionMode?: ChartSeriesSelectionMode;
+    selectionMode?: SeriesSelectionMode;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle
      * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
@@ -1652,7 +1676,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.direction
          * @default 'none'
          */
-        direction?: HatchingDirection;
+        direction?: HatchDirection;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.opacity
          * @default 0.5
@@ -1927,7 +1951,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @public
      */
-    hoverMode?: ChartPointInteractionMode;
+    hoverMode?: PointInteractionMode;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -2003,7 +2027,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @public
      */
-    selectionMode?: ChartPointInteractionMode;
+    selectionMode?: PointInteractionMode;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -2060,7 +2084,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @public
      */
-    symbol?: VizPointSymbol;
+    symbol?: PointSymbol;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.visible
      * @default true

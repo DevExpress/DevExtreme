@@ -27,15 +27,29 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-    VizWordWrap,
-    VizTextOverflow,
-    VizPalette,
-    VizPaletteExtensionMode,
-    SelectionMode,
-    TreeMapLayoutAlgorithm,
-    TreeMapLayoutDirection,
-    TreeMapColorizerType,
-} from '../types/enums';
+    SingleMultipleOrNone,
+} from '../common';
+
+import {
+    Palette,
+    PaletteExtensionMode,
+    TextOverflow,
+    WordWrap,
+} from '../common/charts';
+
+export {
+    Palette,
+    PaletteExtensionMode,
+    TextOverflow,
+    WordWrap,
+};
+
+/** @public */
+export type TreeMapColorizerType = 'discrete' | 'gradient' | 'none' | 'range';
+/** @public */
+export type TreeMapLayoutAlgorithm = 'sliceanddice' | 'squarified' | 'strip';
+/** @public */
+export type TreeMapLayoutDirection = 'leftBottomRightTop' | 'leftTopRightBottom' | 'rightBottomLeftTop' | 'rightTopLeftBottom';
 
 export interface InteractionInfo {
   readonly node: dxTreeMapNode;
@@ -127,12 +141,12 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
        * @docid
        * @default "Material"
        */
-      palette?: Array<string> | VizPalette;
+      palette?: Array<string> | Palette;
       /**
        * @docid
        * @default 'blend'
        */
-      paletteExtensionMode?: VizPaletteExtensionMode;
+      paletteExtensionMode?: PaletteExtensionMode;
       /**
        * @docid
        * @default undefined
@@ -230,7 +244,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "ellipsis"
          */
-        textOverflow?: VizTextOverflow;
+        textOverflow?: TextOverflow;
         /**
          * @docid
          * @default true
@@ -386,7 +400,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default undefined
      * @public
      */
-    selectionMode?: SelectionMode;
+    selectionMode?: SingleMultipleOrNone;
     /**
      * @docid
      * @public
@@ -451,7 +465,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "ellipsis"
          */
-        textOverflow?: VizTextOverflow;
+        textOverflow?: TextOverflow;
         /**
          * @docid
          * @defaultValue true
@@ -461,7 +475,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "normal"
          */
-        wordWrap?: VizWordWrap;
+        wordWrap?: WordWrap;
       };
       /**
        * @docid

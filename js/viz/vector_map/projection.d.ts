@@ -1,6 +1,5 @@
-import {
-    VectorMapProjection,
-} from '../../types/enums';
+/** @public */
+export type VectorMapProjection = 'equirectangular' | 'lambert' | 'mercator' | 'miller';
 
 /**
  * @docid

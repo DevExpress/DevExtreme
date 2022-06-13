@@ -24,9 +24,14 @@ import dxDraggable, {
 } from './draggable';
 
 import {
+    DragHighlight,
     Orientation,
-    DropFeedbackMode,
-} from '../types/enums';
+} from '../common';
+
+export {
+    DragHighlight,
+    Orientation,
+};
 
 /** @public */
 export interface AddEvent {
@@ -164,7 +169,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default "push"
      * @public
      */
-    dropFeedbackMode?: DropFeedbackMode;
+    dropFeedbackMode?: DragHighlight;
     /**
      * @docid
      * @default "> *"

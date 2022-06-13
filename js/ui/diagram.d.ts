@@ -19,24 +19,26 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-  DiagramDataLayoutType,
-  DiagramDataLayoutOrientation,
-  DiagramUnits,
-  DiagramPageOrientation,
-  DiagramShapeCategory,
-  DiagramShapeType,
-  DiagramConnectorLineType,
-  DiagramConnectorLineEnd,
-  DiagramToolboxDisplayMode,
-  DiagramCommand,
-  DiagramPanelVisibility,
-  DiagramAutoZoomMode,
-  DiagramItemType,
-  DiagramExportFormat,
-  DiagramRequestEditOperationReason,
-  DiagramConnectorPosition,
-  ToolbarItemLocation,
-} from '../types/enums';
+    Orientation,
+    PageOrientation,
+    ToolbarItemLocation,
+} from '../common';
+
+export type DiagramAutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
+export type DiagramCommand = 'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox';
+export type DiagramConnectorLineEnd = 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle';
+export type DiagramConnectorLineType = 'straight' | 'orthogonal';
+export type DiagramConnectorPosition = 'start' | 'end';
+export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
+export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
+export type DiagramItemType = 'shape' | 'connector';
+export type DiagramModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape' | 'moveShape';
+export type DiagramPanelVisibility = 'auto' | 'visible' | 'collapsed' | 'disabled';
+export type DiagramRequestEditOperationReason = 'checkUIElementAvailability' | 'modelModification';
+export type DiagramShapeCategory = 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom';
+export type DiagramShapeType = 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight';
+export type DiagramToolboxDisplayMode = 'icons' | 'texts';
+export type DiagramUnits = 'in' | 'cm' | 'px';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxDiagram>;
@@ -599,7 +601,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
          * @docid
          */
-        orientation?: DiagramDataLayoutOrientation;
+        orientation?: Orientation;
         /**
          * @docid
          */
@@ -770,7 +772,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default "portrait"
      * @public
      */
-    pageOrientation?: DiagramPageOrientation;
+    pageOrientation?: PageOrientation;
     /**
      * @docid
      * @public

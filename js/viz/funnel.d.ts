@@ -35,18 +35,35 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-    VizPalette,
-    VizWordWrap,
-    VizTextOverflow,
-    VizPaletteExtensionMode,
-    DashStyle,
-    FunnelResolveLabelOverlapping,
     HorizontalEdge,
-    SelectionMode,
-    FunnelAlgorithm,
-    HatchingDirection,
-    FunnelLabelPosition,
-} from '../types/enums';
+    SingleMultipleOrNone,
+} from '../common';
+
+import {
+    DashStyle,
+    HatchDirection,
+    LabelPosition,
+    Palette,
+    PaletteExtensionMode,
+    TextOverflow,
+    WordWrap,
+} from '../common/charts';
+
+export {
+    DashStyle,
+    HatchDirection,
+    HorizontalEdge,
+    LabelPosition,
+    Palette,
+    PaletteExtensionMode,
+    TextOverflow,
+    WordWrap,
+};
+
+/** @public */
+export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
+/** @public */
+export type FunnelLabelOverlap = 'hide' | 'none' | 'shift';
 
 /**
  * @public
@@ -227,7 +244,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @docid
            * @default 'right'
            */
-          direction?: HatchingDirection;
+          direction?: HatchDirection;
           /**
            * @docid
            * @default 0.75
@@ -277,7 +294,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @docid
            * @default "right"
            */
-          direction?: HatchingDirection;
+          direction?: HatchDirection;
           /**
            * @docid
            * @default 0.5
@@ -385,7 +402,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @docid
        * @default 'columns'
        */
-      position?: FunnelLabelPosition;
+      position?: LabelPosition;
       /**
        * @docid
        * @default false
@@ -395,7 +412,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @docid
        * @default 'ellipsis'
        */
-      textOverflow?: VizTextOverflow;
+      textOverflow?: TextOverflow;
       /**
        * @docid
        * @default true
@@ -405,7 +422,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @docid
        * @default 'normal'
        */
-      wordWrap?: VizWordWrap;
+      wordWrap?: WordWrap;
     };
     /**
      * @docid
@@ -479,25 +496,25 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: VizPaletteExtensionMode;
+    paletteExtensionMode?: PaletteExtensionMode;
     /**
      * @docid
      * @default "shift"
      * @public
      */
-    resolveLabelOverlapping?: FunnelResolveLabelOverlapping;
+    resolveLabelOverlapping?: FunnelLabelOverlap;
     /**
      * @docid
      * @default 'single'
      * @public
      */
-    selectionMode?: SelectionMode;
+    selectionMode?: SingleMultipleOrNone;
     /**
      * @docid
      * @default true

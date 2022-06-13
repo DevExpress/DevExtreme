@@ -4,4 +4,4 @@
  * @publicName hideToasts()
  * @public
  */
- export default function hideToasts(): void;
+export default function hideToasts(): void;

@@ -35,13 +35,17 @@ import {
 } from './widget/ui.search_box_mixin';
 
 import {
-    ShowScrollbarMode,
     SelectAllMode,
-    ListSelectionMode,
-    ListPageLoadMode,
-    ListMenuMode,
-    ListItemDeleteMode,
-} from '../types/enums';
+    ScrollbarMode,
+    PageLoadMode,
+    SingleMultipleAllOrNone,
+} from '../common';
+
+export {
+    SelectAllMode,
+    ScrollbarMode,
+    PageLoadMode,
+};
 
 type ItemLike = string | Item | any;
 
@@ -50,6 +54,11 @@ interface ListItemInfo<TItem extends ItemLike> {
     readonly itemElement: DxElement;
     readonly itemIndex: number | { group: number; item: number };
 }
+
+/** @public */
+export type ItemDeleteMode = 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
+/** @public */
+export type ListMenuMode = 'context' | 'slide';
 
 export interface ScrollInfo {
     readonly scrollOffset?: any;
@@ -213,7 +222,7 @@ export interface dxListOptions<
      * @default 'swipe' &for(Android)
      * @public
      */
-    itemDeleteMode?: ListItemDeleteMode;
+    itemDeleteMode?: ItemDeleteMode;
     /**
      * @docid
      * @public
@@ -389,7 +398,7 @@ export interface dxListOptions<
      * @default "nextButton" &for(desktop except Mac)
      * @public
      */
-    pageLoadMode?: ListPageLoadMode;
+    pageLoadMode?: PageLoadMode;
     /**
      * @docid
      * @default "Loading..."
@@ -461,14 +470,14 @@ export interface dxListOptions<
      * @default 'none'
      * @public
      */
-    selectionMode?: ListSelectionMode;
+    selectionMode?: SingleMultipleAllOrNone;
     /**
      * @docid
      * @default 'onScroll'
      * @default 'onHover' &for(desktop)
      * @public
      */
-    showScrollbar?: ShowScrollbarMode;
+    showScrollbar?: ScrollbarMode;
     /**
      * @docid
      * @default false

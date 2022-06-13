@@ -17,9 +17,15 @@ import BaseSparkline, {
 } from './sparklines/base_sparkline';
 
 import {
-    SparklineType,
-    VizPointSymbol,
-} from '../types/enums';
+    PointSymbol,
+} from '../common/charts';
+
+export {
+    PointSymbol,
+};
+
+/** @public */
+export type SparklineType = 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxSparkline>;
@@ -152,7 +158,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      * @default 'circle'
      * @public
      */
-    pointSymbol?: VizPointSymbol;
+    pointSymbol?: PointSymbol;
     /**
      * @docid
      * @default true
