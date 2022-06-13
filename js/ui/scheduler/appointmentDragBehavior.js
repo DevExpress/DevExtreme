@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import Draggable from '../draggable';
 import { extend } from '../../core/utils/extend';
 import { LIST_ITEM_DATA_KEY } from './constants';
+import { isComponentScheduler } from './utils/is-component-scheduler.func';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
@@ -94,6 +95,8 @@ export default class AppointmentDragBehavior {
             if(!e.cancel) {
                 options.onDragMove(e);
             }
+
+            this.removeDropClassesIfEventCanceled(e);
         };
     }
 
@@ -108,6 +111,8 @@ export default class AppointmentDragBehavior {
                     appointmentDragging.onRemove && appointmentDragging.onRemove(e);
                 }
             }
+
+            this.removeDropClassesIfEventCanceled(e);
         };
     }
 
@@ -119,6 +124,8 @@ export default class AppointmentDragBehavior {
             if(e.fromComponent !== e.toComponent) {
                 appointmentDragging.onAdd && appointmentDragging.onAdd(e);
             }
+
+            this.scheduler._removeDroppableClasses();
         };
     }
 
@@ -151,6 +158,26 @@ export default class AppointmentDragBehavior {
             this.appointments._setDragSourceAppointment(
                 currentAppointment, currentSettings,
             );
+        }
+    }
+
+    removeDropClassesIfEventCanceled(event) {
+        // NOTE: event.cancel may be promise or different type, so we need strict check here.
+        if(event.cancel !== true) {
+            return;
+        }
+
+        if(event.fromComponent === event.toComponent) {
+            this.removeDroppableClassesIfComponentScheduler(event.fromComponent);
+        } else {
+            this.removeDroppableClassesIfComponentScheduler(event.fromComponent);
+            this.removeDroppableClassesIfComponentScheduler(event.toComponent);
+        }
+    }
+
+    removeDroppableClassesIfComponentScheduler(component) {
+        if(isComponentScheduler(component)) {
+            component._removeDroppableClasses();
         }
     }
 }
