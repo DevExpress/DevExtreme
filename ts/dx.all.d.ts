@@ -1406,7 +1406,6 @@ declare module DevExpress.common {
   export type ApplyValueMode = 'instantly' | 'useButtons';
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
-  export type CollectionSearchMode = 'contains' | 'startswith' | 'equals';
   export type DataStructure = 'plain' | 'tree';
   export type DataType =
     | 'string'
@@ -1417,8 +1416,7 @@ declare module DevExpress.common {
     | 'datetime';
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
-  export type DropDownSearchMode = 'contains' | 'startswith';
-  export type DropFeedbackMode = 'push' | 'indicate';
+  export type DragHighlight = 'push' | 'indicate';
   export type EditorStyle = 'outlined' | 'underlined' | 'filled';
   export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
   export type FieldChooserLayout = 0 | 1 | 2;
@@ -1475,7 +1473,9 @@ declare module DevExpress.common {
   export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
   export type ScrollDirection = 'both' | 'horizontal' | 'vertical';
   export type ScrollMode = 'standard' | 'virtual';
+  export type SearchMode = 'contains' | 'startswith' | 'equals';
   export type SelectAllMode = 'allPages' | 'page';
+  export type SimplifiedSearchMode = 'contains' | 'startswith';
   export type SingleMultipleAllOrNone = 'single' | 'multiple' | 'all' | 'none';
   export type SingleMultipleOrNone = 'single' | 'multiple' | 'none';
   export type SingleOrMultiple = 'single' | 'multiple';
@@ -1506,19 +1506,15 @@ declare module DevExpress.common {
   export type VerticalEdge = 'bottom' | 'top';
 }
 declare module DevExpress.common.charts {
-  export type AnimationEasing = 'easeOutCubic' | 'linear';
+  export type AnimationEaseMode = 'easeOutCubic' | 'linear';
   export type AnnotationType = 'text' | 'image' | 'custom';
   export type ApplyFilterMode = 'auto' | 'onClick';
   export type ArgumentAxisHoverMode = 'allArgumentPoints' | 'none';
   export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
   export type ChangesApplyMode = 'instantly' | 'onDemand';
-  export type ChartsAxisLabelOverlapping =
-    | 'rotate'
-    | 'stagger'
-    | 'none'
-    | 'hide';
+  export type ChartsAxisLabelOverlap = 'rotate' | 'stagger' | 'none' | 'hide';
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
-  export type ChartsLabelOverlapping = 'hide' | 'none' | 'stack';
+  export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
   export type ColumnChooserMode = 'dragAndDrop' | 'select';
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
   export type DataChangeType = 'insert' | 'update' | 'remove';
@@ -1545,9 +1541,9 @@ declare module DevExpress.common.charts {
   export type FilterType = 'exclude' | 'include';
   export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
   export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
-  export type GroupingExpandMode = 'buttonClick' | 'rowClick';
+  export type GroupExpandMode = 'buttonClick' | 'rowClick';
   export type HatchingDirection = 'left' | 'none' | 'right';
-  export type LabelOverlapping = 'hide' | 'none';
+  export type LabelOverlap = 'hide' | 'none';
   export type LabelPosition = 'columns' | 'inside' | 'outside';
   export type LegendHoverMode = 'excludePoints' | 'includePoints' | 'none';
   export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
@@ -1626,7 +1622,7 @@ declare module DevExpress.common.charts {
     | 'none'
     | 'onlyPoint';
   export type StartEditAction = 'click' | 'dblClick';
-  export type StateStoringType = 'custom' | 'localStorage' | 'sessionStorage';
+  export type StateStoreType = 'custom' | 'localStorage' | 'sessionStorage';
   export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
   export type TextOverflow = 'ellipsis' | 'hide' | 'none';
   export type Theme =
@@ -6924,7 +6920,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.headerFilter.searchMode]
        */
-      searchMode?: DevExpress.common.CollectionSearchMode;
+      searchMode?: DevExpress.common.SearchMode;
       /**
        * [descr:GridBaseColumn.headerFilter.width]
        */
@@ -6963,7 +6959,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type ColumnResizingMode = 'nextColumn' | 'widget';
+    export type ColumnResizeMode = 'nextColumn' | 'widget';
     export type ContentReadyEvent<
       TRowData = any,
       TKey = any
@@ -7766,7 +7762,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.grouping.expandMode]
        */
-      expandMode?: DevExpress.common.charts.GroupingExpandMode;
+      expandMode?: DevExpress.common.charts.GroupExpandMode;
       /**
        * [descr:dxDataGridOptions.grouping.texts]
        */
@@ -8204,7 +8200,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.rowDragging.dropFeedbackMode]
        */
-      dropFeedbackMode?: DevExpress.common.DropFeedbackMode;
+      dropFeedbackMode?: DevExpress.common.DragHighlight;
       /**
        * [descr:GridBaseOptions.rowDragging.filter]
        */
@@ -8691,7 +8687,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.stateStoring.type]
        */
-      type?: DevExpress.common.charts.StateStoringType;
+      type?: DevExpress.common.charts.StateStoreType;
     }
     export type Summary<TRowData = any, TKey = any> = {
       /**
@@ -11627,7 +11623,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownListOptions.searchMode]
      */
-    searchMode?: DevExpress.common.DropDownSearchMode;
+    searchMode?: DevExpress.common.SimplifiedSearchMode;
     /**
      * [descr:dxDropDownListOptions.searchTimeout]
      */
@@ -11728,7 +11724,11 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type FileManagerContextMenuItem =
+    export type FileManagerItemViewMode = 'details' | 'thumbnails';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type FileManagerPredefinedContextMenuItem =
       | 'create'
       | 'upload'
       | 'refresh'
@@ -11737,10 +11737,6 @@ declare module DevExpress.ui {
       | 'copy'
       | 'rename'
       | 'delete';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type FileManagerItemViewMode = 'details' | 'thumbnails';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -11858,7 +11854,7 @@ declare module DevExpress.ui {
      */
     items?: Array<
       | DevExpress.ui.dxFileManager.ContextMenuItem
-      | DevExpress.ui.dxFileManager.FileManagerContextMenuItem
+      | DevExpress.ui.dxFileManager.FileManagerPredefinedContextMenuItem
     >;
   }
   /**
@@ -11874,7 +11870,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerContextMenuItem.name]
      */
-    name?: DevExpress.ui.dxFileManager.FileManagerContextMenuItem | string;
+    name?:
+      | DevExpress.ui.dxFileManager.FileManagerPredefinedContextMenuItem
+      | string;
     /**
      * [descr:dxFileManagerContextMenuItem.visible]
      */
@@ -13002,7 +13000,12 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type FormItem = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+    export type FormItemType =
+      | 'empty'
+      | 'group'
+      | 'simple'
+      | 'tabbed'
+      | 'button';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -13052,7 +13055,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormButtonItem.itemType]
      */
-    itemType?: DevExpress.ui.dxForm.FormItem;
+    itemType?: DevExpress.ui.dxForm.FormItemType;
     /**
      * [descr:dxFormButtonItem.name]
      */
@@ -13086,7 +13089,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormEmptyItem.itemType]
      */
-    itemType?: DevExpress.ui.dxForm.FormItem;
+    itemType?: DevExpress.ui.dxForm.FormItemType;
     /**
      * [descr:dxFormEmptyItem.name]
      */
@@ -13132,7 +13135,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormGroupItem.itemType]
      */
-    itemType?: DevExpress.ui.dxForm.FormItem;
+    itemType?: DevExpress.ui.dxForm.FormItemType;
     /**
      * [descr:dxFormGroupItem.items]
      */
@@ -13295,7 +13298,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormSimpleItem.itemType]
      */
-    itemType?: DevExpress.ui.dxForm.FormItem;
+    itemType?: DevExpress.ui.dxForm.FormItemType;
     /**
      * [descr:dxFormSimpleItem.label]
      */
@@ -13373,7 +13376,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormTabbedItem.itemType]
      */
-    itemType?: DevExpress.ui.dxForm.FormItem;
+    itemType?: DevExpress.ui.dxForm.FormItemType;
     /**
      * [descr:dxFormTabbedItem.name]
      */
@@ -13816,7 +13819,15 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type GanttContextMenuItem =
+    export type GanttPdfExportDateRange = 'all' | 'visible';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GanttPredefinedContextMenuItem =
       | 'undo'
       | 'redo'
       | 'expandAll'
@@ -13826,15 +13837,26 @@ declare module DevExpress.ui {
       | 'zoomIn'
       | 'zoomOut'
       | 'deleteDependency'
-      | 'taskDetails';
+      | 'taskDetails'
+      | 'resourceManager';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type GanttPdfExportDateRange = 'all' | 'visible';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
+    export type GanttPredefinedToolbarItem =
+      | 'separator'
+      | 'undo'
+      | 'redo'
+      | 'expandAll'
+      | 'collapseAll'
+      | 'addTask'
+      | 'deleteTask'
+      | 'zoomIn'
+      | 'zoomOut'
+      | 'taskDetails'
+      | 'fullScreen'
+      | 'resourceManager'
+      | 'showResources'
+      | 'showDependencies';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -13865,24 +13887,6 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export type GanttTaskTitlePosition = 'inside' | 'outside' | 'none';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type GanttToolbarItem =
-      | 'separator'
-      | 'undo'
-      | 'redo'
-      | 'expandAll'
-      | 'collapseAll'
-      | 'addTask'
-      | 'deleteTask'
-      | 'zoomIn'
-      | 'zoomOut'
-      | 'taskDetails'
-      | 'fullScreen'
-      | 'resourceManager'
-      | 'showResources'
-      | 'showDependencies';
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxGantt>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxGantt> &
@@ -14172,8 +14176,7 @@ declare module DevExpress.ui {
      */
     items?: Array<
       | DevExpress.ui.dxGantt.ContextMenuItem
-      | DevExpress.ui.dxGantt.GanttContextMenuItem
-      | 'resourceManager'
+      | DevExpress.ui.dxGantt.GanttPredefinedContextMenuItem
     >;
   }
   /**
@@ -14185,10 +14188,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttContextMenuItem.name]
      */
-    name?:
-      | DevExpress.ui.dxGantt.GanttContextMenuItem
-      | 'resourceManager'
-      | string;
+    name?: DevExpress.ui.dxGantt.GanttPredefinedContextMenuItem | string;
   }
   /**
    * [descr:dxGanttFilterRow]
@@ -14817,7 +14817,8 @@ declare module DevExpress.ui {
      * [descr:dxGanttToolbar.items]
      */
     items?: Array<
-      DevExpress.ui.dxGantt.ToolbarItem | DevExpress.ui.dxGantt.GanttToolbarItem
+      | DevExpress.ui.dxGantt.ToolbarItem
+      | DevExpress.ui.dxGantt.GanttPredefinedToolbarItem
     >;
   }
   /**
@@ -14828,7 +14829,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttToolbarItem.name]
      */
-    name?: DevExpress.ui.dxGantt.GanttToolbarItem | string;
+    name?: DevExpress.ui.dxGantt.GanttPredefinedToolbarItem | string;
     /**
      * [descr:dxGanttToolbarItem.location]
      */
@@ -16281,13 +16282,13 @@ declare module DevExpress.ui {
       readonly options: any;
       originalRoute: any;
     };
-    export type RouteRemovedEvent = DevExpress.events.EventInfo<dxMap> & {
-      readonly options?: any;
-    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type RoutingMode = 'driving' | 'walking';
+    export type RouteMode = 'driving' | 'walking';
+    export type RouteRemovedEvent = DevExpress.events.EventInfo<dxMap> & {
+      readonly options?: any;
+    };
   }
   /**
    * @deprecated use Properties instead
@@ -16412,7 +16413,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMapOptions.routes.mode]
        */
-      mode?: DevExpress.ui.dxMap.RoutingMode;
+      mode?: DevExpress.ui.dxMap.RouteMode;
       /**
        * [descr:dxMapOptions.routes.opacity]
        */
@@ -17372,7 +17373,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type PivotGridRowHeadersLayout = 'standard' | 'tree';
+    export type PivotGridRowHeaderLayout = 'standard' | 'tree';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -17821,7 +17822,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridOptions.rowHeaderLayout]
      */
-    rowHeaderLayout?: DevExpress.ui.dxPivotGrid.PivotGridRowHeadersLayout;
+    rowHeaderLayout?: DevExpress.ui.dxPivotGrid.PivotGridRowHeaderLayout;
     /**
      * [descr:dxPivotGridOptions.scrolling]
      */
@@ -17886,7 +17887,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.stateStoring.type]
        */
-      type?: DevExpress.common.charts.StateStoringType;
+      type?: DevExpress.common.charts.StateStoreType;
     };
     /**
      * [descr:dxPivotGridOptions.texts]
@@ -18881,7 +18882,7 @@ declare module DevExpress.ui {
     deleteRecurrence(
       appointmentData: dxSchedulerAppointment,
       date: Date | string,
-      recurrenceEditMode: DevExpress.ui.dxScheduler.RecurrenceEditingMode
+      recurrenceEditMode: DevExpress.ui.dxScheduler.RecurrenceEditMode
     ): void;
     getDataSource(): DevExpress.data.DataSource;
     /**
@@ -19089,7 +19090,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type RecurrenceEditingMode = 'dialog' | 'occurrence' | 'series';
+    export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -19500,7 +19501,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.recurrenceEditMode]
      */
-    recurrenceEditMode?: DevExpress.ui.dxScheduler.RecurrenceEditingMode;
+    recurrenceEditMode?: DevExpress.ui.dxScheduler.RecurrenceEditMode;
     /**
      * [descr:dxSchedulerOptions.recurrenceExceptionExpr]
      */
@@ -20629,7 +20630,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSortableOptions.dropFeedbackMode]
      */
-    dropFeedbackMode?: DevExpress.common.DropFeedbackMode;
+    dropFeedbackMode?: DevExpress.common.DragHighlight;
     /**
      * [descr:dxSortableOptions.filter]
      */
@@ -24553,7 +24554,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.columnResizingMode]
      */
-    columnResizingMode?: DevExpress.ui.dxDataGrid.ColumnResizingMode;
+    columnResizingMode?: DevExpress.ui.dxDataGrid.ColumnResizeMode;
     /**
      * [descr:GridBaseOptions.columnWidth]
      */
@@ -25086,7 +25087,7 @@ declare module DevExpress.ui {
     /**
      * [descr:SearchBoxMixinOptions.searchMode]
      */
-    searchMode?: DevExpress.common.CollectionSearchMode;
+    searchMode?: DevExpress.common.SearchMode;
     /**
      * [descr:SearchBoxMixinOptions.searchTimeout]
      */
@@ -25683,7 +25684,7 @@ declare module DevExpress.viz {
           /**
            * [descr:BaseChartOptions.animation.easing]
            */
-          easing?: DevExpress.common.charts.AnimationEasing;
+          easing?: DevExpress.common.charts.AnimationEaseMode;
           /**
            * [descr:BaseChartOptions.animation.enabled]
            */
@@ -25859,7 +25860,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.animation.easing]
      */
-    easing?: DevExpress.common.charts.AnimationEasing;
+    easing?: DevExpress.common.charts.AnimationEaseMode;
     /**
      * [descr:BaseGaugeOptions.animation.enabled]
      */
@@ -26078,7 +26079,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.scale.label.overlappingBehavior]
      */
-    overlappingBehavior?: DevExpress.common.charts.LabelOverlapping;
+    overlappingBehavior?: DevExpress.common.charts.LabelOverlap;
     /**
      * [descr:BaseGaugeOptions.scale.label.useRangeColors]
      */
@@ -27621,7 +27622,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.common.charts.LabelOverlapping;
+    resolveLabelOverlapping?: DevExpress.common.charts.LabelOverlap;
     /**
      * [descr:dxBarGaugeOptions.startValue]
      */
@@ -28462,7 +28463,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.overlappingBehavior]
      */
-    overlappingBehavior?: DevExpress.common.charts.ChartsAxisLabelOverlapping;
+    overlappingBehavior?: DevExpress.common.charts.ChartsAxisLabelOverlap;
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.position]
      */
@@ -29037,7 +29038,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.common.charts.ChartsLabelOverlapping;
+    resolveLabelOverlapping?: DevExpress.common.charts.ChartsLabelOverlap;
     /**
      * [descr:dxChartOptions.rotated]
      */
@@ -31396,7 +31397,7 @@ declare module DevExpress.viz {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type CircularGaugeLabelOverlapping = 'first' | 'last';
+    export type CircularGaugeLabelOverlap = 'first' | 'last';
     export type DisposingEvent = DevExpress.events.EventInfo<dxCircularGauge>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxCircularGauge>;
     export type ExportedEvent = DevExpress.events.EventInfo<dxCircularGauge>;
@@ -31490,7 +31491,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxCircularGaugeOptions.scale.label.hideFirstOrLast]
      */
-    hideFirstOrLast?: DevExpress.viz.dxCircularGauge.CircularGaugeLabelOverlapping;
+    hideFirstOrLast?: DevExpress.viz.dxCircularGauge.CircularGaugeLabelOverlap;
     /**
      * [descr:dxCircularGaugeOptions.scale.label.indentFromTick]
      */
@@ -31535,7 +31536,7 @@ declare module DevExpress.viz {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type FunnelLabelOverlapping = 'hide' | 'none' | 'shift';
+    export type FunnelLabelOverlap = 'hide' | 'none' | 'shift';
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxFunnel> &
@@ -31938,7 +31939,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.viz.dxFunnel.FunnelLabelOverlapping;
+    resolveLabelOverlapping?: DevExpress.viz.dxFunnel.FunnelLabelOverlap;
     /**
      * [descr:dxFunnelOptions.selectionMode]
      */
@@ -32142,15 +32143,15 @@ declare module DevExpress.viz {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
+    export type PieChartLabelOverlap = 'hide' | 'none' | 'shift';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
     export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type PieChartResolveLabelOverlapping = 'hide' | 'none' | 'shift';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type PieChartSegmentsDirection = 'anticlockwise' | 'clockwise';
+    export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -32335,11 +32336,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.viz.dxPieChart.PieChartResolveLabelOverlapping;
+    resolveLabelOverlapping?: DevExpress.viz.dxPieChart.PieChartLabelOverlap;
     /**
      * [descr:dxPieChartOptions.segmentsDirection]
      */
-    segmentsDirection?: DevExpress.viz.dxPieChart.PieChartSegmentsDirection;
+    segmentsDirection?: DevExpress.viz.dxPieChart.PieChartSegmentDirection;
     /**
      * [descr:dxPieChartOptions.series]
      */
@@ -33187,7 +33188,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.label.overlappingBehavior]
      */
-    overlappingBehavior?: DevExpress.common.charts.LabelOverlapping;
+    overlappingBehavior?: DevExpress.common.charts.LabelOverlap;
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.label.visible]
      */
@@ -33440,7 +33441,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.common.charts.LabelOverlapping;
+    resolveLabelOverlapping?: DevExpress.common.charts.LabelOverlap;
     /**
      * [descr:dxPolarChartOptions.series]
      */
@@ -34633,7 +34634,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.scale.label.overlappingBehavior]
          */
-        overlappingBehavior?: DevExpress.common.charts.LabelOverlapping;
+        overlappingBehavior?: DevExpress.common.charts.LabelOverlap;
         /**
          * [descr:dxRangeSelectorOptions.scale.label.topIndent]
          */
