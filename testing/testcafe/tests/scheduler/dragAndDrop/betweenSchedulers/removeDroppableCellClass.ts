@@ -5,6 +5,8 @@ import createWidget from '../../../../helpers/createWidget';
 const FIRST_SCHEDULER_SELECTOR = '#scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = '#scheduler-second';
 const METHODS_TO_CANCEL = [
+  'onDragStart',
+  'onDragMove',
   'onDragEnd',
   'onRemove',
   'onAdd',
