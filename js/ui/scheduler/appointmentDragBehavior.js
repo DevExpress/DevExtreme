@@ -17,6 +17,9 @@ export default class AppointmentDragBehavior {
         };
 
         this.appointmentInfo = null;
+
+        this.dragBetweenComponentsPromise = null;
+        this.dragBetweenComponentsResolver = null;
     }
 
     isAllDay(appointment) {
@@ -95,8 +98,6 @@ export default class AppointmentDragBehavior {
             if(!e.cancel) {
                 options.onDragMove(e);
             }
-
-            this.removeDropClassesIfEventCanceled(e);
         };
     }
 
@@ -112,7 +113,16 @@ export default class AppointmentDragBehavior {
                 }
             }
 
-            this.removeDropClassesIfEventCanceled(e);
+            // NOTE: event.cancel may be promise or different type, so we need strict check here.
+            if(e.cancel === true) {
+                this.removeDroppableClasses();
+            }
+
+            if(e.cancel !== true && isComponentScheduler(e.toComponent)) {
+                const targetDragBehavior = e.toComponent._getDragBehavior();
+                targetDragBehavior.dragBetweenComponentsPromise = new Promise(
+                    (resolve) => targetDragBehavior.dragBetweenComponentsResolver = resolve);
+            }
         };
     }
 
@@ -125,7 +135,11 @@ export default class AppointmentDragBehavior {
                 appointmentDragging.onAdd && appointmentDragging.onAdd(e);
             }
 
-            this.scheduler._removeDroppableClasses();
+            if(this.dragBetweenComponentsResolver) {
+                this.dragBetweenComponentsResolver();
+                this.dragBetweenComponentsPromise = null;
+                this.dragBetweenComponentsResolver = null;
+            }
         };
     }
 
@@ -161,23 +175,8 @@ export default class AppointmentDragBehavior {
         }
     }
 
-    removeDropClassesIfEventCanceled(event) {
-        // NOTE: event.cancel may be promise or different type, so we need strict check here.
-        if(event.cancel !== true) {
-            return;
-        }
-
-        if(event.fromComponent === event.toComponent) {
-            this.removeDroppableClassesIfComponentScheduler(event.fromComponent);
-        } else {
-            this.removeDroppableClassesIfComponentScheduler(event.fromComponent);
-            this.removeDroppableClassesIfComponentScheduler(event.toComponent);
-        }
-    }
-
-    removeDroppableClassesIfComponentScheduler(component) {
-        if(isComponentScheduler(component)) {
-            component._removeDroppableClasses();
-        }
+    removeDroppableClasses() {
+        this.appointments._removeDragSourceClassFromDraggedAppointment();
+        this.scheduler._workSpace.removeDroppableCellClass();
     }
 }

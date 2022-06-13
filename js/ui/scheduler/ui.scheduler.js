@@ -2462,9 +2462,8 @@ class Scheduler extends Widget {
         validateDayHours(startDayHour, endDayHour);
     }
 
-    _removeDroppableClasses() {
-        this._workSpace.removeDroppableCellClass();
-        this._appointments._removeDragSourceClassFromDraggedAppointment();
+    _getDragBehavior() {
+        return this._workSpace.dragBehavior;
     }
 
     /**
