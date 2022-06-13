@@ -33,7 +33,9 @@ jobs:
       run: npm install --no-audit --no-fund 
 
     - name: Compile renovation
-      run: npm run compile:r
+      run: | 
+        npm i cheerio@1.0.0-rc.10 
+        npm run compile:r
 
     - name: Lint renovation
       run: npm run lint-renovation
