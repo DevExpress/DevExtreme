@@ -1,0 +1,50 @@
+{
+    "extends": [
+        "config:base"
+    ],
+    "rangeStrategy": "bump",
+    "prConcurrentLimit": 2,
+    "semanticCommits": "enabled",
+    "commitMessagePrefix": "Update deps - ",
+    "baseBranches": [
+        "22_1",
+        "21_2"
+    ],
+    "labels": [
+        "dependencies"
+    ],
+    "lockFileMaintenance": {
+        "enabled": true,
+        "schedule": [ "every 1 day" ],
+        "automerge": true
+    },
+    "vulnerabilityAlerts": {
+        "enabled": true,
+        "automerge": true
+    },
+    "packageRules": [
+        {
+            "matchPackagePatterns": [ "enzyme" ],
+            "enabled": false
+        },
+        {
+            "matchPackagePatterns": [ "*" ],
+            "matchUpdateTypes": [ "minor", "patch" ],
+            "automerge": true
+        },
+        {
+            "matchPackagePatterns": [ "*" ],
+            "matchUpdateTypes": [ "major" ],
+            "enabled": false
+        }
+    ],
+    "reviewers": [
+        "team:devextreme-devops"
+    ],
+    "ignorePaths": [
+        ".github"
+    ],
+    "constraints": {
+        "node": "^16.3.0"
+    }
+}

@@ -647,26 +647,6 @@ QUnit.module('skip mousewheel event test', () => {
             $element.remove();
         }
     });
-
-    test('needSkipEvent returns false for dropDownList popup (T1000311)', function(assert) {
-        const $element = $('<div class=\'dx-skip-gesture-event\'></div>');
-        const $popup = $('<div class=\'dx-dropdownlist-popup-wrapper\'></div>');
-
-        $popup.appendTo($element);
-
-        assert.notOk(needSkipMouseWheel($popup), 'event is not skipped in inner dropdownlist popup wrapper element');
-    });
-
-    test('needSkipEvent returns false for dropDownList popup child (T1000311)', function(assert) {
-        const $element = $('<div class=\'dx-skip-gesture-event\'></div>');
-        const $popup = $('<div class=\'dx-dropdownlist-popup-wrapper\'></div>');
-        const $content = $('<div class=\'some-content\'></div>');
-
-        $popup.appendTo($element);
-        $content.appendTo($popup);
-
-        assert.notOk(needSkipMouseWheel($content), 'event is not skipped in inner dropdownlist popup wrapper child');
-    });
 });
 
 QUnit.module('skip mouse event tests', () => {
@@ -717,16 +697,6 @@ QUnit.module('skip mouse event tests', () => {
         const element = $('<div />');
         assert.ok(!needSkipMouseDown(element));
     });
-
-    test('needSkipEvent returns true for .dx-skip-gesture-event click', function(assert) {
-        const element = $('<div class=\'dx-skip-gesture-event\' />');
-        assert.ok(needSkipMouseDown(element));
-    });
-
-    test('needSkipEvent returns true for nested in .dx-skip-gesture-event click', function(assert) {
-        const element = $('<div />').appendTo('<div class=\'dx-skip-gesture-event\' />');
-        assert.ok(needSkipMouseDown(element));
-    });
 });
 
 QUnit.module('skip pointer event tests', () => {
@@ -769,16 +739,6 @@ QUnit.module('skip pointer event tests', () => {
     test('needSkipEvent returns false for div click', function(assert) {
         const element = $('<div />');
         assert.ok(!needSkipPointerDown(element));
-    });
-
-    test('needSkipEvent returns true for .dx-skip-gesture-event click', function(assert) {
-        const element = $('<div class=\'dx-skip-gesture-event\' />');
-        assert.ok(needSkipPointerDown(element));
-    });
-
-    test('needSkipEvent returns true for nested in .dx-skip-gesture-event click', function(assert) {
-        const element = $('<div />').appendTo('<div class=\'dx-skip-gesture-event\' />');
-        assert.ok(needSkipPointerDown(element));
     });
 });
 

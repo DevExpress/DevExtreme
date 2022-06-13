@@ -99,8 +99,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
             onSelectionChanged: this._onFilesViewSelectionChanged.bind(this),
             onFocusedRowChanged: this._onFilesViewFocusedRowChanged.bind(this),
-            onOptionChanged: this._onFilesViewOptionChanged.bind(this),
-            onContentReady: () => this._refreshDeferred?.resolve()
+            onOptionChanged: this._onFilesViewOptionChanged.bind(this)
         });
     }
 

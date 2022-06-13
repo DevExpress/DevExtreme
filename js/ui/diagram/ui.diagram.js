@@ -1763,23 +1763,15 @@ class Diagram extends Widget {
         }
     }
     _raiseToolboxDragStart() {
-        if(this._toolbox) {
-            this._toolbox._raiseToolboxDragStart();
-
-            if(this.isMobileScreenSize()) {
-                this._toolbox.hide();
-                this._toolboxDragHidden = true;
-            }
+        if(this._toolbox && this.isMobileScreenSize()) {
+            this._toolbox.hide();
+            this._toolboxDragHidden = true;
         }
     }
     _raiseToolboxDragEnd() {
-        if(this._toolbox) {
-            this._toolbox._raiseToolboxDragEnd();
-
-            if(this._toolboxDragHidden) {
-                this._toolbox.show();
-                delete this._toolboxDragHidden;
-            }
+        if(this._toolbox && this._toolboxDragHidden) {
+            this._toolbox.show();
+            delete this._toolboxDragHidden;
         }
     }
     _raiseTextInputStart() {

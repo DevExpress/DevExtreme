@@ -5857,6 +5857,39 @@ QUnit.module('API methods', baseModuleConfig, () => {
             assert.deepEqual(validationCallbackSpy.args[i][0].data, { id: 1, id1: 1, name: 'test1' }, `data parameter for the ${i + 1} call`);
         }
     });
+
+    ['cell', 'batch', 'row', 'form', 'popup'].forEach(editMode => {
+        // T1090487
+        QUnit.test(`The cellValue method should return the correct value of the modified cell in editMode = ${editMode})`, function(assert) {
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: [{ id: 1, field: 'field' }],
+                keyExpr: 'id',
+                columns: ['field'],
+                editing: {
+                    allowUpdating: true,
+                    allowAdding: true,
+                    mode: editMode
+                },
+                loadingTimeout: null
+            }).dxDataGrid('instance');
+
+            if(editMode === 'batch' || editMode === 'cell') {
+                dataGrid.editCell(0, 0);
+            } else {
+                dataGrid.editRow(0);
+            }
+            this.clock.tick();
+
+            // act
+            const $input = $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input');
+            $input.val('test');
+            $input.trigger('change');
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 0), 'test', 'cell value');
+        });
+    });
 });
 
 
@@ -6608,6 +6641,49 @@ QUnit.module('Editing state', baseModuleConfig, () => {
     });
 
     ['Row', 'Form', 'Popup', 'Cell', 'Batch'].forEach(editMode => {
+        // T1089969
+        QUnit.test(`${editMode} - Changing editing.changes option should update the values of the edited cells`, function(assert) {
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: [{ id: 1, field: 'field' }],
+                keyExpr: 'id',
+                columns: ['field'],
+                editing: {
+                    allowUpdating: true,
+                    mode: editMode.toLowerCase()
+                },
+                loadingTimeout: null,
+            }).dxDataGrid('instance');
+
+            // act
+            if(editMode === 'Batch' || editMode === 'Cell') {
+                dataGrid.editCell(0, 0);
+            } else {
+                dataGrid.editRow(0);
+            }
+            this.clock.tick();
+
+            // assert
+            switch(editMode) {
+                case 'Batch':
+                case 'Cell':
+                    assert.ok($(dataGrid.getRowElement(0)).children().first().hasClass('dx-editor-cell'), 'cell is editing');
+                    break;
+                case 'Popup':
+                    assert.ok($('.dx-datagrid-edit-popup').is(':visible'), 'edit popup is visible');
+                    break;
+                default:
+                    assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-edit-row'), 'row is editing');
+            }
+
+            // act
+            dataGrid.option('editing.changes', [{ type: 'update', key: 1, data: { field: 'test' } }]);
+
+            // assert
+            const cellValue = $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').val();
+            assert.strictEqual(cellValue, 'test', 'cell value');
+        });
+
         ['changes', 'editRowKey', 'editColumnName'].forEach(editingOption => {
             QUnit.test(`${editMode} - Changing the editing.${editingOption} option should not raise the onToolbarPreparing event (T949025)`, function(assert) {
                 // arrange
@@ -7168,6 +7244,30 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             // assert
             assert.ok(true, 'no errors');
         });
+    });
+
+    // T1088316
+    QUnit.test('Adding row after changing focusedRowKey should work', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }],
+            keyExpr: 'id',
+            focusedRowEnabled: true,
+        });
+        this.clock.tick(300);
+
+        // act
+        dataGrid.option('focusedRowKey', 4);
+
+        const dataSource = dataGrid.option('dataSource');
+        dataSource.push({ id: 4 });
+        dataGrid.option('dataSource', dataSource);
+
+        this.clock.tick(300);
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows().length, 4);
+        assert.ok($(dataGrid.element()).find('.dx-data-row:eq(3)').hasClass('dx-row-focused'));
     });
 
     ['first', 'last', 'viewportTop', 'viewportBottom'].forEach(newRowPosition => {

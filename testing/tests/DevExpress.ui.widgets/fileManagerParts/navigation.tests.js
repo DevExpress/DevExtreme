@@ -11,6 +11,7 @@ import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, FileManagerProgressP
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
 import { implementationsMap } from 'core/utils/size';
 import { Deferred } from 'core/utils/deferred';
+import { extend } from 'core/utils/extend';
 
 const moduleConfig = {
 
@@ -50,6 +51,40 @@ const moduleConfig = {
         fx.off = false;
     }
 
+};
+
+const moduleConfig_T1085224 = {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+        this.$element = $('#fileManager');
+        this.wrapper = new FileManagerWrapper(this.$element);
+        this.progressPanelWrapper = new FileManagerProgressPanelWrapper(this.$element);
+        this.clock.tick(400);
+    },
+    afterEach: function() {
+        this.clock.tick(5000);
+        this.clock.restore();
+        fx.off = false;
+    }
+};
+
+const createFileManager_T1085224 = (context, useThumbnailViewMode, extOptions) => {
+    const provider = new CustomFileSystemProvider({
+        getItems: () => { throw new FileSystemError(42, null, 'Custom text'); }
+    });
+    const getItemsSpy = sinon.spy(provider, 'getItems');
+    const viewMode = useThumbnailViewMode ? 'thumbnails' : 'details';
+    extOptions = extOptions || {};
+    const options = extend({
+        fileSystemProvider: provider,
+        itemView: {
+            mode: viewMode
+        }
+    }, extOptions);
+    const fileManager = $('#fileManager').dxFileManager(options).dxFileManager('instance');
+    context.clock.tick(400);
+    return { fileManager, getItemsSpy };
 };
 
 const createBreadcrumbs = (context, controller) => {
@@ -1352,16 +1387,6 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         const optionChangedSpy = sinon.spy();
         const objectProvider = new ObjectFileSystemProvider({ data: createTestFileSystem() });
         const customProvider = new CustomFileSystemProvider({
-            getItems1: function(parentDirectory) {
-                return new Promise((resolve, reject) => {
-                    if(parentDirectory.key === 'Folder 2') {
-                        const error = new FileSystemError(42, parentDirectory, 'Custom text');
-                        reject(error);
-                    } else {
-                        objectProvider.getItems(parentDirectory).then(result => resolve(result));
-                    }
-                });
-            },
             getItems: function(parentDirectory) {
                 const deferred = new Deferred();
                 if(parentDirectory.key === 'Folder 2') {
@@ -1425,5 +1450,123 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
         assert.strictEqual(this.fileManager.getCurrentDirectory().key, '', 'Current directory is the target one');
         assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'NavPane current folder text is correct');
+    });
+});
+
+QUnit.module('initial navigation with error (T1085224)', moduleConfig_T1085224, () => {
+    test('getItems must be invoked only once in case of exception after refresh thumbanilsView (T1085224)', function(assert) {
+        const { getItemsSpy } = createFileManager_T1085224(this, true);
+        getItemsSpy.reset();
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
+        this.clock.tick(800);
+
+        assert.strictEqual(getItemsSpy.callCount, 1, 'getItems function must be called once');
+    });
+
+    test('getItems must be invoked only once in case of exception after refresh detailsView (T1085224)', function(assert) {
+        const { getItemsSpy } = createFileManager_T1085224(this);
+        getItemsSpy.reset();
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
+        this.clock.tick(800);
+
+        assert.strictEqual(getItemsSpy.callCount, 1, 'getItems function must be called once');
+    });
+
+    test('only one notification must be shown in case of getItems exception after refresh thumbnailsView (T1085224)', function(assert) {
+        createFileManager_T1085224(this, true);
+
+        this.progressPanelWrapper.getInfos()[0].common.$closeButton.trigger('dxclick');
+        this.clock.tick(400);
+
+        let infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 0, 'There are no notifications on panel');
+
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
+        this.clock.tick(700);
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 1, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, '', 'Common text is correct');
+        assert.strictEqual(details[0].errorText, 'Custom text', 'Error text is correct');
+    });
+
+    test('only one notification must be shown in case of getItems exception after refresh detailsView (T1085224)', function(assert) {
+        createFileManager_T1085224(this, true);
+
+        this.progressPanelWrapper.getInfos()[0].common.$closeButton.trigger('dxclick');
+        this.clock.tick(400);
+
+        let infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 0, 'There are no notifications on panel');
+
+        this.wrapper.getToolbarRefreshButton().trigger('dxclick');
+        this.clock.tick(700);
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 1, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, '', 'Common text is correct');
+        assert.strictEqual(details[0].errorText, 'Custom text', 'Error text is correct');
+    });
+
+    test('getItems must be invoked only once in case of exception thumbnailsView (T1085224)', function(assert) {
+        const { getItemsSpy } = createFileManager_T1085224(this, true);
+        assert.strictEqual(getItemsSpy.callCount, 1, 'getItems function must be called once');
+    });
+
+    test('getItems must be invoked only once in case of exception detailsView (T1085224)', function(assert) {
+        const { getItemsSpy } = createFileManager_T1085224(this);
+        assert.strictEqual(getItemsSpy.callCount, 1, 'getItems function must be called once');
+    });
+
+    test('only one notification must be shown in case of getItems exception thumbnailsView (T1085224)', function(assert) {
+        createFileManager_T1085224(this, true);
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 1, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, '', 'Common text is correct');
+        assert.strictEqual(details[0].errorText, 'Custom text', 'Error text is correct');
+    });
+
+    test('only one notification must be shown in case of getItems exception detailsView (T1085224)', function(assert) {
+        createFileManager_T1085224(this);
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.strictEqual(infos.length, 1, 'There is one notification on panel');
+
+        assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
+
+        const details = infos[0].details;
+        assert.strictEqual(details.length, 1, 'Notification has one details section');
+
+        assert.strictEqual(details[0].commonText, '', 'Common text is correct');
+        assert.strictEqual(details[0].errorText, 'Custom text', 'Error text is correct');
+    });
+
+    test('getItems must be invoked only once in case of exception thumbnailsView (provider+path) (T1085224)', function(assert) {
+        const { getItemsSpy } = createFileManager_T1085224(this, true, { currentPath: 'somePath' });
+        assert.strictEqual(getItemsSpy.callCount, 1, 'getItems function must be called once');
+    });
+
+    test('getItems must be invoked only once in case of exception detailsView (provider+path) (T1085224)', function(assert) {
+        const { getItemsSpy } = createFileManager_T1085224(this, false, { currentPath: 'somePath' });
+        assert.strictEqual(getItemsSpy.callCount, 1, 'getItems function must be called once');
     });
 });

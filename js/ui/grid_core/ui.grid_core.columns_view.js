@@ -611,7 +611,6 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _setCellAriaAttributes: function($cell, cellOptions) {
         if(cellOptions.rowType !== 'freeSpace') {
-            this.setAria('selected', false, $cell);
             this.setAria('role', 'gridcell', $cell);
 
             const columnIndexOffset = this._columnsController.getColumnIndexOffset();
