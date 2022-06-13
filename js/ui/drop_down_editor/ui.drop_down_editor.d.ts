@@ -32,6 +32,7 @@ import {
     ApplyValueMode,
 } from '../../common';
 
+/** @public */
 export type DropDownPredefinedButton = 'clear' | 'dropDown';
 
 export interface DropDownButtonTemplateDataModel {

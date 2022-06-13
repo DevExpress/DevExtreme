@@ -7,6 +7,7 @@ import {
     EditorStyle,
 } from '../common';
 
+/** @public */
 export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
 
 /**

@@ -32,12 +32,19 @@ export {
     SummaryType,
 };
 
+/** @public */
 export type PivotGridArea = 'column' | 'data' | 'filter' | 'row';
+/** @public */
 export type PivotGridDataType = 'date' | 'number' | 'string';
+/** @public */
 export type PivotGridGroupInterval = 'day' | 'dayOfWeek' | 'month' | 'quarter' | 'year';
+/** @public */
 export type PivotGridRunningTotalMode = 'column' | 'row';
+/** @public */
 export type PivotGridSortBy = 'displayText' | 'value' | 'none';
+/** @public */
 export type PivotGridStoreType = 'array' | 'local' | 'odata' | 'xmla';
+/** @public */
 export type PivotGridSummaryDisplayMode = 'absoluteVariation' | 'percentOfColumnGrandTotal' | 'percentOfColumnTotal' | 'percentOfGrandTotal' | 'percentOfRowGrandTotal' | 'percentOfRowTotal' | 'percentVariation';
 
 /**

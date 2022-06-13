@@ -1375,13 +1375,7 @@ declare module DevExpress.animation {
     | 'slide'
     | 'slideIn'
     | 'slideOut';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type CollisionResolution = 'fit' | 'flip' | 'flipfit' | 'none';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type CollisionResolutionCombination =
     | 'fit'
     | 'fit flip'
@@ -1743,9 +1737,6 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   type EventName = 'orientationChanged';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -2776,38 +2767,17 @@ declare module DevExpress.data {
       | 'loadError'
       | 'loadingChanged';
     export type Options = PivotGridDataSourceOptions;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PivotGridArea = 'column' | 'data' | 'filter' | 'row';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PivotGridDataType = 'date' | 'number' | 'string';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PivotGridGroupInterval =
       | 'day'
       | 'dayOfWeek'
       | 'month'
       | 'quarter'
       | 'year';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PivotGridRunningTotalMode = 'column' | 'row';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PivotGridSortBy = 'displayText' | 'value' | 'none';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PivotGridStoreType = 'array' | 'local' | 'odata' | 'xmla';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PivotGridSummaryDisplayMode =
       | 'absoluteVariation'
       | 'percentOfColumnGrandTotal'
@@ -3888,9 +3858,6 @@ declare module DevExpress.exporter {
      */
     underline?: ExcelUnderlineType;
   }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type ExcelUnderlineType =
     | 'double'
     | 'doubleAccounting'
@@ -5445,25 +5412,16 @@ declare module DevExpress.ui {
     TKey = any
   > extends CollectionWidget<dxBoxOptions<TItem, TKey>, TItem, TKey> {}
   module dxBox {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type BoxDirection = 'col' | 'row';
     export type ContentReadyEvent<
       TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxBox<TItem, TKey>>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type CrosswiseDistribution = 'center' | 'end' | 'start' | 'stretch';
     export type DisposingEvent<
       TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxBox<TItem, TKey>>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type Distribution =
       | 'center'
       | 'end'
@@ -5763,9 +5721,6 @@ declare module DevExpress.ui {
    */
   export class dxCalendar extends Editor<dxCalendarOptions> {}
   module dxCalendar {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
     export type CellTemplateData = {
       readonly date: Date;
@@ -6060,9 +6015,6 @@ declare module DevExpress.ui {
     export type ContentReadyEvent<TKey = any> = DevExpress.events.EventInfo<
       dxContextMenu<TKey>
     >;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ContextSubmenuDirection = 'auto' | 'left' | 'right';
     export type DisposingEvent<TKey = any> = DevExpress.events.EventInfo<
       dxContextMenu<TKey>
@@ -6956,9 +6908,6 @@ declare module DevExpress.ui {
        */
       calculateCellValue?: (rowData: any) => any;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ColumnResizeMode = 'nextColumn' | 'widget';
     export type ContentReadyEvent<
       TRowData = any,
@@ -7001,9 +6950,6 @@ declare module DevExpress.ui {
     export interface DataErrorOccurredInfo {
       readonly error?: Error;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type DataGridCommandColumnType =
       | 'adaptive'
       | 'buttons'
@@ -7011,22 +6957,13 @@ declare module DevExpress.ui {
       | 'groupExpand'
       | 'selection'
       | 'drag';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type DataGridExportFormat = 'pdf' | 'xlsx';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type DataGridPredefinedColumnButton =
       | 'cancel'
       | 'delete'
       | 'edit'
       | 'save'
       | 'undelete';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type DataGridPredefinedToolbarItem =
       | 'addRowButton'
       | 'applyFilterButton'
@@ -7036,9 +6973,6 @@ declare module DevExpress.ui {
       | 'revertButton'
       | 'saveButton'
       | 'searchPanel';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type DataGridScrollMode = 'infinite' | 'standard' | 'virtual';
     export type DataRowTemplateData<TRowData = any, TKey = any> = {
       readonly key: TKey;
@@ -7301,9 +7235,6 @@ declare module DevExpress.ui {
       readonly dataField?: string;
       readonly row?: Row<TRowData, TKey>;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ExcelCellHorizontalAlignment =
       | 'center'
       | 'centerContinuous'
@@ -7326,9 +7257,6 @@ declare module DevExpress.ui {
       numberFormat?: string;
       gridCell?: DevExpress.excelExporter.DataGridCell;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ExcelCellPatternType =
       | 'darkDown'
       | 'darkGray'
@@ -7349,9 +7277,6 @@ declare module DevExpress.ui {
       | 'mediumGray'
       | 'none'
       | 'solid';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ExcelCellVerticalAlignment =
       | 'bottom'
       | 'center'
@@ -7837,9 +7762,6 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type HeaderFilterGroupInterval =
       | 'day'
       | 'hour'
@@ -9274,13 +9196,7 @@ declare module DevExpress.ui {
       dxDateBox,
       ClipboardEvent
     >;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type DatePickerType = 'calendar' | 'list' | 'native' | 'rollers';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type DateType = 'date' | 'datetime' | 'time';
     export type DisabledDate =
       DevExpress.ui.dxCalendar.ComponentDisabledDate<dxDateBox>;
@@ -11032,15 +10948,9 @@ declare module DevExpress.ui {
     export type DisposingEvent = DevExpress.events.EventInfo<dxDrawer>;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxDrawer>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type OpenedStateMode = 'overlap' | 'shrink' | 'push';
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxDrawer> &
       DevExpress.events.ChangedOptionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PanelLocation =
       | 'left'
       | 'right'
@@ -11049,9 +10959,6 @@ declare module DevExpress.ui {
       | 'before'
       | 'after';
     export type Properties = dxDrawerOptions;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type RevealMode = 'slide' | 'expand';
   }
   /**
@@ -11463,9 +11370,6 @@ declare module DevExpress.ui {
       readonly text?: string;
       readonly icon?: string;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type DropDownPredefinedButton = 'clear' | 'dropDown';
   }
   /**
@@ -11725,9 +11629,6 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export type FileManagerItemViewMode = 'details' | 'thumbnails';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type FileManagerPredefinedContextMenuItem =
       | 'create'
       | 'upload'
@@ -11737,9 +11638,6 @@ declare module DevExpress.ui {
       | 'copy'
       | 'rename'
       | 'delete';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type FileManagerPredefinedToolbarItem =
       | 'showNavPane'
       | 'create'
@@ -12306,9 +12204,6 @@ declare module DevExpress.ui {
     };
     export type FilesUploadedEvent =
       DevExpress.events.EventInfo<dxFileUploader>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type FileUploadMode = 'instantly' | 'useButtons' | 'useForm';
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxFileUploader>;
@@ -12343,9 +12238,6 @@ declare module DevExpress.ui {
         readonly error: any;
         message: string;
       };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type UploadHttpMethod = 'POST' | 'PUT';
     export type UploadStartedEvent =
       DevExpress.events.NativeEventInfo<dxFileUploader> & {
@@ -12640,9 +12532,6 @@ declare module DevExpress.ui {
       DevExpress.data.DataSource.DataSourceLike<T>,
       string | DevExpress.data.DataSource
     >;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type GroupOperation = 'and' | 'or' | 'notAnd' | 'notOr';
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxFilterBuilder>;
@@ -12976,9 +12865,6 @@ declare module DevExpress.ui {
       readonly dataField?: string;
       readonly value?: any;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type FormEditor =
       | 'dxAutocomplete'
       | 'dxCalendar'
@@ -12997,18 +12883,12 @@ declare module DevExpress.ui {
       | 'dxTagBox'
       | 'dxTextArea'
       | 'dxTextBox';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type FormItemType =
       | 'empty'
       | 'group'
       | 'simple'
       | 'tabbed'
       | 'button';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
     export type GroupItemTemplateData = {
       readonly component: dxForm;
@@ -13016,9 +12896,6 @@ declare module DevExpress.ui {
     };
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxForm>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type LabelLocation = 'left' | 'right' | 'top';
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxForm> &
       DevExpress.events.ChangedOptionInfo;
@@ -13824,9 +13701,6 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type GanttPredefinedContextMenuItem =
       | 'undo'
       | 'redo'
@@ -13839,9 +13713,6 @@ declare module DevExpress.ui {
       | 'deleteDependency'
       | 'taskDetails'
       | 'resourceManager';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type GanttPredefinedToolbarItem =
       | 'separator'
       | 'undo'
@@ -14969,9 +14840,6 @@ declare module DevExpress.ui {
       dxHtmlEditor,
       FocusEvent
     >;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type HtmlEditorFormat =
       | 'background'
       | 'bold'
@@ -14989,17 +14857,8 @@ declare module DevExpress.ui {
       | 'list'
       | 'align'
       | 'code-block';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type HtmlEditorImageUploadMode = 'base64' | 'server' | 'both';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type HtmlEditorImageUploadTab = 'url' | 'file';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type HtmlEditorPredefinedContextMenuItem =
       | 'background'
       | 'bold'
@@ -15037,9 +14896,6 @@ declare module DevExpress.ui {
       | 'deleteTable'
       | 'cellProperties'
       | 'tableProperties';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type HtmlEditorPredefinedToolbarItem =
       | 'background'
       | 'bold'
@@ -15082,9 +14938,6 @@ declare module DevExpress.ui {
       | 'deleteTable';
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxHtmlEditor>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type MarkupType = 'html' | 'markdown';
     export interface MentionTemplateData {
       readonly marker: string;
@@ -15567,9 +15420,6 @@ declare module DevExpress.ui {
       TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ItemDeleteMode =
       | 'context'
       | 'slideButton'
@@ -15627,9 +15477,6 @@ declare module DevExpress.ui {
       readonly itemElement: DevExpress.core.DxElement;
       readonly itemIndex: number | { group: number; item: number };
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ListMenuMode = 'context' | 'slide';
     export type OptionChangedEvent<
       TItem extends ItemLike = any,
@@ -16257,13 +16104,7 @@ declare module DevExpress.ui {
     export type DisposingEvent = DevExpress.events.EventInfo<dxMap>;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxMap>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type MapProvider = 'bing' | 'google' | 'googleStatic';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type MapType = 'hybrid' | 'roadmap' | 'satellite';
     export type MarkerAddedEvent = DevExpress.events.EventInfo<dxMap> & {
       readonly options: any;
@@ -16282,9 +16123,6 @@ declare module DevExpress.ui {
       readonly options: any;
       originalRoute: any;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type RouteMode = 'driving' | 'walking';
     export type RouteRemovedEvent = DevExpress.events.EventInfo<dxMap> & {
       readonly options?: any;
@@ -16529,9 +16367,6 @@ declare module DevExpress.ui {
       dxMenu<TKey>
     > &
       DevExpress.ui.CollectionWidget.SelectionChangedInfo<Item>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type SubmenuDirection = 'auto' | 'leftOrTop' | 'rightOrBottom';
     export type SubmenuHiddenEvent<TKey = any> = DevExpress.events.EventInfo<
       dxMenu<TKey>
@@ -17047,13 +16882,7 @@ declare module DevExpress.ui {
       dxNumberBox,
       KeyboardEvent
     >;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type NumberBoxPredefinedButton = 'clear' | 'spins';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type NumberBoxType = 'number' | 'text' | 'tel';
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxNumberBox> &
       DevExpress.events.ChangedOptionInfo;
@@ -17366,17 +17195,8 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxPivotGrid>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPivotGrid> &
       DevExpress.events.ChangedOptionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PivotGridDataFieldArea = 'column' | 'row';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PivotGridRowHeaderLayout = 'standard' | 'tree';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PivotGridTotalsDisplayMode =
       | 'both'
       | 'columns'
@@ -18255,9 +18075,6 @@ declare module DevExpress.ui {
     export interface TitleRenderedInfo {
       readonly titleElement: DevExpress.core.DxElement;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ToolbarLocation = 'bottom' | 'top';
   }
   /**
@@ -18602,9 +18419,6 @@ declare module DevExpress.ui {
       MouseEvent | TouchEvent
     > &
       ResizeInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -18935,9 +18749,6 @@ declare module DevExpress.ui {
     ): void;
   }
   module dxScheduler {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
     export type Appointment = dxSchedulerAppointment;
     export type AppointmentAddedEvent =
@@ -19056,9 +18867,6 @@ declare module DevExpress.ui {
         readonly newData: any;
         cancel?: boolean | PromiseLike<boolean>;
       };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type CellAppointmentsLimit = 'auto' | 'unlimited';
     export type CellClickEvent = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<
@@ -19087,9 +18895,6 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxScheduler> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSchedulerOptions;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -19098,9 +18903,6 @@ declare module DevExpress.ui {
       readonly appointmentData: dxSchedulerAppointment;
       readonly targetedAppointmentData?: dxSchedulerAppointment;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ViewType =
       | 'agenda'
       | 'day'
@@ -21440,9 +21242,6 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     interface TextBoxInstance extends dxTextBox<Properties> {}
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TextBoxType =
       | 'email'
       | 'password'
@@ -21834,9 +21633,6 @@ declare module DevExpress.ui {
     export type ShowingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxToast>;
     export type ShownEvent = DevExpress.events.EventInfo<dxToast>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ToastType = 'custom' | 'error' | 'info' | 'success' | 'warning';
   }
   /**
@@ -21991,9 +21787,6 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxToolbar<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type LocateInMenuMode = 'always' | 'auto' | 'never';
     export type OptionChangedEvent<
       TItem extends ItemLike = any,
@@ -22004,9 +21797,6 @@ declare module DevExpress.ui {
       TItem extends ItemLike = any,
       TKey = any
     > = dxToolbarOptions<TItem, TKey>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ShowTextMode = 'always' | 'inMenu';
   }
   /**
@@ -23012,20 +22802,11 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.ui.dxDataGrid.ToolbarPreparingInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TreeListFilterMode =
       | 'fullBranch'
       | 'withAncestors'
       | 'matchOnly';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TreeListPredefinedColumnButton =
       | 'add'
       | 'cancel'
@@ -23033,9 +22814,6 @@ declare module DevExpress.ui {
       | 'edit'
       | 'save'
       | 'undelete';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TreeListPredefinedToolbarItem =
       | 'addRowButton'
       | 'applyFilterButton'
@@ -23576,13 +23354,7 @@ declare module DevExpress.ui {
     export type SelectionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
       dxTreeView<TKey>
     >;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TreeViewExpandEvent = 'dblclick' | 'click';
   }
   /**
@@ -25207,9 +24979,6 @@ declare module DevExpress.ui {
     column?: any;
     formItem?: any;
   }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type ValidationRule =
     | AsyncRule
     | CompareRule
@@ -25220,6 +24989,16 @@ declare module DevExpress.ui {
     | RangeRule
     | RequiredRule
     | StringLengthRule;
+  export type ValidationRuleType =
+    | 'required'
+    | 'numeric'
+    | 'range'
+    | 'stringLength'
+    | 'custom'
+    | 'compare'
+    | 'pattern'
+    | 'email'
+    | 'async';
   /**
    * [descr:Widget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25829,9 +25608,6 @@ declare module DevExpress.viz {
     value(value: number): void;
   }
   module BaseGauge {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type GaugeIndicatorType =
       | 'circle'
       | 'rangeBar'
@@ -27755,9 +27531,6 @@ declare module DevExpress.viz {
     ): void;
   }
   module dxChart {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
     export type ArgumentAxisClickEvent = DevExpress.events.NativeEventInfo<
       dxChart,
@@ -27765,25 +27538,10 @@ declare module DevExpress.viz {
     > & {
       readonly argument: Date | number | string;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ChartSeriesAggregationMethod =
       | 'avg'
       | 'count'
@@ -27793,9 +27551,6 @@ declare module DevExpress.viz {
       | 'range'
       | 'sum'
       | 'custom';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ChartSingleValueSeriesAggregationMethod =
       | 'avg'
       | 'count'
@@ -27803,29 +27558,17 @@ declare module DevExpress.viz {
       | 'min'
       | 'sum'
       | 'custom';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ChartTooltipLocation = 'center' | 'edge';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ChartZoomAndPanMode = 'both' | 'none' | 'pan' | 'zoom';
     export type DisposingEvent = DevExpress.events.EventInfo<dxChart>;
     export type DoneEvent = DevExpress.events.EventInfo<dxChart>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxChart>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
     export type ExportedEvent = DevExpress.events.EventInfo<dxChart>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseWidget.ExportInfo;
     export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxChart>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type FinancialChartReductionLevel =
       | 'close'
       | 'high'
@@ -31387,16 +31130,10 @@ declare module DevExpress.viz {
    */
   export class dxCircularGauge extends BaseGauge<dxCircularGaugeOptions> {}
   module dxCircularGauge {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type CircularGaugeElementOrientation =
       | 'center'
       | 'inside'
       | 'outside';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type CircularGaugeLabelOverlap = 'first' | 'last';
     export type DisposingEvent = DevExpress.events.EventInfo<dxCircularGauge>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxCircularGauge>;
@@ -31523,9 +31260,6 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseWidget.ExportInfo;
     export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxFunnel>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31533,9 +31267,6 @@ declare module DevExpress.viz {
     interface FunnelItemInfo {
       readonly item: Item;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type FunnelLabelOverlap = 'hide' | 'none' | 'shift';
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
@@ -32136,29 +31867,11 @@ declare module DevExpress.viz {
     };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.events.ChangedOptionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PieChartAnnotationLocation = 'center' | 'edge';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PieChartLabelOverlap = 'hide' | 'none' | 'shift';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PieChartType = 'donut' | 'doughnut' | 'pie';
     export type PointClickEvent = DevExpress.events.NativeEventInfo<
       dxPieChart,
@@ -32172,9 +31885,6 @@ declare module DevExpress.viz {
       DevExpress.events.EventInfo<dxPieChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo;
     export type Properties = dxPieChartOptions;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type SmallValuesGroupingMode =
       | 'none'
       | 'smallValueThreshold'
@@ -32733,9 +32443,6 @@ declare module DevExpress.viz {
     export type PointSelectionChangedEvent =
       DevExpress.events.EventInfo<dxPolarChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type PolarChartSeriesType =
       | 'area'
       | 'bar'
@@ -32763,9 +32470,6 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseChart.TooltipInfo;
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxPolarChart> &
       DevExpress.viz.BaseChart.TooltipInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
     export type ZoomEndEvent = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<
@@ -34292,17 +33996,11 @@ declare module DevExpress.viz {
     setValue(value: Array<number | string | Date> | VizRange): void;
   }
   module dxRangeSelector {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type AxisScale =
       | 'continuous'
       | 'discrete'
       | 'logarithmic'
       | 'semidiscrete';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type BackgroundImageLocation =
       | 'center'
       | 'centerBottom'
@@ -34314,9 +34012,6 @@ declare module DevExpress.viz {
       | 'rightBottom'
       | 'rightCenter'
       | 'rightTop';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ChartAxisScale = 'continuous' | 'logarithmic';
     export type DisposingEvent = DevExpress.events.EventInfo<dxRangeSelector>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxRangeSelector>;
@@ -34334,9 +34029,6 @@ declare module DevExpress.viz {
       DevExpress.events.EventInfo<dxRangeSelector> &
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxRangeSelectorOptions;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxRangeSelector,
@@ -34926,9 +34618,6 @@ declare module DevExpress.viz {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxSankey> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSankeyOptions;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
   }
   /**
@@ -35414,9 +35103,6 @@ declare module DevExpress.viz {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxSparkline> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSparklineOptions;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type SparklineType =
       | 'area'
       | 'bar'
@@ -35595,24 +35281,15 @@ declare module DevExpress.viz {
     export type Properties = dxTreeMapOptions;
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTreeMap> &
       InteractionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TreeMapColorizerType =
       | 'discrete'
       | 'gradient'
       | 'none'
       | 'range';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TreeMapLayoutAlgorithm =
       | 'sliceanddice'
       | 'squarified'
       | 'strip';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type TreeMapLayoutDirection =
       | 'leftBottomRightTop'
       | 'leftTopRightBottom'
@@ -36138,17 +35815,8 @@ declare module DevExpress.viz {
     }
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxVectorMap> &
       TooltipInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type VectorMapLayerType = 'area' | 'line' | 'marker';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type VectorMapMarkerShape = 'circle' | 'square';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export type VectorMapMarkerType = 'bubble' | 'dot' | 'image' | 'pie';
     export type ZoomFactorChangedEvent =
       DevExpress.events.EventInfo<dxVectorMap> & {
@@ -36968,9 +36636,6 @@ declare module DevExpress.viz {
      */
     start?: number;
   }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type VectorMapProjection =
     | 'equirectangular'
     | 'lambert'

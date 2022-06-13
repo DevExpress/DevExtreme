@@ -10,6 +10,7 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
+/** @public */
 export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
 
 export interface ResizeInfo {

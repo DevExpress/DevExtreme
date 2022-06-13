@@ -56,7 +56,9 @@ export {
 };
 
 export type FileManagerItemViewMode = 'details' | 'thumbnails';
+/** @public */
 export type FileManagerPredefinedContextMenuItem = 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete';
+/** @public */
 export type FileManagerPredefinedToolbarItem = 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator';
 export type FileManagerViewArea = 'navPane' | 'itemView';
 

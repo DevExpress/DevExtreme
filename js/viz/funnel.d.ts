@@ -60,7 +60,9 @@ export {
     WordWrap,
 };
 
+/** @public */
 export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
+/** @public */
 export type FunnelLabelOverlap = 'hide' | 'none' | 'shift';
 
 /**

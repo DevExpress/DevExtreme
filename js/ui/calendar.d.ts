@@ -33,6 +33,7 @@ export interface ComponentDisabledDate<T> {
     readonly view: string;
 }
 
+/** @public */
 export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
 
 /** @public */

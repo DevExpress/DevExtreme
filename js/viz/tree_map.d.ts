@@ -44,8 +44,11 @@ export {
     WordWrap,
 };
 
+/** @public */
 export type TreeMapColorizerType = 'discrete' | 'gradient' | 'none' | 'range';
+/** @public */
 export type TreeMapLayoutAlgorithm = 'sliceanddice' | 'squarified' | 'strip';
+/** @public */
 export type TreeMapLayoutDirection = 'leftBottomRightTop' | 'leftTopRightBottom' | 'rightBottomLeftTop' | 'rightTopLeftBottom';
 
 export interface InteractionInfo {

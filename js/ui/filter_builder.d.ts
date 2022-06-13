@@ -36,6 +36,7 @@ export {
 } from '../common/grids';
 
 export type FilterBuilderOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between';
+/** @public */
 export type GroupOperation = 'and' | 'or' | 'notAnd' | 'notOr';
 
 /** @public */

@@ -41,8 +41,11 @@ export {
     StateStoreType as StateStoringType,
 };
 
+/** @public */
 export type PivotGridDataFieldArea = 'column' | 'row';
+/** @public */
 export type PivotGridRowHeaderLayout = 'standard' | 'tree';
+/** @public */
 export type PivotGridTotalsDisplayMode = 'both' | 'columns' | 'none' | 'rows';
 
 /** @public */

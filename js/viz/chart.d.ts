@@ -107,16 +107,27 @@ export {
     ZoomPanAction,
 };
 
+/** @public */
 export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
+/** @public */
 export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
+/** @public */
 export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
+/** @public */
 export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
+/** @public */
 export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
+/** @public */
 export type ChartSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'ohlc' | 'range' | 'sum' | 'custom';
+/** @public */
 export type ChartSingleValueSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+/** @public */
 export type ChartTooltipLocation = 'center' | 'edge';
+/** @public */
 export type ChartZoomAndPanMode = 'both' | 'none' | 'pan' | 'zoom';
+/** @public */
 export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
+/** @public */
 export type FinancialChartReductionLevel = 'close' | 'high' | 'low' | 'open';
 
 /** @public */

@@ -13,8 +13,11 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+/** @public */
 export type MapProvider = 'bing' | 'google' | 'googleStatic';
+/** @public */
 export type RouteMode = 'driving' | 'walking';
+/** @public */
 export type MapType = 'hybrid' | 'roadmap' | 'satellite';
 
 /** @public */

@@ -31,6 +31,7 @@ export {
     SubmenuShowMode,
 };
 
+/** @public */
 export type SubmenuDirection = 'auto' | 'leftOrTop' | 'rightOrBottom';
 
 /** @public */

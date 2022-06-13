@@ -8,7 +8,9 @@ import {
     VerticalAlignment,
 } from '../common';
 
+/** @public */
 export type CollisionResolution = 'fit' | 'flip' | 'flipfit' | 'none';
+/** @public */
 export type CollisionResolutionCombination = 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit';
 
 /**

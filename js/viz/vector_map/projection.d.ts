@@ -1,3 +1,4 @@
+/** @public */
 export type VectorMapProjection = 'equirectangular' | 'lambert' | 'mercator' | 'miller';
 
 /**

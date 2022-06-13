@@ -24,6 +24,7 @@ export {
     PointSymbol,
 };
 
+/** @public */
 export type SparklineType = 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
 
 /** @public */

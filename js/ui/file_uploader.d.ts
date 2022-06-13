@@ -16,7 +16,9 @@ import Editor, {
 
 import UploadInfo from '../file_management/upload_info';
 
+/** @public */
 export type FileUploadMode = 'instantly' | 'useButtons' | 'useForm';
+/** @public */
 export type UploadHttpMethod = 'POST' | 'PUT';
 
 /** @public */

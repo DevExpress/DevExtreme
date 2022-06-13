@@ -64,12 +64,19 @@ export {
     WordWrap,
 };
 
+/** @public */
 export type PieChartAnnotationLocation = 'center' | 'edge';
+/** @public */
 export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
+/** @public */
 export type PieChartLabelOverlap = 'hide' | 'none' | 'shift';
+/** @public */
 export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
+/** @public */
 export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';
+/** @public */
 export type PieChartType = 'donut' | 'doughnut' | 'pie';
+/** @public */
 export type SmallValuesGroupingMode = 'none' | 'smallValueThreshold' | 'topN';
 
 /** @public */

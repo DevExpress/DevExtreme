@@ -28,7 +28,9 @@ import CollectionWidget, {
 
 type ItemLike = string | Item | any;
 
+/** @public */
 export type LocateInMenuMode = 'always' | 'auto' | 'never';
+/** @public */
 export type ShowTextMode = 'always' | 'inMenu';
 
 export {

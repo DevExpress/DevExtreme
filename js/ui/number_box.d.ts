@@ -18,7 +18,9 @@ import {
     Format,
   } from '../localization';
 
+/** @public */
 export type NumberBoxPredefinedButton = 'clear' | 'spins';
+/** @public */
 export type NumberBoxType = 'number' | 'text' | 'tel';
 
 /** @public */

@@ -58,8 +58,11 @@ export {
     VerticalEdge,
 };
 
+/** @public */
 export type VectorMapLayerType = 'area' | 'line' | 'marker';
+/** @public */
 export type VectorMapMarkerShape = 'circle' | 'square';
+/** @public */
 export type VectorMapMarkerType = 'bubble' | 'dot' | 'image' | 'pie';
 
 export interface TooltipInfo {

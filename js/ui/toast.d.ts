@@ -19,6 +19,7 @@ import dxOverlay, {
     dxOverlayOptions,
 } from './overlay';
 
+/** @public */
 export type ToastType = 'custom' | 'error' | 'info' | 'success' | 'warning';
 
 /** @public */

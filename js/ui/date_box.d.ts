@@ -27,7 +27,9 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
+/** @public */
 export type DateType = 'date' | 'datetime' | 'time';
+/** @public */
 export type DatePickerType = 'calendar' | 'list' | 'native' | 'rollers';
 
 /** @public */

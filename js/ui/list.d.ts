@@ -55,7 +55,9 @@ interface ListItemInfo<TItem extends ItemLike> {
     readonly itemIndex: number | { group: number; item: number };
 }
 
+/** @public */
 export type ItemDeleteMode = 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
+/** @public */
 export type ListMenuMode = 'context' | 'slide';
 
 export interface ScrollInfo {

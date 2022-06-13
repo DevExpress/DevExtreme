@@ -48,6 +48,7 @@ export interface TitleRenderedInfo {
     readonly titleElement: DxElement;
 }
 
+/** @public */
 export type ToolbarLocation = 'bottom' | 'top';
 
 /** @public */

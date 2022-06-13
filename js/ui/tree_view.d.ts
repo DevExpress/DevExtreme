@@ -48,7 +48,9 @@ export {
     ScrollDirection,
 };
 
+/** @public */
 export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
+/** @public */
 export type TreeViewExpandEvent = 'dblclick' | 'click';
 
 /** @public */

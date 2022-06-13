@@ -43,6 +43,7 @@ export {
     TextOverflow,
 };
 
+/** @public */
 export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
 
 /** @public */

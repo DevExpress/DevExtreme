@@ -95,7 +95,9 @@ export {
     ZoomPanAction,
 };
 
+/** @public */
 export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
+/** @public */
 export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
 
 /** @public */

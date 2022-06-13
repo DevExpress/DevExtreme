@@ -33,6 +33,7 @@ import {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
+/** @public */
 export type ContextSubmenuDirection = 'auto' | 'left' | 'right';
 
 /** @public */

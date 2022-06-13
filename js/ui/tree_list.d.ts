@@ -118,9 +118,13 @@ export {
     ToolbarItemLocation,
 };
 
+/** @public */
 export type TreeListPredefinedColumnButton = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
+/** @public */
 export type TreeListPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+/** @public */
 export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
+/** @public */
 export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
 
 /** @public */

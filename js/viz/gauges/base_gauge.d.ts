@@ -569,6 +569,7 @@ export interface CommonIndicator {
      */
     width?: number;
 }
+/** @public */
 export type GaugeIndicatorType = 'circle' | 'rangeBar' | 'rectangle' | 'rectangleNeedle' | 'rhombus' | 'textCloud' | 'triangleMarker' | 'triangleNeedle' | 'twoColorNeedle';
 
 /**

@@ -20,7 +20,9 @@ import {
     TooltipInfo,
 } from './gauges/base_gauge';
 
+/** @public */
 export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
+/** @public */
 export type CircularGaugeLabelOverlap = 'first' | 'last';
 
 /** @public */

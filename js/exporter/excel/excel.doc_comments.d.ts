@@ -1,3 +1,4 @@
+/** @public */
 export type ExcelUnderlineType = 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
 
 /**

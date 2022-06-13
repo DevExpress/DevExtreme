@@ -13,6 +13,7 @@ import dxTextEditor, {
     dxTextEditorOptions,
 } from './text_box/ui.text_editor.base';
 
+/** @public */
 export type TextBoxType = 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
 
 /** @public */

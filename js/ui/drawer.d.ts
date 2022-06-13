@@ -22,8 +22,11 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+/** @public */
 export type OpenedStateMode = 'overlap' | 'shrink' | 'push';
+/** @public */
 export type PanelLocation = 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
+/** @public */
 export type RevealMode = 'slide' | 'expand';
 
 /** @public */
