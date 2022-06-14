@@ -842,7 +842,7 @@ module('Events', setupModule, () => {
         } catch(e) {
             assert.ok(false, `error: ${e.message}`);
         } finally {
-            assert.strictEqual(this.instance.option('value'), currentDate, 'value ');
+            assert.strictEqual(this.instance.option('value'), currentDate, 'value is updated correctly');
         }
     });
 
