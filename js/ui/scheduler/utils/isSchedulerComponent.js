@@ -1,5 +1,5 @@
 const schedulerComponentName = 'dxScheduler';
 
-export function isComponentScheduler(component) {
+export function isSchedulerComponent(component) {
     return component.NAME === schedulerComponentName;
 }

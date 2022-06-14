@@ -2,7 +2,8 @@ import $ from '../../core/renderer';
 import Draggable from '../draggable';
 import { extend } from '../../core/utils/extend';
 import { LIST_ITEM_DATA_KEY } from './constants';
-import { isComponentScheduler } from './utils/is-component-scheduler.func';
+import { isSchedulerComponent } from './utils/isSchedulerComponent';
+import { Deferred } from '../../core/utils/deferred';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
@@ -19,7 +20,6 @@ export default class AppointmentDragBehavior {
         this.appointmentInfo = null;
 
         this.dragBetweenComponentsPromise = null;
-        this.dragBetweenComponentsResolver = null;
     }
 
     isAllDay(appointment) {
@@ -118,10 +118,9 @@ export default class AppointmentDragBehavior {
                 this.removeDroppableClasses();
             }
 
-            if(e.cancel !== true && isComponentScheduler(e.toComponent)) {
+            if(e.cancel !== true && isSchedulerComponent(e.toComponent)) {
                 const targetDragBehavior = e.toComponent._getDragBehavior();
-                targetDragBehavior.dragBetweenComponentsPromise = new Promise(
-                    (resolve) => targetDragBehavior.dragBetweenComponentsResolver = resolve);
+                targetDragBehavior.dragBetweenComponentsPromise = new Deferred();
             }
         };
     }
@@ -135,10 +134,8 @@ export default class AppointmentDragBehavior {
                 appointmentDragging.onAdd && appointmentDragging.onAdd(e);
             }
 
-            if(this.dragBetweenComponentsResolver) {
-                this.dragBetweenComponentsResolver();
-                this.dragBetweenComponentsPromise = null;
-                this.dragBetweenComponentsResolver = null;
+            if(this.dragBetweenComponentsPromise) {
+                this.dragBetweenComponentsPromise.resolve();
             }
         };
     }
