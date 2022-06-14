@@ -27,12 +27,11 @@ export const viewFunction = ({
     visibleChange={onVisibleChange}
     target={target}
     wrapperAttr={wrapperAttr}
-    contentTemplate={(): JSX.Element => (
-      <AppointmentList
-        appointments={dataList}
-      />
-    )}
-  />
+  >
+    <AppointmentList
+      appointments={dataList}
+    />
+  </Tooltip>
 );
 
 @ComponentBindings()
