@@ -818,7 +818,7 @@ module('Events', setupModule, () => {
         const currentDate = new Date();
 
         this.instance.option({
-            type: 'date',
+            pickerType: 'calendar',
             showClearButton: true,
             value: new Date(2022, 3, 3),
             displayFormat: 'dd.MM.yyyy HH:mm',
@@ -850,7 +850,7 @@ module('Events', setupModule, () => {
         const currentDate = new Date();
 
         this.instance.option({
-            type: 'date',
+            pickerType: 'calendar',
             showClearButton: true,
             value: new Date(2022, 3, 3),
             displayFormat: 'dd.MM.yyyy HH:mm',
@@ -868,7 +868,7 @@ module('Events', setupModule, () => {
 
         this.$input.focusout();
 
-        assert.strictEqual(this.instance.option('value'), currentDate, 'value');
+        assert.strictEqual(this.instance.option('value'), currentDate, 'value is updated correctly');
     });
 });
 
