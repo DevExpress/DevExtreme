@@ -139,16 +139,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     templates.forEach((name) => {
       if (hasTemplate(name, properties, this)) {
         properties[name] = (item, index, container): void => {
-          const actualContainer = container ?? index ?? item;
-
-          renderTemplate(
-            this.props.componentProps[name], {
-              item,
-              index,
-              container: actualContainer,
-            },
-            this,
-          );
+          renderTemplate(this.props.componentProps[name], { item, index, container }, this);
         };
       }
     });
