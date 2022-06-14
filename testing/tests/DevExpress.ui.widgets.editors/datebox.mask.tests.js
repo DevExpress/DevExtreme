@@ -814,7 +814,7 @@ module('Events', setupModule, () => {
         assert.ok(onInput.calledOnce);
     });
 
-    QUnit.test('click on the mask after clear value by clear button should not cause any errors, useMaskBehavior: true (T1094710)', function(assert) {
+    QUnit.test('click on input after clear button click should not cause any errors, useMaskBehavior: true (T1094710)', function(assert) {
         const currentDate = new Date();
 
         this.instance.option({
