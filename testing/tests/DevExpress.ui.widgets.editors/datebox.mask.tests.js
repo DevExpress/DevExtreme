@@ -840,7 +840,7 @@ module('Events', setupModule, () => {
             this.keyboard.caret(9);
             this.$input.trigger('dxclick');
         } catch(e) {
-            assert.ok(false, 'exception was thrown');
+            assert.ok(false, `error: ${e.message}`);
         } finally {
             assert.strictEqual(this.instance.option('value'), currentDate, 'value ');
         }
