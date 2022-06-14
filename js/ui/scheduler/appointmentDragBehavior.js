@@ -10,6 +10,7 @@ const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 export default class AppointmentDragBehavior {
     constructor(scheduler) {
         this.scheduler = scheduler;
+        this.workspace = scheduler._workSpace;
         this.appointments = scheduler._appointments;
 
         this.initialPosition = {
@@ -174,6 +175,6 @@ export default class AppointmentDragBehavior {
 
     removeDroppableClasses() {
         this.appointments._removeDragSourceClassFromDraggedAppointment();
-        this.scheduler._workSpace.removeDroppableCellClass();
+        this.workspace.removeDroppableCellClass();
     }
 }
