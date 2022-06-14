@@ -134,16 +134,18 @@ const createMainItems = (
         itemType: 'empty',
         colSpan: 2,
       },
-      getDescriptionLayoutItemConfig(
-        descriptionEditorTemplate,
-        dataExpr.descriptionExpr,
-        ItemLabels.description,
-      ),
-      {
-        itemType: 'empty',
-        colSpan: 2,
-      },
     ],
+  }, {
+    itemType: 'empty',
+    colSpan: 2,
+  },
+  getDescriptionLayoutItemConfig(
+    descriptionEditorTemplate,
+    dataExpr.descriptionExpr,
+    ItemLabels.description,
+  ), {
+    itemType: 'empty',
+    colSpan: 2,
   },
 ];
 
@@ -200,7 +202,9 @@ export const getFormLayoutConfig = (
   descriptionEditorTemplate: () => JSX.Element,
 ): GroupItem[] => {
   const recurrenceEditorVisibility = !!formData[fieldExpr.recurrenceRuleExpr]; // TODO
-  const colSpan = recurrenceEditorVisibility ? 1 : 2;
+  const colSpan = recurrenceEditorVisibility
+    ? 1
+    : 2;
 
   return getMainLayout(
     colSpan,
