@@ -22,8 +22,6 @@ const KEY_MAP = {
     ' ': 'space',
     'f': 'F',
     'a': 'A',
-    'â': 'A',
-    'ƒ': 'F',
     '*': 'asterisk',
     '-': 'minus',
     'alt': 'alt',
