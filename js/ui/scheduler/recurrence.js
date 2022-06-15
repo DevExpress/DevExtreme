@@ -10,6 +10,7 @@ const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymont
 const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
 const days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
 const loggedWarnings = [];
+const dayCountInWeek = 7;
 
 let recurrence = null;
 export function getRecurrenceProcessor() {
@@ -198,6 +199,20 @@ class RecurrenceProcessor {
 
         ruleOptions.until = timeZoneUtils.createUTCDateWithLocalOffset(until);
 
+        const startDate = options.start.getUTCDate();
+        const startIntervalDate = startDateUtc.getUTCDate();
+
+        /* eslint-disable spellcheck/spell-checker */
+        // NOTE 'byweekday' is the correct name of the property for RRule.
+        // So, we need to turnoff spell-checker here.
+        if(ruleOptions.byweekday && startDate !== startIntervalDate) {
+            ruleOptions.byweekday = ruleOptions.byweekday.map((byWeekDayOption) => ({
+                ...byWeekDayOption,
+                weekday: (byWeekDayOption.weekday + 1) % dayCountInWeek,
+            }));
+        }
+        /* eslint-enable spellcheck/spell-checker */
+
         this._createRRule(ruleOptions);
 
         if(options.exception) {
@@ -220,9 +235,7 @@ class RecurrenceProcessor {
     _createRRule(ruleOptions) {
         this._dispose();
 
-        const rRuleSet = new RRuleSet();
-
-        this.rRuleSet = rRuleSet;
+        this.rRuleSet = new RRuleSet();
         this.rRule = new RRule(ruleOptions);
 
         this.rRuleSet.rrule(this.rRule);
