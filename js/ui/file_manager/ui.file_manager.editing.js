@@ -155,7 +155,11 @@ class FileManagerEditingControl extends Widget {
             },
 
             download: {
-                action: arg => this._download(arg)
+                action: arg => this._download(arg),
+                singleItemProcessingMessage: '',
+                multipleItemsProcessingMessage: '',
+                singleItemErrorMessage: messageLocalization.format('dxFileManager-editingDownloadSingleItemErrorMessage'),
+                multipleItemsErrorMessage: messageLocalization.format('dxFileManager-editingDownloadMultipleItemsErrorMessage'),
             },
 
             getItemContent: {

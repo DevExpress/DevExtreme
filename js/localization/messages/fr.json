@@ -456,6 +456,9 @@
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} items non téléversés",
         "dxFileManager-editingUploadCanceledMessage": "Annulé",
 
+        "dxFileManager-editingDownloadSingleItemErrorMessage": "TODO",
+        "dxFileManager-editingDownloadMultipleItemsErrorMessage": "TODO",
+
         "dxFileManager-listDetailsColumnCaptionName": "Nom",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Date modifié",
         "dxFileManager-listDetailsColumnCaptionFileSize": "Taille de fichier",
