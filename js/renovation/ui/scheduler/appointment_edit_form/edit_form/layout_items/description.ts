@@ -2,7 +2,7 @@ import { SimpleItem } from '../../../../form/wrapper/simple_item';
 import { getRenderEditorTemplate } from '../utils/renderTemplate';
 
 export const getDescriptionLayoutItemConfig = (
-  editorTemplate: () => JSX.Element,
+  editorTemplate: JSX.Element,
   dataField: string,
   label: string,
 ): SimpleItem => ({
