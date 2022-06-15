@@ -623,7 +623,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _getPopupHeight: function() {
-        if(this._list && this._list.itemElements()) {
+        if(this._list && this._list.itemElements().length) {
             return this._calculateListHeight(this.option('grouped')) +
                 (this._$searchWrapper ? getOuterHeight(this._$searchWrapper) : 0) +
                 (this._popup._$bottom ? getOuterHeight(this._popup._$bottom) : 0) +
