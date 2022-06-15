@@ -22,6 +22,8 @@ const KEY_MAP = {
     ' ': 'space',
     'f': 'F',
     'a': 'A',
+    'â': 'A',
+    'ƒ': 'F',
     '*': 'asterisk',
     '-': 'minus',
     'alt': 'alt',
@@ -182,18 +184,11 @@ export const fireEvent = props => {
 };
 
 export const normalizeKeyName = ({ key, which }) => {
-    const originalKey = key;
-    const isKeySupported = !!key;
-
-    if(key || which) {
-        if(isKeySupported) {
-            key = KEY_MAP[key.toLowerCase()];
-        }
-        if(!isKeySupported || !key && which) {
-            key = LEGACY_KEY_CODES[which] || String.fromCharCode(which);
-        }
-
-        return key || originalKey;
+    const isKeySupported = !!key && key !== '\uFFFD';
+    if(isKeySupported) {
+        return KEY_MAP[key.toLowerCase()] || key;
+    } else if(which) {
+        return LEGACY_KEY_CODES[which] || String.fromCharCode(which);
     }
 };
 
