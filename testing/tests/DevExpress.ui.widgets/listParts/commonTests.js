@@ -23,6 +23,7 @@ import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 import { RESIZE_WAIT_TIMEOUT } from '../scrollableParts/scrollable.constants.js';
+import { reorderingPointerMock } from './utils.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
@@ -4030,3 +4031,68 @@ if(devices.real().deviceType === 'desktop') {
         });
     });
 }
+
+if(QUnit.urlParams['nojquery']) {
+    QUnit.module('ShadowDOM', {
+    }, () => {
+        QUnit.test('ShadowDom: drag item', function(assert) {
+            const root = document.querySelector('#list');
+            const container = document.createElement('div');
+            const list = document.createElement('div');
+
+            root.attachShadow({ mode: 'open' });
+            container.appendChild(list);
+            root.shadowRoot.appendChild(container);
+
+            const $list = $(list).dxList({
+                items: ['One', 'Two', 'Three'],
+                itemDragging: { allowReordering: true },
+            });
+
+            const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+
+            const pointer = reorderingPointerMock($items.first());
+
+            pointer.dragStart().drag(34);
+            pointer.dragEnd();
+
+            const orderedItems = $list.find(toSelector(LIST_ITEM_CLASS)).toArray().map(e => e.innerText.trim());
+
+            assert.deepEqual(orderedItems, ['Two', 'Three', 'One']);
+
+            $(container).empty();
+        });
+
+        QUnit.test('ShadowDom: focus item', function(assert) {
+            const done = assert.async();
+
+            const root = document.querySelector('#list');
+            const list = document.createElement('div');
+            const container = document.createElement('div');
+
+            root.attachShadow({ mode: 'open' });
+            root.shadowRoot.appendChild(container);
+            container.appendChild(list);
+
+            const $list = $(list).dxList({
+                items: ['One', 'Two', 'Three']
+            });
+
+            const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+            const event = $.Event('mousedown');
+
+            event.originalEvent = { type: 'mousedown', target: { shadowRoot: root }, path: [ $items.eq(1)[0] ] };
+
+            $(root).trigger(event);
+
+            setTimeout(function() {
+                assert.ok($items.eq(1).hasClass('dx-state-focused'));
+
+                $(container).empty();
+
+                done();
+            });
+        });
+    });
+}
+
