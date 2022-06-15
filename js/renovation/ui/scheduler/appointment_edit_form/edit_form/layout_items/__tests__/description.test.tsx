@@ -1,10 +1,11 @@
+import React from 'react';
 import { getDescriptionLayoutItemConfig } from '../description';
 
 describe('API', () => {
   describe('getDescriptionLayoutItemConfig', () => {
     it('should return correct config', () => {
       const dateBoxLayoutItemConfig = getDescriptionLayoutItemConfig(
-        (): any => 'dateBox template',
+        <div />,
         'descriptionField',
         'description label',
       );

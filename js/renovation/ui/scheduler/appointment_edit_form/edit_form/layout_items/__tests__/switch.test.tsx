@@ -1,10 +1,11 @@
+import React from 'react';
 import { getSwitchLayoutItemConfig } from '../switch';
 
 describe('API', () => {
   describe('getSwitchLayoutItemConfig', () => {
     it('should return correct config', () => {
       const switchLayoutItemConfig = getSwitchLayoutItemConfig(
-        (): any => 'switch template',
+        <div />,
         'descriptionField',
         'description label',
       );
