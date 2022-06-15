@@ -52,7 +52,7 @@ EndDateEditorProps, 'value' | 'firstDayOfWeek' | 'isAllDay' | 'dateChange'>() {
       this.props.endDate,
     );
 
-    this.props.dateChange(newDate);
+    this.props.dateChange(result);
 
     return result;
   }
