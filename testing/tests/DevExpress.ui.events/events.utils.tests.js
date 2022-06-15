@@ -473,6 +473,12 @@ QUnit.module('event utils', () => {
             testData: { key: 'ƒ', which: 70 },
             expected: 'F',
             comment: '\'which\' attribute used where \'key\' attribute value is unknown (non-invariant locale)'
+        },
+        // T1094718
+        {
+            testData: { key: 'F2', which: 113 },
+            expected: 'F2',
+            comment: '\'key\' attribute is prior'
         }
     ].forEach(({ testData, expected, comment }) => {
         test(`normalizeKeyName(${testData.key || testData.which || 'undefined'}) method should normalize key name based on "key" or "which" field`, function(assert) {
