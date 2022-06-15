@@ -7,7 +7,7 @@ import createWidget from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
-const themes = ['generic.light'/* , 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact' */];
+const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
 
 fixture`Lookup`
   .page(url(__dirname, './pages/T1018037.html'));
