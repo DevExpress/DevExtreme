@@ -2,7 +2,7 @@ import { SimpleItem } from '../../../../form/wrapper/simple_item';
 import { getRenderEditorTemplate } from '../utils/renderTemplate';
 
 export const getTimeZoneLayoutItemConfig = (
-  editorTemplate: () => JSX.Element,
+  editorTemplate: JSX.Element,
   dataField: string,
   colSpan: number,
   visibleIndex: number,

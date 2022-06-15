@@ -26,10 +26,10 @@ const ItemLabels = {
 export interface IAppointmentEditFormLayout {
   dataExpr: IFieldExpr;
   allowTimeZoneEditing: boolean | undefined;
-  startDateEditorTemplate: () => JSX.Element;
-  endDateEditorTemplate: () => JSX.Element;
-  startDatetimeZoneEditorTemplate: () => JSX.Element;
-  endDateTimeZoneEditorTemplate: () => JSX.Element;
+  startDateEditorTemplate: JSX.Element;
+  endDateEditorTemplate: JSX.Element;
+  startDatetimeZoneEditorTemplate: JSX.Element;
+  endDateTimeZoneEditorTemplate: JSX.Element;
 }
 
 const createDateBoxItems = (
@@ -80,13 +80,13 @@ const createDateBoxItems = (
 const createMainItems = (
   dataExpr: IFieldExpr,
   allowTimeZoneEditing: boolean | undefined,
-  startDateEditorTemplate: () => JSX.Element,
-  endDateEditorTemplate: () => JSX.Element,
-  startDatetimeZoneEditorTemplate: () => JSX.Element,
-  endDateTimeZoneEditorTemplate: () => JSX.Element,
-  allDayEditorTemplate: () => JSX.Element,
-  repeatEditorTemplate: () => JSX.Element,
-  descriptionEditorTemplate: () => JSX.Element,
+  startDateEditorTemplate: JSX.Element,
+  endDateEditorTemplate: JSX.Element,
+  startDatetimeZoneEditorTemplate: JSX.Element,
+  endDateTimeZoneEditorTemplate: JSX.Element,
+  allDayEditorTemplate: JSX.Element,
+  repeatEditorTemplate: JSX.Element,
+  descriptionEditorTemplate: JSX.Element,
 ): (SimpleItem | GroupItem)[] => [
   {
     dataField: dataExpr.textExpr,
@@ -154,13 +154,13 @@ const getMainLayout = (
   dateExpr: IFieldExpr,
   recurrenceEditorVisibility: boolean,
   allowTimeZoneEditing: boolean | undefined,
-  startDateEditorTemplate: () => JSX.Element,
-  endDateEditorTemplate: () => JSX.Element,
-  startDatetimeZoneEditorTemplate: () => JSX.Element,
-  endDateTimeZoneEditorTemplate: () => JSX.Element,
-  allDayEditorTemplate: () => JSX.Element,
-  repeatEditorTemplate: () => JSX.Element,
-  descriptionEditorTemplate: () => JSX.Element,
+  startDateEditorTemplate: JSX.Element,
+  endDateEditorTemplate: JSX.Element,
+  startDatetimeZoneEditorTemplate: JSX.Element,
+  endDateTimeZoneEditorTemplate: JSX.Element,
+  allDayEditorTemplate: JSX.Element,
+  repeatEditorTemplate: JSX.Element,
+  descriptionEditorTemplate: JSX.Element,
 ): GroupItem[] => [{
   itemType: 'group',
   name: LayoutGroupNames.Main,
@@ -193,13 +193,13 @@ export const getFormLayoutConfig = (
   fieldExpr: IFieldExpr,
   formData: IAppointmentFormData,
   allowTimeZoneEditing: boolean | undefined,
-  startDateEditorTemplate: () => JSX.Element,
-  endDateEditorTemplate: () => JSX.Element,
-  startDatetimeZoneEditorTemplate: () => JSX.Element,
-  endDateTimeZoneEditorTemplate: () => JSX.Element,
-  allDayEditorTemplate: () => JSX.Element,
-  repeatEditorTemplate: () => JSX.Element,
-  descriptionEditorTemplate: () => JSX.Element,
+  startDateEditorTemplate: JSX.Element,
+  endDateEditorTemplate: JSX.Element,
+  startDatetimeZoneEditorTemplate: JSX.Element,
+  endDateTimeZoneEditorTemplate: JSX.Element,
+  allDayEditorTemplate: JSX.Element,
+  repeatEditorTemplate: JSX.Element,
+  descriptionEditorTemplate: JSX.Element,
 ): GroupItem[] => {
   const recurrenceEditorVisibility = !!formData[fieldExpr.recurrenceRuleExpr]; // TODO
   const colSpan = recurrenceEditorVisibility

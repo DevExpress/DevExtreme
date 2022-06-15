@@ -33,6 +33,7 @@ export const viewFunction = ({
   formContextValue,
   formItems,
 }: EditForm): JSX.Element => (
+  /* istanbul ignore next - syntetic jest */
   <Form
     formData={formContextValue.formData}
     items={formItems}
@@ -79,6 +80,7 @@ export class EditForm extends
   @InternalState()
   isAllDay?: boolean;
 
+  /* istanbul ignore next - syntetic jest */
   @Effect({ run: 'once' })
   updateState(): void {
     if (this.isAllDay === undefined) {
@@ -141,58 +143,50 @@ export class EditForm extends
       this.props.dataAccessors.expr,
       formData,
       this.props.allowTimeZoneEditing,
-      (): JSX.Element => (
-        <StartDateTemplate
-          value={startDate}
-          dateChange={this.startDateChange}
-          startDate={formData.startDate as FormDate}
-          endDate={formData.endDate as FormDate}
-          firstDayOfWeek={firstDayOfWeek}
-          isAllDay={allDay}
-        />
-      ),
-      () => (
-        <EndDateTemplate
-          value={this.props.appointmentData.endDate}
-          dateChange={this.endDateChange}
-          startDate={formData.startDate as FormDate}
-          endDate={formData.endDate as FormDate}
-          firstDayOfWeek={this.props.firstDayOfWeek}
-          isAllDay={allDay}
-        />
-      ),
-      () => (
-        <TimeZoneTemplate
-          value={startDateTimeZone}
-          valueChange={this.startDateTimeZoneChange}
-          date={this.props.appointmentData.startDate}
-        />
-      ),
-      () => (
-        <TimeZoneTemplate
-          value={endDateTimeZone}
-          valueChange={this.endDateTimeZoneChange}
-          date={this.props.appointmentData.endDate}
-        />
-      ),
-      () => (
-        <AllDayTemplate
-          value={allDay}
-          valueChange={this.allDayChange}
-        />
-      ),
-      () => (
-        <RepeatTemplate
-          value={isRecurrence}
-          valueChange={this.repeatChange}
-        />
-      ),
-      () => (
-        <DescriptionTemplate
-          value={this.props.appointmentData.description}
-          valueChange={this.descriptionChange}
-        />
-      ),
+      <StartDateTemplate
+        value={startDate}
+        dateChange={this.startDateChange}
+        startDate={formData.startDate as FormDate}
+        endDate={formData.endDate as FormDate}
+        firstDayOfWeek={firstDayOfWeek}
+        isAllDay={allDay}
+      />,
+      /* istanbul ignore next - syntetic jest */
+      <EndDateTemplate
+        value={this.props.appointmentData.endDate}
+        dateChange={this.endDateChange}
+        startDate={formData.startDate as FormDate}
+        endDate={formData.endDate as FormDate}
+        firstDayOfWeek={this.props.firstDayOfWeek}
+        isAllDay={allDay}
+      />,
+      /* istanbul ignore next - syntetic jest */
+      <TimeZoneTemplate
+        value={startDateTimeZone}
+        valueChange={this.startDateTimeZoneChange}
+        date={this.props.appointmentData.startDate}
+      />,
+      /* istanbul ignore next - syntetic jest */
+      <TimeZoneTemplate
+        value={endDateTimeZone}
+        valueChange={this.endDateTimeZoneChange}
+        date={this.props.appointmentData.endDate}
+      />,
+      /* istanbul ignore next - syntetic jest */
+      <AllDayTemplate
+        value={allDay}
+        valueChange={this.allDayChange}
+      />,
+      /* istanbul ignore next - syntetic jest */
+      <RepeatTemplate
+        value={isRecurrence}
+        valueChange={this.repeatChange}
+      />,
+      /* istanbul ignore next - syntetic jest */
+      <DescriptionTemplate
+        value={this.props.appointmentData.description}
+        valueChange={this.descriptionChange}
+      />,
     );
   }
 }

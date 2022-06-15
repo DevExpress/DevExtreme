@@ -4,7 +4,7 @@ import { getRenderEditorTemplate } from '../utils/renderTemplate';
 const AppointmentFormClass = 'dx-appointment-form-switch';
 
 export const getSwitchLayoutItemConfig = (
-  editorTemplate: () => JSX.Element,
+  editorTemplate: JSX.Element,
   dataField: string,
   label: string,
 ): SimpleItem => ({
