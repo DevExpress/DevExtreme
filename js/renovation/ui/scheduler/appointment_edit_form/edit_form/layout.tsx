@@ -9,8 +9,8 @@ import {
   Effect,
 } from '@devextreme-generator/declarations';
 import { Form } from '../../../form/wrapper/form';
-import { AppointmentData } from '../../appointment/types';
-import { DataAccessorType } from '../../types';
+import type { AppointmentData } from '../../appointment/types';
+import type { DataAccessorType } from '../../types';
 import { getFormLayoutConfig } from './layout_items/formLayout';
 import { FormDate } from './utils/normalizeDate';
 import type { GroupItem } from '../../../../../ui/form.d';
@@ -128,9 +128,6 @@ export class EditForm extends
     const isRecurrence = !!recurrenceRule;
 
     const { startDate } = this.props.appointmentData;
-    const {
-      startDateChange,
-    } = this;
     const { firstDayOfWeek } = this.props;
 
     const {
@@ -147,7 +144,7 @@ export class EditForm extends
       (): JSX.Element => (
         <StartDateTemplate
           value={startDate}
-          dateChange={startDateChange}
+          dateChange={this.startDateChange}
           startDate={formData.startDate as FormDate}
           endDate={formData.endDate as FormDate}
           firstDayOfWeek={firstDayOfWeek}

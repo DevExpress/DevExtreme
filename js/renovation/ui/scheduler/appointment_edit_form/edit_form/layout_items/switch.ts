@@ -1,5 +1,5 @@
-import { renderTemplate } from '@devextreme/runtime/declarations';
 import { SimpleItem } from '../../../../form/wrapper/simple_item';
+import { getRenderEditorTemplate } from '../utils/renderTemplate';
 
 const AppointmentFormClass = 'dx-appointment-form-switch';
 
@@ -14,14 +14,5 @@ export const getSwitchLayoutItemConfig = (
     text: label,
     location: 'right',
   },
-  template: (item: unknown, container: unknown): void => {
-    renderTemplate(
-      editorTemplate,
-      {
-        item,
-        container,
-      },
-      null,
-    );
-  },
+  template: getRenderEditorTemplate(editorTemplate),
 });
