@@ -3285,12 +3285,12 @@ QUnit.module('datebox with time component', {
             this.dateBox.option('value', new Date('2015/1/25 13:00:00'));
 
             assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChangedHandler.callCount');
-
             assert.strictEqual(this.$input.val(), '1/25/2015, 1:00 PM', 'input displays a correct value');
-            assert.strictEqual(this.dateBox.option('text'), '1/25/2015, 1:00 PM', 'text is right');
-            assert.strictEqual(this.dateBox.option('isValid'), false, 'widget is invalid');
 
-            assert.deepEqual(this.dateBox.option('value'), new Date(date.setHours(13)), 'value changed correctly');
+            const { text, isValid, value } = this.dateBox.option();
+            assert.strictEqual(text, '1/25/2015, 1:00 PM', 'text is right');
+            assert.strictEqual(isValid, false, 'widget is invalid');
+            assert.deepEqual(value, new Date(date.setHours(13)), 'value is changed correctly');
         });
 
         ['instantly', 'useButtons'].forEach(applyValueMode => {
@@ -3312,12 +3312,12 @@ QUnit.module('datebox with time component', {
                 this.clickApplyButton();
 
                 assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChangedHandler.callCount');
-
                 assert.strictEqual(this.$input.val(), '1/25/2015, 1:00 PM', 'input displays a correct value');
-                assert.strictEqual(this.dateBox.option('text'), '1/25/2015, 1:00 PM', 'text is right');
-                assert.strictEqual(this.dateBox.option('isValid'), false, 'widget is invalid');
 
-                assert.deepEqual(this.dateBox.option('value'), new Date(date.setHours(13)), 'value changed correctly');
+                const { text, isValid, value } = this.dateBox.option();
+                assert.strictEqual(text, '1/25/2015, 1:00 PM', 'text is right');
+                assert.strictEqual(isValid, false, 'widget is invalid');
+                assert.deepEqual(value, new Date(date.setHours(13)), 'value is changed correctly');
             });
 
             QUnit.test(`the out of range value should be applied and valueChangeEvent should be called after change of minutes by spin click, applyValueMode: ${applyValueMode}`, function(assert) {
@@ -3338,12 +3338,12 @@ QUnit.module('datebox with time component', {
                 this.clickApplyButton();
 
                 assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChangedHandler.callCount');
-
                 assert.strictEqual(this.$input.val(), '1/25/2015, 2:59 PM', 'input displays a correct value');
-                assert.strictEqual(this.dateBox.option('text'), '1/25/2015, 2:59 PM', 'text is right');
-                assert.strictEqual(this.dateBox.option('isValid'), false, 'widget is invalid');
 
-                assert.deepEqual(this.dateBox.option('value'), new Date(date.setMinutes(59)), 'value changed correctly');
+                const { text, isValid, value } = this.dateBox.option();
+                assert.strictEqual(text, '1/25/2015, 2:59 PM', 'text is right');
+                assert.strictEqual(isValid, false, 'widget is invalid');
+                assert.deepEqual(value, new Date(date.setMinutes(59)), 'value is changed correctly');
             });
 
             QUnit.test(`the out of range value should be applied and valueChangeEvent should be called after input in hours, applyValueMode: ${applyValueMode}`, function(assert) {
@@ -3374,12 +3374,12 @@ QUnit.module('datebox with time component', {
                 }
 
                 assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChangedHandler.callCount');
-
                 assert.strictEqual(this.$input.val(), '1/25/2015, 1:00 PM', 'input displays a correct value');
-                assert.strictEqual(this.dateBox.option('text'), '1/25/2015, 1:00 PM', 'text is right');
-                assert.strictEqual(this.dateBox.option('isValid'), false, 'widget is invalid');
 
-                assert.deepEqual(this.dateBox.option('value'), new Date(date.setHours(13)), 'value changed correctly');
+                const { text, isValid, value } = this.dateBox.option();
+                assert.strictEqual(text, '1/25/2015, 1:00 PM', 'text is right');
+                assert.strictEqual(isValid, false, 'widget is invalid');
+                assert.deepEqual(value, new Date(date.setHours(13)), 'value is changed correctly');
             });
 
             QUnit.test(`the out of range value should be applied and valueChangeEvent should be called after input in minutes, applyValueMode: ${applyValueMode}`, function(assert) {
@@ -3410,12 +3410,12 @@ QUnit.module('datebox with time component', {
                 }
 
                 assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChangedHandler.callCount');
-
                 assert.strictEqual(this.$input.val(), '1/25/2015, 2:59 PM', 'input displays a correct value');
-                assert.strictEqual(this.dateBox.option('text'), '1/25/2015, 2:59 PM', 'text is right');
-                assert.strictEqual(this.dateBox.option('isValid'), false, 'widget is invalid');
 
-                assert.deepEqual(this.dateBox.option('value'), new Date(date.setMinutes(59)), 'value changed correctly');
+                const { text, isValid, value } = this.dateBox.option();
+                assert.strictEqual(text, '1/25/2015, 2:59 PM', 'text is right');
+                assert.strictEqual(isValid, false, 'widget is invalid');
+                assert.deepEqual(value, new Date(date.setMinutes(59)), 'value is changed correctly');
             });
         });
 
