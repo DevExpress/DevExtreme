@@ -109,10 +109,6 @@ const KEYS = {
     'F2': 'F2'
 };
 
-const KEYS_CODES = {
-    'F2': 113
-};
-
 export function testInDesktop(name, testFunc) {
     if(!isMobile) {
         QUnit.testInActiveWindow(name, testFunc);
@@ -120,7 +116,6 @@ export function testInDesktop(name, testFunc) {
 }
 
 export function triggerKeyDown(key, ctrl, shift, target, result) {
-    const which = KEYS_CODES[key];
     result = result || {
         preventDefault: false,
         stopPropagation: false
@@ -144,7 +139,6 @@ export function triggerKeyDown(key, ctrl, shift, target, result) {
         metaKey: meta,
         target: target && target[0] || target,
         type: 'keydown',
-        ... which ? { which } : {},
         preventDefault: function() {
             result.preventDefault = true;
         },
