@@ -4,7 +4,7 @@
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-commonjs": "^19.0.2",
-    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
     "browserify": "^17.0.0",
     "cross-env": "^7.0.3",
     "devextreme-cldr-data": "^1.0.3",
