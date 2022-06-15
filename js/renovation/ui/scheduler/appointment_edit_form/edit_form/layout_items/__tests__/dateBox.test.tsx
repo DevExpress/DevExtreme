@@ -1,10 +1,11 @@
+import React from 'react';
 import { getDateBoxLayoutItemConfig } from '../dateBox';
 
 describe('API', () => {
   describe('getDateBoxLayoutItemConfig', () => {
     it('should return correct config', () => {
       const dateBoxLayoutItemConfig = getDateBoxLayoutItemConfig(
-        (): any => 'dateBox template',
+        <div />,
         'dateField',
         2,
         'dateBox label',

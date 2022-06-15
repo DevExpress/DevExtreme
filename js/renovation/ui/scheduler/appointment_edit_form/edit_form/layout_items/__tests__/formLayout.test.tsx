@@ -1,3 +1,4 @@
+import React from 'react';
 import { getFormLayoutConfig } from '../formLayout';
 
 describe('API', () => {
@@ -7,13 +8,13 @@ describe('API', () => {
         { startDateExpr: 'startDate' } as any,
         { repeat: true } as any,
         true,
-        (): any => 'startDateEditorTemplate',
-        (): any => 'endDateEditorTemplate',
-        (): any => 'startDatetimeZoneEditorTemplate',
-        (): any => 'endDateTimeZoneEditorTemplate',
-        (): any => 'allDayEditorTemplate',
-        (): any => 'repeatEditorTemplate',
-        (): any => 'descriptionEditorTemplate',
+        <div />,
+        <div />,
+        <div />,
+        <div />,
+        <div />,
+        <div />,
+        <div />,
       );
 
       expect(formLayout)

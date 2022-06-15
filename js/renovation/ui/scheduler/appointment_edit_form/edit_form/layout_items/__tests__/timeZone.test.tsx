@@ -1,10 +1,11 @@
+import React from 'react';
 import { getTimeZoneLayoutItemConfig } from '../timeZone';
 
 describe('API', () => {
   describe('getSwitchLayoutItemConfig', () => {
     it('should return correct config', () => {
       const timeZoneLayoutItemConfig = getTimeZoneLayoutItemConfig(
-        (): any => 'timeZone template',
+        <div />,
         'data field',
         10,
         5,
