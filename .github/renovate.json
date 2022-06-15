@@ -5,7 +5,6 @@
     "rangeStrategy": "bump",
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
-    "commitMessagePrefix": "Update deps - ",
     "baseBranches": [
         "22_1",
         "21_2"
@@ -23,10 +22,6 @@
         "automerge": true
     },
     "packageRules": [
-        {
-            "matchPackagePatterns": [ "enzyme" ],
-            "enabled": false
-        },
         {
             "matchPackagePatterns": [ "*" ],
             "matchUpdateTypes": [ "minor", "patch" ],
