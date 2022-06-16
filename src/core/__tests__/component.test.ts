@@ -6,7 +6,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import { IWidgetComponent } from "../component";
 import globalConfig from "../config";
 import { IConfigurable, IConfigurationComponent } from "../configuration-component";
+import { IExtension } from "../extension-component";
 import { createComponent, createConfigurationComponent, createExtensionComponent } from "../index";
+
+import { getNodeOptions } from "../vue-helper";
 
 interface CustomApp extends App {
     test: string;
@@ -1711,6 +1714,29 @@ describe("component rendering", () => {
 
             expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
             expect(actualElement).toBe(expectedElement);
+        });
+
+        it("should set extension flag when component mounted", () => {
+            const getExtansionFlag = (componentInstance) => {
+                return (getNodeOptions(componentInstance) as any as IExtension).$_isExtension;
+            };
+            TestExtensionComponent.created = function() {
+                expect(getExtansionFlag(this)).toBeFalsy();
+            };
+            TestExtensionComponent.mounted = function() {
+                expect(getExtansionFlag(this)).toBeTruthy();
+            };
+            const vm = defineComponent({
+                template: `<test-component id="component">
+                                <test-extension-component/>
+                            </test-component>`,
+                components: {
+                    TestComponent,
+                    TestExtensionComponent
+                }
+            });
+
+            mount(vm);
         });
 
         it("should create two different components", () => {
