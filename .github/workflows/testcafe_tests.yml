@@ -121,7 +121,6 @@ jobs:
         pushd testing/renovation
         npm install --no-audit --no-fund --legacy-peer-deps
         popd
-        npm run build:angular
         npm run build:react
         npx gulp build-renovation-testing
 
