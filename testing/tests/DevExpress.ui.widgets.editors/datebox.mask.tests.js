@@ -7,8 +7,11 @@ import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/date_box';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from 'core/devices';
+import browser from 'core/utils/browser';
 
 const { test, module } = QUnit;
+
+const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 
 QUnit.testStart(() => {
     $('#qunit-fixture').html('<div id=\'dateBox\'></div>');
@@ -815,6 +818,66 @@ module('Events', setupModule, () => {
 
         assert.ok(onInput.calledOnce);
     });
+
+    QUnit.test('click on input after clear button click should not cause any errors, useMaskBehavior: true (T1094710)', function(assert) {
+        const isIos = devices.current().platform === 'ios';
+        const isIE = browser.msie;
+
+        const currentDate = new Date();
+
+        this.instance.option({
+            pickerType: 'calendar',
+            showClearButton: true,
+            value: new Date(2022, 3, 3),
+            displayFormat: 'dd.MM.yyyy HH:mm',
+            onValueChanged(e) {
+                if(e.value === null) {
+                    e.component.option('value', currentDate);
+                }
+            },
+            useMaskBehavior: true
+        });
+
+        const $clearButton = this.$element.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
+
+        $clearButton.trigger('dxclick');
+
+        assert.deepEqual(this.keyboard.caret(), isIos ? { start: 16, end: 16 } : { start: 0, end: isIE ? 0 : 2 }, 'caret');
+
+        try {
+            this.keyboard.caret(9);
+            this.$input.trigger('dxclick');
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        } finally {
+            assert.strictEqual(this.instance.option('value'), currentDate, 'value is updated correctly');
+        }
+    });
+
+    QUnit.test('focusout after clear value by clear button should not lose input value, useMaskBehavior: true', function(assert) {
+        const currentDate = new Date();
+
+        this.instance.option({
+            pickerType: 'calendar',
+            showClearButton: true,
+            value: new Date(2022, 3, 3),
+            displayFormat: 'dd.MM.yyyy HH:mm',
+            onValueChanged(e) {
+                if(e.value === null) {
+                    e.component.option('value', currentDate);
+                }
+            },
+            useMaskBehavior: true
+        });
+
+        const $clearButton = this.$element.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
+
+        $clearButton.trigger('dxclick');
+
+        this.$input.focusout();
+
+        assert.strictEqual(this.instance.option('value'), currentDate, 'value is updated correctly');
+    });
 });
 
 
@@ -1066,7 +1129,7 @@ module('Empty dateBox', {
 
         assert.strictEqual(this.$input.val(), 'July 19 2018', 'initial value is correct');
 
-        this.$element.find('.dx-clear-button-area').trigger('dxclick');
+        this.$element.find(`.${CLEAR_BUTTON_AREA_CLASS}`).trigger('dxclick');
 
         assert.strictEqual(this.$input.val(), '', 'text was cleared');
         assert.strictEqual(this.instance.option('value'), null, 'value was cleared');
