@@ -4047,6 +4047,7 @@ if(QUnit.urlParams['nojquery']) {
             const $list = $(list).dxList({
                 items: ['One', 'Two', 'Three'],
                 itemDragging: { allowReordering: true },
+                focusStateEnabled: true,
             });
 
             const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -4075,7 +4076,8 @@ if(QUnit.urlParams['nojquery']) {
             container.appendChild(list);
 
             const $list = $(list).dxList({
-                items: ['One', 'Two', 'Three']
+                items: ['One', 'Two', 'Three'],
+                focusStateEnabled: true,
             });
 
             const $items = $list.find(toSelector(LIST_ITEM_CLASS));
