@@ -7,6 +7,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/date_box';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from 'core/devices';
+import browser from '../../../js/core/utils/browser.js';
 
 const { test, module } = QUnit;
 
@@ -820,6 +821,8 @@ module('Events', setupModule, () => {
 
     QUnit.test('click on input after clear button click should not cause any errors, useMaskBehavior: true (T1094710)', function(assert) {
         const isIos = devices.current().platform === 'ios';
+        const isIE = browser.msie;
+
         const currentDate = new Date();
 
         this.instance.option({
@@ -839,7 +842,7 @@ module('Events', setupModule, () => {
 
         $clearButton.trigger('dxclick');
 
-        assert.deepEqual(this.keyboard.caret(), isIos ? { start: 16, end: 16 } : { start: 0, end: 2 }, 'caret');
+        assert.deepEqual(this.keyboard.caret(), isIos ? { start: 16, end: 16 } : { start: 0, end: isIE ? 0 : 2 }, 'caret');
 
         try {
             this.keyboard.caret(9);
