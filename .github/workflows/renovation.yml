@@ -11,7 +11,7 @@ on:
 
 jobs:
   jest-tests:
-    runs-on: ubuntu-latest
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -38,7 +38,7 @@ jobs:
         npx gulp localization
         npm run test-jest
   generation:
-    runs-on: ubuntu-latest
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -57,7 +57,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-audit --no-fund 
+      run: npm install --no-audit --no-fund
 
     - name: Check components generation
       run: |
@@ -65,7 +65,7 @@ jobs:
         npx gulp native-components-compilation-check
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     name: Send notifications
     needs: [jest-tests, generation]
     if: always() && contains(needs.*.result, 'failure')

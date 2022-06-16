@@ -11,7 +11,7 @@ on:
 
 jobs:
   check-ts-bundle:
-    runs-on: ubuntu-latest
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -38,7 +38,7 @@ jobs:
         cp $target $target.current
 
         npm run update-ts
-        
+
         if ! diff $target.current $target -U 5 > $target.diff; then
             echo "FAIL: $target is outdated:"
             cat $target.diff | sed "1,2d"
@@ -47,9 +47,9 @@ jobs:
         else
             echo "TS is up-to-date"
         fi
-  
+
   validate-declarations:
-    runs-on: ubuntu-latest
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -74,7 +74,7 @@ jobs:
       run: npm run validate-declarations
 
   check-ts-compilation:
-    runs-on: ubuntu-latest
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -102,7 +102,7 @@ jobs:
       run: npm run test-typescript
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     name: Send notifications
     needs: [check-ts-bundle, validate-declarations, check-ts-compilation]
     if: always() && contains(needs.*.result, 'failure')

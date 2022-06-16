@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 30
 
     steps:
@@ -50,7 +50,7 @@ jobs:
       run: npx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.material.blue.light.css"
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     name: Send notifications
     needs: [test]
     if: always() && contains(needs.*.result, 'failure')

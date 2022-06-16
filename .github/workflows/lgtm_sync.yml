@@ -6,7 +6,7 @@ on:
 
 jobs:
   lgtm-sync:
-    runs-on: ubuntu-latest
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 5
     env:
       # NOTE: The LGTM.com doesn't scan forks
@@ -30,7 +30,7 @@ jobs:
           sarif_file: lgtm.sarif
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     name: Send notifications
     needs: [lgtm-sync]
     if: always() && contains(needs.*.result, 'failure')
