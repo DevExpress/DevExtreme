@@ -8,6 +8,7 @@ import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import { JSPdfOptionTests } from './jspdf.options.tests.js';
 import { exportDataGrid } from 'pdf_exporter';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
+import browser from 'core/utils/browser';
 
 import 'ui/data_grid/ui.data_grid';
 
