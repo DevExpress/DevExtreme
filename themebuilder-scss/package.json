@@ -30,7 +30,7 @@
     "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources"
   },
   "devDependencies": {
-    "@types/clean-css": "^4.2.3",
+    "@types/clean-css": "^4.2.5",
     "@types/dependency-tree": "^7.2.0",
     "@types/filing-cabinet": "^2.5.0",
     "@types/fs-extra": "9.0.7",
