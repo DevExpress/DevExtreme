@@ -21,4 +21,21 @@ describe('Logic', () => {
         .toEqual(true);
     });
   });
+
+  describe('onToggle', () => {
+    it('should correctly change value', () => {
+      const editor = new SwitchEditor({
+        value: false,
+        valueChange: jest.fn((value) => value),
+      });
+
+      editor.onToggle(true);
+
+      expect(editor.value)
+        .toEqual(true);
+
+      expect(editor.props.valueChange)
+        .toBeCalledWith(true);
+    });
+  });
 });

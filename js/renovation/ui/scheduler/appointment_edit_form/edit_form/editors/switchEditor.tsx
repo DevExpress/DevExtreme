@@ -8,6 +8,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { Switch } from '../../../../editors/switch';
 
+// istanbul ignore next: should be tested in React infrastructure
 export const viewFunction = ({
   value,
   onToggle,

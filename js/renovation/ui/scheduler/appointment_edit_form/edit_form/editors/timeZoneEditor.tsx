@@ -13,6 +13,7 @@ import DataSource from '../../../../../../data/data_source';
 
 const noTzTitle = messageLocalization.format('dxScheduler-noTimezoneTitle');
 
+// istanbul ignore next: should be tested in React infrastructure
 export const viewFunction = ({
   timeZone,
   dataSource,
@@ -29,7 +30,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class TimeZoneEditorProps {
-  @OneWay() value!: string;
+  @OneWay() value!: string | undefined;
 
   @OneWay() date!: Date;
 

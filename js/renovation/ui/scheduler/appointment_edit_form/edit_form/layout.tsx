@@ -29,11 +29,12 @@ import { SwitchEditor } from './editors/switchEditor';
 import { DescriptionEditor } from './editors/descriptionEditor';
 
 const FormColCount = { lg: 2, xs: 1 };
+
+// istanbul ignore next: should be tested in React infrastructure
 export const viewFunction = ({
   formContextValue,
   formItems,
 }: EditForm): JSX.Element => (
-  /* istanbul ignore next - syntetic jest */
   <Form
     formData={formContextValue.formData}
     items={formItems}
@@ -129,13 +130,13 @@ export class EditForm extends
     const { recurrenceRule } = this.formContextValue.formData;
     const isRecurrence = !!recurrenceRule;
 
-    const { startDate } = this.props.appointmentData;
+    const { appointmentData } = this.props;
     const { firstDayOfWeek } = this.props;
 
     const {
-      startDateTimeZone = '',
-      endDateTimeZone = '',
-    } = this.props.appointmentData;
+      startDateTimeZone,
+      endDateTimeZone,
+    } = appointmentData;
 
     const allDay = !!this.isAllDay;
 
@@ -144,7 +145,7 @@ export class EditForm extends
       formData,
       this.props.allowTimeZoneEditing,
       <StartDateTemplate
-        value={startDate}
+        value={appointmentData.startDate}
         dateChange={this.startDateChange}
         startDate={formData.startDate as FormDate}
         endDate={formData.endDate as FormDate}

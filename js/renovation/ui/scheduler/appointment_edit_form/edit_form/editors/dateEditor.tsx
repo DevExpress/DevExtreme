@@ -9,6 +9,7 @@ import {
 import { DateBox, DateEditorType } from '../../../../editors/drop_down_editors/date_box';
 import { getFirstDayOfWeek } from '../../utils';
 
+// istanbul ignore next: should be tested in React infrastructure
 export const viewFunction = ({
   date,
   type,
