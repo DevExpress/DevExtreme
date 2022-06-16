@@ -80,7 +80,6 @@ jobs:
           { componentFolder: "renovation", name: "renovation (react) (2/4)", platform: "react", quarantineMode: false, indices: "2/4" },
           { componentFolder: "renovation", name: "renovation (react) (3/4)", platform: "react", quarantineMode: false, indices: "3/4" },
           { componentFolder: "renovation", name: "renovation (react) (4/4)", platform: "react", quarantineMode: false, indices: "4/4" },
-          { componentFolder: "renovation", name: "renovation (angular)", platform: "angular", quarantineMode: false }
         ]
     runs-on: ubuntu-latest
     timeout-minutes: 90
