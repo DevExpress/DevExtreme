@@ -17,6 +17,11 @@
     },
     "packageRules": [
         {
+            "matchPackagePatterns": [ "typescript" ],
+            "matchUpdateTypes": [ "major", "minor" ],
+            "enabled": false
+        },
+        {
             "matchPackagePatterns": [ "*" ],
             "matchUpdateTypes": [ "minor", "patch" ],
             "automerge": true
