@@ -17,7 +17,7 @@
     },
     "packageRules": [
         {
-            "matchPackagePatterns": [ "typescript" ],
+            "matchPackageNames": [ "typescript", "typescript-min" ],
             "matchUpdateTypes": [ "major", "minor" ],
             "enabled": false
         },
