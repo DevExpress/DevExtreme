@@ -2,7 +2,7 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../helpers/multi-platform-test';
 
-const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['jquery', 'angular', 'react'] });
+const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['jquery'/* , 'angular' */, 'react'] });
 const testReactOnly = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['react'] });
 
 const defaultOptions = {
