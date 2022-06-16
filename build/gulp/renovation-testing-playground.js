@@ -25,10 +25,11 @@ const platforms = {
         pattern: '*.jsx', entryName: (fn) => path.basename(fn, '.jsx'),
         getDeclarationFile: (basenameFilename) => basenameFilename + '.jsx'
     },
-    'angular': {
-        pattern: '!(declaration)**/app.component.ts', entryName: (fn) => path.basename(path.dirname(fn)),
-        getDeclarationFile: (basenameFilename) => path.join(basenameFilename, 'app.component.ts')
-    },
+    // NOTE: Angular generator development is postponed
+    // 'angular': {
+    //     pattern: '!(declaration)**/app.component.ts', entryName: (fn) => path.basename(path.dirname(fn)),
+    //     getDeclarationFile: (basenameFilename) => path.join(basenameFilename, 'app.component.ts')
+    // },
     // TODO uncomment after Vue generators
     // 'vue': {
     //     pattern: '*.vue', entryName: (fn) => path.basename(fn, '.vue'),
@@ -201,4 +202,3 @@ const foldersToCleanup = [
 gulp.task('clean-renovation-testing',
     gulp.parallel([...foldersToCleanup, (cb) => { cb(); }])
 );
-

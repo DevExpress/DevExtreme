@@ -2,7 +2,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { multiPlatformTest, createWidget } from '../../../helpers/multi-platform-test';
 
-const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['react', 'angular'] });
+const test = multiPlatformTest({ page: 'declaration/data_grid_light', platforms: ['react'/* , 'angular' */] });
 
 const defaultOptions = {
   columns: ['id', 'text'],
