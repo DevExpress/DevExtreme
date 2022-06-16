@@ -3,14 +3,11 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
 import 'renovation/ui/button.j';
-import 'generic_light.css!';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
-        <form id="form">\
-        <div id="button"></div>\
-        <div id="widget"></div>\
-        <div id="inkButton"></div>\
+        <form id="form">
+            <div id="button"></div>
         </form>
     `);
 
