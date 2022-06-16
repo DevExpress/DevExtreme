@@ -7,7 +7,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/date_box';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from 'core/devices';
-import browser from '../../../js/core/utils/browser.js';
+import browser from 'core/utils/browser';
 
 const { test, module } = QUnit;
 
