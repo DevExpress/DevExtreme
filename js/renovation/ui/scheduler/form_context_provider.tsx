@@ -11,6 +11,7 @@ import {
   IFormContext,
 } from './form_context';
 
+// istanbul ignore next: should be tested in React infrastructure
 export const viewFunction = (
   viewModel: FormContextProvider,
 ): JSX.Element => viewModel.props.children;

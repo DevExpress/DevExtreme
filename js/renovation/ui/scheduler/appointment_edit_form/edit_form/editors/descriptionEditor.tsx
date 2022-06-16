@@ -8,6 +8,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { TextArea } from '../../../../editors/text_area';
 
+// istanbul ignore next: should be tested in React infrastructure
 export const viewFunction = ({
   props: {
     value,

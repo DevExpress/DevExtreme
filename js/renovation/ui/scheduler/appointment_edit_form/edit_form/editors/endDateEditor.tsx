@@ -7,6 +7,7 @@ import {
 import { FormDate, normalizeNewEndDate } from '../utils/normalizeDate';
 import { DateEditor } from './dateEditor';
 
+// istanbul ignore next: should be tested in React infrastructure
 export const viewFunction = ({
   props: {
     value,
