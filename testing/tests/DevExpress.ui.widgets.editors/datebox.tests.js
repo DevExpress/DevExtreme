@@ -27,16 +27,16 @@ import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
-        '<style>\
-            #containerWithWidth {\
-                width: 100px;\
-            }\
-        </style>\
-        <div id="parent-div"></div>\
-        <div id="dateBox"></div>\
-        <div id="dateBoxWithPicker"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
-        <div id="containerWithWidth"><div id="innerDateBox"></div></div';
+            '<style>\
+                #containerWithWidth {\
+                    width: 100px;\
+                }\
+            </style>\
+            <div id="parent-div"></div>\
+            <div id="dateBox"></div>\
+            <div id="dateBoxWithPicker"></div>\
+            <div id="widthRootStyle" style="width: 300px;"></div>\
+            <div id="containerWithWidth"><div id="innerDateBox"></div></div';
 
     $('#qunit-fixture').html(markup);
 });
