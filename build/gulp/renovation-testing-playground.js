@@ -24,18 +24,7 @@ const platforms = {
     'react': {
         pattern: '*.jsx', entryName: (fn) => path.basename(fn, '.jsx'),
         getDeclarationFile: (basenameFilename) => basenameFilename + '.jsx'
-    },
-    // NOTE: Angular generator development is postponed
-    // 'angular': {
-    //     pattern: '!(declaration)**/app.component.ts', entryName: (fn) => path.basename(path.dirname(fn)),
-    //     getDeclarationFile: (basenameFilename) => path.join(basenameFilename, 'app.component.ts')
-    // },
-    // TODO uncomment after Vue generators
-    // 'vue': {
-    //     pattern: '*.vue', entryName: (fn) => path.basename(fn, '.vue'),
-    //     getEntyPoint: (fn) => path.join(path.dirname(fn), path.basename(fn, '.vue') + '-app.js'),
-    //     getDeclarationFile: (basenameFilename) => basenameFilename + '.vue',
-    // },
+    }
 };
 
 const declarationFiles = glob.sync(path.join(renovationRoot, 'declaration', '*.tsx'));
