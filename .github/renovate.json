@@ -2,7 +2,6 @@
     "extends": [
         "config:base"
     ],
-    "rangeStrategy": "bump",
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
     "baseBranches": [
@@ -12,11 +11,6 @@
     "labels": [
         "dependencies"
     ],
-    "lockFileMaintenance": {
-        "enabled": true,
-        "schedule": [ "every 1 day" ],
-        "automerge": true
-    },
     "vulnerabilityAlerts": {
         "enabled": true,
         "automerge": true
