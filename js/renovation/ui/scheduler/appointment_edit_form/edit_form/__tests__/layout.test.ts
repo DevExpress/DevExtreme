@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars-experimental */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
 import { compileGetter, compileSetter } from '../../../../../../core/utils/data';
 import { DataAccessorType } from '../../../types';
 import { DescriptionEditor } from '../editors/descriptionEditor';
@@ -244,52 +243,6 @@ describe('Logic', () => {
 
       expect(getFormLayoutConfigMock)
         .toBeCalledTimes(1);
-
-      // TODO uncomment for React testing infrastructure
-      // expect(getFormLayoutConfigMock)
-      //   .toBeCalledWith([
-      //     defaultDataAccessors.expr,
-      //     formData,
-      //     true,
-      //     <StartDateEditor
-      //       value={appointmentData.startDate}
-      //       dateChange={editForm.startDateChange}
-      //       startDate={formData.startDate}
-      //       endDate={formData.endDate}
-      //       firstDayOfWeek={5}
-      //       isAllDay
-      //     />,
-      //     <EndDateEditor
-      //       value={appointmentData.endDate}
-      //       dateChange={editForm.endDateChange}
-      //       startDate={formData.startDate}
-      //       endDate={formData.endDate}
-      //       firstDayOfWeek={5}
-      //       isAllDay
-      //     />,
-      //     <TimeZoneEditor
-      //       value={appointmentData.startDateTimeZone}
-      //       valueChange={editForm.startDateTimeZoneChange}
-      //       date={appointmentData.startDate}
-      //     />,
-      //     <TimeZoneEditor
-      //       value={appointmentData.endDateTimeZone}
-      //       valueChange={editForm.endDateTimeZoneChange}
-      //       date={appointmentData.endDate}
-      //     />,
-      //     <SwitchEditor
-      //       value={editForm.isAllDay}
-      //       valueChange={editForm.allDayChange}
-      //     />,
-      //     <SwitchEditor
-      //       value={!!formData.recurrenceRule}
-      //       valueChange={editForm.repeatChange}
-      //     />,
-      //     <DescriptionEditor
-      //       value={appointmentData.description}
-      //       valueChange={editForm.descriptionChange}
-      //     />,
-      //   ]);
     });
   });
 });
