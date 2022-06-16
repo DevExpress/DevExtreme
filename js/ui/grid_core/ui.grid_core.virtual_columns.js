@@ -153,7 +153,7 @@ const ColumnsControllerExtender = (function() {
                 return this.callBase(rowIndex);
             }
 
-            if(!isDefined(this._beginPageIndex) && !isDefined(this._endPageIndex)) {
+            if(this._columns?.length && !isDefined(this._beginPageIndex) && !isDefined(this._endPageIndex)) {
                 this._beginPageIndex = this.getBeginPageIndex(this._position);
                 this._endPageIndex = this.getEndPageIndex(this._position);
             }
