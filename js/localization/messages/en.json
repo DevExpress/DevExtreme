@@ -456,6 +456,9 @@
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} items were not uploaded",
         "dxFileManager-editingUploadCanceledMessage": "Canceled",
 
+        "dxFileManager-editingDownloadSingleItemErrorMessage": "Item was not downloaded",
+        "dxFileManager-editingDownloadMultipleItemsErrorMessage": "{0} items were not downloaded",
+
         "dxFileManager-listDetailsColumnCaptionName": "Name",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Date Modified",
         "dxFileManager-listDetailsColumnCaptionFileSize": "File Size",

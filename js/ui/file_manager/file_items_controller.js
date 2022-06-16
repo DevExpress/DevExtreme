@@ -468,8 +468,6 @@ export default class FileItemsController {
     }
 
     downloadItems(itemInfos) {
-        let canceled = false;
-
         const deferreds = itemInfos.map(itemInfo => {
             return this._processBeforeItemEditAction(
                 args => {
@@ -480,12 +478,17 @@ export default class FileItemsController {
             );
         });
 
-        whenSome(deferreds, null, () => { canceled = true; })
+        return when(...deferreds)
             .then(() => {
-                if(!canceled) {
-                    const items = itemInfos.map(i => i.fileItem);
-                    this._fileProvider.downloadItems(items);
-                }
+                const items = itemInfos.map(i => i.fileItem);
+                return when(this._getItemActionResult(this._fileProvider.downloadItems(items)))
+                    .then(() => { },
+                        errorInfo => {
+                            this._raiseDownloadItemsError(itemInfos, itemInfos[0].parentDirectory, errorInfo);
+                        });
+            },
+            errorInfo => {
+                this._raiseDownloadItemsError(itemInfos, itemInfos[0].parentDirectory, errorInfo);
             });
     }
 
@@ -513,6 +516,28 @@ export default class FileItemsController {
         });
     }
 
+    _raiseDownloadItemsError(targetFileInfos, directory, errorInfo) {
+        const actionInfo = this._createEditActionInfo('download', targetFileInfos, directory);
+        const itemsLength = targetFileInfos.length;
+        actionInfo.singleRequest = itemsLength === 1;
+        this._raiseEditActionStarting(actionInfo);
+        this._raiseEditActionResultAcquired(actionInfo);
+        for(let index = 0; index < itemsLength - 1; index++) {
+            this._raiseEditActionItemError(actionInfo, {
+                errorCode: errorInfo.errorCode,
+                errorText: errorInfo.errorText,
+                fileItem: targetFileInfos[index].fileItem,
+                index
+            });
+        }
+        this._raiseEditActionError(actionInfo, {
+            errorCode: errorInfo.errorCode,
+            errorText: errorInfo.errorText,
+            fileItem: targetFileInfos[itemsLength - 1].fileItem,
+            index: itemsLength - 1
+        });
+    }
+
     _changeDirectoryOnError(dirInfo, skipNavigationOnError, isActualDirectoryRequired) {
         if(isActualDirectoryRequired) {
             dirInfo = this._getActualDirectoryInfo(dirInfo);
@@ -524,6 +549,10 @@ export default class FileItemsController {
         }
     }
 
+    _getItemActionResult(actionResult) {
+        return Array.isArray(actionResult) ? actionResult[0] : actionResult;
+    }
+
     _processEditAction(actionInfo, beforeAction, action, afterAction, completeAction) {
         let isAnyOperationSuccessful = false;
         this._raiseEditActionStarting(actionInfo);
@@ -531,10 +560,7 @@ export default class FileItemsController {
         const actionResult = actionInfo.itemInfos.map((itemInfo, itemIndex) => {
             return this._processBeforeItemEditAction(beforeAction, itemInfo)
                 .then(() => {
-                    let itemActionResult = action(itemInfo.fileItem, itemIndex);
-                    if(Array.isArray(itemActionResult)) {
-                        itemActionResult = itemActionResult[0];
-                    }
+                    const itemActionResult = this._getItemActionResult(action(itemInfo.fileItem, itemIndex));
                     return itemActionResult.done(() => afterAction(itemInfo));
                 });
         });
