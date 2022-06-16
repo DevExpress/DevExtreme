@@ -4075,17 +4075,28 @@ if(QUnit.urlParams['nojquery']) {
             root.shadowRoot.appendChild(container);
             container.appendChild(list);
 
+            const createEvent = eventName => {
+                const event = $.Event(eventName);
+
+                event.originalEvent = {
+                    type: eventName,
+                    target: { shadowRoot: root },
+                    path: [ $items.eq(1)[0] ],
+                    changedTouches: [{}]
+                };
+
+                return event;
+            };
+
             const $list = $(list).dxList({
                 items: ['One', 'Two', 'Three'],
                 focusStateEnabled: true,
             });
 
             const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-            const event = $.Event('mousedown');
 
-            event.originalEvent = { type: 'mousedown', target: { shadowRoot: root }, path: [ $items.eq(1)[0] ] };
-
-            $(root).trigger(event);
+            $(root).trigger(createEvent('mousedown'));
+            $(root).trigger(createEvent('touchstart'));
 
             setTimeout(function() {
                 assert.ok($items.eq(1).hasClass('dx-state-focused'));
