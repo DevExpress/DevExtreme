@@ -1,7 +1,10 @@
 import dateSerialization from '../../../../../../core/utils/date_serialization';
-import { validateAppointmentFormDate } from './validate';
 
-export type FormDate = Date | undefined;
+export type FormDate = Date | undefined | null;
+
+const validateAppointmentFormDate = (
+  date: Date | undefined | null,
+): boolean => date === null || (!!date && !!new Date(date).getDate());
 
 const normalizeNewDate = (
   newDate: FormDate,
@@ -9,7 +12,7 @@ const normalizeNewDate = (
   currentOppositeDate: FormDate,
   needCorrect: (startDate: Date, endDate: Date) => boolean,
 ): Date => {
-  if (!validateAppointmentFormDate(newDate, currentDate)) {
+  if (!validateAppointmentFormDate(newDate)) {
     return currentDate as Date;
   }
 
@@ -20,11 +23,12 @@ const normalizeNewDate = (
 
   result = normalizedDate;
 
-  if (needCorrect(normalizedOppositeDate, normalizedDate)) {
-    const duration = currentDate
-      ? normalizedOppositeDate.getTime() - normalizedDate.getTime()
-      : 0;
-
+  if (
+    normalizedOppositeDate
+    && normalizedDate
+    && needCorrect(normalizedOppositeDate, normalizedDate)
+  ) {
+    const duration = normalizedOppositeDate.getTime() - normalizedDate.getTime();
     result = new Date(normalizedDate.getTime() + duration);
   }
 
