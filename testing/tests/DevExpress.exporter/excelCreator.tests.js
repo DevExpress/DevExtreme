@@ -1,9 +1,11 @@
-const $ = require('jquery');
-const excelCreator = require('exporter').excel;
-const coreLocalization = require('localization/core');
+import $ from 'jquery';
+import { excel as excelCreator } from 'exporter';
+import coreLocalization from 'localization/core';
+import exportMocks from '../../helpers/exportMocks.js';
+import browser from 'core/utils/browser';
+
 const ExcelCreator = excelCreator.creator;
 const internals = excelCreator.__internals;
-const exportMocks = require('../../helpers/exportMocks.js');
 
 QUnit.module('Excel creator', {
     beforeEach: function() {
@@ -23,7 +25,7 @@ QUnit.test('Date time format converting', function(assert) {
         shortDate: '[$-9]M\\/d\\/yyyy',
         shortTime: '[$-9]H:mm AM/PM',
         shortDateShortTime: '[$-9]M\\/d\\/yyyy, H:mm AM/PM',
-        longDateLongTime: '[$-9]dddd, MMMM d, yyyy, H:mm:ss AM/PM',
+        longDateLongTime: `[$-9]dddd, MMMM d, yyyy${browser.mozilla ? ' \\a\\t' : ','} H:mm:ss AM/PM`,
         dayOfWeek: '[$-9]dddd',
         hour: '[$-9]HH',
         minute: '[$-9]H:mm:ss AM/PM',
