@@ -452,6 +452,10 @@ function sameYear(date1, date2) {
     return date1 && date2 && date1.getFullYear() === date2.getFullYear();
 }
 
+function sameHoursAndMinutes(date1, date2) {
+    return date1 && date2 && date1.getHours() === date2.getHours() && date1.getMinutes() === date2.getMinutes();
+}
+
 const sameDecade = function(date1, date2) {
     if(!isDefined(date1) || !isDefined(date2)) return;
 
@@ -653,6 +657,7 @@ const dateUtils = {
     addInterval: addInterval,
     getSequenceByInterval: getSequenceByInterval,
     getDateIntervalByString: getDateIntervalByString,
+    sameHoursAndMinutes: sameHoursAndMinutes,
     sameDate: sameDate,
     sameMonthAndYear: sameMonthAndYear,
     sameMonth: sameMonthAndYear,
