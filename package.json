@@ -58,7 +58,7 @@
     "@devextreme-generator/inferno": "^3.0.7",
     "@devextreme-generator/react": "^3.0.7",
     "@devextreme-generator/vue": "^3.0.7",
-    "@types/enzyme": "^3.10.5",
+    "@types/enzyme": "^3.10.12",
     "@types/jest": "^24.0.24",
     "@types/jquery": "^2.0.34",
     "@types/react": "16.9.16",
