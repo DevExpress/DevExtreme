@@ -178,14 +178,6 @@ module('Work Space Day', {
         assert.ok($cell.hasClass(DROPPABLE_CELL_CLASS), 'cell has droppable class');
     });
 
-    test('droppable class should be removed on dxdrop', function(assert) {
-        const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(2);
-        $cell.addClass(DROPPABLE_CELL_CLASS);
-
-        $($cell).trigger(dragEvents.drop);
-        assert.ok(!$cell.hasClass(DROPPABLE_CELL_CLASS), 'cell has no droppable class');
-    });
-
     test('Get date range', function(assert) {
         this.instance.option('currentDate', new Date(2015, 2, 16));
 
