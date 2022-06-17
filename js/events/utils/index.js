@@ -182,19 +182,15 @@ export const fireEvent = props => {
 };
 
 export const normalizeKeyName = ({ key, which }) => {
-    const originalKey = key;
-    const isKeySupported = !!key;
-
-    if(key || which) {
-        if(isKeySupported) {
-            key = KEY_MAP[key.toLowerCase()];
-        }
-        if(!isKeySupported || !key && which) {
-            key = LEGACY_KEY_CODES[which] || String.fromCharCode(which);
-        }
-
-        return key || originalKey;
+    const normalizedKey = KEY_MAP[key?.toLowerCase()] || key;
+    const normalizedKeyFromWhich = LEGACY_KEY_CODES[which];
+    if(normalizedKeyFromWhich && normalizedKey === key) {
+        return normalizedKeyFromWhich;
+    } else if(!normalizedKey && which) {
+        return String.fromCharCode(which);
     }
+
+    return normalizedKey;
 };
 
 export const getChar = ({ key, which }) => key || String.fromCharCode(which);
