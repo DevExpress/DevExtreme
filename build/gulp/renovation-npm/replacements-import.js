@@ -14,16 +14,12 @@ function performRecastReplacements(context) {
     return through.obj((file, enc, callback) => {
         if (file.isNull())
             return callback(null, file);
-        
+
         const absoluteRootFolderPath = path.resolve(process.cwd(), rootFolderPath);
 
         const isJs = file.extname === '.js';
         const isTs = file.extname === '.ts' || file.extname === '.tsx';
 
-        // TODO: Condition below: workaround for angular generator. It creates *.tsx file instead of *.ts (it does not contain react markup);
-        if (isTs && context.name === 'angular') {
-            file.extname = '.ts';
-        }
         if (!isJs && !isTs)
             return callback(null, file);
 

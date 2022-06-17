@@ -93,22 +93,6 @@ const tasks = ({ isWatch }) => Object.entries(platforms)
                 ...platformDeclarationFiles.map(vueAppFileGenerationTask(platformDeclarationSrc))
             ];
         }
-        if(platform == 'angular') {
-            const angularTemplateGenerationTask = fileName => {
-                const destFileName = path.basename(fileName, '.ts') + '.html';
-                const destDir = path.join(platformDeclarationSrc, entryName(fileName))
-                return namedTask(`${platform}-angular-app`,
-                    () => gulp
-                        .src('build/gulp/templates/playground-angular-declaration-template.jst')
-                        .pipe(templatePipe(destFileName, {}))
-                        .pipe(gulp.dest(destDir))
-                );
-            };
-            generateHtmlFiles = [
-                ...generateHtmlFiles,
-                ...platformDeclarationFiles.map(angularTemplateGenerationTask)
-            ];
-        }
         const declarationAppFileGeneratorTask = fileName => {
             const relativePathToDeclationComponent = path.relative(path.dirname(fileName), path.join(renovationRoot, 'declaration'));
             const componentModule = path.join(relativePathToDeclationComponent, entryName(fileName))
