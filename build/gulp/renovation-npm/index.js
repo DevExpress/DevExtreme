@@ -27,7 +27,7 @@ function copyMiscFiles(context, additionalReplacements) {
             .pipe(through2.obj((chunk, enc, callback) => {
                 if (chunk.isNull())
                     return callback(null, chunk);
-                
+
                 const fileContents = chunk.contents.toString();
                 const patchedContents = messages.getReadmeNote(context.name) + fileContents;
 
@@ -157,38 +157,5 @@ addCompilationTask({
                 actions: [require('./steps-react').createReactEntryPoint, require('./steps-react').createModuleEntryPointers]
             }
         },
-    }
-});
-addCompilationTask({
-    name: 'angular',
-    artifactsFolder: 'angular-typescript',
-    generator: 'generate-angular-typescript',
-
-    switches: {
-        installPackages: true,
-    },
-    components: ['Button', 'DataGridNext', 'DataGridNextPaging', 'DataGridNextPager', 'DataGridNextSelection', 'DataGridNextMasterDetail'],
-    steps: {
-        installPackages: {
-            before: {
-                condition: (ctx) => !ctx.production,
-                actions: [require('./steps-angular').beforeNpmInstall]
-            },
-            after: {
-                condition: (ctx) => !ctx.production,
-                actions: [require('./steps-angular').afterNpmInstall]
-            }
-        },
-        copyMiscFiles: {
-            arg: (ctx) => require('./steps-angular').preparePackageForPackagr,
-            after: {
-                actions: [require('./steps-angular').createNgEntryPoint, require('./steps-angular').createTSConfig]
-            }
-        },
-        teardown: {
-            before: {
-                actions: [require('./steps-angular').runPackagr]
-            }
-        }
     }
 });

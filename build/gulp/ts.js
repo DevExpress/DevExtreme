@@ -59,12 +59,6 @@ gulp.task('ts-copy-bundle', gulp.series(
             .pipe(replace(/(interface JQuery\b[\s\S]*?{)[\s\S]+?(})/gm, '$1$2'))
             .pipe(gulp.dest(packageBundlesPath));
     },
-
-    function writeAngularHack() {
-        return file('dx.all.js', '// This file is required to compile devextreme-angular', { src: true })
-            .pipe(headerPipes.starLicense())
-            .pipe(gulp.dest(packageBundlesPath));
-    }
 ));
 
 gulp.task('ts-check-jquery', function() {
@@ -166,7 +160,7 @@ gulp.task('test-ts', gulp.series(
         .on('error', callback)
         .on('close', code => code ? callback(new Error(code)) : callback());
     },
-    () => { 
+    () => {
         return gulp
         .src([
             `${TS_TESTS_PATH}/**/*.ts`,
@@ -176,7 +170,7 @@ gulp.task('test-ts', gulp.series(
             'esModuleInterop': true,
             'moduleResolution': 'node',
             'noEmit': true,
-            'skipLibCheck': true, 
+            'skipLibCheck': true,
             'typeRoots': [],
             'target': 'es2015',
             'baseUrl': `${TS_TESTS_PATH}`,
