@@ -1963,6 +1963,9 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is still visible');
 
         this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.clock.tick(200);
+        assert.notOk(this.wrapper.getDialogButton('Copy').hasClass(Consts.DISABLED_STATE_CLASS), '\'Copy\' dialog button is enabled');
+
         this.wrapper.getDialogButton('Copy').trigger('dxclick');
         this.clock.tick(400);
 
@@ -1999,6 +2002,9 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is still visible');
 
         this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.clock.tick(200);
+        assert.notOk(this.wrapper.getDialogButton('Move').hasClass(Consts.DISABLED_STATE_CLASS), '\'Move\' dialog button is enabled');
+
         this.wrapper.getDialogButton('Move').trigger('dxclick');
         this.clock.tick(400);
 
