@@ -1936,4 +1936,76 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDetailsItemName(0), fileName1, '1st file is still in the initial dir');
         assert.strictEqual(this.wrapper.getDetailsItemName(1), fileName2, '2nd file is still in the initial dir');
     });
+
+    test('the \'copy\' dialog button must be disabled and dialog remains open after click on it if no folders are selected (T1092300)', function(assert) {
+        let $cells = this.wrapper.getColumnCellsInDetailsView(2);
+        const initialCount = $cells.length;
+        const $cell = $cells.eq(0);
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
+
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+        assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is visible');
+        assert.ok(this.wrapper.getDialogButton('Copy').hasClass(Consts.DISABLED_STATE_CLASS), '\'Copy\' dialog button is disabled');
+
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
+        this.clock.tick(400);
+
+        $cells = this.wrapper.getColumnCellsInDetailsView(2);
+        assert.equal($cells.length, initialCount, 'file count not changed');
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'first file is the target file');
+        assert.equal(this.wrapper.getDetailsItemName(1), 'File 2.jpg', 'second file is not target file');
+        assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is still visible');
+
+        this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Folder 3', 'root folder selected');
+        $cells = this.wrapper.getColumnCellsInDetailsView(2);
+        assert.equal($cells.length, 1, 'file count is correct');
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'first file is the target file');
+        assert.notOk(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is invisible');
+    });
+
+    test('the \'move\' dialog button must be disabled and dialog remains open after click on it if no folders are selected (T1092300)', function(assert) {
+        let $cells = this.wrapper.getColumnCellsInDetailsView(2);
+        const initialCount = $cells.length;
+        const $cell = $cells.eq(0);
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
+
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+        assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is visible');
+        assert.ok(this.wrapper.getDialogButton('Move').hasClass(Consts.DISABLED_STATE_CLASS), '\'Move\' dialog button is disabled');
+
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(400);
+
+        $cells = this.wrapper.getColumnCellsInDetailsView(2);
+        assert.equal($cells.length, initialCount, 'file count not changed');
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'first file is the target file');
+        assert.equal(this.wrapper.getDetailsItemName(1), 'File 2.jpg', 'second file is not target file');
+        assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is still visible');
+
+        this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Folder 3', 'root folder selected');
+        $cells = this.wrapper.getColumnCellsInDetailsView(2);
+        assert.equal($cells.length, 1, 'file count is correct');
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'first file is the target file');
+        assert.notOk(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is invisible');
+    });
 });
