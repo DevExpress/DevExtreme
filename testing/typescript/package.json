@@ -4,10 +4,10 @@
   "version": "1.1.0",
   "author": "Developer Express Inc.",
   "dependencies": {
-    "@angular/common": "^11.2.14"
+    "@angular/common": "11.2.14"
   },
   "devDependencies": {
-    "jquery": "^3.6.0",
-    "@types/jquery": "^3.5.11"
+    "jquery": "3.6.0",
+    "@types/jquery": "3.5.14"
   }
 }

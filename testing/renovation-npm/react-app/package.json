@@ -4,14 +4,14 @@
   "private": true,
   "dependencies": {
     "@devextreme/react": "file:devextreme-react-22.1.0-dev.tgz",
-    "@testing-library/jest-dom": "^5.15.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
+    "@testing-library/jest-dom": "5.16.4",
+    "@testing-library/react": "11.2.7",
+    "@testing-library/user-event": "12.8.3",
     "devextreme": "file:devextreme-22.1.0-dev.tgz",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
     "react-scripts": "4.0.3",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "1.1.2"
   },
   "scripts": {
     "start": "react-scripts start",

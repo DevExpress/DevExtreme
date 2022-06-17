@@ -23,13 +23,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cross-env": "^7.0.3",
-    "del": "^6.0.0",
-    "devextreme-screenshot-comparer": "^2.0.11",
-    "eslint-plugin-testcafe": "^0.2.1",
-    "glob": "^7.2.0",
-    "gulp": "^4.0.2",
-    "testcafe": "^1.17.1",
-    "yargs": "^17.2.1"
+    "cross-env": "7.0.3",
+    "del": "6.1.1",
+    "devextreme-screenshot-comparer": "2.0.11",
+    "eslint-plugin-testcafe": "0.2.1",
+    "glob": "7.2.3",
+    "gulp": "4.0.2",
+    "testcafe": "1.19.0",
+    "yargs": "17.5.1"
   }
 }
