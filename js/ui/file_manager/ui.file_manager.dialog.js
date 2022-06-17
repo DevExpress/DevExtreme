@@ -126,8 +126,8 @@ class FileManagerDialogBase extends Widget {
         this._popup.option('title', newTitle);
     }
 
-    _setButtonText(newText) {
-        this._popup.option('toolbarItems[0].options.text', newText);
+    _setApplyButtonOptions(options) {
+        this._popup.option('toolbarItems[0].options', options);
     }
 
     _getDefaultOptions() {
