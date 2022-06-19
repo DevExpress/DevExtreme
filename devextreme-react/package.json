@@ -27,7 +27,7 @@
     "react-dom": "^16.2.0 || ^17.0.0 || ^18.0.0"
   },
   "dependencies": {
-    "devextreme-internal-tools": "^7.6.0",
+    "devextreme-internal-tools": "^8.0.0",
     "prop-types": "^15.6.1"
   },
   "devDependencies": {

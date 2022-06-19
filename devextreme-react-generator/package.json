@@ -27,7 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "dasherize": "^2.0.0",
-    "devextreme-internal-tools": "^7.6.0",
+    "devextreme-internal-tools": "^8.0.0",
     "dot": "^1.1.2"
   },
   "devDependencies": {
