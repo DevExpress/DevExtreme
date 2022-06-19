@@ -32,7 +32,8 @@ export type WidgetName =
 'dxTreeView' |
 'dxDateBox' |
 'dxLookup' |
-'dxNumberBox';
+'dxNumberBox' |
+'dxValidator';
 
 export default async function createWidget(
   widgetName: WidgetName,
