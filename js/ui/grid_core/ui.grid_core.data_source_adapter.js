@@ -307,6 +307,7 @@ export default gridCore.Controller.inherit((function() {
         },
         push: function(changes, fromStore) {
             const store = this.store();
+            const isReshapeMode = this.option('editing.refreshMode') === 'reshape';
 
             if(this._needClearStoreDataCache()) {
                 this._cachedStoreData = undefined;
@@ -324,7 +325,7 @@ export default gridCore.Controller.inherit((function() {
                 });
             }
 
-            if(!fromStore) {
+            if(!fromStore && !isReshapeMode) {
                 this._applyBatch(changes);
             }
 
@@ -360,7 +361,6 @@ export default gridCore.Controller.inherit((function() {
             const groupCount = gridCore.normalizeSortingInfo(this.group()).length;
             const totalCount = this.totalCount();
             const isVirtualMode = this.option('scrolling.mode') === 'virtual';
-            const isReshapeMode = this.option('editing.refreshMode') === 'reshape';
 
             changes = changes.filter(function(change) {
                 return !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined;
@@ -385,7 +385,7 @@ export default gridCore.Controller.inherit((function() {
                 useInsertIndex: true
             });
 
-            if(this._currentTotalCount > 0 || !isReshapeMode && isVirtualMode && totalCount === oldItemCount) {
+            if(this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount) {
                 this._totalCountCorrection += getItemCount() - oldItemCount;
             }
 
