@@ -142,7 +142,7 @@
     "jquery": "^3.5.1",
     "jquery.tmpl": "0.0.2",
     "jspdf": "2.5.1",
-    "jspdf-autotable": "3.5.23",
+    "jspdf-autotable": "3.5.25",
     "jsrender": "1.0.6",
     "knockout": "^3.4.2",
     "lazypipe": "^1.0.1",
