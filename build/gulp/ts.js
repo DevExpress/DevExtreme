@@ -59,6 +59,12 @@ gulp.task('ts-copy-bundle', gulp.series(
             .pipe(replace(/(interface JQuery\b[\s\S]*?{)[\s\S]+?(})/gm, '$1$2'))
             .pipe(gulp.dest(packageBundlesPath));
     },
+
+    function writeAngularHack() {
+        return file('dx.all.js', '// This file is required to compile devextreme-angular', { src: true })
+            .pipe(headerPipes.starLicense())
+            .pipe(gulp.dest(packageBundlesPath));
+    }
 ));
 
 gulp.task('ts-check-jquery', function() {
