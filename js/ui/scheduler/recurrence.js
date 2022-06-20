@@ -207,7 +207,7 @@ class RecurrenceProcessor {
                     date = options.getPostProcessedException(date);
                 }
 
-                const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
+                const utcDate = timeZoneUtils.setOffsetsToDate(date, [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset]);
                 this.rRuleSet.exdate(utcDate);
             });
         }

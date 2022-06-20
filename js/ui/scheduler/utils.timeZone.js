@@ -196,7 +196,8 @@ const getExtremeDates = () => {
 
 const setOffsetsToDate = (targetDate, offsetsArray) => {
     const dateCopy = new Date(targetDate);
-    offsetsArray.forEach((offset) => dateCopy.setMilliseconds(dateCopy.getMilliseconds() + offset));
+    const offsetToAdd = offsetsArray.reduce((result, offset) => result + offset, 0);
+    dateCopy.setMilliseconds(dateCopy.getMilliseconds() + offsetToAdd);
     return dateCopy;
 };
 
