@@ -30,7 +30,7 @@ test('ValidationMessage integrated in editor should not raise any errors when it
 fixture`ValidationMessage_TextBox`
   .page(url(__dirname, '../container.html'));
 
-test('Validation Message position should be correct after change visibility of parent container', async (t) => {
+test('Validation Message position should be correct after change visibility of parent container (T1095900)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
