@@ -212,8 +212,6 @@
     "build:react": "gulp generate-react",
     "build:react:watch": "gulp generate-react-watch",
     "build:react:typescript": "gulp generate-react-typescript",
-    "build:vue": "gulp generate-vue",
-    "build:vue:watch": "gulp generate-vue-watch",
     "prepare-npm-renovation": "cd ./build/gulp/renovation-npm && npm i --no-audit --no-fund --no-package-lock",
     "build-npm-renovation:react": "npm run prepare-npm-renovation && gulp renovation-npm-react",
     "build-npm-renovation:react:production": "cross-env NPM_PRODUCTION=true npm run build-npm-renovation:react",
