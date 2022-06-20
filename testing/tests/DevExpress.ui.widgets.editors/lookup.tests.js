@@ -3505,7 +3505,7 @@ QUnit.module('default options', {
 
             const $popup = $('.dx-popup-content');
 
-            assert.roughEqual($popup.height(), 112, 1, 'popup height if DataSource without items and `searchEnabled: true`');
+            assert.roughEqual($popup.height(), 112, 1.01, 'popup height if DataSource without items and `searchEnabled: true`');
         } finally {
             $lookup.remove();
             themes.isMaterial = origIsMaterial;
