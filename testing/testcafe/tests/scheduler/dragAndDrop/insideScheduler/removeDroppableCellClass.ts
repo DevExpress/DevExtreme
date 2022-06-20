@@ -19,7 +19,7 @@ const TEST_APPOINTMENT = {
   endDate: new Date(2021, 3, 28, 2),
 };
 
-const getSchedulerOptions = () => ({
+const getSchedulerOptions = (): any => ({
   dataSource: [TEST_APPOINTMENT],
   currentDate: new Date(2021, 3, 28),
   currentView: 'workWeek',

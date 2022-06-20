@@ -21,16 +21,16 @@ const TEST_APPOINTMENT = {
   endDate: new Date(2021, 3, 28, 2),
 };
 
-const getBaseSchedulerOptions = (currentDate) => ({
+const getBaseSchedulerOptions = (currentDate): any => ({
   currentDate,
   currentView: 'workWeek',
   width: 600,
   appointmentDragging: {
     group: 'testDragGroup',
-    onRemove(e) {
+    onRemove(e): void {
       e.component.deleteAppointment(e.itemData);
     },
-    onAdd(e) {
+    onAdd(e): void {
       e.component.addAppointment(e.itemData);
     },
   },
@@ -51,14 +51,14 @@ const createSchedulerWithRemoteDataSource = async (
         this.data = initialData;
       }
 
-      load = () => Promise.resolve(this.data);
+      load = (): Promise<TestAppointment[]> => Promise.resolve(this.data);
 
-      insert = (value) => {
+      insert = (value): Promise<void> => {
         this.data = [...this.data, value];
         return Promise.resolve();
       };
 
-      update = (key, value) => {
+      update = (key, value): Promise<void> => {
         this.data = this.data.map((item) => {
           if (item.id === key) {
             return value;
@@ -68,7 +68,7 @@ const createSchedulerWithRemoteDataSource = async (
         return Promise.resolve();
       };
 
-      remove = (id) => {
+      remove = (id): Promise<void> => {
         this.data = this.data.filter((item) => item.id !== id);
         return Promise.resolve();
       };

@@ -19,20 +19,20 @@ const TEST_APPOINTMENT = {
   endDate: new Date(2021, 3, 28, 2),
 };
 
-const getSchedulerOptions = (dataSource, currentDate, cancelMethodName) => ({
+const getSchedulerOptions = (dataSource, currentDate, cancelMethodName): any => ({
   dataSource,
   currentDate,
   currentView: 'workWeek',
   width: 600,
   appointmentDragging: {
     group: 'testDragGroup',
-    onRemove(e) {
+    onRemove(e): void {
       e.component.deleteAppointment(e.itemData);
     },
-    onAdd(e) {
+    onAdd(e): void {
       e.component.addAppointment(e.itemData);
     },
-    [cancelMethodName]: (e) => {
+    [cancelMethodName]: (e): void => {
       e.cancel = true;
     },
   },
