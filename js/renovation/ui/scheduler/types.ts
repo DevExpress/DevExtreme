@@ -25,8 +25,8 @@ export interface AppointmentDataItem {
   startDateTimeZone: string | null;
   endDate: Date;
   endDateTimeZone: string | null;
-  recurrenceRule: string;
-  recurrenceException: string;
+  recurrenceRule?: string;
+  recurrenceException?: string;
   hasRecurrenceRule: boolean;
   allDay: boolean;
   visible: boolean;

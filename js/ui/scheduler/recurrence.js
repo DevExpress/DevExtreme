@@ -35,17 +35,18 @@ class RecurrenceProcessor {
         }
 
         const clientOffset = new Date().getTimezoneOffset() * 60000;
+        const appointmentOffset = options.appointmentTimezoneOffset;
         const duration = options.end ? options.end.getTime() - clientOffset - options.start.getTime() : 0;
-        const startDate = new Date(options.start.getTime() - clientOffset + options.appointmentTimezoneOffset);
-        const minViewTime = options.min.getTime() - clientOffset + options.appointmentTimezoneOffset;
+        const startDate = new Date(options.start.getTime() - clientOffset + appointmentOffset);
+        const minViewTime = options.min.getTime() - clientOffset + appointmentOffset;
         const minViewDate = new Date(minViewTime - duration);
-        const maxViewDate = new Date(options.max.getTime() - clientOffset + options.appointmentTimezoneOffset);
+        const maxViewDate = new Date(options.max.getTime() - clientOffset + appointmentOffset);
 
         this._initializeRRule(options, startDate, rule.until);
 
         return this.rRuleSet.between(minViewDate, maxViewDate, true)
             .filter((date) => (date.getTime() + duration) >= minViewTime)
-            .map((date) => new Date(date.getTime() + clientOffset - options.appointmentTimezoneOffset));
+            .map((date) => new Date(date.getTime() + clientOffset - appointmentOffset));
     }
 
     hasRecurrence(options) {
