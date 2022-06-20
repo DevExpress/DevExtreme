@@ -9,8 +9,7 @@ import { appendElementTo } from '../navigation/helpers/domUtils';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 fixture`ValidationMessage`
-  .page(url(__dirname, './pages/T941581.html'))
-  .beforeEach(async (t) => { await t.wait(1000); });
+  .page(url(__dirname, './pages/T941581.html'));
 
 test('ValidationMessage integrated in editor should not raise any errors when it is placed inside of form and has name "style"', async (t) => {
   const checkBox = new CheckBox('#checkBox');
