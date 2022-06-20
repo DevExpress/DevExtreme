@@ -37,11 +37,11 @@ class RecurrenceProcessor {
         const clientOffsets = {
             startDate: timeZoneUtils.getClientTimezoneOffset(options.start),
             minViewDate: timeZoneUtils.getClientTimezoneOffset(options.min),
-            maxViewDate: timeZoneUtils.getClientTimezoneOffset(options.min),
+            maxViewDate: timeZoneUtils.getClientTimezoneOffset(options.max),
         };
 
         const appointmentOffset = options.appointmentTimezoneOffset;
-        const duration = options.end ? options.end.getTime() - clientOffsets.startDate - options.start.getTime() : 0;
+        const duration = options.end ? options.end.getTime() - options.start.getTime() : 0;
         const startDate = timeZoneUtils.setOffsetsToDate(options.start, [-clientOffsets.startDate, appointmentOffset]);
         const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentOffset;
         const minViewDate = new Date(minViewTime - duration);

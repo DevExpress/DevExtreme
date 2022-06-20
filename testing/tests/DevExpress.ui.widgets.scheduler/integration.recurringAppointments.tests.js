@@ -1235,7 +1235,7 @@ supportedScrollingModes.forEach(scrollingMode => {
         });
 
         test('Recurrence exception should be adjusted by scheduler timezone', function(assert) {
-            // const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-39600000);
+            const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-39600000);
             try {
                 const scheduler = this.createInstance({
                     dataSource: [{
@@ -1257,7 +1257,7 @@ supportedScrollingModes.forEach(scrollingMode => {
 
                 assert.equal($appointments.length, 11, 'correct number of the appointments');
             } finally {
-                // tzOffsetStub.restore();
+                tzOffsetStub.restore();
             }
         });
 
