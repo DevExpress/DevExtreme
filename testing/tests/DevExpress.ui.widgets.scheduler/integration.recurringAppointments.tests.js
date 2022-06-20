@@ -1235,15 +1235,15 @@ supportedScrollingModes.forEach(scrollingMode => {
         });
 
         test('Recurrence exception should be adjusted by scheduler timezone', function(assert) {
-            const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-39600000);
+            // const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-39600000);
             try {
                 const scheduler = this.createInstance({
                     dataSource: [{
                         text: 'a',
-                        startDate: new Date('2018-03-26T10:00:00.000Z'),
-                        endDate: new Date('2018-03-26T11:00:00.000Z'),
+                        startDate: new Date(2018, 2, 26, 10),
+                        endDate: new Date(2018, 2, 26, 11),
                         recurrenceRule: 'FREQ=DAILY',
-                        recurrenceException: '20180327T100000Z, 20180330T100000Z'
+                        recurrenceException: '20180327T100000, 20180330T100000'
                     }],
                     views: ['month'],
                     currentView: 'month',
@@ -1257,7 +1257,7 @@ supportedScrollingModes.forEach(scrollingMode => {
 
                 assert.equal($appointments.length, 11, 'correct number of the appointments');
             } finally {
-                tzOffsetStub.restore();
+                // tzOffsetStub.restore();
             }
         });
 

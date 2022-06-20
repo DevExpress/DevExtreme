@@ -1,5 +1,5 @@
 import url from '../../../helpers/getPageUrl';
-import { getAppointmentTime, screenshotTestFunc } from './utils/timezoneTestingUtils';
+import { getAppointmentTime, screenshotTestFunc } from './timezoneTestingUtils';
 import createWidget from '../../../helpers/createWidget';
 
 const SCREENSHOT_BASE_NAME = 'timezone-yearly-recurrent';

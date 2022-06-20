@@ -34,19 +34,24 @@ class RecurrenceProcessor {
             return [];
         }
 
-        const clientOffset = new Date().getTimezoneOffset() * 60000;
+        const clientOffsets = {
+            startDate: timeZoneUtils.getClientTimezoneOffset(options.start),
+            minViewDate: timeZoneUtils.getClientTimezoneOffset(options.min),
+            maxViewDate: timeZoneUtils.getClientTimezoneOffset(options.min),
+        };
+
         const appointmentOffset = options.appointmentTimezoneOffset;
-        const duration = options.end ? options.end.getTime() - clientOffset - options.start.getTime() : 0;
-        const startDate = new Date(options.start.getTime() - clientOffset + appointmentOffset);
-        const minViewTime = options.min.getTime() - clientOffset + appointmentOffset;
+        const duration = options.end ? options.end.getTime() - clientOffsets.startDate - options.start.getTime() : 0;
+        const startDate = new Date(options.start.getTime() - clientOffsets.startDate + appointmentOffset);
+        const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentOffset;
         const minViewDate = new Date(minViewTime - duration);
-        const maxViewDate = new Date(options.max.getTime() - clientOffset + appointmentOffset);
+        const maxViewDate = new Date(options.max.getTime() - clientOffsets.maxViewDate + appointmentOffset);
 
         this._initializeRRule(options, startDate, rule.until);
 
         return this.rRuleSet.between(minViewDate, maxViewDate, true)
             .filter((date) => (date.getTime() + duration) >= minViewTime)
-            .map((date) => new Date(date.getTime() + clientOffset - appointmentOffset));
+            .map((date) => new Date(date.getTime() + timeZoneUtils.getClientTimezoneOffset(date) - appointmentOffset));
     }
 
     hasRecurrence(options) {

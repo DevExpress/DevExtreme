@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import { getAppointmentTime, screenshotTestFunc } from './utils/timezoneTestingUtils';
+import { getAppointmentTime, screenshotTestFunc } from './timezoneTestingUtils';
 import createWidget from '../../../helpers/createWidget';
 import SelectBox from '../../../model/selectBox';
 
