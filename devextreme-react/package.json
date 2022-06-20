@@ -42,7 +42,7 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "gulp": "^4.0.0",
-    "jest": "^24.8.0",
+    "jest": "^26.0.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "gulp-header": "^2.0.5",
