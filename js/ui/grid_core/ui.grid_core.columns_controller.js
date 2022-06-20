@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { compileGetter, compileSetter } from '../../core/utils/data';
-import { grep } from '../../core/utils/common';
+import { grep, equalByValue } from '../../core/utils/common';
 import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, type } from '../../core/utils/type';
 import { each, map } from '../../core/utils/iterator';
 import { getDefaultAlignment } from '../../core/utils/position';
@@ -22,7 +22,6 @@ import { when, Deferred } from '../../core/utils/deferred';
 import Store from '../../data/abstract_store';
 import { DataSource } from '../../data/data_source/data_source';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
-import { equalByValue } from '../../core/utils/common';
 import filterUtils from '../shared/filtering';
 
 const USER_STATE_FIELD_NAMES_15_1 = ['filterValues', 'filterType', 'fixed', 'fixedPosition'];
