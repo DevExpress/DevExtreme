@@ -1,5 +1,5 @@
 import { Selector } from 'testcafe';
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from '../../helpers/screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import Lookup from '../../model/lookup';
 import { restoreBrowserSize } from '../../helpers/restoreBrowserSize';
