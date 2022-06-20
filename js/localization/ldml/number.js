@@ -132,7 +132,7 @@ export function getFormatter(format, config) {
         const maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]);
 
         if(isPercentFormat(numberFormat)) {
-            value = precisionRound(value * 100, maxFloatPrecision + 2);
+            value = value * 100;
         }
 
         if(!isPositive) {
@@ -159,11 +159,6 @@ export function getFormatter(format, config) {
 
         return result;
     };
-}
-
-function precisionRound(value, precision) {
-    const factor = Math.pow(10, precision);
-    return Math.round(value * factor) / factor;
 }
 
 function parseValue(text, isPercent, isNegative) {

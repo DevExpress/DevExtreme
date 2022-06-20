@@ -11,7 +11,7 @@ function roundByAbs(value) {
 function adjustValue(value, precision) {
     const precisionMultiplier = Math.pow(DECIMAL_BASE, precision);
     const roundMultiplier = precisionMultiplier * DECIMAL_BASE;
-    const intermediateValue = (value * roundMultiplier) / DECIMAL_BASE;
+    const intermediateValue = Math.round(value * roundMultiplier) / DECIMAL_BASE;
 
     return roundByAbs(intermediateValue) / precisionMultiplier;
 }
