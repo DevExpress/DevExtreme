@@ -1054,8 +1054,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             const task = {
                 text: 'No Recruiting students',
                 roomId: [5],
-                startDate: new Date(2017, 4, 15, 11, 0),
-                endDate: new Date(2017, 4, 15, 12, 0),
+                startDate: new Date('2017-05-15T11:00:00.000Z'),
+                endDate: new Date('2017-05-15T12:00:00.000Z'),
                 recurrenceRule: 'FREQ=DAILY;COUNT=3',
                 recurrenceException: '20170516T070000Z'
             };
@@ -1240,10 +1240,10 @@ supportedScrollingModes.forEach(scrollingMode => {
                 const scheduler = this.createInstance({
                     dataSource: [{
                         text: 'a',
-                        startDate: new Date(2018, 2, 26, 10),
-                        endDate: new Date(2018, 2, 26, 11),
+                        startDate: new Date('2018-03-26T10:00:00.000Z'),
+                        endDate: new Date('2018-03-26T11:00:00.000Z'),
                         recurrenceRule: 'FREQ=DAILY',
-                        recurrenceException: '20180327T100000, 20180330T100000'
+                        recurrenceException: '20180327T100000Z, 20180330T100000Z'
                     }],
                     views: ['month'],
                     currentView: 'month',

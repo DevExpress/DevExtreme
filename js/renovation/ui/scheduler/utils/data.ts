@@ -36,7 +36,9 @@ export const getPreparedDataItems = (
       result.push({
         allDay: !!adapter.allDay,
         startDate: comparableStartDate,
+        startDateTimeZone: rawAppointment.startDateTimeZone ?? null,
         endDate: comparableEndDate,
+        endDateTimeZone: rawAppointment.endDateTimeZone ?? null,
         recurrenceRule: adapter.recurrenceRule,
         recurrenceException: adapter.recurrenceException,
         hasRecurrenceRule,

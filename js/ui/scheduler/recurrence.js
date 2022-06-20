@@ -27,37 +27,25 @@ class RecurrenceProcessor {
     }
 
     generateDates(options) {
-        const result = [];
         const recurrenceRule = this.evalRecurrenceRule(options.rule);
         const rule = recurrenceRule.rule;
 
         if(!recurrenceRule.isValid || !rule.freq) {
-            return result;
+            return [];
         }
 
-        const startDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.start);
-        const endDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.end);
-        const minDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.min);
-        const maxDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.max);
+        const clientOffset = new Date().getTimezoneOffset() * 60000;
+        const duration = options.end ? options.end.getTime() - clientOffset - options.start.getTime() : 0;
+        const startDate = new Date(options.start.getTime() - clientOffset + options.appointmentTimezoneOffset);
+        const minViewTime = options.min.getTime() - clientOffset + options.appointmentTimezoneOffset;
+        const minViewDate = new Date(minViewTime - duration);
+        const maxViewDate = new Date(options.max.getTime() - clientOffset + options.appointmentTimezoneOffset);
 
-        const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
+        this._initializeRRule(options, startDate, rule.until);
 
-        this._initializeRRule(options, startDateUtc, rule.until);
-
-        const minTime = minDateUtc.getTime();
-
-        const newMinDate = new Date(minDateUtc.getTime() - duration);
-
-        this.rRuleSet.between(newMinDate, maxDateUtc, true).forEach(date => {
-            const endAppointmentTime = date.getTime() + duration;
-
-            if(endAppointmentTime >= minTime) {
-                const correctDate = timeZoneUtils.createDateFromUTCWithLocalOffset(date);
-                result.push(correctDate);
-            }
-        });
-
-        return result;
+        return this.rRuleSet.between(minViewDate, maxViewDate, true)
+            .filter((date) => (date.getTime() + duration) >= minViewTime)
+            .map((date) => new Date(date.getTime() + clientOffset - options.appointmentTimezoneOffset));
     }
 
     hasRecurrence(options) {
@@ -220,9 +208,7 @@ class RecurrenceProcessor {
     _createRRule(ruleOptions) {
         this._dispose();
 
-        const rRuleSet = new RRuleSet();
-
-        this.rRuleSet = rRuleSet;
+        this.rRuleSet = new RRuleSet();
         this.rRule = new RRule(ruleOptions);
 
         this.rRuleSet.rrule(this.rRule);
