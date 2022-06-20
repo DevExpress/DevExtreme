@@ -1454,4 +1454,43 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.columnOption(0, 'filterValue', 35);
         dataGrid.columnOption(0, 'filterValue', null);
     });
+
+    // T1093656, T1096053
+    QUnit.testInActiveWindow('Filter row editor should have focus when filterPanel is visible', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            filterRow: { visible: true },
+            columns: [
+                { dataField: 'field1' },
+                {
+                    dataField: 'field2',
+                    filterValue: 4,
+                    selectedFilterOperation: '='
+                }
+            ],
+            filterPanel: {
+                visible: true
+            },
+            dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 1, 'row count');
+
+        // act
+        const $input = $(dataGrid.$element()).find('.dx-datagrid-filter-row').first().find('.dx-texteditor-input').first();
+        $input
+            .trigger('focus')
+            .val('1')
+            .trigger('change');
+        this.clock.tick(100);
+
+        // assert
+        const $focusedInput = $(dataGrid.$element()).find('.dx-datagrid-filter-row .dx-texteditor-input:focus');
+        assert.deepEqual($focusedInput.get(0), $input.get(0), 'filter cell has focus after filter applyed');
+        assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'row count after filtering');
+        assert.deepEqual(dataGrid.option('filterValue'), [['field2', '=', 4], 'and', ['field1', '=', 1]], 'filterValue');
+    });
 });
