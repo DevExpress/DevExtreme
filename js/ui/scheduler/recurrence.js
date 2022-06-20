@@ -49,11 +49,9 @@ class RecurrenceProcessor {
 
         this._initializeRRule(options, startDate, rule.until);
 
-        const result = this.rRuleSet.between(minViewDate, maxViewDate, true)
+        return this.rRuleSet.between(minViewDate, maxViewDate, true)
             .filter((date) => (date.getTime() + duration) >= minViewTime)
             .map((date) => timeZoneUtils.setOffsetsToDate(date, [timeZoneUtils.getClientTimezoneOffset(date), -appointmentOffset]));
-
-        return result;
     }
 
     hasRecurrence(options) {
@@ -192,7 +190,10 @@ class RecurrenceProcessor {
             ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
         }
 
-        ruleOptions.until = timeZoneUtils.createUTCDateWithLocalOffset(until);
+        if(until) {
+            ruleOptions.until = timeZoneUtils.setOffsetsToDate(until,
+                [-timeZoneUtils.getClientTimezoneOffset(until), options.appointmentTimezoneOffset]);
+        }
 
         this._createRRule(ruleOptions);
 
@@ -207,7 +208,15 @@ class RecurrenceProcessor {
                     date = options.getPostProcessedException(date);
                 }
 
-                const utcDate = timeZoneUtils.setOffsetsToDate(date, [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset]);
+                const utcDate = timeZoneUtils.setOffsetsToDate(date,
+                    [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset]);
+                const originClientOffset = date.getTimezoneOffset();
+                const utcDateClientOffset = utcDate.getTimezoneOffset();
+
+                if(utcDateClientOffset !== originClientOffset) {
+                    utcDate.setMilliseconds(utcDate.getMilliseconds() - (utcDateClientOffset - originClientOffset) * 60000);
+                }
+
                 this.rRuleSet.exdate(utcDate);
             });
         }
