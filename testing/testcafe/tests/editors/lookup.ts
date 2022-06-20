@@ -36,21 +36,6 @@ test('Popup should be flipped if lookup is placed at the page bottom', async (t)
 });
 
 fixture`Lookup`
-  .page(url(__dirname, './pages/lookup.html'));
-
-test('Popover should have correct vertical position (T1048128)', async (t) => {
-  const lookupElement = Selector('#lookup');
-  const popoverArrow = Selector('.dx-popover-arrow');
-
-  const lookupElementBottom = await lookupElement.getBoundingClientRectProperty('bottom');
-  const popoverArrowTop = await popoverArrow.getBoundingClientRectProperty('top');
-
-  await t
-    .expect(lookupElementBottom)
-    .eql(popoverArrowTop);
-});
-
-fixture`Lookup`
   .page(url(__dirname, '../container.html'));
 
 themes.forEach((theme) => {
