@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { compileGetter, compileSetter } from '../../core/utils/data';
-import { grep } from '../../core/utils/common';
+import { grep, equalByValue } from '../../core/utils/common';
 import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, type } from '../../core/utils/type';
 import { each, map } from '../../core/utils/iterator';
 import { getDefaultAlignment } from '../../core/utils/position';
@@ -713,7 +713,7 @@ export const columnsControllerModule = {
                     return optionGetter(column, { functionsAsIs: true });
                 }
                 const prevValue = optionGetter(column, { functionsAsIs: true });
-                if(prevValue !== value) {
+                if(!equalByValue(prevValue, value)) {
                     if(optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
                         changeType = 'grouping';
                         updateSortOrderWhenGrouping(that, column, value, prevValue);
