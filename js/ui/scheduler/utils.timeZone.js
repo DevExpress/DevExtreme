@@ -194,6 +194,12 @@ const getExtremeDates = () => {
     return [startDate, endDate];
 };
 
+const setOffsetsToDate = (targetDate, offsetsArray) => {
+    const dateCopy = new Date(targetDate);
+    offsetsArray.forEach((offset) => dateCopy.setMilliseconds(dateCopy.getMilliseconds() + offset));
+    return dateCopy;
+};
+
 const utils = {
     getDaylightOffset,
     getDaylightOffsetInMs,
@@ -214,7 +220,9 @@ const utils = {
     hasDSTInLocalTimeZone,
     isEqualLocalTimeZone,
     isEqualLocalTimeZoneByDeclaration,
-    getTimeZones
+    getTimeZones,
+
+    setOffsetsToDate
 };
 
 export default utils;
