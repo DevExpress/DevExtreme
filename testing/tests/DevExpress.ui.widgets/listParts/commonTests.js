@@ -4034,77 +4034,63 @@ if(devices.real().deviceType === 'desktop') {
 
 if(QUnit.urlParams['nojquery']) {
     QUnit.module('ShadowDOM', {
-    }, () => {
-        QUnit.test('ShadowDom: drag item', function(assert) {
-            const root = document.querySelector('#list');
-            const container = document.createElement('div');
-            const list = document.createElement('div');
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
 
-            root.attachShadow({ mode: 'open' });
-            container.appendChild(list);
-            root.shadowRoot.appendChild(container);
+            this.root = document.querySelector('#list');
+            this.container = document.createElement('div');
+            this.list = document.createElement('div');
 
-            const $list = $(list).dxList({
+            this.root.attachShadow({ mode: 'open' });
+            this.container.appendChild(this.list);
+            this.root.shadowRoot.appendChild(this.container);
+
+            this.$list = $(this.list).dxList({
                 items: ['One', 'Two', 'Three'],
                 itemDragging: { allowReordering: true },
                 focusStateEnabled: true,
             });
+        },
 
-            const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        afterEach: function() {
+            this.clock.restore();
 
-            const pointer = reorderingPointerMock($items.first());
+            // TODO: get rid of it after fix jquery event bubbling to shadow dom
+            $(this.container).empty();
+        },
 
-            pointer.dragStart().drag(34);
-            pointer.dragEnd();
+        getItems: function() {
+            return this.$list.find(toSelector(LIST_ITEM_CLASS));
+        },
 
-            const orderedItems = $list.find(toSelector(LIST_ITEM_CLASS)).toArray().map(e => e.innerText.trim());
+        createEvent: function(eventName) {
+            return $.Event(eventName, {
+                originalEvent: {
+                    type: eventName,
+                    target: { shadowRoot: this.root },
+                    path: [ this.getItems().eq(1)[0] ],
+                    changedTouches: [{}]
+                }
+            });
+        },
+    }, () => {
+        QUnit.test('drag item', function(assert) {
+            const pointer = reorderingPointerMock(this.getItems().first());
+
+            pointer.dragStart().drag(34).dragEnd();
+
+            const orderedItems = this.getItems().toArray().map(e => e.innerText.trim());
 
             assert.deepEqual(orderedItems, ['Two', 'Three', 'One']);
-
-            $(container).empty();
         });
 
-        QUnit.test('ShadowDom: focus item', function(assert) {
-            const done = assert.async();
+        QUnit.test('focus item', function(assert) {
+            $(this.root).trigger(this.createEvent('mousedown'));
+            $(this.root).trigger(this.createEvent('touchstart'));
 
-            const root = document.querySelector('#list');
-            const list = document.createElement('div');
-            const container = document.createElement('div');
+            this.clock.tick();
 
-            root.attachShadow({ mode: 'open' });
-            root.shadowRoot.appendChild(container);
-            container.appendChild(list);
-
-            const createEvent = eventName => {
-                const event = $.Event(eventName);
-
-                event.originalEvent = {
-                    type: eventName,
-                    target: { shadowRoot: root },
-                    path: [ $items.eq(1)[0] ],
-                    changedTouches: [{}]
-                };
-
-                return event;
-            };
-
-            const $list = $(list).dxList({
-                items: ['One', 'Two', 'Three'],
-                focusStateEnabled: true,
-            });
-
-            const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-
-            $(root).trigger(createEvent('mousedown'));
-            $(root).trigger(createEvent('touchstart'));
-
-            setTimeout(function() {
-                assert.ok($items.eq(1).hasClass('dx-state-focused'));
-
-                $(container).empty();
-
-                done();
-            });
+            assert.ok(this.getItems().eq(1).hasClass('dx-state-focused'));
         });
     });
 }
