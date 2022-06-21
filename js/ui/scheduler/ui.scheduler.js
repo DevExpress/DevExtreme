@@ -2183,6 +2183,10 @@ class Scheduler extends Widget {
         return new AppointmentAdapter(rawAppointment, options);
     }
 
+    _getDragBehavior() {
+        return this._workSpace.dragBehavior;
+    }
+
     /**
         * @name dxScheduler.registerKeyHandler
         * @publicName registerKeyHandler(key, handler)

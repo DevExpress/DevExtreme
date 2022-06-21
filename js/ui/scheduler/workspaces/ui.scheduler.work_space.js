@@ -2272,7 +2272,16 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         eventsEngine.on(element, DragEventNames.ENTER, DRAG_AND_DROP_SELECTOR, { checkDropTarget: onCheckDropTarget }, onDragEnter);
         eventsEngine.on(element, DragEventNames.LEAVE, removeClasses);
-        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, removeClasses);
+        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, () => {
+            if(!this.dragBehavior?.dragBetweenComponentsPromise) {
+                this.dragBehavior.removeDroppableClasses();
+                return;
+            }
+
+            this.dragBehavior.dragBetweenComponentsPromise?.then(() => {
+                this.dragBehavior.removeDroppableClasses();
+            });
+        });
     }
 
     _attachPointerEvents(element) {

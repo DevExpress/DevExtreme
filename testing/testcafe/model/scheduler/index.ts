@@ -15,6 +15,7 @@ export const CLASS = {
   allDayTableCell: 'dx-scheduler-all-day-table-cell',
   focusedCell: 'dx-scheduler-focused-cell',
   selectedCell: 'dx-state-focused',
+  droppableCell: 'dx-scheduler-date-table-droppable-cell',
   dateTableRow: 'dx-scheduler-date-table-row',
   dateTableScrollable: 'dx-scheduler-date-table-scrollable',
   headerPanelCell: 'dx-scheduler-header-panel-cell',
@@ -101,6 +102,12 @@ export default class Scheduler extends Widget {
     const cells = isAllDay ? this.allDayTableCells : this.dateTableCells;
 
     return cells.filter(`.${CLASS.selectedCell}`);
+  }
+
+  getDroppableCell(isAllDay = false): Selector {
+    const cells = isAllDay ? this.allDayTableCells : this.dateTableCells;
+
+    return cells.filter(`.${CLASS.droppableCell}`);
   }
 
   getAppointment(title: string, index = 0): Appointment {
