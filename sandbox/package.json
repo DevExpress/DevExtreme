@@ -16,7 +16,7 @@
     "@angular/platform-browser-dynamic": "~12.2.16",
     "@angular/router": "~12.2.16",
     "devextreme": "22.1-next",
-    "devextreme-angular": "~22.1.0",
+    "devextreme-angular": "~22.1.2",
     "core-js": "^2.5.4",
     "rxjs": "^6.3.3",
     "tslib": "^1.9.0",
