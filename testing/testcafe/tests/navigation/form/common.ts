@@ -6,7 +6,7 @@ import { changeTheme } from '../../../helpers/changeTheme';
 fixture`Form`
   .page(url(__dirname, '../../container.html'));
 
-['generic.light', 'generic.dark', 'generic.contrast', 'material.blue.light'].forEach((theme) => {
+['generic.light', 'generic.dark', 'generic.contrast'].forEach((theme) => {
   // T882067
   test(`Color of the marks,theme=${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
