@@ -13,7 +13,7 @@ const { module, test, testInActiveWindow } = QUnit;
 
 const DIALOG_WRAPPER_CLASS = 'dx-dialog-wrapper';
 
-module('dialog tests', {
+module('dialog tests tests', {
     beforeEach: function() {
         viewPort('#qunit-fixture');
 
