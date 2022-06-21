@@ -1271,6 +1271,7 @@ QUnit.test('Tooltip shown twice with template. Async template emulation', functi
     this.tooltip._getCanvas = function() { return CANVAS; };
 
     const renderTemplate = (container, onRendered, content) => {
+        assert.ok(container[0].parentNode, 'container should be appended to the group');
         $(container).append($(`<span>${content}</span>`));
         onRendered();
     };
