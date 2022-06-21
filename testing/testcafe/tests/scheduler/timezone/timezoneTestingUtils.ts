@@ -36,6 +36,8 @@ const getAppointmentTime = (desiredDate: Date, timezone: string): Date => {
   return new Date(desiredDate.getTime() - localOffset - timezoneOffset);
 };
 
+const getScreenshotName = (testModuleName: string, screenshotName: string): string => `${testModuleName}__${screenshotName}.png`;
+
 const screenshotTestFunc = async (t: TestController,
   testModuleName: string,
   screenshotName: string,
@@ -43,10 +45,14 @@ const screenshotTestFunc = async (t: TestController,
   const scheduler = new Scheduler(schedulerSelector);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.expect(await takeScreenshot(`${testModuleName}__${screenshotName}.png`, scheduler.workSpace))
+  await t
+    .expect(await takeScreenshot(
+      getScreenshotName(testModuleName, screenshotName),
+      scheduler.workSpace,
+    ))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 };
 
-export { getAppointmentTime, screenshotTestFunc };
+export { getAppointmentTime, screenshotTestFunc, getScreenshotName };

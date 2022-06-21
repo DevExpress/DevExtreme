@@ -1,8 +1,10 @@
 import { ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import { getAppointmentTime, screenshotTestFunc } from './timezoneTestingUtils';
+import { getAppointmentTime, getScreenshotName } from './timezoneTestingUtils';
 import createWidget from '../../../helpers/createWidget';
 import SelectBox from '../../../model/selectBox';
+import Scheduler from '../../../model/scheduler';
 
 const SELECT_SELECTOR = '#container';
 const SCHEDULER_SELECTOR = '#otherContainer';
@@ -42,17 +44,22 @@ fixture`Recurrent appointments without timezone in scheduler with timezone`
 
 test('Should correctly display the recurrent weekly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
+  const schedulerElement = new Scheduler(SCHEDULER_SELECTOR).element;
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
-  await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'weekly-appointment__same-timezone', SCHEDULER_SELECTOR);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__same-timezone'), schedulerElement);
 
   await selectTimezoneInUI(t, selectBox, 0);
   // expected date: 4/28/2021 9:00 PM - 11:00 PM
-  await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'weekly-appointment__greater-timezone', SCHEDULER_SELECTOR);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__greater-timezone'), schedulerElement);
 
   await selectTimezoneInUI(t, selectBox, 2);
   // expected date: 4/28/2021 1:00 AM - 3:00 AM
-  await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'weekly-appointment__lower-timezone', SCHEDULER_SELECTOR);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__lower-timezone'), schedulerElement);
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => {
   const schedulerTimezone = TEST_TIMEZONES[1];
 
@@ -75,17 +82,22 @@ test('Should correctly display the recurrent weekly appointment without timezone
 
 test('Should correctly display the recurrent monthly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
+  const schedulerElement = new Scheduler(SCHEDULER_SELECTOR).element;
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
-  await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'monthly-appointment__same-timezone');
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__same-timezone'), schedulerElement);
 
   await selectTimezoneInUI(t, selectBox, 0);
   // expected date: 4/28/2021 9:00 PM - 11:00 PM
-  await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'monthly-appointment__greater-timezone');
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__greater-timezone'), schedulerElement);
 
   await selectTimezoneInUI(t, selectBox, 2);
   // expected date: 4/28/2021 1:00 AM - 3:00 AM
-  await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'monthly-appointment__lower-timezone');
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__lower-timezone'), schedulerElement);
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => {
   const schedulerTimezone = TEST_TIMEZONES[1];
 
@@ -108,17 +120,22 @@ test('Should correctly display the recurrent monthly appointment without timezon
 
 test('Should correctly display the recurrent yearly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
+  const schedulerElement = new Scheduler(SCHEDULER_SELECTOR).element;
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
-  await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'yearly-appointment__same-timezone');
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__same-timezone'), schedulerElement);
 
   await selectTimezoneInUI(t, selectBox, 0);
   // expected date: 4/28/2021 9:00 PM - 11:00 PM
-  await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'yearly-appointment__greater-timezone');
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__greater-timezone'), schedulerElement);
 
   await selectTimezoneInUI(t, selectBox, 2);
   // expected date: 4/28/2021 1:00 AM - 3:00 AM
-  await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'yearly-appointment__lower-timezone');
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__lower-timezone'), schedulerElement);
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => {
   const schedulerTimezone = TEST_TIMEZONES[1];
 
