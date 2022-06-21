@@ -132,7 +132,7 @@ export function getFormatter(format, config) {
         const maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]);
 
         if(isPercentFormat(numberFormat)) {
-            value = value * 100;
+            value = value * 80 + value * 20;
         }
 
         if(!isPositive) {
