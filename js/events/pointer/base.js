@@ -37,7 +37,8 @@ const BaseStrategy = Class.inherit({
 
         const originalEvent = e.originalEvent;
         if(originalEvent?.target.shadowRoot) {
-            event.target = e.originalEvent.path[0];
+            const path = originalEvent.path || (originalEvent.composedPath && originalEvent.composedPath());
+            event.target = path[0];
         }
 
         return this._fireEvent(event);
