@@ -2,9 +2,10 @@ import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { getAppointmentTime, getScreenshotName } from './timezoneTestingUtils';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import SelectBox from '../../../model/selectBox';
 import Scheduler from '../../../model/scheduler';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 const SELECT_SELECTOR = '#container';
 const SCHEDULER_SELECTOR = '#otherContainer';
@@ -39,13 +40,16 @@ const selectTimezoneInUI = async (t: TestController, selectBox: SelectBox, timez
   await t.click(timezonesList.getItem(timezoneIdx).element, TEST_CURSOR_OPTIONS);
 };
 
-fixture`Recurrent appointments without timezone in scheduler with timezone`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Recurrent appointments without timezone in scheduler with timezone`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 test('Should correctly display the recurrent weekly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
   const schedulerElement = new Scheduler(SCHEDULER_SELECTOR).element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await restoreBrowserSize(t);
 
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__same-timezone'), schedulerElement);
@@ -77,6 +81,8 @@ test('Should correctly display the recurrent weekly appointment without timezone
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   }, false, SCHEDULER_SELECTOR);
 });
 
@@ -84,6 +90,8 @@ test('Should correctly display the recurrent monthly appointment without timezon
   const selectBox = new SelectBox(SELECT_SELECTOR);
   const schedulerElement = new Scheduler(SCHEDULER_SELECTOR).element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await restoreBrowserSize(t);
 
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__same-timezone'), schedulerElement);
@@ -115,6 +123,8 @@ test('Should correctly display the recurrent monthly appointment without timezon
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   }, false, SCHEDULER_SELECTOR);
 });
 
@@ -122,6 +132,8 @@ test('Should correctly display the recurrent yearly appointment without timezone
   const selectBox = new SelectBox(SELECT_SELECTOR);
   const schedulerElement = new Scheduler(SCHEDULER_SELECTOR).element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await restoreBrowserSize(t);
 
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__same-timezone'), schedulerElement);
@@ -153,5 +165,7 @@ test('Should correctly display the recurrent yearly appointment without timezone
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   }, false, SCHEDULER_SELECTOR);
 });

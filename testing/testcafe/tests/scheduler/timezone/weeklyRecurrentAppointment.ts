@@ -1,11 +1,12 @@
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { getAppointmentTime, screenshotTestFunc } from './timezoneTestingUtils';
 
 const SCREENSHOT_BASE_NAME = 'timezone-weekly-recurrent';
 
-fixture`Weekly recurrent appointments with timezones`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Weekly recurrent appointments with timezones`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 // === One day in week tests section ===
 
@@ -30,6 +31,8 @@ test('Should correctly display the recurrent (one day at week) appointment with 
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -54,6 +57,8 @@ test('Should correctly display the recurrent (one day at week) morning appointme
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -78,6 +83,8 @@ test('Should correctly display the recurrent (one day at week) evening appointme
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -103,6 +110,8 @@ with a greater time timezone and day shift to the next day`, async (t) => {
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -127,6 +136,8 @@ test('Should correctly display the recurrent (one day at week) appointment with 
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -151,6 +162,8 @@ test('Should correctly display the recurrent (one day at week) appointment with 
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -175,6 +188,8 @@ test('Should correctly display the recurrent (one day at week) appointment with 
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -200,6 +215,8 @@ with timezone view period shift to the next view period at the first week`, asyn
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -225,6 +242,8 @@ with timezone view period shift to the next view period at the second week`, asy
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -250,6 +269,8 @@ with timezone view period shift to the previous view period at the first week`, 
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -275,6 +296,8 @@ with timezone view period shift to the previous view period at the second week`,
     currentDate: new Date(2021, 3, 21),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -303,6 +326,8 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -330,6 +355,8 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -356,6 +383,8 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -383,6 +412,8 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -409,6 +440,8 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -436,6 +469,8 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -463,6 +498,8 @@ test(`Should correctly display recurrent appointment with multiple day in week
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -491,6 +528,8 @@ test(`Should correctly display recurrent appointment with multiple day in week
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -518,6 +557,8 @@ test(`Should correctly display recurrent appointment with multiple day in week
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
 
@@ -546,5 +587,7 @@ test(`Should correctly display recurrent appointment with multiple day in week
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
     cellDuration: 120,
+    width: '100%',
+    height: '100%',
   });
 });
