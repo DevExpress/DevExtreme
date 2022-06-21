@@ -12,17 +12,17 @@ const TEST_APPOINTMENT = {
   endDate: new Date(2021, 3, 30, 2),
 };
 
-const getSchedulerOptions = (dataSource) => ({
+const getSchedulerOptions = (dataSource): any => ({
   dataSource,
   currentView: 'workWeek',
   currentDate: new Date(2021, 3, 26),
   width: 600,
   appointmentDragging: {
     group: 'testDragGroup',
-    onRemove(e) {
+    onRemove(e): void {
       e.component.deleteAppointment(e.itemData);
     },
-    onAdd(e) {
+    onAdd(e): void {
       e.component.addAppointment(e.itemData);
     },
   },
