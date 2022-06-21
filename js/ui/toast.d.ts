@@ -19,9 +19,8 @@ import dxOverlay, {
     dxOverlayOptions,
 } from './overlay';
 
-import {
-    ToastType,
-} from '../types/enums';
+/** @public */
+export type ToastType = 'custom' | 'error' | 'info' | 'success' | 'warning';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxToast>;

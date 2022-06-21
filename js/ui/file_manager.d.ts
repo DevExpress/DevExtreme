@@ -34,22 +34,33 @@ import {
 } from '../core/templates/template';
 
 import {
+    DataType,
+    SingleOrMultiple,
     HorizontalAlignment,
-    GridColumnDataType,
     SortOrder,
     ToolbarItemLocation,
-    FileManagerSelectionMode,
-    FileManagerToolbarItem,
-    FileManagerContextMenuItem,
-    FileManagerItemViewMode,
-    FileManagerViewArea,
-} from '../types/enums';
+} from '../common';
 
 interface ActionEventInfo {
     errorCode?: number;
     errorText: string;
     cancel: boolean | PromiseLike<void>;
 }
+
+export {
+    DataType,
+    SingleOrMultiple,
+    HorizontalAlignment,
+    SortOrder,
+    ToolbarItemLocation,
+};
+
+export type FileManagerItemViewMode = 'details' | 'thumbnails';
+/** @public */
+export type FileManagerPredefinedContextMenuItem = 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete';
+/** @public */
+export type FileManagerPredefinedToolbarItem = 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator';
+export type FileManagerViewArea = 'navPane' | 'itemView';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFileManager>;
@@ -546,7 +557,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @default "multiple"
      * @public
      */
-    selectionMode?: FileManagerSelectionMode;
+    selectionMode?: SingleOrMultiple;
     /**
      * @docid
      * @default []
@@ -619,11 +630,11 @@ export default class dxFileManager extends Widget<dxFileManagerOptions> {
 export interface dxFileManagerContextMenu {
     /**
      * @docid
-     * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
+     * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerPredefinedContextMenuItem>
      * @default [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ]
      * @public
      */
-    items?: Array<ContextMenuItem | FileManagerContextMenuItem>;
+    items?: Array<ContextMenuItem | FileManagerPredefinedContextMenuItem>;
 }
 
 /**
@@ -647,7 +658,7 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
      * @docid
      * @public
      */
-    name?: FileManagerContextMenuItem | string;
+    name?: FileManagerPredefinedContextMenuItem | string;
     /**
      * @docid
      * @default undefined
@@ -669,18 +680,18 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
 export interface dxFileManagerToolbar {
     /**
      * @docid
-     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerPredefinedToolbarItem>
      * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "clearSelection", { name: "separator", location: "after" }, "refresh" ]
      * @public
      */
-    fileSelectionItems?: Array<ToolbarItem | FileManagerToolbarItem>;
+    fileSelectionItems?: Array<ToolbarItem | FileManagerPredefinedToolbarItem>;
     /**
      * @docid
-     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerPredefinedToolbarItem>
      * @default [ "showNavPane", "create", "upload", "switchView", { name: "separator", location: "after" }, "refresh" ]
      * @public
      */
-    items?: Array<ToolbarItem | FileManagerToolbarItem >;
+    items?: Array<ToolbarItem | FileManagerPredefinedToolbarItem >;
 }
 
 /**
@@ -710,7 +721,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @docid
      * @public
      */
-    name?: FileManagerToolbarItem | string;
+    name?: FileManagerPredefinedToolbarItem | string;
     /**
      * @docid
      * @default undefined
@@ -771,7 +782,7 @@ export interface dxFileManagerDetailsColumn {
      * @default undefined
      * @public
      */
-    dataType?: GridColumnDataType;
+    dataType?: DataType;
     /**
      * @docid
      * @default undefined

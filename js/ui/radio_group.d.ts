@@ -16,7 +16,13 @@ import {
     DataExpressionMixinOptions,
 } from './editor/ui.data_expression';
 
-import { Orientation } from '../types/enums';
+import {
+    Orientation,
+} from '../common';
+
+export {
+    Orientation,
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxRadioGroup>;

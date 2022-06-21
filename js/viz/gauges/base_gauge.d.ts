@@ -23,13 +23,16 @@ import BaseWidget, {
 } from '../core/base_widget';
 
 import {
-    ScaleLabelOverlappingBehavior,
-    VizPalette,
-    VizPaletteExtensionMode,
-    VerticalEdge,
     HorizontalEdge,
-    VizAnimationEasing,
-} from '../../types/enums';
+    VerticalEdge,
+} from '../../common';
+
+import {
+    AnimationEaseMode,
+    Palette,
+    PaletteExtensionMode,
+    LabelOverlap,
+} from '../../common/charts';
 
 export interface TooltipInfo {
     target: any;
@@ -125,7 +128,7 @@ export interface BaseGaugeAnimation {
      * @default 'easeOutCubic'
      * @public
      */
-    easing?: VizAnimationEasing;
+    easing?: AnimationEaseMode;
     /**
      * @docid BaseGaugeOptions.animation.enabled
      * @default true
@@ -160,13 +163,13 @@ export interface BaseGaugeRangeContainer {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid BaseGaugeOptions.rangeContainer.paletteExtensionMode
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: VizPaletteExtensionMode;
+    paletteExtensionMode?: PaletteExtensionMode;
     /**
      * @docid BaseGaugeOptions.rangeContainer.ranges
      * @default []
@@ -337,7 +340,7 @@ export interface BaseGaugeScaleLabel {
      * @default 'hide'
      * @public
      */
-    overlappingBehavior?: ScaleLabelOverlappingBehavior;
+    overlappingBehavior?: LabelOverlap;
     /**
      * @docid BaseGaugeOptions.scale.label.useRangeColors
      * @default false
@@ -482,7 +485,7 @@ export interface CommonIndicator {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid
      * @default '#E18E92'
@@ -566,6 +569,7 @@ export interface CommonIndicator {
      */
     width?: number;
 }
+/** @public */
 export type GaugeIndicatorType = 'circle' | 'rangeBar' | 'rectangle' | 'rectangleNeedle' | 'rhombus' | 'textCloud' | 'triangleMarker' | 'triangleNeedle' | 'twoColorNeedle';
 
 /**

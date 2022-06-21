@@ -20,8 +20,13 @@ import Widget, {
 
 import {
     ButtonType,
-    ButtonStylingMode,
-} from '../types/enums';
+    ButtonStyle,
+} from '../common';
+
+export {
+    ButtonType,
+    ButtonStyle,
+};
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxButton, KeyboardEvent | MouseEvent | PointerEvent> & {
@@ -91,7 +96,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @default 'contained'
      * @public
      */
-    stylingMode?: ButtonStylingMode;
+    stylingMode?: ButtonStyle;
     /**
      * @docid
      * @default "content"

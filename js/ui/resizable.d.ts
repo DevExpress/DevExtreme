@@ -10,9 +10,8 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
-import {
-    ResizeHandle,
-} from '../types/enums';
+/** @public */
+export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
 
 export interface ResizeInfo {
     readonly width: number;

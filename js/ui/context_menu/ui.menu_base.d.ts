@@ -13,9 +13,9 @@ import {
 } from '../menu';
 
 import {
-  ShowSubmenuMode,
-  MenuSelectionMode,
-} from '../../types/enums';
+    SingleOrNone,
+    SubmenuShowMode,
+} from '../../common';
 
 /** @namespace DevExpress.ui */
 export interface dxMenuBaseOptions<
@@ -77,7 +77,7 @@ export interface dxMenuBaseOptions<
      * @default none
      * @public
      */
-    selectionMode?: MenuSelectionMode;
+    selectionMode?: SingleOrNone;
     /**
      * @docid
      * @default { name: "onHover", delay: { show: 50, hide: 300 } }
@@ -104,8 +104,8 @@ export interface dxMenuBaseOptions<
        * @docid
        * @default "onHover"
        */
-      name?: ShowSubmenuMode;
-    } | ShowSubmenuMode;
+      name?: SubmenuShowMode;
+    } | SubmenuShowMode;
 }
 /**
  * @docid

@@ -28,7 +28,9 @@ import dxPopup, {
     TitleRenderedInfo,
 } from './popup';
 
-import { Position } from '../types/enums';
+import {
+    Position,
+} from '../common';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxPopover>;

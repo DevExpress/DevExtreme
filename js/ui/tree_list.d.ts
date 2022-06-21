@@ -27,6 +27,14 @@ import {
 } from '../events/index';
 
 import {
+    DataStructure,
+    Mode,
+    ScrollMode,
+    SingleMultipleOrNone,
+    ToolbarItemLocation,
+} from '../common';
+
+import {
     GridBase,
     ColumnBase,
     ColumnButtonBase,
@@ -65,17 +73,6 @@ import dxScrollable from './scroll_view/ui.scrollable';
 
 import Widget from './widget/ui.widget';
 
-import {
-    Mode,
-    TreeListDataStructure,
-    TreeListScrollingMode,
-    TreeListColumnButtonName,
-    TreeListFilterMode,
-    TreeListCommandColumnType,
-    TreeListToolbarItem,
-    ToolbarItemLocation,
-} from '../types/enums';
-
 interface CellInfo<TRowData = any, TKey = any> {
     readonly data: TRowData;
     readonly key: TKey;
@@ -89,6 +86,46 @@ interface CellInfo<TRowData = any, TKey = any> {
     readonly cellElement: DxElement;
     readonly row: Row<TRowData, TKey>;
 }
+
+export {
+    SearchMode,
+} from '../common';
+
+export {
+    ApplyFilterMode,
+    ColumnChooserMode,
+    DataChangeType,
+    DataRenderMode,
+    EnterKeyAction,
+    EnterKeyDirection,
+    FilterOperation,
+    GridsEditMode,
+    GridsEditRefreshMode,
+    GroupExpandMode,
+    NewRowPosition,
+    PagerDisplayMode,
+    PagerPageSize,
+    SelectedFilterOperation,
+    SelectionColumnDisplayMode,
+    StartEditAction,
+} from '../common/grids';
+
+export {
+    DataStructure,
+    Mode,
+    ScrollMode,
+    SingleMultipleOrNone,
+    ToolbarItemLocation,
+};
+
+/** @public */
+export type TreeListPredefinedColumnButton = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
+/** @public */
+export type TreeListPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+/** @public */
+export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
+/** @public */
+export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
 
 /** @public */
 export type Scrollable = Skip<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
@@ -436,7 +473,7 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
      * @default "plain"
      * @public
      */
-    dataStructure?: TreeListDataStructure;
+    dataStructure?: DataStructure;
     /**
      * @docid
      * @public
@@ -834,7 +871,7 @@ export interface Scrolling extends ScrollingBase {
      * @default "virtual"
      * @public
      */
-    mode?: TreeListScrollingMode;
+    mode?: ScrollMode;
 }
 
 /**
@@ -1078,7 +1115,7 @@ export interface ToolbarItem extends dxToolbarItem {
      * @docid dxTreeListToolbarItem.name
      * @public
      */
-    name?: TreeListToolbarItem | string;
+    name?: TreeListPredefinedToolbarItem | string;
     /**
      * @docid dxTreeListToolbarItem.location
      * @default 'after'
@@ -1095,10 +1132,10 @@ export interface ToolbarItem extends dxToolbarItem {
 export type Toolbar = {
     /**
      * @docid dxTreeListToolbar.items
-     * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItem>
+     * @type Array<dxTreeListToolbarItem,Enums.TreeListPredefinedToolbarItem>
      * @public
      */
-    items?: Array<TreeListToolbarItem | ToolbarItem>;
+    items?: Array<TreeListPredefinedToolbarItem | ToolbarItem>;
     /**
      * @docid dxTreeListToolbar.visible
      * @default undefined
@@ -1125,10 +1162,10 @@ export type Column<TRowData = any, TKey = any> = dxTreeListColumn<TRowData, TKey
 export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase<TRowData> {
     /**
      * @docid dxTreeListColumn.buttons
-     * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
+     * @type Array<Enums.TreeListPredefinedColumnButton,dxTreeListColumnButton>
      * @public
      */
-    buttons?: Array<TreeListColumnButtonName | ColumnButton<TRowData, TKey>>;
+    buttons?: Array<TreeListPredefinedColumnButton | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxTreeListColumn.cellTemplate
      * @type_function_param2 cellInfo:object
@@ -1184,7 +1221,7 @@ export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends Colu
      * @docid dxTreeListColumnButton.name
      * @public
      */
-    name?: TreeListColumnButtonName | string;
+    name?: TreeListPredefinedColumnButton | string;
     /**
      * @docid dxTreeListColumnButton.onClick
      * @type_function_param1 e:object

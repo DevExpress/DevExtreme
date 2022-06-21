@@ -15,6 +15,11 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
+import {
+    EditorStyle,
+    ToolbarItemLocation,
+} from '../common';
+
 import Editor, {
     ValueChangedInfo,
     EditorOptions,
@@ -29,16 +34,24 @@ import {
 } from './toolbar';
 
 import { Properties as fileUploaderProperties } from './file_uploader';
-import {
+
+export {
+    EditorStyle,
     ToolbarItemLocation,
-    HtmlEditorValueType,
-    HtmlEditorToolbarItem,
-    HtmlEditorFormat,
-    EditorStylingMode,
-    HtmlEditorContextMenuItem,
-    HtmlEditorImageUploadTab,
-    HtmlEditorImageUploadFileUploadMode,
-} from '../types/enums';
+};
+
+/** @public */
+export type HtmlEditorFormat = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block';
+/** @public */
+export type HtmlEditorImageUploadMode = 'base64' | 'server' | 'both';
+/** @public */
+export type HtmlEditorImageUploadTab = 'url' | 'file';
+/** @public */
+export type HtmlEditorPredefinedContextMenuItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'cellProperties' | 'tableProperties';
+/** @public */
+export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
+/** @public */
+export type MarkupType = 'html' | 'markdown';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
@@ -163,7 +176,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default "html"
      * @public
      */
-    valueType?: HtmlEditorValueType;
+    valueType?: MarkupType;
     /**
      * @docid
      * @default null
@@ -175,7 +188,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default 'outlined'
      * @public
      */
-    stylingMode?: EditorStylingMode;
+    stylingMode?: EditorStyle;
 }
 /**
  * @docid
@@ -404,7 +417,7 @@ export interface dxHtmlEditorTableResizing {
  * @type object
  * @namespace DevExpress.ui
  */
- export interface dxHtmlEditorImageUpload {
+export interface dxHtmlEditorImageUpload {
   /**
    * @docid
    * @default undefined
@@ -422,7 +435,7 @@ export interface dxHtmlEditorTableResizing {
    * @default 'base64'
    * @public
    */
-   fileUploadMode?: HtmlEditorImageUploadFileUploadMode;
+   fileUploadMode?: HtmlEditorImageUploadMode;
      /**
    * @docid
    * @default ["url"]
@@ -443,13 +456,13 @@ export interface dxHtmlEditorTableResizing {
  * @public
  * @namespace DevExpress.ui.dxHtmlEditor
  */
- export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
+export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
 
  /**
   * @deprecated Use ImageUploadTab instead
   * @namespace DevExpress.ui
   */
- export interface dxHtmlEditorImageUploadTabItem {
+export interface dxHtmlEditorImageUploadTabItem {
     /**
      * @docid
      * @default undefined
@@ -472,10 +485,10 @@ export interface dxHtmlEditorTableContextMenu {
     enabled?: boolean;
     /**
      * @docid
-     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorContextMenuItem>
+     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorPredefinedContextMenuItem>
      * @public
      */
-    items?: Array<ContextMenuItem | HtmlEditorContextMenuItem>;
+    items?: Array<ContextMenuItem | HtmlEditorPredefinedContextMenuItem>;
 }
 
 /**
@@ -494,13 +507,13 @@ export interface dxHtmlEditorTableContextMenuItem extends MenuBasePlainItem {
      * @default undefined
      * @public
      */
-    name?: HtmlEditorContextMenuItem;
+    name?: HtmlEditorPredefinedContextMenuItem;
     /**
      * @docid
      * @public
-     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorContextMenuItem>
+     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorPredefinedContextMenuItem>
      */
-    items?: Array<ContextMenuItem | HtmlEditorContextMenuItem>;
+    items?: Array<ContextMenuItem | HtmlEditorPredefinedContextMenuItem>;
 }
 
 /**
@@ -585,10 +598,10 @@ export interface dxHtmlEditorToolbar {
     container?: string | UserDefinedElement;
     /**
      * @docid
-     * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
+     * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorPredefinedToolbarItem>
      * @public
      */
-    items?: Array<ToolbarItem | HtmlEditorToolbarItem>;
+    items?: Array<ToolbarItem | HtmlEditorPredefinedToolbarItem>;
     /**
      * @docid
      * @default true
@@ -612,12 +625,12 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
      * @docid
      * @public
      */
-    name?: HtmlEditorToolbarItem | string;
+    name?: HtmlEditorPredefinedToolbarItem | string;
     /**
      * @docid
      * @deprecated dxHtmlEditorToolbarItem.name
      */
-    formatName?: HtmlEditorToolbarItem | string;
+    formatName?: HtmlEditorPredefinedToolbarItem | string;
     /**
      * @docid
      * @public

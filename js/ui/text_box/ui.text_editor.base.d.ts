@@ -11,12 +11,12 @@ import Editor, {
 } from '../editor/editor';
 
 import {
-    ShowMaskMode,
+    LabelMode,
+    EditorStyle,
+    MaskMode,
+    TextBoxPredefinedButton,
     TextEditorButtonLocation,
-    TextBoxButtonName,
-    EditorStylingMode,
-    EditorLabelMode,
-} from '../../types/enums';
+} from '../../common';
 
 /** @namespace DevExpress.ui */
 export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponent> {
@@ -25,7 +25,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default undefined
      * @public
      */
-    buttons?: Array<string | TextBoxButtonName | dxTextEditorButton>;
+    buttons?: Array<string | TextBoxPredefinedButton | dxTextEditorButton>;
     /**
      * @docid
      * @default true
@@ -56,7 +56,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default 'floating' &for(Material)
      * @public
      */
-    labelMode?: EditorLabelMode;
+    labelMode?: LabelMode;
     /**
      * @docid
      * @default ""
@@ -204,7 +204,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default "always"
      * @public
      */
-    showMaskMode?: ShowMaskMode;
+    showMaskMode?: MaskMode;
     /**
      * @docid
      * @default false
@@ -217,7 +217,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default 'filled' &for(Material)
      * @public
      */
-    stylingMode?: EditorStylingMode;
+    stylingMode?: EditorStyle;
     /**
      * @docid
      * @readonly

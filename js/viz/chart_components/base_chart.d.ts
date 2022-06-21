@@ -39,11 +39,14 @@ import BaseWidget, {
 } from '../core/base_widget';
 
 import {
-    VizAnimationEasing,
-    VizPalette,
-    VizPaletteExtensionMode,
-    ChartElementSelectionMode,
-} from '../../types/enums';
+    AnimationEaseMode,
+    Palette,
+    PaletteExtensionMode,
+} from '../../common/charts';
+
+import {
+    SingleOrMultiple,
+} from '../../common';
 
 export interface PointInteractionInfo {
     readonly target: basePointObject;
@@ -75,7 +78,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
        * @docid
        * @default 'easeOutCubic'
        */
-      easing?: VizAnimationEasing;
+      easing?: AnimationEaseMode;
       /**
        * @docid
        * @default true
@@ -182,19 +185,19 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: VizPaletteExtensionMode;
+    paletteExtensionMode?: PaletteExtensionMode;
     /**
      * @docid
      * @default 'single'
      * @public
      */
-    pointSelectionMode?: ChartElementSelectionMode;
+    pointSelectionMode?: SingleOrMultiple;
     /**
      * @docid
      * @default undefined

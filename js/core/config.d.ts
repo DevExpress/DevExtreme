@@ -3,10 +3,12 @@ import {
 } from '../animation/position';
 
 import {
-  PositionAlignment,
-  EditorStylingMode,
-  FloatingActionButtonDirection,
-} from '../types/enums';
+    PositionAlignment,
+    EditorStyle,
+} from '../common';
+
+/** @public */
+export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
 
 /**
  * @docid
@@ -57,7 +59,7 @@ export interface globalConfig {
      * @default undefined
      * @public
      */
-    editorStylingMode?: EditorStylingMode;
+    editorStylingMode?: EditorStyle;
     /**
      * @docid
      * @public

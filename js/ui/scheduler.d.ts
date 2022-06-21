@@ -34,14 +34,10 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-  FirstDayOfWeek,
-  Orientation,
-  SchedulerViewType,
-  MaxAppointmentsPerCell,
-  SchedulerRecurrenceEditMode,
-  SchedulerScrollingMode,
-  AllDayPanelMode,
-} from '../types/enums';
+    FirstDayOfWeek,
+    Orientation,
+    ScrollMode,
+} from '../common';
 
 interface AppointmentDraggingEvent {
   readonly component: dxScheduler;
@@ -55,6 +51,21 @@ interface TargetedAppointmentInfo {
   readonly appointmentData: dxSchedulerAppointment;
   readonly targetedAppointmentData?: dxSchedulerAppointment;
 }
+
+export {
+    FirstDayOfWeek,
+    Orientation,
+    ScrollMode,
+};
+
+/** @public */
+export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
+/** @public */
+export type CellAppointmentsLimit = 'auto' | 'unlimited';
+/** @public */
+export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
+/** @public */
+export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
 /** @public */
 export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
@@ -333,7 +344,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @fires dxSchedulerOptions.onOptionChanged
      * @public
      */
-    currentView?: SchedulerViewType;
+    currentView?: ViewType;
     /**
      * @docid
      * @type_function_param1 info:object
@@ -481,7 +492,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default "auto"
      * @public
      */
-    maxAppointmentsPerCell?: number | MaxAppointmentsPerCell;
+    maxAppointmentsPerCell?: number | CellAppointmentsLimit;
     /**
      * @docid
      * @default undefined
@@ -645,7 +656,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default "dialog"
      * @public
      */
-    recurrenceEditMode?: SchedulerRecurrenceEditMode;
+    recurrenceEditMode?: RecurrenceEditMode;
     /**
      * @docid
      * @default 'recurrenceException'
@@ -888,7 +899,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default "auto"
        */
-      maxAppointmentsPerCell?: number | MaxAppointmentsPerCell;
+      maxAppointmentsPerCell?: number | CellAppointmentsLimit;
       /**
        * @docid
        * @default undefined
@@ -920,7 +931,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default undefined
        */
-      type?: SchedulerViewType;
+      type?: ViewType;
       /**
        * @docid
        */
@@ -959,7 +970,7 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     deleteRecurrence(
       appointmentData: dxSchedulerAppointment,
       date: Date | string,
-      recurrenceEditMode: SchedulerRecurrenceEditMode,
+      recurrenceEditMode: RecurrenceEditMode,
     ): void;
     getDataSource(): DataSource;
     /**
@@ -1124,5 +1135,5 @@ export interface dxSchedulerScrolling {
    * @default "standard"
    * @public
    */
-  mode?: SchedulerScrollingMode;
+  mode?: ScrollMode;
 }
