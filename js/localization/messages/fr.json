@@ -57,7 +57,7 @@
         "dxDateBox-validation-datetime": "La valeur doit être une date ou une heure.",
 
         "dxFileUploader-selectFile": "Choisissez un fichier",
-        "dxFileUploader-dropFile": "Enlever fichier",
+        "dxFileUploader-dropFile": "Déposez un fichier",
         "dxFileUploader-bytes": "Bytes",
         "dxFileUploader-kb": "kb",
         "dxFileUploader-Mb": "Mb",
