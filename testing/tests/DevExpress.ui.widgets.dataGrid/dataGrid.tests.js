@@ -4508,28 +4508,6 @@ QUnit.module('templates', baseModuleConfig, () => {
         log.restore();
     });
 
-    QUnit.test('deprecate warnings should be fired for onToolbarPreparing', function(assert) {
-        const log = sinon.spy(errors, 'log');
-
-        createDataGrid({
-            onToolbarPreparing: function() {},
-            dataSource: [{ id: 1 }],
-        });
-
-        this.clock.tick();
-
-        assert.strictEqual(log.callCount, 1, 'error.log is called once');
-        assert.deepEqual(log.getCall(0).args, [
-            'W0001',
-            'dxDataGrid',
-            'onToolbarPreparing',
-            '21.2',
-            'Use the "toolbar" option instead'
-        ], 'error.log args');
-
-        log.restore();
-    });
-
     ['deferUpdate', 'setTimeout'].forEach(asyncMethod => {
         QUnit.test(`freespace row should be rendered correctly on last page if async dataRowTemplate is defined with ${asyncMethod} in react (T1031218)`, function(assert) {
             // arrange, act
