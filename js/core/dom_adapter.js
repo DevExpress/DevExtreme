@@ -122,7 +122,7 @@ const nativeDOMAdapterStrategy = {
     },
 
     getActiveElement(element) {
-        const doc = element ? element.getRootNode() : this._document;
+        const doc = element?.getRootNode?.() ?? this._document;
 
         return doc.activeElement;
     },
