@@ -5803,6 +5803,33 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             assert.deepEqual(names, ['test 3', 'test 2', 'test 1']);
         });
     });
+
+    // T1094867
+    QUnit.test('Virtual scrolling in legacyMode should work with stateStoring and rowRenderingMode \'virtual\'', function(assert) {
+        // arrange
+        createDataGrid({
+            height: 440,
+            dataSource: [...new Array(20).keys()].map(i => ({ id: i })),
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                legacyMode: true
+            },
+            keyExpr: 'id',
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return { pageIndex: 0 };
+                }
+            },
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        assert.ok(true, 'no errors');
+    });
 });
 
 
