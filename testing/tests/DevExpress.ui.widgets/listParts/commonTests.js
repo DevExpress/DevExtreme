@@ -23,6 +23,7 @@ import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 import { RESIZE_WAIT_TIMEOUT } from '../scrollableParts/scrollable.constants.js';
+import { reorderingPointerMock } from './utils.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
@@ -4030,3 +4031,67 @@ if(devices.real().deviceType === 'desktop') {
         });
     });
 }
+
+if(QUnit.urlParams['nojquery']) {
+    QUnit.module('ShadowDOM', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+
+            this.root = document.querySelector('#list');
+            this.container = document.createElement('div');
+            this.list = document.createElement('div');
+
+            this.root.attachShadow({ mode: 'open' });
+            this.container.appendChild(this.list);
+            this.root.shadowRoot.appendChild(this.container);
+
+            this.$list = $(this.list).dxList({
+                items: ['One', 'Two', 'Three'],
+                itemDragging: { allowReordering: true },
+                focusStateEnabled: true,
+            });
+        },
+
+        afterEach: function() {
+            this.clock.restore();
+
+            // TODO: get rid of it after fix jquery event bubbling to shadow dom
+            $(this.container).empty();
+        },
+
+        getItems: function() {
+            return this.$list.find(toSelector(LIST_ITEM_CLASS));
+        },
+
+        createEvent: function(eventName) {
+            return $.Event(eventName, {
+                originalEvent: {
+                    type: eventName,
+                    target: { shadowRoot: this.root },
+                    path: [ this.getItems().eq(1)[0] ],
+                    changedTouches: [{}]
+                }
+            });
+        },
+    }, () => {
+        QUnit.test('drag item', function(assert) {
+            const pointer = reorderingPointerMock(this.getItems().first());
+
+            pointer.dragStart().drag(34).dragEnd();
+
+            const orderedItems = this.getItems().toArray().map(e => e.innerText.trim());
+
+            assert.deepEqual(orderedItems, ['Two', 'Three', 'One']);
+        });
+
+        QUnit.test('focus item', function(assert) {
+            $(this.root).trigger(this.createEvent('mousedown'));
+            $(this.root).trigger(this.createEvent('touchstart'));
+
+            this.clock.tick();
+
+            assert.ok(this.getItems().eq(1).hasClass('dx-state-focused'));
+        });
+    });
+}
+
