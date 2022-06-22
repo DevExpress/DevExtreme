@@ -3,6 +3,7 @@ import browser from 'core/utils/browser';
 import config from 'core/config';
 import devices from 'core/devices';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import { appendShadowRoot } from '../../../helpers/shadowDOM.js';
 import numberLocalization from 'localization/number';
 
 import 'ui/text_box/ui.text_editor';
@@ -2230,3 +2231,41 @@ QUnit.module('symbol with dot in format', {
         assert.strictEqual(this.$input.val(), '. 67.50', 'value is correct');
     });
 });
+
+QUnit.module('ShadowDOM', {
+    beforeEach: function() {
+        appendShadowRoot.call(this, '#numberbox');
+    }
+}, function() {
+    QUnit.test('should move caret', function(assert) {
+        this.$element = $(this.control).dxNumberBox({
+            format: '#0.##',
+            value: '',
+            useMaskBehavior: true
+        });
+
+        this.clock = sinon.useFakeTimers();
+        this.input = this.$element.find('.dx-texteditor-input');
+        this.inputElement = this.input.get(0);
+        this.instance = this.$element.dxNumberBox('instance');
+        this.keyboard = keyboardMock(this.input, true);
+
+        this.instance.option({
+            format: '#0 \'9\'',
+            value: 0
+        });
+
+        this.input.focus();
+        this.clock.tick(CARET_TIMEOUT_DURATION);
+        for(let i = 0; i < 2; ++i) {
+            this.keyboard.caret(3);
+            this.input.trigger('dxclick');
+            this.clock.tick(CARET_TIMEOUT_DURATION);
+        }
+
+        assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
+
+        this.clock.restore();
+    });
+});
+

@@ -5,6 +5,7 @@ import devices from 'core/devices';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
+import { appendShadowRoot } from '../../../helpers/shadowDOM.js';
 import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/number_box';
@@ -2229,5 +2230,38 @@ QUnit.module('valueChanged should receive correct event parameter', {
         assert.ok(this.valueChangedHandler.calledOnce, 'valueChanged is raised');
 
         this.testProgramChange(assert);
+    });
+});
+
+QUnit.module('ShadowDOM ', {
+    beforeEach: function() {
+        appendShadowRoot.call(this, '#numberbox');
+    },
+    afterEach: function() {
+        // TODO: get rid of it after fix jquery event bubbling to shadow dom
+        $(this.container).empty();
+    },
+}, () => {
+    QUnit.test('should change value on mouse wheel', function(assert) {
+        const $numberBox = $(this.control).dxNumberBox({
+            value: 100.6
+        });
+
+        const instance = $numberBox.dxNumberBox('instance');
+        const $numberBoxInput = $numberBox.find(`.${INPUT_CLASS}`);
+        const mouse = pointerMock($numberBoxInput);
+
+        $numberBoxInput.focus();
+
+        mouse.wheel(10);
+
+        assert.equal(instance.option('value'), 101.6, 'value is greeter after mousewheel up');
+
+        mouse.wheel(-20);
+        assert.equal(instance.option('value'), 100.6, 'value is less after mousewheel down');
+
+        $numberBoxInput.blur();
+        mouse.wheel(-20);
+        assert.roughEqual(instance.option('value'), 100.6, 1.001);
     });
 });
