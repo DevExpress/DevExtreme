@@ -44,7 +44,7 @@ const caret = function(input, position, force = false) {
     }
 
     // NOTE: AppleWebKit-based browsers focuses element input after caret position has changed
-    if(!force && isFocusingOnCaretChange && domAdapter.getActiveElement() !== input) {
+    if(!force && isFocusingOnCaretChange && domAdapter.getActiveElement(input) !== input) {
         return;
     }
 
