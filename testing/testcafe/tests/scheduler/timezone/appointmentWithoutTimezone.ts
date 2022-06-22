@@ -46,26 +46,26 @@ fixture.disablePageReloads`Recurrent appointments without timezone in scheduler 
 
 test('Should correctly display the recurrent weekly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
-  const schedulerElement = new Scheduler(SCHEDULER_SELECTOR).element;
+  const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await restoreBrowserSize(t);
-
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
-  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__same-timezone'), schedulerElement);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__same-timezone'), schedulerWorkspace);
 
   await selectTimezoneInUI(t, selectBox, 0);
   // expected date: 4/28/2021 9:00 PM - 11:00 PM
-  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__greater-timezone'), schedulerElement);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__greater-timezone'), schedulerWorkspace);
 
   await selectTimezoneInUI(t, selectBox, 2);
   // expected date: 4/28/2021 1:00 AM - 3:00 AM
-  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__lower-timezone'), schedulerElement);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__lower-timezone'), schedulerWorkspace);
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}).before(async (t) => {
   const schedulerTimezone = TEST_TIMEZONES[1];
+
+  await restoreBrowserSize(t);
 
   await createTimezoneSelect(SELECT_SELECTOR, TEST_TIMEZONES, SCHEDULER_SELECTOR);
   await createWidget('dxScheduler', {
@@ -80,34 +80,34 @@ test('Should correctly display the recurrent weekly appointment without timezone
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   }, false, SCHEDULER_SELECTOR);
 });
 
 test('Should correctly display the recurrent monthly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
-  const schedulerElement = new Scheduler(SCHEDULER_SELECTOR).element;
+  const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await restoreBrowserSize(t);
-
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
-  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__same-timezone'), schedulerElement);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__same-timezone'), schedulerWorkspace);
 
   await selectTimezoneInUI(t, selectBox, 0);
   // expected date: 4/28/2021 9:00 PM - 11:00 PM
-  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__greater-timezone'), schedulerElement);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__greater-timezone'), schedulerWorkspace);
 
   await selectTimezoneInUI(t, selectBox, 2);
   // expected date: 4/28/2021 1:00 AM - 3:00 AM
-  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__lower-timezone'), schedulerElement);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__lower-timezone'), schedulerWorkspace);
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}).before(async (t) => {
   const schedulerTimezone = TEST_TIMEZONES[1];
+
+  await restoreBrowserSize(t);
 
   await createTimezoneSelect(SELECT_SELECTOR, TEST_TIMEZONES, SCHEDULER_SELECTOR);
   await createWidget('dxScheduler', {
@@ -123,33 +123,33 @@ test('Should correctly display the recurrent monthly appointment without timezon
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    width: 1000,
+    height: 585,
   }, false, SCHEDULER_SELECTOR);
 });
 
 test('Should correctly display the recurrent yearly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
-  const schedulerElement = new Scheduler(SCHEDULER_SELECTOR).element;
+  const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await restoreBrowserSize(t);
-
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
-  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__same-timezone'), schedulerElement);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__same-timezone'), schedulerWorkspace);
 
   await selectTimezoneInUI(t, selectBox, 0);
   // expected date: 4/28/2021 9:00 PM - 11:00 PM
-  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__greater-timezone'), schedulerElement);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__greater-timezone'), schedulerWorkspace);
 
   await selectTimezoneInUI(t, selectBox, 2);
   // expected date: 4/28/2021 1:00 AM - 3:00 AM
-  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__lower-timezone'), schedulerElement);
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__lower-timezone'), schedulerWorkspace);
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}).before(async (t) => {
   const schedulerTimezone = TEST_TIMEZONES[1];
+
+  await restoreBrowserSize(t);
 
   await createTimezoneSelect(SELECT_SELECTOR, TEST_TIMEZONES, SCHEDULER_SELECTOR);
   await createWidget('dxScheduler', {
@@ -165,7 +165,7 @@ test('Should correctly display the recurrent yearly appointment without timezone
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
     cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    width: 1000,
+    height: 585,
   }, false, SCHEDULER_SELECTOR);
 });

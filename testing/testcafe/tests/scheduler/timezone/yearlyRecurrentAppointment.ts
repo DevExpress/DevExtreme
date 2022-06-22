@@ -28,9 +28,9 @@ test('Should correctly display the recurrent yearly appointment with the same ti
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -54,9 +54,9 @@ test('Should correctly display the recurrent yearly appointment with a greater t
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -80,9 +80,9 @@ test('Should correctly display the recurrent yearly appointment with a lower tim
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -107,9 +107,9 @@ lower than recurrent date with the same timezone`, async (t) => {
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -134,9 +134,9 @@ lower than recurrent date with a greater time timezone`, async (t) => {
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -161,9 +161,9 @@ lower than recurrent date with a lower time timezone`, async (t) => {
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -188,9 +188,9 @@ greater than recurrent date with the same timezone`, async (t) => {
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -215,9 +215,9 @@ greater than recurrent date with the same timezone`, async (t) => {
     currentView: 'week',
     currentDate: new Date(2022, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -242,9 +242,9 @@ greater than recurrent date with a greater time timezone`, async (t) => {
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -269,9 +269,9 @@ greater than recurrent date with a greater time timezone`, async (t) => {
     currentView: 'week',
     currentDate: new Date(2022, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -296,9 +296,9 @@ greater than recurrent date with a lower time timezone`, async (t) => {
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -323,8 +323,8 @@ greater than recurrent date with a lower time timezone`, async (t) => {
     currentView: 'week',
     currentDate: new Date(2022, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });

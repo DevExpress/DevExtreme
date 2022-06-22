@@ -1,6 +1,7 @@
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { getAppointmentTime, screenshotTestFunc } from './timezoneTestingUtils';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 const SCREENSHOT_BASE_NAME = 'timezone-weekly-recurrent';
 
@@ -30,9 +31,9 @@ test('Should correctly display the recurrent (one day at week) appointment with 
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -56,9 +57,9 @@ test('Should correctly display the recurrent (one day at week) morning appointme
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -82,9 +83,9 @@ test('Should correctly display the recurrent (one day at week) evening appointme
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -109,9 +110,9 @@ with a greater time timezone and day shift to the next day`, async (t) => {
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -135,9 +136,9 @@ test('Should correctly display the recurrent (one day at week) appointment with 
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -161,9 +162,9 @@ test('Should correctly display the recurrent (one day at week) appointment with 
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -187,9 +188,9 @@ test('Should correctly display the recurrent (one day at week) appointment with 
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -214,9 +215,9 @@ with timezone view period shift to the next view period at the first week`, asyn
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -241,9 +242,9 @@ with timezone view period shift to the next view period at the second week`, asy
     currentView: 'week',
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -268,9 +269,9 @@ with timezone view period shift to the previous view period at the first week`, 
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -295,9 +296,9 @@ with timezone view period shift to the previous view period at the second week`,
     currentView: 'week',
     currentDate: new Date(2021, 3, 21),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -325,9 +326,9 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -354,9 +355,9 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentView: 'week',
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -382,9 +383,9 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -411,9 +412,9 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentView: 'week',
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -439,9 +440,9 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -468,9 +469,9 @@ test('Should correctly display recurrent appointment with multiple day in week o
     currentView: 'week',
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -497,9 +498,9 @@ test(`Should correctly display recurrent appointment with multiple day in week
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -527,9 +528,9 @@ test(`Should correctly display recurrent appointment with multiple day in week
     currentView: 'week',
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -556,9 +557,9 @@ test(`Should correctly display recurrent appointment with multiple day in week
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });
 
@@ -569,9 +570,12 @@ test(`Should correctly display recurrent appointment with multiple day in week
   // 5/3/2021 10:00 PM - 12:00 AM
   // 5/8/2021 10:00 PM - 12:00 AM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'one-appointment__second-week__max-negative-timezone-offset');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT-14';
   const timezone = 'Etc/GMT+12';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -586,8 +590,8 @@ test(`Should correctly display recurrent appointment with multiple day in week
     currentView: 'week',
     currentDate: new Date(2021, 4, 5),
     startDayHour: 0,
-    cellDuration: 120,
-    width: '100%',
-    height: '100%',
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
   });
 });

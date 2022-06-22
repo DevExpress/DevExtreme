@@ -1,7 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 
 import Scheduler from '../../../model/scheduler';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 const generateTimezoneOffsets = (): Record<string, number> => {
   const result: Record<string, number> = {};
@@ -45,8 +44,6 @@ const screenshotTestFunc = async (t: TestController,
   schedulerSelector = DEFAULT_SCHEDULER_SELECTOR): Promise<void> => {
   const scheduler = new Scheduler(schedulerSelector);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await restoreBrowserSize(t);
 
   await t
     .expect(await takeScreenshot(
