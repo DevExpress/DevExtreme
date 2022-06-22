@@ -358,7 +358,6 @@ export default gridCore.Controller.inherit((function() {
             const keyInfo = this._getKeyInfo();
             const dataSource = this._dataSource;
             const groupCount = gridCore.normalizeSortingInfo(this.group()).length;
-            const totalCount = this.totalCount();
             const isReshapeMode = this.option('editing.refreshMode') === 'reshape';
             const isVirtualMode = this.option('scrolling.mode') === 'virtual';
 
@@ -385,7 +384,7 @@ export default gridCore.Controller.inherit((function() {
                 useInsertIndex: true
             });
 
-            if(this._currentTotalCount > 0 || !isReshapeMode && isVirtualMode && totalCount === oldItemCount) {
+            if(this._currentTotalCount > 0 || !isReshapeMode && isVirtualMode) {
                 this._totalCountCorrection += getItemCount() - oldItemCount;
             }
 
