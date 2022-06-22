@@ -49,6 +49,8 @@ test('Should correctly display the recurrent weekly appointment without timezone
   const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.wait(100);
+
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__same-timezone'), schedulerWorkspace);
 
@@ -91,6 +93,8 @@ test('Should correctly display the recurrent monthly appointment without timezon
   const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.wait(100);
+
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__same-timezone'), schedulerWorkspace);
 
@@ -132,6 +136,8 @@ test('Should correctly display the recurrent yearly appointment without timezone
   const selectBox = new SelectBox(SELECT_SELECTOR);
   const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.wait(100);
 
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__same-timezone'), schedulerWorkspace);
