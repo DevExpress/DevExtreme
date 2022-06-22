@@ -24560,7 +24560,6 @@ declare module DevExpress.ui {
     ) => void;
     /**
      * [descr:GridBaseOptions.onToolbarPreparing]
-     * @deprecated [depNote:GridBaseOptions.onToolbarPreparing]
      */
     onToolbarPreparing?: (
       e: DevExpress.events.EventInfo<TComponent> &
