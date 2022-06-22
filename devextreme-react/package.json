@@ -45,7 +45,7 @@
     "jest": "^26.0.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "gulp-header": "^2.0.5",
+    "gulp-header": "^2.0.9",
     "gulp-shell": "^0.6.5",
     "gulp-typescript": "^5.0.0",
     "ts-jest": "^25.0.0",
