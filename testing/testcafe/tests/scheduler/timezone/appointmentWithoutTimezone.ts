@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { getAppointmentTime, getScreenshotName } from './timezoneTestingUtils';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import SelectBox from '../../../model/selectBox';
 import Scheduler from '../../../model/scheduler';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
@@ -40,16 +40,13 @@ const selectTimezoneInUI = async (t: TestController, selectBox: SelectBox, timez
   await t.click(timezonesList.getItem(timezoneIdx).element, TEST_CURSOR_OPTIONS);
 };
 
-fixture.disablePageReloads`Recurrent appointments without timezone in scheduler with timezone`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+fixture`Recurrent appointments without timezone in scheduler with timezone`
+  .page(url(__dirname, '../../container.html'));
 
 test('Should correctly display the recurrent weekly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
   const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await t.wait(100);
 
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__same-timezone'), schedulerWorkspace);
@@ -93,8 +90,6 @@ test('Should correctly display the recurrent monthly appointment without timezon
   const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.wait(100);
-
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__same-timezone'), schedulerWorkspace);
 
@@ -136,8 +131,6 @@ test('Should correctly display the recurrent yearly appointment without timezone
   const selectBox = new SelectBox(SELECT_SELECTOR);
   const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await t.wait(100);
 
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__same-timezone'), schedulerWorkspace);

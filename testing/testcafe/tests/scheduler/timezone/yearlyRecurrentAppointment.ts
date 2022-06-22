@@ -1,19 +1,22 @@
 import url from '../../../helpers/getPageUrl';
 import { getAppointmentTime, screenshotTestFunc } from './timezoneTestingUtils';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 const SCREENSHOT_BASE_NAME = 'timezone-yearly-recurrent';
 
-fixture.disablePageReloads`Yearly recurrent appointments with timezones`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+fixture`Yearly recurrent appointments with timezones`
+  .page(url(__dirname, '../../container.html'));
 
 test('Should correctly display the recurrent yearly appointment with the same timezone', async (t) => {
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'same-date__same-timezone');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT+1';
   const schedulerTimezone = 'Etc/GMT+1';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -37,9 +40,12 @@ test('Should correctly display the recurrent yearly appointment with the same ti
 test('Should correctly display the recurrent yearly appointment with a greater time timezone', async (t) => {
   // expected date: 4/29/2021 2:00 AM - 4:00 AM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'same-date__greater-timezone');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT+10';
   const schedulerTimezone = 'Etc/GMT-2';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -63,9 +69,12 @@ test('Should correctly display the recurrent yearly appointment with a greater t
 test('Should correctly display the recurrent yearly appointment with a lower time timezone', async (t) => {
   // expected date: 4/27/2021 2:00 PM - 4:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'same-date__lower-timezone');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT-2';
   const schedulerTimezone = 'Etc/GMT+10';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -90,9 +99,12 @@ test(`Should correctly display the recurrent yearly appointment if start date
 lower than recurrent date with the same timezone`, async (t) => {
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'lower-date__same-timezone');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT+1';
   const schedulerTimezone = 'Etc/GMT+1';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -117,9 +129,12 @@ test(`Should correctly display the recurrent yearly appointment if start date
 lower than recurrent date with a greater time timezone`, async (t) => {
   // expected date: 4/29/2021 2:00 AM - 4:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'lower-date__greater-timezone');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT+10';
   const schedulerTimezone = 'Etc/GMT-2';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -144,9 +159,12 @@ test(`Should correctly display the recurrent yearly appointment if start date
 lower than recurrent date with a lower time timezone`, async (t) => {
   // expected date: 4/27/2021 4:00 PM - 6:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'lower-date__lower-timezone');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT-2';
   const schedulerTimezone = 'Etc/GMT+10';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -171,9 +189,12 @@ test(`Should correctly display the recurrent yearly appointment at first date if
 greater than recurrent date with the same timezone`, async (t) => {
   // expected no visible date
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__same-timezone__same-view-date');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT+1';
   const schedulerTimezone = 'Etc/GMT+1';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -198,9 +219,12 @@ test(`Should correctly display the recurrent yearly appointment at next date if 
 greater than recurrent date with the same timezone`, async (t) => {
   // expected date: 4/28/2022 10:00 AM - 12:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__same-timezone__next-view-date');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT+1';
   const schedulerTimezone = 'Etc/GMT+1';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -225,9 +249,12 @@ test(`Should correctly display the recurrent yearly appointment at first date if
 greater than recurrent date with a greater time timezone`, async (t) => {
   // expected no visible date
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__greater-timezone__same-view-date');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT+10';
   const schedulerTimezone = 'Etc/GMT-2';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -252,9 +279,12 @@ test(`Should correctly display the recurrent yearly appointment at next date if 
 greater than recurrent date with a greater time timezone`, async (t) => {
   // expected date: 4/29/2022 2:00 AM - 4:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__greater-timezone__next-view-date');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT+10';
   const schedulerTimezone = 'Etc/GMT-2';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -279,9 +309,12 @@ test(`Should correctly display the recurrent yearly appointment at first date if
 greater than recurrent date with a lower time timezone`, async (t) => {
   // expected no visible date
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__lower-timezone__same-view-date');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT-2';
   const schedulerTimezone = 'Etc/GMT+10';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
@@ -306,9 +339,12 @@ test(`Should correctly display the recurrent yearly appointment at next date if 
 greater than recurrent date with a lower time timezone`, async (t) => {
   // expected date: 4/27/2022 4:00 PM - 6:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__lower-timezone__next-view-date');
-}).before(async () => {
+}).before(async (t) => {
   const appointmentTimezone = 'Etc/GMT-2';
   const schedulerTimezone = 'Etc/GMT+10';
+
+  await restoreBrowserSize(t);
+
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,

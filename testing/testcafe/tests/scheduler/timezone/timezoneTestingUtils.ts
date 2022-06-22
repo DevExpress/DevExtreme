@@ -45,8 +45,6 @@ const screenshotTestFunc = async (t: TestController,
   const scheduler = new Scheduler(schedulerSelector);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.wait(100);
-
   await t
     .expect(await takeScreenshot(
       getScreenshotName(testModuleName, screenshotName),
