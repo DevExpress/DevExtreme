@@ -5,6 +5,7 @@ import windowResizeCallbacks from '../core/utils/resize_callbacks';
 import { Component } from './component';
 import { TemplateManager } from './template_manager';
 import { attachInstanceToElement, getInstanceByElement } from './utils/public_component';
+import { addShadowDOMStyles } from './utils/shadow-dom';
 import { cleanDataRecursive } from './element_data';
 import { each } from './utils/iterator';
 import { extend } from './utils/extend';
@@ -45,6 +46,7 @@ const DOMComponent = Component.inherit({
 
         this._createElement(element);
         attachInstanceToElement(this._$element, this, this._dispose);
+        addShadowDOMStyles(this._$element);
 
         this.callBase(options);
     },
