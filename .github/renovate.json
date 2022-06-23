@@ -5,7 +5,7 @@
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
     "baseBranches": [
-        "22_1",
+        "22_2",
         "21_2"
     ],
     "labels": [
