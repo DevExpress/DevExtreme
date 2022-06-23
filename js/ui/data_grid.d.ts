@@ -3789,6 +3789,7 @@ export type GroupPanel = {
   /**
    * @docid dxDataGridOptions.groupPanel.visible
    * @type boolean|Enums.Mode
+   * @fires dxDataGridOptions.onOptionChanged
    * @default false
    */
   visible?: boolean | 'auto';
