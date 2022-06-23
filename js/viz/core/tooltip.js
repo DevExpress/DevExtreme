@@ -134,18 +134,16 @@ Tooltip.prototype = {
                     textGroupHtml.css({ color: state.textColor, width: DEFAULT_HTML_GROUP_WIDTH, 'pointerEvents': pointerEvents });
                     if(useTemplate) {
                         const htmlContainers = that._textHtmlContainers;
-                        const containerToTemplateRender = createTextHtml();
+                        const containerToTemplateRender = createTextHtml().appendTo(that._textGroupHtml);
                         htmlContainers.push(containerToTemplateRender);
 
                         template.render({ model: state.formatObject, container: containerToTemplateRender, onRendered: () => {
                             removeElements(htmlContainers.splice(0, htmlContainers.length - 1));
-                            const containerWithContent = htmlContainers[0];
 
-                            replaceWith(that._textHtml, containerWithContent);
-                            that._textHtml = containerWithContent;
+                            that._textHtml = replaceWith(that._textHtml, containerToTemplateRender);
 
-                            state.html = containerWithContent.html();
-                            if(containerWithContent.width() === 0 && containerWithContent.height() === 0) {
+                            state.html = that._textHtml.html();
+                            if(that._textHtml.width() === 0 && that._textHtml.height() === 0) {
                                 this.plaque.clear();
                                 templateCallback(false);
                                 return;
