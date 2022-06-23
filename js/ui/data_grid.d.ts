@@ -3590,6 +3590,7 @@ export type GroupPanel = {
   emptyPanelText?: string;
   /**
    * @docid dxDataGridOptions.groupPanel.visible
+   * @fires dxDataGridOptions.onOptionChanged
    * @default false
    */
   visible?: boolean | Mode;
