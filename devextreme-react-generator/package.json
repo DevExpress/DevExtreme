@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^13.0.1",
+    "@testing-library/user-event": "^13.5.0",
     "@types/dot": "^1.1.5",
     "@types/jest": "^22.1.2",
     "cpy-cli": "^3.1.1",
