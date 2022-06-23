@@ -45,8 +45,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             itemThumbnailTemplate: this._getItemThumbnailContainer.bind(this),
             getTooltipText: this._getTooltipText.bind(this),
             onSelectionChanged: this._onItemListSelectionChanged.bind(this),
-            onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this),
-            onContentReady: () => this._refreshDeferred?.resolve()
+            onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this)
         });
     }
 

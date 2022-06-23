@@ -6,6 +6,11 @@
 // adduse
 
 $datagrid-base-color: $base-text-color !default;
+
+/**
+* $name 60. Background color
+* $type color
+*/
 $datagrid-base-background-color: $base-bg !default;
 $datagrid-border-color: $base-border-color !default;
 $datagrid-border: 1px solid $datagrid-border-color !default;

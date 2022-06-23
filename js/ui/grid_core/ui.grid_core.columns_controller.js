@@ -21,6 +21,7 @@ import { when, Deferred } from '../../core/utils/deferred';
 import Store from '../../data/abstract_store';
 import { DataSource } from '../../data/data_source/data_source';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
+import { equalByValue } from '../../core/utils/common';
 import filterUtils from '../shared/filtering';
 
 const USER_STATE_FIELD_NAMES_15_1 = ['filterValues', 'filterType', 'fixed', 'fixedPosition'];
@@ -712,7 +713,7 @@ export const columnsControllerModule = {
                     return optionGetter(column, { functionsAsIs: true });
                 }
                 const prevValue = optionGetter(column, { functionsAsIs: true });
-                if(prevValue !== value) {
+                if(!equalByValue(prevValue, value)) {
                     if(optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
                         changeType = 'grouping';
                         updateSortOrderWhenGrouping(that, column, value, prevValue);
@@ -2034,7 +2035,9 @@ export const columnsControllerModule = {
                                 that._columns.push(group.selector);
                             });
                             each(sortParameters, function(index, sort) {
-                                that._columns.push(sort.selector);
+                                if(!isFunction(sort.selector)) {
+                                    that._columns.push(sort.selector);
+                                }
                             });
                             assignColumns(that, createColumnsFromOptions(that, that._columns));
                         }

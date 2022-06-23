@@ -984,7 +984,17 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         eventsEngine.on(element, DragEventNames.ENTER, DRAG_AND_DROP_SELECTOR, { checkDropTarget: onCheckDropTarget }, onDragEnter);
         eventsEngine.on(element, DragEventNames.LEAVE, removeClasses);
-        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, removeClasses);
+        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, () => {
+            if(!this.dragBehavior?.dragBetweenComponentsPromise) {
+                this.dragBehavior.removeDroppableClasses();
+                return;
+            }
+
+            this.dragBehavior.dragBetweenComponentsPromise?.then(() => {
+                this.dragBehavior.removeDroppableClasses();
+            });
+        });
+
     }
 
     _attachPointerEvents(element) {
@@ -2202,6 +2212,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             getSchedulerWidth: () => this.option('schedulerWidth'),
             getViewHeight: () => this.$element().height ? this.$element().height() : getHeight(this.$element()),
             getViewWidth: () => this.$element().width ? this.$element().width() : getWidth(this.$element()),
+            getWindowHeight: () => getWindow().innerHeight,
+            getWindowWidth: () => getWindow().innerWidth,
             getScrolling: () => this.option('scrolling'),
             getScrollableOuterWidth: this.getScrollableOuterWidth.bind(this),
             getScrollable: this.getScrollable.bind(this),

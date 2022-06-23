@@ -334,7 +334,7 @@ const Overlay = Widget.inherit({
     },
 
     _contentResizeHandler: function(entry) {
-        if(!this._shouldSkipContentResize(entry)) {
+        if(!this._shouldSkipContentResize(entry) && this._$content.is(':visible')) {
             this._renderGeometry({ shouldOnlyReposition: true });
         }
     },

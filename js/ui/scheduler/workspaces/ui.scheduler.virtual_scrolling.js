@@ -53,19 +53,23 @@ export class VirtualScrollingDispatcher {
 
     get outlineCount() { return this.options.getScrolling().outlineCount; }
 
-    get viewportHeight() {
-        return this.height
-            ? this.options.getViewHeight()
-            : getWindow().innerHeight; // TODO: refactor, we can't use it here
-    }
-
     get cellWidth() { return this._cellWidth; }
     set cellWidth(value) { this._cellWidth = value; }
 
+    get viewportHeight() {
+        const height = this.height && this.options.getViewHeight();
+
+        return height > 0
+            ? height
+            : getWindow().innerHeight;
+    }
+
     get viewportWidth() {
-        return this.width
-            ? this.options.getViewWidth()
-            : getWindow().innerWidth; // TODO: refactor, we can't use it here
+        const width = this.width && this.options.getViewWidth();
+
+        return width > 0
+            ? width
+            : getWindow().innerWidth;
     }
 
     get cellCountInsideTopVirtualRow() { return this.verticalScrollingState?.virtualItemCountBefore || 0; }

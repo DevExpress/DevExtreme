@@ -520,7 +520,8 @@ const EditingController = modules.ViewController.inherit((function() {
             this._processInsertChanges(args.value);
 
             dataController.updateItems({
-                repaintChangesOnly: true
+                repaintChangesOnly: true,
+                isLiveUpdate: false
             });
         },
 
@@ -2328,6 +2329,11 @@ export const editingModule = {
                     }
 
                     return this.callBase.apply(this, arguments);
+                },
+                needToRefreshOnDataSourceChange: function(args) {
+                    const editingController = this.getController('editing');
+                    const isParasiteChange = Array.isArray(args.value) && args.value === args.previousValue && editingController.isSaving();
+                    return !isParasiteChange;
                 },
                 _handleDataSourceChange(args) {
                     const result = this.callBase(args);

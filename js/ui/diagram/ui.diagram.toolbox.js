@@ -18,7 +18,6 @@ const DIAGRAM_TOOLBOX_PANEL_CLASS = 'dx-diagram-toolbox-panel';
 const DIAGRAM_TOOLBOX_INPUT_CONTAINER_CLASS = 'dx-diagram-toolbox-input-container';
 const DIAGRAM_TOOLBOX_INPUT_CLASS = 'dx-diagram-toolbox-input';
 const DIAGRAM_TOOLTIP_DATATOGGLE = 'shape-toolbox-tooltip';
-// const DIAGRAM_SKIP_GESTURE_CLASS = 'dx-skip-gesture-event';
 const DIAGRAM_TOOLBOX_START_DRAG_CLASS = '.dxdi-tb-start-drag-flag';
 
 class DiagramToolbox extends DiagramFloatingPanel {
@@ -320,14 +319,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
             this._updateScrollAnimateSubscription(component);
         });
     }
-    _raiseToolboxDragStart() {
-        // this._scrollView.$element().addClass(DIAGRAM_SKIP_GESTURE_CLASS);
-        // this._scrollView.option('scrollByContent', false); // It raises invalidate() and reset scrolling. Use _moveIsAllowed instead
-    }
-    _raiseToolboxDragEnd() {
-        // this._scrollView.$element().removeClass(DIAGRAM_SKIP_GESTURE_CLASS);
-        // this._scrollView.option('scrollByContent', true);
-    }
+
     _onInputChanged(text) {
         this._filterText = text;
         this._onFilterChangedAction({

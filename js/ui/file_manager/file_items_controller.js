@@ -13,6 +13,7 @@ import { find } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { equalByValue } from '../../core/utils/common';
 import { isDefined, isObject, isPromise } from '../../core/utils/type';
+import Guid from '../../core/guid';
 
 const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
 
@@ -31,6 +32,7 @@ export default class FileItemsController {
 
         this._defaultIconMap = this._createDefaultIconMap();
 
+        this.startSingleLoad();
         this._setSecurityController();
         this._setProvider(options.fileProvider);
         this._initialize();
@@ -235,9 +237,14 @@ export default class FileItemsController {
                 .resolve(parentDirectoryInfo.items)
                 .promise();
         }
+        if(this._singleOperationLockId && parentDirectoryInfo.itemsSingleLoadErrorId === this._singleOperationLockId) {
+            this._changeDirectoryOnError(parentDirectoryInfo, skipNavigationOnError, true);
+            return new Deferred().reject().promise();
+        }
 
         const dirKey = parentDirectoryInfo.getInternalKey();
         let loadItemsDeferred = this._loadedItems[dirKey];
+
         if(loadItemsDeferred) {
             return loadItemsDeferred;
         }
@@ -250,6 +257,11 @@ export default class FileItemsController {
                 );
                 parentDirectoryInfo.itemsLoaded = true;
                 return parentDirectoryInfo.items;
+            }, () => {
+                if(this._singleOperationLockId && parentDirectoryInfo.itemsSingleLoadErrorId !== this._singleOperationLockId) {
+                    parentDirectoryInfo.itemsSingleLoadErrorId = this._singleOperationLockId;
+                }
+                return [];
             });
 
         this._loadedItems[dirKey] = loadItemsDeferred;
@@ -457,8 +469,6 @@ export default class FileItemsController {
     }
 
     downloadItems(itemInfos) {
-        let canceled = false;
-
         const deferreds = itemInfos.map(itemInfo => {
             return this._processBeforeItemEditAction(
                 args => {
@@ -469,12 +479,17 @@ export default class FileItemsController {
             );
         });
 
-        whenSome(deferreds, null, () => { canceled = true; })
+        return when(...deferreds)
             .then(() => {
-                if(!canceled) {
-                    const items = itemInfos.map(i => i.fileItem);
-                    this._fileProvider.downloadItems(items);
-                }
+                const items = itemInfos.map(i => i.fileItem);
+                return when(this._getItemActionResult(this._fileProvider.downloadItems(items)))
+                    .then(() => { },
+                        errorInfo => {
+                            this._raiseDownloadItemsError(itemInfos, itemInfos[0].parentDirectory, errorInfo);
+                        });
+            },
+            errorInfo => {
+                this._raiseDownloadItemsError(itemInfos, itemInfos[0].parentDirectory, errorInfo);
             });
     }
 
@@ -485,6 +500,12 @@ export default class FileItemsController {
 
     _handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError) {
         parentDirectoryInfo = this._getActualDirectoryInfo(parentDirectoryInfo);
+        this._raiseGetItemsError(parentDirectoryInfo, errorInfo);
+        this._changeDirectoryOnError(parentDirectoryInfo, skipNavigationOnError);
+        return new Deferred().reject().promise();
+    }
+
+    _raiseGetItemsError(parentDirectoryInfo, errorInfo) {
         const actionInfo = this._createEditActionInfo('getItems', parentDirectoryInfo, parentDirectoryInfo);
         this._raiseEditActionStarting(actionInfo);
         this._raiseEditActionResultAcquired(actionInfo);
@@ -494,13 +515,43 @@ export default class FileItemsController {
             fileItem: parentDirectoryInfo.fileItem,
             index: 0
         });
-        this._resetDirectoryState(parentDirectoryInfo);
-        parentDirectoryInfo.expanded = false;
-        if(!skipNavigationOnError) {
-            this.setCurrentDirectory(parentDirectoryInfo.parentDirectory);
-        }
+    }
 
-        return new Deferred().reject().promise();
+    _raiseDownloadItemsError(targetFileInfos, directory, errorInfo) {
+        const actionInfo = this._createEditActionInfo('download', targetFileInfos, directory);
+        const itemsLength = targetFileInfos.length;
+        actionInfo.singleRequest = itemsLength === 1;
+        this._raiseEditActionStarting(actionInfo);
+        this._raiseEditActionResultAcquired(actionInfo);
+        for(let index = 0; index < itemsLength - 1; index++) {
+            this._raiseEditActionItemError(actionInfo, {
+                errorCode: errorInfo.errorCode,
+                errorText: errorInfo.errorText,
+                fileItem: targetFileInfos[index].fileItem,
+                index
+            });
+        }
+        this._raiseEditActionError(actionInfo, {
+            errorCode: errorInfo.errorCode,
+            errorText: errorInfo.errorText,
+            fileItem: targetFileInfos[itemsLength - 1].fileItem,
+            index: itemsLength - 1
+        });
+    }
+
+    _changeDirectoryOnError(dirInfo, skipNavigationOnError, isActualDirectoryRequired) {
+        if(isActualDirectoryRequired) {
+            dirInfo = this._getActualDirectoryInfo(dirInfo);
+        }
+        this._resetDirectoryState(dirInfo);
+        dirInfo.expanded = false;
+        if(!skipNavigationOnError) {
+            this.setCurrentDirectory(dirInfo.parentDirectory);
+        }
+    }
+
+    _getItemActionResult(actionResult) {
+        return Array.isArray(actionResult) ? actionResult[0] : actionResult;
     }
 
     _processEditAction(actionInfo, beforeAction, action, afterAction, completeAction) {
@@ -510,10 +561,7 @@ export default class FileItemsController {
         const actionResult = actionInfo.itemInfos.map((itemInfo, itemIndex) => {
             return this._processBeforeItemEditAction(beforeAction, itemInfo)
                 .then(() => {
-                    let itemActionResult = action(itemInfo.fileItem, itemIndex);
-                    if(Array.isArray(itemActionResult)) {
-                        itemActionResult = itemActionResult[0];
-                    }
+                    const itemActionResult = this._getItemActionResult(action(itemInfo.fileItem, itemIndex));
                     return itemActionResult.done(() => afterAction(itemInfo));
                 });
         });
@@ -609,6 +657,14 @@ export default class FileItemsController {
         return this._executeDataLoad(() => {
             return this._refreshDeferred = this._refreshInternal();
         }, 'refresh');
+    }
+
+    startSingleLoad() {
+        this._singleOperationLockId = new Guid().toString();
+    }
+
+    endSingleLoad() {
+        delete this._singleOperationLockId;
     }
 
     _refreshInternal() {
@@ -853,7 +909,7 @@ export default class FileItemsController {
 
     _tryCallAction(actionName) {
         const args = Array.prototype.slice.call(arguments, 1);
-        if(this._options[actionName]) {
+        if(this._isInitialized && this._options[actionName]) {
             this._options[actionName](...args);
         }
     }

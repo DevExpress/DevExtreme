@@ -112,6 +112,46 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok(getHeight(dataGrid.$element().find('.dx-virtual-row').first().children().first()) <= scrollTop, 'scrollTop should be less than or equal to virtual row height');
     });
 
+    // T1092443
+    QUnit.test('Virtual scrolling should work with stateStoring and selection', function(assert) {
+        // arrange
+        const dataSource = [...Array(100).keys()].map(i => ({ id: i + 1 }));
+
+        const dataGrid = createDataGrid({
+            height: 440,
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        selectedRowKeys: [100],
+                        pageIndex: 4,
+                    };
+                },
+                customSave: function() {}
+            },
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+            },
+            dataSource,
+        });
+
+        this.clock.tick();
+        const scrollable = dataGrid.getScrollable();
+
+        // act
+        dataGrid.navigateToRow(100);
+        this.clock.tick();
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [100], 'selectedRowKeys is actual');
+        assert.deepEqual(dataGrid.getVisibleRows().slice(-1)[0].isSelected, true, 'last row is selected');
+        assert.ok(dataGrid.getVisibleRows().slice(0, -1).every(row => row.isSelected === false), 'other rows are not selected');
+    });
+
     // T916093
     ['standard', 'virtual', 'infinite'].forEach(scrollingMode => {
         QUnit.test(`LoadPanel should be shown during export (scrolling.mode = ${scrollingMode})`, function(assert) {
@@ -5488,6 +5528,54 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             // assert
             assert.deepEqual(dataGrid.getSelectedRowKeys(), [50, 55, 54, 53, 52, 51], 'selected keys with Shift');
         });
+
+        // T1092804
+        QUnit.test(`${scrollingMode} - Rows should be selected correctly with Shift on different pages`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: Array(100).fill().map((x, i) => ({ id: i })),
+                keyExpr: 'id',
+                showBorders: true,
+                height: 500,
+                scrolling: {
+                    mode: scrollingMode.toLowerCase(),
+                    useNative: false
+                },
+                selection: {
+                    mode: 'multiple',
+                    showCheckBoxesMode: 'always'
+                }
+            });
+
+            this.clock.tick(300);
+
+            // act
+            $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(1)').trigger('dxclick');
+            this.clock.tick(300);
+
+            dataGrid.getScrollable().scrollTo({ top: 1600 });
+            if(scrollingMode === 'Infinite') {
+                dataGrid.getScrollable().scrollTo({ top: 1600 });
+                this.clock.tick(300);
+                dataGrid.getScrollable().scrollTo({ top: 1600 });
+                this.clock.tick(300);
+            }
+            this.clock.tick(300);
+
+            const pointer1 = pointerMock($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(2)'));
+            pointer1.start({ shiftKey: true }).down().up();
+            this.clock.tick(100);
+
+            const pointer2 = pointerMock($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox:eq(3)'));
+            pointer2.start({ shiftKey: true }).down().up();
+
+            this.clock.tick(100);
+
+            // assert
+            const keys = dataGrid.getSelectedRowKeys();
+            assert.strictEqual(keys.length, 50, 'selected rows count');
+            assert.deepEqual(keys.sort((a, b) => a - b), Array(50).fill().map((x, i) => i + 1), 'selected rows keys');
+        });
     });
 
     QUnit.test('No redundant load calls with filter (T1063237)', function(assert) {
@@ -5711,6 +5799,33 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             // assert
             assert.deepEqual(names, ['test 3', 'test 2', 'test 1']);
         });
+    });
+
+    // T1094867
+    QUnit.test('Virtual scrolling in legacyMode should work with stateStoring and rowRenderingMode \'virtual\'', function(assert) {
+        // arrange
+        createDataGrid({
+            height: 440,
+            dataSource: [...new Array(20).keys()].map(i => ({ id: i })),
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                legacyMode: true
+            },
+            keyExpr: 'id',
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return { pageIndex: 0 };
+                }
+            },
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        assert.ok(true, 'no errors');
     });
 });
 

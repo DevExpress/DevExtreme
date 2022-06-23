@@ -153,6 +153,15 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  isVisible(): Promise<boolean> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => $((getGridInstance() as any).element()).is(':visible'),
+      { dependencies: { getGridInstance } },
+    )();
+  }
+
   scrollBy(options: { x?: number; y?: number; top?: number }): Promise<void> {
     const { getGridInstance } = this;
 
@@ -355,6 +364,19 @@ export default class DataGrid extends Widget {
       const dataGrid = getGridInstance() as any;
       return dataGrid.getTopVisibleRowData();
     }, { dependencies: { getGridInstance } })();
+  }
+
+  apiUpdateDimensions(): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => (getGridInstance() as any).updateDimensions(),
+      {
+        dependencies: {
+          getGridInstance,
+        },
+      },
+    )();
   }
 
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
