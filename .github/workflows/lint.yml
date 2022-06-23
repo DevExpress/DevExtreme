@@ -1,0 +1,194 @@
+name: Lint
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches: [22_1]
+
+jobs:
+  Renovation:
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Compile renovation
+      run: |
+        npm i cheerio@1.0.0-rc.10
+        npm run compile:r
+# Remove package install after upgrade to TypeScript >= 4.6
+
+    - name: Lint renovation
+      run: npm run lint-renovation
+
+  TS:
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Run npm install TS testing
+      run: |
+        pushd testing/typescript
+        npm install --no-audit --no-fund
+        popd
+
+    - name: Build
+      run: npm run build
+
+    - name: Lint TS
+      env:
+        DEBUG: eslint:cli-engine
+      run: npm run lint-ts
+
+    - name: Lint .d.ts
+      env:
+        DEBUG: eslint:cli-engine
+      run: npm run lint-dts
+
+  JS:
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Build
+      run: npm run build
+
+    - name: Lint JS
+      env:
+        DEBUG: eslint:cli-engine
+      run: npm run lint-js
+
+  CSS:
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Lint CSS
+      run: npm run lint-css
+
+  package_lock_npm_6:
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    timeout-minutes: 10
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Check package-lock
+      run: |
+        node -v
+        npm -v
+        npm install --no-audit --no-fund
+
+    - name: Check build
+      run: npm run build:dev
+
+  package_lock:
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    timeout-minutes: 10
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Check package-lock
+      run: |
+        node -v
+        npm -v
+        npm install --no-audit --no-fund --ignore-scripts
+        git diff --exit-code package-lock.json
+
+  notify:
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    name: Send notifications
+    needs: [Renovation, TS, JS, CSS, package_lock, package_lock_npm_6]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/send-teams-notification
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          run_id: ${{github.run_id}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 22_1

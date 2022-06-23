@@ -1,0 +1,166 @@
+name: TestCafe tests
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches: [22_1]
+
+jobs:
+  build:
+    name: build-${{ matrix.ARGS.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        ARGS: [
+          { name: "wip-renovation", inProgressRenovation: true },
+          { name: "default" },
+        ]
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    timeout-minutes: 15
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Build
+      run: BUILD_INPROGRESS_RENOVATION="${{ matrix.ARGS.inProgressRenovation == true }}" npm run build:dev
+
+    - name: Zip artifacts
+      run: |
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
+        path: artifacts.zip
+        retention-days: 1
+
+  testcafe:
+    name: ${{ matrix.ARGS.name }}
+    needs: [build]
+    strategy:
+      fail-fast: false
+      matrix:
+        ARGS: [
+          { componentFolder: "treeList", name: "treeList", quarantineMode: true },
+          { componentFolder: "dataGrid", name: "dataGrid", quarantineMode: true },
+          { componentFolder: "scheduler", name: "scheduler (1/3)", quarantineMode: true, indices: "1/3" },
+          { componentFolder: "scheduler", name: "scheduler (2/3)", quarantineMode: true, indices: "2/3" },
+          { componentFolder: "scheduler", name: "scheduler (3/3)", quarantineMode: true, indices: "3/3" },
+          { componentFolder: "editors", name: "editors", quarantineMode: false },
+          { componentFolder: "navigation", name: "navigation (1/4)", quarantineMode: false, indices: "1/4" },
+          { componentFolder: "navigation", name: "navigation (2/4)", quarantineMode: false, indices: "2/4" },
+          { componentFolder: "navigation", name: "navigation (3/4)", quarantineMode: false, indices: "3/4" },
+          { componentFolder: "navigation", name: "navigation (4/4)", quarantineMode: false, indices: "4/4" },
+          { componentFolder: "renovation", name: "renovation (jquery) (1/4)", platform: "jquery", quarantineMode: false, inProgressRenovation: true, indices: "1/4" },
+          { componentFolder: "renovation", name: "renovation (jquery) (2/4)", platform: "jquery", quarantineMode: false, inProgressRenovation: true, indices: "2/4" },
+          { componentFolder: "renovation", name: "renovation (jquery) (3/4)", platform: "jquery", quarantineMode: false, inProgressRenovation: true, indices: "3/4" },
+          { componentFolder: "renovation", name: "renovation (jquery) (4/4)", platform: "jquery", quarantineMode: false, inProgressRenovation: true, indices: "4/4" },
+          { componentFolder: "renovation", name: "renovation (react) (1/4)", platform: "react", quarantineMode: false, indices: "1/4" },
+          { componentFolder: "renovation", name: "renovation (react) (2/4)", platform: "react", quarantineMode: false, indices: "2/4" },
+          { componentFolder: "renovation", name: "renovation (react) (3/4)", platform: "react", quarantineMode: false, indices: "3/4" },
+          { componentFolder: "renovation", name: "renovation (react) (4/4)", platform: "react", quarantineMode: false, indices: "4/4" },
+          { componentFolder: "renovation", name: "renovation (angular)", platform: "angular", quarantineMode: false }
+        ]
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    timeout-minutes: 90
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
+
+    - name: Prepare localization
+      run: npx gulp localization
+
+    - name: Unpack artifacts
+      run: 7z x artifacts.zip -aoa
+
+    - name: Prepare renovation playground
+      if: matrix.ARGS.componentFolder == 'renovation'
+      run: |
+        pushd testing/renovation
+        npm install --no-audit --no-fund --legacy-peer-deps
+        popd
+        npm run build:angular
+        npm run build:react
+        npx gulp build-renovation-testing
+
+    - name: Run TestCafe tests
+      run: |
+        [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
+        [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
+        [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
+        all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES $PLATFORM"
+        echo "$all_args"
+        npm run test-testcafe -- $all_args
+
+    - name: Copy compared screenshot artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: compared-screenshots
+        path: ${{ github.workspace }}/testing/testcafe/artifacts/compared-screenshots/**/*
+        if-no-files-found: ignore
+    - name: Copy failed test artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: failed-tests
+        path: ${{ github.workspace }}/testing/testcafe/artifacts/failedtests/**/*
+        if-no-files-found: ignore
+
+  notify:
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    name: Send notifications
+    needs: [build, testcafe]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/send-teams-notification
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          run_id: ${{github.run_id}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 22_1
