@@ -1403,52 +1403,6 @@ QUnit.module('popup', moduleConfig, () => {
         }
     });
 
-    QUnit.test('widget has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881)', function(assert) {
-        const items = [{
-            id: 1,
-            value: 'value11'
-        }, {
-            id: 2,
-            value: 'value12'
-        }];
-        const dropDownList = $('#dropDownList').dxDropDownList({
-            displayExpr: 'value',
-            valueExpr: 'id',
-            dataSource: new DataSource({
-                store: [],
-                paginate: true,
-                pageSize: 2
-            }),
-            opened: true
-        }).dxDropDownList('instance');
-        const listInstance = $(`.${LIST_CLASS}`).dxList('instance');
-        listInstance.option({
-            'pageLoadMode': 'scrollBottom',
-            'useNativeScrolling': 'true'
-        });
-        listInstance.option();
-        dropDownList.close();
-
-        dropDownList.option('dataSource', new DataSource({
-            store: items,
-            paginate: true,
-            pageSize: 2
-        }));
-
-        dropDownList.open();
-        this.clock.tick();
-
-        const popupHeight = $(dropDownList.content()).height();
-
-        dropDownList.close();
-        dropDownList.open();
-
-        const recalculatedPopupHeight = $(dropDownList.content()).height();
-
-        assert.strictEqual(popupHeight, recalculatedPopupHeight);
-        assert.strictEqual(listInstance.option('_revertPageOnEmptyLoad'), true, 'default list _revertPageOnEmptyLoad is correct');
-    });
-
     QUnit.test('scroll on input should not scroll the page when opened DropDownList is inside Popup (T1082501)', function(assert) {
         const $dropDownList = $('<div>').dxDropDownList({ opened: true });
         $('#popup').dxPopup({
