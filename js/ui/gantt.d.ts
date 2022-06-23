@@ -1454,7 +1454,7 @@ export type Column<TRowData = any, TKey = any> = dxGanttColumn<TRowData, TKey>;
  * @namespace DevExpress.ui
  * @deprecated Use the Column type instead
  */
-export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<TRowData, TKey>, 'allowEditing' | 'allowFixing' | 'allowHiding' | 'allowReordering' | 'allowResizing' | 'allowSearch' | 'buttons' | 'columns' | 'editCellComponent' | 'editCellRender' | 'editCellTemplate' | 'editorOptions' | 'fixed' | 'fixedPosition' | 'formItem' | 'hidingPriority' | 'isBand' | 'lookup' | 'name' | 'ownerBand' | 'renderAsync' | 'setCellValue' | 'showEditorAlways' | 'showInColumnChooser' | 'type' | 'validationRules' | 'visible' >;
+export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<TRowData, TKey>, 'allowEditing' | 'allowFixing' | 'allowHiding' | 'allowReordering' | 'allowResizing' | 'allowSearch' | 'buttons' | 'columns' | 'editCellTemplate' | 'editorOptions' | 'fixed' | 'fixedPosition' | 'formItem' | 'hidingPriority' | 'isBand' | 'lookup' | 'name' | 'ownerBand' | 'renderAsync' | 'setCellValue' | 'showEditorAlways' | 'showInColumnChooser' | 'type' | 'validationRules' | 'visible' >;
 
 /**
  * @docid dxGanttColumn
@@ -1510,16 +1510,7 @@ export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<
     editorOptions: any;
     /**
      * @hidden
-     * @docid dxGanttColumn.editCellComponent
-     */
-    editCellComponent: any;
-    /**
-     * @hidden
-     * @docid dxGanttColumn.editCellRender
-     */
-    editCellRender: any;
-    /**
-     * @hidden
+     * @type template
      * @docid dxGanttColumn.editCellTemplate
      */
     editCellTemplate: any;
