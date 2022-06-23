@@ -7,7 +7,7 @@ concurrency:
 on:
   pull_request:
   push:
-    branches: [22_1]
+    branches: [22_2]
 
 jobs:
   Renovation:
@@ -30,7 +30,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-audit --no-fund 
+      run: npm install --no-audit --no-fund
 
     - name: Compile renovation
       run: npm run compile:r
@@ -70,12 +70,12 @@ jobs:
       run: npm run build
 
     - name: Lint TS
-      env: 
+      env:
         DEBUG: eslint:cli-engine
       run: npm run lint-ts
 
     - name: Lint .d.ts
-      env: 
+      env:
         DEBUG: eslint:cli-engine
       run: npm run lint-dts
 
@@ -105,7 +105,7 @@ jobs:
       run: npm run build
 
     - name: Lint JS
-      env: 
+      env:
         DEBUG: eslint:cli-engine
       run: npm run lint-js
 
@@ -120,7 +120,7 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '15'
-    
+
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
@@ -188,4 +188,4 @@ jobs:
           run_id: ${{github.run_id}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
           specific_repo: DevExpress/DevExtreme
-          specific_branch: 22_1
+          specific_branch: 22_2

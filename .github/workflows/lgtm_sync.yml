@@ -43,4 +43,4 @@ jobs:
           run_id: ${{github.run_id}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
           specific_repo: DevExpress/DevExtreme
-          specific_branch: 22_1
+          specific_branch: 22_2
