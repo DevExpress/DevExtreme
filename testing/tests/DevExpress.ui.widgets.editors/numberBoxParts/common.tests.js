@@ -2248,20 +2248,16 @@ QUnit.module('ShadowDOM ', {
         });
 
         const instance = $numberBox.dxNumberBox('instance');
-        const $numberBoxInput = $numberBox.find(`.${INPUT_CLASS}`);
-        const mouse = pointerMock($numberBoxInput);
+        const $input = $numberBox.find(`.${INPUT_CLASS}`);
+        const mouse = pointerMock($input);
 
-        $numberBoxInput.focus();
+        $input.focus();
 
         mouse.wheel(10);
 
-        assert.equal(instance.option('value'), 101.6, 'value is greeter after mousewheel up');
+        assert.strictEqual(instance.option('value'), 101.6, 'value is increased after mousewheel up');
 
         mouse.wheel(-20);
-        assert.equal(instance.option('value'), 100.6, 'value is less after mousewheel down');
-
-        $numberBoxInput.blur();
-        mouse.wheel(-20);
-        assert.roughEqual(instance.option('value'), 100.6, 1.001);
+        assert.strictEqual(instance.option('value'), 100.6, 'value is decreased after mousewheel down');
     });
 });

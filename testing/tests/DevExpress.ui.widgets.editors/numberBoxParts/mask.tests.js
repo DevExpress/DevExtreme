@@ -2238,34 +2238,33 @@ QUnit.module('ShadowDOM', {
     }
 }, function() {
     QUnit.test('should move caret', function(assert) {
-        this.$element = $(this.control).dxNumberBox({
+        const $element = $(this.control).dxNumberBox({
             format: '#0.##',
             value: '',
             useMaskBehavior: true
         });
 
-        this.clock = sinon.useFakeTimers();
-        this.input = this.$element.find('.dx-texteditor-input');
-        this.inputElement = this.input.get(0);
-        this.instance = this.$element.dxNumberBox('instance');
-        this.keyboard = keyboardMock(this.input, true);
+        const clock = sinon.useFakeTimers();
+        const input = $element.find('.dx-texteditor-input');
+        const instance = $element.dxNumberBox('instance');
+        const keyboard = keyboardMock(input, true);
 
-        this.instance.option({
+        instance.option({
             format: '#0 \'9\'',
             value: 0
         });
 
-        this.input.focus();
-        this.clock.tick(CARET_TIMEOUT_DURATION);
+        input.focus();
+        clock.tick(CARET_TIMEOUT_DURATION);
         for(let i = 0; i < 2; ++i) {
-            this.keyboard.caret(3);
-            this.input.trigger('dxclick');
-            this.clock.tick(CARET_TIMEOUT_DURATION);
+            keyboard.caret(3);
+            input.trigger('dxclick');
+            clock.tick(CARET_TIMEOUT_DURATION);
         }
 
-        assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
+        assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
 
-        this.clock.restore();
+        clock.restore();
     });
 });
 

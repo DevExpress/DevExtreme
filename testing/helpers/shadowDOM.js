@@ -1,4 +1,4 @@
-function appendShadowRoot(shadowSelector) {
+export function appendShadowRoot(shadowSelector) {
     const root = document.querySelector(shadowSelector);
     const control = document.createElement('div');
     const container = document.createElement('div');
@@ -11,6 +11,3 @@ function appendShadowRoot(shadowSelector) {
     this.container = container;
     this.control = control;
 }
-
-exports.appendShadowRoot = appendShadowRoot;
-
