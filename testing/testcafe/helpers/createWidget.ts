@@ -7,6 +7,7 @@ export type WidgetName =
 'dxTabPanel' |
 'dxForm' |
 'dxTabPanel' |
+'dxSelectBox' |
 'dxScrollable' |
 'dxScrollView' |
 'dxPivotGrid' |
