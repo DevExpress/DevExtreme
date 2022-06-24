@@ -33,13 +33,11 @@ describe('Data API', () => {
       const expectedResult: AppointmentDataItem = {
         allDay: false,
         endDate: new Date(2021, 9, 9),
-        endDateTimeZone: null,
         hasRecurrenceRule: true,
         rawAppointment: data[0],
         recurrenceException: undefined,
         recurrenceRule: 'FREQ=WEEKLY',
         startDate: new Date(2021, 9, 8),
-        startDateTimeZone: null,
         visible: true,
       };
       const result = getPreparedDataItems(
@@ -63,13 +61,11 @@ describe('Data API', () => {
         const expectedResult: AppointmentDataItem = {
           allDay: false,
           endDate: new Date(2021, 9, 9),
-          endDateTimeZone: null,
           hasRecurrenceRule: false,
           rawAppointment: data[0],
           recurrenceException: undefined,
           recurrenceRule: recurrenceRule as any,
           startDate: new Date(2021, 9, 8),
-          startDateTimeZone: null,
           visible: true,
         };
         const result = getPreparedDataItems(
@@ -156,13 +152,11 @@ describe('Data API', () => {
       const expectedResult: AppointmentDataItem = {
         allDay: false,
         endDate: new Date(2021, 9, 9, 17, 30),
-        endDateTimeZone: null,
         hasRecurrenceRule: false,
         rawAppointment: data[0],
         recurrenceException: undefined,
         recurrenceRule: undefined,
         startDate: new Date(2021, 9, 9, 17),
-        startDateTimeZone: null,
         visible: true,
       };
       const result = getPreparedDataItems(

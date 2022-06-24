@@ -22,9 +22,9 @@ export interface DataSourcePromise extends DxPromise {
 
 export interface AppointmentDataItem {
   startDate: Date;
-  startDateTimeZone: string | null;
+  startDateTimeZone?: string;
   endDate: Date;
-  endDateTimeZone: string | null;
+  endDateTimeZone?: string;
   recurrenceRule?: string;
   recurrenceException?: string;
   hasRecurrenceRule: boolean;
