@@ -1054,8 +1054,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             const task = {
                 text: 'No Recruiting students',
                 roomId: [5],
-                startDate: new Date(2017, 4, 15, 11, 0),
-                endDate: new Date(2017, 4, 15, 12, 0),
+                startDate: new Date('2017-05-15T11:00:00.000Z'),
+                endDate: new Date('2017-05-15T12:00:00.000Z'),
                 recurrenceRule: 'FREQ=DAILY;COUNT=3',
                 recurrenceException: '20170516T070000Z'
             };
