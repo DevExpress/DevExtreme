@@ -18,9 +18,14 @@ import {
 } from '../localization';
 
 import {
+    TooltipShowMode,
     VerticalEdge,
-    SliderTooltipShowMode,
-} from '../types/enums';
+} from '../common';
+
+export {
+    TooltipShowMode,
+    VerticalEdge,
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxSlider>;
@@ -152,7 +157,7 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
        * @docid
        * @default 'onHover'
        */
-      showMode?: SliderTooltipShowMode;
+      showMode?: TooltipShowMode;
     };
 }
 

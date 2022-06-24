@@ -48,14 +48,25 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-    VerticalAlignment,
     HorizontalAlignment,
     Mode,
-    FormLabelLocation,
-    FormItemEditorType,
-    FormItemType,
-    FormLabelMode,
-} from '../types/enums';
+    VerticalAlignment,
+} from '../common';
+
+export {
+    HorizontalAlignment,
+    Mode,
+    VerticalAlignment,
+};
+
+/** @public */
+export type FormItemComponent = 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
+/** @public */
+export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+/** @public */
+export type LabelLocation = 'left' | 'right' | 'top';
+/** @public */
+export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxForm>;
@@ -158,7 +169,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default "top" &for(Material)
      * @public
      */
-    labelLocation?: FormLabelLocation;
+    labelLocation?: LabelLocation;
     /**
      * @docid
      * @default "outside"
@@ -583,7 +594,7 @@ export interface dxFormSimpleItem {
      * @docid
      * @public
      */
-    editorType?: FormItemEditorType;
+    editorType?: FormItemComponent;
     /**
      * @docid
      * @default undefined
@@ -617,7 +628,7 @@ export interface dxFormSimpleItem {
        * @docid
        * @default "left"
        */
-      location?: FormLabelLocation;
+      location?: LabelLocation;
       /**
        * @docid
        * @default from showColonAfterLabel

@@ -21,10 +21,16 @@ import {
 } from './gauges/base_gauge';
 
 import {
+    HorizontalAlignment,
     Orientation,
     VerticalAlignment,
+} from '../common';
+
+export {
     HorizontalAlignment,
-} from '../types/enums';
+    Orientation,
+    VerticalAlignment,
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxLinearGauge>;

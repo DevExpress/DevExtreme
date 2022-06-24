@@ -45,21 +45,39 @@ import {
 } from './core/base_widget';
 
 import {
-    VizPalette,
-    VizWordWrap,
-    VizTextOverflow,
+    ChartsDataType,
     DashStyle,
-    ChartDataType,
-    PieChartLegendHoverMode,
-    PieChartResolveLabelOverlapping,
-    PieChartType,
-    PieChartSegmentsDirection,
-    PieChartAnnotationLocation,
-    HatchingDirection,
-    SmallValuesGroupingMode,
-    PieChartSeriesInteractionMode,
-    PieChartLabelPosition,
-} from '../types/enums';
+    HatchDirection,
+    LabelPosition,
+    Palette,
+    TextOverflow,
+    WordWrap,
+} from '../common/charts';
+
+export {
+    ChartsDataType,
+    DashStyle,
+    HatchDirection,
+    LabelPosition,
+    Palette,
+    TextOverflow,
+    WordWrap,
+};
+
+/** @public */
+export type PieChartAnnotationLocation = 'center' | 'edge';
+/** @public */
+export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
+/** @public */
+export type PieChartLabelOverlap = 'hide' | 'none' | 'shift';
+/** @public */
+export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
+/** @public */
+export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';
+/** @public */
+export type PieChartType = 'donut' | 'doughnut' | 'pie';
+/** @public */
+export type SmallValuesGroupingMode = 'none' | 'smallValueThreshold' | 'topN';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxPieChart>;
@@ -232,19 +250,19 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | VizPalette;
+    palette?: Array<string> | Palette;
     /**
      * @docid
      * @default "none"
      * @public
      */
-    resolveLabelOverlapping?: PieChartResolveLabelOverlapping;
+    resolveLabelOverlapping?: PieChartLabelOverlap;
     /**
      * @docid
      * @default 'clockwise'
      * @public
      */
-    segmentsDirection?: PieChartSegmentsDirection;
+    segmentsDirection?: PieChartSegmentDirection;
     /**
      * @docid
      * @default undefined
@@ -469,7 +487,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
      * @default undefined
      * @public
      */
-    argumentType?: ChartDataType;
+    argumentType?: ChartsDataType;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border
      * @public
@@ -551,7 +569,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.direction
            * @default 'right'
            */
-          direction?: HatchingDirection;
+          direction?: HatchDirection;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.opacity
            * @default 0.75
@@ -650,7 +668,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.position
        * @default 'outside'
        */
-      position?: PieChartLabelPosition;
+      position?: LabelPosition;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.radialOffset
        * @default 0
@@ -665,7 +683,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.textOverflow
        * @default 'ellipsis'
        */
-      textOverflow?: VizTextOverflow;
+      textOverflow?: TextOverflow;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.visible
        * @default false
@@ -675,7 +693,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap
        * @default 'normal'
        */
-      wordWrap?: VizWordWrap;
+      wordWrap?: WordWrap;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.displayFormat
        * @default undefined
@@ -744,7 +762,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.direction
            * @default 'right'
            */
-          direction?: HatchingDirection;
+          direction?: HatchDirection;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.opacity
            * @default 0.5

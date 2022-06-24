@@ -37,19 +37,33 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
+    VectorMapProjection,
     VectorMapProjectionConfig,
 } from './vector_map/projection';
 
 import {
-    VizPalette,
+    Palette,
+} from '../common/charts';
+
+import {
     HorizontalAlignment,
+    SingleMultipleOrNone,
     VerticalEdge,
-    SelectionMode,
-    VectorMapLayerType,
-    VectorMapMarkerType,
-    VectorMapMarkerShape,
+} from '../common';
+
+export {
+    SingleMultipleOrNone,
+    Palette,
     VectorMapProjection,
-} from '../types/enums';
+    VerticalEdge,
+};
+
+/** @public */
+export type VectorMapLayerType = 'area' | 'line' | 'marker';
+/** @public */
+export type VectorMapMarkerShape = 'circle' | 'square';
+/** @public */
+export type VectorMapMarkerType = 'bubble' | 'dot' | 'image' | 'pie';
 
 export interface TooltipInfo {
     target?: MapLayerElement | dxVectorMapAnnotationConfig;
@@ -427,7 +441,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default "Material"
        */
-      palette?: Array<string> | VizPalette;
+      palette?: Array<string> | Palette;
       /**
        * @docid
        * @default 0
@@ -456,7 +470,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default 'single'
        */
-      selectionMode?: SelectionMode;
+      selectionMode?: SingleMultipleOrNone;
       /**
        * @docid
        * @default 8
@@ -477,7 +491,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @notUsedInTheme
        */
       type?: VectorMapLayerType;
-    }> | { borderColor?: string; borderWidth?: number; color?: string; colorGroupingField?: string; colorGroups?: Array<number>; customize?: ((elements: Array<MapLayerElement>) => any); dataField?: string; dataSource?: object | DataSourceLike<any>; elementType?: 'bubble' | 'dot' | 'image' | 'pie'; hoverEnabled?: boolean; hoveredBorderColor?: string; hoveredBorderWidth?: number; hoveredColor?: string; label?: { dataField?: string; enabled?: boolean; font?: Font }; maxSize?: number; minSize?: number; name?: string; opacity?: number; palette?: Array<string> | VizPalette; paletteSize?: number; selectedBorderColor?: string; selectedBorderWidth?: number; selectedColor?: string; selectionMode?: 'multiple' | 'none' | 'single'; size?: number; sizeGroupingField?: string; sizeGroups?: Array<number>; type?: 'area' | 'line' | 'marker' };
+    }> | { borderColor?: string; borderWidth?: number; color?: string; colorGroupingField?: string; colorGroups?: Array<number>; customize?: ((elements: Array<MapLayerElement>) => any); dataField?: string; dataSource?: object | DataSourceLike<any>; elementType?: 'bubble' | 'dot' | 'image' | 'pie'; hoverEnabled?: boolean; hoveredBorderColor?: string; hoveredBorderWidth?: number; hoveredColor?: string; label?: { dataField?: string; enabled?: boolean; font?: Font }; maxSize?: number; minSize?: number; name?: string; opacity?: number; palette?: Array<string> | Palette; paletteSize?: number; selectedBorderColor?: string; selectedBorderWidth?: number; selectedColor?: string; selectionMode?: SingleMultipleOrNone; size?: number; sizeGroupingField?: string; sizeGroups?: Array<number>; type?: 'area' | 'line' | 'marker' };
     /**
      * @docid
      * @type Array<Object>

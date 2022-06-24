@@ -3556,6 +3556,47 @@ QUnit.module('Editing', baseModuleConfig, () => {
             }
         });
     });
+
+    // T1089428
+    QUnit.test('totalCount should be correct after removing/adding rows when refreshMode is reshape and scrolling.mode is virtual', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1 },
+                { id: 2 },
+            ],
+            keyExpr: 'id',
+            editing: {
+                refreshMode: 'reshape',
+                confirmDelete: false,
+            },
+            scrolling: {
+                mode: 'virtual',
+            }
+        });
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.totalCount(), 2, 'totalCount before update');
+
+        // act
+        dataGrid.addRow();
+        this.clock.tick();
+        dataGrid.saveEditData();
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.totalCount(), 3, 'totalCount after adding row');
+
+        // act
+        dataGrid.deleteRow(1);
+        this.clock.tick();
+        dataGrid.deleteRow(1);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.totalCount(), 1, 'totalCount after removing rows');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {

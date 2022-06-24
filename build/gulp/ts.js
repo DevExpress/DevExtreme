@@ -166,7 +166,7 @@ gulp.task('test-ts', gulp.series(
         .on('error', callback)
         .on('close', code => code ? callback(new Error(code)) : callback());
     },
-    () => { 
+    () => {
         return gulp
         .src([
             `${TS_TESTS_PATH}/**/*.ts`,
@@ -176,7 +176,7 @@ gulp.task('test-ts', gulp.series(
             'esModuleInterop': true,
             'moduleResolution': 'node',
             'noEmit': true,
-            'skipLibCheck': true, 
+            'skipLibCheck': true,
             'typeRoots': [],
             'target': 'es2015',
             'baseUrl': `${TS_TESTS_PATH}`,

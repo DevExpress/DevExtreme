@@ -23,6 +23,7 @@ import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 import { RESIZE_WAIT_TIMEOUT } from '../scrollableParts/scrollable.constants.js';
+import { reorderingPointerMock } from './utils.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
@@ -2670,52 +2671,6 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
 
         assert.deepEqual($element.dxList('option', 'items'), [1, 2, 3, 4], 'all data loaded');
     });
-
-    QUnit.test('widget has pageIndex == 1 if the pageSize is equal to dataSource length', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
-
-        const dataSource = new DataSource({
-            store: new ArrayStore([1, 2, 3, 4]),
-            pageSize: 4
-        });
-        const $element = this.element.hide().dxList({
-            pageLoadMode: 'scrollBottom',
-            scrollingEnabled: true,
-            dataSource: dataSource
-        });
-
-        $element.show().triggerHandler('dxshown');
-        this.clock.tick();
-
-        assert.strictEqual(dataSource.pageIndex(), 1, 'page index is correct');
-    });
-
-    QUnit.test('widget has a correct pageIndex if the pageSize is equal to dataSource length if it has _revertPageOnEmptyLoad is true (T942881)', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
-
-        const onContentReadySpy = sinon.spy();
-        const dataSource = new DataSource({
-            store: new ArrayStore([1, 2, 3, 4]),
-            pageSize: 4
-        });
-        const $element = this.element.hide().dxList({
-            pageLoadMode: 'scrollBottom',
-            scrollingEnabled: true,
-            dataSource: dataSource,
-            _revertPageOnEmptyLoad: true,
-            onContentReady: onContentReadySpy
-        });
-
-        $element.show().triggerHandler('dxshown');
-        this.clock.tick();
-
-        assert.strictEqual(dataSource.pageIndex(), 0, 'page index is correct');
-        assert.strictEqual(onContentReadySpy.callCount, 3, 'list fires contentReady after empty page load');
-    });
 });
 
 QUnit.module('scrollView interaction', moduleSetup, () => {
@@ -4030,3 +3985,67 @@ if(devices.real().deviceType === 'desktop') {
         });
     });
 }
+
+if(QUnit.urlParams['nojquery']) {
+    QUnit.module('ShadowDOM', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+
+            this.root = document.querySelector('#list');
+            this.container = document.createElement('div');
+            this.list = document.createElement('div');
+
+            this.root.attachShadow({ mode: 'open' });
+            this.container.appendChild(this.list);
+            this.root.shadowRoot.appendChild(this.container);
+
+            this.$list = $(this.list).dxList({
+                items: ['One', 'Two', 'Three'],
+                itemDragging: { allowReordering: true },
+                focusStateEnabled: true,
+            });
+        },
+
+        afterEach: function() {
+            this.clock.restore();
+
+            // TODO: get rid of it after fix jquery event bubbling to shadow dom
+            $(this.container).empty();
+        },
+
+        getItems: function() {
+            return this.$list.find(toSelector(LIST_ITEM_CLASS));
+        },
+
+        createEvent: function(eventName) {
+            return $.Event(eventName, {
+                originalEvent: {
+                    type: eventName,
+                    target: { shadowRoot: this.root },
+                    path: [ this.getItems().eq(1)[0] ],
+                    changedTouches: [{}]
+                }
+            });
+        },
+    }, () => {
+        QUnit.test('drag item', function(assert) {
+            const pointer = reorderingPointerMock(this.getItems().first());
+
+            pointer.dragStart().drag(34).dragEnd();
+
+            const orderedItems = this.getItems().toArray().map(e => e.innerText.trim());
+
+            assert.deepEqual(orderedItems, ['Two', 'Three', 'One']);
+        });
+
+        QUnit.test('focus item', function(assert) {
+            $(this.root).trigger(this.createEvent('mousedown'));
+            $(this.root).trigger(this.createEvent('touchstart'));
+
+            this.clock.tick();
+
+            assert.ok(this.getItems().eq(1).hasClass('dx-state-focused'));
+        });
+    });
+}
+

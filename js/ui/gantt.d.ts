@@ -39,15 +39,20 @@ import {
 import { Skip } from '../core/index';
 
 import {
-    ToolbarItemLocation,
     FirstDayOfWeek,
-    GanttTaskTitlePosition,
-    GanttToolbarItem,
-    GanttContextMenuItem,
-    GanttScaleType,
-    GanttSortingMode,
-    GanttRenderScaleType,
-} from '../types/enums';
+    SingleMultipleOrNone,
+    ToolbarItemLocation,
+} from '../common';
+
+export type GanttPdfExportDateRange = 'all' | 'visible';
+export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
+/** @public */
+export type GanttPredefinedContextMenuItem = 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager';
+/** @public */
+export type GanttPredefinedToolbarItem = 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies';
+export type GanttRenderScaleType = 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years' | 'fiveYears';
+export type GanttScaleType = 'auto' | 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+export type GanttTaskTitlePosition = 'inside' | 'outside' | 'none';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxGantt>;
@@ -1136,10 +1141,10 @@ export default class dxGantt extends Widget<dxGanttOptions> {
 export interface dxGanttToolbar {
     /**
      * @docid
-     * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
+     * @type Array<dxGanttToolbarItem,Enums.GanttPredefinedToolbarItem>
      * @public
      */
-    items?: Array<ToolbarItem | GanttToolbarItem>;
+    items?: Array<ToolbarItem | GanttPredefinedToolbarItem>;
 }
 
 /**
@@ -1156,10 +1161,10 @@ export interface dxGanttContextMenu {
     enabled?: boolean;
     /**
      * @docid
-     * @type Array<dxGanttContextMenuItem,Enums.GanttContextMenuItem>
+     * @type Array<dxGanttContextMenuItem,Enums.GanttPredefinedContextMenuItem>
      * @public
      */
-    items?: Array<ContextMenuItem | GanttContextMenuItem | 'resourceManager'>;
+    items?: Array<ContextMenuItem | GanttPredefinedContextMenuItem>;
 }
 
 /**
@@ -1177,7 +1182,7 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
      * @docid
      * @public
      */
-    name?: GanttToolbarItem | string;
+    name?: GanttPredefinedToolbarItem | string;
     /**
      * @docid
      * @default "before"
@@ -1199,10 +1204,10 @@ export type ContextMenuItem = dxGanttContextMenuItem;
 export interface dxGanttContextMenuItem extends dxContextMenuItem {
     /**
      * @docid
-     * @type Enums.GanttContextMenuItem|string
+     * @type Enums.GanttPredefinedContextMenuItem|string
      * @public
      */
-    name?: GanttContextMenuItem | 'resourceManager' | string;
+    name?: GanttPredefinedContextMenuItem | string;
 }
 
 /**
@@ -1262,7 +1267,7 @@ export interface dxGanttSorting {
      * @docid
      * @default "single"
      */
-    mode?: GanttSortingMode | string;
+    mode?: SingleMultipleOrNone | string;
     /**
      * @docid
      * @default false
@@ -1449,7 +1454,7 @@ export type Column<TRowData = any, TKey = any> = dxGanttColumn<TRowData, TKey>;
  * @namespace DevExpress.ui
  * @deprecated Use the Column type instead
  */
-export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<TRowData, TKey>, 'allowEditing' | 'allowFixing' | 'allowHiding' | 'allowReordering' | 'allowResizing' | 'allowSearch' | 'buttons' | 'columns' | 'editCellComponent' | 'editCellRender' | 'editCellTemplate' | 'editorOptions' | 'fixed' | 'fixedPosition' | 'formItem' | 'hidingPriority' | 'isBand' | 'lookup' | 'name' | 'ownerBand' | 'renderAsync' | 'setCellValue' | 'showEditorAlways' | 'showInColumnChooser' | 'type' | 'validationRules' | 'visible' >;
+export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<TRowData, TKey>, 'allowEditing' | 'allowFixing' | 'allowHiding' | 'allowReordering' | 'allowResizing' | 'allowSearch' | 'buttons' | 'columns' | 'editCellTemplate' | 'editorOptions' | 'fixed' | 'fixedPosition' | 'formItem' | 'hidingPriority' | 'isBand' | 'lookup' | 'name' | 'ownerBand' | 'renderAsync' | 'setCellValue' | 'showEditorAlways' | 'showInColumnChooser' | 'type' | 'validationRules' | 'visible' >;
 
 /**
  * @docid dxGanttColumn
@@ -1505,16 +1510,7 @@ export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<
     editorOptions: any;
     /**
      * @hidden
-     * @docid dxGanttColumn.editCellComponent
-     */
-    editCellComponent: any;
-    /**
-     * @hidden
-     * @docid dxGanttColumn.editCellRender
-     */
-    editCellRender: any;
-    /**
-     * @hidden
+     * @type template
      * @docid dxGanttColumn.editCellTemplate
      */
     editCellTemplate: any;

@@ -2,10 +2,8 @@
     "extends": [
         "config:base"
     ],
-    "rangeStrategy": "bump",
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
-    "commitMessagePrefix": "Update deps - ",
     "baseBranches": [
         "22_1",
         "21_2"
@@ -13,28 +11,24 @@
     "labels": [
         "dependencies"
     ],
-    "lockFileMaintenance": {
-        "enabled": true,
-        "schedule": [ "every 1 day" ],
-        "automerge": true
-    },
     "vulnerabilityAlerts": {
         "enabled": true,
         "automerge": true
     },
     "packageRules": [
         {
-            "matchPackagePatterns": [ "enzyme" ],
+            "matchPackageNames": [ "typescript", "typescript-min" ],
+            "matchUpdateTypes": [ "major", "minor" ],
             "enabled": false
         },
         {
             "matchPackagePatterns": [ "*" ],
-            "matchPackageType": [ "minor", "patch" ],
+            "matchUpdateTypes": [ "minor", "patch" ],
             "automerge": true
         },
         {
             "matchPackagePatterns": [ "*" ],
-            "matchPackageType": [ "major" ],
+            "matchUpdateTypes": [ "major" ],
             "enabled": false
         }
     ],

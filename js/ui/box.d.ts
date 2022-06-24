@@ -14,13 +14,21 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 import {
-    BoxAlign,
-    BoxDirection,
-    BoxCrossAlign,
     Mode,
-} from '../types/enums';
+} from '../common';
 
 type ItemLike<TKey> = string | Item<TKey> | any;
+
+export {
+    Mode,
+};
+
+/** @public */
+export type Distribution = 'center' | 'end' | 'space-around' | 'space-between' | 'start';
+/** @public */
+export type CrosswiseDistribution = 'center' | 'end' | 'start' | 'stretch';
+/** @public */
+export type BoxDirection = 'col' | 'row';
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxBox<TItem, TKey>>;
@@ -60,13 +68,13 @@ export interface dxBoxOptions<
      * @default 'start'
      * @public
      */
-    align?: BoxAlign;
+    align?: Distribution;
     /**
      * @docid
      * @default 'start'
      * @public
      */
-    crossAlign?: BoxCrossAlign;
+    crossAlign?: CrosswiseDistribution;
     /**
      * @docid
      * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions

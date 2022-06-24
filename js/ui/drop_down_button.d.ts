@@ -1,6 +1,6 @@
 import {
-    ButtonStylingMode,
-} from '../types/enums';
+    ButtonStyle,
+} from '../common';
 
 import {
     UserDefinedElement,
@@ -35,6 +35,10 @@ import {
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
+
+export {
+    ButtonStyle,
+};
 
 /** @public */
 export type ButtonClickEvent = NativeEventInfo<dxDropDownButton, KeyboardEvent | MouseEvent | PointerEvent> & {
@@ -222,7 +226,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default 'outlined'
      * @public
      */
-    stylingMode?: ButtonStylingMode;
+    stylingMode?: ButtonStyle;
     /**
      * @docid
      * @default ""

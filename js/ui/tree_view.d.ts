@@ -28,12 +28,11 @@ import {
 } from './widget/ui.search_box_mixin';
 
 import {
-    NavSelectionMode,
+    DataStructure,
+    SingleOrMultiple,
     ScrollDirection,
-    TreeViewDataStructure,
-    TreeViewCheckBoxMode,
-    TreeViewExpandEvent,
-} from '../types/enums';
+} from '../common';
+
 import dxScrollable from './scroll_view/ui.scrollable';
 
 interface ItemInfo<TKey = any> {
@@ -42,6 +41,17 @@ interface ItemInfo<TKey = any> {
     readonly itemIndex?: number;
     readonly node?: Node<TKey>;
 }
+
+export {
+    DataStructure,
+    SingleOrMultiple,
+    ScrollDirection,
+};
+
+/** @public */
+export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
+/** @public */
+export type TreeViewExpandEvent = 'dblclick' | 'click';
 
 /** @public */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
@@ -116,7 +126,7 @@ export interface dxTreeViewOptions<TKey = any>
      * @default 'tree'
      * @public
      */
-    dataStructure?: TreeViewDataStructure;
+    dataStructure?: DataStructure;
     /**
      * @docid
      * @default false
@@ -298,7 +308,7 @@ export interface dxTreeViewOptions<TKey = any>
      * @default "multiple"
      * @public
      */
-    selectionMode?: NavSelectionMode;
+    selectionMode?: SingleOrMultiple;
     /**
      * @docid
      * @default 'none'

@@ -16,10 +16,10 @@ import Editor, {
 
 import UploadInfo from '../file_management/upload_info';
 
-import {
-    FileUploadMode,
-    UploadHttpMethod,
-} from '../types/enums';
+/** @public */
+export type FileUploadMode = 'instantly' | 'useButtons' | 'useForm';
+/** @public */
+export type UploadHttpMethod = 'POST' | 'PUT';
 
 /** @public */
 export type BeforeSendEvent = EventInfo<dxFileUploader> & {

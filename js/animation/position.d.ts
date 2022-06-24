@@ -3,12 +3,15 @@ import {
 } from '../core/element';
 
 import {
-  VerticalAlignment,
-  HorizontalAlignment,
-  PositionAlignment,
-  PositionResolveCollisionXY,
-  PositionResolveCollision,
-} from '../types/enums';
+    HorizontalAlignment,
+    PositionAlignment,
+    VerticalAlignment,
+} from '../common';
+
+/** @public */
+export type CollisionResolution = 'fit' | 'flip' | 'flipfit' | 'none';
+/** @public */
+export type CollisionResolutionCombination = 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit';
 
 /**
  * @docid
@@ -56,17 +59,17 @@ export interface PositionConfig {
      * @docid
      * @public
      */
-    collision?: PositionResolveCollisionXY | {
+    collision?: CollisionResolutionCombination | {
       /**
        * @docid
        * @default 'none'
        */
-      x?: PositionResolveCollision;
+      x?: CollisionResolution;
       /**
        * @docid
        * @default 'none'
        */
-      y?: PositionResolveCollision;
+      y?: CollisionResolution;
     };
     /**
      * @docid

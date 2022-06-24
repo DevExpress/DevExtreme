@@ -27,10 +27,10 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
-import {
-    DateBoxType,
-    DateBoxPickerType,
-} from '../types/enums';
+/** @public */
+export type DateType = 'date' | 'datetime' | 'time';
+/** @public */
+export type DatePickerType = 'calendar' | 'list' | 'native' | 'rollers';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxDateBox, Event>;
@@ -178,7 +178,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @default 'native' &for(Android)
      * @public
      */
-    pickerType?: DateBoxPickerType;
+    pickerType?: DatePickerType;
     /**
      * @docid
      * @default ""
@@ -196,7 +196,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @default "date"
      * @public
      */
-    type?: DateBoxType;
+    type?: DateType;
     /**
      * @docid
      * @default false

@@ -1,20 +1,19 @@
 import { DxPromise } from './core/utils/deferred';
 import dxDataGrid from './ui/data_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
-import dxGantt from './ui/gantt';
+import dxGantt, {
+  GanttPdfExportMode,
+  GanttPdfExportDateRange,
+} from './ui/gantt';
 import {
   DataGridCell as ExcelCell,
 } from './excel_exporter';
-import {
-  GanttPdfExportMode,
-  GanttPdfExportDateRange,
-} from './types/enums';
 
 /**
  * @public
  * @namespace DevExpress.pdfExporter
  */
- export type DataGridCell = PdfDataGridCell;
+export type DataGridCell = PdfDataGridCell;
 
  /**
   * @namespace DevExpress.pdfExporter
@@ -271,7 +270,7 @@ export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>
  * @docid
  * @namespace DevExpress.pdfExporter
  */
- export interface PdfExportGanttProps {
+export interface PdfExportGanttProps {
   /**
    * @docid
    * @type_function_param1 options:object
@@ -369,4 +368,4 @@ export interface PdfExportGanttFont {
  * @static
  * @public
  */
- export function exportGantt(options: PdfExportGanttProps): DxPromise<any>;
+export function exportGantt(options: PdfExportGanttProps): DxPromise<any>;

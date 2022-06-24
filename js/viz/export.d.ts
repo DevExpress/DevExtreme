@@ -1,10 +1,10 @@
 import DOMComponent from '../core/dom_component';
 
 import {
-    VerticalAlignment,
-    HorizontalAlignment,
     ExportFormat,
-} from '../types/enums';
+    HorizontalAlignment,
+    VerticalAlignment,
+} from '../common';
 
 /**
  * @docid viz.exportFromMarkup

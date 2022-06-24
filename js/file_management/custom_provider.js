@@ -68,7 +68,7 @@ class CustomFileSystemProvider extends FileSystemProviderBase {
     }
 
     downloadItems(items) {
-        return this._downloadItemsFunction(items);
+        return this._executeActionAsDeferred(() => this._downloadItemsFunction(items));
     }
 
     getItemsContent(items) {

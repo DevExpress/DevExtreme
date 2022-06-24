@@ -32,6 +32,7 @@ import {
 import {
     ChartSeries,
     ScaleBreak,
+    SeriesType,
     VizRange,
     VizTimeInterval,
 } from './common';
@@ -44,48 +45,90 @@ import {
 } from './core/base_widget';
 
 import {
-    EventKeyModifier,
-    VizWordWrap,
-    VizTextOverflow,
-    OverlappingBehavior,
-    VerticalAlignment,
+    SingleOrMultiple,
     HorizontalAlignment,
-    DashStyle,
-    ChartResolveLabelOverlapping,
-    ChartElementSelectionMode,
-    SeriesType,
     Position,
-    ChartZoomAndPanMode,
-    ChartLegendHoverMode,
-    RelativePosition,
-    DiscreteAxisDivisionMode,
-    ScaleBreakLineStyle,
-    ChartLabelDisplayMode,
-    VisualRangeUpdateMode,
-    ChartZoomPanAction,
-    AxisScaleType,
-    ChartDataType,
+    VerticalAlignment,
+} from '../common';
+
+import {
     ArgumentAxisHoverMode,
-    ChartTooltipLocation,
-    HatchingDirection,
-    FinancialChartReductionLevel,
-    ChartSeriesHoverMode,
-    ChartSeriesSelectionMode,
-    ChartPointInteractionMode,
+    AxisScaleType,
+    ChartsAxisLabelOverlap,
+    ChartsLabelOverlap,
+    ChartsDataType,
+    DashStyle,
+    DiscreteAxisDivisionMode,
+    HatchDirection,
+    LegendHoverMode,
+    PointInteractionMode,
     PointSymbol,
+    RelativePosition,
+    ScaleBreakLineStyle,
+    SeriesHoverMode,
+    SeriesSelectionMode,
+    TextOverflow,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
-    ChartSeriesAggregationMethod,
-    ChartSingleValueSeriesAggregationMethod,
-    ChartFinancialSeriesAggregationMethod,
-    ChartRangeSeriesAggregationMethod,
-    ChartBubbleSeriesAggregationMethod,
-    AggregatedPointsPosition,
-} from '../types/enums';
+    VisualRangeUpdateMode,
+    WordWrap,
+    ZoomPanAction,
+} from '../common/charts';
 
 interface SeriesInteractionInfo {
     target: chartSeriesObject;
 }
+
+export {
+    ArgumentAxisHoverMode,
+    AxisScaleType,
+    ChartsAxisLabelOverlap,
+    ChartsLabelOverlap,
+    ChartsDataType,
+    DashStyle,
+    DiscreteAxisDivisionMode,
+    HatchDirection,
+    HorizontalAlignment,
+    LegendHoverMode,
+    PointInteractionMode,
+    PointSymbol,
+    Position,
+    RelativePosition,
+    ScaleBreakLineStyle,
+    SeriesHoverMode,
+    SeriesSelectionMode,
+    SeriesType,
+    TextOverflow,
+    ValueErrorBarDisplayMode,
+    ValueErrorBarType,
+    VerticalAlignment,
+    VisualRangeUpdateMode,
+    WordWrap,
+    ZoomPanAction,
+};
+
+/** @public */
+export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
+/** @public */
+export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
+/** @public */
+export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
+/** @public */
+export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
+/** @public */
+export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
+/** @public */
+export type ChartSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'ohlc' | 'range' | 'sum' | 'custom';
+/** @public */
+export type ChartSingleValueSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+/** @public */
+export type ChartTooltipLocation = 'center' | 'edge';
+/** @public */
+export type ChartZoomAndPanMode = 'both' | 'none' | 'pan' | 'zoom';
+/** @public */
+export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
+/** @public */
+export type FinancialChartReductionLevel = 'close' | 'high' | 'low' | 'open';
 
 /** @public */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
@@ -157,7 +200,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | To
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly previousRange: VizRange;
-    readonly actionType: ChartZoomPanAction;
+    readonly actionType: ZoomPanAction;
     readonly zoomFactor: number;
     readonly shift: number;
 };
@@ -166,7 +209,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | To
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
-    readonly actionType?: ChartZoomPanAction;
+    readonly actionType?: ZoomPanAction;
 };
 
 /**
@@ -969,7 +1012,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @type_function_param1_field event:event
      * @type_function_param1_field rangeStart:Date|Number:deprecated(range)
      * @type_function_param1_field rangeEnd:Date|Number:deprecated(range)
-     * @type_function_param1_field actionType:Enums.ChartZoomPanAction
+     * @type_function_param1_field actionType:Enums.ZoomPanAction
      * @type_function_param1_field component:dxChart
      * @notUsedInTheme
      * @action
@@ -982,7 +1025,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxChart
      * @type_function_param1_field event:event
-     * @type_function_param1_field actionType:Enums.ChartZoomPanAction
+     * @type_function_param1_field actionType:Enums.ZoomPanAction
      * @notUsedInTheme
      * @action
      * @public
@@ -1007,7 +1050,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default "none"
      * @public
      */
-    resolveLabelOverlapping?: ChartResolveLabelOverlapping;
+    resolveLabelOverlapping?: ChartsLabelOverlap;
     /**
      * @docid
      * @default false
@@ -1064,7 +1107,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default 'single'
      * @public
      */
-    seriesSelectionMode?: ChartElementSelectionMode;
+    seriesSelectionMode?: SingleOrMultiple;
     /**
      * @docid
      * @default undefined
@@ -1176,7 +1219,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.aggregationInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     aggregationInterval?: VizTimeInterval;
@@ -1185,7 +1228,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @default undefined
      * @public
      */
-    argumentType?: ChartDataType;
+    argumentType?: ChartsDataType;
     /**
      * @docid dxChartOptions.argumentAxis.axisDivisionFactor
      * @default 70
@@ -1258,7 +1301,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -1273,7 +1316,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.minorTickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -1318,7 +1361,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.tickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -1853,7 +1896,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @default 'hide'
      * @public
      */
-    overlappingBehavior?: OverlappingBehavior;
+    overlappingBehavior?: ChartsAxisLabelOverlap;
     /**
      * @docid dxChartOptions.commonAxisSettings.label.position
      * @default 'outside'
@@ -1877,7 +1920,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @default "none"
      * @public
      */
-    textOverflow?: VizTextOverflow;
+    textOverflow?: TextOverflow;
     /**
      * @docid dxChartOptions.commonAxisSettings.label.visible
      * @default true
@@ -1889,7 +1932,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @default "normal"
      * @public
      */
-    wordWrap?: VizWordWrap;
+    wordWrap?: WordWrap;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartCommonAxisSettingsStripStyle {
@@ -1959,13 +2002,13 @@ export interface dxChartCommonAxisSettingsTitle {
      * @default "ellipsis"
      * @public
      */
-    textOverflow?: VizTextOverflow;
+    textOverflow?: TextOverflow;
     /**
      * @docid dxChartOptions.commonAxisSettings.title.wordWrap
      * @default "normal"
      * @public
      */
-    wordWrap?: VizWordWrap;
+    wordWrap?: WordWrap;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartCommonPaneSettings {
@@ -2147,6 +2190,7 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
     /**
      * @docid dxChartOptions.commonSeriesSettings.type
      * @default 'line'
+     * @type Enums.SeriesType
      * @public
      */
     type?: SeriesType;
@@ -2169,7 +2213,7 @@ export interface dxChartLegend extends BaseChartLegend {
      * @default 'includePoints'
      * @public
      */
-    hoverMode?: ChartLegendHoverMode;
+    hoverMode?: LegendHoverMode;
     /**
      * @docid dxChartOptions.legend.position
      * @default 'outside'
@@ -2276,7 +2320,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -2291,7 +2335,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.minorTickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -2355,7 +2399,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.tickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -2376,7 +2420,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @default undefined
      * @public
      */
-    valueType?: ChartDataType;
+    valueType?: ChartsDataType;
     /**
      * @docid dxChartOptions.valueAxis.visualRange
      * @fires BaseWidgetOptions.onOptionChanged
@@ -3022,7 +3066,7 @@ export interface dxChartSeriesTypesCandleStickSeriesHoverStyleHatching extends d
      * @default 'none'
      * @public
      */
-    direction?: HatchingDirection;
+    direction?: HatchDirection;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCandleStickSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -3050,7 +3094,7 @@ export interface dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching exten
      * @default 'none'
      * @public
      */
-    direction?: HatchingDirection;
+    direction?: HatchDirection;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeries {
@@ -3141,7 +3185,7 @@ export interface dxChartSeriesTypesCommonSeries {
      * @docid dxChartSeriesTypes.CommonSeries.hoverMode
      * @public
      */
-    hoverMode?: ChartSeriesHoverMode;
+    hoverMode?: SeriesHoverMode;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle
      * @type object
@@ -3255,7 +3299,7 @@ export interface dxChartSeriesTypesCommonSeries {
      * @docid dxChartSeriesTypes.CommonSeries.selectionMode
      * @public
      */
-    selectionMode?: ChartSeriesSelectionMode;
+    selectionMode?: SeriesSelectionMode;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle
      * @type object
@@ -3486,7 +3530,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleHatching {
      * @default 'right'
      * @public
      */
-    direction?: HatchingDirection;
+    direction?: HatchDirection;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.opacity
      * @default 0.75
@@ -3682,7 +3726,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
-    hoverMode?: ChartPointInteractionMode;
+    hoverMode?: PointInteractionMode;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -3797,7 +3841,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
-    selectionMode?: ChartPointInteractionMode;
+    selectionMode?: PointInteractionMode;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -3934,7 +3978,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
      * @default 'right'
      * @public
      */
-    direction?: HatchingDirection;
+    direction?: HatchDirection;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.opacity
      * @default 0.5

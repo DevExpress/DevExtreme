@@ -34,9 +34,9 @@ import dxSelectBox, {
 } from './select_box';
 
 import {
-    EditorApplyValueMode,
+    ApplyValueMode,
     SelectAllMode,
-} from '../types/enums';
+} from '../common';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxTagBox, Event>;
@@ -111,13 +111,13 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
- export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>> {
+export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>> {
     /**
      * @docid
      * @default "instantly"
      * @public
      */
-    applyValueMode?: EditorApplyValueMode;
+    applyValueMode?: ApplyValueMode;
     /**
      * @docid
      * @default false

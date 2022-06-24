@@ -414,6 +414,9 @@
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "TODO",
         "dxFileManager-editingUploadCanceledMessage": "TODO",
 
+        "dxFileManager-editingDownloadSingleItemErrorMessage": "TODO",
+        "dxFileManager-editingDownloadMultipleItemsErrorMessage": "TODO",
+
         "dxFileManager-listDetailsColumnCaptionName": "TODO",
         "dxFileManager-listDetailsColumnCaptionDateModified": "TODO",
         "dxFileManager-listDetailsColumnCaptionFileSize": "TODO",

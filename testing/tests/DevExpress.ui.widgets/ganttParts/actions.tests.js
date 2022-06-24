@@ -202,6 +202,73 @@ QUnit.module('Actions', moduleConfig, () => {
         assert.equal(ganttView.width(), splitter.width());
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
     });
+    test('splitter should resize panels with 2 gantts (T1091934)', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        const $element2 = $('<div>').attr('id', 'gantt2').appendTo('#qunit-fixture');
+        const instance2 = $element2.dxGantt().dxGantt('instance');
+        this.clock.tick();
+
+        [this.$element, $element2].forEach(($element, index) => {
+            const splitterWrapper = $element.find(Consts.SPLITTER_WRAPPER_SELECTOR);
+            const splitter = $element.find(Consts.SPLITTER_SELECTOR);
+
+            const treeListWrapperElement = $element.find(Consts.TREELIST_WRAPPER_SELECTOR);
+            const treeListWrapperLeftOffset = treeListWrapperElement.offset().left;
+            const treeListWrapperTopOffset = treeListWrapperElement.offset().top;
+
+            const ganttView = $element.find(Consts.GANTT_VIEW_SELECTOR);
+
+            const splitterContainerWrapperWidth = $(treeListWrapperElement).parent().width();
+
+            assert.ok(splitterWrapper, `Splitter ${index} wrapper has been found`);
+            assert.ok(splitter, `Splitter ${index} has been found`);
+
+            splitter.trigger($.Event('dxpointerdown', { pointerType: 'mouse' }));
+            splitter.trigger($.Event('dxpointermove', {
+                pointerType: 'mouse',
+                pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 100,
+                pageY: treeListWrapperTopOffset + 100 }));
+            splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
+
+            assert.equal(treeListWrapperElement.width(), 100);
+            assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
+            assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 100, `Splitter ${index} has been moved by mouse`);
+
+            splitter.trigger($.Event('dxpointerdown', { pointerType: 'touch' }));
+            splitter.trigger($.Event('dxpointermove', {
+                pointerType: 'touch',
+                pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 300,
+                pageY: treeListWrapperTopOffset + 100 }));
+            splitter.trigger($.Event('dxpointerup', { pointerType: 'touch' }));
+
+            assert.equal(treeListWrapperElement.width(), 300);
+            assert.equal(ganttView.width(), splitterContainerWrapperWidth - 300);
+            assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 300, `Splitter ${index} has been moved by touch`);
+
+            splitter.trigger($.Event('dxpointerdown'));
+            splitter.trigger($.Event('dxpointermove', {
+                pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) - 10,
+                pageY: treeListWrapperTopOffset + 100 }));
+            splitter.trigger($.Event('dxpointerup'));
+
+            assert.equal(treeListWrapperElement.width(), 0);
+            assert.equal(ganttView.width(), splitterContainerWrapperWidth);
+            assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 0, `Splitter ${index} has not cross the left side`);
+
+            splitter.trigger($.Event('dxpointerdown'));
+            splitter.trigger($.Event('dxpointermove', {
+                pageX: splitterContainerWrapperWidth - parseFloat(splitter.css('margin-left')) + 10,
+                pageY: treeListWrapperTopOffset + 100 }));
+            splitter.trigger($.Event('dxpointerup'));
+
+            assert.equal(treeListWrapperElement.width(), splitterContainerWrapperWidth - splitter.width());
+            assert.equal(ganttView.width(), splitter.width());
+            assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), `Splitter ${index} has not cross the right side`);
+        });
+
+        instance2.dispose();
+        $element2.remove();
+    });
     test('expand api', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.clock.tick();

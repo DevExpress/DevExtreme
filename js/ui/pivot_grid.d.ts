@@ -23,15 +23,30 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-  PivotGridFieldChooserLayout,
-  Mode,
-  StateStoringType,
-  PivotGridScrollingMode,
-  PivotGridDataFieldArea,
-  PivotGridTotalsDisplayMode,
-  PivotGridRowHeadersLayout,
-  ApplyChangesMode,
-} from '../types/enums';
+    Mode,
+    FieldChooserLayout,
+    ScrollMode,
+} from '../common';
+
+import {
+    ApplyChangesMode,
+    StateStoreType,
+} from '../common/grids';
+
+export {
+    ApplyChangesMode,
+    FieldChooserLayout,
+    Mode,
+    ScrollMode,
+    StateStoreType,
+};
+
+/** @public */
+export type PivotGridDataFieldArea = 'column' | 'row';
+/** @public */
+export type PivotGridRowHeaderLayout = 'standard' | 'tree';
+/** @public */
+export type PivotGridTotalDisplayMode = 'both' | 'columns' | 'none' | 'rows';
 
 /** @public */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid, MouseEvent | PointerEvent> & {
@@ -202,7 +217,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default 0
        */
-      layout?: PivotGridFieldChooserLayout;
+      layout?: FieldChooserLayout;
       /**
        * @docid
        * @default 500
@@ -490,7 +505,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @default "standard"
      * @public
      */
-    rowHeaderLayout?: PivotGridRowHeadersLayout;
+    rowHeaderLayout?: PivotGridRowHeaderLayout;
     /**
      * @docid
      * @public
@@ -500,7 +515,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default "standard"
        */
-      mode?: PivotGridScrollingMode;
+      mode?: ScrollMode;
       /**
        * @docid
        * @default "auto"
@@ -542,7 +557,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @default "none"
      * @public
      */
-    showTotalsPrior?: PivotGridTotalsDisplayMode;
+    showTotalsPrior?: PivotGridTotalDisplayMode;
     /**
      * @docid
      * @public
@@ -578,7 +593,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default "localStorage"
        */
-      type?: StateStoringType;
+      type?: StateStoreType;
     };
     /**
      * @docid

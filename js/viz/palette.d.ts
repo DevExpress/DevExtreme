@@ -1,8 +1,14 @@
 import {
-    VizPalette,
-    VizPaletteExtensionMode,
-    VizPaletteColorSet,
-} from '../types/enums';
+    Palette,
+    PaletteColorSet,
+    PaletteExtensionMode,
+} from '../common/charts';
+
+export {
+    Palette,
+    PaletteColorSet,
+    PaletteExtensionMode,
+};
 
 /**
  * @docid viz.currentPalette
@@ -23,13 +29,12 @@ export function currentPalette(paletteName: string): void;
 /**
  * @docid viz.generateColors
  * @publicName generateColors(palette, count, options)
- * @param1 palette:Enums.VizPalette|Array<string>
- * @param3_field paletteExtensionMode:Enums.VizPaletteExtensionMode
- * @param3_field baseColorSet:Enums.VizPaletteColorSet
+ * @param1 palette:Enums.Palette|Array<string>
+ * @param3_field paletteExtensionMode:Enums.PaletteExtensionMode
  * @static
  * @public
  */
-export function generateColors(palette: VizPalette | Array<string>, count: number, options: { paletteExtensionMode?: VizPaletteExtensionMode; baseColorSet?: VizPaletteColorSet }): Array<string>;
+export function generateColors(palette: Palette | Array<string>, count: number, options: { paletteExtensionMode?: PaletteExtensionMode; baseColorSet?: PaletteColorSet }): Array<string>;
 
 /**
  * @docid viz.getPalette

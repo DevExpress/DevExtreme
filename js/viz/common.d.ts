@@ -7,15 +7,19 @@ import {
 } from './core/base_widget';
 
 import {
-    Orientation,
     HorizontalAlignment,
-    VerticalEdge,
-    DashStyle,
-    SeriesType,
+    Orientation,
     Position,
-    VizTimeInterval as TimeIntervalType,
+    VerticalEdge,
+} from '../common';
+
+import {
+    DashStyle,
     LegendMarkerState,
-} from '../types/enums';
+    TimeInterval,
+} from '../common/charts';
+
+export type SeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
 
 /**
  * @docid
@@ -41,7 +45,7 @@ export type VizTimeInterval = number | {
   weeks?: number;
   /** @docid */
   years?: number;
-} | TimeIntervalType;
+} | TimeInterval;
 
 /**
  * @docid
@@ -391,7 +395,7 @@ export interface VizRange {
     /**
      * @docid
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @default undefined
      * @public
      */

@@ -18,6 +18,7 @@ const CLASS = {
     body: 'dx-scheduler-appointment-body',
     tail: 'dx-scheduler-appointment-tail',
   },
+  draggableSource: 'dx-draggable-source',
 };
 
 export default class Appointment {
@@ -40,6 +41,8 @@ export default class Appointment {
   isReducedBody: Promise<boolean>;
 
   isReducedTail: Promise<boolean>;
+
+  isDraggableSource: Promise<boolean>;
 
   title: Promise<string>;
 
@@ -76,6 +79,7 @@ export default class Appointment {
     this.isReducedHead = this.element.hasClass(CLASS.reduced.head);
     this.isReducedBody = this.element.hasClass(CLASS.reduced.body);
     this.isReducedTail = this.element.hasClass(CLASS.reduced.tail);
+    this.isDraggableSource = this.element.hasClass(CLASS.draggableSource);
     this.title = this.element.find(`.${CLASS.title}`).innerText;
   }
 
