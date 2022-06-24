@@ -1,0 +1,52 @@
+name: CI
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 5 * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { TARGET: lint }
+          - { TARGET: test, CONSTEL: misc }
+          - { TARGET: test, CONSTEL: misc, JQUERY: true }
+          - { TARGET: test, CONSTEL: ui }
+          - { TARGET: test, CONSTEL: ui.editors }
+          - { TARGET: test, CONSTEL: ui.grid }
+          - { TARGET: test, CONSTEL: ui.scheduler }
+          - { TARGET: test, CONSTEL: viz }
+          - { TARGET: test, BROWSER: firefox, CONSTEL: misc }
+          - { TARGET: test, BROWSER: firefox, CONSTEL: ui }
+          - { TARGET: test, BROWSER: firefox, CONSTEL: ui.editors }
+          - { TARGET: test, BROWSER: firefox, CONSTEL: ui.grid }
+          - { TARGET: test, BROWSER: firefox, CONSTEL: ui.scheduler }
+          - { TARGET: test, BROWSER: firefox, CONSTEL: viz }
+          - { TARGET: test_themebuilder }
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 50
+
+      - name: Docker CI
+        run: >
+          docker run -t
+          -e HEADLESS=true
+          -e TARGET=${{matrix.TARGET}}
+          -e CONSTEL=${{matrix.CONSTEL}}
+          -v $GITHUB_WORKSPACE:/devextreme
+          docker.io/devexpress/devextreme-build:18_2
+          ./docker-ci.sh
