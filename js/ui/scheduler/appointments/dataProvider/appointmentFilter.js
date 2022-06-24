@@ -5,6 +5,7 @@ import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined } from '../../../../core/utils/type';
 import query from '../../../../data/query';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
+import { hasResourceValue } from '../../../../renovation/ui/scheduler/resources/hasResourceValue';
 
 import {
     isDateAndTimeView as calculateIsDateAndTimeView,
@@ -13,7 +14,6 @@ import {
 import {
     getResourcesDataByGroups,
 } from '../../resources/utils';
-import { prepareItemForFilter } from '../../../../renovation/ui/scheduler/utils/resources';
 import {
     compareDateWithStartDayHour,
     compareDateWithEndDayHour,
@@ -263,11 +263,11 @@ export class AppointmentFilterBaseStrategy {
             const appointmentResourceValues = wrapToArray(resource);
             const resourceData = map(
                 resources[resourceIndex].items,
-                ({ id }) => prepareItemForFilter(id),
+                ({ id }) => id,
             );
 
-            for(let j = 0; j < appointmentResourceValues.length; j++) {
-                if(resourceData.includes(appointmentResourceValues[j])) {
+            for(let i = 0; i < appointmentResourceValues.length; i++) {
+                if(hasResourceValue(resourceData, appointmentResourceValues[i])) {
                     return true;
                 }
             }
