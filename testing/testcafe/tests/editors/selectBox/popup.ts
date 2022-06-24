@@ -64,7 +64,7 @@ themes.forEach((theme) => {
     )();
 
     await t
-      .expect(await takeScreenshot(`SelectBox_pagesize_equal_datasource_length,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await takeScreenshot(`SelectBox_pagesize_equal_datasource_items_count,theme=${theme.replace(/\./g, '-')}.png`))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -80,19 +80,13 @@ themes.forEach((theme) => {
     });
   });
 
-  test(`SelectBox has a correct popup height for the first opening if the pageSize is less to dataSource length, theme=${theme}`, async (t) => {
+  test(`SelectBox has a correct popup height for the first opening if the pageSize is less than dataSource items count, theme=${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const selectBox = new SelectBox('#container');
     const { getInstance } = selectBox;
 
     await t.click(selectBox.element);
-
-    await t
-      .expect(await takeScreenshot(`SelectBox_no_data,theme=${theme.replace(/\./g, '-')}.png`))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
 
     await ClientFunction(
       () => {
@@ -108,7 +102,7 @@ themes.forEach((theme) => {
     )();
 
     await t
-      .expect(await takeScreenshot(`SelectBox_pagesize_less_datasource_length,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await takeScreenshot(`SelectBox_pagesize_less_datasource_items_count,theme=${theme.replace(/\./g, '-')}.png`))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -124,19 +118,13 @@ themes.forEach((theme) => {
     });
   });
 
-  test(`SelectBox has a correct popup height for the first opening if the pageSize is more to dataSource length, theme=${theme}`, async (t) => {
+  test(`SelectBox has a correct popup height for the first opening if the pageSize is more than dataSource items count, theme=${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const selectBox = new SelectBox('#container');
     const { getInstance } = selectBox;
 
     await t.click(selectBox.element);
-
-    await t
-      .expect(await takeScreenshot(`SelectBox_no_data,theme=${theme.replace(/\./g, '-')}.png`))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
 
     await ClientFunction(
       () => {
@@ -152,7 +140,7 @@ themes.forEach((theme) => {
     )();
 
     await t
-      .expect(await takeScreenshot(`SelectBox_pagesize_more_datasource_length,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await takeScreenshot(`SelectBox_pagesize_more_datasource_items_count,theme=${theme.replace(/\./g, '-')}.png`))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
