@@ -1638,6 +1638,11 @@ describe('Scheduler', () => {
             info: {
               isRecurrent: true,
             },
+            appointment: {
+              startDate: new Date(2022, 5, 14, 8),
+              endDate: new Date(2022, 5, 14, 10),
+              recurrenceRule: 'SOME_RECURRENCE_RULE',
+            },
           }];
           scheduler.appointmentsContextValue.onAppointmentDoubleClick({
             data,
@@ -1648,8 +1653,8 @@ describe('Scheduler', () => {
               fullScreen: false,
               maxWidth: expect.anything(),
             });
-          expect(scheduler.appointmentData)
-            .toEqual(data[0]);
+          expect(scheduler.appointmentFormData)
+            .toEqual(data[0].appointment);
           expect(scheduler.needCreateAppointmentEditForm)
             .toBe(true);
 

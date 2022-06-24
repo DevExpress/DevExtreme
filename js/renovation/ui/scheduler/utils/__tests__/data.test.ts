@@ -19,7 +19,7 @@ const defaultDataAccessors: DataAccessorType = {
     endDateExpr: 'endDate',
     recurrenceRuleExpr: 'recurrenceRule',
     visibleExpr: 'visible',
-  },
+  } as any,
 };
 
 describe('Data API', () => {

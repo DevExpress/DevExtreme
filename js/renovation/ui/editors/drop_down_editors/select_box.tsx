@@ -41,6 +41,12 @@ export class SelectBoxProps extends EditorProps {
 
   @OneWay() valueExpr?: string;
 
+  @OneWay() placeholder = '';
+
+  @OneWay() hoverStateEnabled?: boolean = true;
+
+  @OneWay() searchEnabled = false;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Event() valueChange?: EventCallback<any>;
 }
