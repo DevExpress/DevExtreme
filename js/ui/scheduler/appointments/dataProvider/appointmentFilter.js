@@ -14,7 +14,10 @@ import {
     isDateAndTimeView as calculateIsDateAndTimeView,
     isSupportMultiDayAppointments
 } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getResourcesDataByGroups } from '../../resources/utils';
+import {
+    getResourcesDataByGroups,
+} from '../../resources/utils';
+import { prepareItemForFilter } from '../../../../renovation/ui/scheduler/utils/resources';
 import {
     compareDateWithStartDayHour,
     compareDateWithEndDayHour,
@@ -414,11 +417,12 @@ export class AppointmentFilterBaseStrategy {
             const appointmentResourceValues = wrapToArray(resource);
             const resourceData = map(
                 resources[resourceIndex].items,
-                (item) => { return item.id; }
+                ({ id }) => prepareItemForFilter(id),
             );
 
-            for(let j = 0; j < appointmentResourceValues.length; j++) {
-                if(inArray(appointmentResourceValues[j], resourceData) > -1) {
+            for(let i = 0; i < appointmentResourceValues.length; i++) {
+                const item = prepareItemForFilter(appointmentResourceValues[i]);
+                if(inArray(item, resourceData) > -1) {
                     return true;
                 }
             }

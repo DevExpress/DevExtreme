@@ -1,13 +1,14 @@
 import { normalizeDataSourceOptions } from '../../../data/data_source/utils';
 import { DataSource } from '../../../data/data_source/data_source';
 import { when, Deferred } from '../../../core/utils/deferred';
-import query from '../../../data/query';
 import { compileGetter, compileSetter } from '../../../core/utils/data';
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 import { isDefined } from '../../../core/utils/type';
 import { wrapToArray, inArray } from '../../../core/utils/array';
 import { deepExtendArraySafe } from '../../../core/utils/object';
+import { prepareItemForFilter } from '../../../renovation/ui/scheduler/utils/resources';
+import { equalByValue } from '../../../core/utils/common';
 
 export const getValueExpr = resource => resource.valueExpr || 'id';
 export const getDisplayExpr = resource => resource.displayExpr || 'text';
@@ -233,10 +234,10 @@ export const getOrLoadResourceItem = (resources, resourceLoaderMap, field, value
 
             resourceLoaderMap.get(field)
                 .done(data => {
-                    const filteredData = query(data)
-                        .filter(valueExpr, value)
-                        .toArray();
-
+                    const getter = compileGetter(valueExpr);
+                    const filteredData = data.filter(
+                        (resource) => equalByValue(getter(resource), value)
+                    );
                     result.resolve(filteredData[0]);
                 })
                 .fail(() => {
@@ -325,14 +326,10 @@ export const getResourceTreeLeaves = (getDataAccessors, tree, rawAppointment, re
 
 const hasGroupItem = (getDataAccessors, rawAppointment, groupName, itemValue) => {
     const resourceValue = getDataAccessors(groupName, 'getter')(rawAppointment);
-    const groups = wrapToArray(resourceValue);
+    const groups = wrapToArray(resourceValue)
+        .map((item) => prepareItemForFilter(item));
 
-    if(groups) {
-        if(inArray(itemValue, groups) > -1) {
-            return true;
-        }
-    }
-    return false;
+    return inArray(prepareItemForFilter(itemValue), groups) > -1;
 };
 
 export const createReducedResourcesTree = (loadedResources, getDataAccessors, appointments) => {
