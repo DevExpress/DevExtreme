@@ -2462,6 +2462,10 @@ class Scheduler extends Widget {
         validateDayHours(startDayHour, endDayHour);
     }
 
+    _getDragBehavior() {
+        return this._workSpace.dragBehavior;
+    }
+
     /**
         * @name dxScheduler.registerKeyHandler
         * @publicName registerKeyHandler(key, handler)

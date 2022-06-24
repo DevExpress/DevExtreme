@@ -1365,6 +1365,16 @@ QUnit.module('format: percent format', moduleConfig, () => {
         { text: '1.4', value: 0.0135, format: '#0.0%' },
         { text: '0.005', value: 0.000049999, format: '#0.000%' },
         { text: '0.004', value: 0.0000444999, format: '#0.000%' },
+        { text: '1.2962', value: 0.01296249, format: '#0.0000%' },
+        { text: '1.2963', value: 0.0129625, format: '#0.0000%' },
+        { text: '1.2962', value: 0.01296249999, format: '#0.0000%' },
+        { text: '4.654', value: 0.046544999, format: '#0.000%' },
+        { text: '-4.65', value: -0.04645, format: '#0.00%' },
+        { text: '-35.86', value: -0.35855, format: '#0.00%' },
+        { text: '-1.2962', value: -0.01296249, format: '#0.0000%' },
+        { text: '10.004', value: 0.100035, format: '#0.000%' },
+        { text: '43.104', value: 0.431035, format: '#0.000%' },
+        { text: '43.105', value: 0.431045, format: '#0.000%' },
     ].forEach(({ text, value, format }) => {
         QUnit.test(`percent format should correctly handle float values, value: ${value}, format: ${format} (T1093736)`, function(assert) {
             this.instance.option({

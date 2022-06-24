@@ -80,7 +80,6 @@ jobs:
           { componentFolder: "renovation", name: "renovation (react) (2/4)", platform: "react", quarantineMode: false, indices: "2/4" },
           { componentFolder: "renovation", name: "renovation (react) (3/4)", platform: "react", quarantineMode: false, indices: "3/4" },
           { componentFolder: "renovation", name: "renovation (react) (4/4)", platform: "react", quarantineMode: false, indices: "4/4" },
-          { componentFolder: "renovation", name: "renovation (angular)", platform: "angular", quarantineMode: false }
         ]
     runs-on: shr-ubuntu-m5a-docker-cpu2ram8
     timeout-minutes: 90
@@ -121,7 +120,6 @@ jobs:
         pushd testing/renovation
         npm install --no-audit --no-fund --legacy-peer-deps
         popd
-        npm run build:angular
         npm run build:react
         npx gulp build-renovation-testing
 

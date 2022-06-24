@@ -15,6 +15,7 @@ import SwitchableButtonEditDecorator from 'ui/list/ui.list.edit.decorator.switch
 import themes from 'ui/themes';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
+import { reorderingPointerMock, toSelector } from './utils.js';
 
 import 'ui/action_sheet';
 import 'ui/list';
@@ -24,8 +25,6 @@ const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
 const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
-
-const toSelector = (cssClass) => `.${cssClass}`;
 
 const SWITCHABLE_DELETE_READY_CLASS = 'dx-list-switchable-delete-ready';
 const SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS = 'dx-list-switchable-menu-shield-positioning';
@@ -2516,43 +2515,8 @@ QUnit.module('reordering decorator', {
     }
 });
 
-const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
 const REORDERING_ITEM_CLASS = 'dx-sortable-source-hidden';
 const REORDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering';
-
-const reorderingPointerMock = ($item, clock, usePixel) => {
-    const itemOffset = $item.offset().top;
-    const itemHeight = $item.outerHeight();
-    const scale = usePixel ? 1 : itemHeight;
-    const $handle = $item.find(toSelector(REORDER_HANDLE_CLASS));
-    const pointer = pointerMock($handle);
-
-    return {
-        dragStart: function(offset) {
-            offset = offset || 0;
-
-            pointer.start().down(0, itemOffset + scale * offset);
-
-            if(clock) {
-                clock.tick(30);
-            }
-
-            return this;
-        },
-        drag: function(offset) {
-            offset = offset || 0;
-
-            pointer.move(0, scale * offset);
-
-            return this;
-        },
-        dragEnd: function() {
-            pointer.up();
-
-            return this;
-        }
-    };
-};
 
 const topTranslation = ($item) => {
     return translator.locate($item).top;

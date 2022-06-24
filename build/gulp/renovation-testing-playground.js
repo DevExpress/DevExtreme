@@ -24,17 +24,7 @@ const platforms = {
     'react': {
         pattern: '*.jsx', entryName: (fn) => path.basename(fn, '.jsx'),
         getDeclarationFile: (basenameFilename) => basenameFilename + '.jsx'
-    },
-    'angular': {
-        pattern: '!(declaration)**/app.component.ts', entryName: (fn) => path.basename(path.dirname(fn)),
-        getDeclarationFile: (basenameFilename) => path.join(basenameFilename, 'app.component.ts')
-    },
-    // TODO uncomment after Vue generators
-    // 'vue': {
-    //     pattern: '*.vue', entryName: (fn) => path.basename(fn, '.vue'),
-    //     getEntyPoint: (fn) => path.join(path.dirname(fn), path.basename(fn, '.vue') + '-app.js'),
-    //     getDeclarationFile: (basenameFilename) => basenameFilename + '.vue',
-    // },
+    }
 };
 
 const declarationFiles = glob.sync(path.join(renovationRoot, 'declaration', '*.tsx'));
@@ -101,22 +91,6 @@ const tasks = ({ isWatch }) => Object.entries(platforms)
                 ...generateHtmlFiles,
                 ...nativeFiles.map(vueAppFileGenerationTask(platformRootSrc)),
                 ...platformDeclarationFiles.map(vueAppFileGenerationTask(platformDeclarationSrc))
-            ];
-        }
-        if(platform == 'angular') {
-            const angularTemplateGenerationTask = fileName => {
-                const destFileName = path.basename(fileName, '.ts') + '.html';
-                const destDir = path.join(platformDeclarationSrc, entryName(fileName))
-                return namedTask(`${platform}-angular-app`,
-                    () => gulp
-                        .src('build/gulp/templates/playground-angular-declaration-template.jst')
-                        .pipe(templatePipe(destFileName, {}))
-                        .pipe(gulp.dest(destDir))
-                );
-            };
-            generateHtmlFiles = [
-                ...generateHtmlFiles,
-                ...platformDeclarationFiles.map(angularTemplateGenerationTask)
             ];
         }
         const declarationAppFileGeneratorTask = fileName => {
@@ -201,4 +175,3 @@ const foldersToCleanup = [
 gulp.task('clean-renovation-testing',
     gulp.parallel([...foldersToCleanup, (cb) => { cb(); }])
 );
-

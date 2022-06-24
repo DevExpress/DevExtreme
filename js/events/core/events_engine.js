@@ -113,7 +113,7 @@ const eventsEngine = injector({
         if(!noBubble) {
             const parents = [];
             const getParents = function(element) {
-                const parent = element.parentNode;
+                const parent = element.parentNode ?? element.host;
                 if(parent) {
                     parents.push(parent);
                     getParents(parent);

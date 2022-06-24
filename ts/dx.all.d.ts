@@ -13898,8 +13898,6 @@ declare module DevExpress.ui {
     | 'allowSearch'
     | 'buttons'
     | 'columns'
-    | 'editCellComponent'
-    | 'editCellRender'
     | 'editCellTemplate'
     | 'editorOptions'
     | 'fixed'
@@ -13960,14 +13958,6 @@ declare module DevExpress.ui {
      * [descr:dxGanttColumn.editorOptions]
      */
     editorOptions: any;
-    /**
-     * [descr:dxGanttColumn.editCellComponent]
-     */
-    editCellComponent: any;
-    /**
-     * [descr:dxGanttColumn.editCellRender]
-     */
-    editCellRender: any;
     /**
      * [descr:dxGanttColumn.editCellTemplate]
      */
@@ -24560,7 +24550,6 @@ declare module DevExpress.ui {
     ) => void;
     /**
      * [descr:GridBaseOptions.onToolbarPreparing]
-     * @deprecated [depNote:GridBaseOptions.onToolbarPreparing]
      */
     onToolbarPreparing?: (
       e: DevExpress.events.EventInfo<TComponent> &

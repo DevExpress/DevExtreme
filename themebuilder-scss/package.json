@@ -32,10 +32,10 @@
   "devDependencies": {
     "@types/clean-css": "^4.2.5",
     "@types/dependency-tree": "^7.2.0",
-    "@types/filing-cabinet": "^2.5.0",
-    "@types/fs-extra": "9.0.7",
+    "@types/filing-cabinet": "^2.5.1",
+    "@types/fs-extra": "9.0.13",
     "@types/jest": "^26.0.20",
-    "@types/less": "^3.0.2",
+    "@types/less": "^3.0.3",
     "express": "^4.17.1",
     "filing-cabinet": "^2.6.0",
     "fs-extra": "^9.0.0",
