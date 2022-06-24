@@ -1,6 +1,6 @@
 # DevExtreme
 
-[![Build Status](https://devextreme-ci.devexpress.com/api/badges/DevExpress/DevExtreme/status.svg?branch=17_1)](https://devextreme-ci.devexpress.com/DevExpress/DevExtreme)
+[![Build Status](https://github.com/DevExpress/DevExtreme/actions/workflows/drone-ci-migrated-jobs.yml/badge.svg?branch=17_1)](https://github.com/DevExpress/DevExtreme/actions/workflows/drone-ci-migrated-jobs.yml)
 
 Voted the best cross-platform component suite containing everything you need to create responsive web apps for touch devices and traditional desktops: data grid, interactive charts, data editors, navigation and multi-purpose widgets that are designed to look great and provide powerful functionality in any browser.
 
