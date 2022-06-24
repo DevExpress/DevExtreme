@@ -19,7 +19,7 @@ jobs:
           { name: "wip-renovation", inProgressRenovation: true },
           { name: "default" },
         ]
-    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 15
 
     steps:
@@ -81,7 +81,7 @@ jobs:
           { componentFolder: "renovation", name: "renovation (react) (3/4)", platform: "react", quarantineMode: false, indices: "3/4" },
           { componentFolder: "renovation", name: "renovation (react) (4/4)", platform: "react", quarantineMode: false, indices: "4/4" },
         ]
-    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 90
 
     steps:
@@ -148,7 +148,7 @@ jobs:
         if-no-files-found: ignore
 
   notify:
-    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     name: Send notifications
     needs: [build, testcafe]
     if: always() && contains(needs.*.result, 'failure')
