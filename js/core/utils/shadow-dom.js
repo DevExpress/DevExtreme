@@ -13,36 +13,30 @@ function createConstructedStyleSheet(rootNode) {
     }
 }
 
-function isDxSheet(sheet) {
-    // NOTE: need try/catch block for cross-domain css
-    // NOTE: need some rule here to detect if it's a DX sheet
-    try {
-        for(let i = 0; i < sheet.cssRules.length; i++) {
-            if(sheet.cssRules[i].constructor.name === 'CSSStyleRule') {
-                return sheet.cssRules[i].selectorText?.startsWith('.dx-');
-            }
-        }
-    } catch(err) {
-    }
-
-    return false;
-}
-
 function processRules(styleSheets) {
-    const sheets = [...styleSheets].filter(isDxSheet);
-
-    sheets.forEach(sheet => {
-        for(let j = 0; j < sheet.cssRules.length; j++) {
-            insertRule(sheet.cssRules[j]);
+    [...styleSheets].forEach(sheet => {
+        // NOTE: need try/catch block for not-supported cross-domain css
+        try {
+            for(let j = 0; j < sheet.cssRules.length; j++) {
+                insertRule(sheet.cssRules[j]);
+            }
+        } catch(err) {
         }
     });
 }
 
 function insertRule(rule) {
-    constructedStyleSheet.insertRule(
-        rule.cssText,
-        constructedStyleSheet.cssRules.length
-    );
+    const isDxRule = rule.selectorText?.includes('.dx-') ||
+                     rule.cssRules?.[0]?.selectorText?.includes('.dx-') ||
+                     rule.name?.startsWith('dx-') ||
+                     rule.style?.fontFamily === 'DXIcons';
+
+    if(isDxRule) {
+        constructedStyleSheet.insertRule(
+            rule.cssText,
+            constructedStyleSheet.cssRules.length
+        );
+    }
 }
 
 export function addShadowDOMStyles($element) {
