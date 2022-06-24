@@ -31,7 +31,7 @@
         "validation-email": "Die Email-Adresse ist ungültig",
         "validation-email-formatted": "{0} ist ungültig",
         "validation-mask": "Der Wert ist ungültig",
-        "dxLookup-searchPlaceholder": "Mindestanzahl an Zeichen: {0}",
+        "dxLookup-searchPlaceholder": "Mindestlänge {0} Zeichen",
         "dxList-pullingDownText": "Zum Aktualisieren nach unten ziehen",
         "dxList-pulledDownText": "Zum Aktualisieren loslassen",
         "dxList-refreshingText": "Aktualisiere...",
