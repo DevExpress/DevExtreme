@@ -5,10 +5,10 @@ import { compileGetter, compileSetter } from '../../../core/utils/data';
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 import { isDefined } from '../../../core/utils/type';
-import { wrapToArray, inArray } from '../../../core/utils/array';
+import { wrapToArray } from '../../../core/utils/array';
 import { deepExtendArraySafe } from '../../../core/utils/object';
-import { prepareItemForFilter } from '../../../renovation/ui/scheduler/utils/resources';
 import { equalByValue } from '../../../core/utils/common';
+import { hasResourceValue } from '../../../renovation/ui/scheduler/resources/hasResourceValue';
 
 export const getValueExpr = resource => resource.valueExpr || 'id';
 export const getDisplayExpr = resource => resource.displayExpr || 'text';
@@ -326,10 +326,8 @@ export const getResourceTreeLeaves = (getDataAccessors, tree, rawAppointment, re
 
 const hasGroupItem = (getDataAccessors, rawAppointment, groupName, itemValue) => {
     const resourceValue = getDataAccessors(groupName, 'getter')(rawAppointment);
-    const groups = wrapToArray(resourceValue)
-        .map((item) => prepareItemForFilter(item));
 
-    return inArray(prepareItemForFilter(itemValue), groups) > -1;
+    return hasResourceValue(wrapToArray(resourceValue), itemValue);
 };
 
 export const createReducedResourcesTree = (loadedResources, getDataAccessors, appointments) => {
