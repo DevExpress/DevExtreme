@@ -28,37 +28,31 @@ class RecurrenceProcessor {
     }
 
     generateDates(options) {
-        const result = [];
         const recurrenceRule = this.evalRecurrenceRule(options.rule);
         const rule = recurrenceRule.rule;
 
         if(!recurrenceRule.isValid || !rule.freq) {
-            return result;
+            return [];
         }
 
-        const startDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.start);
-        const endDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.end);
-        const minDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.min);
-        const maxDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.max);
+        const clientOffsets = {
+            startDate: timeZoneUtils.getClientTimezoneOffset(options.start),
+            minViewDate: timeZoneUtils.getClientTimezoneOffset(options.min),
+            maxViewDate: timeZoneUtils.getClientTimezoneOffset(options.max),
+        };
 
-        const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
+        const appointmentOffset = options.appointmentTimezoneOffset;
+        const duration = options.end ? options.end.getTime() - options.start.getTime() : 0;
+        const startDate = timeZoneUtils.setOffsetsToDate(options.start, [-clientOffsets.startDate, appointmentOffset]);
+        const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentOffset;
+        const minViewDate = new Date(minViewTime - duration);
+        const maxViewDate = timeZoneUtils.setOffsetsToDate(options.max, [-clientOffsets.maxViewDate, appointmentOffset]);
 
-        this._initializeRRule(options, startDateUtc, rule.until);
+        this._initializeRRule(options, startDate, rule.until);
 
-        const minTime = minDateUtc.getTime();
-
-        const newMinDate = new Date(minDateUtc.getTime() - duration);
-
-        this.rRuleSet.between(newMinDate, maxDateUtc, true).forEach(date => {
-            const endAppointmentTime = date.getTime() + duration;
-
-            if(endAppointmentTime >= minTime) {
-                const correctDate = timeZoneUtils.createDateFromUTCWithLocalOffset(date);
-                result.push(correctDate);
-            }
-        });
-
-        return result;
+        return this.rRuleSet.between(minViewDate, maxViewDate, true)
+            .filter((date) => (date.getTime() + duration) >= minViewTime)
+            .map((date) => timeZoneUtils.setOffsetsToDate(date, [timeZoneUtils.getClientTimezoneOffset(date), -appointmentOffset]));
     }
 
     hasRecurrence(options) {
@@ -197,7 +191,10 @@ class RecurrenceProcessor {
             ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
         }
 
-        ruleOptions.until = timeZoneUtils.createUTCDateWithLocalOffset(until);
+        if(until) {
+            ruleOptions.until = timeZoneUtils.setOffsetsToDate(until,
+                [-timeZoneUtils.getClientTimezoneOffset(until), options.appointmentTimezoneOffset]);
+        }
 
         this._createRRule(ruleOptions);
 
@@ -212,7 +209,15 @@ class RecurrenceProcessor {
                     date = options.getPostProcessedException(date);
                 }
 
-                const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
+                const utcDate = timeZoneUtils.setOffsetsToDate(date,
+                    [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset]);
+                const originClientOffset = date.getTimezoneOffset();
+                const utcDateClientOffset = utcDate.getTimezoneOffset();
+
+                if(utcDateClientOffset !== originClientOffset) {
+                    utcDate.setMilliseconds(utcDate.getMilliseconds() - (utcDateClientOffset - originClientOffset) * 60000);
+                }
+
                 this.rRuleSet.exdate(utcDate);
             });
         }
@@ -221,9 +226,7 @@ class RecurrenceProcessor {
     _createRRule(ruleOptions) {
         this._dispose();
 
-        const rRuleSet = new RRuleSet();
-
-        this.rRuleSet = rRuleSet;
+        this.rRuleSet = new RRuleSet();
         this.rRule = new RRule(ruleOptions);
 
         this.rRuleSet.rrule(this.rRule);

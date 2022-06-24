@@ -107,7 +107,6 @@ class FilterMaker {
 export class AppointmentFilterBaseStrategy {
     constructor(options) {
         this.options = options;
-        this.dataSource = this.options.dataSource;
         this.dataAccessors = this.options.dataAccessors;
 
         this._init();
@@ -270,12 +269,12 @@ export class AppointmentFilterBaseStrategy {
                 }
             }
 
-            let recurrenceRule;
-            if(useRecurrence) {
-                recurrenceRule = appointment.recurrenceRule;
-            }
-
-            const appointmentTakesAllDay = getAppointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
+            const appointmentTakesAllDay = getAppointmentTakesAllDay(
+                appointment,
+                viewStartDayHour,
+                viewEndDayHour,
+                this.allDayPanelMode,
+            );
             const appointmentTakesSeveralDays = getAppointmentTakesSeveralDays(appointment);
             const isAllDay = appointment.allDay;
             const isLongAppointment = appointmentTakesSeveralDays || appointmentTakesAllDay;
@@ -292,9 +291,7 @@ export class AppointmentFilterBaseStrategy {
                 const recurrenceException = getRecurrenceException(appointment, this.timeZoneCalculator, this.timezone);
 
                 if(!this._filterAppointmentByRRule({
-                    startDate,
-                    endDate,
-                    recurrenceRule,
+                    ...appointment,
                     recurrenceException,
                     allDay: appointmentTakesAllDay
                 }, min, max, startDayHour, endDayHour, firstDayOfWeek)) {
@@ -472,7 +469,12 @@ export class AppointmentFilterBaseStrategy {
                 end: appointmentEndDate,
                 min: min,
                 max: max,
-                firstDayOfWeek: firstDayOfWeek
+                firstDayOfWeek: firstDayOfWeek,
+                appointmentTimezoneOffset: this.timeZoneCalculator.getOriginStartDateOffsetInMs(
+                    appointmentStartDate,
+                    appointment.startDateTimeZone,
+                    false,
+                )
             });
         }
 

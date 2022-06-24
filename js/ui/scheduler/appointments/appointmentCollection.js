@@ -901,18 +901,27 @@ class SchedulerAppointments extends CollectionWidget {
             const dates = appointment.settings || appointment;
 
             const startDate = new Date(ExpressionUtils.getField(this.option('dataAccessors'), 'startDate', dates));
+            const startDateTimeZone = ExpressionUtils.getField(this.option('dataAccessors'), 'startDateTimeZone', appointment);
             const endDate = new Date(ExpressionUtils.getField(this.option('dataAccessors'), 'endDate', dates));
             const appointmentDuration = endDate.getTime() - startDate.getTime();
             const recurrenceException = ExpressionUtils.getField(this.option('dataAccessors'), 'recurrenceException', appointment);
             const startViewDate = this.invoke('getStartViewDate');
             const endViewDate = this.invoke('getEndViewDate');
+
+            const timezoneCalculator = this.option('timeZoneCalculator');
+
             const recurrentDates = getRecurrenceProcessor().generateDates({
                 rule: recurrenceRule,
                 exception: recurrenceException,
                 start: startDate,
                 end: endDate,
                 min: startViewDate,
-                max: endViewDate
+                max: endViewDate,
+                appointmentTimezoneOffset: timezoneCalculator.getOriginStartDateOffsetInMs(
+                    startDate,
+                    startDateTimeZone,
+                    false,
+                ),
             });
             const recurrentDateCount = appointment.settings ? 1 : recurrentDates.length;
 

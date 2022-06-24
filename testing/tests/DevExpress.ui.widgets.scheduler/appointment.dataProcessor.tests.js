@@ -928,7 +928,10 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecRule',
                     recurrenceExceptionExpr: 'RecException'
                 }
-            }
+            },
+            timeZoneCalculator: {
+                getOriginStartDateOffsetInMs: () => 0,
+            },
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -977,7 +980,10 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecRule',
                     recurrenceExceptionExpr: 'RecException'
                 }
-            }
+            },
+            timeZoneCalculator: {
+                getOriginStartDateOffsetInMs: () => 0,
+            },
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
@@ -1023,7 +1029,10 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecRule',
                     recurrenceExceptionExpr: 'RecException'
                 }
-            }
+            },
+            timeZoneCalculator: {
+                getOriginStartDateOffsetInMs: () => 0,
+            },
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
@@ -1265,7 +1274,10 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            },
+            timeZoneCalculator: {
+                getOriginStartDateOffsetInMs: () => 0,
+            },
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' });
@@ -1312,7 +1324,10 @@ module('Client side after filtering', () => {
                         recurrenceRuleExpr: 'RecurrenceRule',
                         recurrenceExceptionExpr: 'Exception'
                     }
-                }
+                },
+                timeZoneCalculator: {
+                    getOriginStartDateOffsetInMs: () => 0,
+                },
             });
 
             appointmentDataProvider.add({
