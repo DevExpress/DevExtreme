@@ -1,6 +1,6 @@
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import TagBox from '../../../model/tagBox';
 
 const dataSource = [{
@@ -27,8 +27,9 @@ const priorityData = [{
   color: 'rgb(225, 142, 146)',
 }];
 
-fixture`Appointment resources`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Appointment resources`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 test('Resource color should be correct if group is set in "views"', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -145,4 +146,68 @@ test('Resource with allowMultiple should be set correctly for new the appointmen
     }],
     label: 'MultipleResource',
   }],
+}));
+
+test('Resource color should be correct for the complex resource id without grouping', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const appointmentA = scheduler.getAppointment('a');
+  const appointmentB = scheduler.getAppointment('b');
+  const appointmentC = scheduler.getAppointment('c');
+
+  await t
+    .expect(appointmentA.getColor())
+    .eql('rgb(255, 0, 0)')
+    .expect(appointmentB.getColor())
+    .eql('rgb(0, 128, 0)')
+    .expect(appointmentC.getColor())
+    .eql('rgb(255, 255, 0)');
+}).before(async () => createWidget('dxScheduler', {
+  currentDate: new Date(2015, 6, 10),
+  views: ['week'],
+  currentView: 'week',
+  editing: true,
+  dataSource: [{
+    text: 'a',
+    allDay: true,
+    startDate: new Date(2015, 6, 10, 0),
+    endDate: new Date(2015, 6, 10, 0, 30),
+    ownerId: { _value: 'guid-1' },
+  }, {
+    text: 'b',
+    allDay: true,
+    startDate: new Date(2015, 6, 10, 0),
+    endDate: new Date(2015, 6, 10, 0, 30),
+    ownerId: { _value: 'guid-2' },
+  }, {
+    text: 'c',
+    startDate: new Date(2015, 6, 10, 2),
+    endDate: new Date(2015, 6, 10, 2, 30),
+    ownerId: { _value: 'guid-3' },
+  }],
+  resources: [
+    {
+      field: 'ownerId',
+      dataSource: [
+        {
+          id: { _value: 'guid-1' },
+          text: 'one',
+          color: 'rgb(255, 0, 0)',
+        },
+        {
+          id: { _value: 'guid-2' },
+          text: 'two',
+          color: 'rgb(0, 128, 0)',
+        },
+        {
+          id: { _value: 'guid-3' },
+          text: 'three',
+          color: 'rgb(255, 255, 0)',
+        },
+      ],
+    },
+  ],
+  scrolling: {
+    orientation: 'vertical',
+  },
+  height: 600,
 }));
