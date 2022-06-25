@@ -48,7 +48,7 @@
     "gulp-header": "^2.0.9",
     "gulp-shell": "^0.8.0",
     "gulp-typescript": "^5.0.1",
-    "ts-jest": "^25.0.0",
+    "ts-jest": "^25.5.1",
     "typescript": "~4.2",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^13.5.0"
