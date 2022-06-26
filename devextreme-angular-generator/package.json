@@ -38,7 +38,7 @@
     "@types/node": "~8.9.4",
     "@types/yargs": "^6.3.2",
     "del": "^2.2.0",
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.2",
     "gulp-jasmine": "^2.3.0",
     "gulp-sourcemaps": "^2.0.0-alpha",
     "gulp-typescript": "^3.0.1",
