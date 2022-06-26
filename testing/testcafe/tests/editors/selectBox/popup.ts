@@ -159,7 +159,7 @@ test('SelectBox does not change a popup height after load the last page', async 
   await list.scrollTo(100);
 
   await t
-    .expect(await takeScreenshot('SelectBox_pagesize_more_datasource_items_count.png'))
+    .expect(await takeScreenshot('SelectBox_popup_height_after_last_page_load.png'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
