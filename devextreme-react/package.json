@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "devextreme-internal-tools": "^8.0.0",
-    "prop-types": "^15.6.1"
+    "prop-types": "^15.8.1"
   },
   "devDependencies": {
     "@types/enzyme": "^3.10.12",
