@@ -35,7 +35,7 @@
     "@types/node": "~8.9.4",
     "codelyzer": "6.0.2",
     "core-js": "^2.5.4",
-    "del": "^2.2.0",
+    "del": "^2.2.2",
     "devextreme": "22.1-next",
     "devextreme-angular-generator": "^1.0.0",
     "devextreme-internal-tools": "^8.0.0",
