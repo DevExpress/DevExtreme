@@ -205,13 +205,13 @@ fixture`Scrollable_ScrollToElement`
 
         await ClientFunction(
           () => {
-            getInstance.scrollTo(initialScrollOffset);
+            getInstance().scrollTo(initialScrollOffset);
           },
           { dependencies: { getInstance, initialScrollOffset } },
         )();
 
         await ClientFunction(
-          () => { getInstance.scrollToElement($('#element').get(0)); },
+          () => { getInstance().scrollToElement($('#element').get(0)); },
           { dependencies: { getInstance } },
         )();
 

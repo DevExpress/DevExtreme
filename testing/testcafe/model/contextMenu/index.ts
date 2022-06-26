@@ -2,6 +2,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import Widget from '../internal/widget';
 import Overlay from './overlay';
 import OverlayWrapper from './overlay/wrapper';
+import { getComponentInstance } from '../../helpers/multi-platform-test';
 
 const CLASS = {
   contextMenu: 'dx-context-menu',
@@ -41,5 +42,9 @@ export default class ContextMenu extends Widget {
       () => { getInstance().show(); },
       { dependencies: { getInstance } },
     )();
+  }
+
+  getInstance(): () => Promise<unknown> {
+    return getComponentInstance(this.platform, this.element, this.name);
   }
 }
