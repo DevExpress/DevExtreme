@@ -133,7 +133,7 @@ themes.forEach((theme) => {
   });
 });
 
-fixture`popup_height_after_load`
+fixture`popup_height_after_last_page_load`
   .page(url(__dirname, '../../container.html'))
   .beforeEach(async (t) => {
     await t.resizeWindow(300, 400);
