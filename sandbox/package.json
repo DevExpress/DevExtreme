@@ -11,8 +11,8 @@
   "dependencies": {
     "devextreme": "22.1-next",
     "devextreme-react": "~22.1.0",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2"
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0"
   },
   "devDependencies": {
     "@types/react": "^16.14.28",
