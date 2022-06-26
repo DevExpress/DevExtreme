@@ -1,5 +1,4 @@
 import { ClientFunction, Selector } from 'testcafe';
-import { getComponentInstance } from '../../../helpers/multi-platform-test';
 import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/renovation/ui/scroll_view/common/consts';
 
 import Widget from '../../internal/widget';
@@ -19,11 +18,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
 
   hScrollbar?: Scrollbar;
 
-  getInstance: () => Promise<unknown>;
-
   name: string;
-
-  platform: string;
 
   constructor(id: string | Selector, options?: any, name = 'dxScrollable') {
     super(id);
@@ -42,9 +37,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     }
 
     this.name = name;
-    this.platform = platform || 'jquery';
-
-    this.getInstance = getComponentInstance(this.platform as PlatformType, this.getElement());
+    this.platform = platform ?? 'jquery';
   }
 
   // eslint-disable-next-line class-methods-use-this

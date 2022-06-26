@@ -1,8 +1,10 @@
+import { ClientFunction } from 'testcafe';
 import Widget from '../internal/widget';
 import ListItem from './item';
 import ListGroup from './group';
 
 const CLASS = {
+  list: 'dx-list',
   group: 'dx-list-group',
   item: 'dx-list-item',
   search: 'dx-list-search',
@@ -13,13 +15,13 @@ const CLASS = {
 };
 
 export default class List extends Widget {
+  name = 'dxList';
+
   items: Selector;
 
   searchInput: Selector;
 
   selectAll: ListItem;
-
-  name = 'dxList';
 
   constructor(id: string | Selector) {
     super(id);
@@ -35,5 +37,14 @@ export default class List extends Widget {
 
   getGroup(index = 0): ListGroup {
     return new ListGroup(this.element.find(`.${CLASS.group}`).nth(index));
+  }
+
+  scrollTo(value: number): Promise<void> {
+    const getInstance = this.getInstance() as any;
+
+    return ClientFunction(
+      () => { getInstance().scrollTo(value); },
+      { dependencies: { getInstance, value } },
+    )();
   }
 }

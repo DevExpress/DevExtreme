@@ -1,7 +1,6 @@
 import { ClientFunction, Selector } from 'testcafe';
 import Widget from '../internal/widget';
 import Overlay from './overlay';
-import { getComponentInstance } from '../../helpers/multi-platform-test';
 import OverlayWrapper from './overlay/wrapper';
 
 const CLASS = {
@@ -10,15 +9,13 @@ const CLASS = {
 };
 
 export default class ContextMenu extends Widget {
+  name = 'dxContextMenu';
+
   items: Selector;
 
   overlay: Overlay;
 
   overlayWrapper: OverlayWrapper;
-
-  getInstance: () => Promise<unknown>;
-
-  name = 'dxContextMenu';
 
   constructor(id: string | Selector) {
     super(id);
@@ -26,8 +23,6 @@ export default class ContextMenu extends Widget {
     this.items = Selector(`.${CLASS.contextMenu}`).find(`.${CLASS.item}`);
     this.overlay = new Overlay();
     this.overlayWrapper = new OverlayWrapper();
-
-    this.getInstance = getComponentInstance('jquery', this.getElement(id));
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -39,14 +34,12 @@ export default class ContextMenu extends Widget {
     return this.items.count;
   }
 
-  apiShow(): Promise<void> {
-    const { getInstance } = this;
+  apiShow(value: number): Promise<void> {
+    const getInstance = this.getInstance() as any;
 
     return ClientFunction(
-      () => {
-        (getInstance() as any).show();
-      },
-      { dependencies: { getInstance } },
+      () => { getInstance().show(value); },
+      { dependencies: { getInstance, value } },
     )();
   }
 }

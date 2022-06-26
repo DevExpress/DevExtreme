@@ -1,4 +1,6 @@
 import { Selector, ClientFunction } from 'testcafe';
+import type { PlatformType } from '../../helpers/multi-platform-test/platform-type';
+import { getComponentInstance } from '../../helpers/multi-platform-test';
 
 const CLASS = {
   focused: 'dx-state-focused',
@@ -11,6 +13,8 @@ export default abstract class Widget {
   public isFocused: Promise<boolean>;
 
   public isHovered: Promise<boolean>;
+
+  platform: PlatformType = 'jquery';
 
   abstract name: string;
 
@@ -35,5 +39,9 @@ export default abstract class Widget {
         option, value, element, name,
       },
     })();
+  }
+
+  getInstance(): () => Promise<unknown> {
+    return getComponentInstance(this.platform, Selector(this.name.replace('dx', '.dx-').toLowerCase()), this.name);
   }
 }
