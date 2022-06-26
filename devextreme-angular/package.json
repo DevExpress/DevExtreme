@@ -31,7 +31,7 @@
     "@angular/platform-browser": "~12.2.16",
     "@angular/platform-browser-dynamic": "~12.2.16",
     "@angular/platform-server": "~12.2.16",
-    "@types/jasmine": "2.5.38",
+    "@types/jasmine": "2.8.19",
     "@types/node": "~8.9.4",
     "codelyzer": "6.0.2",
     "core-js": "^2.5.4",

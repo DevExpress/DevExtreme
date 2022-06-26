@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@types/dot": "^1.0.29",
-    "@types/jasmine": "2.5.38",
+    "@types/jasmine": "2.8.19",
     "@types/mkdirp": "^0.5.2",
     "@types/node": "~8.9.4",
     "@types/yargs": "^6.3.2",
