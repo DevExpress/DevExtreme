@@ -76,68 +76,59 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
   }
 
   apiScrollOffset(): Promise<{ top: number; left: number }> {
-    const { getInstance } = this;
+    const getInstance = this.getInstance() as any;
 
     return ClientFunction(
-      () => (getInstance() as any).scrollOffset(),
+      () => getInstance().scrollOffset(),
       { dependencies: { getInstance } },
     )();
   }
 
   apiScrollTo(value: { top?: number; left?: number }): Promise<void> {
-    const { getInstance } = this;
+    const getInstance = this.getInstance() as any;
 
     return ClientFunction(
-      () => {
-        (getInstance() as any).scrollTo(value);
-      },
+      () => { getInstance().scrollTo(value); },
       { dependencies: { getInstance, value } },
     )();
   }
 
   apiScrollToElement(selector: string): Promise<void> {
-    const { getInstance } = this;
+    const getInstance = this.getInstance() as any;
 
     return ClientFunction(
-      () => {
-        (getInstance() as any).scrollToElement(selector);
-      },
+      () => { getInstance().scrollToElement(selector); },
       { dependencies: { getInstance, selector } },
     )();
   }
 
   apiOption(name: string, value: string | number | boolean = 'undefined'): Promise<any> {
-    const { getInstance } = this;
+    const getInstance = this.getInstance() as any;
 
     return ClientFunction(
-      () => {
-        const scrollable = getInstance() as any;
-        return value !== 'undefined' ? scrollable.option(name, value) : scrollable.option(name);
-      },
+      () => (value !== 'undefined' ? getInstance().option(name, value) : getInstance().option(name)),
       { dependencies: { getInstance, name, value } },
     )();
   }
 
   apiUpdate(): Promise<void> {
-    const { getInstance } = this;
+    const getInstance = this.getInstance() as any;
 
     return ClientFunction(
-      () => {
-        (getInstance() as any).update();
-      },
+      () => { getInstance().update(); },
       { dependencies: { getInstance } },
     )();
   }
 
   setContainerCssWidth(value: number): Promise<unknown> {
-    const { getInstance } = this;
+    const getInstance = this.getInstance() as any;
 
     return ClientFunction(
       () => {
-        (getInstance() as any).container().css({ width: value });
+        getInstance().container().css({ width: value });
         // force recalculate size for old component
         // eslint-disable-next-line no-underscore-dangle
-        (getInstance() as any)._dimensionChanged();
+        getInstance()._dimensionChanged();
       },
       { dependencies: { getInstance, value } },
     )();
@@ -156,12 +147,12 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
   }
 
   apiTriggerHidingEvent(): Promise<unknown> {
-    const { getInstance } = this;
+    const getInstance = this.getInstance() as any;
 
     return ClientFunction(
       () => {
         // eslint-disable-next-line no-underscore-dangle
-        (getInstance() as any)._visibilityChanged(false);
+        getInstance()._visibilityChanged(false);
       },
       { dependencies: { getInstance } },
     )();
@@ -180,12 +171,12 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
   }
 
   apiTriggerShownEvent(): Promise<unknown> {
-    const { getInstance } = this;
+    const getInstance = this.getInstance() as any;
 
     return ClientFunction(
       () => {
         // eslint-disable-next-line no-underscore-dangle
-        (getInstance() as any)._visibilityChanged(true);
+        getInstance()._visibilityChanged(true);
       },
       { dependencies: { getInstance } },
     )();

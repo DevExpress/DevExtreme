@@ -91,7 +91,7 @@ fixture`Scrollable_ScrollToElement`
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const scrollable = new Scrollable('#container', { useNative, direction });
-      const { getInstance } = scrollable;
+      const getInstance = scrollable.getInstance() as any;
 
       const positions = [
         { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTLCorner' },
@@ -128,14 +128,14 @@ fixture`Scrollable_ScrollToElement`
         for (const { initialScrollOffset, position } of positions) {
           await ClientFunction(
             () => {
-              (getInstance() as any).option('rtlEnabled', rtlEnabled);
-              (getInstance() as any).scrollTo(initialScrollOffset);
+              getInstance().option('rtlEnabled', rtlEnabled);
+              getInstance().scrollTo(initialScrollOffset);
             },
             { dependencies: { getInstance, initialScrollOffset, rtlEnabled } },
           )();
 
           await ClientFunction(
-            () => { (getInstance() as any).scrollToElement($('#element').get(0)); },
+            () => { getInstance().scrollToElement($('#element').get(0)); },
             { dependencies: { getInstance } },
           )();
 
@@ -201,17 +201,17 @@ fixture`Scrollable_ScrollToElement`
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
         const scrollable = new Scrollable('#container', { useNative, direction });
-        const { getInstance } = scrollable;
+        const getInstance = scrollable.getInstance() as any;
 
         await ClientFunction(
           () => {
-            (getInstance() as any).scrollTo(initialScrollOffset);
+            getInstance.scrollTo(initialScrollOffset);
           },
           { dependencies: { getInstance, initialScrollOffset } },
         )();
 
         await ClientFunction(
-          () => { (getInstance() as any).scrollToElement($('#element').get(0)); },
+          () => { getInstance.scrollToElement($('#element').get(0)); },
           { dependencies: { getInstance } },
         )();
 
