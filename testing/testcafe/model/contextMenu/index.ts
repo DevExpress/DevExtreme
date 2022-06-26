@@ -34,12 +34,12 @@ export default class ContextMenu extends Widget {
     return this.items.count;
   }
 
-  apiShow(value: number): Promise<void> {
+  apiShow(): Promise<void> {
     const getInstance = this.getInstance() as any;
 
     return ClientFunction(
-      () => { getInstance().show(value); },
-      { dependencies: { getInstance, value } },
+      () => { getInstance().show(); },
+      { dependencies: { getInstance } },
     )();
   }
 }
