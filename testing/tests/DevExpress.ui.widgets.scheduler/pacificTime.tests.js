@@ -634,7 +634,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     rule: 'FREQ=DAILY;UNTIL=20210625T075959Z',
                     start: new Date(2021, 5, 24, 1, 30),
                     min: new Date(2021, 5, 20),
-                    max: new Date(2021, 5, 26)
+                    max: new Date(2021, 5, 26),
+                    appointmentTimezoneOffset: 0,
                 }
             );
 
