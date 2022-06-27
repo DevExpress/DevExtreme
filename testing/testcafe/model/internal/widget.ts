@@ -17,14 +17,14 @@ export default abstract class Widget {
 
   public isHovered: Promise<boolean>;
 
-  platform: PlatformType = 'jquery';
-
   constructor(id: string | Selector) {
     this.element = typeof id === 'string' ? Selector(id) : id;
     this.isFocused = this.element.hasClass(CLASS.focused);
     this.isHovered = this.element.hasClass(CLASS.hovered);
 
-    this.getInstance = getComponentInstance(this.platform, this.element, this.getName());
+    this.getInstance = getComponentInstance(
+      this.getTestingPlatform(), this.element, this.getName(),
+    );
   }
 
   static addClassPrefix(widgetName: string, className: string): string {
@@ -43,6 +43,11 @@ export default abstract class Widget {
         option, value, getInstance,
       },
     })();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getTestingPlatform(): PlatformType {
+    return 'jquery';
   }
 
   abstract getName(): WidgetName;

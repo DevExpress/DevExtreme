@@ -34,8 +34,11 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
         this.hScrollbar = new Scrollbar(DIRECTION_HORIZONTAL);
       }
     }
+  }
 
-    this.platform = platform ?? 'jquery';
+  // eslint-disable-next-line class-methods-use-this
+  getTestingPlatform() {
+    return platform;
   }
 
   // eslint-disable-next-line class-methods-use-this
