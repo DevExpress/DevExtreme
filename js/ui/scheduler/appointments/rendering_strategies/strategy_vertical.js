@@ -132,7 +132,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _isMultiViewAppointment(position, height) {
-        return height > (position.vMax - position.top);
+        return height - (position.vMax - position.top) > 1;
     }
 
     _reduceMultiDayAppointment(sourceAppointmentHeight, bound) {
