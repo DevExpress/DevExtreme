@@ -42,7 +42,7 @@
     "gulp": "^4.0.2",
     "gulp-header": "^1.8.12",
     "gulp-replace": "^0.6.1",
-    "gulp-sourcemaps": "^2.0.0-alpha",
+    "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^3.0.1",
     "jasmine": "2.5.2",
     "karma": "^6.3.16",
