@@ -43,7 +43,7 @@
     "gulp-header": "^1.8.12",
     "gulp-replace": "^0.6.1",
     "gulp-sourcemaps": "^2.6.5",
-    "gulp-typescript": "^3.0.1",
+    "gulp-typescript": "^3.2.4",
     "jasmine": "2.5.2",
     "karma": "^6.3.16",
     "karma-chrome-launcher": "^2.0.0",
