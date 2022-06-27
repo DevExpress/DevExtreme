@@ -35,7 +35,7 @@
     "@types/dot": "^1.0.29",
     "@types/jasmine": "2.8.19",
     "@types/mkdirp": "^0.5.2",
-    "@types/node": "~8.9.4",
+    "@types/node": "~8.10.66",
     "@types/yargs": "^6.3.2",
     "del": "^2.2.2",
     "gulp": "^4.0.2",
