@@ -1,6 +1,5 @@
 import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 import { moduleConfig, createMockPdfDoc, createDataGrid } from './jspdf.dataGrid_utils.js';
-import browser from 'core/utils/browser';
 
 QUnit.module('Column data formats', moduleConfig, () => {
 
@@ -78,7 +77,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             'rect,440,55,80,21.5',
             'addPage,',
             'text,9:09 AM,45,65.75,{baseline:middle}',
-            `text,Wednesday, October 9, 2019${browser.mozilla ? ' at' : ','} 9:09:09 AM,125,65.75,{baseline:middle}`,
+            'text,Wednesday, October 9, 2019 at 9:09:09 AM,125,65.75,{baseline:middle}',
             'text,10/9/2019, 9:09 AM,335,65.75,{baseline:middle}',
             'rect,40,55,80,21.5',
             'rect,120,55,210,21.5',
