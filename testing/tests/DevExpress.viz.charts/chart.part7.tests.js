@@ -1626,21 +1626,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
     });
 
     // T1093233
-    QUnit.test('Overlapping labels if middle labels has negative value', function(assert) {
-        this.createFakeSeriesWithLabels([{ x: 5, y: 0, width: 10, height: 10, value: 12 },
-            { x: 5, y: 8, width: 10, height: 10, value: -10 },
-            { x: 5, y: 10, width: 10, height: 10, value: 15 }]);
-
-        this.createChart({
-            resolveLabelOverlapping: 'stack',
-            series: [{ type: 'stackedbar' }]
-        });
-
-        this.checkLabelPosition(assert, this.labels[0], [5, 20]);
-        this.checkLabelPosition(assert, this.labels[1], [5, 30]);
-    });
-
-    QUnit.test('Overlapping labels if multiple labels has negative value', function(assert) {
+    QUnit.test('Overlapping labels if there are labels with negative value', function(assert) {
         this.createFakeSeriesWithLabels([{ x: 5, y: 0, width: 10, height: 10, value: 11 },
             { x: 5, y: 5, width: 10, height: 10, value: -12 },
             { x: 5, y: 7, width: 10, height: 10, value: -9 },

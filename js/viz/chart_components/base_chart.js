@@ -125,7 +125,7 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, isInve
     if(hasStackedSeries) {
         (!isRotated ^ isInverted) && rollingStocks.reverse();
 
-        sortRollingStocks = sortRollingStocksByValue(rollingStocks);
+        sortRollingStocks = !isInverted ? sortRollingStocksByValue(rollingStocks) : rollingStocks;
     } else {
         const rollingStocksTmp = rollingStocks.slice();
         sortRollingStocks = rollingStocks.sort(function(a, b) {
