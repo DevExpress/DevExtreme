@@ -2,6 +2,7 @@ import { ClientFunction } from 'testcafe';
 import Widget from '../internal/widget';
 import ListItem from './item';
 import ListGroup from './group';
+import { WidgetName } from '../../helpers/createWidget';
 
 const CLASS = {
   list: 'dx-list',
@@ -15,8 +16,6 @@ const CLASS = {
 };
 
 export default class List extends Widget {
-  name = 'dxList';
-
   items: Selector;
 
   searchInput: Selector;
@@ -31,6 +30,9 @@ export default class List extends Widget {
     this.selectAll = new ListItem(this.element.find(`.${CLASS.selectAllItem}`));
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxList'; }
+
   getItem(index = 0): ListItem {
     return new ListItem(this.items.nth(index));
   }
@@ -39,11 +41,20 @@ export default class List extends Widget {
     return new ListGroup(this.element.find(`.${CLASS.group}`).nth(index));
   }
 
-  scrollTo(value: number): Promise<void> {
-    const getInstance = this.getInstance() as any;
+  focus(): Promise<void> {
+    const { getInstance } = this;
 
     return ClientFunction(
-      () => { getInstance().scrollTo(value); },
+      () => { (getInstance() as any).focus(); },
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  scrollTo(value: number): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => { (getInstance() as any).scrollTo(value); },
       { dependencies: { getInstance, value } },
     )();
   }

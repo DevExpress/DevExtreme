@@ -3,6 +3,7 @@ import Widget from '../internal/widget';
 import Overlay from './overlay';
 import OverlayWrapper from './overlay/wrapper';
 import { getComponentInstance } from '../../helpers/multi-platform-test';
+import { WidgetName } from '../../helpers/createWidget';
 
 const CLASS = {
   contextMenu: 'dx-context-menu',
@@ -10,8 +11,6 @@ const CLASS = {
 };
 
 export default class ContextMenu extends Widget {
-  name = 'dxContextMenu';
-
   items: Selector;
 
   overlay: Overlay;
@@ -24,7 +23,12 @@ export default class ContextMenu extends Widget {
     this.items = Selector(`.${CLASS.contextMenu}`).find(`.${CLASS.item}`);
     this.overlay = new Overlay();
     this.overlayWrapper = new OverlayWrapper();
+
+    this.getInstance = getComponentInstance(this.platform, this.element, this.getName());
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxContextMenu'; }
 
   // eslint-disable-next-line class-methods-use-this
   getElement(id: string | Selector): Selector {
@@ -36,15 +40,11 @@ export default class ContextMenu extends Widget {
   }
 
   apiShow(): Promise<void> {
-    const getInstance = this.getInstance() as any;
+    const { getInstance } = this;
 
     return ClientFunction(
-      () => { getInstance().show(); },
+      () => { (getInstance() as any).show(); },
       { dependencies: { getInstance } },
     )();
-  }
-
-  getInstance(): () => Promise<unknown> {
-    return getComponentInstance(this.platform, this.element, this.name);
   }
 }

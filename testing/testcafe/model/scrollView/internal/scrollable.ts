@@ -4,6 +4,7 @@ import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/reno
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
 import type { PlatformType } from '../../../helpers/multi-platform-test/platform-type';
+import { WidgetName } from '../../../helpers/createWidget';
 
 const CLASS = {
   scrollable: 'dx-scrollable',
@@ -18,9 +19,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
 
   hScrollbar?: Scrollbar;
 
-  name: string;
-
-  constructor(id: string | Selector, options?: any, name = 'dxScrollable') {
+  constructor(id: string | Selector, options?: any) {
     super(id);
 
     const direction = options.direction ?? 'vertical';
@@ -36,9 +35,11 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
       }
     }
 
-    this.name = name;
     this.platform = platform ?? 'jquery';
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxScrollable'; }
 
   // eslint-disable-next-line class-methods-use-this
   getElement(): Selector {
@@ -76,59 +77,50 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
   }
 
   apiScrollOffset(): Promise<{ top: number; left: number }> {
-    const getInstance = this.getInstance() as any;
+    const { getInstance } = this;
 
     return ClientFunction(
-      () => getInstance().scrollOffset(),
+      () => (getInstance() as any).scrollOffset(),
       { dependencies: { getInstance } },
     )();
   }
 
   apiScrollTo(value: { top?: number; left?: number }): Promise<void> {
-    const getInstance = this.getInstance() as any;
+    const { getInstance } = this;
 
     return ClientFunction(
-      () => { getInstance().scrollTo(value); },
+      () => { (getInstance() as any).scrollTo(value); },
       { dependencies: { getInstance, value } },
     )();
   }
 
   apiScrollToElement(selector: string): Promise<void> {
-    const getInstance = this.getInstance() as any;
+    const { getInstance } = this;
 
     return ClientFunction(
-      () => { getInstance().scrollToElement(selector); },
+      () => { (getInstance() as any).scrollToElement(selector); },
       { dependencies: { getInstance, selector } },
     )();
   }
 
-  apiOption(name: string, value: string | number | boolean = 'undefined'): Promise<any> {
-    const getInstance = this.getInstance() as any;
-
-    return ClientFunction(
-      () => (value !== 'undefined' ? getInstance().option(name, value) : getInstance().option(name)),
-      { dependencies: { getInstance, name, value } },
-    )();
-  }
-
   apiUpdate(): Promise<void> {
-    const getInstance = this.getInstance() as any;
+    const { getInstance } = this;
 
     return ClientFunction(
-      () => { getInstance().update(); },
+      () => { (getInstance() as any).update(); },
       { dependencies: { getInstance } },
     )();
   }
 
   setContainerCssWidth(value: number): Promise<unknown> {
-    const getInstance = this.getInstance() as any;
+    const { getInstance } = this;
 
     return ClientFunction(
       () => {
-        getInstance().container().css({ width: value });
+        (getInstance() as any).container().css({ width: value });
         // force recalculate size for old component
         // eslint-disable-next-line no-underscore-dangle
-        getInstance()._dimensionChanged();
+        (getInstance() as any)._dimensionChanged();
       },
       { dependencies: { getInstance, value } },
     )();
@@ -147,12 +139,12 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
   }
 
   apiTriggerHidingEvent(): Promise<unknown> {
-    const getInstance = this.getInstance() as any;
+    const { getInstance } = this;
 
     return ClientFunction(
       () => {
         // eslint-disable-next-line no-underscore-dangle
-        getInstance()._visibilityChanged(false);
+        (getInstance() as any)._visibilityChanged(false);
       },
       { dependencies: { getInstance } },
     )();
@@ -171,12 +163,12 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
   }
 
   apiTriggerShownEvent(): Promise<unknown> {
-    const getInstance = this.getInstance() as any;
+    const { getInstance } = this;
 
     return ClientFunction(
       () => {
         // eslint-disable-next-line no-underscore-dangle
-        getInstance()._visibilityChanged(true);
+        (getInstance() as any)._visibilityChanged(true);
       },
       { dependencies: { getInstance } },
     )();

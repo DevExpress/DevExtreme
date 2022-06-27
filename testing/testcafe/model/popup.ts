@@ -1,3 +1,4 @@
+import { WidgetName } from '../helpers/createWidget';
 import Widget from './internal/widget';
 
 const CLASS = {
@@ -6,8 +7,6 @@ const CLASS = {
   toolbar: 'dx-popup-title',
 };
 export default class Popup extends Widget {
-  name = 'dxPopup';
-
   content: Selector;
 
   wrapper: Selector;
@@ -21,4 +20,7 @@ export default class Popup extends Widget {
     this.wrapper = this.element.find(`.${CLASS.wrapper}`);
     this.toolbar = this.element.find(`.${CLASS.toolbar}`);
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxPopup'; }
 }
