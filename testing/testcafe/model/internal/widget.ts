@@ -24,7 +24,7 @@ export default abstract class Widget {
     this.isFocused = this.element.hasClass(CLASS.focused);
     this.isHovered = this.element.hasClass(CLASS.hovered);
 
-    this.getInstance = getComponentInstance(this.platform, Selector(this.getName().replace('dx', '.dx-').toLowerCase()), this.getName());
+    this.getInstance = getComponentInstance(this.platform, this.element, this.getName());
   }
 
   static addClassPrefix(widgetName: string, className: string): string {

@@ -91,7 +91,7 @@ fixture`Scrollable_ScrollToElement`
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const scrollable = new Scrollable('#container', { useNative, direction });
-      const getInstance = scrollable.getInstance() as any;
+      const { getInstance } = scrollable;
 
       const positions = [
         { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTLCorner' },
@@ -126,16 +126,17 @@ fixture`Scrollable_ScrollToElement`
       for (const rtlEnabled of [true, false]) {
         // eslint-disable-next-line no-restricted-syntax
         for (const { initialScrollOffset, position } of positions) {
+          await scrollable.option('rtlEnabled', rtlEnabled);
+
           await ClientFunction(
             () => {
-              getInstance().option('rtlEnabled', rtlEnabled);
-              getInstance().scrollTo(initialScrollOffset);
+              (getInstance() as any).scrollTo(initialScrollOffset);
             },
             { dependencies: { getInstance, initialScrollOffset, rtlEnabled } },
           )();
 
           await ClientFunction(
-            () => { getInstance().scrollToElement($('#element').get(0)); },
+            () => { (getInstance() as any).scrollToElement($('#element').get(0)); },
             { dependencies: { getInstance } },
           )();
 
@@ -201,17 +202,17 @@ fixture`Scrollable_ScrollToElement`
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
         const scrollable = new Scrollable('#container', { useNative, direction });
-        const getInstance = scrollable.getInstance() as any;
+        const { getInstance } = scrollable;
 
         await ClientFunction(
           () => {
-            getInstance().scrollTo(initialScrollOffset);
+            (getInstance() as any).scrollTo(initialScrollOffset);
           },
           { dependencies: { getInstance, initialScrollOffset } },
         )();
 
         await ClientFunction(
-          () => { getInstance().scrollToElement($('#element').get(0)); },
+          () => { (getInstance() as any).scrollToElement($('#element').get(0)); },
           { dependencies: { getInstance } },
         )();
 

@@ -2,7 +2,6 @@ import { ClientFunction, Selector } from 'testcafe';
 import Widget from '../internal/widget';
 import Overlay from './overlay';
 import OverlayWrapper from './overlay/wrapper';
-import { getComponentInstance } from '../../helpers/multi-platform-test';
 import { WidgetName } from '../../helpers/createWidget';
 
 const CLASS = {
@@ -23,8 +22,6 @@ export default class ContextMenu extends Widget {
     this.items = Selector(`.${CLASS.contextMenu}`).find(`.${CLASS.item}`);
     this.overlay = new Overlay();
     this.overlayWrapper = new OverlayWrapper();
-
-    this.getInstance = getComponentInstance(this.platform, this.element, this.getName());
   }
 
   // eslint-disable-next-line class-methods-use-this

@@ -1,4 +1,4 @@
-import { Selector, t } from 'testcafe';
+import { ClientFunction, Selector, t } from 'testcafe';
 import List from '../list';
 import TextBox from '../textBox';
 
@@ -57,5 +57,15 @@ export default abstract class DropDownList extends TextBox {
     await t.expect(await this.isOpened()).ok();
 
     return new List(await this.getPopup());
+  }
+
+  open(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(() => {
+      (getInstance() as any).open();
+    }, {
+      dependencies: { getInstance },
+    })();
   }
 }

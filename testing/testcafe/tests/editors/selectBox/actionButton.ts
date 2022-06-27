@@ -14,17 +14,17 @@ const purePressKey = async (t, key): Promise<void> => {
 
 test('Click on action button should correctly work with SelectBox containing the field template (T811890)', async (t) => {
   const selectBox = new SelectBox('#container');
-  const getInstance = selectBox.getInstance() as any;
+  const { getInstance } = selectBox;
 
   await ClientFunction(
     () => {
-      getInstance().option('buttons', [{
+      (getInstance() as any).option('buttons', [{
         name: 'test',
         options: {
           icon: 'home',
           onClick: () => {
-            getInstance().option('value', 'item2');
-            getInstance().focus(); // NOTE: need because of editor input rerendering
+            (getInstance() as any).option('value', 'item2');
+            (getInstance() as any).focus(); // NOTE: need because of editor input rerendering
           },
         },
       }]);
@@ -52,17 +52,17 @@ test('Click on action button should correctly work with SelectBox containing the
 
 test('Click on action button after typing should correctly work with SelectBox containing the field template (T811890)', async (t) => {
   const selectBox = new SelectBox('#container');
-  const getInstance = selectBox.getInstance() as any;
+  const { getInstance } = selectBox;
 
   await ClientFunction(
     () => {
-      getInstance().option('buttons', [{
+      (getInstance() as any).option('buttons', [{
         name: 'test',
         options: {
           icon: 'home',
           onClick: () => {
-            getInstance().option('value', 'item2');
-            getInstance().focus(); // NOTE: need because of editor input rerendering
+            (getInstance() as any).option('value', 'item2');
+            (getInstance() as any).focus(); // NOTE: need because of editor input rerendering
           },
         },
       }]);
@@ -93,16 +93,16 @@ test('Click on action button after typing should correctly work with SelectBox c
 
 test('editor can be focused out after click on action button', async (t) => {
   const selectBox = new SelectBox('#container');
-  const getInstance = selectBox.getInstance() as any;
+  const { getInstance } = selectBox;
 
   await ClientFunction(
     () => {
-      getInstance().option('buttons', [{
+      (getInstance() as any).option('buttons', [{
         name: 'test',
         options: {
           icon: 'home',
           onClick: () => {
-            getInstance().option('value', 'item2');
+            (getInstance() as any).option('value', 'item2');
           },
         },
       }]);
