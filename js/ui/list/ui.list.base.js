@@ -455,7 +455,7 @@ export const ListBase = CollectionWidget.inherit({
         const stopLoading = isDataLoaded || !scrollBottomMode;
         const hideLoadIndicator = stopLoading && !this._isDataSourceLoading();
 
-        if(stopLoading || this._scrollViewIsFull()) {
+        if(stopLoading || (this._scrollViewIsFull() && !this._isLoadIndicatorVisible())) {
             this._scrollView.release(hideLoadIndicator);
             this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
             this._loadIndicationSuppressed(false);
@@ -543,11 +543,18 @@ export const ListBase = CollectionWidget.inherit({
         }
     },
 
+    _isLoadIndicatorVisible: function() {
+        const scrollView = this._scrollView;
+
+        return getHeight(scrollView.content()) - getHeight(scrollView.container()) < scrollView.scrollOffset().top;
+    },
+
     _infiniteDataLoading: function() {
         const isElementVisible = this.$element().is(':visible');
 
-        if(isElementVisible && !this._scrollViewIsFull() && !this._isDataSourceLoading() && !this._isLastPage()) {
+        if(isElementVisible && (!this._scrollViewIsFull() || this._isLoadIndicatorVisible()) && !this._isDataSourceLoading() && !this._isLastPage()) {
             clearTimeout(this._loadNextPageTimer);
+
             this._loadNextPageTimer = setTimeout(() => {
                 this._loadNextPage();
             });
