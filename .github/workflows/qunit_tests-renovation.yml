@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
     name: Build
     timeout-minutes: 60
 
@@ -57,7 +57,7 @@ jobs:
 
   qunit-tests:
     needs: build
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
     name: Constel ${{ matrix.CONSTEL }}
     timeout-minutes: 60
     strategy:
@@ -143,7 +143,7 @@ jobs:
       run: echo "::set-output name=last_run_status::success" > last_run_status
 
   notify:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
     name: Send notifications
     needs: [build, qunit-tests]
     if: always() && contains(needs.*.result, 'failure')

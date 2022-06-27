@@ -11,7 +11,7 @@ on:
 
 jobs:
   Renovation:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -42,7 +42,7 @@ jobs:
       run: npm run lint-renovation
 
   TS:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -83,7 +83,7 @@ jobs:
       run: npm run lint-dts
 
   JS:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -113,7 +113,7 @@ jobs:
       run: npm run lint-js
 
   CSS:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -138,7 +138,7 @@ jobs:
       run: npm run lint-css
 
   package_lock_npm_6:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
     timeout-minutes: 10
     steps:
     - name: Get sources
@@ -159,7 +159,7 @@ jobs:
       run: npm run build:dev
 
   package_lock:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
     timeout-minutes: 10
     steps:
     - name: Get sources
@@ -178,7 +178,7 @@ jobs:
         git diff --exit-code package-lock.json
 
   notify:
-    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
     name: Send notifications
     needs: [Renovation, TS, JS, CSS, package_lock, package_lock_npm_6]
     if: always() && contains(needs.*.result, 'failure')
