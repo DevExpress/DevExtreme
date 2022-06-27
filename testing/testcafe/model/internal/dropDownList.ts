@@ -8,6 +8,7 @@ const ATTR = {
 
 const CLASS = {
   dropDownButton: 'dx-dropdowneditor-button',
+  list: 'dx-list',
 };
 
 export default abstract class DropDownList extends TextBox {
@@ -56,7 +57,7 @@ export default abstract class DropDownList extends TextBox {
   async getList(): Promise<List> {
     await t.expect(await this.isOpened()).ok();
 
-    return new List(await this.getPopup());
+    return new List((await this.getPopup()).find(`.${CLASS.list}`));
   }
 
   open(): Promise<void> {
