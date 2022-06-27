@@ -75,7 +75,7 @@ describe('compile', () => {
       () => expect(false).toBe(true),
       (error) => {
         expect(error.code).toBe('ERR_INVALID_URL');
-        expect(`${error.message}: ${error.input}`).toBe('Invalid URL: dx.error.scss');
+        expect(`${error.message}`).toBe('Invalid URL: dx.error.scss');
       },
     );
   });
