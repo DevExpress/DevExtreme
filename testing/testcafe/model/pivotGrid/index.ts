@@ -1,45 +1,32 @@
 import { ClientFunction } from 'testcafe';
+import { WidgetName } from '../../helpers/createWidget';
 import Widget from '../internal/widget';
 
 export default class PivotGrid extends Widget {
-  getGridInstance: ClientFunction;
-
-  name: string;
-
-  constructor(id: string, name = 'dxPivotGrid') {
-    super(id);
-
-    this.name = name;
-
-    const grid = this.element;
-
-    this.getGridInstance = ClientFunction(
-      () => $(grid())[`${name}`]('instance'),
-      { dependencies: { grid, name } },
-    );
-  }
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxPivotGrid'; }
 
   addWidgetPrefix(className: string): string {
-    return Widget.addClassPrefix(this.name, className);
+    return Widget.addClassPrefix(this.getName(), className);
   }
 
   scrollTo(options: { top?: number; left?: number }): Promise<void> {
-    const { getGridInstance } = this;
+    const { getInstance } = this;
 
     return ClientFunction(
       // eslint-disable-next-line no-underscore-dangle
-      () => (getGridInstance() as any)._dataArea._getScrollable().scrollTo(options),
-      { dependencies: { getGridInstance, options } },
+      () => (getInstance() as any)._dataArea._getScrollable().scrollTo(options),
+      { dependencies: { getInstance, options } },
     )();
   }
 
   scrollBy(options: { top?: number; left?: number }): Promise<void> {
-    const { getGridInstance } = this;
+    const { getInstance } = this;
 
     return ClientFunction(
       // eslint-disable-next-line no-underscore-dangle
-      () => (getGridInstance() as any)._dataArea._getScrollable().scrollBy(options),
-      { dependencies: { getGridInstance, options } },
+      () => (getInstance() as any)._dataArea._getScrollable().scrollBy(options),
+      { dependencies: { getInstance, options } },
     )();
   }
 }

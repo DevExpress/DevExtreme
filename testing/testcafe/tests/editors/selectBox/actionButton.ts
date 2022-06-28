@@ -18,15 +18,13 @@ test('Click on action button should correctly work with SelectBox containing the
 
   await ClientFunction(
     () => {
-      const instance = getInstance() as any;
-
-      instance.option('buttons', [{
+      (getInstance() as any).option('buttons', [{
         name: 'test',
         options: {
           icon: 'home',
           onClick: () => {
-            instance.option('value', 'item2');
-            instance.focus(); // NOTE: need because of editor input rerendering
+            (getInstance() as any).option('value', 'item2');
+            (getInstance() as any).focus(); // NOTE: need because of editor input rerendering
           },
         },
       }]);
@@ -58,15 +56,13 @@ test('Click on action button after typing should correctly work with SelectBox c
 
   await ClientFunction(
     () => {
-      const instance = getInstance() as any;
-
-      instance.option('buttons', [{
+      (getInstance() as any).option('buttons', [{
         name: 'test',
         options: {
           icon: 'home',
           onClick: () => {
-            instance.option('value', 'item2');
-            instance.focus(); // NOTE: need because of editor input rerendering
+            (getInstance() as any).option('value', 'item2');
+            (getInstance() as any).focus(); // NOTE: need because of editor input rerendering
           },
         },
       }]);
@@ -101,14 +97,12 @@ test('editor can be focused out after click on action button', async (t) => {
 
   await ClientFunction(
     () => {
-      const instance = getInstance() as any;
-
-      instance.option('buttons', [{
+      (getInstance() as any).option('buttons', [{
         name: 'test',
         options: {
           icon: 'home',
           onClick: () => {
-            instance.option('value', 'item2');
+            (getInstance() as any).option('value', 'item2');
           },
         },
       }]);

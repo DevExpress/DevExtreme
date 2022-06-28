@@ -6,6 +6,7 @@ import AppointmentDialog from './appointment/dialog';
 import Appointment from './appointment';
 import Toolbar from './toolbar';
 import Collectors from './collectors';
+import { WidgetName } from '../../helpers/createWidget';
 
 export const CLASS = {
   appointment: 'dx-scheduler-appointment',
@@ -37,8 +38,6 @@ const ViewTypeClassesMap = {
 };
 
 export default class Scheduler extends Widget {
-  readonly name = 'dxScheduler';
-
   readonly workSpace: Selector;
 
   readonly dateTableCells: Selector;
@@ -102,6 +101,9 @@ export default class Scheduler extends Widget {
     return new AppointmentDialog();
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxScheduler'; }
+
   getDateTableCell(rowIndex = 0, cellIndex = 0): Selector {
     return this.dateTableRows.nth(rowIndex).find(`.${CLASS.dateTableCell}`).nth(cellIndex);
   }
@@ -141,22 +143,23 @@ export default class Scheduler extends Widget {
   }
 
   scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): Promise<any> {
-    const { name, element } = this;
-    const scrollTo = (): any => $(element())[name]('instance').scrollTo(date, group, allDay);
+    const { getInstance } = this;
+    const scrollTo = (): any => (getInstance() as any).scrollTo(date, group, allDay);
 
     return ClientFunction(scrollTo, {
       dependencies: {
-        date, group, allDay, element, name,
+        date, group, allDay, getInstance,
       },
     })();
   }
 
   hideAppointmentTooltip(): Promise<any> {
-    const { name, element } = this;
-    const hideAppointmentTooltip = (): any => $(element())[name]('instance').hideAppointmentTooltip();
+    const { getInstance } = this;
+
+    const hideAppointmentTooltip = (): any => (getInstance() as any).hideAppointmentTooltip();
 
     return ClientFunction(hideAppointmentTooltip, {
-      dependencies: { element, name },
+      dependencies: { getInstance },
     })();
   }
 

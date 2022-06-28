@@ -4,16 +4,21 @@ export type WidgetName =
 'dxAccordion' |
 'dxGallery' |
 'dxButtonGroup' |
+'dxCheckBox' |
+'dxDropDownButton' |
 'dxTabPanel' |
 'dxForm' |
+'dxFilterBuilder' |
 'dxTabPanel' |
 'dxSelectBox' |
 'dxScrollable' |
 'dxScrollView' |
+'dxMultiView' |
 'dxPivotGrid' |
 'dxDataGrid' |
 'dxTreeList' |
 'dxPager' |
+'dxRadioGroup' |
 'dxScheduler' |
 'dxTabs' |
 'dxTagBox' |
@@ -31,6 +36,7 @@ export type WidgetName =
 'dxTreeView' |
 'dxDateBox' |
 'dxLookup' |
+'dxList' |
 'dxNumberBox' |
 'dxValidator';
 

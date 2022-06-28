@@ -1,4 +1,5 @@
 import { Selector, ClientFunction } from 'testcafe';
+import { WidgetName } from '../../helpers/createWidget';
 import Widget from '../internal/widget';
 
 const CLASS = {
@@ -11,8 +12,6 @@ export default class DateBox extends Widget {
   input: Selector;
 
   dropDownEditorButton: Selector;
-
-  name = 'dxDateBox';
 
   constructor(id: string | Selector) {
     super(id);
@@ -38,4 +37,7 @@ export default class DateBox extends Widget {
         },
       })();
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxDateBox'; }
 }
