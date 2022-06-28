@@ -559,7 +559,7 @@ const DropDownList = DropDownEditor.inherit({
     _canListHaveFocus: () => false,
 
     _getDataSource: function() {
-        return this._needPassDataSourceToList() ? this._dataController.getDataSource() : null;
+        return this._needPassDataSourceToList() ? this._dataSource : null;
     },
 
     _dataSourceOptions: function() {
@@ -624,7 +624,7 @@ const DropDownList = DropDownEditor.inherit({
 
     _canKeepDataSource: function() {
         const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
-        return this._dataSource?.isLoaded() &&
+        return this._dataController?.isLoaded() &&
             this.option('showDataBeforeSearch') &&
             this.option('minSearchLength') &&
             !isMinSearchLengthExceeded &&

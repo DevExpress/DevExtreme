@@ -552,7 +552,7 @@ const CollectionWidget = Widget.inherit({
     _loadNextPage: function() {
         this._expectNextPageLoading();
 
-        return this._dataController.loadNextPage();
+        return this._dataController?.loadNextPage();
     },
 
     _expectNextPageLoading: function() {

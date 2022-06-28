@@ -97,6 +97,10 @@ class DataController {
     }
 
     searchValue(value) {
+        if(!arguments.length) {
+            return this._dataSource?.searchValue();
+        }
+
         return this._dataSource?.searchValue(value);
     }
 
