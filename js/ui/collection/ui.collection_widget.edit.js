@@ -223,7 +223,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
                 if(dataController?.getDataSource()) {
                     const loadOptions = dataController.loadOptions();
                     options.customQueryParams = loadOptions.customQueryParams;
-                    options.userData = dataController.getDataSource()._userData;
+                    options.userData = dataController.userData();
                 }
 
                 if(dataController?.store()) {
@@ -283,9 +283,8 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _initMarkup: function() {
         this._rendering = true;
-        const dataController = this._dataController;
 
-        if(!dataController?.getDataSource() || !dataController.isLoading()) {
+        if(!this._dataController?.isLoading()) {
             this._syncSelectionOptions().done(() => this._normalizeSelectedItems());
         }
 

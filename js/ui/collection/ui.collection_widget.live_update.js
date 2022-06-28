@@ -32,8 +32,7 @@ export default CollectionWidget.inherit({
             }
         },
 
-        this._dataController?.getDataSource()
-            && this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
+        this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
     },
 
     reload: function() {
@@ -228,7 +227,7 @@ export default CollectionWidget.inherit({
     _modifyByChanges: function(changes, isPartialRefresh) {
         const items = this._editStrategy.itemsGetter();
         const keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
-        const dataController = this._dataController;
+        const dataController = this._dataController?.getDataSource() && this._dataController;
         const paginate = dataController?.paginate();
         const group = dataController?.group();
 

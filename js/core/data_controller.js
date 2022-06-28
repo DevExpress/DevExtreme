@@ -12,6 +12,11 @@ class DataController {
     }
 
     loadSingle(propName, propValue) {
+        if(arguments.length < 2) {
+            propValue = propName;
+            propName = this.key();
+        }
+
         return this._dataSource.loadSingle(propName, propValue);
     }
 
@@ -39,6 +44,10 @@ class DataController {
 
     loadOptions() {
         return this._dataSource?.loadOptions();
+    }
+
+    userData() {
+        return this._dataSource?._userData;
     }
 
     cancel(operationId) {
@@ -109,6 +118,10 @@ class DataController {
     }
 
     searchExpr(expr) {
+        if(!arguments.length) {
+            return this._dataSource?.searchExpr();
+        }
+
         return this._dataSource?.searchExpr(expr);
     }
 
