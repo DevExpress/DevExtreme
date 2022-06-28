@@ -422,7 +422,7 @@ const DropDownList = DropDownEditor.inherit({
     _processDataSourceChanging: function() {
         this._setListDataSource();
 
-        this._dataController.updateDataSource(this._getDataSource());
+        this._dataController.updateDataSource(this._dataSource);
 
         this._renderInputValue().fail((function() {
             if(this._isCustomValueAllowed()) {

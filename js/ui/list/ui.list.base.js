@@ -540,10 +540,13 @@ export const ListBase = CollectionWidget.inherit({
         const isElementVisible = this.$element().is(':visible');
         const dataController = this._dataController;
 
-        if(isElementVisible && !this._scrollViewIsFull() && !dataController?.isLoading() && !dataController?.isLastPage()) {
+        if(
+            isElementVisible && !this._scrollViewIsFull() && dataController?.getDataSource
+            && !dataController?.isLoading() && !dataController?.isLastPage()
+        ) {
             clearTimeout(this._loadNextPageTimer);
             this._loadNextPageTimer = setTimeout(() => {
-                this._loadNextPage().done(this._setPreviousPageIfNewIsEmpty.bind(this));
+                this._loadNextPage()?.done(this._setPreviousPageIfNewIsEmpty.bind(this));
             });
         }
     },

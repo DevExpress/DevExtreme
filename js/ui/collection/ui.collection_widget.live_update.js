@@ -22,7 +22,9 @@ export default CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
 
         this._customizeStoreLoadOptions = (e) => {
-            if(!this._dataController?.isLoaded()) {
+            const dataController = this._dataController?.getDataSource() && this._dataController;
+
+            if(dataController && !dataController?.isLoaded()) {
                 this._correctionIndex = 0;
             }
             if(this._correctionIndex && e.storeLoadOptions) {
@@ -30,7 +32,8 @@ export default CollectionWidget.inherit({
             }
         },
 
-        this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
+        this._dataController?.getDataSource()
+            && this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
     },
 
     reload: function() {
