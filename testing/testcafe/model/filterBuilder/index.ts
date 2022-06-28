@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe';
+import { WidgetName } from '../../helpers/createWidget';
 import Widget from '../internal/widget';
 import Field from './field';
 
@@ -12,8 +13,6 @@ const CLASS = {
 };
 
 export default class FilterBuilder extends Widget {
-  name = 'dxFilterBuilder';
-
   static getPopupTreeView(): Selector {
     return Selector(`.${CLASS.popupContent} .${CLASS.treeView}`);
   }
@@ -21,6 +20,9 @@ export default class FilterBuilder extends Widget {
   static getPopupTreeViewNode(index = 0): Selector {
     return Selector(`.${CLASS.treeViewLeaf}`).nth(index);
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxFilterBuilder'; }
 
   getField(index = 0, type: FieldType = 'item'): Field {
     const cssClass = CLASS[type];

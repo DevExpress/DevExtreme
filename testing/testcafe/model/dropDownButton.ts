@@ -1,3 +1,4 @@
+import { WidgetName } from '../helpers/createWidget';
 import DropDownList from './internal/dropDownList';
 
 const ATTR = {
@@ -5,7 +6,8 @@ const ATTR = {
 };
 
 export default class DropDownButton extends DropDownList {
-  name = 'dxDropDownButton';
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxDropDownButton'; }
 
   getPopupOwnerElement(): Selector {
     return this.element;

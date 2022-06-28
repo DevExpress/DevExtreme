@@ -1,42 +1,45 @@
-import { Selector } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import List from '../../model/list';
+import { ClientFunction } from 'testcafe';
+import url from '../../../helpers/getPageUrl';
+import List from '../../../model/list';
+import createWidget from '../../../helpers/createWidget';
 
 fixture`List`
-  .page(url(__dirname, './pages/t718398.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Should focus first item after changing selection mode (T811770)', async (t) => {
-  const list = new List('#list');
-  const input = Selector('#input');
-  const switchSelectionMode = Selector('#button');
+  const list = new List('#container');
   const { selectAll } = list;
   const firstItemRadioButton = list.getItem().radioButton;
 
+  await list.focus();
+
   await t
-    .click(input)
-    .pressKey('tab')
-    .expect(selectAll.checkBox.isFocused).ok()
+    .expect(selectAll.checkBox.isFocused).ok();
 
-    .click(switchSelectionMode)
+  await list.option('selectionMode', 'single');
 
-    .click(input)
-    .pressKey('tab')
+  await list.focus();
+
+  await t
     .expect(firstItemRadioButton.isFocused)
     .ok();
-});
+}).before(async () => createWidget('dxList', {
+  items: ['item1', 'item2', 'item3'],
+  showSelectionControls: true,
+  selectionMode: 'all',
+}));
 
 test('List selection should work with keyboard arrows (T718398)', async (t) => {
-  const list = new List('#list');
-  const input = Selector('#input');
+  const list = new List('#container');
   const firstItemCheckBox = list.getItem().checkBox;
   const secondItemCheckBox = list.getItem(1).checkBox;
   const thirdItemCheckBox = list.getItem(2).checkBox;
   const { selectAll } = list;
   const selectAllCheckBox = selectAll.checkBox;
 
+  await list.focus();
+
   await t
-    .click(input)
-    .pressKey('tab')
     .expect(selectAllCheckBox.isFocused).ok()
 
     .pressKey('down')
@@ -92,18 +95,21 @@ test('List selection should work with keyboard arrows (T718398)', async (t) => {
     .notOk()
     .expect(secondItemCheckBox.isFocused)
     .notOk();
-});
+}).before(async () => createWidget('dxList', {
+  items: ['item1', 'item2', 'item3'],
+  showSelectionControls: true,
+  selectionMode: 'all',
+}));
 
 test('Should save focused checkbox', async (t) => {
-  const list = new List('#list');
-  const input = Selector('#input');
+  const list = new List('#container');
   const secondItemCheckBox = list.getItem(1).checkBox;
   const { selectAll } = list;
   const selectAllCheckBox = selectAll.checkBox;
 
+  await list.focus();
+
   await t
-    .click(input)
-    .pressKey('tab')
     .expect(selectAllCheckBox.isFocused).ok()
 
     .pressKey('down down')
@@ -141,13 +147,14 @@ test('Should save focused checkbox', async (t) => {
     .ok()
     .expect(secondItemCheckBox.isFocused)
     .notOk();
-});
-
-fixture`List T727360`
-  .page(url(__dirname, './pages/t727360.html'));
+}).before(async () => createWidget('dxList', {
+  items: ['item1', 'item2', 'item3'],
+  showSelectionControls: true,
+  selectionMode: 'all',
+}));
 
 test('Grouped list can not reorder items (T727360)', async (t) => {
-  const list = new List('#list');
+  const list = new List('#container');
   const firstGroup = list.getGroup();
   const secondGroup = list.getGroup(1);
   const thirdGroup = list.getGroup(2);
@@ -158,34 +165,70 @@ test('Grouped list can not reorder items (T727360)', async (t) => {
 
     .dragToElement(firstGroup.getItem().reorderHandle, firstGroup.getItem(1).element)
     .expect(firstGroup.getItem().text)
-    .eql('value12')
+    .eql('12')
     .expect(firstGroup.getItem(1).text)
-    .eql('value11')
+    .eql('11')
 
     .click(firstGroup.header)
     .click(secondGroup.header)
 
     .dragToElement(secondGroup.getItem().reorderHandle, secondGroup.getItem(1).element)
     .expect(secondGroup.getItem().text)
-    .eql('value22')
+    .eql('22')
     .expect(secondGroup.getItem(1).text)
-    .eql('value21')
+    .eql('21')
 
     .click(secondGroup.header)
     .click(thirdGroup.header)
 
     .dragToElement(thirdGroup.getItem().reorderHandle, thirdGroup.getItem(1).element)
     .expect(thirdGroup.getItem().text)
-    .eql('value32')
+    .eql('32')
     .expect(thirdGroup.getItem(1).text)
-    .eql('value31');
+    .eql('31');
+}).before(async () => {
+  const data = [
+    { group: 'group1', value: '11' },
+    { group: 'group1', value: '12' },
+    { group: 'group1', value: '13' },
+    { group: 'group2', value: '21' },
+    { group: 'group2', value: '22' },
+    { group: 'group2', value: '23' },
+    { group: 'group2', value: '24' },
+    { group: 'group2', value: '25' },
+    { group: 'group2', value: '26' },
+    { group: 'group2', value: '27' },
+    { group: 'group2', value: '28' },
+    { group: 'group2', value: '29' },
+    { group: 'group2', value: '20' },
+    { group: 'group3', value: '31' },
+    { group: 'group3', value: '32' },
+    { group: 'group3', value: '33' },
+    { group: 'group3', value: '34' },
+    { group: 'group3', value: '35' },
+    { group: 'group3', value: '36' },
+    { group: 'group3', value: '37' },
+    { group: 'group3', value: '38' },
+    { group: 'group3', value: '39' },
+    { group: 'group3', value: '30' },
+  ];
+
+  return createWidget('dxList', {
+    dataSource: {
+      store: data,
+      group: 'group',
+    },
+    itemDragging: {
+      allowReordering: true,
+    },
+    collapsibleGroups: true,
+    grouped: true,
+    itemTemplate: ({ value }, _, el) => el.append($('<b>').text(value)),
+  });
 });
 
-fixture`List T845082`
-  .page(url(__dirname, './pages/t845082.html'));
-
 test('Grouped List with nested List should able to reorder items (T845082)', async (t) => {
-  const list = new List('#list');
+  const list = new List('#container');
   const group = list.getGroup();
 
   await t
@@ -193,26 +236,55 @@ test('Grouped List with nested List should able to reorder items (T845082)', asy
     .dragToElement(group.getItem().reorderHandle, group.getItem(1).element)
     .expect(group.getItem(1).text)
     .eql('value11');
+}).before(async () => {
+  const data = [
+    { group: 'group1', text: 'value11' },
+    {
+      group: 'group1',
+      text: 'value12',
+      template: ClientFunction((_data, _index, element) => ($('<div>').appendTo(element) as any).dxList({
+        items: ['value121', 'value122', 'value123'],
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        itemTemplate: (data, _index, element) => {
+          $(element)
+            .text(data)
+            .parent()
+            .addClass('nested-item');
+        },
+      })),
+    },
+    { group: 'group1', text: 'value13' },
+  ];
+
+  return createWidget('dxList', {
+    dataSource: {
+      store: data,
+      group: 'group',
+    },
+    itemDragging: {
+      allowReordering: true,
+    },
+    collapsibleGroups: true,
+    grouped: true,
+  });
 });
 
-fixture`List T815151`
-  .page(url(__dirname, './pages/t815151.html'));
-
 test('Disabled item should not have focus (T815151)', async (t) => {
-  const list = new List('#list');
+  const list = new List('#container');
   const { searchInput } = list;
   const firstItem = list.getItem();
   const secondItem = list.getItem(1);
-  const disableFirstItem = Selector('#disable');
 
   await t
     .click(searchInput)
     .pressKey('tab')
     .expect(firstItem.isFocused).ok()
     .expect(secondItem.isFocused)
-    .notOk()
+    .notOk();
 
-    .click(disableFirstItem)
+  await list.option('items[0].disabled', true);
+
+  await t
     .expect(firstItem.isDisabled)
     .ok()
 
@@ -222,4 +294,7 @@ test('Disabled item should not have focus (T815151)', async (t) => {
     .notOk()
     .expect(secondItem.isFocused)
     .ok();
-});
+}).before(async () => createWidget('dxList', {
+  dataSource: [{ text: 'item1' }, { text: 'item2' }],
+  searchEnabled: true,
+}));

@@ -25,12 +25,12 @@ const getGridConfig = (config): Record<string, unknown> => {
   return config ? { ...defaultConfig, ...config } : defaultConfig;
 };
 
-const getElementCount = async (gridInstance: DataGrid, elementSelector: string):
+const getElementCount = async (dataGrid: DataGrid, elementSelector: string):
 Promise<number> => {
-  const { getGridInstance } = gridInstance;
+  const { getInstance } = dataGrid;
   return ClientFunction(
-    () => (getGridInstance() as any).element().find(elementSelector).length,
-    { dependencies: { getGridInstance, elementSelector } },
+    () => (getInstance() as any).element().find(elementSelector).length,
+    { dependencies: { getInstance, elementSelector } },
   )();
 };
 
