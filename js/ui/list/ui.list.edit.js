@@ -27,7 +27,7 @@ const ListEdit = ListBase.inherit({
             const focusedItemIndex = editStrategy.getNormalizedIndex(focusedElement);
             const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
 
-            if(isLastIndexFocused && this._isDataSourceLoading()) {
+            if(isLastIndexFocused && this._dataController?.isLoading()) {
                 return;
             }
 

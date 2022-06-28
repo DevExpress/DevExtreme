@@ -765,7 +765,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _getFilter: function(creator) {
-        const dataSourceFilter = this._dataSource.filter();
+        const dataSourceFilter = this._dataController.filter();
         const filterExpr = creator.getCombinedFilter(this.option('valueExpr'), dataSourceFilter);
         const filterQueryLength = encodeURI(JSON.stringify(filterExpr)).length;
         const maxFilterQueryLength = this.option('maxFilterQueryLength');
@@ -782,25 +782,24 @@ const TagBox = SelectBox.inherit({
         const creator = new FilterCreator(values);
 
         const listSelectedItems = this._list?.option('selectedItems');
-        const isListItemsLoaded = !!listSelectedItems && this._list.getDataSource()?.isLoaded();
+        const isListItemsLoaded = !!listSelectedItems && this._list._dataController?.isLoaded();
         const selectedItems = listSelectedItems || this.option('selectedItems');
         const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
         const filteredItems = selectedItems.filter(clientFilterFunction);
         const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
         const d = new Deferred();
-        const dataSource = this._dataSource;
+        const dataController = this._dataController.getDataSource() && this._dataController;
 
-        if(!dataSource) {
+        if(!dataController) {
             return d.resolve([]).promise();
         } else if((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
-            const { customQueryParams, expand, select } = dataSource.loadOptions();
+            const { customQueryParams, expand, select } = dataController.loadOptions();
             const filter = this._getFilter(creator);
 
-            dataSource
-                .store()
-                .load({ filter, customQueryParams, expand, select })
+            dataController
+                .loadFromStore({ filter, customQueryParams, expand, select })
                 .done((data, extra) => {
                     this._isDataSourceChanged = false;
                     if(this._disposed) {
@@ -809,7 +808,7 @@ const TagBox = SelectBox.inherit({
                     }
 
                     const { data: items } = normalizeLoadResult(data, extra);
-                    const mappedItems = dataSource._applyMapFunction(items);
+                    const mappedItems = dataController.applyMapFunction(items);
                     d.resolve(mappedItems.filter(clientFilterFunction));
                 })
                 .fail(d.reject);
@@ -868,7 +867,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _isGroupedData: function() {
-        return this.option('grouped') && !this._dataSource?.group();
+        return this.option('grouped') && !this._dataController.group();
     },
 
     _getItemsByValues: function(values) {
@@ -885,15 +884,15 @@ const TagBox = SelectBox.inherit({
     _getFilteredGroupedItems: function(values) {
         const selectedItems = new Deferred();
 
-        if(!this._dataSource) {
+        if(!this._dataController.getDataSource()) {
             return selectedItems.promise();
         }
 
         if(this._filteredGroupedItemsLoadPromise) {
-            this._dataSource.cancel(this._filteredGroupedItemsLoadPromise.operationId);
+            this._dataController.cancel(this._filteredGroupedItemsLoadPromise.operationId);
         }
-        if(!this._dataSource.items().length) {
-            this._filteredGroupedItemsLoadPromise = this._dataSource.load()
+        if(!this._dataController.items().length) {
+            this._filteredGroupedItemsLoadPromise = this._dataController.load()
                 .done(() => {
                     selectedItems.resolve(this._getItemsByValues(values));
                 })
@@ -971,7 +970,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _shouldGetItemsFromPlain: function(values) {
-        return values && this._dataSource.isLoaded() && values.length <= this._getPlainItems().length;
+        return values && this._dataController.isLoaded() && values.length <= this._getPlainItems().length;
     },
 
     _getItemsFromPlain: function(values) {
@@ -1357,20 +1356,21 @@ const TagBox = SelectBox.inherit({
     },
 
     _refreshSelected: function() {
-        this._list?.getDataSource() && this._list.option('selectedItems', this._selectedItems);
+        this._list?._dataController?.getDataSource()
+            && this._list.option('selectedItems', this._selectedItems);
     },
 
     _resetListDataSourceFilter: function() {
-        const dataSource = this._getDataSource();
+        const dataController = this._dataController.getDataSource() && this._dataController;
 
-        if(!dataSource) {
+        if(!dataController) {
             return;
         }
 
         delete this._userFilter;
 
-        dataSource.filter(null);
-        dataSource.reload();
+        dataController.filter(null);
+        dataController.reload();
     },
 
     _setListDataSourceFilter: function() {
@@ -1378,9 +1378,9 @@ const TagBox = SelectBox.inherit({
             return;
         }
 
-        const dataSource = this._getDataSource();
+        const dataController = this._dataController.getDataSource() && this._dataController;
 
-        if(!dataSource) {
+        if(!dataController) {
             return;
         }
 
@@ -1390,26 +1390,24 @@ const TagBox = SelectBox.inherit({
             const filter = this._dataSourceFilterExpr();
 
             if(this._userFilter === undefined) {
-                this._userFilter = dataSource.filter() || null;
+                this._userFilter = dataController.filter() || null;
             }
 
             this._userFilter && filter.push(this._userFilter);
 
-            filter.length ? dataSource.filter(filter) : dataSource.filter(null);
+            filter.length ? dataController.filter(filter) : dataController.filter(null);
 
         } else {
-            dataSource.filter(this._dataSourceFilterFunction.bind(this));
+            dataController.filter(this._dataSourceFilterFunction.bind(this));
         }
 
-        dataSource.load();
+        dataController.load();
     },
 
     _dataSourceFilterExpr: function() {
         const filter = [];
 
-        each(this._getValue(), (index, value) => {
-            filter.push(['!', [this._valueGetterExpr(), value]]);
-        });
+        this._getValue().forEach((value) => filter.push(['!', [this._valueGetterExpr(), value]]));
 
         return filter;
     },

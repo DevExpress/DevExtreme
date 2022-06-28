@@ -167,27 +167,22 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         return this._editStrategy.getIndexByItemData(itemData);
     },
 
-    _isKeySpecified: function() {
-        return !!(this._dataSource && this._dataSource.key());
-    },
-
     _getCombinedFilter: function() {
-        return this._dataSource && this._dataSource.filter();
+        return this._dataController?.filter();
     },
 
     key: function() {
         if(this.option('keyExpr')) return this.option('keyExpr');
-        return this._dataSource && this._dataSource.key();
+        return this._dataController?.key();
     },
 
     keyOf: function(item) {
         let key = item;
-        const store = this._dataSource && this._dataSource.store();
 
         if(this.option('keyExpr')) {
             key = this._keyGetter(item);
-        } else if(store) {
-            key = store.keyOf(item);
+        } else if(this._dataController?.store()) {
+            key = this._dataController.keyOf(item);
         }
 
         return key;
@@ -205,7 +200,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             allowNullValue: this._nullValueSelectionSupported(),
             mode: this.option('selectionMode'),
             maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
-            equalByReference: !this._isKeySpecified(),
+            equalByReference: !that._dataController?.isKeySpecified(),
             onSelectionChanged: function(args) {
                 if(args.addedItemKeys.length || args.removedItemKeys.length) {
                     that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
@@ -215,37 +210,38 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             filter: that._getCombinedFilter.bind(that),
             totalCount: function() {
                 const items = that.option('items');
-                const dataSource = that._dataSource;
-                return dataSource && dataSource.totalCount() >= 0
-                    ? dataSource.totalCount()
+                const dataController = that._dataController;
+                return dataController?.totalCount() >= 0
+                    ? dataController.totalCount()
                     : that._getItemsCount(items);
             },
             key: that.key.bind(that),
             keyOf: that.keyOf.bind(that),
             load: function(options) {
-                if(that._dataSource) {
-                    const loadOptions = that._dataSource.loadOptions();
-                    options.customQueryParams = loadOptions.customQueryParams;
-                    options.userData = that._dataSource._userData;
-                }
-                const store = that._dataSource && that._dataSource.store();
+                const dataController = that._dataController;
 
-                if(store) {
-                    return store.load(options).done(function(loadResult) {
+                if(dataController?.getDataSource()) {
+                    const loadOptions = dataController.loadOptions();
+                    options.customQueryParams = loadOptions.customQueryParams;
+                    options.userData = dataController.getDataSource()._userData;
+                }
+
+                if(dataController?.store()) {
+                    return dataController.loadFromStore(options).done(function(loadResult) {
                         if(that._disposed) {
                             return;
                         }
 
                         const items = normalizeLoadResult(loadResult).data;
 
-                        that._dataSource._applyMapFunction(items);
+                        dataController.applyMapFunction(items);
                     });
                 } else {
                     return new Deferred().resolve(this.plainItems());
                 }
             },
             dataFields: function() {
-                return that._dataSource && that._dataSource.select();
+                return that._dataController?.select();
             },
             plainItems: itemsGetter.bind(that._editStrategy)
         });
@@ -287,7 +283,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _initMarkup: function() {
         this._rendering = true;
-        if(!this._dataSource || !this._dataSource.isLoading()) {
+        const dataController = this._dataController;
+
+        if(!dataController?.getDataSource() || !dataController.isLoading()) {
             this._syncSelectionOptions().done(() => this._normalizeSelectedItems());
         }
 
@@ -649,13 +647,13 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _deleteItemFromDS: function($item) {
-        if(!this._dataSource) {
+        if(!this._dataController?.getDataSource()) {
             return new Deferred().resolve().promise();
         }
 
         const deferred = new Deferred();
         const disabledState = this.option('disabled');
-        const dataStore = this._dataSource.store();
+        const dataStore = this._dataController.store();
 
         this.option('disabled', true);
 
@@ -698,7 +696,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _refreshLastPage: function() {
         this._expectLastItemLoading();
-        return this._dataSource.load();
+        return this._dataController.load();
     },
 
     _updateSelectionAfterDelete: function(index) {
@@ -796,7 +794,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _afterItemElementDeleted: function($item, deletedActionArgs) {
-        const changingOption = this._dataSource ? 'dataSource' : 'items';
+        const changingOption = this._dataController?.getDataSource()
+            ? 'dataSource'
+            : 'items';
         this._simulateOptionChange(changingOption);
         this._itemEventHandler($item, 'onItemDeleted', deletedActionArgs, {
             beforeExecute: function() {
@@ -865,7 +865,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         const movingIndex = strategy.getNormalizedIndex(itemElement);
         const destinationIndex = strategy.getNormalizedIndex(toItemElement);
 
-        const changingOption = this._dataSource ? 'dataSource' : 'items';
+        const changingOption = this._dataController?.getDataSource()
+            ? 'dataSource'
+            : 'items';
 
         const canMoveItems = indexExists(movingIndex) && indexExists(destinationIndex) && movingIndex !== destinationIndex;
         if(canMoveItems) {

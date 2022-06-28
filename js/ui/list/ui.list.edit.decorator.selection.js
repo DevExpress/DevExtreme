@@ -174,9 +174,9 @@ registerDecorator(
 
         _checkSelectAllCapability: function() {
             const list = this._list;
-            const dataSource = list.getDataSource();
+            const dataController = list._dataController;
 
-            if(list.option('selectAllMode') === 'allPages' && list.option('grouped') && (!dataSource || !dataSource.group())) {
+            if(list.option('selectAllMode') === 'allPages' && list.option('grouped') && (!dataController || !dataController.group())) {
                 errors.log('W1010');
                 return false;
             }

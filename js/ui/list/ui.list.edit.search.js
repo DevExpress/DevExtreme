@@ -9,11 +9,12 @@ const ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
     _getCombinedFilter: function() {
         let filter;
         let storeLoadOptions;
-        const dataSource = this._dataSource;
+        const dataController = this._dataController?.getDataSource()
+            && this._dataController;
 
-        if(dataSource) {
-            storeLoadOptions = { filter: dataSource.filter() };
-            dataSource._addSearchFilter(storeLoadOptions);
+        if(dataController) {
+            storeLoadOptions = { filter: dataController.filter() };
+            dataController.addSearchFilter(storeLoadOptions);
             filter = storeLoadOptions.filter;
         }
 

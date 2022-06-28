@@ -156,12 +156,19 @@ const DropDownList = DropDownEditor.inherit({
         this.callBase();
 
         this._initDataExpressions();
+        this._initDataController();
         this._initActions();
         this._setListDataSource();
         this._validateSearchMode();
         this._clearSelectedItem();
         this._initItems();
     },
+
+    // _initDataController: function() {
+    //     if(this._dataSource) {
+    //         this._dataController = new DataController(this._dataSource);
+    //     }
+    // },
 
     _setListFocusedElementOptionChange: function() {
         this._list._updateParentActiveDescendant = this._updateActiveDescendant.bind(this);
@@ -415,6 +422,8 @@ const DropDownList = DropDownEditor.inherit({
     _processDataSourceChanging: function() {
         this._setListDataSource();
 
+        this._dataController.updateDataSource(this._getDataSource());
+
         this._renderInputValue().fail((function() {
             if(this._isCustomValueAllowed()) {
                 return;
@@ -534,6 +543,7 @@ const DropDownList = DropDownEditor.inherit({
             groupTemplate: this.option('groupTemplate'),
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
+            _dataController: this._dataController,
             _revertPageOnEmptyLoad: true,
             hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
             focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false
@@ -549,7 +559,7 @@ const DropDownList = DropDownEditor.inherit({
     _canListHaveFocus: () => false,
 
     _getDataSource: function() {
-        return this._needPassDataSourceToList() ? this._dataSource : null;
+        return this._needPassDataSourceToList() ? this._dataController.getDataSource() : null;
     },
 
     _dataSourceOptions: function() {
@@ -718,18 +728,18 @@ const DropDownList = DropDownEditor.inherit({
     _filterDataSource: function(searchValue) {
         this._clearSearchTimer();
 
-        const dataSource = this._dataSource;
-        if(dataSource) {
-            dataSource.searchExpr(this.option('searchExpr') || this._displayGetterExpr());
-            dataSource.searchOperation(this.option('searchMode'));
-            dataSource.searchValue(searchValue);
-            dataSource.load().done(this._dataSourceFiltered.bind(this, searchValue));
+        const dataController = this._dataController.getDataSource() && this._dataController;
+        if(dataController) {
+            dataController.searchExpr(this.option('searchExpr') || this._displayGetterExpr());
+            dataController.searchOperation(this.option('searchMode'));
+            dataController.searchValue(searchValue);
+            dataController.load().done(this._dataSourceFiltered.bind(this, searchValue));
         }
     },
 
     _clearFilter: function() {
-        const dataSource = this._dataSource;
-        dataSource && dataSource.searchValue() && dataSource.searchValue(null);
+        const dataController = this._dataController;
+        dataController.getDataSource() && dataController.searchValue() && dataController.searchValue(null);
     },
 
     _dataSourceFiltered: function() {
@@ -761,7 +771,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems) {
-        if(this._dataSource.pageIndex() === 0) {
+        if(this._dataController?.pageIndex() === 0) {
             this.option().items = newItems;
         } else {
             this.option().items = this.option().items.concat(newItems);
@@ -769,7 +779,8 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _hasItemsToShow: function() {
-        const resultItems = this._dataSource && this._dataSource.items() || [];
+        const dataController = this._dataController;
+        const resultItems = dataController.getDataSource() && dataController.items() || [];
         const resultAmount = resultItems.length;
         const isMinSearchLengthExceeded = this._needPassDataSourceToList();
 
@@ -792,11 +803,11 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _needPopupRepaint: function() {
-        if(!this._dataSource) {
+        if(!this._dataController?.getDataSource()) {
             return false;
         }
 
-        const currentPageIndex = this._dataSource.pageIndex();
+        const currentPageIndex = this._dataController.pageIndex();
         const needRepaint = isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
 
         this._pageIndex = currentPageIndex;
