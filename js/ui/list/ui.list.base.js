@@ -446,11 +446,11 @@ export const ListBase = CollectionWidget.inherit({
         const isDataLoaded = !tryLoadMore || this._dataController?.isLastPage();
         const scrollBottomMode = this._scrollBottomMode();
         const stopLoading = isDataLoaded || !scrollBottomMode;
-        const hideLoadIndicator = stopLoading && !this._dataController?.isLoading();
+        const hideLoadIndicator = stopLoading && this._dataController && !this._dataController?.isLoading();
 
         if(stopLoading || this._scrollViewIsFull()) {
             this._scrollView.release(hideLoadIndicator);
-            this._toggleNextButton(this._shouldRenderNextButton() && !this._dataController.isLastPage());
+            this._toggleNextButton(this._shouldRenderNextButton() && this._dataController && !this._dataController.isLastPage());
             this._loadIndicationSuppressed(false);
         } else {
             this._infiniteDataLoading();
@@ -725,7 +725,7 @@ export const ListBase = CollectionWidget.inherit({
         this._pageLoadingAction(e);
 
         const dataController = this._dataController;
-        if(dataController && !dataController.isLoading()) {
+        if(dataController?.getDataSource() && !dataController.isLoading()) {
             this._scrollView.toggleLoading(true);
             this._$nextButton.detach();
             this._loadIndicationSuppressed(true);
@@ -833,7 +833,7 @@ export const ListBase = CollectionWidget.inherit({
 
         this.$element().toggleClass(LIST_HAS_NEXT_CLASS, value);
 
-        if(value && dataController && dataController.isLoaded()) {
+        if(value && dataController?.isLoaded()) {
             $nextButton.appendTo(this._itemContainer());
         }
 
