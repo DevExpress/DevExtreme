@@ -11,6 +11,7 @@ import fx from 'animation/fx';
 import holdEvent from 'events/hold';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
+import { appendShadowRoot } from '../../../helpers/shadowDOM.js';
 import registerComponent from 'core/component_registrator';
 import swipeEvents from 'events/swipe';
 import themes from 'ui/themes';
@@ -4037,15 +4038,9 @@ if(QUnit.urlParams['nojquery']) {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
 
-            this.root = document.querySelector('#list');
-            this.container = document.createElement('div');
-            this.list = document.createElement('div');
+            appendShadowRoot.call(this, '#list');
 
-            this.root.attachShadow({ mode: 'open' });
-            this.container.appendChild(this.list);
-            this.root.shadowRoot.appendChild(this.container);
-
-            this.$list = $(this.list).dxList({
+            this.$list = $(this.control).dxList({
                 items: ['One', 'Two', 'Three'],
                 itemDragging: { allowReordering: true },
                 focusStateEnabled: true,
