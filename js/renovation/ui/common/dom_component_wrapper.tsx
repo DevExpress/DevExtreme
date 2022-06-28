@@ -41,7 +41,7 @@ export const viewFunction = ({
   restAttributes: {
     children,
     ...rest
-  },
+  } = { },
 }: DomComponentWrapper): JSX.Element => (
   <div
     ref={widgetRef}
