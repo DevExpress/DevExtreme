@@ -13,7 +13,7 @@ fixture`ContextMenu_common`
 
 ['generic.light', 'generic.dark', 'generic.contrast', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
   test(`ContextMenu_items,theme=${theme}`, async (t) => {
-    const contextMenu = new ContextMenu('#contextMenu');
+    const contextMenu = new ContextMenu('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await contextMenu.apiShow();
@@ -38,7 +38,6 @@ fixture`ContextMenu_common`
 
     return createWidget('dxContextMenu', {
       cssClass: 'custom-class',
-      elementAttr: { id: 'contextMenu' },
       items: menuItems,
       target: 'body',
     });
