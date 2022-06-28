@@ -1,27 +1,37 @@
-import { Selector } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../helpers/getPageUrl';
-import Lookup from '../../model/lookup';
-import { restoreBrowserSize } from '../../helpers/restoreBrowserSize';
-import createWidget from '../../helpers/createWidget';
-import { changeTheme } from '../../helpers/changeTheme';
+import url from '../../../helpers/getPageUrl';
+import Lookup from '../../../model/lookup';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import createWidget from '../../../helpers/createWidget';
+import { changeTheme } from '../../../helpers/changeTheme';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
 
 fixture`Lookup`
-  .page(url(__dirname, './pages/T1018037.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Popup should not be closed if lookup is placed at the page bottom in material theme (T1018037)', async (t) => {
-  const lookup = new Lookup('#lookup');
+  const lookup = new Lookup('#container');
+
+  const { getInstance } = lookup;
+  await ClientFunction(() => {
+    const $element = (getInstance() as any).$element();
+    $element.css({ top: window.innerHeight - $element.height() });
+  }, {
+    dependencies: { getInstance },
+  })();
+
+  await lookup.open();
 
   await t
     .expect(await lookup.isOpened())
     .ok();
-});
-
-fixture`Lookup`
-  .page(url(__dirname, './pages/lookupMaterial.html'));
+}).before(async () => createWidget('dxLookup', {
+  items: [1, 2, 3],
+  usePopover: false,
+}));
 
 test('Popup should be flipped if lookup is placed at the page bottom', async (t) => {
   const popupWrapper = Selector('.dx-overlay-wrapper');
@@ -33,25 +43,43 @@ test('Popup should be flipped if lookup is placed at the page bottom', async (t)
   await t
     .expect(popupContentTop)
     .lt(popupWrapperTop);
+}).before(async () => {
+  await changeTheme('material.blue.light');
+
+  await ClientFunction(() => {
+    const $element = $('#container');
+    $element.css({ top: $(window).height() - $element.height() });
+  }, {
+    dependencies: { },
+  })();
+
+  return createWidget('dxLookup', {
+    items: [1, 2, 3],
+    usePopover: false,
+    opened: true,
+    dropDownOptions: {
+      hideOnParentScroll: false,
+    },
+  });
+}).after(async () => {
+  await changeTheme('generic.light');
 });
 
-fixture`Lookup`
-  .page(url(__dirname, './pages/lookup.html'));
-
 test('Popover should have correct vertical position (T1048128)', async (t) => {
-  const lookupElement = Selector('#lookup');
+  const lookup = new Lookup('#container');
+  await lookup.open();
+
   const popoverArrow = Selector('.dx-popover-arrow');
 
-  const lookupElementBottom = await lookupElement.getBoundingClientRectProperty('bottom');
+  const lookupElementBottom = await lookup.element.getBoundingClientRectProperty('bottom');
   const popoverArrowTop = await popoverArrow.getBoundingClientRectProperty('top');
 
   await t
     .expect(lookupElementBottom)
     .eql(popoverArrowTop);
-});
-
-fixture`Lookup`
-  .page(url(__dirname, '../container.html'));
+}).before(async () => createWidget('dxLookup', {
+  items: Array.from(Array(100).keys()),
+}));
 
 themes.forEach((theme) => {
   test(`Check popup height with no found data option, theme=${theme}`, async (t) => {
