@@ -450,17 +450,14 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _updateLoadingState: function(tryLoadMore) {
-        const isDataLoaded = !tryLoadMore || this._isLastPage();
-        const scrollBottomMode = this._scrollBottomMode();
-        const stopLoading = isDataLoaded || !scrollBottomMode;
-        const hideLoadIndicator = stopLoading && !this._isDataSourceLoading();
+        const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && !this._isDataSourceLoading() && !this._isLastPage();
 
-        if(stopLoading || (this._scrollViewIsFull() && !this._isLoadIndicatorVisible())) {
-            this._scrollView.release(hideLoadIndicator);
+        if(this._shouldContinueLoading(shouldLoadNextPage)) {
+            this._infiniteDataLoading();
+        } else {
+            this._scrollView.release(!shouldLoadNextPage);
             this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
             this._loadIndicationSuppressed(false);
-        } else {
-            this._infiniteDataLoading();
         }
     },
 
@@ -543,16 +540,16 @@ export const ListBase = CollectionWidget.inherit({
         }
     },
 
-    _isLoadIndicatorVisible: function() {
-        const scrollView = this._scrollView;
+    _shouldContinueLoading: function(shouldLoadNextPage) {
+        const isReachBottom = getHeight(this._scrollView.content()) - getHeight(this._scrollView.container()) < this._scrollView.scrollOffset().top;
 
-        return getHeight(scrollView.content()) - getHeight(scrollView.container()) < scrollView.scrollOffset().top;
+        return shouldLoadNextPage && (!this._scrollViewIsFull() || isReachBottom);
     },
 
     _infiniteDataLoading: function() {
         const isElementVisible = this.$element().is(':visible');
 
-        if(isElementVisible && (!this._scrollViewIsFull() || this._isLoadIndicatorVisible()) && !this._isDataSourceLoading() && !this._isLastPage()) {
+        if(isElementVisible) {
             clearTimeout(this._loadNextPageTimer);
 
             this._loadNextPageTimer = setTimeout(() => {

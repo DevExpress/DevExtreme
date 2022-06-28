@@ -20,8 +20,10 @@ test('Should initiate load next pages if items on the first pages are invisible'
   const list = new List('#container');
 
   await t
-    .expect(list.items.length)
-    .eql(2);
+    .expect(list.getItems().count)
+    .eql(12)
+    .expect(list.getVisibleItems().count)
+    .eql(4);
 
   await t
     .expect(await takeScreenshot('List_first_items_invisible.png', list.element))
@@ -55,7 +57,9 @@ test('Should initiate load next page if all items in the current load are invisi
   await list.scrollTo(100);
 
   await t
-    .expect(list.items.length)
+    .expect(list.getItems().count)
+    .eql(10)
+    .expect(list.getVisibleItems().count)
     .eql(6);
 
   await t
@@ -90,7 +94,9 @@ test('Should initiate load next page if some items in the current load are invis
   await list.scrollTo(100);
 
   await t
-    .expect(list.items.length)
+    .expect(list.getItems().count)
+    .eql(12)
+    .expect(list.getVisibleItems().count)
     .eql(6);
 
   await t
@@ -125,7 +131,9 @@ test('Should initiate load next page if all items on next pages are invisible', 
   await list.scrollTo(100);
 
   await t
-    .expect(list.items.length)
+    .expect(list.getItems().count)
+    .eql(12)
+    .expect(list.getVisibleItems().count)
     .eql(4);
 
   await t
