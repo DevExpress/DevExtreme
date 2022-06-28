@@ -41,6 +41,6 @@ export const tabbable = function(index, element) {
     // note: use this method instead of is(":focus")
 export const focused = function($element) {
     const element = $($element).get(0);
-    return domAdapter.getActiveElement() === element;
+    return domAdapter.getActiveElement(element) === element;
 };
 
