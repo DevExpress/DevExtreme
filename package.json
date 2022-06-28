@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "21.2.7",
+  "version": "21.2.8",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -29,9 +29,9 @@
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "@babel/runtime": "^7.12.1",
-    "@devextreme/runtime": "~2.3.14",
-    "devexpress-diagram": "2.1.49",
-    "devexpress-gantt": "4.0.22",
+    "@devextreme/runtime": "~2.3.15",
+    "devexpress-diagram": "2.1.59",
+    "devexpress-gantt": "4.0.27",
     "devextreme-quill": "~1.5.16",
     "devextreme-showdown": "^1.0.1",
     "inferno": "^7.4.9",

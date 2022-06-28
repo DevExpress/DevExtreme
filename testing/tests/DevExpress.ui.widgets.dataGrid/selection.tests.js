@@ -3898,6 +3898,52 @@ QUnit.module('Selection with views', {
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: 'Alex' }], 'one item is selected');
         assert.strictEqual($selectionCell.find('.dx-checkbox').dxCheckBox('instance').option('value'), true, 'checkbox is checked');
     });
+
+    // T1093760
+    QUnit.test('Check aria-selected attribute when select and deselect row', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        const firstRowKey = { name: 'Alex', age: 15 };
+
+        this.setup();
+        this.rowsView.render($testElement);
+
+        // assert
+        let $rowElement = $(this.rowsView.getRowElement(0));
+        let cellElements = $rowElement.children().toArray();
+        assert.strictEqual($rowElement.attr('aria-selected'), 'false', 'first row - aria-selected = false');
+        assert.strictEqual(cellElements.length, 3, 'cell count');
+
+        cellElements.forEach((cellElement) => {
+            assert.notOk(cellElement.hasAttribute('aria-selected'), 'cell has no aria-selected attribute');
+        });
+
+        // act
+        this.selectionController.selectRows([firstRowKey]);
+
+        // assert
+        $rowElement = $(this.rowsView.getRowElement(0));
+        cellElements = $rowElement.children().toArray();
+        assert.strictEqual($rowElement.attr('aria-selected'), 'true', 'first row - aria-selected = true');
+        assert.strictEqual(cellElements.length, 3, 'cell count');
+
+        cellElements.forEach((cellElement) => {
+            assert.notOk(cellElement.hasAttribute('aria-selected'), 'cell has no aria-selected attribute');
+        });
+
+        // act
+        this.selectionController.deselectRows([firstRowKey]);
+
+        // assert
+        $rowElement = $(this.rowsView.getRowElement(0));
+        cellElements = $rowElement.children().toArray();
+        assert.strictEqual($rowElement.attr('aria-selected'), 'false', 'first row - aria-selected = false');
+        assert.strictEqual(cellElements.length, 3, 'cell count');
+
+        cellElements.forEach((cellElement) => {
+            assert.notOk(cellElement.hasAttribute('aria-selected'), 'cell has no aria-selected attribute');
+        });
+    });
 });
 
 QUnit.module('Deferred selection', {

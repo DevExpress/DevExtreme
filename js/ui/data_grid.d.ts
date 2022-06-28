@@ -943,7 +943,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
     onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo<TRowData, TKey>) => void);
     /**
      * @docid
-     * @deprecated
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
@@ -3790,6 +3789,7 @@ export type GroupPanel = {
   /**
    * @docid dxDataGridOptions.groupPanel.visible
    * @type boolean|Enums.Mode
+   * @fires dxDataGridOptions.onOptionChanged
    * @default false
    */
   visible?: boolean | 'auto';

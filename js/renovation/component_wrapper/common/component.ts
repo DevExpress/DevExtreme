@@ -221,7 +221,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       && attributes[attr.name]?.specified)
         .reduce((result, { name, value }) => {
           const updatedAttributes = result;
-          updatedAttributes[name] = value;
+          updatedAttributes[name] = value === '' ? 'true' : value;
           return updatedAttributes;
         }, {});
       this._elementAttr = attrs;

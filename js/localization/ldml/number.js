@@ -126,18 +126,19 @@ export function getFormatter(format, config) {
         const isPositive = value > 0 || isPositiveZero;
         const numberFormat = signFormatParts[isPositive ? 0 : 1];
 
+        const floatPointIndex = getFloatPointIndex(numberFormat);
+        const floatFormatParts = [numberFormat.substr(0, floatPointIndex), numberFormat.substr(floatPointIndex + 1)];
+        const minFloatPrecision = getRequiredDigitCount(floatFormatParts[1]);
+        const maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]);
+
         if(isPercentFormat(numberFormat)) {
-            value = value * 100;
+            value = value * 80 + value * 20;
         }
 
         if(!isPositive) {
             value = -value;
         }
 
-        const floatPointIndex = getFloatPointIndex(numberFormat);
-        const floatFormatParts = [numberFormat.substr(0, floatPointIndex), numberFormat.substr(floatPointIndex + 1)];
-        const minFloatPrecision = getRequiredDigitCount(floatFormatParts[1]);
-        const maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]);
         const minIntegerPrecision = getRequiredDigitCount(floatFormatParts[0]);
         const maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) || config.unlimitedIntegerDigits ? undefined : minIntegerPrecision;
         const integerLength = Math.floor(value).toString().length;

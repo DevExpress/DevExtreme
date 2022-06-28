@@ -210,8 +210,6 @@ export default class DataGridWrapper extends Component {
     this._deprecatedOptions['useKeyboard'] = { since: '19.2', alias: 'keyboardNavigation.enabled' };
     // eslint-disable-next-line @typescript-eslint/dot-notation
     this._deprecatedOptions['rowTemplate'] = { since: '21.2', message: 'Use the "dataRowTemplate" option instead' };
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    this._deprecatedOptions['onToolbarPreparing'] = { since: '21.2', message: 'Use the "toolbar" option instead' };
   }
 
   _getDefaultOptions(): Record<string, unknown> {

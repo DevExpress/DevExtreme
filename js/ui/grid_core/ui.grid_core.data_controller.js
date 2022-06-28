@@ -151,14 +151,16 @@ export const dataControllerModule = {
                             }
                         }
 
-                        const isParasiteChange = Array.isArray(args.value) && !isValueChanged && this._dataSource?.isLoading();
-                        if(!isParasiteChange) {
+                        if(this.needToRefreshOnDataSourceChange(args)) {
                             this.refresh(this.option('repaintChangesOnly'));
                         }
                         return true;
                     }
 
                     return false;
+                },
+                needToRefreshOnDataSourceChange: function(args) {
+                    return true;
                 },
                 optionChanged: function(args) {
                     const that = this;
@@ -743,6 +745,7 @@ export const dataControllerModule = {
                     const changeTypes = [];
                     const items = [];
                     const newIndexByKey = {};
+                    const isLiveUpdate = change?.isLiveUpdate ?? true;
 
                     function getRowKey(row) {
                         if(row) {
@@ -789,7 +792,7 @@ export const dataControllerModule = {
                                 const index = change.index;
                                 const newItem = change.data;
                                 const oldItem = change.oldItem;
-                                const changedColumnIndices = this._partialUpdateRow(oldItem, newItem, index, true);
+                                const changedColumnIndices = this._partialUpdateRow(oldItem, newItem, index, isLiveUpdate);
 
                                 rowIndices.push(index);
                                 changeTypes.push('update');
@@ -923,7 +926,7 @@ export const dataControllerModule = {
                         }
                     }
 
-                    if(that._updateLockCount) {
+                    if(that._updateLockCount && !change.cancel) {
                         that._changes.push(change);
                         return;
                     }

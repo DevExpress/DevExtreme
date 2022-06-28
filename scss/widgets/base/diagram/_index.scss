@@ -217,6 +217,7 @@ $transparent-border: 1px solid transparent;
 
 .dx-diagram-toolbar {
   .dx-diagram-toolbar-separator {
+    display: table;
     height: 100%;
     border-left: $transparent-border;
   }

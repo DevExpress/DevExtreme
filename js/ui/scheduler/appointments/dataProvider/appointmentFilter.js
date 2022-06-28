@@ -3,18 +3,21 @@ import dateUtils from '../../../../core/utils/date';
 import { equalByValue } from '../../../../core/utils/common';
 import dateSerialization from '../../../../core/utils/date_serialization';
 import { getRecurrenceProcessor } from '../../recurrence';
-import { inArray, wrapToArray } from '../../../../core/utils/array';
+import { wrapToArray } from '../../../../core/utils/array';
 import { extend } from '../../../../core/utils/extend';
 import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
+import { hasResourceValue } from '../../../../renovation/ui/scheduler/resources/hasResourceValue';
 
 import {
     isDateAndTimeView as calculateIsDateAndTimeView,
     isSupportMultiDayAppointments
 } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getResourcesDataByGroups } from '../../resources/utils';
+import {
+    getResourcesDataByGroups,
+} from '../../resources/utils';
 import {
     compareDateWithStartDayHour,
     compareDateWithEndDayHour,
@@ -414,11 +417,11 @@ export class AppointmentFilterBaseStrategy {
             const appointmentResourceValues = wrapToArray(resource);
             const resourceData = map(
                 resources[resourceIndex].items,
-                (item) => { return item.id; }
+                ({ id }) => id,
             );
 
-            for(let j = 0; j < appointmentResourceValues.length; j++) {
-                if(inArray(appointmentResourceValues[j], resourceData) > -1) {
+            for(let i = 0; i < appointmentResourceValues.length; i++) {
+                if(hasResourceValue(resourceData, appointmentResourceValues[i])) {
                     return true;
                 }
             }

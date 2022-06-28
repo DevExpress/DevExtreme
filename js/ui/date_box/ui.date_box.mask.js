@@ -674,9 +674,10 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     reset() {
-        this.callBase();
         this._clearMaskState();
         this._activePartIndex = 0;
+
+        this.callBase();
     },
 
     _clean() {
