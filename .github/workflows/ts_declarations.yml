@@ -11,7 +11,7 @@ on:
 
 jobs:
   check-ts-bundle:
-    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    runs-on: shr-ubuntu-c5-docker-cpu2ram4
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -49,7 +49,7 @@ jobs:
         fi
 
   validate-declarations:
-    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    runs-on: shr-ubuntu-c5-docker-cpu2ram4
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -74,7 +74,7 @@ jobs:
       run: npm run validate-declarations
 
   check-ts-compilation:
-    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    runs-on: shr-ubuntu-c5-docker-cpu2ram4
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -102,7 +102,7 @@ jobs:
       run: npm run test-typescript
 
   notify:
-    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    runs-on: shr-ubuntu-c5-docker-cpu2ram4
     name: Send notifications
     needs: [check-ts-bundle, validate-declarations, check-ts-compilation]
     if: always() && contains(needs.*.result, 'failure')
