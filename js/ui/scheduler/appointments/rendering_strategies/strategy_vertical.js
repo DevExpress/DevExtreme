@@ -7,6 +7,7 @@ import { ExpressionUtils } from '../../expressionUtils';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
 import { getAppointmentTakesAllDay } from '../dataProvider/utils';
 import getSkippedHoursInRange from '../../../../renovation/ui/scheduler/view_model/appointments/utils/getSkippedHoursInRange';
+import { roundFloatPart } from '../../../../core/utils/math';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -129,8 +130,12 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return false;
     }
 
-    _isMultiViewAppointment(position, height) {
-        return height - (position.vMax - position.top) > 1;
+    _isMultiViewAppointment({ vMax, top }, height) {
+        // NOTE: we round these numbers, because in js 100 - 33.3333 = 66.66669999
+        const fullAppointmentHeight = roundFloatPart(height, 2);
+        const remainingHeight = roundFloatPart(vMax - top, 2);
+
+        return fullAppointmentHeight > remainingHeight;
     }
 
     _reduceMultiDayAppointment(sourceAppointmentHeight, bound) {
