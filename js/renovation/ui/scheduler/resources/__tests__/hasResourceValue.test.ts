@@ -37,6 +37,16 @@ describe('Resources Utils', () => {
         itemValue: 'Failed',
         expected: false,
       },
+      {
+        resourceValues: [0],
+        itemValue: 0,
+        expected: true,
+      },
+      {
+        resourceValues: [0],
+        itemValue: 'Failed',
+        expected: false,
+      },
     ].forEach(({ resourceValues, itemValue, expected }) => {
       it(`should return correct value if itemValue=${JSON.stringify(itemValue)}`, () => {
         expect(hasResourceValue(resourceValues, itemValue))
