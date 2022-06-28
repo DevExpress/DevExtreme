@@ -123,4 +123,52 @@ export default class Scrollable extends Widget {
       { dependencies: { getInstance, value } },
     )();
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  hide(): Promise<unknown> {
+    return ClientFunction(
+      () => {
+        const targetElement = document.querySelector(`.${CLASS.scrollable}`) as HTMLElement;
+
+        targetElement.style.display = 'none';
+      },
+      { dependencies: { CLASS } },
+    )();
+  }
+
+  apiTriggerHidingEvent(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        // eslint-disable-next-line no-underscore-dangle
+        (getInstance() as any)._visibilityChanged(false);
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  show(): Promise<unknown> {
+    return ClientFunction(
+      () => {
+        const targetElement = document.querySelector(`.${CLASS.scrollable}`) as HTMLElement;
+
+        targetElement.style.display = 'block';
+      },
+      { dependencies: { CLASS } },
+    )();
+  }
+
+  apiTriggerShownEvent(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        // eslint-disable-next-line no-underscore-dangle
+        (getInstance() as any)._visibilityChanged(true);
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
 }

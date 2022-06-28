@@ -146,11 +146,11 @@ export default class DataGrid extends Widget {
   }
 
   isVisible(): Promise<boolean> {
-    const { getGridInstance } = this;
+    const { getInstance } = this;
 
     return ClientFunction(
-      () => $((getGridInstance() as any).element()).is(':visible'),
-      { dependencies: { getGridInstance } },
+      () => $((getInstance() as any).element()).is(':visible'),
+      { dependencies: { getInstance } },
     )();
   }
 
