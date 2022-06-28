@@ -1,3 +1,6 @@
+import '../../../helpers/noIntl.js';
+import 'intl';
+
 import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 import { moduleConfig, createMockPdfDoc, createDataGrid } from './jspdf.dataGrid_utils.js';
 
