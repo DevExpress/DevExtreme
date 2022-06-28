@@ -54,7 +54,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   protected readonly independentEvents: string[];
 
-  private _childNode: Node;
+  private _childNodes: Node[] = [];
 
   private _templatesRendererRef: TemplatesRenderer | null;
 
@@ -84,11 +84,10 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   }
 
   public componentDidMount(): void {
-    if (this._childNode) {
-      this._element.appendChild(this._childNode);
-    }
-    if (!this._childNode && this._element.childNodes.length) {
-      this._childNode = this._element.childNodes[0];
+    if (this._childNodes?.length) {
+      this._element.append(...this._childNodes);
+    } else if (this._element.childNodes.length) {
+      this._childNodes = Array.from(this._element.childNodes);
     }
     this._updateCssClasses(null, this.props);
   }
@@ -105,7 +104,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   public componentWillUnmount(): void {
     if (this._instance) {
-      this._childNode?.parentNode?.removeChild(this._childNode);
+      this._childNodes?.forEach((child) => child.parentNode?.removeChild(child));
       events.triggerHandler(this._element, DX_REMOVE_EVENT);
       this._instance.dispose();
     }
