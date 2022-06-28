@@ -443,10 +443,11 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _updateLoadingState: function(tryLoadMore) {
-        const isDataLoaded = !tryLoadMore || this._dataController?.isLastPage();
+        const dataController = this._dataController;
+        const isDataLoaded = !tryLoadMore || dataController?.isLastPage();
         const scrollBottomMode = this._scrollBottomMode();
         const stopLoading = isDataLoaded || !scrollBottomMode;
-        const hideLoadIndicator = stopLoading && this._dataController && !this._dataController?.isLoading();
+        const hideLoadIndicator = stopLoading && !this._dataController?.isLoading();
 
         if(stopLoading || this._scrollViewIsFull()) {
             this._scrollView.release(hideLoadIndicator);
@@ -567,7 +568,7 @@ export const ListBase = CollectionWidget.inherit({
         this._pageLoadingAction(e);
         const dataController = this._dataController;
 
-        if(!dataController?.isLoading() && !dataController?.isLastPage()) {
+        if(dataController?.getDataSource() && !dataController?.isLoading() && !dataController?.isLastPage()) {
             this._loadNextPage();
         } else {
             this._updateLoadingState();
