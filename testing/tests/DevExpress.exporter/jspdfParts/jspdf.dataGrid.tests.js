@@ -1,4 +1,4 @@
-import '../../helpers/noIntl.js';
+import '../../../helpers/noIntl.js';
 import $ from 'jquery';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
