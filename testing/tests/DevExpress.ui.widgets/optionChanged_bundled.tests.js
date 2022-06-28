@@ -44,7 +44,8 @@ define(function(require) {
                     name === 'ignoreChildEvents' ||
                     name === 'copyRootClassesToWrapper' ||
                     name === '_ignoreCopyRootClassesToWrapperDeprecation' ||
-                    name === '_checkParentVisibility') {
+                    name === '_checkParentVisibility' ||
+                    name === '_dataController') {
                     return;
                 }
                 // NOTE: workaround for inferno
