@@ -100,7 +100,13 @@ class DataController {
         return this._dataSource?.searchValue(value);
     }
 
-    se
+    searchOperation(operation) {
+        return this._dataSource?.searchOperation(operation);
+    }
+
+    searchExpr(expr) {
+        return this._dataSource?.searchExpr(expr);
+    }
 
     select() {
         return this._dataSource && this._dataSource.select(...arguments);

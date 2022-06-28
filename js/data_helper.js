@@ -53,7 +53,6 @@ const DataHelperMixin = {
             }
 
             this._addDataSourceHandlers();
-            // this._initDataController();
         }
     },
 
