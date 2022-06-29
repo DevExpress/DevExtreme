@@ -455,7 +455,7 @@ export const ListBase = CollectionWidget.inherit({
         if(this._shouldContinueLoading(shouldLoadNextPage)) {
             this._infiniteDataLoading();
         } else {
-            this._scrollView.release(!shouldLoadNextPage);
+            this._scrollView.release(!shouldLoadNextPage && !this._isDataSourceLoading());
             this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
             this._loadIndicationSuppressed(false);
         }
