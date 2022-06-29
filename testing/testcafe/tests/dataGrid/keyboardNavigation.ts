@@ -978,7 +978,7 @@ test('Select views by Ctrl+Up, Ctrl+Down keys', async (t) => {
   });
 });
 
-test('DataGrid - Scroll bars should not appear when updating edge cell focus overlay position (T812494)', async (t) => {
+test.skip('DataGrid - Scroll bars should not appear when updating edge cell focus overlay position (T812494)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t
@@ -2502,7 +2502,7 @@ test('Grid should get focus when the focus method is called (T955678)', async (t
   })();
 });
 
-test('New mode. A cell should be focused when the PageDow/Up key is pressed (T898324)', async (t) => {
+test.skip('New mode. A cell should be focused when the PageDow/Up key is pressed (T898324)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act
