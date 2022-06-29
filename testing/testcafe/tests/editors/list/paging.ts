@@ -100,7 +100,7 @@ test('Should initiate load next page if some items in the current load are invis
     .eql(6);
 
   await t
-    .expect(await takeScreenshot('List_middle_items_invisible.png', list.element))
+    .expect(await takeScreenshot('List_part_items_invisible_on_loaded_page.png', list.element))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
