@@ -24,7 +24,7 @@ export default CollectionWidget.inherit({
         this._customizeStoreLoadOptions = (e) => {
             const dataController = this._dataController?.getDataSource() && this._dataController;
 
-            if(dataController && !dataController?.isLoaded()) {
+            if(dataController && !dataController.isLoaded()) {
                 this._correctionIndex = 0;
             }
             if(this._correctionIndex && e.storeLoadOptions) {

@@ -156,19 +156,12 @@ const DropDownList = DropDownEditor.inherit({
         this.callBase();
 
         this._initDataExpressions();
-        this._initDataController();
         this._initActions();
         this._setListDataSource();
         this._validateSearchMode();
         this._clearSelectedItem();
         this._initItems();
     },
-
-    // _initDataController: function() {
-    //     if(this._dataSource) {
-    //         this._dataController = new DataController(this._dataSource);
-    //     }
-    // },
 
     _setListFocusedElementOptionChange: function() {
         this._list._updateParentActiveDescendant = this._updateActiveDescendant.bind(this);

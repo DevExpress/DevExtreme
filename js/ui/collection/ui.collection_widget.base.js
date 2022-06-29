@@ -152,26 +152,12 @@ const CollectionWidget = Widget.inherit({
 
         this._cleanRenderedItems();
         this._refreshDataSource();
-        this._initDataController();
     },
 
     _compileDisplayGetter: function() {
         const displayExpr = this.option('displayExpr');
         this._displayGetter = displayExpr ? compileGetter(this.option('displayExpr')) : undefined;
     },
-
-    // _initDataController: function() {
-    //     const dataController = this.option('_dataController');
-
-    //     if(this._dataSource) {
-    //         if(!dataController) {
-    //             this._dataController = new DataController(this._dataSource);
-    //         } else {
-    //             this._dataController = dataController;
-    //         }
-    //     }
-
-    // },
 
     _initTemplates: function() {
         this._initItemsFromMarkup();
@@ -497,7 +483,6 @@ const CollectionWidget = Widget.inherit({
                 break;
             case 'dataSource':
                 this._refreshDataSource();
-                this._initDataController();
                 this._renderEmptyMessage();
                 break;
             case 'noDataText':

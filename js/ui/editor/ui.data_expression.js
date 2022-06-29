@@ -7,6 +7,7 @@ import DataHelperMixin from '../../data_helper';
 import { DataSource } from '../../data/data_source/data_source';
 import ArrayStore from '../../data/array_store';
 import { Deferred } from '../../core/utils/deferred';
+import DataController from '../../core/data_controller';
 
 const DataExpressionMixin = extend({}, DataHelperMixin, {
 
@@ -41,6 +42,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
                 store: new ArrayStore(this.option('items')),
                 pageSize: 0
             });
+            this._dataController = new DataController(this._dataSource);
         }
     },
 
