@@ -1,3 +1,4 @@
+import '../../helpers/noIntl.js';
 import $ from 'jquery';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
@@ -7,7 +8,6 @@ import { JSPdfDataGridTestHelper } from './jspdfParts/autotable/jspdfTestHelper.
 import { LoadPanelTests } from './commonParts/loadPanel.tests.js';
 import { JSPdfOptionTests } from './jspdfParts/autotable/jspdf.options.tests.js';
 import { exportDataGridWithAutoTable } from 'pdf_exporter';
-import browser from 'core/utils/browser';
 
 import 'ui/data_grid';
 import 'generic_light.css!';
@@ -928,7 +928,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
         { format: 'quarterAndYear', expectedPdfCellValue: 'Q4 2019' },
         { format: 'shortDate', expectedPdfCellValue: '10/9/2019' },
         { format: 'shortTime', expectedPdfCellValue: '9:09 AM' },
-        { format: 'longDateLongTime', expectedPdfCellValue: `Wednesday, October 9, 2019${browser.mozilla ? ' at' : ','} 9:09:09 AM` },
+        { format: 'longDateLongTime', expectedPdfCellValue: 'Wednesday, October 9, 2019, 9:09:09 AM' },
         { format: 'shortDateShortTime', expectedPdfCellValue: '10/9/2019, 9:09 AM' },
         { format: 'longDate', expectedPdfCellValue: 'Wednesday, October 9, 2019' },
         { format: 'longTime', expectedPdfCellValue: '9:09:09 AM' },
