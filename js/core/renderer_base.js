@@ -462,6 +462,8 @@ initRender.prototype.find = function(selector) {
 };
 
 const isVisible = function(_, element) {
+    element = element.host ?? element;
+
     if(!element.nodeType) return true;
     return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
 };

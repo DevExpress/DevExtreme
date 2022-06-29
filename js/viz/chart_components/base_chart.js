@@ -111,6 +111,7 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, isInve
         end: isRotated ? canvas.width - canvas.right : canvas.height - canvas.bottom
     };
     let hasStackedSeries = false;
+    let sortRollingStocks;
 
     points.forEach(function(p) {
         if(!p) return;
@@ -123,20 +124,22 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, isInve
 
     if(hasStackedSeries) {
         (!isRotated ^ isInverted) && rollingStocks.reverse();
+
+        sortRollingStocks = !isInverted ? sortRollingStocksByValue(rollingStocks) : rollingStocks;
     } else {
         const rollingStocksTmp = rollingStocks.slice();
-        rollingStocks.sort(function(a, b) {
+        sortRollingStocks = rollingStocks.sort(function(a, b) {
             return customSorting(a, b) || (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocksTmp.indexOf(a) - rollingStocksTmp.indexOf(b));
         });
     }
 
-    if(!checkStackOverlap(rollingStocks)) return false;
-    checkHeightRollingStock(rollingStocks, stubCanvas);
+    if(!checkStackOverlap(sortRollingStocks)) return false;
+    checkHeightRollingStock(sortRollingStocks, stubCanvas);
 
-    prepareOverlapStacks(rollingStocks);
+    prepareOverlapStacks(sortRollingStocks);
 
-    rollingStocks.reverse();
-    moveRollingStock(rollingStocks, stubCanvas);
+    sortRollingStocks.reverse();
+    moveRollingStock(sortRollingStocks, stubCanvas);
     return true;
 }
 
@@ -146,7 +149,23 @@ function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides) {
     const secondRect = secondRolling.getBoundingRect();
     const oppositeOverlapping = inTwoSides ? ((firstRect.oppositeStart <= secondRect.oppositeStart && firstRect.oppositeEnd > secondRect.oppositeStart) ||
             (secondRect.oppositeStart <= firstRect.oppositeStart && secondRect.oppositeEnd > firstRect.oppositeStart)) : true;
+
     return firstRect.end > secondRect.start && oppositeOverlapping;
+}
+
+function sortRollingStocksByValue(rollingStocks) {
+    const positiveRollingStocks = [];
+    const negativeRollingStocks = [];
+
+    rollingStocks.forEach((stock) => {
+        if(stock.value() > 0) {
+            positiveRollingStocks.push(stock);
+        } else {
+            negativeRollingStocks.unshift(stock);
+        }
+    });
+
+    return positiveRollingStocks.concat(negativeRollingStocks);
 }
 
 function prepareOverlapStacks(rollingStocks) {
