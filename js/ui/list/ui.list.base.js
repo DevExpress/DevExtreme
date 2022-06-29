@@ -541,9 +541,9 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _shouldContinueLoading: function(shouldLoadNextPage) {
-        const isReachBottom = getHeight(this._scrollView.content()) - getHeight(this._scrollView.container()) < this._scrollView.scrollOffset().top;
+        const isBottomReached = getHeight(this._scrollView.content()) - getHeight(this._scrollView.container()) < (this._scrollView.scrollOffset()?.top ?? 0);
 
-        return shouldLoadNextPage && (!this._scrollViewIsFull() || isReachBottom);
+        return shouldLoadNextPage && (!this._scrollViewIsFull() || isBottomReached);
     },
 
     _infiniteDataLoading: function() {
