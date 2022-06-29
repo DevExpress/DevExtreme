@@ -444,14 +444,14 @@ export const ListBase = CollectionWidget.inherit({
 
     _updateLoadingState: function(tryLoadMore) {
         const dataController = this._dataController;
-        const isDataLoaded = !tryLoadMore || dataController?.isLastPage();
+        const isDataLoaded = !tryLoadMore || !dataController || dataController?.isLastPage();
         const scrollBottomMode = this._scrollBottomMode();
         const stopLoading = isDataLoaded || !scrollBottomMode;
         const hideLoadIndicator = stopLoading && !this._dataController?.isLoading();
 
         if(stopLoading || this._scrollViewIsFull()) {
             this._scrollView.release(hideLoadIndicator);
-            this._toggleNextButton(this._shouldRenderNextButton() && this._dataController && !this._dataController.isLastPage());
+            this._toggleNextButton(this._shouldRenderNextButton() && !this._dataController?.isLastPage());
             this._loadIndicationSuppressed(false);
         } else {
             this._infiniteDataLoading();

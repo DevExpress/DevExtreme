@@ -61,18 +61,15 @@ const DataHelperMixin = {
         const dataController = this.option('_dataController');
         const dataSource = this._dataSource;
 
-        if(dataSource) {
-            if(!this._dataController) {
-                if(dataController) {
-                    this._dataController = dataController;
-                } else {
-                    this._dataController = new DataController(this._dataSource);
-                }
+        if(!this._dataController) {
+            if(dataController) {
+                this._dataController = dataController;
             } else {
-                this._dataController.updateDataSource(dataSource);
+                this._dataController = new DataController(this._dataSource);
             }
+        } else {
+            this._dataController.updateDataSource(dataSource);
         }
-
     },
 
     _addDataSourceHandlers: function() {
@@ -116,20 +113,19 @@ const DataHelperMixin = {
     },
 
     _loadDataSource: function() {
-        if(this._dataController?.getDataSource()) {
-            const dataController = this._dataController;
-
-            if(dataController.isLoaded()) {
+        const dataSource = this._dataSource;
+        if(dataSource) {
+            if(dataSource.isLoaded()) {
                 this._proxiedDataSourceChangedHandler && this._proxiedDataSourceChangedHandler();
             } else {
-                dataController.load();
+                dataSource.load();
             }
         }
     },
 
     _loadSingle: function(key, value) {
-        key = key === 'this' ? this._dataController.key() || 'this' : key;
-        return this._dataController.loadSingle(key, value);
+        key = key === 'this' ? this._dataSource.key() || 'this' : key;
+        return this._dataSource.loadSingle(key, value);
     },
 
     _isLastPage: function() {
