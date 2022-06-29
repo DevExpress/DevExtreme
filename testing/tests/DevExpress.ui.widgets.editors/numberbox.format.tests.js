@@ -4,6 +4,7 @@ import numberLocalization from 'localization/number';
 import localization from 'localization';
 
 import 'ui/number_box';
+import 'ui/text_box/ui.text_editor';
 
 QUnit.testStart(function() {
     const markup =
@@ -14,17 +15,17 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
+const CARET_TIMEOUT_DURATION = 0;
+
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#numberbox').dxNumberBox({
-            format: '#0.##',
-            value: '',
-            useMaskBehavior: true
+            useMaskBehavior: true,
         });
         this.clock = sinon.useFakeTimers();
-        this.input = this.$element.find('.dx-texteditor-input');
+        this.$input = this.$element.find('.dx-texteditor-input');
         this.instance = this.$element.dxNumberBox('instance');
-        this.keyboard = keyboardMock(this.input, true);
+        this.keyboard = keyboardMock(this.$input, true);
     },
 
     afterEach: function() {
@@ -46,7 +47,7 @@ QUnit.module('format: point and comma button', moduleConfig, () => {
     ].forEach(({ locale, expectedSeparator }) => {
         [',', '.'].forEach((separator) => {
 
-            QUnit.test(`caret position after type '${separator}' key, locale(${locale}) with ${expectedSeparator === '.' ? 'point' : 'comma'} separator, format: '#,##0.00' (T1091149)`, function(assert) {
+            QUnit.testInActiveWindow(`caret position after type '${separator}' key, locale(${locale}) with ${expectedSeparator === '.' ? 'point' : 'comma'} separator, format: '#,##0.00' (T1091149)`, function(assert) {
                 const currentLocale = localization.locale();
 
                 try {
@@ -55,10 +56,11 @@ QUnit.module('format: point and comma button', moduleConfig, () => {
 
                     this.instance.option({
                         format: '#,##0.00',
-                        value: 0
+                        value: 0,
                     });
 
-                    this.input.focus();
+                    this.$input.focus();
+                    this.clock.tick(CARET_TIMEOUT_DURATION);
 
                     this.keyboard
                         .type('15');
