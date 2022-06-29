@@ -3,14 +3,14 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
-const getVisibleColumns = (gridInstance: DataGrid): Promise<string[]> => {
-  const { getGridInstance } = gridInstance;
+const getVisibleColumns = (dataGrid: DataGrid): Promise<string[]> => {
+  const { getInstance } = dataGrid;
 
   return ClientFunction(
-    () => (getGridInstance() as any)
+    () => (getInstance() as any)
       .getVisibleColumns()
       .map((column: any) => column.dataField || column.name),
-    { dependencies: { getGridInstance } },
+    { dependencies: { getInstance } },
   )();
 };
 

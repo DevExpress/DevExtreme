@@ -535,7 +535,6 @@ const DropDownList = DropDownEditor.inherit({
             groupTemplate: this.option('groupTemplate'),
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
-            _revertPageOnEmptyLoad: true,
             hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
             focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false
         };
@@ -798,7 +797,7 @@ const DropDownList = DropDownEditor.inherit({
         }
 
         const currentPageIndex = this._dataSource.pageIndex();
-        const needRepaint = isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
+        const needRepaint = (isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex) || (this._dataSource.isLastPage() && !this._list._scrollViewIsFull());
 
         this._pageIndex = currentPageIndex;
 

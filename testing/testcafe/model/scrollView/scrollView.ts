@@ -1,5 +1,7 @@
 import Scrollable from './internal/scrollable';
+import { WidgetName } from '../../helpers/createWidget';
 
 export default class ScrollView extends Scrollable {
-  name = 'dxScrollView';
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxScrollView'; }
 }

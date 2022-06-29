@@ -3,6 +3,7 @@ import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/reno
 
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
+import { WidgetName } from '../../../helpers/createWidget';
 
 const CLASS = {
   scrollable: 'dx-scrollable',
@@ -16,12 +17,8 @@ export default class Scrollable extends Widget {
 
   hScrollbar?: Scrollbar;
 
-  getInstance: ClientFunction;
-
-  name: string;
-
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  constructor(id: string | Selector, options?: any, name = 'dxScrollable') {
+  constructor(id: string | Selector, options?: any) {
     super(id);
 
     const direction = options.direction ?? 'vertical';
@@ -37,14 +34,14 @@ export default class Scrollable extends Widget {
         this.hScrollbar = new Scrollbar(DIRECTION_HORIZONTAL);
       }
     }
+  }
 
-    const scrollable = this.element;
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxScrollable'; }
 
-    this.name = name;
-    this.getInstance = ClientFunction(
-      () => $(scrollable())[`${name}`]('instance'),
-      { dependencies: { scrollable, name } },
-    );
+  // eslint-disable-next-line class-methods-use-this
+  getElement(): Selector {
+    return Selector(`.${CLASS.scrollable}`);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -90,9 +87,7 @@ export default class Scrollable extends Widget {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => {
-        (getInstance() as any).scrollTo(value);
-      },
+      () => { (getInstance() as any).scrollTo(value); },
       { dependencies: { getInstance, value } },
     )();
   }
@@ -101,22 +96,8 @@ export default class Scrollable extends Widget {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => {
-        (getInstance() as any).scrollToElement(selector);
-      },
+      () => { (getInstance() as any).scrollToElement(selector); },
       { dependencies: { getInstance, selector } },
-    )();
-  }
-
-  apiOption(name: string, value: string | number | boolean = 'undefined'): Promise<any> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => {
-        const scrollable = getInstance() as any;
-        return value !== 'undefined' ? scrollable.option(name, value) : scrollable.option(name);
-      },
-      { dependencies: { getInstance, name, value } },
     )();
   }
 
@@ -124,9 +105,7 @@ export default class Scrollable extends Widget {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => {
-        (getInstance() as any).update();
-      },
+      () => { (getInstance() as any).update(); },
       { dependencies: { getInstance } },
     )();
   }
@@ -142,6 +121,54 @@ export default class Scrollable extends Widget {
         (getInstance() as any)._dimensionChanged();
       },
       { dependencies: { getInstance, value } },
+    )();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  hide(): Promise<unknown> {
+    return ClientFunction(
+      () => {
+        const targetElement = document.querySelector(`.${CLASS.scrollable}`) as HTMLElement;
+
+        targetElement.style.display = 'none';
+      },
+      { dependencies: { CLASS } },
+    )();
+  }
+
+  apiTriggerHidingEvent(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        // eslint-disable-next-line no-underscore-dangle
+        (getInstance() as any)._visibilityChanged(false);
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  show(): Promise<unknown> {
+    return ClientFunction(
+      () => {
+        const targetElement = document.querySelector(`.${CLASS.scrollable}`) as HTMLElement;
+
+        targetElement.style.display = 'block';
+      },
+      { dependencies: { CLASS } },
+    )();
+  }
+
+  apiTriggerShownEvent(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        // eslint-disable-next-line no-underscore-dangle
+        (getInstance() as any)._visibilityChanged(true);
+      },
+      { dependencies: { getInstance } },
     )();
   }
 }
